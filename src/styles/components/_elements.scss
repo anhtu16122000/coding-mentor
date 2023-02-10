@@ -847,7 +847,7 @@ body {
 		}
 	}
 	.app-content {
-		width: calc(100% - 330px);
+		width: calc(100% - 310px);
 		margin-top: 65px;
 		padding: 20px 10px;
 		transition: 0.3s width;
@@ -878,7 +878,7 @@ body {
 		}
 
 		&.close-app {
-			width: calc(100% - 80px);
+			width: calc(100% - 70px);
 		}
 
 		.app-content-box {

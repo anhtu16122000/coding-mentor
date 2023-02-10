@@ -8,17 +8,12 @@
 }
 
 .app-content {
-	width: calc(100% - 330px);
 	margin-top: 65px;
 	padding: 20px 10px;
 	transition: 0.3s width;
 	height: calc(100vh - 65px);
 	overflow: auto;
 	overflow-x: hidden;
-
-	// .ant-card-body {
-	// 	min-height: calc(100vh - 110px);
-	// }
 
 	@include max-media(1000px) {
 		width: 100%;

@@ -28,6 +28,7 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 		}
 		return true
 	})
+
 	useEffect(() => {
 		const getSlug = window.location.search.search('slug')
 		if (getSlug === -1) {
@@ -99,9 +100,6 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 								if (path.indexOf(childrenMenu[j]?.MenuItem[indexSub]?.Route) === 0) {
 									temp.push(childrenMenu[j]?.MenuItem[indexSub]?.Text)
 								}
-								// if (childrenMenu[j]?.MenuItem[indexSub].Key === path) {
-								// 	temp.push(childrenMenu[j]?.MenuItem[indexSub]?.Text)
-								// }
 							}
 						}
 					}
@@ -126,7 +124,7 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 			<main className="app-main">
 				<div className={`app-content ${!isOpen && 'close-app'}`}>
 					<div className="container-fluid w-full container">
-						<div className="breadcrumb ml-3">
+						<div className="breadcrumb">
 							{breadcrumbs.length > 0 && (
 								<Breadcrumb>
 									{breadcrumbs?.map(
@@ -165,6 +163,7 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 							)}
 						</div>
 					</div>
+
 					<div className="container-fluid">{children}</div>
 				</div>
 			</main>

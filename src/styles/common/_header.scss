@@ -1,31 +1,33 @@
 .app-header {
-	@apply fixed top-0 right-0 w-[calc(100%-80px)] h-[65px] bg-tw-white transition-all duration-[0.3s] z-[100] flex items-center;
+	@apply fixed top-0 right-0 w-[calc(100%-70px)] h-[65px] bg-[#fff] transition-all duration-[0.3s] z-[100] flex items-center;
 	box-shadow: 0px 0px 40px 0px rgb(82 63 105 / 10%);
+
 	@include max-media(1000px) {
 		@apply w-full;
-		&.mobile {
-			@apply w-[calc(100%-330px)];
-		}
 	}
+
 	&.close {
 		@apply w-[calc(100%-80px)];
 		.app-header-logo {
-			@apply w-[80px] justify-center p-0;
+			@apply w-[0px] justify-center p-0;
 			p {
 				@apply hidden;
 			}
 		}
 	}
+
 	.col-title-page {
 		@include max-media(1000px) {
 			@apply hidden;
 		}
 	}
+
 	.app-header-logo {
-		@apply w-[250px] h-full px-[25px] py-[5px] pr-0 flex items-center justify-center transition-all duration-[0.3s];
+		@apply w-[240px] h-full px-[25px] py-[5px] pr-0 flex items-center justify-center transition-all duration-[0.3s];
 		box-shadow: 2px 1px 15px #0000000d;
+
 		&.close-app {
-			@apply w-0 shadow-none;
+			@apply w-0 shadow-none pl-0;
 			p:last-child {
 				animation: hideText 0.2s forwards;
 				animation-delay: 0.2s;
@@ -67,19 +69,23 @@
 	}
 
 	.app-header-inner {
-		@apply w-[calc(100%-250px)] h-full flex items-center justify-between px-[25px] py-0 transition-all duration-[0.3s];
+		@apply w-[calc(100%-240px)] h-full flex items-center justify-between px-[16px] py-0 transition-all duration-[0.3s];
+
 		&.close-app {
 			@apply w-full;
 		}
+
 		@include max-media(1000px) {
 			@apply w-full py-0 px-[15px];
 		}
+
 		.right {
 			@apply flex items-center;
 		}
 		.header-menu {
 			@apply ml-[50px] flex items-center;
 		}
+
 		.box-menu {
 			@apply w-[50px] h-[50px] cursor-pointer flex items-center justify-center;
 			&:hover {

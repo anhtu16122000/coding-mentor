@@ -85,67 +85,32 @@ export const AdminChildMenu = [
 			}
 		]
 	},
-	// {
-	// 	MenuName: 'tab-home',
-	// 	MenuTitle: 'Quản lý hệ thống',
-	// 	MenuKey: '/home',
-	// 	MenuItem: [
-	// 		{
-	// 			TypeItem: 'single',
-	// 			Key: '/home/dashboard',
-	// 			Route: '/home/dashboard',
-	// 			Icon: <FiPieChart />,
-	// 			Text: 'Thống kê'
-	// 		},
-	// 		{
-	// 			TypeItem: 'single',
-	// 			Key: '/home/report',
-	// 			Route: '/home/report',
-	// 			Icon: <TbReport />,
-	// 			Text: 'Báo cáo'
-	// 		},
-	// 		{
-	// 			TypeItem: 'single',
-	// 			Key: '/newsfeed',
-	// 			Route: '/newsfeed',
-	// 			Icon: <TbNews />,
-	// 			Text: 'Tin tức'
-	// 		}
-	// 	]
-	// },
 	{
 		MenuName: 'Quản lý thông tin học',
-		MenuTitle: 'Quản lý thông tin học',
+		MenuTitle: 'Thông tin học',
 		MenuKey: '/info-course',
+		Parent: 'student',
 		MenuItem: [
 			{
-				ItemType: 'sub-menu',
-				Key: 'sub-list-staff-child-2',
-				Icon: <MdOutlineSchool />,
-				TitleSub: 'Học viên',
-				SubMenuList: [
-					{
-						ItemType: 'single',
-						Key: '/info-course/student',
-						Route: '/info-course/student',
-						Text: 'Danh sách học viên',
-						Icon: ''
-					},
-					{
-						ItemType: 'single',
-						Key: '/info-course/customer',
-						Route: '/info-course/customer',
-						Text: 'Leads',
-						Icon: ''
-					},
-					{
-						ItemType: 'single',
-						Key: '/info-course/service-appointment-test',
-						Route: '/info-course/service-appointment-test',
-						Text: 'Khách hẹn test',
-						Icon: ''
-					}
-				]
+				ItemType: 'single',
+				Key: '/info-course/student',
+				Route: '/info-course/student',
+				Text: 'Danh sách học viên',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/customer',
+				Route: '/info-course/customer',
+				Text: 'Leads',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/service-appointment-test',
+				Route: '/info-course/service-appointment-test',
+				Text: 'Khách hẹn test',
+				Icon: ''
 			}
 		]
 	},
@@ -153,150 +118,29 @@ export const AdminChildMenu = [
 		MenuName: 'Quản lý tài khoản',
 		MenuTitle: 'Quản lý tài khoản',
 		MenuKey: '/users',
+		Parent: 'staff',
 		MenuItem: [
 			{
-				ItemType: 'sub-menu',
-				Key: 'sub-list-staff-child-1',
-				Icon: <AiOutlineUser />,
-				TitleSub: 'Nhân viên',
-				SubMenuList: [
-					{
-						ItemType: 'single',
-						Key: '/users/personnel',
-						Route: '/users/personnel',
-						Text: 'Danh sách nhân viên',
-						Icon: ''
-					}
-					// {
-					// 	ItemType: 'single',
-					// 	Key: '/configs/staff-salary',
-					// 	Route: '/configs/staff-salary',
-					// 	Text: 'Cấu hình lương',
-					// 	Icon: ''
-					// }
-				]
+				ItemType: 'single',
+				Key: '/users/personnel',
+				Route: '/users/personnel',
+				Text: 'Danh sách nhân viên',
+				Icon: ''
 			},
-			// {
-			// 	ItemType: 'sub-menu',
-			// 	Key: 'sub-list-staff-child-2',
-			// 	Icon: <MdOutlineSchool />,
-			// 	TitleSub: 'Học viên',
-			// 	SubMenuList: [
-			// 		{
-			// 			ItemType: 'single',
-			// 			Key: '/users/student',
-			// 			Route: '/users/student',
-			// 			Text: 'Danh sách học viên',
-			// 			Icon: ''
-			// 		},
-			// 		{
-			// 			ItemType: 'single',
-			// 			Key: '/users/customer',
-			// 			Route: '/users/customer',
-			// 			Text: 'Khách hàng',
-			// 			Icon: ''
-			// 		},
-			// 		{
-			// 			ItemType: 'single',
-			// 			Key: '/users/student/student-appointment',
-			// 			Route: '/users/student/student-appointment',
-			// 			Text: 'Học viên chờ xếp lớp',
-			// 			Icon: ''
-			// 		},
-			// 		{
-			// 			ItemType: 'single',
-			// 			Key: '/users/student/student-course',
-			// 			Route: '/users/student/student-course',
-			// 			Text: 'Học viên trong lớp',
-			// 			Icon: ''
-			// 		},
-			// 		{
-			// 			ItemType: 'single',
-			// 			Key: '/users/student/student-change-course',
-			// 			Route: '/users/student/student-change-course',
-			// 			Text: 'Học viên chuyển khóa',
-			// 			Icon: ''
-			// 		},
-			// 		{
-			// 			ItemType: 'single',
-			// 			Key: '/users/student/student-reserve',
-			// 			Route: '/users/student/student-reserve',
-			// 			Text: 'Học viên bảo lưu',
-			// 			Icon: ''
-			// 		},
-			// 		{
-			// 			ItemType: 'single',
-			// 			Key: '/users/student/student-exchange',
-			// 			Route: '/users/student/student-exchange',
-			// 			Text: 'Học viên chuyển giao',
-			// 			Icon: ''
-			// 		}
-			// 	]
-			// },
-			// {
-			// 	ItemType: 'sub-menu',
-			// 	Key: 'sub-list-staff-child-3',
-			// 	Icon: <FiUsers />,
-			// 	TitleSub: 'Phụ huynh',
-			// 	SubMenuList: [
-			// 		{
-			// 			ItemType: 'single',
-			// 			Key: '/users/parents',
-			// 			Route: '/users/parents',
-			// 			Text: 'Danh sách phụ huynh',
-			// 			Icon: ''
-			// 		}
-			// 	]
-			// },
 			{
-				ItemType: 'sub-menu',
-				Key: 'sub-list-staff-child-4',
-				Icon: <GiTeacher />,
-				TitleSub: 'Giáo viên',
-				SubMenuList: [
-					// {
-					// 	ItemType: 'single',
-					// 	Key: '/users/teacher',
-					// 	Route: '/users/teacher',
-					// 	Text: 'Danh sách giáo viên',
-					// 	Icon: ''
-					// },
-					// {
-					// 	ItemType: 'single',
-					// 	Key: '/users/teacher/total-lesson',
-					// 	Route: '/users/teacher/total-lesson',
-					// 	Text: 'Thống kê buổi dạy',
-					// 	Icon: ''
-					// }
-					{
-						ItemType: 'single',
-						Key: '/users/teacher/teacher-off',
-						Route: '/users/teacher/teacher-off',
-						Text: 'Duyệt lịch nghỉ',
-						Icon: ''
-					}
-				]
+				ItemType: 'single',
+				Key: '/users/teacher/teacher-off',
+				Route: '/users/teacher/teacher-off',
+				Text: 'Duyệt lịch nghỉ',
+				Icon: ''
 			}
-			// {
-			// 	ItemType: 'single',
-			// 	Key: '/users/student',
-			// 	Route: '/users/student',
-			// 	Text: 'Học viên',
-			// 	Icon: <RiUser3Line />
-			// },
-			// {
-			// 	ItemType: 'single',
-			// 	Key: '/users/request',
-			// 	Route: '/users/request',
-			// 	Text: 'Yêu cầu thay đổi',
-			// 	Icon: <BiGitPullRequest />
-			// }
 		]
 	},
 	{
 		MenuName: 'Đề thi',
 		MenuTitle: 'Đề thi',
 		MenuKey: '/exercise',
+		Parent: 'library',
 		MenuItem: [
 			{
 				ItemType: 'single',
@@ -308,196 +152,11 @@ export const AdminChildMenu = [
 		]
 	},
 	{
-		MenuName: 'Danh sách tài liệu',
-		MenuTitle: 'Danh sách tài liệu',
-		MenuKey: '/',
-		MenuItem: [
-			{
-				ItemType: 'single',
-				Key: '/document-list',
-				Route: '/document-list',
-				Text: 'Danh sách tài liệu',
-				Icon: <FaRegNewspaper />
-			}
-		]
-	},
-	{
-		MenuName: 'Quản lý',
-		MenuTitle: 'Quản lý',
-		MenuKey: '/manage',
-		MenuItem: [
-			{
-				ItemType: 'sub-menu',
-				Key: 'sub-list-staff-child-5',
-				Icon: <GoReport />,
-				TitleSub: 'Báo cáo học viên',
-				SubMenuList: [
-					{
-						ItemType: 'single',
-						Key: '/users/student/report-student-warning',
-						Route: '/users/student/report-student-warning',
-						Text: 'Cảnh báo học viên',
-						Icon: ''
-					}
-				]
-			},
-			{
-				ItemType: 'sub-menu',
-				Key: 'sub-list-staff-child-6',
-				Icon: <MdOutlineAttachMoney />,
-				TitleSub: 'Tài chính',
-				SubMenuList: [
-					{
-						ItemType: 'single',
-						Key: '/finance/billing-information',
-						Route: '/finance/billing-information',
-						Text: 'Thông tin thanh toán',
-						Icon: ''
-					},
-					{
-						ItemType: 'single',
-						Key: '15',
-						Route: '',
-						Text: 'Yêu cầu hoàn tiền',
-						Icon: ''
-					},
-					{
-						ItemType: 'single',
-						Key: '16',
-						Route: '',
-						Text: 'Phiếu chi',
-						Icon: ''
-					},
-					{
-						ItemType: 'single',
-						Key: '17',
-						Route: '',
-						Text: 'Phiếu thu',
-						Icon: ''
-					}
-				]
-			},
-			{
-				ItemType: 'single',
-				Key: '18',
-				Route: '',
-				Text: 'Học viên có hợp đồng',
-				Icon: <AiOutlineContainer />
-			},
-			{
-				ItemType: 'single',
-				Key: '19',
-				Route: '',
-				Text: 'Chứng chỉ học viên',
-				Icon: <GrCertificate />
-			},
-			{
-				ItemType: 'single',
-				Key: '20',
-				Route: '',
-				Text: 'Bảng lương giáo viên',
-				Icon: <FaMoneyBillWave />
-			},
-			{
-				ItemType: 'single',
-				Key: '21',
-				Route: '',
-				Text: 'Bảng lương nhân viên',
-				Icon: <FaMoneyBillWaveAlt />
-			},
-			{
-				ItemType: 'single',
-				Key: '22',
-				Route: '',
-				Text: 'Danh sách phản hồi',
-				Icon: <BsReplyAll />
-			},
-			{
-				ItemType: 'single',
-				Key: '23',
-				Route: '',
-				Text: 'Quản lý công việc',
-				Icon: <BsCardChecklist />
-			}
-		]
-	},
-	{
-		MenuName: 'Webinar',
-		MenuTitle: 'Hội thảo',
-		MenuKey: '/webinars',
-		MenuItem: [
-			{
-				ItemType: 'single',
-				Key: '/webinars',
-				Route: '/webinars',
-				Text: 'Webinar',
-				Icon: <TbScreenShare />
-			}
-		]
-	},
-	{
 		MenuName: 'Lớp học',
 		MenuTitle: 'Lớp học',
 		MenuKey: '/class',
+		Parent: 'class',
 		MenuItem: [
-			// {
-			// 	ItemType: 'sub-menu',
-			// 	Key: 'sub-course',
-			// 	Icon: <BsBook />,
-			// 	TitleSub: 'Quản lí lớp học',
-			// 	SubMenuList: [
-			// 		{
-			// 			ItemType: 'single',
-			// 			Key: '/course/create/offline',
-			// 			Route: '/course/create/offline',
-			// 			Text: 'Tạo lớp học',
-			// 			Icon: ''
-			// 		}
-			// {
-			// 	ItemType: 'single',
-			// 	Key: '/course/create/online',
-			// 	Route: '/course/create/online',
-			// 	Text: 'Tạo lớp học online',
-			// 	Icon: ''
-			// },
-			// {
-			// 	ItemType: 'single',
-			// 	Key: '/course/courses',
-			// 	Route: '/course/courses',
-			// 	Text: 'Danh sách lớp học',
-			// 	Icon: ''
-			// }
-			// 	]
-			// },
-			// {
-			// 	ItemType: 'sub-menu',
-			// 	Key: 'sub-course-video',
-			// 	Icon: '<span class="anticon"><img src="/images/icons/zoom-video.svg" ></span>',
-			// 	TitleSub: 'Khoá học video',
-			// 	SubMenuList: [
-			// 		{
-			// 			TypeItem: 'single',
-			// 			Key: '/video-course',
-			// 			Route: '/video-course',
-			// 			Icon: '',
-			// 			Text: 'Danh sách'
-			// 		},
-			// 		{
-			// 			TypeItem: 'single',
-			// 			Key: '/video-course-order',
-			// 			Icon: '',
-			// 			Route: '/video-course-order',
-			// 			Text: 'Đơn hàng'
-			// 		},
-			// 		{
-			// 			TypeItem: 'single',
-			// 			Key: '/video-course-list',
-			// 			Icon: '',
-			// 			Route: '/video-course-list',
-			// 			Text: 'Đã kích hoạt'
-			// 		}
-			// 	]
-			// },
 			{
 				ItemType: 'single',
 				Key: '/class/create',
@@ -526,40 +185,12 @@ export const AdminChildMenu = [
 				Route: '/class/register',
 				Text: 'Đăng ký học'
 			}
-			// {
-			// 	TypeItem: 'single',
-			// 	Key: '/course/register',
-			// 	Icon: <BsBookmarkCheck />,
-			// 	Route: '/course/register',
-			// 	Text: 'Đăng ký lớp học'
-			// },
-			// {
-			// 	ItemType: 'sub-menu',
-			// 	Key: 'sub-course-zoom',
-			// 	Icon: <AiOutlineVideoCamera />,
-			// 	TitleSub: 'Quản lý Zoom',
-			// 	SubMenuList: [
-			// 		{
-			// 			ItemType: 'single',
-			// 			Key: '/course/zoom/configs',
-			// 			Route: '/course/zoom/configs',
-			// 			Text: 'Cấu hình',
-			// 			Icon: ''
-			// 		},
-			// 		{
-			// 			ItemType: 'single',
-			// 			Key: '/course/zoom/rooms',
-			// 			Route: '/course/zoom/rooms',
-			// 			Text: 'Danh sách phòng học',
-			// 			Icon: ''
-			// 		}
-			// 	]
-			// }
 		]
 	},
 	{
 		MenuName: 'Khóa học',
 		MenuTitle: 'Khóa học',
+		Parent: 'video',
 		MenuKey: '/course',
 		MenuItem: [
 			{
@@ -585,175 +216,12 @@ export const AdminChildMenu = [
 			}
 		]
 	},
-	// {
-	// 	MenuName: 'Quản lí nhân viên',
-	// 	MenuTitle: 'Quản lí nhân viên',
-	// 	MenuKey: '/staff',
-	// 	MenuItem: [
-	// 		{
-	// 			ItemType: 'sub-menu',
-	// 			Key: 'sub-list-staff-child-1',
-	// 			Icon: '',
-	// 			TitleSub: 'Nhân viên',
-	// 			SubMenuList: [
-	// 				{
-	// 					ItemType: 'single',
-	// 					Key: '/staff/staff-list',
-	// 					Route: '/staff/staff-list',
-	// 					Text: 'Danh sách nhân viên',
-	// 					Icon: ''
-	// 				},
-	// 				{
-	// 					ItemType: 'single',
-	// 					Key: '/staff/saler-list',
-	// 					Route: '/staff/saler-list',
-	// 					Text: 'Danh sách Salers',
-	// 					Icon: ''
-	// 				},
-	// 				{
-	// 					ItemType: 'single',
-	// 					Key: '/staff/feedback-list',
-	// 					Route: '/staff/feedback-list',
-	// 					Text: 'Duyệt feedback',
-	// 					Icon: ''
-	// 				}
-	// 			]
-	// 		},
-	// 		{
-	// 			ItemType: 'single',
-	// 			Key: '/staff/salary-review',
-	// 			Route: '/staff/salary-review',
-	// 			Text: 'Bảng lương nhân viên',
-	// 			Icon: ''
-	// 		},
-	// 		{
-	// 			ItemType: 'sub-menu',
-	// 			Key: 'sub-list-staff-child-300',
-	// 			Icon: '',
-	// 			TitleSub: 'Giáo viên',
-	// 			SubMenuList: [
-	// 				{
-	// 					ItemType: 'single',
-	// 					Key: '/staff/teacher-list',
-	// 					Route: '/staff/teacher-list',
-	// 					Text: 'Giáo viên',
-	// 					Icon: ''
-	// 				}
-	// 			]
-	// 		},
-	// 		{
-	// 			ItemType: 'single',
-	// 			Key: '/staff/teacher-salary',
-	// 			Route: '/staff/teacher-salary',
-	// 			Text: 'Bảng lương giáo viên',
-	// 			Icon: ''
-	// 		},
-	// 		{
-	// 			ItemType: 'single',
-	// 			Key: '/staff/admin-salary-staff',
-	// 			Route: '/staff/admin-salary-staff',
-	// 			Text: 'Bảng lương nhân viên',
-	// 			Icon: ''
-	// 		},
-	// 		{
-	// 			ItemType: 'single',
-	// 			Key: '/feedback',
-	// 			Route: '/feedback',
-	// 			Text: 'Danh sách phản hồi',
-	// 			Icon: ''
-	// 		},
-	// 		{
-	// 			ItemType: 'sub-menu',
-	// 			Key: 'sub-list-staff-child-301',
-	// 			Icon: '',
-	// 			TitleSub: 'Tư vấn viên',
-	// 			SubMenuList: [
-	// 				{
-	// 					ItemType: 'single',
-	// 					Key: '/staff/sales-campaign',
-	// 					Route: '/staff/sales-campaign',
-	// 					Text: 'Chiến dịch kinh doanh',
-	// 					Icon: ''
-	// 				},
-	// 				{
-	// 					ItemType: 'single',
-	// 					Key: '/staff/sales-salary',
-	// 					Route: '/staff/sales-salary',
-	// 					Text: 'Duyệt lương',
-	// 					Icon: ''
-	// 				},
-	// 				{
-	// 					ItemType: 'single',
-	// 					Key: '/staff/sales-salary-history',
-	// 					Route: '/staff/sales-salary-history',
-	// 					Text: 'Lịch sử duyệt',
-	// 					Icon: ''
-	// 				},
-	// 				{
-	// 					ItemType: 'single',
-	// 					Key: '/staff/saler-list',
-	// 					Route: '/staff/saler-list',
-	// 					Text: 'Danh sách tư vấn viên',
-	// 					Icon: ''
-	// 				},
-	// 				{
-	// 					ItemType: 'single',
-	// 					Key: '/staff/saler-revenue',
-	// 					Route: '/staff/saler-revenue',
-	// 					Text: 'Doanh thu tư vấn viên',
-	// 					Icon: ''
-	// 				}
-	// 			]
-	// 		},
-	// 		{
-	// 			ItemType: 'single',
-	// 			Key: '/staff/manage-task',
-	// 			Route: '/staff/manage-task',
-	// 			Text: 'Quản lí công việc',
-	// 			Icon: ''
-	// 		}
-	// 	]
-	// },
-	// {
-	// 	MenuName: 'Ngân hàng đề thi',
-	// 	MenuTitle: 'Ngân hàng đề thi',
-	// 	MenuKey: '/question-bank',
-	// 	MenuItem: [
-	// 		{
-	// 			ItemType: 'single',
-	// 			Key: '/question-bank/question-list',
-	// 			Route: '/question-bank/question-list',
-	// 			Text: 'Danh sách câu hỏi',
-	// 			Icon: ''
-	// 		},
-	// 		{
-	// 			ItemType: 'single',
-	// 			Key: '/question-bank/exam-list',
-	// 			Route: '/question-bank/exam-list',
-	// 			Text: 'Danh sách đề thi',
-	// 			Icon: ''
-	// 		}
-	// 	]
-	// },
 	{
 		MenuName: 'Cấu hình',
 		MenuTitle: 'Cấu hình',
 		MenuKey: '/options',
+		Parent: 'config',
 		MenuItem: [
-			// {
-			// 	ItemType: 'single',
-			// 	Key: '/configs/certificate',
-			// 	Route: '/configs/certificate',
-			// 	Text: 'Chứng chỉ',
-			// 	Icon: <TbFileCertificate />
-			// },
-			// {
-			// 	ItemType: 'single',
-			// 	Key: '/configs/zoom-config',
-			// 	Route: '/configs/zoom-config',
-			// 	Text: 'Tài khoản Zoom',
-			// 	Icon: <TbVideo />
-			// },
 			{
 				ItemType: 'sub-menu',
 				Key: 'sub-list-staff-child-303',
@@ -790,13 +258,6 @@ export const AdminChildMenu = [
 					}
 				]
 			},
-			// {
-			// 	ItemType: 'single',
-			// 	Key: '/options/area',
-			// 	Route: '/options/area',
-			// 	Text: 'Địa chỉ',
-			// 	Icon: <GoLocation />
-			// },
 			{
 				ItemType: 'sub-menu',
 				Key: 'sub-list-staff-child-304',
@@ -845,13 +306,6 @@ export const AdminChildMenu = [
 						Text: 'Trạng thái khách hàng',
 						Icon: ''
 					},
-					// {
-					// 	ItemType: 'single',
-					// 	Key: '/options/feedback',
-					// 	Route: '/options/feedback',
-					// 	Text: 'Loại phản hồi',
-					// 	Icon: ''
-					// },
 					{
 						ItemType: 'single',
 						Key: '/options/purpose',

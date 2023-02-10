@@ -8,33 +8,55 @@ import { RootState } from '~/store'
 import { TeacherChildMenu, TeacherMenu } from '~/common/libs/routers/teacher'
 import { StudentChildMenu, StudentMenu } from '~/common/libs/routers/student'
 import ReactHtmlParser from 'react-html-parser'
+import { log } from '~/common/utils'
+import PrimaryTooltip from '../../PrimaryTooltip'
 
 const { SubMenu } = Menu
 
-const defaultTab = 'tab-home'
-
-const SHOW_SMALL_MENU = false
+const defaultTab = 'home'
 
 const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, resetMenuMobile }) => {
 	const router = useRouter()
-	let getRouter = router.pathname
+	let pathname = router.pathname
 
 	const menuChild = useRef(null)
 
-	if (getRouter == '/') {
-		getRouter = '/user/student'
-	}
+	// if (pathname == '/') {
+	// 	pathname = '/user/student'
+	// }
 
-	const { information: user } = useSelector((state: RootState) => state.user)
 	const [isHover, setIsHover] = useState({ changeHeight: null, status: false, position: null })
-	const [tab, tabSet] = useState<string>(defaultTab)
-	const [subMenuActive, setSubMenuActive] = useState('')
 	const [posMenu, setPosMenu] = useState(null)
 	const [openKeys, setOpenKeys] = useState([])
 	const [statusOpen, setStatusOpen] = useState<boolean>(false)
 	const [sameTab, setSameTab] = useState(false)
+
 	const [parentMenu, setParentMenu] = useState([])
 	const [childMenu, setChildMenu] = useState([])
+
+	const [mainActivated, setMainActivated] = useState<string>(defaultTab)
+	const [subMenuActive, setSubMenuActive] = useState('')
+
+	log.Blue('parentMenu: ', parentMenu)
+
+	useEffect(() => {
+		if (parentMenu.length > 0) {
+			getActiveTab()
+		}
+	}, [parentMenu])
+
+	log.Blue('pathname: ', pathname)
+	log.Red('mainActivated: ', mainActivated)
+
+	function getActiveTab() {
+		console.time('- getActiveTab')
+
+		if (pathname == '/') {
+			//
+		}
+
+		console.timeEnd('- getActiveTab')
+	}
 
 	const changeTabs = (e) => {
 		e.preventDefault()
@@ -45,7 +67,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 
 		if (!isOpen) {
 			let dataTab = e.target.getAttribute('data-tabs')
-			dataTab == tab ? setSameTab(true) : tabSet(dataTab)
+			dataTab == mainActivated ? setSameTab(true) : setMainActivated(dataTab)
 			setStatusOpen(true)
 			setIsHover({ ...isHover, status: true, changeHeight: false })
 		}
@@ -54,17 +76,17 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 	const changeTabsClick = (e) => {
 		e.preventDefault()
 		let dataTab = e.target.getAttribute('data-tabs')
-		tabSet(dataTab)
+		setMainActivated(dataTab)
 	}
 
 	const closeTabs = (e) => {
 		e.preventDefault()
 
 		// Xóa tab trước khi tìm active tab
-		tabSet('')
+		setMainActivated('')
 
 		// Func tìm active tap
-		FindTabActive()
+		getActivated()
 
 		// Reset is Hover
 		if (isHover.status) {
@@ -77,22 +99,21 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 		}
 	}
 
-	const FindTabActive = () => {
-		childMenu.forEach((menu, index) => {
-			menu.MenuItem.forEach((item, ind) => {
-				if (getRouter === '/') {
-					tabSet('tab-home')
-				} else {
+	const getActivated = () => {
+		childMenu.forEach((menuItem, index) => {
+			let isPrimary = pathname !== '/'
+			menuItem.MenuItem.forEach((item, ind) => {
+				if (isPrimary) {
 					if (item.ItemType === 'sub-menu') {
 						item.SubMenuList.forEach((itemSub, key) => {
-							if (itemSub.Route === getRouter) {
-								tabSet(menu.MenuName)
+							if (itemSub.Route == pathname) {
+								setMainActivated(menuItem.Parent)
 								return false
 							}
 						})
 					} else {
-						if (item.Route === getRouter) {
-							tabSet(menu.MenuName)
+						if (item.Route == pathname) {
+							setMainActivated(menuItem.Parent)
 							return false
 						}
 					}
@@ -106,7 +127,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 			menu.MenuItem.forEach((item, ind) => {
 				if (item.ItemType === 'sub-menu') {
 					item.SubMenuList.forEach((itemSub, key) => {
-						if (itemSub.Route === getRouter) {
+						if (itemSub.Route === pathname) {
 							setSubMenuActive(item.Key)
 							return false
 						}
@@ -163,11 +184,11 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 	}, [openKeys])
 
 	useEffect(() => {
-		window.innerWidth < 1000 ? resetMenuMobile() : FindSubMenuActive(), FindTabActive()
-	}, [getRouter])
+		window.innerWidth < 1000 ? resetMenuMobile() : FindSubMenuActive(), getActivated()
+	}, [pathname])
 
 	useEffect(() => {
-		!isOpen && (setIsHover({ ...isHover, status: false }), FindTabActive())
+		!isOpen && (setIsHover({ ...isHover, status: false }), getActivated())
 	}, [isOpen])
 
 	const changeTabsWithPostion = () => {
@@ -215,7 +236,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 		return finalRouter
 	}
 
-	getRouter = convertRouter(getRouter)
+	pathname = convertRouter(pathname)
 
 	const closeMenuMobile = (e) => {
 		e.preventDefault()
@@ -224,7 +245,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 
 	useEffect(() => {
 		changeTabsWithPostion()
-	}, [tab])
+	}, [mainActivated])
 
 	useEffect(() => {
 		if (sameTab) {
@@ -275,13 +296,13 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 	useEffect(() => {
 		if (childMenu.length > 0) {
 			FindSubMenuActive()
-			FindTabActive()
+			getActivated()
 		}
 	}, [childMenu])
 
 	return (
 		<aside className={`menu-bar none-selection ${openMenuMobile ? 'mobile' : ''}`}>
-			<div onClick={closeMenuMobile} className={`right-menu ${openMenuMobile ? 'active' : ''}`} />
+			<div onClick={closeMenuMobile} className={`right-menu ${openMenuMobile ? 'right-menu-active' : ''}`} />
 
 			<div className="menu-parent">
 				<div className="menu-parent-logo" />
@@ -289,7 +310,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 				<div className="menu-parent-body">
 					<ul className="list-menu">
 						{parentMenu.map((item, index) => {
-							const isActive = tab == item.Key
+							const isActive = mainActivated == item.Key
 
 							return (
 								<li key={`menu-${index}`} className={`mt-[8px] relative ${isActive ? 'active' : ''} ${isOpen ? 'open-menu' : ''}`}>
@@ -302,7 +323,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 										onClick={changeTabsClick}
 										onMouseEnter={changeTabs}
 										data-tabs={item?.Key}
-										className={`${tab == item.Key && isHover.status && 'bg-white'}`}
+										className={`${mainActivated == item.Key && isHover.status && 'bg-white'}`}
 									>
 										{item.Icon}
 									</a>
@@ -332,14 +353,14 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 							<Menu
 								key={indexMenu}
 								onOpenChange={onOpenChange}
-								selectedKeys={[getRouter == '/' ? '/dashboard' : getRouter]}
+								selectedKeys={[pathname == '/' ? '/dashboard' : pathname]}
 								openKeys={[subMenuActive]}
 								mode="inline"
 								theme="light"
-								style={{ display: tab == menu.Parent ? 'block' : 'none' }}
+								style={{ display: mainActivated == menu.Parent ? 'block' : 'none' }}
 							>
 								<Menu.ItemGroup key={menu.MenuKey} title={menu.MenuTitle !== 'xx69x' ? menu.MenuTitle : ''}>
-									{menu.MenuItem?.map((item, indexItem) =>
+									{menu.MenuItem?.map((item) =>
 										item.ItemType !== 'sub-menu' ? (
 											<Menu.Item key={item.Key} icon={null}>
 												<Link href={item.Route}>
@@ -356,16 +377,20 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 												icon={typeof item.Icon == 'string' ? ReactHtmlParser(item.Icon) : item.Icon}
 												title={item.TitleSub}
 											>
-												{item?.SubMenuList.map((subitem) => (
-													<Menu.Item
-														key={`sub-menu-${subitem?.Key}`}
-														icon={typeof subitem.Icon == 'string' ? ReactHtmlParser(subitem.Icon) : subitem.Icon}
-													>
-														<Link href={subitem.Route}>
-															<div style={{ paddingLeft: 24 }}>{subitem.Text}</div>
-														</Link>
-													</Menu.Item>
-												))}
+												{item?.SubMenuList.map((subitem) => {
+													const isActive = subitem?.Route == pathname
+													return (
+														<Menu.Item
+															className={`${isActive ? '!text-[#1b73e8] bg-[#ecf2fd]' : ''}`}
+															key={`sub-menu-${subitem?.Key}`}
+															icon={typeof subitem.Icon == 'string' ? ReactHtmlParser(subitem.Icon) : subitem.Icon}
+														>
+															<Link href={subitem.Route}>
+																<div style={{ paddingLeft: 24 }}>{subitem.Text}</div>
+															</Link>
+														</Menu.Item>
+													)
+												})}
 											</SubMenu>
 										)
 									)}
