@@ -1,0 +1,13 @@
+.info-course-customer {
+	.wrap-btn-popover-customer {
+		@apply hidden;
+	}
+	@media (max-width: 767px) {
+		.wrap-btn-customer {
+			@apply hidden;
+		}
+		.wrap-btn-popover-customer {
+			@apply block;
+		}
+	}
+}

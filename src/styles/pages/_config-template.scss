@@ -1,0 +1,29 @@
+.invoice-editor {
+	@apply relative;
+}
+
+.btn-code-editor {
+	@apply absolute top-0 right-0 font-medium text-tw-primary;
+}
+
+.wrapper-config-template {
+	@apply p-6 rounded-lg bg-tw-white relative;
+}
+.popover-guide {
+	@apply absolute right-0 mx-6 z-10;
+}
+.btn-guide {
+	@apply font-medium text-tw-primary transition-all;
+
+	&:hover {
+		@apply text-[#02459d];
+	}
+}
+
+.text-guide {
+	@apply p-1 cursor-pointer transition-all;
+
+	&:hover {
+		@apply text-[#02459d];
+	}
+}

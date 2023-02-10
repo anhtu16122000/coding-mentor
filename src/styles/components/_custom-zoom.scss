@@ -1,0 +1,73 @@
+.loading-main {
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	justify-content: center !important;
+}
+
+.zoom-view {
+	position: relative;
+	height: 100vh;
+	width: 100vw;
+	.ant-spin {
+		@include mid;
+	}
+	.ant-spin-dot {
+		font-size: 120px;
+	}
+	.ant-spin-dot-item.ant-spin-dot-item {
+		background-color: $primary-color;
+		width: 56px;
+		height: 56px;
+	}
+	#footer_button-leave {
+		display: none;
+	}
+}
+
+#zmmtg-root {
+	display: none;
+	.btn-xs {
+		padding: 1px 5px !important;
+		font-size: 12px !important;
+		line-height: 1.5 !important;
+		border-radius: 3px !important;
+	}
+	.dropdown-toggle::after {
+		display: none;
+	}
+	#newname {
+		width: 100%;
+	}
+	.media-preview-icon-mic-option {
+		background-position-x: -271px !important;
+	}
+
+	.leave-meeting-options {
+		width: 270px !important;
+	}
+
+	.leave-option-container__cancel-btn {
+		background-color: rgb(210, 13, 13) !important;
+		&:hover {
+			background-color: rgb(177, 15, 15) !important;
+		}
+	}
+
+	.footer__leave-btn {
+		border-radius: 4px !important;
+	}
+
+	.chat-container__chat-control {
+		margin-bottom: 15px !important;
+		margin-top: 15px !important;
+	}
+
+	.meeting-info-container__wrapper {
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		padding: 0px !important;
+		margin-right: 20px !important;
+	}
+}

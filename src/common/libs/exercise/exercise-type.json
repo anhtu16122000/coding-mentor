@@ -1,0 +1,10 @@
+{
+	"MultipleChoice": 1,
+	"DragDrop": 2,
+	"FillInTheBlank": 3,
+	"Mindmap": 4,
+	"TrueOrFalse": 5,
+	"Sort": 6,
+	"Write": 7,
+	"Speak": 8
+}

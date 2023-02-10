@@ -1,0 +1,264 @@
+.title {
+	@apply font-medium;
+}
+.wrapper-calendar {
+	@apply relative z-10;
+	.overlay-calendar {
+		@apply absolute inset-0 z-20 bg-[rgba(255,255,255,0.3)] flex items-center justify-center;
+	}
+}
+.fc {
+	&.fc-theme-standard {
+		.fc-toolbar {
+			.fc-toolbar-chunk {
+				.fc-button {
+					@apply bg-[#1b73e8];
+				}
+				.fc-today-button {
+					@apply font-medium;
+				}
+				.fc-button-group {
+					button.fc-button {
+						@apply font-medium;
+					}
+					button.fc-button-active {
+						@apply bg-[#1b73e8];
+					}
+				}
+			}
+		}
+	}
+
+	.fc-scrollgrid {
+		@apply overflow-hidden rounded-xl;
+	}
+	.fc-scrollgrid-section-liquid {
+		& > td {
+			@apply rounded-br-xl;
+		}
+	}
+	.fc-scrollgrid-sync-table .fc-daygrid-day.fc-day-today {
+		@apply bg-[#e3f2fd];
+	}
+	.fc-col-header-cell {
+		@apply h-[44px] bg-tw-blue;
+		.fc-scrollgrid-sync-inner {
+			@apply flex items-center justify-center h-full bg-[#1b73e8] text-tw-white;
+			a {
+				&:hover {
+					@apply text-tw-orange;
+				}
+			}
+		}
+	}
+
+	.wrapper-schedule-mobile {
+		@apply hidden;
+	}
+	.wrapper-schedule-tablet {
+		@apply hidden;
+	}
+
+	.fc-dayGridMonth-view {
+		.fc-event.fc-daygrid-block-event {
+			@apply border-none pt-[2px] pb-1;
+			background: unset !important;
+		}
+		.fc-event.fc-daygrid-dot-event {
+			@apply pb-1;
+			&:hover {
+				background: unset !important;
+			}
+		}
+		.fc-daygrid-event-harness-abs {
+			.btn-remove,
+			.btn-edit {
+				@apply mx-2 relative bottom-2 w-[136px];
+			}
+		}
+		.wrapper-schedule {
+			@apply w-full h-full bg-[#e2e2e4] rounded-lg text-[#000];
+			button.btn-edit-title {
+				@apply flex items-center justify-center h-10 bg-[#1b73e8] text-tw-white font-medium text-base rounded-t-lg z-10 transition-all w-full;
+				&:hover {
+					@apply text-tw-orange;
+				}
+			}
+			.wrapper-content-schedule {
+				@apply p-2 text-sm leading-6;
+				.title {
+					@apply font-medium;
+				}
+				p {
+					@apply whitespace-normal;
+				}
+			}
+			.btn-remove,
+			.btn-edit {
+				@apply mx-2 relative bottom-2;
+			}
+		}
+	}
+	.fc-timeGridWeek-view {
+		.wrapper-schedule {
+			@apply hidden;
+		}
+		.wrapper-schedule-mobile {
+			@apply hidden;
+		}
+		.fc-event.fc-timegrid-event {
+			@apply border-none;
+			background-color: unset !important;
+			&:hover {
+				background: unset !important;
+			}
+		}
+		.wrapper-schedule-tablet {
+			@apply block;
+			button {
+				@apply flex items-center justify-center h-10 bg-[#1b73e8] text-tw-white font-medium text-base rounded-lg mb-2 z-10 transition-all w-full;
+				&:hover {
+					@apply text-tw-orange;
+				}
+			}
+			.wrapper-content-schedule {
+				@apply p-2;
+				.title {
+					@apply font-medium;
+				}
+				p {
+					@apply whitespace-normal;
+				}
+			}
+			.btn-remove {
+				@apply w-fit mx-auto mt-1 mb-2;
+			}
+		}
+	}
+	.fc-timeGridDay-view {
+		.wrapper-schedule {
+			@apply hidden;
+		}
+		.wrapper-schedule-mobile {
+			@apply hidden;
+		}
+		.fc-event.fc-timegrid-event {
+			@apply border-none p-0;
+			background-color: unset !important;
+			&:hover {
+				background: unset !important;
+			}
+		}
+		.wrapper-schedule-tablet {
+			@apply block;
+			button {
+				@apply flex items-center justify-center h-10 bg-[#1b73e8] text-tw-white font-medium text-base rounded-lg mb-2 z-10 transition-all w-full;
+				&:hover {
+					@apply text-tw-orange;
+				}
+			}
+			.wrapper-content-schedule {
+				@apply p-2;
+				.title {
+					@apply font-medium;
+				}
+				p {
+					@apply whitespace-normal;
+				}
+			}
+			.btn-remove {
+				@apply w-fit mx-auto mt-1 mb-2;
+			}
+		}
+	}
+}
+
+@media (max-width: 1023px) {
+	.fc {
+		.fc-dayGridMonth-view {
+			.wrapper-schedule {
+				@apply hidden;
+			}
+			.wrapper-schedule-mobile {
+				@apply hidden;
+			}
+			.fc-event.fc-daygrid-event {
+				@apply border-none;
+				background-color: unset !important;
+				&:hover {
+					@apply bg-[#f1f0f0];
+				}
+				span {
+					@apply w-full;
+				}
+			}
+			.wrapper-schedule-tablet {
+				@apply block;
+				button.btn-edit-title {
+					@apply h-full w-full flex-col p-2 rounded-lg;
+				}
+			}
+		}
+		.fc-timeGridWeek-view {
+			.wrapper-schedule {
+				@apply hidden;
+			}
+			.wrapper-schedule-mobile {
+				@apply hidden;
+			}
+			.wrapper-schedule-tablet {
+				@apply block;
+				button {
+					@apply h-full w-full flex-col p-2 rounded-lg text-sm;
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	.wrapper-detail-class {
+		.ant-tabs {
+			@apply flex-col gap-4;
+			.ant-tabs-content-holder {
+				.ant-tabs-tabpane {
+					@apply pr-0;
+				}
+			}
+		}
+	}
+	.fc {
+		.fc-header-toolbar.fc-toolbar {
+			@apply flex-col gap-2;
+		}
+		.fc-dayGridMonth-view {
+			.wrapper-schedule {
+				@apply hidden;
+			}
+			.wrapper-schedule-mobile {
+				@apply block;
+				button {
+					@apply rounded-lg;
+				}
+			}
+
+			.wrapper-schedule-tablet {
+				@apply hidden;
+			}
+		}
+		.fc-timeGridWeek-view {
+			.wrapper-schedule {
+				@apply hidden;
+			}
+			.wrapper-schedule-mobile {
+				@apply block;
+				button.btn-edit-title {
+					@apply flex items-center justify-center h-10 bg-[#1b73e8] text-tw-white font-medium text-base rounded-lg mb-2 z-10 transition-all w-full;
+				}
+			}
+			.wrapper-schedule-tablet {
+				@apply hidden;
+			}
+		}
+	}
+}

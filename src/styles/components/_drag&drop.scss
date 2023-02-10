@@ -1,0 +1,166 @@
+.drag-list {
+	.intro,
+	footer {
+		width: 400px;
+		margin: auto;
+	}
+
+	.item .dragHandle {
+		visibility: hidden;
+		position: absolute;
+		top: 0;
+		left: 0;
+		cursor: move;
+		width: 20px;
+		height: 16px;
+		background: url('/icons/grippy.png') 30% 50% no-repeat no-repeat;
+	}
+	.item:hover .dragHandle,
+	.item.dragged .dragHandle {
+		visibility: visible;
+	}
+	.item h2 {
+		margin: 0;
+	}
+	.item .subtitle {
+		font-weight: bold;
+	}
+
+	::-webkit-scrollbar {
+		-webkit-appearance: none;
+		width: 7px;
+	}
+
+	::-webkit-scrollbar-thumb {
+		border-radius: 4px;
+		background-color: rgba(0, 0, 0, 0.5);
+		-webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+	}
+
+	.drag-title .menu {
+		display: none;
+	}
+
+	.drag-title:hover .menu,
+	.drag-title.dragged .menu {
+		display: block;
+	}
+
+	.exam-dropdown:hover .menu {
+		display: block;
+	}
+}
+
+.ant-radio-disabled + span {
+	color: #000;
+}
+
+.custom-checkbox {
+	.ant-checkbox-inner {
+		border-radius: 0.375rem;
+		height: 30px;
+		width: 30px;
+		&:hover {
+			border-radius: 0.375rem;
+		}
+	}
+
+	.form-create-question .row-ans .ant-checkbox-wrapper .ant-checkbox .ant-checkbox-inner:after {
+		left: 29%;
+		width: 8.714286px;
+		height: 15.142857px;
+	}
+
+	.ant-checkbox-inner::after {
+		top: 45%;
+		left: 30%;
+		width: 8px;
+		height: 15px;
+		border: 3px solid #fff;
+		border-top: 0;
+		border-left: 0;
+	}
+
+	.ant-checkbox-checked::after {
+		border-radius: 0.375rem;
+		background-color: rgba(0, 0, 0, 0.1) !important;
+	}
+}
+
+.custom-check-group {
+	.ant-checkbox-group {
+		.ant-checkbox-wrapper {
+			width: 100% !important;
+			margin-top: 5px;
+			margin-bottom: 5px;
+		}
+	}
+	.ant-checkbox-wrapper {
+		width: 100% !important;
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+}
+
+.ant-checkbox-wrapper-disabled {
+	span {
+		color: #000 !important;
+	}
+}
+
+.inner-import-question {
+	height: 65vh;
+}
+
+.question-checkbox {
+	.ant-checkbox {
+		cursor: pointer !important;
+		.ant-checkbox-inner {
+			width: 22px;
+			height: 22px;
+			cursor: pointer !important;
+		}
+
+		.ant-checkbox-inner::after {
+			top: 45%;
+			left: 18%;
+			width: 8px;
+			height: 14px;
+			border: 3px solid #fff;
+			border-top: 0;
+			border-left: 0;
+		}
+
+		.ant-checkbox-checked::after {
+			border-radius: 0.375rem;
+			background-color: rgba(0, 0, 0, 0.1) !important;
+		}
+	}
+}
+
+.inner-testing {
+	height: calc(100vh - 87px);
+}
+
+.inner-testing-navigator {
+	height: calc(100vh - 175px);
+}
+
+.none-margin-card-header {
+	.ant-card-head {
+		padding: 0px;
+	}
+}
+
+.custom-card-header {
+	.ant-card-head {
+		padding: 0px;
+	}
+	.ant-card-body {
+		margin-top: -18px;
+	}
+}
+
+.inner-history-exam {
+	max-height: 70vh;
+}

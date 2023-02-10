@@ -1,0 +1,148 @@
+// Page Class List
+.wrapper-class {
+	.list-ver {
+		li {
+			@apply mb-1;
+		}
+	}
+	.course-list-content {
+		.wrapper-img {
+			@apply w-[105px];
+		}
+		.ant-list-item {
+			@apply items-baseline;
+		}
+		.ant-list-item-meta {
+			@apply flex-wrap;
+		}
+		.ant-list-item-meta-avatar {
+			@apply mt-[6px];
+		}
+		.ant-list-item-meta-title {
+			@apply w-[calc(100%-100px)] text-[17px];
+			a {
+				@apply text-tw-primary;
+			}
+		}
+		.content-body {
+			.list-ver {
+				@apply list-none pl-0;
+				li {
+					@apply flex items-center text-[#505050];
+					span:first-child {
+						@apply min-w-[100px] mr-[15px] font-medium;
+					}
+				}
+			}
+
+			.list-hor {
+				@apply mt-[5px] pl-[0];
+				li {
+					@apply inline-block text-[#505050] mr-5 text-xs;
+				}
+			}
+		}
+		@include max-media(1023px) {
+			.course-list-content {
+				.wrapper-img {
+					@apply w-[105px];
+				}
+				.ant-list-item-meta-avatar {
+					@apply mt-0 mb-[6px];
+					.tag {
+						@apply ml-0;
+					}
+				}
+				.ant-list-item-meta-title {
+					@apply w-full;
+				}
+			}
+		}
+	}
+	@include max-media(767px) {
+		.ant-card-body {
+			@apply p-4;
+		}
+		.course-list-content {
+			.wrapper-img {
+				@apply w-[130px];
+			}
+			.ant-list-item-meta-avatar {
+				@apply mr-0 w-full;
+				.wrapper-img {
+					@apply items-center;
+					.tag {
+						@apply w-full;
+					}
+				}
+			}
+			.ant-list-item-meta-content {
+				@apply w-full mt-3;
+			}
+			.ant-list-item {
+				@apply relative;
+				.wrapper-btn-class {
+					@apply absolute top-[9px] right-0;
+				}
+			}
+		}
+	}
+}
+
+// .ant-select-selection-item {
+// 	@apply flex;
+// }
+
+// Page Create Class
+.create-class {
+	.wrapper-calendar-class {
+		@apply flex items-center justify-between;
+	}
+	.ant-picker-cell-selected {
+		@apply z-0;
+		background: none;
+	}
+	.ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(
+			.ant-picker-cell-range-hover-start
+		):not(.ant-picker-cell-range-hover-end)
+		.ant-picker-cell-inner,
+	.ant-picker-cell:hover {
+		// background: none;
+	}
+	.ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date {
+		z-index: 0;
+		background: none;
+	}
+
+	.btn-show-schedule {
+		@apply absolute;
+	}
+	.popover-btn-create-class {
+		@apply hidden;
+	}
+	@media (max-width: 767px) {
+		.wrapper-calendar-class {
+			@apply flex-col gap-2;
+		}
+		.wrapper-btn-create-class-desktop {
+			@apply hidden;
+		}
+		.popover-btn-create-class {
+			@apply block;
+		}
+	}
+}
+
+.wrapper-detail-class {
+	.ant-tabs {
+		.ant-tabs-nav-wrap {
+			@apply bg-tw-white rounded-lg;
+			.label-tab {
+				@apply flex items-center justify-between w-full text-base;
+				svg {
+					@apply text-xl;
+				}
+			}
+		}
+	}
+}

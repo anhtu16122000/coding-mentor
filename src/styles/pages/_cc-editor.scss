@@ -1,0 +1,50 @@
+.cc-editor {
+	.tox-edit-area {
+		iframe {
+			padding: 0 16px !important;
+		}
+	}
+
+	.tox-tinymce {
+		border: 1px solid #c8c8c8 !important;
+		border-radius: 6px !important;
+		padding: 2px 0px !important;
+		&:hover {
+			border: 1px solid #b3b3b3 !important;
+		}
+		&:focus {
+			border: 1px solid #8a8a8a !important;
+		}
+		&:active {
+			border: 1px solid #8a8a8a !important;
+		}
+	}
+
+	.tox-toolbar__primary {
+		margin-bottom: 2px !important;
+	}
+
+	.tox:not(.tox-tinymce-inline) .tox-editor-header {
+		box-shadow: none !important;
+	}
+
+	.tox-toolbar-overlord {
+		border-bottom: 1px solid #ececec !important;
+	}
+
+	.tox-statusbar {
+		display: none !important;
+	}
+
+	.tox-editor-header {
+		height: 40px !important;
+	}
+
+	.tox:not(.tox-tinymce-inline) .tox-editor-header {
+		padding: 0 !important;
+	}
+
+	.tox:not([dir='rtl']) .tox-toolbar__group:not(:last-of-type) {
+		border-right: 1px solid #ececec !important;
+	}
+}

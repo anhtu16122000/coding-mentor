@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'variables';
+@import 'mixins';
+@import 'main';
+@import './fontawesome/css/all.css';
+@import './fonts/Noir/font.css';
+
+@import './pages/certificate';
+@import './pages/auth';
+@import './pages/news';
+@import './pages/video-course';
+@import './pages/exercise';
+@import './pages/newsfeed';
+@import './pages/config-template';
+@import './pages/service-appointment-test';
+@import './pages/curriculum-detail';
+@import './pages/class';
+@import './pages/student';
+@import './pages/customer';
+@import './pages/exam';
+@import './pages/cc-editor';
+@import './pages/schedule';
+@import './pages/register-class';
+
+@import './common/menu';
+@import './common/header';
+@import './common/layout';
+@import './components/custom-zoom';
+@import './common/table';
+@import './components/antd-custom';
+@import './components/elements';
+@import './common/other';
+@import './components/loading-layout';
+@import './components/drag&drop';
+@import './components/pdf-custom';
+@import './components/context-menu';
+@import './components/layoutTags';
+@import './components/calendar';
+
+@import './common/animation';
+@import './pages/chau-mentor.css';

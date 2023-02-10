@@ -1,0 +1,50 @@
+// .video_course-item {
+// 	.video_course-img {
+// 		transition: all 0.5s;
+
+// 		&:hover {
+//             .video_course-overlay {
+//                 opacity: 0.3;
+//                 z-index: 3;
+// 			}
+// 		}
+//         .video-course-overlay {
+//             transition: all 0.5s;
+//             opacity: 0;
+//             z-index: -1;
+//         }
+// 	}
+// }
+
+// .black-candal {
+//     opacity: 0;
+// }
+.collapse-wrap-admin {
+	& .ant-collapse-header-text {
+		width: 65%;
+	}
+
+	@include max-media(1450px) {
+		& .ant-collapse-header-text {
+			width: 60%;
+		}
+	}
+
+	@include max-media(1024px) {
+		& .ant-collapse-header-text {
+			width: 65%;
+		}
+	}
+
+	@include max-media(575px) {
+		& .ant-collapse-header-text {
+			width: 60%;
+		}
+	}
+}
+
+.collapse-wrap {
+	& .ant-collapse-header-text {
+		width: 100%;
+	}
+}

@@ -1,0 +1,132 @@
+/* TEXT CSS WITH SIZE 10 */
+.text-10-400 {
+	font-size: 10px;
+	font-weight: 400;
+}
+.text-10-500 {
+	font-size: 10px;
+	font-weight: 500;
+}
+.text-10-600 {
+	font-size: 10px;
+	font-weight: 600;
+}
+.text-10-700 {
+	font-size: 10px;
+	font-weight: 700;
+}
+.text-10-bold {
+	font-size: 10px;
+	font-weight: bold;
+}
+
+/* TEXT CSS WITH SIZE 12 */
+.text-12-400 {
+	font-size: 12px;
+	font-weight: 400;
+}
+.text-12-500 {
+	font-size: 12px;
+	font-weight: 500;
+}
+.text-12-600 {
+	font-size: 12px;
+	font-weight: 600;
+}
+.text-12-700 {
+	font-size: 12px;
+	font-weight: 700;
+}
+.text-12-bold {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+/* TEXT CSS WITH SIZE 14 */
+.text-14-400 {
+	font-size: 14px;
+	font-weight: 400;
+}
+.text-14-500 {
+	font-size: 14px;
+	font-weight: 500;
+}
+.text-14-600 {
+	font-size: 14px;
+	font-weight: 600;
+}
+.text-14-700 {
+	font-size: 14px;
+	font-weight: 700;
+}
+.text-14-bold {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+/* TEXT CSS WITH SIZE 16 */
+.text-16-400 {
+	font-size: 16px;
+	font-weight: 400;
+}
+.text-16-500 {
+	font-size: 16px;
+	font-weight: 500;
+}
+.text-16-600 {
+	font-size: 16px;
+	font-weight: 600;
+}
+.text-16-700 {
+	font-size: 16px;
+	font-weight: 700;
+}
+.text-16-bold {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+/* TEXT CSS WITH SIZE 18 */
+.text-18-400 {
+	font-size: 18px;
+	font-weight: 400;
+}
+.text-18-500 {
+	font-size: 18px;
+	font-weight: 500;
+}
+.text-18-600 {
+	font-size: 18px;
+	font-weight: 600;
+}
+.text-18-700 {
+	font-size: 18px;
+	font-weight: 700;
+}
+.text-18-bold {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+/* TEXT COLOR CSS */
+.text-white {
+	color: #fff;
+}
+.text-black {
+	color: #000;
+}
+.text-red {
+	color: red;
+}
+.text-green {
+	color: green;
+}
+.text-blue {
+	color: blue;
+}
+.text-grey {
+	color: grey;
+}
+.text-gray {
+	color: gray;
+}

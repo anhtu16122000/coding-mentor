@@ -1,0 +1,26 @@
+.wrapper-class-schedule {
+	.btn-schedule-branch {
+		@apply bg-[#e0f7ff] border-[#e0f7ff] text-[#00afef] transition-all;
+		&:hover {
+			@apply bg-[#008abc] border-[#008abc] text-[#fff];
+		}
+	}
+	.wrapper-status {
+		@apply flex items-center gap-4 mt-4;
+		.wrapper-tag {
+			@apply flex items-center;
+			.tag-color {
+				@apply w-4 h-4 mr-1;
+			}
+			.no-study {
+				@apply bg-tw-secondary;
+			}
+			.no-attendance {
+				@apply bg-tw-disable;
+			}
+			.attendaced {
+				@apply bg-tw-primary;
+			}
+		}
+	}
+}

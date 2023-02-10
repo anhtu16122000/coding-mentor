@@ -1,0 +1,25 @@
+@keyframes shake {
+	0% {
+		transform: translate(0, 2px);
+	}
+	50% {
+		transform: translate(0, -2px);
+	}
+	100% {
+		transform: translate(0, 0);
+	}
+	50% {
+		transform: translate(0, -2px);
+	}
+	0% {
+		transform: translate(0, 2px);
+	}
+}
+
+.shake-y {
+	animation: shake 00ms 2 linear;
+	-moz-animation: shake 1000ms 2 linear;
+	-webkit-animation: shake 1000ms 2 linear;
+	-o-animation: shake 1000ms 2 linear;
+	animation-iteration-count: infinite;
+}

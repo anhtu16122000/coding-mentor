@@ -1,0 +1,31 @@
+.wrapper-expanded-table-appointment {
+	@apply bg-tw-white p-6;
+	.wrap-table {
+		padding: 0 !important;
+		th.ant-table-cell {
+			@apply bg-tw-orange;
+		}
+	}
+	.result-appointment-title {
+		@apply text-center font-semibold mb-4;
+	}
+	.custom-table-appointment {
+		@apply bg-tw-white rounded-lg shadow-md;
+		tr {
+			th {
+				@apply relative bg-tw-orange text-tw-white px-4 py-2;
+
+				&:after {
+					@apply absolute content-[''] w-[0.5px] h-[60%] block top-2/4 right-0 -translate-x-2/4 -translate-y-2/4 bg-[#282828];
+				}
+			}
+
+			th:first-child {
+				@apply rounded-tl-lg;
+			}
+			th:last-child {
+				@apply rounded-tr-lg after:hidden;
+			}
+		}
+	}
+}

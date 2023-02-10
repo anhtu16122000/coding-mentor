@@ -1,0 +1,88 @@
+.app {
+	background-color: #f8f7f7;
+}
+
+.app-main {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.app-content {
+	width: calc(100% - 330px);
+	margin-top: 65px;
+	padding: 20px 10px;
+	transition: 0.3s width;
+	height: calc(100vh - 65px);
+	overflow: auto;
+	overflow-x: hidden;
+
+	// .ant-card-body {
+	// 	min-height: calc(100vh - 110px);
+	// }
+
+	@include max-media(1000px) {
+		width: 100%;
+		padding: 20px 0;
+		overflow-x: hidden;
+	}
+
+	&::-webkit-scrollbar-track {
+		border-radius: 10px;
+		background-color: white;
+	}
+
+	&::-webkit-scrollbar {
+		border: none;
+		width: 6px;
+		background-color: #f5f5f5;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		background-color: #b1b1b1;
+	}
+
+	&.close-app {
+		width: calc(100% - 80px);
+	}
+}
+
+// Modifire Antd
+.ant-pagination {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+
+	.ant-pagination-item-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	// .ant-pagination-prev,.ant-pagination-next {
+	// 	margin-top: 5px!important;
+	// }
+
+	li {
+		border-radius: 4px !important;
+		// border-color: $primary-color;
+		margin-top: 1px;
+		&.ant-pagination-item-active {
+			margin-top: 1px;
+		}
+
+		&.ant-pagination-item-active a {
+			color: $primary-color;
+		}
+
+		a,
+		button {
+			border-radius: 4px !important;
+		}
+	}
+	.ant-pagination-item-link {
+		&:hover {
+			color: $primary-color;
+		}
+	}
+}

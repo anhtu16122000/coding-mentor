@@ -1,0 +1,126 @@
+import { Form, Modal, Spin, Tooltip } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Edit } from 'react-feather'
+import { MdAddCircleOutline, MdSave } from 'react-icons/md'
+import * as yup from 'yup'
+import { idiomApi } from '~/api/idiom'
+import EditorField from '~/common/components/FormControl/EditorField'
+import { ShowNoti, wait } from '~/common/utils'
+import PrimaryButton from '../Primary/Button'
+import IconButton from '../Primary/IconButton'
+
+const IdiomsForm = React.memo((props: any) => {
+	const { rowData, getDataIdiom } = props
+	const [isModalVisible, setIsModalVisible] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
+	const [form] = Form.useForm()
+
+	const schema = yup.object().shape({
+		Content: yup.string().required('Bạn không được để trống')
+	})
+
+	const yupSync = {
+		async validator({ field }, value) {
+			await schema.validateSyncAt(field, { [field]: value })
+		}
+	}
+
+	const onSubmit = async (data: any) => {
+		setIsLoading(true)
+		try {
+			let dataSubmit = null
+			if (rowData) {
+				dataSubmit = { ...rowData, ...data }
+			} else {
+				dataSubmit = { ...data }
+			}
+			const res = await (dataSubmit?.Id ? idiomApi.update(dataSubmit) : idiomApi.add(dataSubmit))
+			if (res.status === 200) {
+				getDataIdiom()
+				form.resetFields()
+				setIsModalVisible(false)
+				ShowNoti('success', res.data.message)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	useEffect(() => {
+		if (isModalVisible) {
+			if (rowData) {
+				form.setFieldValue('Content', rowData.Content)
+			}
+		}
+	}, [isModalVisible])
+
+	return (
+		<>
+			{rowData ? (
+				<IconButton
+					type="button"
+					icon="edit"
+					color="yellow"
+					onClick={() => {
+						setIsModalVisible(true)
+					}}
+				/>
+			) : (
+				<PrimaryButton
+					onClick={() => {
+						setIsModalVisible(true)
+					}}
+					type="button"
+					background="green"
+					icon="add"
+				>
+					Thêm mới
+				</PrimaryButton>
+			)}
+
+			<Modal
+				width={1000}
+				title={<>{rowData ? 'Cập nhật' : 'Thêm mới'}</>}
+				visible={isModalVisible}
+				onCancel={() => setIsModalVisible(false)}
+				footer={null}
+				centered
+			>
+				<div className="container-fluid">
+					<Form form={form} layout="vertical" onFinish={onSubmit}>
+						<div className="row">
+							<div className="col-12">
+								<EditorField
+									id={rowData?.Id}
+									label="Câu thành ngữ"
+									name="Content"
+									// content={idiomsDetail ? idiomsDetail.Idioms : idiomsInput}
+									isRequired
+									rules={[yupSync]}
+									onChangeEditor={(value) => form.setFieldValue('Content', value)}
+									height={450}
+								/>
+							</div>
+						</div>
+						<div className="row">
+							<div className="col-12 text-center">
+								{/* <button type="submit" className="btn btn-primary">
+									<MdSave size={18} className="mr-2" />
+									Lưu
+									{loading && <Spin className="loading-base" />}
+								</button> */}
+								<PrimaryButton className="w-full" type="submit" background="blue" icon="save" disable={isLoading} loading={isLoading}>
+									Lưu
+								</PrimaryButton>
+							</div>
+						</div>
+					</Form>
+				</div>
+			</Modal>
+		</>
+	)
+})
+
+export default IdiomsForm

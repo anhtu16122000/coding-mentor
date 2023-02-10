@@ -1,0 +1,289 @@
+.login-container {
+	width: 100%;
+	height: 100vh;
+	background-color: #fff;
+	.left-login {
+		background: url('https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80')
+			no-repeat center center;
+		background-size: cover;
+		position: relative;
+		.mask-background {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100vh;
+			width: 100%;
+			background-color: #000;
+			z-index: 99;
+			opacity: 0.3;
+		}
+		.mask-content {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100vh;
+			width: 100%;
+			z-index: 99;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background-color: rgba(0, 0, 0, 0.2);
+			.content {
+				color: #fff;
+				font-size: 20px;
+			}
+
+			.date {
+				font-weight: bold;
+				color: #fff;
+				font-size: 80px;
+				line-height: 1;
+				margin-bottom: 35px;
+			}
+			.month_year {
+				font-size: 62px;
+				font-weight: bold;
+				color: $primary-color;
+				background-color: #fff;
+				padding: 0 20px;
+				border-radius: 15px;
+				margin-bottom: 1rem;
+			}
+			.time {
+				font-weight: bold;
+				color: #fff;
+				font-size: 52px;
+				display: inline-block;
+			}
+
+			.content-idiom {
+				@apply font-bold text-3xl text-tw-white mx-12 my-5;
+			}
+		}
+		@include max-media(1000px) {
+			display: none;
+		}
+	}
+	.right-login {
+		height: 100vh;
+		background-color: rgb(255, 255, 255);
+		box-shadow: 0px 0px 50px #23293143;
+		@include max-media(1000px) {
+			width: 100vw;
+		}
+		.logo-login {
+			width: 250px;
+		}
+		.logo-register {
+			width: 150px;
+		}
+		.login-title {
+			font-weight: 700;
+			font-size: 24px;
+			line-height: 40px;
+			color: $second-color;
+		}
+		label {
+			font-weight: 400;
+			font-size: 16px;
+			line-height: 24px;
+			color: #333333;
+			margin-bottom: 8px;
+			width: 70%;
+			&.password {
+				flex: 1;
+			}
+			@include max-media(1200px) {
+				width: 90%;
+			}
+			@include max-media(1000px) {
+				width: 50%;
+			}
+			@include max-media(700px) {
+				width: 70%;
+			}
+			@include max-media(500px) {
+				width: 85%;
+			}
+		}
+		.input {
+			width: 100%;
+			height: 44px;
+			background: #f0f0f0;
+			border: 0.5px solid #cccccc;
+			border-radius: 8px;
+			.ant-input-prefix {
+				color: #6e6e6e;
+			}
+			input {
+				background-color: transparent;
+				margin-left: 8px;
+			}
+		}
+		.ant-form-item {
+			width: 70%;
+			@include max-media(1200px) {
+				width: 90%;
+			}
+			@include max-media(1000px) {
+				width: 50%;
+			}
+			@include max-media(700px) {
+				width: 70%;
+			}
+			@include max-media(500px) {
+				width: 85%;
+			}
+		}
+		.ant-input-affix-wrapper {
+			&:hover {
+				border-color: #a2a2a2;
+				border-width: 1px;
+			}
+		}
+		.ant-input-affix-wrapper-focused {
+			border-color: #9a9a9a;
+			box-shadow: none;
+		}
+
+		.wrap-password {
+			width: 70%;
+			display: inline-flex;
+			align-items: center;
+			a {
+				font-size: 16px;
+				line-height: 24px;
+				color: $primary-color;
+			}
+			@include max-media(1200px) {
+				width: 90%;
+			}
+			@include max-media(1000px) {
+				width: 50%;
+			}
+			@include max-media(700px) {
+				width: 70%;
+			}
+			@include max-media(500px) {
+				width: 85%;
+			}
+		}
+
+		.btn-login {
+			display: inline-flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			width: 70%;
+			height: 44px;
+			padding: 9px 0;
+			background: $primary-color;
+			border-radius: 8px;
+			border-style: none;
+			color: #fff;
+			font-weight: 600;
+			font-size: 16px;
+
+			&:hover {
+				background: $primary-hover;
+			}
+
+			&:active {
+				background: $primary-color;
+			}
+
+			@include max-media(1200px) {
+				width: 90%;
+			}
+			@include max-media(1000px) {
+				width: 50%;
+			}
+			@include max-media(700px) {
+				width: 70%;
+			}
+			@include max-media(500px) {
+				width: 85%;
+			}
+
+			.loading-white {
+				margin-top: -6px;
+			}
+
+			&:disabled {
+				background-color: rgb(183, 183, 183);
+				cursor: not-allowed !important;
+			}
+		}
+
+		.register {
+			font-weight: 400;
+			font-size: 16px;
+			line-height: 24px;
+			text-align: center;
+			color: #333333;
+			a {
+				color: $primary-color;
+			}
+		}
+	}
+
+	.error-text {
+		width: 70%;
+		margin-top: 5px;
+		@include max-media(1200px) {
+			width: 90%;
+		}
+		@include max-media(1000px) {
+			width: 50%;
+		}
+		@include max-media(700px) {
+			width: 70%;
+		}
+		@include max-media(500px) {
+			width: 85%;
+		}
+		&.response {
+			margin-bottom: -15px;
+		}
+	}
+}
+
+.input-register {
+	position: relative;
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	border-radius: 0;
+	border: none;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1803921569);
+	padding: 10px 15px;
+	padding-left: 0;
+	margin-bottom: 10px;
+	font-size: 14px;
+
+	&:hover,
+	&:focus {
+		outline: none;
+	}
+}
+
+.label-register {
+	line-height: 2;
+	text-align: left;
+	display: block;
+	margin-top: 0;
+	padding: 0;
+	color: #424242;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.wrap-register-form {
+	.ant-form-item {
+		margin-bottom: 12px;
+	}
+	.ant-form-item-label {
+		padding: 0;
+	}
+}

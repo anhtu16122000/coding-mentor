@@ -1,0 +1,146 @@
+.wrapper-register-class {
+	.tab-item {
+		@apply transition-all text-[15px];
+		&.active {
+			@apply relative text-tw-primary;
+			&::after {
+				@apply content-[''] block absolute top-[105%] left-0 right-0 h-[2px] bg-tw-primary;
+			}
+		}
+		&:hover {
+			@apply text-tw-primary;
+		}
+	}
+
+	.info-payment-register-class {
+		@apply bg-tw-white rounded-lg p-6;
+		.wrapper-payment-method-register-class {
+			@apply flex items-center justify-start gap-3 overflow-x-scroll;
+			&::-webkit-scrollbar-track {
+				border-radius: 10px;
+				background-color: white !important;
+			}
+
+			&::-webkit-scrollbar {
+				border: none;
+				width: 5px !important;
+				height: 5px !important;
+				background-color: white !important;
+			}
+
+			&::-webkit-scrollbar-thumb {
+				border-radius: 10px;
+				background-color: #dbdbdb !important;
+			}
+		}
+		.item-payment-method-register-class {
+			border: 2px solid #bfbfcb;
+			&.active-method {
+				border: 2px solid #1b73e8;
+			}
+			@apply rounded-lg w-32 h-24 flex-shrink-0 cursor-pointer;
+			img {
+				@apply rounded-lg object-fill;
+			}
+		}
+	}
+}
+
+.wrapper-item-class {
+	@apply flex items-center;
+	.img-class {
+		@apply w-20 h-20 rounded-lg mr-3 object-fill;
+	}
+	.img-discount {
+		@apply w-24 h-24 rounded-lg object-fill;
+	}
+	.wrapper-info-class {
+		@apply text-base flex flex-col gap-2;
+	}
+}
+
+.modal-review-class-program {
+	.ant-modal-body {
+		@apply max-h-[80vh] overflow-y-scroll;
+		&::-webkit-scrollbar-track {
+			border-radius: 10px;
+			background-color: white !important;
+		}
+
+		&::-webkit-scrollbar {
+			border: none;
+			width: 4px !important;
+			background-color: white !important;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			border-radius: 10px;
+			background-color: #dbdbdb !important;
+		}
+	}
+
+	.ant-list-items {
+		@apply max-h-[60vh] overflow-y-scroll;
+		&::-webkit-scrollbar-track {
+			border-radius: 10px;
+			background-color: white !important;
+		}
+
+		&::-webkit-scrollbar {
+			border: none;
+			width: 4px !important;
+			background-color: white !important;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			border-radius: 10px;
+			background-color: #dbdbdb !important;
+		}
+	}
+}
+
+.wrapper-classes,
+.wrapper-programs {
+	.ant-list-items {
+		@apply max-h-[42vh] overflow-y-scroll;
+		&::-webkit-scrollbar-track {
+			border-radius: 10px;
+			background-color: white !important;
+		}
+
+		&::-webkit-scrollbar {
+			border: none;
+			width: 4px !important;
+			background-color: white !important;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			border-radius: 10px;
+			background-color: #dbdbdb !important;
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	.wrapper-register-class {
+		.responsive-mobile {
+			@apply grid-cols-1 gap-y-4;
+		}
+		.info-payment-register-class {
+			.wrapper-payment-method-register-class {
+				@apply flex items-center justify-start gap-3 overflow-x-scroll;
+				&::-webkit-scrollbar-track {
+					background-color: transparent !important;
+				}
+
+				&::-webkit-scrollbar {
+					background-color: transparent !important;
+				}
+
+				&::-webkit-scrollbar-thumb {
+					background-color: transparent !important;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,37 @@
+@font-face {
+	font-family: 'Roboto';
+	src: url('../fonts/Montserrat/Roboto-Medium.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	src: url('../fonts/Montserrat/Montserrat-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	font-style: italic;
+	src: url('../fonts/Montserrat/Montserrat-Italic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'DejaVu Sans';
+	src: url('https://kendo.cdn.telerik.com/2022.2.802/styles/fonts/DejaVu/DejaVuSans.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	font-weight: 500;
+	src: url('../fonts/Montserrat/Montserrat-Medium.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'DejaVu Sans';
+	font-weight: 600;
+	font-style: italic;
+	src: url('../fonts/Dejavu-sans/dejavu-sans.bold-oblique.ttf') format('truetype');
+}
+
+.MsoNormal {
+	padding: 4px 0;
+}
