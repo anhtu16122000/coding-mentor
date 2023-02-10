@@ -10,32 +10,33 @@ import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import { setPaymentMethod } from '~/store/paymentMethodReducer'
 
+let initTodoApi = {
+	pageSize: PAGE_SIZE,
+	pageIndex: 1
+}
+
 const PaymentMethodPage = () => {
-	let initTodoApi = {
-		pageSize: PAGE_SIZE,
-		pageIndex: 1
-	}
 	const [todoApi, setTodoApi] = useState(initTodoApi)
-	// const [listPaymentMethod, setListPaymentMethod] = useState([])
 	const paymentMethod = useSelector((state: RootState) => state.paymentMethod.PaymentMethod)
 	const dispatch = useDispatch()
+
 	const columns = [
 		{
-			title: 'Hình ảnh',
+			title: '',
 			dataIndex: 'Thumbnail',
 			key: 'Thumbnail',
+			width: 110,
 			render: (image) => {
-				return (
-					<div className="image-table">
-						<img src={image} alt="Thumbnail" />
-					</div>
-				)
+				return <img src={image} alt="Thumbnail" className="w-[100px] h-[100px] rounded-[6px] shadow-md" />
 			}
 		},
 		{
-			title: 'Tên',
+			title: 'Phương thức',
 			dataIndex: 'Name',
-			key: 'Name'
+			key: 'Name',
+			render: (value) => {
+				return <div className="font-[600] text-[#1E88E5]">{value}</div>
+			}
 		},
 		{
 			title: 'Trạng thái',

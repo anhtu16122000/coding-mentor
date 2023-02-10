@@ -7,6 +7,8 @@ import SelectField from '../FormControl/SelectField'
 import UploadImageField from '../FormControl/UploadImageField'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
+import { formNoneRequired, formRequired } from '~/common/libs/others/form'
+import PrimaryEditor from '../Editor'
 
 const PaymentMethodForm = (props) => {
 	const { dataRow, setTodoApi, initTodoApi } = props
@@ -48,9 +50,10 @@ const PaymentMethodForm = (props) => {
 			<IconButton icon="edit" color="yellow" type="button" tooltip="Cập nhật" onClick={() => setOpenModal(true)} />
 			<Modal
 				centered
+				width={600}
 				open={openModal}
 				onCancel={() => setOpenModal(false)}
-				title="Cập nhật phương thức"
+				title="Cập nhật"
 				footer={
 					<PrimaryButton type="button" icon="save" background="blue" onClick={form.submit} disable={isLoading} loading={isLoading}>
 						Lưu
@@ -62,6 +65,7 @@ const PaymentMethodForm = (props) => {
 						<div className="col-span-1">
 							<UploadImageField form={form} name="Thumbnail" label="Hình ảnh" />
 						</div>
+
 						<div className="col-span-1">
 							<Form.Item name="Active" label="Trạng thái" className="antd-custom-wrap">
 								<Switch onChange={handleChangeStatus} checked={statusShow} />
@@ -69,13 +73,14 @@ const PaymentMethodForm = (props) => {
 						</div>
 					</div>
 
-					<EditorField
-						id={dataRow?.Id}
-						height={300}
-						label="Mô tả"
-						name="Description"
-						onChangeEditor={(value) => form.setFieldsValue({ Description: value })}
-					/>
+					<Form.Item className="col-span-4" label="Mô tả" name="Description" required rules={formNoneRequired}>
+						<PrimaryEditor
+							id={`quest-content-${new Date().getTime()}`}
+							height={300}
+							initialValue={dataRow?.Description || ''}
+							onChange={(event) => form.setFieldValue('Description', event)}
+						/>
+					</Form.Item>
 				</Form>
 			</Modal>
 		</div>

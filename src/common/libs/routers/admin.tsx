@@ -14,11 +14,18 @@ import {
 import { FiAirplay, FiBook, FiFileText, FiPieChart, FiUsers } from 'react-icons/fi'
 import { RiFileEditLine, RiFileList2Fill, RiHomeHeartFill, RiUser2Line, RiUser3Line } from 'react-icons/ri'
 import { BiBookAdd, BiBookBookmark, BiGitPullRequest } from 'react-icons/bi'
-import { MdAirplay, MdOutlineAttachMoney, MdOutlineManageAccounts, MdOutlineSchool, MdPersonalVideo } from 'react-icons/md'
+import {
+	MdAirplay,
+	MdOutlineAttachMoney,
+	MdOutlineManageAccounts,
+	MdOutlineSchool,
+	MdOutlineSettingsInputComposite,
+	MdPersonalVideo
+} from 'react-icons/md'
 import { AiFillHome, AiFillSetting, AiOutlineCalendar, AiOutlineContainer, AiOutlineUser, AiOutlineVideoCamera } from 'react-icons/ai'
 import { GiArchiveRegister, GiTeacher } from 'react-icons/gi'
 import { GoHome, GoLocation, GoReport, GoSettings } from 'react-icons/go'
-import { GrCertificate, GrMoney } from 'react-icons/gr'
+import { GrCertificate, GrMoney, GrSettingsOption } from 'react-icons/gr'
 import { FaHouseDamage, FaMoneyBillWave, FaMoneyBillWaveAlt, FaRegNewspaper, FaUserGraduate, FaUserTie } from 'react-icons/fa'
 import { IoPeopleOutline, IoVideocam } from 'react-icons/io5'
 import { User } from 'react-feather'
@@ -225,7 +232,7 @@ export const AdminChildMenu = [
 			{
 				ItemType: 'sub-menu',
 				Key: 'sub-list-staff-child-303',
-				Icon: <GoSettings />,
+				Icon: <GrSettingsOption />,
 				TitleSub: 'Cấu hình học',
 				SubMenuList: [
 					{
@@ -261,7 +268,7 @@ export const AdminChildMenu = [
 			{
 				ItemType: 'sub-menu',
 				Key: 'sub-list-staff-child-304',
-				Icon: <BsThreeDots />,
+				Icon: <MdOutlineSettingsInputComposite />,
 				TitleSub: 'Khác',
 				SubMenuList: [
 					{
@@ -343,8 +350,8 @@ export const AdminChildMenu = [
 					},
 					{
 						ItemType: 'single',
-						Key: '/options/payment-method',
-						Route: '/options/payment-method',
+						Key: '/options/payment',
+						Route: '/options/payment',
 						Text: 'Phương thức thanh toán',
 						Icon: ''
 					}

@@ -10,7 +10,6 @@ import { branchApi } from '~/api/branch'
 import { courseApi } from '~/api/course/course'
 import { studentChangeCourseApi } from '~/api/course-of-student-change'
 // import { useWrap } from '~/src/context/wrap'
-// import { PaymentMethod } from '~/src/lib/payment-method/payment-method'
 import { parseToMoney } from '~/common/utils/common'
 import { ShowNoti } from '~/common/utils'
 

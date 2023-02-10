@@ -8,7 +8,6 @@ import { courseApi } from '~/api/course/course'
 import { courseReserveApi } from '~/api/course-reserve'
 import { courseStudentPriceApi } from '~/api/course-of-student-price'
 // import { useWrap } from '~/src/context/wrap'
-// import { PaymentMethod } from '~/src/lib/payment-method/payment-method'
 import { ShowNoti } from '~/common/utils'
 
 const PaymentMethod = [
@@ -137,8 +136,8 @@ const CourseReserveIntoCourse = React.memo((props: any) => {
 
 	useEffect(() => {
 		if (isModalVisible == true) {
-			const temp = courseAfterDetail?.Price - infoDetail?.ProgramPrice
-			setRequestMoney(temp !== NaN ? temp : 0)
+			const temp: any = courseAfterDetail?.Price - infoDetail?.ProgramPrice
+			setRequestMoney(!!temp ? temp : 0)
 		}
 	}, [courseAfterDetail])
 
