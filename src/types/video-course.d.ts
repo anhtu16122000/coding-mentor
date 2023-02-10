@@ -159,7 +159,7 @@ type INotificationInVideoCourse = {
 
 type IReviewVideoCourse = {
 	VideoCourseId: number
-	UserId: number
+	UserId: number | string
 	Avatar: string
 	FullName: string
 	MyRate: number

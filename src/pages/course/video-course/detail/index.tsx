@@ -22,10 +22,10 @@ const VideoCourseDetail = () => {
 	const [completedPercent, setCompletedPercent] = useState(0)
 
 	useEffect(() => {
-		if (user) {
-			setUserRoleId(user.RoleId)
+		if (!!user) {
+			setUserRoleId(user?.RoleId || null)
 		}
-	}, [])
+	}, [user])
 
 	const getCourseDetail = async () => {
 		try {
@@ -82,17 +82,11 @@ const VideoCourseDetail = () => {
 		<>
 			<header className="flex justify-between align-center h-16 bg-tw-primary">
 				<div className="flex justify-start align-center gap-4 px-8">
-					<button
-						className="text-[#ffffff] text-2xl"
-						onClick={() => {
-							router.push('/course/video-course')
-						}}
-					>
+					<button className="text-[#ffffff] text-2xl" onClick={() => router.push('/course/video-course')}>
 						{<IoIosArrowBack />}
 					</button>
 					<p className="m-auto in-1-line text-2xl font-bold text-white">{courseDetail?.Name}</p>
 				</div>
-				{/*  */}
 
 				<div className="flex justify-end align-center gap-4 px-8">
 					{userRoleId === '3' && (

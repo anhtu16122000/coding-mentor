@@ -131,10 +131,10 @@ const WrapLesson = (props) => {
 			>
 				<div className="h-16 bg-tw-white flex justify-between align-center">
 					<p className="desktop:pt-0 text-base my-auto px-4 font-bold">Nội dung khóa học</p>
-					{user.RoleId === '3' && (
+					{user?.RoleId === '3' && (
 						<p className="tablet:hidden my-auto px-4 text-base font-bold text-[#ab1d38]">{completedPercent?.toFixed(2)}%</p>
 					)}
-					{user.RoleId === '1' && (
+					{user?.RoleId === '1' && (
 						<button
 							onClick={() => setIsChangePositionSection(!isChangePositionSection)}
 							className="w-fit my-4 pr-4 flex items-center justify-center"

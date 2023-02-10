@@ -10,7 +10,7 @@ import ModalAddFileVideoCourse from './ModalAddFIle'
 
 interface Props {
 	lessonID: number
-	UserID: string
+	UserID: string | number
 }
 
 export default function ModalShowFile(props: Props) {

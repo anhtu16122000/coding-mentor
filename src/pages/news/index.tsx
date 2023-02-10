@@ -1,7 +1,7 @@
 import React from 'react'
 import { MainLayout } from '~/common'
 import NewsFeed from '~/common/components/News'
-import NewsProvider from '~/common/Providers/News'
+import NewsProvider from '~/common/providers/News'
 
 function NewsPage() {
 	return (

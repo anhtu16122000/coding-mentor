@@ -182,7 +182,7 @@ const DocumentList = (props) => {
 						<div className="pb-3 col-12 d-flex justify-content-between align-items-center box-header">
 							<div className="title">Danh sách</div>
 
-							{userInformation?.RoleID == 1 && (
+							{userInformation.RoleId == 1 && (
 								<DocumentModal
 									type="ADD_DOC"
 									CategoryName={null}

@@ -2,11 +2,11 @@ import { Form, Input, Modal, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { MdSettings } from 'react-icons/md'
-import dirtyApi from '~/api/dirtyApi'
-import { formNoneRequired, formRequired } from '~/common/libs/form'
+// import dirtyApi from '~/api/dirtyApi'
+// import { formNoneRequired, formRequired } from '~/common/libs/form'
 import { ShowNoti } from '~/common/utils'
-import ModalFooter from '../../ModalFooter'
-import PrimaryUpload from '../../Upload'
+// import ModalFooter from '../../ModalFooter'
+// import PrimaryUpload from '../../Upload'
 
 function GroupForm(props) {
 	const { onRefresh, isEdit, defaultData } = props
@@ -22,31 +22,31 @@ function GroupForm(props) {
 
 	async function post(params) {
 		console.log('--- SUBMIT_DATA: ', params)
-		try {
-			const response = await dirtyApi.post('NewsFeedGroup', params)
-			if (response.data.resultCode == 200) {
-				onRefresh()
-				setVisible(false)
-			}
-		} catch (error) {
-		} finally {
-			setLoading(false)
-		}
+		// try {
+		// 	const response = await dirtyApi.post('NewsFeedGroup', params)
+		// 	if (response.data.resultCode == 200) {
+		// 		onRefresh()
+		// 		setVisible(false)
+		// 	}
+		// } catch (error) {
+		// } finally {
+		// 	setLoading(false)
+		// }
 	}
 
 	async function put(params) {
 		console.log('--- SUBMIT_DATA: ', params)
-		try {
-			const response = await dirtyApi.put('NewsFeedGroup', { ...params, id: defaultData?.id })
-			if (response.data.resultCode == 200) {
-				onRefresh()
-				setVisible(false)
-			}
-		} catch (error) {
-			ShowNoti.error(error?.resultMessage)
-		} finally {
-			setLoading(false)
-		}
+		// try {
+		// 	const response = await dirtyApi.put('NewsFeedGroup', { ...params, id: defaultData?.id })
+		// 	if (response.data.resultCode == 200) {
+		// 		onRefresh()
+		// 		setVisible(false)
+		// 	}
+		// } catch (error) {
+		// 	ShowNoti.error(error?.resultMessage)
+		// } finally {
+		// 	setLoading(false)
+		// }
 	}
 
 	function onFinish(params) {
@@ -65,16 +65,16 @@ function GroupForm(props) {
 
 	const [classes, setClasses] = useState<any>({ items: [], totalItem: 0 })
 	async function getClasses() {
-		try {
-			const response = await dirtyApi.get<TSubjects>('Class', { orderBy: 3, pageIndex: 1, pageSize: 999999 })
-			if (response.data.resultCode == 200) {
-				setClasses(response.data.data)
-			} else {
-				setClasses({ items: [], totalItem: 0 })
-			}
-		} catch (error) {
-			ShowNoti.error(error?.resultMessage)
-		}
+		// try {
+		// 	const response = await dirtyApi.get<TSubjects>('Class', { orderBy: 3, pageIndex: 1, pageSize: 999999 })
+		// 	if (response.data.resultCode == 200) {
+		// 		setClasses(response.data.data)
+		// 	} else {
+		// 		setClasses({ items: [], totalItem: 0 })
+		// 	}
+		// } catch (error) {
+		// 	ShowNoti.error(error?.resultMessage)
+		// }
 	}
 
 	function onOpenEdit() {
@@ -104,7 +104,7 @@ function GroupForm(props) {
 				centered
 				width={500}
 				title="Thông tin nhóm"
-				footer={<ModalFooter buttonFull loading={loading} onCancel={() => setVisible(false)} onOK={submitForm} />}
+				// footer={<ModalFooter buttonFull loading={loading} onCancel={() => setVisible(false)} onOK={submitForm} />}
 			>
 				<Form
 					form={form}
@@ -114,7 +114,7 @@ function GroupForm(props) {
 					onFinish={onFinish}
 					autoComplete="on"
 				>
-					<Form.Item className="col-span-2" label="Ảnh bìa" name="background" rules={formNoneRequired}>
+					{/* <Form.Item className="col-span-2" label="Ảnh bìa" name="background" rules={formNoneRequired}>
 						<div className="group-thum-form">
 							<PrimaryUpload.Image
 								defaultValue={form.getFieldValue('background')}
@@ -139,7 +139,7 @@ function GroupForm(props) {
 								})}
 							</Select>
 						</Form.Item>
-					)}
+					)}*/}
 				</Form>
 			</Modal>
 		</>

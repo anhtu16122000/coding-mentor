@@ -16,7 +16,7 @@ type IUser = {
 	ModifiedBy?: string
 
 	UserCode: string
-	UserInformationId: string
+	UserInformationId: string | number
 }
 
 type IUserInputGetall = {
