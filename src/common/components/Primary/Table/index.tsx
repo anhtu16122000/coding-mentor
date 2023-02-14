@@ -7,7 +7,7 @@ import Popup from './MenuContext'
 
 const PrimaryTable: FC<IPrimaryTable> = (props) => {
 	const { columns, children, TitleCard, Extra, className, loading, bordered } = props
-	const { total, current, expand, data, onExpand, onChangePage, menuContext } = props
+	const { total, current, expand, data, onExpand, onChangePage, menuContext, pageSize } = props
 
 	const [dataSource, setDataSource] = useState([])
 	const [rowKeys, setRowKeys] = useState([{ currentPage: 1, listKeys: [] }])
@@ -97,7 +97,7 @@ const PrimaryTable: FC<IPrimaryTable> = (props) => {
 							dataSource={dataSource}
 							size="middle"
 							pagination={{
-								pageSize: PAGE_SIZE,
+								pageSize: pageSize || 30,
 								pageSizeOptions: ['30'],
 								// onShowSizeChange: onShowSizeChange,
 								total: total && total,
