@@ -11,3 +11,7 @@ type IStaffSalary = IBaseApi<{
 	ModifiedBy: string
 	ModifiedDat: string
 }>
+
+type IStaffSalaryTeachingDetail = IBaseApi<{
+	
+}>
