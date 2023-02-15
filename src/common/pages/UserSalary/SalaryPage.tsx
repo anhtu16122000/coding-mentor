@@ -26,6 +26,13 @@ export const SalaryPage = () => {
 		setApiParameters({ ...apiParameters, month: month, year: year })
 		setValueDate(data)
 	}
+	const handleReset = () => {
+		if (valueDate) {
+			const year = Number(moment(valueDate).format('YYYY'))
+			const month = Number(moment(valueDate).format('MM'))
+			setApiParameters({ ...initParameters, month: month, year: year })
+		}
+	}
 
 	const handleSalaryClosing = async () => {
 		try {
@@ -76,7 +83,7 @@ export const SalaryPage = () => {
 				type: 'search',
 				dataIndex: 'FullName',
 				handleSearch: (event) => setApiParameters({ ...apiParameters, fullName: event }),
-				handleReset: (event) => setApiParameters(initParameters)
+				handleReset: (event) => handleReset()
 			}),
 			width: 200,
 			title: 'Nhân viên',
