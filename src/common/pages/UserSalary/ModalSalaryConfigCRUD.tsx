@@ -19,6 +19,7 @@ type IModalSalary = {
 }
 
 const initParameters = { pageIndex: 1, pageSize: 9999, roleIds: '' }
+
 export const ModalSalaryConfigCRUD: React.FC<IModalSalary> = ({ mode, dataRow, onRefresh }) => {
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [visible, setVisible] = useState(false)
@@ -201,7 +202,7 @@ export const ModalSalaryConfigCRUD: React.FC<IModalSalary> = ({ mode, dataRow, o
 						/>
 					</>
 				}
-				width={mode != 'delete' ? 800 : 400}
+				width={mode != 'delete' ? 500 : 400}
 			>
 				<div className="container-fluid">
 					<Form form={form} layout="vertical" onFinish={_onSubmit}>
