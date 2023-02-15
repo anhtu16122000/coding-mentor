@@ -66,6 +66,7 @@ type IEditorField = {
 	onChangeEditor: Function
 	disableButton?: Function
 	isRequired?: boolean
+	disabled?: boolean
 	rules?: array
 	initialValue?: string
 	placeholder?: string

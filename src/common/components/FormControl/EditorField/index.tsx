@@ -8,7 +8,20 @@ const DynamicComponentWithNoSSR = dynamic(() => import('./Editor'), {
 
 function EditorField(props: IEditorField) {
 	// Phải thêm onchangeEditor để set value form
-	const { label, name, isRequired, rules, initialValue, placeholder, customFieldProps, onChangeEditor, disableButton, id, height } = props
+	const {
+		label,
+		name,
+		isRequired,
+		disabled,
+		rules,
+		initialValue,
+		placeholder,
+		customFieldProps,
+		onChangeEditor,
+		disableButton,
+		id,
+		height
+	} = props
 	const [value, setValue] = useState('')
 
 	const checkHandleChange = (value) => {
@@ -25,6 +38,7 @@ function EditorField(props: IEditorField) {
 				placeholder={placeholder}
 				handleChangeDataEditor={checkHandleChange}
 				customFieldProps={customFieldProps}
+				disabled={disabled}
 				disableButton={disableButton}
 				id={id}
 				height={height}

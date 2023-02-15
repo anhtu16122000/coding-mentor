@@ -53,16 +53,23 @@ instance.interceptors.request.use(
 	}
 )
 
+// THIS FLAG USE TO THROW AN AXIOS CANCEL OPERATION WHEN EVER 401 RESPONSE HAPPEN MORE THAN TWICE
+// let isAbort = false
+
 const checkResponse = (error: any) => {
 	switch (error?.response?.status) {
 		case 401:
+			// alert('Phiên đăng nhập hết hạn, quay lại đăng nhập!')
 			setTimeout(() => {
 				logOut()
 			}, 1000)
 			break
 		case 403:
 			console.log(`%cLỖI 403:` + `%c DON'T HAVE PERMISSON`, 'color: red; font-weight: bold', 'color: yellow;')
-			alert('Bạn không có quyền thực hiện')
+			// alert('Bạn không có quyền thực hiện')
+			setTimeout(() => {
+				window.history.back()
+			}, 1000)
 			break
 		case 400:
 			console.log(error?.response?.message)
@@ -79,6 +86,7 @@ instance.interceptors.response.use(
 	(response: AxiosResponse) => {
 		let url: any = getUrl(response?.config)
 		isShowLog(url) && console.log(` %c ${response?.status} - ${getUrl(response?.config)}:`, 'color: #008000; font-weight: bold', response)
+
 		return response
 	},
 	function (error: any) {
