@@ -20,5 +20,8 @@ export const staffSalaryApi = {
 
 	getTeachingDetail(params) {
 		return instance.get<IApiResultData<IStaffSalaryTeachingDetail[]>>(`${url}/teaching-detail`, { params })
+	},
+	addSalaryClosing() {
+		return instance.post(`${url}/salary-closing`)
 	}
 }

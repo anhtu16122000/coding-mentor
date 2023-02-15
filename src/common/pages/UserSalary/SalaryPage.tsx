@@ -1,4 +1,4 @@
-import { DatePicker } from 'antd'
+import { DatePicker, Popconfirm } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { staffSalaryApi } from '~/api/staff-salary'
@@ -7,22 +7,35 @@ import PrimaryButton from '~/common/components/Primary/Button'
 import PrimaryTable from '~/common/components/Primary/Table'
 import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
+import { ShowNoti } from '~/common/utils'
 import { parseToMoney } from '~/common/utils/common'
 import FilterTable from '~/common/utils/table-filter'
 import { ModalSalaryCRUD } from './ModalSalaryCRUD'
 import { ModalTeachingDetail } from './ModalTeachingDetail'
 
 export const SalaryPage = () => {
+	const [valueDate, setValueDate] = useState(moment().subtract(1, 'months'))
 	const initParameters = { fullName: '', userCode: '', year: null, month: null, pageIndex: 1, pageSize: PAGE_SIZE }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [totalRow, setTotalRow] = useState(1)
 	const [dataTable, setDataTable] = useState([])
 	const [loading, setLoading] = useState(false)
-
 	const handleFilterMonth = (data) => {
 		const year = Number(moment(data).format('YYYY'))
 		const month = Number(moment(data).format('MM'))
 		setApiParameters({ ...apiParameters, month: month, year: year })
+		setValueDate(data)
+	}
+
+	const handleSalaryClosing = async () => {
+		try {
+			const res = await staffSalaryApi.addSalaryClosing()
+			if (res.status === 200) {
+				ShowNoti('success', res.data.message)
+			}
+		} catch (error) {
+			ShowNoti('error', error.message)
+		}
 	}
 	const getSalary = async (params) => {
 		try {
@@ -146,7 +159,7 @@ export const SalaryPage = () => {
 				TitleCard={
 					<div className="extra-table">
 						<div className="flex-1 max-w-[350px] mr-[16px]">
-							<DatePicker onChange={handleFilterMonth} picker="month" placeholder="Chọn tháng" />
+							<DatePicker onChange={handleFilterMonth} picker="month" placeholder="Chọn tháng" value={valueDate} />
 						</div>
 					</div>
 				}
@@ -154,12 +167,21 @@ export const SalaryPage = () => {
 				columns={columns}
 				Extra={
 					<>
-						<button
-							type="button"
-							className={`font-medium none-selection rounded-lg h-[38px] px-3 inline-flex items-center justify-center text-white bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf]`}
+						<Popconfirm
+							title={`Xác nhận tính lương từ ${valueDate.startOf('month').format('DD-MM-YYYY')} đến ${valueDate
+								.endOf('month')
+								.format('DD-MM-YYYY')}?`}
+							okText="Ok"
+							cancelText="No"
+							onConfirm={handleSalaryClosing}
 						>
-							Tính lương tháng trước
-						</button>
+							<button
+								type="button"
+								className={`font-medium none-selection rounded-lg h-[38px] px-3 inline-flex items-center justify-center text-white bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf]`}
+							>
+								Tính lương tháng trước
+							</button>
+						</Popconfirm>
 					</>
 				}
 			/>
