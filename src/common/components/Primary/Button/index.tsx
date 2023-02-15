@@ -1,7 +1,7 @@
 import { Spin, Tooltip } from 'antd'
 import { FC } from 'react'
 import { PlusCircle } from 'react-feather'
-import { AiOutlineCheckCircle, AiOutlineEye, AiOutlineFileSearch } from 'react-icons/ai'
+import { AiFillPrinter, AiOutlineCheckCircle, AiOutlineEye, AiOutlineFileSearch } from 'react-icons/ai'
 import { BiHide, BiReset, BiSearchAlt2 } from 'react-icons/bi'
 import { FiEdit, FiSave, FiSend, FiTrash2, FiXCircle } from 'react-icons/fi'
 import { IoEnterOutline, IoPowerSharp } from 'react-icons/io5'
@@ -99,6 +99,9 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 		}
 		if (icon == 'eye') {
 			return <AiOutlineEye size={20} className="mr-2" />
+		}
+		if (icon == 'print') {
+			return <AiFillPrinter size={20} className="mr-2" />
 		}
 		if (icon == 'hide') {
 			return <BiHide size={18} className="mr-2" />

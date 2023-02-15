@@ -8,9 +8,15 @@ export const contractApi = {
 			params
 		})
 	},
+	getByStudentID(studentID) {
+		return instance.get<IApiResultData<IContract[]>>(`${url}template/${studentID}`)
+	},
 
 	// Cập nhật data
 	update(data: IContract) {
 		return instance.put(url, data)
+	},
+	addContract(data) {
+		return instance.post(url, data)
 	}
 }

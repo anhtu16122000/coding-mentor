@@ -27,6 +27,8 @@ import { setSource } from '~/store/sourceReducer'
 import { setLearningNeed } from '~/store/learningNeedReducer'
 import { setPurpose } from '~/store/purposeReducer'
 import { setSaler } from '~/store/salerReducer'
+import IconButton from '~/common/components/Primary/IconButton'
+import { useRouter } from 'next/router'
 
 const Student: FC<IPersonnel> = (props) => {
 	const { reFresh, allowRegister } = props
@@ -48,6 +50,7 @@ const Student: FC<IPersonnel> = (props) => {
 	const [loading, setLoading] = useState(false)
 	const [loadingAllow, setLoadingAllow] = useState(false)
 	const state = useSelector((state: RootState) => state)
+	const router = useRouter()
 	const dispatch = useDispatch()
 
 	const sale = useMemo(() => {
@@ -280,7 +283,6 @@ const Student: FC<IPersonnel> = (props) => {
 				listFilter: roleStaff,
 				defaultValue: roleSelectFilter,
 				handleSearch: (event) => {
-					console.log('🚀 ~ file: index.tsx ~ line 124 ~ event', event)
 					setRoleSelectFilter(event)
 					setApiParameters({ ...apiParameters, roleIds: event.join(',') })
 				},
@@ -318,6 +320,19 @@ const Student: FC<IPersonnel> = (props) => {
 			render: (data, item) => {
 				return (
 					<div className="flex justify-center items-center">
+						<IconButton
+							type="button"
+							icon={'eye'}
+							color="blue"
+							onClick={() => {
+								router.push({
+									pathname: '/info-course/student/detail',
+									query: { StudentID: item.UserInformationId }
+								})
+							}}
+							className=""
+							tooltip="Chi tiết"
+						/>
 						{props.type !== 'student' && (
 							<CreateUser
 								isEdit
@@ -429,6 +444,20 @@ const Student: FC<IPersonnel> = (props) => {
 			render: (data, item) => {
 				return (
 					<div className="flex justify-center items-center">
+						<IconButton
+							type="button"
+							icon={'eye'}
+							color="blue"
+							onClick={() => {
+								router.push({
+									pathname: '/info-course/student/detail',
+									query: { StudentID: item.UserInformationId }
+								})
+							}}
+							className=""
+							tooltip="Chi tiết"
+						/>
+
 						{props.type !== 'student' && (
 							<CreateUser
 								isEdit

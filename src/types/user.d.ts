@@ -1,5 +1,6 @@
 type IUser = {
 	Address?: string
+	AreaName?: string
 	Avatar: string
 	DOB?: string
 	Email: string
@@ -40,6 +41,7 @@ type IUserResponse = IBaseApi<{
 	Mobile: string
 	Email: string
 	Address: string
+	AreaName: string
 	StatusId: number
 	RoleId: number
 	RoleName: string
@@ -64,6 +66,7 @@ type IUserResponse = IBaseApi<{
 type IUserInformation = IBaseApi<{
 	UserInformationId: number
 	UserAccountID: number
+	FullName: string
 	FirstName: string
 	LastName: string
 	FullNameUnicode: string

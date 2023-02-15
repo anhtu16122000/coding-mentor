@@ -9,7 +9,7 @@ const editorPlugins =
 	'preview importcss searchreplace autolink autosave save directionality visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons image code'
 
 const EditorBase = (props) => {
-	const { initialValue, value, placeholder, handleChangeDataEditor, customFieldProps, disableButton, height } = props
+	const { initialValue, value, placeholder, handleChangeDataEditor, customFieldProps, disableButton, height , disabled} = props
 	const editorRef = useRef(null)
 
 	const checkHandleChangeDataEditor = (content) => {
@@ -37,7 +37,7 @@ const EditorBase = (props) => {
 				onChange={(event: any) => {
 					// setTimeStamp(getTimeStamp())
 				}}
-				disabled={false}
+				disabled={disabled}
 				value={value}
 				onEditorChange={(value) => {
 					checkHandleChangeDataEditor(value)
