@@ -46,20 +46,14 @@ export const SalaryConfigPage = () => {
 				handleReset: (event) => setApiParameters(initParameters)
 			}),
 			width: 160,
-			title: 'Mã người dùng',
+			title: 'Mã',
 			dataIndex: 'UserCode',
 			render: (text) => <p className="font-semibold">{text}</p>
 		},
 		{
-			...FilterTable({
-				type: 'search',
-				dataIndex: 'FullName',
-				handleSearch: (event) => setApiParameters({ ...apiParameters, fullName: event }),
-				handleReset: (event) => setApiParameters(initParameters)
-			}),
 			title: 'Họ tên',
 			dataIndex: 'FullName',
-			render: (text) => <p className="font-semibold">{text}</p>
+			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
 		},
 		{
 			title: 'Chức vụ',
