@@ -1,27 +1,28 @@
 import { List, Skeleton } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { getNews } from './utils'
+import { useNewsContext } from '~/common/providers/News'
+import { decode } from '~/common/utils/common'
 import CreateNews from './Create'
-import NewsItem from './item'
 import NewsGroup from './Group'
 import GroupHeader from './Group/header'
-import { useNewsContext } from '~/common/providers/News'
-import { log } from '~/common/utils'
+import NewsItem from './item'
+import { getNews } from './utils'
 
 const DEFAULT_FILTER = {
 	newsFeedGroupId: null,
 	accountLogin: null,
 	role: null,
 	pageIndex: 1,
-	pageSize: 6,
+	pageSize: 4,
 	searchContent: '',
 	orderBy: 0
 }
 
 function NewsLoading() {
 	return (
-		<div className="cc-news-item mx-[-16px]" id={`loading-32`}>
+		<div className="cc-news-item mx-[-16px] mt-4" id={`loading-32`}>
 			<div className="flex">
 				<Skeleton.Avatar active style={{ width: 40, height: 40 }} />
 				<div className="flex-1 ml-[16px] max-w-[150px]">
@@ -52,12 +53,11 @@ function NewsLoading() {
 
 function NewsFeed() {
 	const { loading, setLoading, currentGroup } = useNewsContext()
-
 	const [filter, setFilter] = useState(DEFAULT_FILTER)
 	const [data, setData] = useState<Array<TNews>>([])
 	const [totalItem, setTotalItem] = useState(0)
 
-	log.Red('NewsFeed data: ', data)
+	const router = useRouter()
 
 	useEffect(() => {
 		if (!!currentGroup) {
@@ -69,6 +69,7 @@ function NewsFeed() {
 
 	useEffect(() => {
 		if (!!filter) {
+			if (decode(router.query.group) !== currentGroup) return
 			getNews(filter, _setData, setTotalItem, data)
 		}
 	}, [filter])
@@ -79,6 +80,8 @@ function NewsFeed() {
 	}
 
 	const loadMoreData = () => {
+		console.log('--- loadMoreData')
+
 		if (loading) {
 			return
 		}
@@ -88,25 +91,25 @@ function NewsFeed() {
 
 	return (
 		<>
-			<div className="cc-news flex">
+			<div className="flex gap-3 cc-news">
 				<div className="min-w-[300px]" style={{ flex: 3 }}>
-					{/* {!!currentGroup && (
+					{!!currentGroup && (
 						<div className="cc-news-container !mb-[16px]">
-							<GroupHeader group={currentGroup} />
+							<GroupHeader groupId={currentGroup} />
 						</div>
-					)} */}
+					)}
 
 					<div className="cc-news-container">
 						<CreateNews onRefresh={() => setFilter({ ...filter, pageIndex: 1 })} />
 					</div>
 
-					{/* {!currentGroup && (
+					{!currentGroup && (
 						<div className="cc-new-mobile-group">
 							<div className="bg-[#fff] shadow-md w-full rounded-[6px]">
-								<NewsGroup isMobile />
+								<NewsGroup pageSizeDisplay={2} />
 							</div>
 						</div>
-					)} */}
+					)}
 
 					{loading && data.length == 0 && (
 						<div className="mx-[-10px] mt-[-16px]">
@@ -139,9 +142,11 @@ function NewsFeed() {
 					)}
 				</div>
 
-				{/* <div className="min-w-[300px] ml-[16px] cc-new-desktop-group" style={{ flex: 1 }}>
-					<div className="bg-[#fff] shadow-md w-full rounded-[6px]">{!currentGroup && <NewsGroup />}</div>
-				</div> */}
+				<div className="min-w-[300px] cc-new-desktop-group" style={{ flex: 1 }}>
+					<div className="bg-[#fff] shadow-md w-full rounded-[6px] cc-news-group">
+						<NewsGroup />
+					</div>
+				</div>
 			</div>
 		</>
 	)

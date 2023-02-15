@@ -123,7 +123,7 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 
 			<main className="app-main">
 				<div className={`app-content ${!isOpen && 'close-app'}`}>
-					<div className="container-fluid w-full container">
+					<div className="container w-full container-fluid">
 						<div className="breadcrumb">
 							{breadcrumbs.length > 0 && (
 								<Breadcrumb>

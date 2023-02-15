@@ -76,7 +76,7 @@ function CommentItem({ item, onRefresh }) {
 				<>
 					<div className="cc-comment-item">
 						<Avatar uri={CommentedAvatar} className="cc-news-avatar" />
-						<div className="cc-comment-content relative">
+						<div className="relative cc-comment-content">
 							<div className="cc-comment-user-name mr-[20px]">{CreatedBy}</div>
 
 							{user.UserInformationId == CreatedIdBy && (
@@ -98,7 +98,6 @@ function CommentItem({ item, onRefresh }) {
 						</div>
 						<div className="cc-comment-menu" />
 					</div>
-
 					<div>
 						<div className="news-cmt-info">
 							<PrimaryTooltip id={`cmt-since-${Id}`} place="left" content={getDate(CreatedOn).full}>
@@ -119,7 +118,7 @@ function CommentItem({ item, onRefresh }) {
 				<>
 					<div className="cc-news-create-comment mt-[16px]">
 						<Avatar uri={user.Avatar} className="cc-news-avatar" />
-						<div onClick={() => {}} className="cc-comment-input relative">
+						<div onClick={() => {}} className="relative cc-comment-input">
 							<input
 								onKeyUp={inputKeyup}
 								disabled={loadingComment}

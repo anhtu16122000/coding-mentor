@@ -100,8 +100,6 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 		}
 	}
 
-	log.Blue('user: ', user)
-
 	function deleteThisComment() {
 		menuRef.current?.close()
 		deleteNews(Id, onRefresh)
@@ -113,7 +111,7 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 				showArrow={false}
 				placement="right"
 				onConfirm={() => deleteThisComment()}
-				title="Xoá bình luận này?"
+				title="Xoá bài đăng này ?"
 				cancelText="Hủy"
 				okText="Xóa"
 			>
@@ -200,7 +198,7 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 					</ShowMore>
 				</div>
 
-				<div className="cc-news-item-files">{!!details?.files && <NewsFiles files={details?.files} />}</div>
+				<div className="cc-news-item-files">{!!details?.FileList && <NewsFiles files={details?.FileList} />}</div>
 			</div>
 
 			<div className="cc-news-item-footer">
@@ -237,7 +235,7 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 						<div className="cc-comments">
 							<div className="cc-news-create-comment">
 								<Avatar uri={user.Avatar} className="cc-news-avatar" />
-								<div className="cc-comment-input relative">
+								<div className="relative cc-comment-input">
 									<input
 										onKeyUp={inpuKeyUp}
 										disabled={loadingComment}

@@ -1,9 +1,9 @@
-import { Modal } from 'antd'
+import { Image, Modal } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import { FaPlay } from 'react-icons/fa'
 
 type TNewsFiles = {
-	files: Array<{ fileType: string; fileUrl: string; fileName: string }>
+	files: Array<{ FileType: string; FileUrl: string; FileName: string }>
 }
 
 const NewsFiles: FC<TNewsFiles> = ({ files }) => {
@@ -28,8 +28,8 @@ const NewsFiles: FC<TNewsFiles> = ({ files }) => {
 		if (!!files) {
 			let temp = []
 			files.forEach((element) => {
-				if (!!element?.fileUrl && isImage(element.fileType)) {
-					temp.push({ src: element?.fileUrl, alt: element.fileName, fileType: element.fileType })
+				if (!!element?.FileUrl && isImage(element.FileType)) {
+					temp.push({ src: element?.FileUrl, alt: element.FileName, fileType: element.FileType })
 				}
 			})
 			setImages([...temp])
@@ -39,9 +39,9 @@ const NewsFiles: FC<TNewsFiles> = ({ files }) => {
 	const imagesLength = images.length < 4 ? images.length : 4
 
 	function getFileName() {
-		const index = files.findIndex((file) => file?.fileUrl == visible)
+		const index = files.findIndex((file) => file?.FileUrl == visible)
 		if (index > -1) {
-			return files[index].fileName
+			return files[index].FileName
 		}
 		return ''
 	}
@@ -56,13 +56,13 @@ const NewsFiles: FC<TNewsFiles> = ({ files }) => {
 						<div
 							key={`FILE-POST-${index}-${new Date().getTime()}`}
 							onClick={() => setVisible(item.src)}
-							className={`shadow-md cursor-pointer bg-[#fff]`}
+							className={`shadow-md cursor-pointer bg-[#fff] h-full`}
 						>
 							{item.fileType !== 'mp4' && (
 								<img
 									draggable={false}
 									src={item.src}
-									className={`${imagesLength > 1 ? 'max-h-[120px] w-[100%]' : 'max-h-[300px]'} object-cover`}
+									className={`${imagesLength > 1 ? 'max-h-[400px] w-[100%]' : ''} object-cover`}
 									width="100%"
 								/>
 							)}
@@ -83,7 +83,7 @@ const NewsFiles: FC<TNewsFiles> = ({ files }) => {
 				})}
 			</div>
 
-			<Modal width={1000} closable={false} centered open={!!visible} title={getFileName()} footer={null} onCancel={() => setVisible('')}>
+			<Modal width={1000} closable={false} centered open={!!visible} footer={null} onCancel={() => setVisible('')}>
 				{visible.includes('.mp4') && (
 					<video className="shadow-md" controls id="video" src={visible}>
 						<source src={visible} type="video/mp4" />
@@ -99,7 +99,13 @@ const NewsFiles: FC<TNewsFiles> = ({ files }) => {
 				)}
 
 				{!visible.includes('.mp4') && !visible.includes('.avi') && (
-					<img className="shadow-md" draggable={false} alt="example" style={{ width: '100%' }} src={visible} />
+					<img
+						className="shadow-md"
+						draggable={false}
+						alt="example"
+						style={{ width: '100%', maxHeight: '80vh', objectFit: 'cover' }}
+						src={visible}
+					/>
 				)}
 			</Modal>
 		</>

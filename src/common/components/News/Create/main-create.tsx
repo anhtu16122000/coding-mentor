@@ -48,7 +48,6 @@ function MainCreate(props) {
 					icon={<IoMdImages size={20} className="text-[#1E88E5] mt-[-2px] mr-[8px]" />}
 					title="Ảnh/video"
 				/>
-				<CreateType onClick={() => {}} icon={<MdGroup size={22} className="text-[#FF5722] mr-[8px]" />} title="Nhóm" />
 			</div>
 		</div>
 	)
