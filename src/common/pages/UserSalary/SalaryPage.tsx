@@ -21,9 +21,9 @@ export const SalaryPage = () => {
 	const [dataTable, setDataTable] = useState([])
 	const [loading, setLoading] = useState(false)
 	const handleFilterMonth = (data) => {
-		const year = Number(moment(data).format('YYYY'))
-		const month = Number(moment(data).format('MM'))
-		setApiParameters({ ...apiParameters, month: month, year: year })
+		// const year = Number(moment(data).format('YYYY'))
+		// const month = Number(moment(data).format('MM'))
+		// setApiParameters({ ...apiParameters, month: month, year: year })
 		setValueDate(data)
 	}
 	const handleReset = () => {
@@ -39,6 +39,9 @@ export const SalaryPage = () => {
 			const res = await staffSalaryApi.addSalaryClosing()
 			if (res.status === 200) {
 				ShowNoti('success', res.data.message)
+				const year = Number(moment(valueDate).format('YYYY'))
+				const month = Number(moment(valueDate).format('MM'))
+				setApiParameters({ ...initParameters, month: month, year: year })
 			}
 		} catch (error) {
 			ShowNoti('error', error.message)
@@ -77,7 +80,6 @@ export const SalaryPage = () => {
 	}, [apiParameters])
 
 	const columns = [
-		,
 		{
 			...FilterTable({
 				type: 'search',
@@ -183,7 +185,8 @@ export const SalaryPage = () => {
 				Extra={
 					<>
 						<Popconfirm
-							title={`Xác nhận tính lương từ ${valueDate.startOf('month').format('DD-MM-YYYY')} đến ${valueDate
+							title={`Xác nhận tính lương từ ${moment().subtract(1, 'months').startOf('month').format('DD-MM-YYYY')} đến ${moment()
+								.subtract(1, 'months')
 								.endOf('month')
 								.format('DD-MM-YYYY')}?`}
 							okText="Ok"
