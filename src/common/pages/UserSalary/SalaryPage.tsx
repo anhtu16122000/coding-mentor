@@ -56,6 +56,14 @@ export const SalaryPage = () => {
 	}
 
 	useEffect(() => {
+		if (valueDate) {
+			const year = Number(moment(valueDate).format('YYYY'))
+			const month = Number(moment(valueDate).format('MM'))
+			setApiParameters({ ...apiParameters, month: month, year: year })
+		}
+	}, [valueDate])
+
+	useEffect(() => {
 		if (apiParameters) {
 			getSalary(apiParameters)
 		}
