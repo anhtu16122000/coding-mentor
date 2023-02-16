@@ -368,6 +368,13 @@ export const AdminChildMenu = [
 						Route: '/options/payment',
 						Text: 'Phương thức thanh toán',
 						Icon: ''
+					},
+					{
+						ItemType: 'single',
+						Key: '/options/tags',
+						Route: '/options/tags',
+						Text: 'Danh mục từ khoá',
+						Icon: ''
 					}
 				]
 			}

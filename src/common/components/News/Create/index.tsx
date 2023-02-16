@@ -1,22 +1,20 @@
+import { PlusOutlined } from '@ant-design/icons'
 import { Modal, Upload } from 'antd'
-import React, { FC, useState } from 'react'
+import type { RcFile, UploadProps } from 'antd/es/upload'
+import type { UploadFile } from 'antd/es/upload/interface'
+import { FC, useState } from 'react'
 import { FaEdit, FaTelegramPlane, FaUserFriends } from 'react-icons/fa'
 import { IoMdImages } from 'react-icons/io'
-// import PrimaryButton from '../../PrimaryButton'
-import { PlusOutlined } from '@ant-design/icons'
-import type { UploadFile } from 'antd/es/upload/interface'
-import type { RcFile, UploadProps } from 'antd/es/upload'
-// import { uploadApi } from '~/api/Upload'
-import { ShowNostis, ShowNoti, log } from '~/common/utils'
+import { useSelector } from 'react-redux'
+import { UploadFileApi } from '~/api/common/upload-image'
+import RestApi from '~/api/RestApi'
+import { useNewsContext } from '~/common/providers/News'
+import { log, ShowNostis } from '~/common/utils'
+import { RootState } from '~/store'
+import Avatar from '../../Avatar'
+import BaseLoading from '../../BaseLoading'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import MainCreate from './main-create'
-import Avatar from '../../Avatar'
-import { useNewsContext } from '~/common/providers/News'
-import RestApi from '~/api/RestApi'
-import { useSelector } from 'react-redux'
-import { RootState } from '~/store'
-import BaseLoading from '../../BaseLoading'
-import { UploadFileApi } from '~/api/common/upload-image'
 
 const getBase64 = (file: RcFile): Promise<string> =>
 	new Promise((resolve, reject) => {
@@ -73,33 +71,17 @@ const CreateNews: FC<TCreateNews> = (props) => {
 			}
 		})
 
-		log.Green('----------------------------------------------------------------', '')
-		console.log('-- fileList: ', fileList)
-		console.log('-- uploadFiles: ', uploadFiles)
-
 		try {
 			let temp = []
 			let flag = false
-
 			if (uploadFiles.length > 0) {
-				// await uploadFiles.forEach(async (element) => {
-				// 	if (!!element) {
-				// 		const response: any = await UploadFileApi.uploadImage(uploadFiles[0])
-				// 		if (response.status == 200) {
-				// 			temp.push({ FileUrl: response.data.data })
-				// 		}
-				// 	}
-				// })
-
 				for (let i = 0; i < uploadFiles.length; i++) {
 					let element = uploadFiles[i]
-
 					if (i == uploadFiles.length - 1) {
 						flag = true
 					}
-
 					if (!!element) {
-						const response = await UploadFileApi.uploadImage(uploadFiles[0])
+						const response = await UploadFileApi.uploadImage(element)
 						if (response.status == 200) {
 							temp.push({ FileUrl: response.data.data })
 						}
@@ -108,10 +90,7 @@ const CreateNews: FC<TCreateNews> = (props) => {
 			} else {
 				flag = true
 			}
-
 			if (flag) {
-				log.Yellow('temp: ', temp)
-
 				const DATA_SUBMIT = {
 					Content: currentContent,
 					Color: '',
@@ -121,7 +100,8 @@ const CreateNews: FC<TCreateNews> = (props) => {
 				if (!isEdit) {
 					postNews({ ...DATA_SUBMIT, FileListCreate: temp, NewsFeedGroupId: currentGroup || null })
 				} else {
-					putNews({ Id: defaultData?.Id, ...DATA_SUBMIT, FileListUpdate: [...temp, ...fileList] })
+					const oldData = fileList.filter((item) => item.FilteUrl || item.FileName)
+					putNews({ Id: defaultData?.Id, ...DATA_SUBMIT, FileListUpdate: [...temp, ...oldData] })
 				}
 			}
 		} catch (error) {
@@ -136,9 +116,10 @@ const CreateNews: FC<TCreateNews> = (props) => {
 	}
 
 	async function postNews(params) {
-		console.log('--- DATA_SUBMIT: ', params)
 		try {
-			const response = await RestApi.post('NewsFeed', params)
+			if (currentGroup) params.NewsFeedGroupId = currentGroup
+
+			let response = await RestApi.post('NewsFeed', params)
 			if (response.status == 200) {
 				onRefresh()
 				setVisible(false)
@@ -169,25 +150,21 @@ const CreateNews: FC<TCreateNews> = (props) => {
 		}
 	}
 
-	const [avt, setAvt] = useState('')
-
 	function _openEdit() {
 		let temp = []
 
-		// if (!!defaultData?.files) {
-		// 	setHaveImage(true)
-		// 	defaultData.files.forEach((file, index) => {
-		// 		temp.push({ ...file, url: file.fileUrl, uid: file.fileName })
-		// 	})
-		// }
+		if (!!defaultData?.FileList) {
+			setHaveImage(true)
+			defaultData.FileList.forEach((file, index) => {
+				temp.push({ ...file, url: file.FileUrl, uid: file.FileName })
+			})
+		}
 
-		// setFileList([...temp])
-		// onOpen()
-		// setCurrentContent(defaultData.content)
+		setFileList([...temp])
+		onOpen()
+		setCurrentContent(defaultData.Content)
 		setVisible(true)
 	}
-
-	log.Yellow('user: ', user)
 
 	return (
 		<>

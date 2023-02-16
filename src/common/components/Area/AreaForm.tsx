@@ -84,7 +84,7 @@ const AreaForm = (props) => {
 				</button>
 			)}
 
-			<Modal title="Thêm Tỉnh/Thành phố" visible={isModalOpen} onCancel={handleCancel} footer={null}>
+			<Modal title="Thêm Tỉnh/Thành phố" open={isModalOpen} onCancel={handleCancel} footer={null}>
 				<Form form={form} layout="vertical" onFinish={handleSubmitForm}>
 					<InputTextField placeholder="Tên Tỉnh/Thành phố" name="AreaName" label="Tỉnh/Thành phố" />
 					<button className="btn btn-primary w-100" type="submit" disabled={isLoading}>
