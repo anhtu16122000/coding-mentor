@@ -73,7 +73,14 @@ function NewsGroup(props) {
 						)
 					})}
 
-					<div
+					{totalRow > filter.pageSize && (
+						<div className="cc-news-group-more">
+							Hiện tất cả
+							<MdOutlineKeyboardArrowDown size={18} className={` duration-300`} />
+						</div>
+					)}
+
+					{/* <div
 						onClick={() => {
 							if (filter.pageSize == pageSizeDisplay) {
 								setFilter({ ...filter, pageSize: totalRow })
@@ -95,7 +102,7 @@ function NewsGroup(props) {
 								<MdOutlineKeyboardArrowDown size={18} className={`rotate-180  duration-300`} />
 							</>
 						)}
-					</div>
+					</div> */}
 				</>
 			)}
 

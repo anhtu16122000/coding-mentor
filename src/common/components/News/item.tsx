@@ -18,6 +18,7 @@ import PrimaryTooltip from '../PrimaryTooltip'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import ShowMore from '../ShowMore'
+import CreateNews from './Create'
 
 const ButtonPost: FC<TNewType> = (props) => {
 	const { onClick, title, icon, loading, activated } = props
@@ -50,6 +51,7 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 	const [filterComments, setFilterComment] = useState({ pageIndex: 1, pageSize: 1, newsFeedId: Id })
 	const [totalComment, setTotalComment] = useState(0)
 	const [details, setDetails] = useState<any>({})
+	const [isShowPopover, setIsShowPopover] = useState(false)
 
 	const user = useSelector((state: RootState) => state.user.information)
 
@@ -121,12 +123,12 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 				</div>
 			</Popconfirm>
 
-			{/* {user.userId == item?.createdBy && (
-				<>
-					{getNewsPer(permission, 'NewsFeed-DeleteItem') && <div className="cc-hr my-[4px] mx-[4px]" />}
+			{user.UserInformationId == item?.CreatedIdBy && (
+				<span onClick={() => setIsShowPopover(false)}>
+					{/* {getNewsPer(permission, 'NewsFeed-DeleteItem') && <div className="cc-hr my-[4px] mx-[4px]" />} */}
 					<CreateNews onRefresh={onRefresh} isEdit={true} defaultData={item} onOpen={() => menuRef.current?.close()} />
-				</>
-			)} */}
+				</span>
+			)}
 		</div>
 	)
 
@@ -183,7 +185,16 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 				</div>
 
 				{user.RoleId == 1 && (
-					<Popover ref={menuRef} placement="rightTop" content={menuContent} title={null} showArrow={false} trigger="click">
+					<Popover
+						ref={menuRef}
+						placement="rightTop"
+						content={menuContent}
+						title={null}
+						onOpenChange={(newOpen: boolean) => setIsShowPopover(newOpen)}
+						open={isShowPopover}
+						showArrow={false}
+						trigger="click"
+					>
 						<div className="cc-news-item-menu">
 							<FiMoreVertical size={18} />
 						</div>

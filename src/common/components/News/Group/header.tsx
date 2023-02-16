@@ -12,27 +12,6 @@ const { Search } = Input
 
 function GroupHeader({ groupId }) {
 	const [details, setDetails] = useState<any>({})
-	const [members, setMember] = useState<any>([])
-
-	useEffect(() => {
-		getPermission()
-		getUserPermiss()
-	}, [])
-
-	async function getPermission() {}
-
-	async function getUserPermiss() {
-		// try {
-		// 	const response = await dirtyApi.getPermission<any>(currentRole, 'NewsFeedUserInGroup')
-		// 	console.log('---- NewsFeedUserInGroup Permission: ', response?.data?.data)
-		// 	if (response.data.resultCode == 200) {
-		// 		const theData: any = response?.data?.data
-		// 		setUserPermiss(theData)
-		// 	} else {
-		// 		setUserPermiss([])
-		// 	}
-		// } catch (error) {}
-	}
 
 	useEffect(() => {
 		getNewsDetail()
@@ -46,13 +25,11 @@ function GroupHeader({ groupId }) {
 				setDetails(response.data.data)
 			} else {
 				setDetails([])
-				setMember([])
 			}
 		} catch (error) {}
 	}
 
 	const [showUser, setShowUser] = useState<any>(false)
-	const [loading, setLoading] = useState<any>(false)
 
 	useEffect(() => {
 		if (!!showUser) {
@@ -105,7 +82,10 @@ function GroupHeader({ groupId }) {
 					return (
 						<GroupHeader.UserItem
 							key={`key:>-${Date.now() + Math.random() * 10000}`}
-							onRefresh={getStudentNotInGroup}
+							onRefresh={() => {
+								getStudentInGroup()
+								getNewsDetail()
+							}}
 							groupId={groupId}
 							item={item}
 							isMember={true}
@@ -144,7 +124,15 @@ function GroupHeader({ groupId }) {
 				</>
 			</div>
 
-			<Modal open={showUser} onCancel={() => setShowUser(false)} closable={true} centered title="Danh sách user" footer={null}>
+			<Modal
+				className="min-h-[650px]"
+				open={showUser}
+				onCancel={() => setShowUser(false)}
+				closable={true}
+				centered
+				title="Danh sách user"
+				footer={null}
+			>
 				<Search placeholder="input search text" className="w-full mb-2" onSearch={handleSearchUser} />
 				<div className="max-h-[500px] scrollable">
 					{studentsNotInGroup &&
@@ -152,7 +140,10 @@ function GroupHeader({ groupId }) {
 						stuFinded.map((item) => (
 							<GroupHeader.UserItem
 								key={`key:>-${Date.now() + Math.random() * 10000}`}
-								onRefresh={getStudentNotInGroup}
+								onRefresh={() => {
+									getStudentNotInGroup()
+									getNewsDetail()
+								}}
 								groupId={groupId}
 								item={item}
 							/>
@@ -176,7 +167,7 @@ GroupHeader.UserItem = (props) => {
 				NewsFeedGroupId: groupId,
 				Members: [
 					{
-						UserId: item.UserInformationId,
+						UserId: item.UserInformationId || item.Id,
 						Type: 2
 					}
 				]
@@ -192,15 +183,15 @@ GroupHeader.UserItem = (props) => {
 	}
 
 	const handleDeleteMember = async () => {
-		// try {
-		// 	await userInNewsFeedGroup.deleteMember(item.UserInformationId)
-		// 	if (onRefresh) onRefresh()
-		// 	ShowNostis.success('Thành Công')
-		// } catch (error) {
-		// 	ShowNostis.error(error?.resultMessage)
-		// } finally {
-		// 	setLoading(false)
-		// }
+		try {
+			await userInNewsFeedGroup.deleteMember(item.UserInformationId || item.Id)
+			await onRefresh()
+			ShowNostis.success('Thành Công')
+		} catch (error) {
+			ShowNostis.error(error?.resultMessage)
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	return (

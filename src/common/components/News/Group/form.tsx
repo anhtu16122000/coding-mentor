@@ -11,6 +11,7 @@ import { MdSettings } from 'react-icons/md'
 
 function GroupForm(props) {
 	const { onRefresh, defaultData, isEdit = false } = props
+	console.log('🚀 ~ file: form.tsx:14 ~ GroupForm ~ defaultData', defaultData)
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(false)
 	const [classOption, setClassOption] = useState([])
@@ -111,7 +112,16 @@ function GroupForm(props) {
 				centered
 				width={500}
 				title="Thông tin nhóm"
-				footer={<ModalFooter isEdit={isEdit} buttonFull loading={loading} onCancel={() => setVisible(false)} onOK={submitForm} />}
+				footer={
+					<ModalFooter
+						isEdit={isEdit}
+						buttonFull
+						loading={loading}
+						groupId={defaultData && defaultData.Id}
+						onCancel={() => setVisible(false)}
+						onOK={submitForm}
+					/>
+				}
 			>
 				<Form form={form} className="grid grid-cols-2 gap-x-4 " layout="vertical" onFinish={onFinish} autoComplete="on">
 					<Form.Item label="Ảnh bìa" name="Background" className="col-span-2">

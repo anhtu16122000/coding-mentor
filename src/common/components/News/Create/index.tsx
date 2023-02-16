@@ -74,7 +74,6 @@ const CreateNews: FC<TCreateNews> = (props) => {
 		try {
 			let temp = []
 			let flag = false
-
 			if (uploadFiles.length > 0) {
 				for (let i = 0; i < uploadFiles.length; i++) {
 					let element = uploadFiles[i]
@@ -92,7 +91,6 @@ const CreateNews: FC<TCreateNews> = (props) => {
 				flag = true
 			}
 			if (flag) {
-				log.Yellow('temp: ', temp)
 				const DATA_SUBMIT = {
 					Content: currentContent,
 					Color: '',
@@ -102,7 +100,8 @@ const CreateNews: FC<TCreateNews> = (props) => {
 				if (!isEdit) {
 					postNews({ ...DATA_SUBMIT, FileListCreate: temp, NewsFeedGroupId: currentGroup || null })
 				} else {
-					putNews({ Id: defaultData?.Id, ...DATA_SUBMIT, FileListUpdate: [...temp, ...fileList] })
+					const oldData = fileList.filter((item) => item.FilteUrl || item.FileName)
+					putNews({ Id: defaultData?.Id, ...DATA_SUBMIT, FileListUpdate: [...temp, ...oldData] })
 				}
 			}
 		} catch (error) {
@@ -151,25 +150,21 @@ const CreateNews: FC<TCreateNews> = (props) => {
 		}
 	}
 
-	const [avt, setAvt] = useState('')
-
 	function _openEdit() {
 		let temp = []
 
-		// if (!!defaultData?.files) {
-		// 	setHaveImage(true)
-		// 	defaultData.files.forEach((file, index) => {
-		// 		temp.push({ ...file, url: file.fileUrl, uid: file.fileName })
-		// 	})
-		// }
+		if (!!defaultData?.FileList) {
+			setHaveImage(true)
+			defaultData.FileList.forEach((file, index) => {
+				temp.push({ ...file, url: file.FileUrl, uid: file.FileName })
+			})
+		}
 
-		// setFileList([...temp])
-		// onOpen()
-		// setCurrentContent(defaultData.content)
+		setFileList([...temp])
+		onOpen()
+		setCurrentContent(defaultData.Content)
 		setVisible(true)
 	}
-
-	// log.Yellow('user: ', user)
 
 	return (
 		<>
