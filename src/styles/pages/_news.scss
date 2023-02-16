@@ -317,3 +317,8 @@
 	@apply transition-all overflow-hidden;
 }	
 
+.cc_search_input {
+	& input {
+		@apply rounded-lg;
+	}
+}
