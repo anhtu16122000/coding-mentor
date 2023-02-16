@@ -209,7 +209,11 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 					</ShowMore>
 				</div>
 
-				<div className="cc-news-item-files">{!!details?.FileList && <NewsFiles files={details?.FileList} />}</div>
+				{!!details?.FileList && (
+					<div className="cc-news-item-files">
+						<NewsFiles files={details?.FileList} />
+					</div>
+				)}
 			</div>
 
 			<div className="cc-news-item-footer">

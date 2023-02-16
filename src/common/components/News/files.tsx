@@ -7,6 +7,7 @@ type TNewsFiles = {
 }
 
 const NewsFiles: FC<TNewsFiles> = ({ files }) => {
+	console.log('🚀 ~ file: files.tsx:10 ~ files', files)
 	const [visible, setVisible] = useState('')
 
 	const [images, setImages] = useState([])
@@ -48,7 +49,7 @@ const NewsFiles: FC<TNewsFiles> = ({ files }) => {
 
 	return (
 		<>
-			<div className="cc-hr my-[8px] mx-[-6px]" />
+			{files.length > 0 && <div className="cc-hr my-[8px] mx-[-6px]" />}
 
 			<div className={`grid grid-cols-${imagesLength} gap-x-2 gap-y-2`}>
 				{images.map((item, index) => {
