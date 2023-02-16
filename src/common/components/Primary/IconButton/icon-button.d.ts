@@ -8,6 +8,7 @@ type IIconButton = {
 		| 'cancel'
 		| 'edit'
 		| 'check'
+		| 'print'
 		| 'eye'
 		| 'more'
 		| 'exchange'

@@ -13,7 +13,7 @@ export const contractApi = {
 	},
 
 	// Cập nhật data
-	update(data: IContract) {
+	update(data) {
 		return instance.put(url, data)
 	},
 	addContract(data) {

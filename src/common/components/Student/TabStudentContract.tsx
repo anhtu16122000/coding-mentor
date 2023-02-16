@@ -35,8 +35,10 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 				let temp = []
 				res.data.data.forEach((item) => temp.push({ title: item.Name, value: item.Id }))
 				setContracts({ option: temp, list: res.data.data })
-				handleChangeContract(res.data.data[0].Content)
+				handleChangeContract(res.data.data[0].Content, res.data.data[0].Name)
 				form.setFieldValue('ContractID', temp[0].value)
+				form.setFieldValue('Name', temp[0].title)
+				console.log('🚀 ~ temp', temp)
 			}
 			if (res.status === 204) {
 			}
@@ -75,19 +77,23 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 		handlePrint()
 	}
 
-	const handleChangeContract = (data) => {
-		setContract(data)
-		form.setFieldValue('Content', data)
+	const handleChangeContract = (content, name) => {
+		setContract(content)
+		form.setFieldValue('Content', content)
+		form.setFieldValue('Name', name)
 	}
 
 	const onSubmit = async (data) => {
 		try {
-			const res = await contractApi.addContract({ Name: data.Name, Content: data.Content, StudentId: StudentDetail.UserInformationId })
+			const res =
+				modeEdit == 'add'
+					? await contractApi.addContract({ Name: data.Name, Content: data.Content, StudentId: StudentDetail.UserInformationId })
+					: await contractApi.update({ Name: data.Name, Content: data.Content, Id: data.ContractID })
 			if (res.status === 200) {
 				ShowNoti('success', res.data.message)
 				getContractList(StudentDetail.UserInformationId)
 				setModeEdit('edit')
-				handleChangeContract(contracts.option[0].value)
+				handleChangeContract(contracts.option[0].value, contracts.option[0].title)
 				form.setFieldValue('ContractID', contracts.option[0].value)
 				form.setFieldValue('Name', null)
 				form.setFieldValue('Content', null)
@@ -105,16 +111,24 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 				<div className="flex justify-end items-center">
 					<div className="flex gap-tw-4 justify-end items-start">
 						{modeEdit == 'edit' && (
-							<SelectField
-								name="ContractID"
-								label=""
-								optionList={contracts.option}
-								placeholder="Chọn hợp đồng"
-								onChangeSelect={(data) => {
-									let temp = contracts.list.filter((item) => item.Id == data)[0].Content
-									handleChangeContract(temp)
-								}}
-							/>
+							<>
+								<SelectField
+									name="ContractID"
+									label=""
+									optionList={contracts.option}
+									placeholder="Chọn hợp đồng"
+									onChangeSelect={(data) => {
+										if (data) {
+											let temp = contracts.list.filter((item) => item.Id == data)[0]
+											handleChangeContract(temp.Content, temp.Name)
+										} else {
+											handleChangeContract(null, null)
+										}
+									}}
+								/>
+
+								<PrimaryButton background="green" type="submit" children={<span>Lưu thay đổi</span>} icon="save" onClick={() => {}} />
+							</>
 						)}
 						{modeEdit == 'edit' && userInformation.RoleId !== '3' && (
 							<PrimaryButton
@@ -126,20 +140,20 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 									setModeEdit('add')
 									setContract(null)
 									form.setFieldValue('Content', contractPattern)
+									form.setFieldValue('Name', null)
 								}}
 							/>
 						)}
 					</div>
 				</div>
 
-				{modeEdit == 'add' && <InputTextField name="Name" label="Tên hợp đồng" placeholder="Nhập tên hộp đồng" />}
+				{userInformation.RoleId !== '3' && <InputTextField name="Name" label="Tên hợp đồng" placeholder="Nhập tên hộp đồng" />}
 
-				<EditorField
-					name="Content"
-					disabled={modeEdit == 'edit'}
-					label={modeEdit == 'add' ? 'Nội dung hợp đồng' : ''}
-					onChangeEditor={(value) => form.setFieldValue('Content', value)}
-				/>
+				{userInformation.RoleId !== '3' ? (
+					<EditorField name="Content" label="Nội dung hợp đồng" onChangeEditor={(value) => form.setFieldValue('Content', value)} />
+				) : (
+					<p className="form-print-import">{ReactHtmlParser(contract)}</p>
+				)}
 
 				{modeEdit == 'add' && (
 					<div className="flex gap-4 justify-end items-center">
@@ -150,7 +164,7 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 							icon="cancel"
 							onClick={() => {
 								setModeEdit('edit')
-								handleChangeContract(contracts.option[0].value)
+								handleChangeContract(contracts.option[0].value, contracts.option[0].title)
 								form.setFieldValue('ContractID', contracts.option[0].value)
 							}}
 						/>
