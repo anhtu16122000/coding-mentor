@@ -1,7 +1,8 @@
 .cc-list-group {
 
+    @apply max-w-[1080px] w-[100%] m-auto;
 
-    @apply max-w-[1200px] w-[100%] m-auto;
-
-
+    .cc-list-group--title {
+        @apply mb-4 font-semibold;
+    }
 }

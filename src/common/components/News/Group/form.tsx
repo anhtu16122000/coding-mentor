@@ -84,7 +84,7 @@ function GroupForm(props) {
 	const submitForm = () => form.submit()
 
 	const onClassAvailableChange = (idClass: string) => {
-		if (form.getFieldValue('Name').trim().length === 0) {
+		if (form.getFieldValue('Name') && form.getFieldValue('Name')?.trim().length === 0) {
 			const nameClass = classOption.find((classItem) => classItem.Id == idClass)
 			form.setFieldValue('Name', nameClass.Name)
 		}
