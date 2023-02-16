@@ -1,9 +1,9 @@
 import { Tooltip } from 'antd'
 import { FC, useRef } from 'react'
-import { Edit, LogIn, Trash, X, FileMinus, Edit3, Book } from 'react-feather'
+import { Edit, LogIn, Trash, X, FileMinus, Edit3, Book, Trash2 } from 'react-feather'
 import { AiOutlineCheckCircle, AiOutlineEye, AiOutlineInfoCircle, AiOutlineUsergroupAdd } from 'react-icons/ai'
 import { CgAddR, CgFileDocument } from 'react-icons/cg'
-import { FiEdit, FiMenu, FiMoreVertical, FiSend, FiTrash2 } from 'react-icons/fi'
+import { FiEdit, FiMenu, FiMoreVertical, FiPrinter, FiSend, FiTrash2 } from 'react-icons/fi'
 import { HiOutlineFilter } from 'react-icons/hi'
 import { MdOutlineCancel } from 'react-icons/md'
 import { RiExchangeLine } from 'react-icons/ri'
@@ -81,7 +81,7 @@ const IconButton: FC<IIconButton> = (props) => {
 			return <Edit3 size={20} />
 		}
 		if (icon == 'remove') {
-			return <Trash size={20} />
+			return <Trash2 size={20} />
 		}
 		if (icon == 'check') {
 			return <AiOutlineCheckCircle size={!!size ? size : 22} />
@@ -121,6 +121,9 @@ const IconButton: FC<IIconButton> = (props) => {
 		}
 		if (icon == 'file') {
 			return <FileMinus className="mt-[0.5px] mb-[-1px]" size={!!size ? size : 22} />
+		}
+		if (icon == 'print') {
+			return <FiPrinter className="mt-[0.5px] mb-[-1px]" size={!!size ? size : 22} />
 		}
 		if (icon == 'user-group') {
 			return <AiOutlineUsergroupAdd size={!!size ? size : 22} />
