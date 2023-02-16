@@ -11,6 +11,7 @@ type IPrimaryButton = {
 		| 'file'
 		| 'download'
 		| 'edit'
+		| 'print'
 		| 'upload'
 		| 'excel'
 		| 'enter'

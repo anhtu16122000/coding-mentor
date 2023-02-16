@@ -108,15 +108,16 @@ const TeacherOff = () => {
 
 	const columnsAdmin = [
 		{
-			title: 'Mã nhân viên',
+			title: 'Mã',
 			dataIndex: 'UserCode',
 			key: 'UserCode',
 			...FilterColumn('UserCode', onSearch, onResetSearch, 'text')
 		},
 		{
-			title: 'Từ ngày',
+			title: 'Tên nhân viên',
 			dataIndex: 'FullName',
 			key: 'FullName',
+			className: 'text-[#1b73e8] font-[500]',
 			...FilterColumn('FullName', onSearch, onResetSearch, 'text')
 		},
 		{

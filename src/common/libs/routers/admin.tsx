@@ -140,6 +140,20 @@ export const AdminChildMenu = [
 				Route: '/users/teacher/teacher-off',
 				Text: 'Duyệt lịch nghỉ',
 				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/users/salary-config',
+				Route: '/users/salary-config',
+				Text: 'Cấu hình lương',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/users/salary',
+				Route: '/users/salary',
+				Text: 'Bảng lương',
+				Icon: ''
 			}
 		]
 	},
