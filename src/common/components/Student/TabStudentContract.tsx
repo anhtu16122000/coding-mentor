@@ -1,4 +1,4 @@
-import { Form } from 'antd'
+import { Form, Popover } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import { contractApi } from '~/api/contract'
 import EditorField from '../FormControl/EditorField'
@@ -12,6 +12,7 @@ import InputTextField from '../FormControl/InputTextField'
 import { ShowNoti } from '~/common/utils'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
+import IconButton from '../Primary/IconButton'
 
 export interface ITabStudentContractProps {
 	StudentDetail: IUserResponse
@@ -27,6 +28,7 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 	const [modeEdit, setModeEdit] = useState('edit')
 	const [form] = Form.useForm()
 	const userInformation = useSelector((state: RootState) => state.user.information)
+	const [isOpenPopover, setIsOpenPopover] = useState(false)
 
 	const getContractList = async (studentID) => {
 		try {
@@ -38,7 +40,6 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 				handleChangeContract(res.data.data[0].Content, res.data.data[0].Name)
 				form.setFieldValue('ContractID', temp[0].value)
 				form.setFieldValue('Name', temp[0].title)
-				console.log('🚀 ~ temp', temp)
 			}
 			if (res.status === 204) {
 			}
@@ -108,8 +109,8 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 	return (
 		<div className="wrapper-config-template">
 			<Form form={form} layout="vertical" onFinish={onSubmit}>
-				<div className="flex justify-end items-center">
-					<div className="flex gap-tw-4 justify-end items-start">
+				<div className="flex justify-end items-center wrap-button">
+					<div className="flex gap-tw-4 justify-end items-start not-mobile">
 						{modeEdit == 'edit' && (
 							<>
 								<SelectField
@@ -145,6 +146,70 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 							/>
 						)}
 					</div>
+
+					{modeEdit == 'edit' && (
+						<div className="mobile">
+							<Popover
+								open={isOpenPopover}
+								placement="bottomRight"
+								overlayClassName="filter-popover"
+								trigger="click"
+								onOpenChange={(visible) => {
+									setIsOpenPopover(visible)
+								}}
+								content={
+									<div className="flex flex-col">
+										{modeEdit == 'edit' && (
+											<>
+												<SelectField
+													name="ContractID"
+													label=""
+													optionList={contracts.option}
+													placeholder="Chọn hợp đồng"
+													onChangeSelect={(data) => {
+														if (data) {
+															let temp = contracts.list.filter((item) => item.Id == data)[0]
+															handleChangeContract(temp.Content, temp.Name)
+														} else {
+															handleChangeContract(null, null)
+														}
+													}}
+												/>
+
+												<PrimaryButton
+													background="green"
+													type="submit"
+													children={<span>Lưu thay đổi</span>}
+													icon="save"
+													onClick={() => {
+														setIsOpenPopover(false)
+													}}
+												/>
+											</>
+										)}
+										{modeEdit == 'edit' && userInformation.RoleId !== '3' && (
+											<PrimaryButton
+												background="blue"
+												type="button"
+												children={<span>Tạo hợp đồng</span>}
+												icon="add"
+												className="mt-tw-8"
+												onClick={() => {
+													setIsOpenPopover(false)
+													setModeEdit('add')
+													setContract(null)
+													form.setFieldValue('Content', contractPattern)
+													form.setFieldValue('Name', null)
+												}}
+											/>
+										)}
+									</div>
+								}
+							>
+								<IconButton type="button" icon="more" color="disabled" className="" tooltip="Thao tác" />
+							</Popover>
+						</div>
+					)}
 				</div>
 
 				{userInformation.RoleId !== '3' && <InputTextField name="Name" label="Tên hợp đồng" placeholder="Nhập tên hộp đồng" />}

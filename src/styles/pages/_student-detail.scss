@@ -22,10 +22,17 @@
 					width: 100%;
 					height: 250px;
 					background: linear-gradient(90deg, #f9e3ab 15%, #f5cfcc 100%);
+
+					@include max-media(628px) {
+						height: 150px;
+					}
 				}
 				.more-info {
 					width: 100%;
 					padding: 20px 0 20px 220px;
+					@include max-media(628px) {
+						padding: 20px 0 20px 120px;
+					}
 					.name {
 						font-size: 1.5rem;
 						font-weight: bold;
@@ -40,12 +47,22 @@
 					bottom: 10px;
 					overflow: hidden;
 
+					@include max-media(628px) {
+						left: 10px;
+						bottom: 10px;
+					}
+
 					img {
 						width: 150px !important;
 						height: 150px !important;
 						object-fit: cover;
 						border: 5px solid #fff;
 						border-radius: 50%;
+
+						@include max-media(628px) {
+							width: 100px !important;
+							height: 100px !important;
+						}
 					}
 					.overlay {
 						opacity: 0;
@@ -73,6 +90,25 @@
 
 			.body {
 				padding: 20px 40px;
+
+				@include max-media(628px) {
+					padding: 8px 14px;
+
+					.ant-tabs-content-holder {
+						.wrapper-config-template {
+							padding: 0;
+
+							.wrap-button {
+								.not-mobile {
+									display: none;
+								}
+								.mobile {
+									display: block;
+								}
+							}
+						}
+					}
+				}
 
 				.ant-tabs {
 					.ant-tabs-nav-wrap {
