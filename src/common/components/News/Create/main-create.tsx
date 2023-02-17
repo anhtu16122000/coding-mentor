@@ -23,7 +23,7 @@ function MainCreate(props) {
 	const user = useSelector((state: RootState) => state.user.information)
 
 	return (
-		<div className="cc-news-create-container">
+		<div className="cc-news-create-container !w-[calc(100%-8px)] ml-[3px]">
 			<div className="flex row-center">
 				<Avatar uri={user?.Avatar} className="cc-news-avatar" />
 				<div onClick={() => onClick()} className="cc-fake-input">

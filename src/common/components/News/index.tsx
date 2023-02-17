@@ -22,7 +22,7 @@ const DEFAULT_FILTER = {
 
 function NewsLoading() {
 	return (
-		<div className="cc-news-item mx-[-16px] mt-[32px]" id={`loading-32`}>
+		<div className="cc-news-item mt-[32px]" id={`loading-32`}>
 			<div className="flex">
 				<Skeleton.Avatar active style={{ width: 40, height: 40 }} />
 				<div className="flex-1 ml-[16px] max-w-[150px]">
@@ -91,7 +91,10 @@ function NewsFeed() {
 
 	return (
 		<>
-			<div className="flex gap-3 cc-news">
+			<div
+				id="news-scroll"
+				className="flex gap-3 cc-news scrollable h-[calc(100vh-65px)] pr-[8px] w1000:pr-[20px] mr-[-10px] mb-[-30px] pt-[16px] w1000:mr-[-20px] w1000:pt-[36px] mt-[-34px]"
+			>
 				<div className="min-w-[300px]" style={{ flex: 3 }}>
 					{!!currentGroup && (
 						<div className="cc-news-container !mb-[16px]">
@@ -104,7 +107,7 @@ function NewsFeed() {
 					</div>
 
 					{!currentGroup && (
-						<div className="cc-new-mobile-group">
+						<div className="cc-new-mobile-group ml-[3px]">
 							<div className="bg-[#fff] shadow-md w-full rounded-[6px]">
 								<NewsGroup pageSizeDisplay={2} />
 							</div>
@@ -112,7 +115,7 @@ function NewsFeed() {
 					)}
 
 					{loading && data.length == 0 && (
-						<div className="mx-[-10px] ">
+						<div className="!ml-[2px]">
 							<NewsLoading />
 							<NewsLoading />
 						</div>
@@ -133,6 +136,7 @@ function NewsFeed() {
 							className="mx-[-10px]"
 						>
 							<List
+								className="ml-[1px]"
 								dataSource={data}
 								renderItem={(item, index) => (
 									<NewsItem key={`new-item-${index}`} onRefresh={() => setFilter({ ...filter, pageIndex: 1 })} item={item} index={index} />

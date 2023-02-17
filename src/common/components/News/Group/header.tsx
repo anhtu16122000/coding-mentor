@@ -97,7 +97,7 @@ function GroupHeader({ groupId }) {
 	)
 
 	return (
-		<div className="w-full p-[16px] bg-[#fff] rounded-[6px] shadow-md">
+		<div className="w-[calc(100%-8px)] ml-[3px] p-[16px] bg-[#fff] rounded-[6px] shadow-md">
 			{!!details?.BackGround && <img src={details?.BackGround} className="object-cover w-[100%] h-[250px]" />}
 
 			<div className="cc-hr my-[16px]" />
@@ -116,8 +116,6 @@ function GroupHeader({ groupId }) {
 				</div>
 
 				<>
-					{/* {getPer(userPermiss, 'NewsFeedUserInGroup-AddItem') && (
-					)} */}
 					<div className="cc-add-member" onClick={() => setShowUser(true)}>
 						<FaUserPlus size={20} />
 					</div>

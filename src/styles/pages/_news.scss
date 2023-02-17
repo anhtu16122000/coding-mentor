@@ -49,8 +49,9 @@
 	}
 
 	.cc-news-item {
-		@apply max-w-[680px] w-[calc(100%-20px)] m-auto overflow-hidden;
+		@apply max-w-[670px] w-[calc(100%-26px)] m-auto overflow-hidden;
 		@apply bg-[#fff] rounded-[8px] shadow-md mt-[16px] p-[16px];
+
 		.cc-news-item-header {
 			@apply w-full flex;
 			.cc-news-item-user {
