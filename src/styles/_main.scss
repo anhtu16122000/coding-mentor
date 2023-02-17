@@ -172,19 +172,6 @@ button {
 	}
 }
 
-.loading-white {
-	line-height: 0;
-	margin-left: 15px !important ;
-	margin-bottom: -7px !important;
-
-	transition: 0.3s;
-	.ant-spin-dot {
-		font-size: 18px;
-		.ant-spin-dot-item {
-			background: white;
-		}
-	}
-}
 .row-center {
 	@apply flex flex-row items-center;
 }

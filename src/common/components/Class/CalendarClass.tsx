@@ -7,7 +7,6 @@ import { ShowNoti } from '~/common/utils'
 import PrimaryButton from '../Primary/Button'
 import CreateClassForm from './CreateClassForm'
 import ModalReviewScheduleClass from './ModalReviewScheduleClass'
-
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -44,11 +43,11 @@ const CalenderClass = () => {
 		setIsLoading(true)
 		try {
 			const res = await classApi.getAllTeacherWhenCreate({ branchId: branchId, programId: programId })
-			if (res.status === 200) {
+			if (res.status == 200) {
 				const convertData = parseSelectArray(res.data.data, 'TeacherName', 'TeacherId')
 				dispatch(setTeacher(convertData))
 			}
-			if (res.status === 204) {
+			if (res.status == 204) {
 				dispatch(setTeacher([]))
 			}
 		} catch (err) {
@@ -73,7 +72,7 @@ const CalenderClass = () => {
 	const checkRoomAvailable = async (params) => {
 		try {
 			const res = await classApi.checkRoomAvailable(params)
-			if (res.status === 200) {
+			if (res.status == 200) {
 				dispatch(setRoom(res.data.data))
 				return res.data.data
 			}
@@ -85,11 +84,9 @@ const CalenderClass = () => {
 	const onSubmit = async (data) => {
 		setIsLoading(true)
 		try {
-			let dataDispatch = {
-				...data,
-				StartDay: moment(data.StartDay).format()
-			}
+			let dataDispatch = { ...data, StartDay: moment(data.StartDay).format() }
 			dispatch(setDataChangeSchedule(dataDispatch))
+
 			const res = await classApi.createLesson(data)
 			if (res.status === 200) {
 				ShowNoti('success', res.data.message)
@@ -169,17 +166,20 @@ const CalenderClass = () => {
 			ShowNoti('error', 'Lịch học không hợp lệ')
 		} else {
 			dispatch(setLoadingCalendar(true))
+
 			const checkExistSchedule = listCalendar.find((item) => {
+				const start = moment(eventDropInfo.event.start).format()
+				const end = moment(eventDropInfo.event.end).format()
+
 				return (
-					(moment(item.StartTime).format() === moment(eventDropInfo.event.start).format() ||
-						moment(item.EndTime).format() === moment(eventDropInfo.event.end).format() ||
-						(moment(item.EndTime).format() > moment(eventDropInfo.event.start).format() &&
-							moment(item.EndTime).format() <= moment(eventDropInfo.event.end).format()) ||
-						(moment(item.StartTime).format() > moment(eventDropInfo.event.start).format() &&
-							moment(item.StartTime).format() < moment(eventDropInfo.event.end).format())) &&
+					(moment(item.StartTime).format() === start ||
+						moment(item.EndTime).format() === end ||
+						(moment(item.EndTime).format() > start && moment(item.EndTime).format() <= end) ||
+						(moment(item.StartTime).format() > start && moment(item.StartTime).format() < end)) &&
 					item.Id !== eventDropInfo.event.extendedProps.Id
 				)
 			})
+
 			if (!checkExistSchedule) {
 				const newListCalendar = listCalendar.map((item) => {
 					if (eventDropInfo.event.extendedProps.Id === item.Id) {
@@ -249,7 +249,17 @@ const CalenderClass = () => {
 						})
 					)
 					dispatch(setShowModal({ open: true, id: eventDropInfo.event.extendedProps.IdSchedule }))
-					ShowNoti('error', !!checkTeacher ? 'Phòng học không tồn tại' : 'Giáo viên không tồn tại')
+
+					if (!!listCalendar && listCalendar.length > 0) {
+						if (!checkTeacher) {
+							ShowNoti('error', 'Giáo viên không tồn tại')
+						}
+
+						if (!!listCalendar[0]?.RoomId && !!checkTeacher) {
+							ShowNoti('error', 'Phòng học không tồn tại')
+						}
+					}
+
 					dispatch(setLoadingCalendar(false))
 				} else if (parseInt(dataChangeSchedule?.Type) == 1 && !!checkTeacher && !!checkTeacher?.Fit && !!checkRoom && !!checkRoom?.Fit) {
 					dispatch(setLoadingCalendar(false))

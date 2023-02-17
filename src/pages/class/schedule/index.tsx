@@ -100,6 +100,7 @@ const Schedule = () => {
 			getAllSchedule(paramsSearch)
 		}
 	}, [paramsSearch])
+
 	return (
 		<div className="wrapper-class-schedule wrapper-calendar">
 			<Card
@@ -155,18 +156,12 @@ const Schedule = () => {
 
 				<div className="wrapper-status">
 					<div className="wrapper-tag">
-						<div className="tag-color no-study"></div>
+						<div className="bg-[#a2a2a2] w-[20px] h-[20px] rounded-[4px] mr-[8px]"></div>
 						<span>Chưa học</span>
 					</div>
 					<div className="wrapper-tag">
-						<div className="tag-color no-attendance"></div>
-						<span>
-							Chưa điểm danh<div></div>
-						</span>
-					</div>
-					<div className="wrapper-tag">
-						<div className="tag-color attendaced"></div>
-						<span>Đã điểm danh</span>
+						<div className="bg-[#59b96c] w-[20px] h-[20px] rounded-[4px] mr-[8px] ml-[8px]"></div>
+						<span>Đã học</span>
 					</div>
 				</div>
 

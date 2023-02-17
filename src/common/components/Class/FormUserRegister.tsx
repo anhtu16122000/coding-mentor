@@ -3,21 +3,22 @@ import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { billApi } from '~/api/bill'
 import { userInformationApi } from '~/api/user'
-import { ShowNoti } from '~/common/utils'
+import { ShowNoti, log } from '~/common/utils'
 import AvatarComponent from '../AvatarComponent'
 
 const FormUserRegister = (props) => {
 	const { form, setClasses } = props
 	const [students, setStudents] = useState([])
 	const [userInfo, setUserInfo] = useState<IUserInformation>()
+
 	const getAllStudent = async () => {
 		try {
 			const ROLE_STUDENT = 3
 			const res = await userInformationApi.getAll({ roleIds: ROLE_STUDENT })
-			if (res.status === 200) {
+			if (res.status == 200) {
 				setStudents(res.data.data)
 			}
-			if (res.status === 204) {
+			if (res.status == 204) {
 				setStudents([])
 			}
 		} catch (err) {
@@ -52,6 +53,7 @@ const FormUserRegister = (props) => {
 	useEffect(() => {
 		getAllStudent()
 	}, [])
+
 	return (
 		<div className="form-user-register">
 			{/* <Form layout="vertical"> */}

@@ -194,6 +194,7 @@ const RegisterClass = () => {
 							<FormUserRegister setClasses={setClasses} form={form} />
 						</Card>
 					</div>
+
 					<div className="col-span-2">
 						<div className="grid grid-cols-2 gap-x-4 responsive-mobile">
 							<div className="col-span-1">

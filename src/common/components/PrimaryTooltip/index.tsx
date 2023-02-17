@@ -6,14 +6,17 @@ type TPrimaryTooltip = {
 	children: React.ReactNode
 	content: string
 	place: 'top' | 'bottom' | 'left' | 'right'
+	className?: string
 }
 
 const PrimaryTooltip: FC<TPrimaryTooltip> = (props) => {
-	const { id, children, content, place } = props
+	const { id, children, content, place, className } = props
 
 	return (
 		<>
-			<div id={id + '' || ''}>{children}</div>
+			<div className={className || ''} id={id + '' || ''}>
+				{children}
+			</div>
 			<ReactTooltip anchorId={`${id}`} place={place} content={content || ''} />
 		</>
 	)

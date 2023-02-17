@@ -14,6 +14,7 @@ import SelectField from '../FormControl/SelectField'
 import TextBoxField from '../FormControl/TextBoxField'
 import PrimaryButton from '../Primary/Button'
 import ModalRemoveSchedule from './ModalRemoveSchedule'
+import InputMoneyField from '~/common/components/FormControl/InputNumberField'
 
 const ChangeScheduleClass = (props) => {
 	const { dataRow, checkTeacherAvailable, handleChangeInfo, checkRoomAvailable } = props
@@ -67,6 +68,8 @@ const ChangeScheduleClass = (props) => {
 					EndTime: moment(data.EndTime).format(),
 					end: moment(data.EndTime).format(),
 					start: moment(data.StartTime).format(),
+
+					// That shit should
 					title: `${moment(data.StartTime).format('HH:mm')} - ${moment(data.EndTime).format('HH:mm')}`
 				}
 				dispatch(setListCalendar(newListCalendar))
@@ -98,6 +101,7 @@ const ChangeScheduleClass = (props) => {
 			form.setFieldsValue({ EndTime: moment(dataRow.event.end) })
 			form.setFieldsValue({ Id: dataRow.event.extendedProps.Id })
 			form.setFieldsValue({ Note: dataRow.event.extendedProps.Note })
+			form.setFieldsValue({ TeachingFee: dataRow.event.extendedProps.TeachingFee })
 		}
 	}, [isModalOpen])
 
@@ -155,6 +159,33 @@ const ChangeScheduleClass = (props) => {
 		}
 	}
 
+	function getTime() {
+		const start = dataRow.event.extendedProps.StartTime
+		const end = dataRow.event.extendedProps.EndTime
+
+		return `${moment(start).format('HH:mm')} - ${moment(end).format('HH:mm')}`
+	}
+
+	function getDate() {
+		return moment(dataRow.event.extendedProps.StartTime).format('DD/MM')
+	}
+
+	function modalCancel() {
+		const newListCalendar = [...listCalendar]
+		newListCalendar[prevSchedule.Id] = {
+			...prevSchedule,
+			StartTime: moment(prevSchedule.start).format(),
+			EndTime: moment(prevSchedule.end).format(),
+			end: moment(prevSchedule.end).format(),
+			start: moment(prevSchedule.start).format(),
+			title: `${moment(prevSchedule.start).format('HH:mm')} - ${moment(prevSchedule.end).format('HH:mm')}`
+		}
+		dispatch(setListCalendar(newListCalendar))
+		handleCheckTeacher(moment(prevSchedule.start).format(), moment(prevSchedule.end).format())
+		setIsModalOpen({ open: false, id: null })
+		dispatch(setShowModal({ open: false, id: null }))
+	}
+
 	return (
 		<>
 			<div className="wrapper-schedule">
@@ -191,6 +222,7 @@ const ChangeScheduleClass = (props) => {
 					<ModalRemoveSchedule dataRow={dataRow} />
 				</div>
 			</div>
+
 			<Popover
 				ref={refPopover}
 				content={
@@ -248,28 +280,11 @@ const ChangeScheduleClass = (props) => {
 					</button>
 				</div>
 			</Popover>
+
 			<Modal
-				title={`Ca ${moment(dataRow.event.extendedProps.StartTime).format('HH:mm')} - ${moment(dataRow.event.extendedProps.EndTime).format(
-					'HH:mm'
-				)} - Ngày ${moment(dataRow.event.extendedProps.StartTime).format('DD/MM')}`}
+				title={`Ca ${getTime()} - Ngày ${getDate()}`}
 				open={!!isModalOpen.open && isModalOpen.id !== null}
-				onCancel={() => {
-					// if (!!isDisableButton) {
-					const newListCalendar = [...listCalendar]
-					newListCalendar[prevSchedule.Id] = {
-						...prevSchedule,
-						StartTime: moment(prevSchedule.start).format(),
-						EndTime: moment(prevSchedule.end).format(),
-						end: moment(prevSchedule.end).format(),
-						start: moment(prevSchedule.start).format(),
-						title: `${moment(prevSchedule.start).format('HH:mm')} - ${moment(prevSchedule.end).format('HH:mm')}`
-					}
-					dispatch(setListCalendar(newListCalendar))
-					handleCheckTeacher(moment(prevSchedule.start).format(), moment(prevSchedule.end).format())
-					// }
-					setIsModalOpen({ open: false, id: null })
-					dispatch(setShowModal({ open: false, id: null }))
-				}}
+				onCancel={modalCancel}
 				footer={
 					<PrimaryButton
 						disable={isDisableButton || loadingCalendar}
@@ -283,11 +298,13 @@ const ChangeScheduleClass = (props) => {
 					</PrimaryButton>
 				}
 			>
-				<Form form={form} layout="vertical" onFinish={onSubmit}>
+				<Form form={form} layout="vertical" className="grid grid-cols-2 gap-x-4" onFinish={onSubmit}>
 					<div className="hidden">
 						<InputTextField name="Id" label="" />
 					</div>
+
 					<DatePickerField
+						className="col-span-2 w500:col-span-1"
 						mode="single"
 						showTime={'HH:mm'}
 						picker="showTime"
@@ -296,7 +313,9 @@ const ChangeScheduleClass = (props) => {
 						name="StartTime"
 						onChange={getDataAvailable}
 					/>
+
 					<DatePickerField
+						className="col-span-2 w500:col-span-1"
 						mode="single"
 						showTime={'HH:mm'}
 						picker="showTime"
@@ -305,45 +324,50 @@ const ChangeScheduleClass = (props) => {
 						name="EndTime"
 						onChange={getDataAvailable}
 					/>
-					<Form.Item name="TeacherId" label="Giáo viên">
+
+					<Form.Item className="col-span-2" name="TeacherId" label="Giáo viên">
 						<Select onChange={() => setIsDisableButton(false)} placeholder="Chọn giáo viên">
 							{teacher.map((item) => {
 								return (
 									<Select.Option disabled={!item.Fit} key={item.TeacherId} value={item.TeacherId}>
 										<div className="flex items-center justify-between w-full">
-											{item.TeacherName}
-											{!item.Fit ? (
+											{item.TeacherName} - {item.TeacherCode}
+											{!item.Fit && (
 												<Tooltip placement="right" title={!!item.Note ? item.Note : `Giáo viên ${item.TeacherName} bị trùng lịch`}>
 													<AiOutlineWarning className="text-tw-red" />
 												</Tooltip>
-											) : null}
+											)}
 										</div>
 									</Select.Option>
 								)
 							})}
 						</Select>
 					</Form.Item>
-					{!!dataChangeSchedule.RoomId ? (
-						<Form.Item name="RoomId" label="Phòng học">
+
+					{!!dataChangeSchedule.RoomId && (
+						<Form.Item className="col-span-2" name="RoomId" label="Phòng học">
 							<Select onChange={() => setIsDisableButton(false)} placeholder="Chọn phòng học">
 								{room.map((item) => {
 									return (
 										<Select.Option disabled={!item.Fit} key={item.RoomId} value={item.RoomId}>
 											<div className="flex items-center justify-between w-full">
 												{item.RoomName}
-												{!item.Fit ? (
+												{!item.Fit && (
 													<Tooltip placement="right" title={!!item.Note ? item.Note : `Phòng học ${item.RoomName} bị trùng lịch`}>
 														<AiOutlineWarning className="text-tw-red" />
 													</Tooltip>
-												) : null}
+												)}
 											</div>
 										</Select.Option>
 									)
 								})}
 							</Select>
 						</Form.Item>
-					) : null}
-					<TextBoxField name="Note" label="Ghi chú" />
+					)}
+
+					<InputMoneyField className="col-span-2" label="Lương / buổi" name="TeachingFee" placeholder="Nhập mức lương" isRequired />
+
+					<TextBoxField className="col-span-2" name="Note" label="Ghi chú" />
 				</Form>
 			</Modal>
 		</>
