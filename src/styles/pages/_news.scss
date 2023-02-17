@@ -200,6 +200,13 @@
 	}
 }
 
+.cc-news-branch-wrapper {
+	@apply w-full;
+	.ant-select .ant-select-selector {
+		@apply border-[1px] border-[#d0d0d0] shadow-sm none-selection;
+	}
+}
+
 .cc-news-item-files {
 	//
 }
@@ -315,5 +322,10 @@
 	@apply h-[150px] border-dashed border-[1px];
 	@apply bg-[#fafafa] rounded-lg w-full flex items-center justify-center;
 	@apply transition-all overflow-hidden;
-}	
+}
 
+.cc_search_input {
+	& input {
+		@apply rounded-lg;
+	}
+}

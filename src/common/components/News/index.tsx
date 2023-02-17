@@ -22,7 +22,7 @@ const DEFAULT_FILTER = {
 
 function NewsLoading() {
 	return (
-		<div className="cc-news-item mx-[-16px] mt-4" id={`loading-32`}>
+		<div className="cc-news-item mx-[-16px] mt-[32px]" id={`loading-32`}>
 			<div className="flex">
 				<Skeleton.Avatar active style={{ width: 40, height: 40 }} />
 				<div className="flex-1 ml-[16px] max-w-[150px]">
@@ -112,7 +112,7 @@ function NewsFeed() {
 					)}
 
 					{loading && data.length == 0 && (
-						<div className="mx-[-10px] mt-[-16px]">
+						<div className="mx-[-10px] ">
 							<NewsLoading />
 							<NewsLoading />
 						</div>

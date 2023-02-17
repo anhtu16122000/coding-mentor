@@ -74,9 +74,8 @@ function NewsGroup(props) {
 					})}
 
 					{totalRow > filter.pageSize && (
-						<div className="cc-news-group-more">
+						<div className="cc-news-group-more" onClick={() => Router.push({ pathname: '/group' })}>
 							Hiện tất cả
-							<MdOutlineKeyboardArrowDown size={18} className={` duration-300`} />
 						</div>
 					)}
 

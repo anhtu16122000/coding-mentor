@@ -7,6 +7,7 @@ import RestApi from '~/api/RestApi'
 import { userInNewsFeedGroup } from '~/api/user'
 import { ShowNostis } from '~/common/utils'
 import GroupForm from './form'
+import defaultAvatar from '../../../../../public/images/default-avatar.svg'
 
 const { Search } = Input
 
@@ -130,10 +131,15 @@ function GroupHeader({ groupId }) {
 				onCancel={() => setShowUser(false)}
 				closable={true}
 				centered
-				title="Danh sách user"
+				title="Danh sách người dùng"
 				footer={null}
 			>
-				<Search placeholder="input search text" className="w-full mb-2" onSearch={handleSearchUser} />
+				<Search
+					placeholder="Tìm kiếm  ..."
+					className="w-full mb-2 rounded-lg cc_search_input"
+					style={{ borderRadius: '8px' }}
+					onSearch={handleSearchUser}
+				/>
 				<div className="max-h-[500px] scrollable">
 					{studentsNotInGroup &&
 						stuFinded &&
@@ -196,7 +202,7 @@ GroupHeader.UserItem = (props) => {
 
 	return (
 		<div className="flex row-center mb-[8px] p-[8px] hover:bg-[#eeeaea41] rounded-[6px]">
-			<Avatar src={item.Avatar} className="w-[40px] h-[40px] mr-[16px]" />
+			<Avatar src={item.Avatar || '/images/default-avatar.svg'} className="w-[40px] h-[40px] mr-[16px] shadow-sm " />
 			<div className="flex-1">
 				<div className="font-[600]">{item?.FullName}</div>
 				<div className={`font-[400] text-[#808080] ${item?.RoleName == 'Admin' ? '!text-[#1E88E5] font-[500]' : ''}`}>{item?.RoleName}</div>
