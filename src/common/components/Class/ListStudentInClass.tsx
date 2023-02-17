@@ -4,6 +4,7 @@ import { TiWarningOutline } from 'react-icons/ti'
 import { studentInClassApi } from '~/api/student-in-class'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import PrimaryTable from '../Primary/Table'
+import PrimaryTag from '../Primary/Tag'
 import { ModalStudentInClassCRUD } from './ModalStudentInClassCRUD'
 
 export const ListStudentInClass = () => {
@@ -64,8 +65,13 @@ export const ListStudentInClass = () => {
 		},
 		{
 			title: 'Loại',
-			width: 100,
-			dataIndex: 'TypeName'
+			width: 150,
+			dataIndex: 'TypeName',
+			render: (text, item) => (
+				<>
+					<PrimaryTag color={item?.Type == 1 ? 'green' : 'red'} children={text} />
+				</>
+			)
 		},
 		{
 			title: 'Cảnh báo',
