@@ -364,6 +364,7 @@ const CreateClassForm = (props) => {
 			refPopoverWrapperBtn.current.close()
 		}
 	}, [isModalOpen])
+
 	useEffect(() => {
 		if (form.getFieldValue('BranchId') && form.getFieldValue('ProgramId')) {
 			getAllTeacherByBranchAndProgram(form.getFieldValue('BranchId'), form.getFieldValue('ProgramId'))
@@ -381,11 +382,12 @@ const CreateClassForm = (props) => {
 					Tạo lớp offline
 				</PrimaryButton>
 			)}
+
 			<Modal
 				title={<>Tạo lớp {isOnline ? ' online' : ' offline'}</>}
 				open={isModalOpen}
 				onCancel={() => setIsModalOpen(false)}
-				width={900}
+				width={800}
 				footer={
 					<>
 						<PrimaryButton background="blue" type="button" icon="save" onClick={form.submit} disable={isLoading} loading={isLoading}>
@@ -404,7 +406,7 @@ const CreateClassForm = (props) => {
 								label="Trung tâm"
 								name="BranchId"
 								optionList={branch}
-								onChangeSelect={(value) => handleSelectChange('BranchId', value)}
+								onChangeSelect={(value) => !isOnline && handleSelectChange('BranchId', value)}
 							/>
 						</div>
 						<div className="col-md-6 col-12">
