@@ -74,7 +74,7 @@ const ReplyItem = (props) => {
 				<>
 					<div key={`rep-${indexRe}`} className="cc-comment-item">
 						<Avatar className="cc-news-avatar" uri={ReplyAvatar} />
-						<div className="cc-comment-content relative">
+						<div className="relative cc-comment-content">
 							<div className="cc-comment-user-name mr-[20px]">{CreatedBy}</div>
 							{user.UserInformationId == CreatedIdBy && (
 								<Popover
@@ -107,7 +107,7 @@ const ReplyItem = (props) => {
 				<>
 					<div className="cc-news-create-comment mt-[16px]">
 						<Avatar className="cc-news-avatar" uri={user.Avatar} />
-						<div onClick={() => {}} className="cc-comment-input relative">
+						<div onClick={() => {}} className="relative cc-comment-input">
 							<input
 								onKeyUp={inputKeyUp}
 								disabled={loading}
@@ -205,7 +205,7 @@ function Reply(props) {
 		<div className="ml-[56px]">
 			<div className="cc-news-create-comment mt-[16px]">
 				<Avatar className="cc-news-avatar" uri={user?.Avatar} />
-				<div onClick={() => {}} className="cc-comment-input relative">
+				<div onClick={() => {}} className="relative cc-comment-input">
 					<input
 						onKeyUp={inputKeyUp}
 						disabled={loading}

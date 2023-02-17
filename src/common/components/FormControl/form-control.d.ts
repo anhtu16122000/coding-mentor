@@ -52,6 +52,8 @@ type IFormSelectField = {
 	isLoading?: boolean
 	rules?: array
 	onChangeSelect?: function
+	onSearch?: function
+	onScroll?: function
 	optionList: ISelectOptionList[]
 }
 

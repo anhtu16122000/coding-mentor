@@ -18,4 +18,5 @@ type IPrimaryTable = {
 	onExpand?: Function
 	onChangePage?: Function
 	menuContext?: Array<any>
+	pageSize?: number
 }

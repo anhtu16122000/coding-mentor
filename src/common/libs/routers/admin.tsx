@@ -1,35 +1,23 @@
-import React from 'react'
-import { TbFileCertificate, TbHome, TbNews, TbReport, TbScreenShare, TbSettings, TbVideo } from 'react-icons/tb'
+import { AiFillSetting, AiOutlineCalendar } from 'react-icons/ai'
+import { BiBookAdd } from 'react-icons/bi'
 import {
-	BsBook,
-	BsBookmarkCheck,
-	BsCardChecklist,
-	BsFilePost,
-	BsFillGridFill,
-	BsPeople,
-	BsPeopleFill,
-	BsReplyAll,
-	BsThreeDots
+	BsBook, BsFillGridFill
 } from 'react-icons/bs'
-import { FiAirplay, FiBook, FiFileText, FiPieChart, FiUsers } from 'react-icons/fi'
-import { RiFileEditLine, RiFileList2Fill, RiHomeHeartFill, RiUser2Line, RiUser3Line } from 'react-icons/ri'
-import { BiBookAdd, BiBookBookmark, BiGitPullRequest } from 'react-icons/bi'
 import {
-	MdAirplay,
-	MdOutlineAttachMoney,
-	MdOutlineManageAccounts,
-	MdOutlineSchool,
+	FaHouseDamage,
+	FaMoneyBillAlt, FaUserGraduate,
+	FaUserTie
+} from 'react-icons/fa'
+import { FiAirplay } from 'react-icons/fi'
+import { GrMoney, GrSettingsOption } from 'react-icons/gr'
+import { HiPresentationChartLine } from 'react-icons/hi'
+import { IoVideocam } from 'react-icons/io5'
+import {
 	MdOutlineSettingsInputComposite,
 	MdPersonalVideo
 } from 'react-icons/md'
-import { AiFillHome, AiFillSetting, AiOutlineCalendar, AiOutlineContainer, AiOutlineUser, AiOutlineVideoCamera } from 'react-icons/ai'
-import { GiArchiveRegister, GiTeacher } from 'react-icons/gi'
-import { GoHome, GoLocation, GoReport, GoSettings } from 'react-icons/go'
-import { GrCertificate, GrMoney, GrSettingsOption } from 'react-icons/gr'
-import { FaHouseDamage, FaMoneyBillWave, FaMoneyBillWaveAlt, FaRegNewspaper, FaUserGraduate, FaUserTie } from 'react-icons/fa'
-import { IoPeopleOutline, IoVideocam } from 'react-icons/io5'
-import { User } from 'react-feather'
-import { HiHome, HiPresentationChartLine } from 'react-icons/hi'
+import { RiExchangeBoxFill, RiFileEditLine, RiFileList2Fill } from 'react-icons/ri'
+import { TbFileCertificate } from 'react-icons/tb'
 import { TiHome } from 'react-icons/ti'
 
 export const AdminMenu = [
@@ -42,6 +30,11 @@ export const AdminMenu = [
 		Key: 'student',
 		TabName: 'Học viên',
 		Icon: <FaUserGraduate size={20} />
+	},
+	{
+		Key: 'finance',
+		TabName: 'Tài chính',
+		Icon: <FaMoneyBillAlt size={20} />
 	},
 	{
 		Key: 'staff',
@@ -89,6 +82,20 @@ export const AdminChildMenu = [
 				Route: '/dashboard',
 				Icon: <HiPresentationChartLine style={{ width: 18, height: 18 }} />,
 				Text: 'Thống kê'
+			}
+		]
+	},
+	{
+		Parent: 'finance',
+		MenuTitle: 'Tài chính',
+		MenuKey: '/finance',
+		MenuItem: [
+			{
+				TypeItem: 'single',
+				Key: '/finance/income-expense-management',
+				Route: '/finance/income-expense-management',
+				Icon: <RiExchangeBoxFill />,
+				Text: 'Quản lý thu chi'
 			}
 		]
 	},
@@ -367,6 +374,13 @@ export const AdminChildMenu = [
 						Key: '/options/payment',
 						Route: '/options/payment',
 						Text: 'Phương thức thanh toán',
+						Icon: ''
+					},
+					{
+						ItemType: 'single',
+						Key: '/options/tags',
+						Route: '/options/tags',
+						Text: 'Danh mục từ khoá',
 						Icon: ''
 					}
 				]

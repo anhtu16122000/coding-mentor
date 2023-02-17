@@ -1,4 +1,5 @@
 import { Modal } from 'antd'
+import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { staffSalaryApi } from '~/api/staff-salary'
 import PrimaryTable from '~/common/components/Primary/Table'
@@ -10,13 +11,14 @@ type IModalTeachingDetail = {
 export const ModalTeachingDetail: React.FC<IModalTeachingDetail> = ({ dataRow }) => {
 	const [visible, setVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
-	const initParameters = { salaryId: null, pageIndex: 1, pageSize: PAGE_SIZE }
+	const initParameters = { salaryId: dataRow?.Id, pageIndex: 1, pageSize: PAGE_SIZE }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [dataTable, setDataTable] = useState([])
 	const onClose = () => {
 		setVisible(false)
 	}
 	const onOpen = () => {
+		getSalaryTeachingDetail(apiParameters)
 		setVisible(true)
 	}
 
@@ -39,12 +41,6 @@ export const ModalTeachingDetail: React.FC<IModalTeachingDetail> = ({ dataRow })
 	}
 
 	useEffect(() => {
-		if (apiParameters) {
-			getSalaryTeachingDetail(apiParameters)
-		}
-	}, [apiParameters])
-
-	useEffect(() => {
 		if (dataRow && dataRow?.Id) {
 			setApiParameters({ ...apiParameters, salaryId: dataRow?.Id })
 		}
@@ -52,28 +48,33 @@ export const ModalTeachingDetail: React.FC<IModalTeachingDetail> = ({ dataRow })
 
 	const columns = [
 		{
-			title: 'Giáo viên',
-			dataIndex: ''
+			title: 'Lớp học',
+			dataIndex: 'ClassName'
 		},
 		{
-			title: 'Môn học',
-			dataIndex: ''
-		},
-		{
-			title: 'Buổi học',
-			dataIndex: ''
+			title: 'Phòng học',
+			dataIndex: 'RoomName'
 		},
 		{
 			title: 'Ngày dạy',
-			dataIndex: ''
+			dataIndex: 'StartTime',
+			render: (text) => <>{moment(text).format('MM-DD-YYYY')}</>
 		},
 		{
 			title: 'Thòi gian học',
-			dataIndex: ''
+			dataIndex: 'Time',
+			render: (text, item) => {
+				return (
+					<>
+						{moment(item?.StartTime).format('HH:mm')} - {moment(item?.EndTime).format('HH:mm')}
+					</>
+				)
+			}
 		},
 		{
 			title: 'Lương buổi học',
-			dataIndex: ''
+			dataIndex: 'TeachingFee',
+			render: (text) => <>{parseToMoney(text)}</>
 		}
 	]
 
@@ -82,7 +83,7 @@ export const ModalTeachingDetail: React.FC<IModalTeachingDetail> = ({ dataRow })
 			<button onClick={() => onOpen()}>
 				<span className="tag green w-[100px]">{dataRow ? parseToMoney(dataRow?.TeachingSalary) : 0}</span>
 			</button>
-			<Modal title="Chi tiết lương giáo viên" open={visible} onCancel={onClose} footer={null} width={800}>
+			<Modal title="Chi tiết lương giáo viên" open={visible} onCancel={onClose} footer={null} width={1200}>
 				<PrimaryTable data={dataTable} columns={columns} />
 			</Modal>
 		</>

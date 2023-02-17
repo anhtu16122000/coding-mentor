@@ -18,30 +18,18 @@ type IModalSalary = {
 	onRefresh?: Function
 }
 
-const initParameters = { pageIndex: 1, pageSize: 9999, roleIds: '' }
-
 export const ModalSalaryConfigCRUD: React.FC<IModalSalary> = ({ mode, dataRow, onRefresh }) => {
-	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [visible, setVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
-	const [loading, setLoading] = useState(false)
 	const [form] = Form.useForm()
 	const [user, setUser] = useState<{ title: string; value: string }[]>([])
-	const onClose = () => {
-		setVisible(false)
-	}
-	const onOpen = () => {
-		setVisible(true)
-	}
-
-	const getUsers = async (params) => {
-		setLoading(true)
+	const getUsers = async () => {
 		try {
 			const response = await salaryConfigApi.getUserAvailable()
 			if (response.status === 200) {
 				let temp = []
 				response?.data?.data?.forEach((item) => {
-					temp.push({ title: `${item.FullName} - ${item?.UserCode}`, value: item?.UserInformationId })
+					temp.push({ title: `${item?.FullName} - ${item?.UserCode}`, value: item?.UserInformationId })
 				})
 				setUser(temp)
 			}
@@ -51,13 +39,14 @@ export const ModalSalaryConfigCRUD: React.FC<IModalSalary> = ({ mode, dataRow, o
 		} catch (error) {
 			console.error(error)
 		} finally {
-			setLoading(false)
 		}
 	}
-
-	const handleChangeRole = (data) => {
-		setApiParameters({ ...apiParameters, roleIds: data })
-		form.setFieldValue('UserId', null)
+	const onClose = () => {
+		setVisible(false)
+	}
+	const onOpen = () => {
+		getUsers()
+		setVisible(true)
 	}
 
 	const handleRemove = async (Id) => {
@@ -70,6 +59,7 @@ export const ModalSalaryConfigCRUD: React.FC<IModalSalary> = ({ mode, dataRow, o
 				setIsLoading(false)
 				form.resetFields()
 				ShowNoti('success', res.data.message)
+				getUsers()
 			}
 		} catch (error) {
 			setIsLoading(true)
@@ -107,6 +97,7 @@ export const ModalSalaryConfigCRUD: React.FC<IModalSalary> = ({ mode, dataRow, o
 				setIsLoading(false)
 				form.resetFields()
 				ShowNoti('success', res.data.message)
+				getUsers()
 			}
 		} catch (error) {
 			setIsLoading(true)
@@ -134,10 +125,6 @@ export const ModalSalaryConfigCRUD: React.FC<IModalSalary> = ({ mode, dataRow, o
 			handleRemove(data.Id)
 		}
 	}
-
-	useEffect(() => {
-		getUsers(apiParameters)
-	}, [apiParameters])
 
 	useEffect(() => {
 		if (dataRow) {

@@ -138,7 +138,7 @@ const CenterForm = React.memo((props: any) => {
 
 			<Modal
 				title={rowData ? 'Cập nhật trung tâm' : 'Thêm trung tâm'}
-				visible={isModalVisible}
+				open={isModalVisible}
 				onCancel={() => setIsModalVisible(false)}
 				footer={null}
 				centered={true}

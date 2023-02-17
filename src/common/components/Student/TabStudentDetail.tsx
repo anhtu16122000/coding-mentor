@@ -1,6 +1,8 @@
 import { Card, Divider, Form } from 'antd'
 import moment from 'moment'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { areaApi, districtApi, wardApi } from '~/api/area'
 import { branchApi } from '~/api/branch'
 import { learningNeedApi } from '~/api/learning-needs'
@@ -8,6 +10,7 @@ import { purposeApi } from '~/api/purpose'
 import { sourceApi } from '~/api/source'
 import { userInformationApi } from '~/api/user'
 import { ShowNoti } from '~/common/utils'
+import { RootState } from '~/store'
 import DatePickerField from '../FormControl/DatePickerField'
 import InputTextField from '../FormControl/InputTextField'
 import SelectField from '../FormControl/SelectField'
@@ -24,6 +27,8 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 	const [ward, setWard] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [form] = Form.useForm()
+	const userInformation = useSelector((state: RootState) => state.user.information)
+	const router = useRouter()
 
 	const getDistrict = async (areaID) => {
 		try {
@@ -235,23 +240,27 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 							/>
 						</div>
 
-						<Divider>Thông tin học</Divider>
+						{router.query.StudentID && (
+							<>
+								<Divider>Thông tin học</Divider>
 
-						<div className="col-md-6 col-12">
-							<SelectField name="LearningNeedId" label="Nhu cầu học" optionList={optionList.learningNeed} />
-						</div>
+								<div className="col-md-6 col-12">
+									<SelectField name="LearningNeedId" label="Nhu cầu học" optionList={optionList.learningNeed} />
+								</div>
 
-						<div className="col-md-6 col-12">
-							<SelectField name="SourceId" label="Nguồn khách hàng" optionList={optionList.source} />
-						</div>
+								<div className="col-md-6 col-12">
+									<SelectField name="SourceId" label="Nguồn khách hàng" optionList={optionList.source} />
+								</div>
 
-						<div className="col-md-6 col-12">
-							<SelectField name="SaleId" label="Tư vấn viên" optionList={optionList.sale} />
-						</div>
+								<div className="col-md-6 col-12">
+									<SelectField name="SaleId" label="Tư vấn viên" optionList={optionList.sale} />
+								</div>
 
-						<div className="col-md-6 col-12">
-							<SelectField name="PurposeId" label="Mục đích học" optionList={optionList.purpose} />
-						</div>
+								<div className="col-md-6 col-12">
+									<SelectField name="PurposeId" label="Mục đích học" optionList={optionList.purpose} />
+								</div>
+							</>
+						)}
 					</div>
 
 					<div className="row mt-3">

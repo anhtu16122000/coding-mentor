@@ -61,7 +61,7 @@ const NestedTable = React.memo((props: any) => {
 							size="middle"
 							pagination={{
 								showTotal: () => <div className="font-weight-black">Tổng cộng: {props.totalPage}</div>,
-								pageSize: 30,
+								pageSize: props.pageSize || 30,
 								pageSizeOptions: ['30'],
 								total: props.totalPage && props.totalPage,
 								onChange: (pageNumber) => changePagination(pageNumber),

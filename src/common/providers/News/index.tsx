@@ -7,15 +7,9 @@ export const NewsContext = createContext<INewsProvider>({})
 
 const NewsProvider = (props) => {
 	const router = useRouter()
-	// const { user, currentRole } = useGlobalContext()
 
 	const [loading, setLoading] = useState(true)
-	const [permission, setPermission] = useState([])
 	const [currentGroup, setCurrentGroup] = useState('')
-
-	useEffect(() => {
-		// getPermission()
-	}, [])
 
 	useEffect(() => {
 		if (router?.query?.group) {
@@ -26,8 +20,6 @@ const NewsProvider = (props) => {
 	}, [router])
 
 	const contextValue = {
-		permission,
-		setPermission,
 		loading,
 		setLoading,
 		currentGroup,

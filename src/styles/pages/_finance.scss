@@ -1,0 +1,47 @@
+.statistical-contain {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 16px;
+	margin-bottom: 24px;
+
+	@include max-media(600px) {
+		grid-template-columns: repeat(1, 1fr);
+	}
+
+	.item {
+		display: flex;
+		gap: 1rem;
+		background-color: #ececec;
+		border-radius: 8px;
+		padding: 8px 16px;
+		height: 100px;
+		justify-content: space-between;
+
+		.text {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			.name {
+				color: #555555;
+				font-size: 22px;
+			}
+			.number {
+				font-size: 26px;
+				font-weight: 500;
+			}
+		}
+		.icon {
+			font-size: 40px;
+		}
+	}
+
+	.total-income {
+		color: $color-success;
+	}
+	.total-expense {
+		color: $red;
+	}
+	.total-revenue {
+		color: $blue;
+	}
+}

@@ -46,7 +46,7 @@ const AreaRemoveForm = (props) => {
 				// cancelText="Hủy"
 				footer={
 					<>
-						<button onClick={handleCancel} className="btn btn-outline mr-2">
+						<button onClick={handleCancel} className="mr-2 btn btn-outline">
 							Hủy
 						</button>
 						<button onClick={handleOk} className="btn btn-danger">
@@ -56,8 +56,8 @@ const AreaRemoveForm = (props) => {
 				}
 			>
 				<div>
-					<span className="text-base mb-4">Bạn muốn xóa Tỉnh/Thành phố: </span>
-					<span className="text-base mb-4" style={{ color: '#f25767' }}>
+					<span className="mb-4 text-base">Bạn muốn xóa Tỉnh/Thành phố: </span>
+					<span className="mb-4 text-base" style={{ color: '#f25767' }}>
 						{dataRow.AreaName}
 					</span>
 				</div>
