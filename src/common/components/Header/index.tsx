@@ -21,7 +21,6 @@ function Header({ isOpenMenu, isOpen, funcMenuMobile, openMenuMobile }: IHeader)
 	const router = useRouter()
 	const { loading, data } = useSelector((state: RootState) => state.auth)
 	const userInfo = useSelector((state: RootState) => state.user.information)
-	console.log('🚀 ~ userInfo', userInfo)
 	const [roleStaff, setRoleStaff] = useState([])
 	const dispatch = useDispatch()
 
@@ -194,9 +193,9 @@ function Header({ isOpenMenu, isOpen, funcMenuMobile, openMenuMobile }: IHeader)
 					<div className="mr-4">
 						<Notification />
 					</div>
-					<div className="border border-tw-gray h-10 my-auto"></div>
+					<div className="h-10 my-auto border border-tw-gray"></div>
 					{/* User */}
-					<div className="user ml-4">
+					<div className="ml-4 user">
 						<Popover
 							open={userVisible}
 							onOpenChange={(event) => setUserVisible(event)}

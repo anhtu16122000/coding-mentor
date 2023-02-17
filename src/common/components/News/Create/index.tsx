@@ -224,12 +224,7 @@ const CreateNews: FC<TCreateNews> = (props) => {
 
 					{!currentGroup && (
 						<div className="cc-news-branch-wrapper">
-							<Select
-								className="cc-news-branch-wrapper"
-								placeholder="Chọn chi nhánh"
-								defaultValue={listBranch[0]?.Id || 0}
-								onChange={(value) => setBranchIdSelect(value)}
-							>
+							<Select className="cc-news-branch-wrapper" placeholder="Chọn chi nhánh" onChange={(value) => setBranchIdSelect(value)}>
 								{listBranch.map((branch: IBranch) => (
 									<Select.Option value={branch.Id} key={branch.Id}>
 										{branch.Name} - {branch.Code}
