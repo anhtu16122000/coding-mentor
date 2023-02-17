@@ -1,36 +1,56 @@
 type IStudentInClass = IBaseApi<{
-	UserInformationID: number
-	UserAccountID: number
-	Username: string
-	Password: string
-	FullNameUnicode: string
-	StatusID: number
-	StatusName: string
-	Mobile: string
-	Email: string
-	Gender: number
-	Extension: string
-	Address: string
-	Avatar: string
-	AreaID: number
-	AreaName: string
-	DistrictID: number
-	DistrictName: string
-	WardID: number
-	WardName: string
-	HouseNumber: string
-	DOB: string
-	CMND: string
-	CMNDDate: string
-	CMNDRegister: string
-	Branch: { BranchName: string; ID: number }[]
-	AcademicPurposesID: number
-	AcademicPurposesName: string
-	JobID: number
-	JobName: string
-	SourceInformationID: number
-	SourceInformationName: string
-	ParentsIDOf: number
-	ParentsNameOf: string
-	CounselorsName: string
+	BranchId: number,
+	ClassId: number,
+	StudentId: number,
+	Warning: boolean,
+	Note: srting,
+	Type: number,
+	TypeName: srting,
+	ClassName: srting,
+	FullName: srting,
+	UserCode: srting,
+	Avatar: srting,
+	Mobile: srting,
+	Email: srting,
+	Id: number,
+	Enable: true,
+	CreatedOn: any,
+	CreatedBy: srting,
+	ModifiedOn: any,
+	ModifiedBy: srting
 }>
+
+type IClassOfStudent = IBaseApi<{
+	Name: string,
+      Thumbnail: null,
+      BranchId: number,
+      GradeId: number,
+      ProgramId: number,
+      CurriculumId: number,
+      StartDay: any,
+      EndDay: any,
+      Price: number,
+      Status: number,
+      StatusName: string,
+      AcademicId:number,
+      TeacherId: number,
+      Type: number,
+      TypeName: string,
+      MaxQuantity: number,
+      TotalStudent: any,
+      TotalLesson: any,
+      LessonCompleted: any,
+      ProgramName: string,
+      GradeName: string,
+      CurriculumName: string,
+      BranchName: string,
+      TeacherName: string,
+      AcademicName: string,
+      Id: number,
+      Enable: true,
+      CreatedOn: any,
+      CreatedBy: Admin,
+      ModifiedOn:any,
+      ModifiedBy: Admin
+}>
+
