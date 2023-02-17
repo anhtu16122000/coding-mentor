@@ -9,6 +9,9 @@ type ICurriculum = IBaseApi<{
 type ICurriculumDetail = IBaseApi<{
 	CurriculumId: number
 	Name: string
+	FileName: string
+	FileUrl: string
+	FileType: string
 	Id: number
 }>
 

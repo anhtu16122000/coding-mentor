@@ -131,3 +131,39 @@
 .ant-upload.ant-upload-drag .ant-upload {
 	padding: 0px;
 }
+
+.curriculum-content-container {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	.curriculum-filename-contain {
+
+		margin: 0 auto;
+		min-width: 1200px;
+		.item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background-color: #ececec;
+			margin-bottom: 4px;
+			border-radius: 8px;
+			padding: 4px 8px;
+			&:hover {
+				
+				background-color: #d9d9d9;
+			}
+			.left {
+				display: flex;
+				gap: 4px;
+				justify-content: start;
+				align-items: center;
+			}
+			.right {
+				display: flex;
+				gap: 4px;
+				justify-content: end;
+				align-items: center;
+			}
+		}
+	}
+}
