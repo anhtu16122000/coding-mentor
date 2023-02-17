@@ -1,8 +1,8 @@
 import { PlusOutlined } from '@ant-design/icons'
-import { Modal, Upload } from 'antd'
+import { Button, Modal, Select, Upload } from 'antd'
 import type { RcFile, UploadProps } from 'antd/es/upload'
 import type { UploadFile } from 'antd/es/upload/interface'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { FaEdit, FaTelegramPlane, FaUserFriends } from 'react-icons/fa'
 import { IoMdImages } from 'react-icons/io'
 import { useSelector } from 'react-redux'
@@ -13,6 +13,7 @@ import { log, ShowNostis } from '~/common/utils'
 import { RootState } from '~/store'
 import Avatar from '../../Avatar'
 import BaseLoading from '../../BaseLoading'
+import SelectField from '../../FormControl/SelectField'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import MainCreate from './main-create'
 
@@ -41,15 +42,20 @@ const CreateNews: FC<TCreateNews> = (props) => {
 	const [fileList, setFileList] = useState([])
 	const [currentContent, setCurrentContent] = useState('')
 
+	const [listBranch, setListBranch] = useState<IBranch[] | []>([])
+	const [branchIdSelect, setBranchIdSelect] = useState(0)
 	const handleCancel = () => setPreviewOpen(false)
 
 	const handlePreview = async (file: UploadFile) => {
+		console.log('đang ở trên đây')
+
 		if (!file.url && !file.preview) {
 			file.preview = await getBase64(file.originFileObj as RcFile)
 		}
 		setPreviewImage(file.url || (file.preview as string))
 		setPreviewOpen(true)
 		setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1))
+		console.log('dang ở đây')
 	}
 
 	const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setFileList(newFileList)
@@ -115,9 +121,26 @@ const CreateNews: FC<TCreateNews> = (props) => {
 		uploadFile()
 	}
 
+	const getAllBranch = async () => {
+		try {
+			const response = await RestApi.get<IBranch[]>('Branch', {})
+			setListBranch(response.data.data)
+		} catch (err) {
+			console.log('🚀 ~ file: index.tsx:130 ~ getAllBranch ~ err', err)
+		}
+	}
+
+	useEffect(() => {
+		if (!currentGroup) getAllBranch()
+	}, [])
+
 	async function postNews(params) {
 		try {
-			if (currentGroup) params.NewsFeedGroupId = currentGroup
+			if (currentGroup) {
+				params.NewsFeedGroupId = currentGroup
+			} else {
+				params.ListBranchId[0] = branchIdSelect
+			}
 
 			let response = await RestApi.post('NewsFeed', params)
 			if (response.status == 200) {
@@ -199,6 +222,23 @@ const CreateNews: FC<TCreateNews> = (props) => {
 						rows={6}
 					/>
 
+					{!currentGroup && (
+						<div className="cc-news-branch-wrapper">
+							<Select
+								className="cc-news-branch-wrapper"
+								placeholder="Chọn chi nhánh"
+								defaultValue={listBranch[0]?.Id || 0}
+								onChange={(value) => setBranchIdSelect(value)}
+							>
+								{listBranch.map((branch: IBranch) => (
+									<Select.Option value={branch.Id} key={branch.Id}>
+										{branch.Name} - {branch.Code}
+									</Select.Option>
+								))}
+							</Select>
+						</div>
+					)}
+
 					{haveImage && (
 						<>
 							<div className="cc-hr my-[16px]" />
@@ -235,10 +275,16 @@ const CreateNews: FC<TCreateNews> = (props) => {
 					</div>
 				</div>
 
-				<div className="btn-submit-post" onClick={submitPost}>
-					{posting ? <BaseLoading.White /> : <FaTelegramPlane size={20} />}
+				<Button
+					className={`w-full flex items-center justify-center `}
+					onClick={!posting && submitPost}
+					loading={posting}
+					disabled={posting}
+					type="primary"
+				>
+					{posting ? '' : <FaTelegramPlane size={20} />}
 					<div className="ml-[8px] font-[600]">{!isEdit ? 'Đăng bài' : 'Lưu'}</div>
-				</div>
+				</Button>
 			</Modal>
 		</>
 	)

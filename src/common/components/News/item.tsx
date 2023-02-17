@@ -39,7 +39,6 @@ const ButtonPost: FC<TNewType> = (props) => {
 
 const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props) => {
 	const { item, index, onRefresh } = props
-
 	const { Id, CreatedBy, GroupName, RoleName, CreatedOn, Content } = item
 
 	const menuRef = useRef(null)
@@ -48,7 +47,7 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 	const [loadingComment, setLoadingComment] = useState(false)
 	const [showComment, setShowComment] = useState(false)
 	const [comments, setComments] = useState<Array<TComment>>([])
-	const [filterComments, setFilterComment] = useState({ pageIndex: 1, pageSize: 1, newsFeedId: Id })
+	const [filterComments, setFilterComment] = useState({ pageIndex: 1, pageSize: 1, newsFeedId: item.Id || null })
 	const [totalComment, setTotalComment] = useState(0)
 	const [details, setDetails] = useState<any>({})
 	const [isShowPopover, setIsShowPopover] = useState(false)
@@ -60,9 +59,7 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 	}, [item])
 
 	useEffect(() => {
-		if (comments.length > 0) {
-			getComments(filterComments, setComments, setLoadingComment, setTotalComment)
-		}
+		getComments(filterComments, setComments, setLoadingComment, setTotalComment)
 	}, [filterComments])
 
 	function _setDetail(params) {
@@ -99,10 +96,12 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 			} catch (error) {
 				ShowNostis.error(error.message)
 			}
+			setLoadingComment(false)
 		}
 	}
 
 	function deleteThisComment() {
+		refreshComment()
 		menuRef.current?.close()
 		deleteNews(Id, onRefresh)
 	}
@@ -138,7 +137,7 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 
 	function _clickComment() {
 		if (!showComment) {
-			getComments(filterComments, setComments, setLoadingComment, setTotalComment)
+			setFilterComment({ pageIndex: 1, pageSize: 1, newsFeedId: item.Id || null })
 		}
 		setShowComment(!showComment)
 	}
@@ -218,12 +217,14 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 
 			<div className="cc-news-item-footer">
 				<div className="cc-footer-top">
-					{!!details?.TotalLike && (
-						<div className="cc-news-likes">
-							<AiFillLike size={20} className="mr-[8px] text-[#1E88E5]" />
-							<div className="number-of-likes">{getLiked(details, user.UserInformationId).text}</div>
-						</div>
-					)}
+					<div className="cc-news-likes">
+						{!!details?.TotalLike && (
+							<>
+								<AiFillLike size={20} className="mr-[8px] text-[#1E88E5]" />
+								<div className="number-of-likes">{getLiked(details, user.UserInformationId).text}</div>
+							</>
+						)}
+					</div>
 
 					{!!details?.TotalComment && <div className="number-of-likes">{details?.TotalComment} nhận xét</div>}
 				</div>

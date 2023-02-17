@@ -11,7 +11,6 @@ import { MdSettings } from 'react-icons/md'
 
 function GroupForm(props) {
 	const { onRefresh, defaultData, isEdit = false } = props
-	console.log('🚀 ~ file: form.tsx:14 ~ GroupForm ~ defaultData', defaultData)
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(false)
 	const [classOption, setClassOption] = useState([])
@@ -84,10 +83,8 @@ function GroupForm(props) {
 	const submitForm = () => form.submit()
 
 	const onClassAvailableChange = (idClass: string) => {
-		if (form.getFieldValue('Name') && form.getFieldValue('Name')?.trim().length === 0) {
-			const nameClass = classOption.find((classItem) => classItem.Id == idClass)
-			form.setFieldValue('Name', nameClass.Name)
-		}
+		const nameClass = classOption.find((classItem) => classItem.Id == idClass)
+		form.setFieldValue('Name', nameClass.Name)
 	}
 
 	return (

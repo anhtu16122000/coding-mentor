@@ -14,7 +14,6 @@ import { RootState } from '~/store'
 import { useSelector } from 'react-redux'
 import { getDate } from '~/common/utils/super-functions'
 import PrimaryTooltip from '../../PrimaryTooltip'
-import { log } from '~/common/utils'
 
 function CommentItem({ item, onRefresh }) {
 	const user = useSelector((state: RootState) => state.user.information)
@@ -30,6 +29,7 @@ function CommentItem({ item, onRefresh }) {
 	function deleteThisComment() {
 		setShowMenu(false)
 		deleteComment(Id, onRefresh)
+		setShowReply(false)
 	}
 
 	const menuContent = (

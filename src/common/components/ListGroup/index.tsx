@@ -34,7 +34,7 @@ const ListGroup = () => {
 			<Row gutter={[8, 8]}>
 				{loading
 					? //@ts-ignore
-					  [...Array(18).keys()].map((item) => <GroupItem.LoadingSkeleton key={item} />)
+					  [...Array(18).keys()].map((item) => <GroupItem.LoadingSkeleton key={item || Date.now()} />)
 					: groups.map((item, idx) => <GroupItem groupData={item} key={idx} />)}
 			</Row>
 
