@@ -23,6 +23,7 @@ type IIconButton = {
 		| 'user-group'
 		| 'book'
 		| 'info'
+		| 'save'
 	type: 'button' | 'submit'
 	onClick?: Function
 	className?: string

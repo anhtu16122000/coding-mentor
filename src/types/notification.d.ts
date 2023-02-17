@@ -29,3 +29,16 @@ type INotificationBase = IBaseApi<{
 	ModifiedOn: string
 	ModifiedBy: string
 }>
+
+type INotificationInClass = IBaseApi<{
+	ClassId: number,
+	Title: string,
+	Content: string,
+	IsSendMail: boolean,
+	Id: number,
+	Enable: boolean,
+	CreatedOn: any,
+	CreatedBy: string,
+	ModifiedOn: any,
+	ModifiedBy: string
+}>

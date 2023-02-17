@@ -310,6 +310,20 @@
 			}
 		}
 	}
+	.custom-form-row-warning {
+		.ant-row {
+			align-items: center;
+			flex-direction: unset;
+			flex-flow: unset;
+		}
+		.ant-form-item-label {
+			width: auto;
+			padding: 0;
+		}
+		.ant-form-item-label > label {
+			width: 100px;
+		}
+	}
 }
 .ant-select {
 	&.ant-select-multiple {

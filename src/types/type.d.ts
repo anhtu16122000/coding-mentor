@@ -74,3 +74,14 @@ type IClass = IBaseApi<{
 	LessonComple: number
 	Id: number
 }>
+
+type IRollUpTeacher = IBaseApi<{
+	ScheduleId: number,
+	ClassId: number,
+	TeacherId: number,
+	TeacherName: string,
+	TeacherCode: string,
+	StartTime: any,
+	EndTime: any,
+	TeacherAttendanceId: number
+}>

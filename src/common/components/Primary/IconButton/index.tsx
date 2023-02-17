@@ -3,7 +3,7 @@ import { FC, useRef } from 'react'
 import { Edit, LogIn, Trash, X, FileMinus, Edit3, Book } from 'react-feather'
 import { AiOutlineCheckCircle, AiOutlineEye, AiOutlineInfoCircle, AiOutlineUsergroupAdd } from 'react-icons/ai'
 import { CgAddR, CgFileDocument } from 'react-icons/cg'
-import { FiEdit, FiMenu, FiMoreVertical, FiSend, FiTrash2 } from 'react-icons/fi'
+import { FiEdit, FiMenu, FiMoreVertical, FiSave, FiSend, FiTrash2 } from 'react-icons/fi'
 import { HiOutlineFilter } from 'react-icons/hi'
 import { MdOutlineCancel } from 'react-icons/md'
 import { RiExchangeLine } from 'react-icons/ri'
@@ -130,6 +130,9 @@ const IconButton: FC<IIconButton> = (props) => {
 		}
 		if (icon == 'info') {
 			return <AiOutlineInfoCircle size={!!size ? size : 20} />
+		}
+		if (icon == 'save') {
+			return <FiSave size={!!size ? size : 20} />
 		}
 	}
 

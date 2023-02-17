@@ -31,5 +31,11 @@ export const classApi = {
 	},
 	updateClass(data) {
 		return instance.put(url, data)
+	},
+	getRollUpTeacher(params) {
+		return instance.get<IApiResultData<any[]>>(`${url}/roll-up-teacher`, { params: params })
+	},
+	addRoleUpTeacher(Id) {
+		return instance.post(`${url}/roll-up-teacher/${Id}`)
 	}
 }
