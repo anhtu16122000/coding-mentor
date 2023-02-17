@@ -63,6 +63,11 @@ export const ListStudentInClass = () => {
 			dataIndex: 'Email'
 		},
 		{
+			title: 'Loại',
+			width: 100,
+			dataIndex: 'TypeName'
+		},
+		{
 			title: 'Cảnh báo',
 			width: 100,
 			dataIndex: 'Warning',

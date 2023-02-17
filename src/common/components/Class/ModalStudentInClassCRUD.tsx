@@ -224,7 +224,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 													optionList={student}
 													placeholder="Chọn học viên"
 													isRequired
-													// rules={[{ required: true, message: 'Bạn không được để trống' }]}
+													rules={[{ required: true, message: 'Bạn không được để trống' }]}
 												/>
 											</div>
 											<div className="col-span-2">
@@ -238,7 +238,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 													]}
 													placeholder="Chọn loại"
 													isRequired
-													// rules={[{ required: true, message: 'Bạn không được để trống' }]}
+													rules={[{ required: true, message: 'Bạn không được để trống' }]}
 												/>
 											</div>
 										</>
