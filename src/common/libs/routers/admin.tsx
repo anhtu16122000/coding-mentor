@@ -27,14 +27,14 @@ export const AdminMenu = [
 		Icon: <TiHome style={{ width: 24, height: 24 }} />
 	},
 	{
+		Key: 'class',
+		TabName: 'Lớp học',
+		Icon: <BsFillGridFill size={22} />
+	},
+	{
 		Key: 'student',
 		TabName: 'Học viên',
 		Icon: <FaUserGraduate size={20} />
-	},
-	{
-		Key: 'finance',
-		TabName: 'Tài chính',
-		Icon: <FaMoneyBillAlt size={20} />
 	},
 	{
 		Key: 'staff',
@@ -42,9 +42,9 @@ export const AdminMenu = [
 		Icon: <FaUserTie size={20} />
 	},
 	{
-		Key: 'class',
-		TabName: 'Lớp học',
-		Icon: <BsFillGridFill size={22} />
+		Key: 'finance',
+		TabName: 'Tài chính',
+		Icon: <FaMoneyBillAlt size={20} />
 	},
 	{
 		Key: 'video',
