@@ -40,7 +40,7 @@ const DeleteTableRow = (props) => {
 							icon="cancel"
 							background="transparent"
 							onClick={() => setIsModalVisible(false)}
-							className="btn-outline mr-2"
+							className="mr-2 btn-outline"
 						>
 							Hủy
 						</PrimaryButton>
@@ -58,7 +58,7 @@ const DeleteTableRow = (props) => {
 					</div>
 				}
 			>
-				<p className="text-base mb-4">
+				<p className="mb-4 text-base">
 					Bạn có chắc muốn xóa <span className="text-[#f25767]">{text}</span> ?
 				</p>
 			</Modal>

@@ -1,19 +1,18 @@
-import React, { useState } from 'react'
-import { IoMdClose } from 'react-icons/io'
-import { deleteComment, getTimeSince } from '../utils'
-import { Tooltip as ReactTooltip } from 'react-tooltip'
-import { FiMoreVertical } from 'react-icons/fi'
 import { Popover } from 'antd'
+import React, { useState } from 'react'
 import { FaTelegramPlane } from 'react-icons/fa'
-import Loading from '../../BaseLoading'
-import { putComment } from './comment-utils'
-import Reply from './reply'
-import Avatar from '../../Avatar'
-import MenuContext from '../menu-context'
-import { RootState } from '~/store'
+import { FiMoreVertical } from 'react-icons/fi'
+import { IoMdClose } from 'react-icons/io'
 import { useSelector } from 'react-redux'
 import { getDate } from '~/common/utils/super-functions'
+import { RootState } from '~/store'
+import Avatar from '../../Avatar'
+import Loading from '../../BaseLoading'
 import PrimaryTooltip from '../../PrimaryTooltip'
+import MenuContext from '../menu-context'
+import { deleteComment, getTimeSince } from '../utils'
+import { putComment } from './comment-utils'
+import Reply from './reply'
 
 function CommentItem({ item, onRefresh }) {
 	const user = useSelector((state: RootState) => state.user.information)
@@ -21,8 +20,7 @@ function CommentItem({ item, onRefresh }) {
 	const [showMenu, setShowMenu] = useState(false)
 	const [showEdit, setShowEdit] = useState(false)
 	const [currentComment, setCurrentComment] = useState('')
-	const [loadingComment, setLoadingComment] = useState(false)
-	const [inputFocused, setInputFocused] = useState(false)
+	const [showReply, setShowReply] = useState(false)
 
 	const { Id, Content, CreatedIdBy, CreatedBy, CreatedOn, CommentedAvatar } = item
 
@@ -41,34 +39,8 @@ function CommentItem({ item, onRefresh }) {
 				setShowMenu(false)
 				setShowEdit(true)
 			}}
-			showEdit={user.UserInformationId == CreatedIdBy}
 		/>
 	)
-
-	function _comment() {
-		putComment({
-			apiParams: { Id: Id, Content: currentComment },
-			setLoading: setLoadingComment,
-			onSuccess: () => {
-				{
-					onRefresh()
-					setCurrentComment('')
-					setShowEdit(false)
-				}
-			}
-		})
-	}
-
-	function onEditComment() {
-		if (!!currentComment && !loadingComment && currentComment !== Content) _comment()
-	}
-
-	const [showReply, setShowReply] = useState(false)
-
-	function inputKeyup(event) {
-		if (event.keyCode == 13 && !!currentComment && !loadingComment) _comment()
-		if (event.keyCode == 27) setShowEdit(false)
-	}
 
 	return (
 		<>
@@ -104,59 +76,13 @@ function CommentItem({ item, onRefresh }) {
 								<div className="mr-2 hover:underline">{getTimeSince(CreatedOn)}</div>
 							</PrimaryTooltip>
 							•
-							<div onClick={() => setShowReply(!showReply)} className="news-cmt-info-text none-selection">
+							<div onClick={() => setShowReply((pre) => !pre)} className="news-cmt-info-text none-selection">
 								Trả lời
 							</div>
 						</div>
 
 						{showReply && <Reply comment={item} />}
 					</div>
-				</>
-			)}
-
-			{!!showEdit && (
-				<>
-					<div className="cc-news-create-comment mt-[16px]">
-						<Avatar uri={user.Avatar} className="cc-news-avatar" />
-						<div onClick={() => {}} className="relative cc-comment-input">
-							<input
-								onKeyUp={inputKeyup}
-								disabled={loadingComment}
-								placeholder="Nhập nhận xét..."
-								value={currentComment}
-								onChange={(event) => setCurrentComment(event.target.value)}
-								onFocus={() => setInputFocused(true)}
-								onBlur={() => setInputFocused(false)}
-							/>
-							<div onClick={onEditComment} className="cc-comment-submit">
-								{loadingComment ? (
-									<Loading.Blue />
-								) : (
-									<FaTelegramPlane
-										size={20}
-										color={!currentComment || currentComment == Content ? '#0000003d' : '#1E88E5'}
-										className="ml-[-2px]"
-									/>
-								)}
-							</div>
-						</div>
-						<PrimaryTooltip id={`cmt-cancel-${Id}`} place="right" content="Huỷ">
-							<div onClick={() => setShowEdit(false)} className="news-cancel-input">
-								<IoMdClose size={22} color="#E53935" />
-							</div>
-						</PrimaryTooltip>
-					</div>
-
-					{inputFocused && (
-						<div className="the-option text-[12px] text-[#E53935] mt-[8px] font-[500] ml-[56px]">
-							Nhấn ESC để hủy
-							{!!currentComment && currentComment !== item?.commentContent && (
-								<>
-									, <div className="text-[#1E88E5] inline-flex">Enter để lưu</div>
-								</>
-							)}
-						</div>
-					)}
 				</>
 			)}
 		</>
@@ -173,8 +99,8 @@ function ListComment({ data, onShowAll, totalComment, onRefresh }) {
 
 	return (
 		<div className="cc-list-comment">
-			{data.map((comment, index) => {
-				return <CommentItem key={`cmt-item-${index}`} item={comment} onRefresh={onRefresh} />
+			{data.map((comment) => {
+				return <CommentItem key={comment.Id} item={comment} onRefresh={onRefresh} />
 			})}
 
 			{totalComment > 1 && (

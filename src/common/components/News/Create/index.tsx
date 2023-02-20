@@ -43,7 +43,7 @@ const CreateNews: FC<TCreateNews> = (props) => {
 	const [currentContent, setCurrentContent] = useState('')
 
 	const [listBranch, setListBranch] = useState<IBranch[] | []>([])
-	const [branchIdSelect, setBranchIdSelect] = useState(0)
+	const [branchIdSelect, setBranchIdSelect] = useState([])
 	const handleCancel = () => setPreviewOpen(false)
 
 	const handlePreview = async (file: UploadFile) => {
@@ -139,7 +139,7 @@ const CreateNews: FC<TCreateNews> = (props) => {
 			if (currentGroup) {
 				params.NewsFeedGroupId = currentGroup
 			} else {
-				params.ListBranchId[0] = branchIdSelect
+				params.ListBranchId = branchIdSelect
 			}
 
 			let response = await RestApi.post('NewsFeed', params)
@@ -148,6 +148,7 @@ const CreateNews: FC<TCreateNews> = (props) => {
 				setVisible(false)
 				setCurrentContent('')
 				setFileList([])
+				setBranchIdSelect([])
 			}
 		} catch (error) {
 			ShowNostis.error(error?.message)
@@ -225,10 +226,11 @@ const CreateNews: FC<TCreateNews> = (props) => {
 					{!currentGroup && (
 						<div className="cc-news-branch-wrapper">
 							<Select
+								mode="multiple"
 								className="cc-news-branch-wrapper"
 								placeholder="Chọn chi nhánh"
-								defaultValue={listBranch[0]?.Id || 0}
 								onChange={(value) => setBranchIdSelect(value)}
+								value={branchIdSelect}
 							>
 								{listBranch.map((branch: IBranch) => (
 									<Select.Option value={branch.Id} key={branch.Id}>

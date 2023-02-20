@@ -36,7 +36,7 @@ const GroupItem = ({ groupData }: IProps) => {
 GroupItem.LoadingSkeleton = () => {
 	return (
 		<Col xs={24} md={12} lg={8}>
-			<div className="p-4 rounded-lg bg-tw-white">
+			<div className="p-4 rounded-lg shadow-md bg-tw-white">
 				<div className="flex items-end gap-[16px]">
 					<div className="overflow-hidden rounded-lg">
 						<Skeleton.Image active={true} />
