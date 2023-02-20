@@ -1,68 +1,49 @@
 import { Modal, Tabs, Tooltip } from 'antd'
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 import { AiOutlinePlusCircle } from 'react-icons/ai'
 import PrimaryButton from '../Primary/Button'
 import ListShowAllProgram from './ListShowAllProgram'
 import ListShowProgramSelected from './ListShowProgramSeleted'
-import PrimaryTooltip from '../PrimaryTooltip'
 
-type TModalAddProgram = {
-	programs?: Array<any>
-	programsSelected?: Array<any>
-	setProgramsSelected?: Function
-	setPrograms?: Function
-	type: 'default' | '1-1'
-}
-
-const ModalAddProgram: FC<TModalAddProgram> = (props) => {
-	const { programs, programsSelected, setProgramsSelected, setPrograms, type } = props
+const ModalAddProgram = (props) => {
+	const { programs, programsSelected, setProgramsSelected, setPrograms } = props
 	const [isModalOpen, setIsModalOpen] = useState(false)
-
-	function onSelect(params) {
-		setProgramsSelected(params)
-		if (type == '1-1') {
-			setIsModalOpen(false)
+	let items = [
+		{
+			label: (
+				<div>
+					Tất cả - <span>{programs.length}</span>
+				</div>
+			),
+			key: 'item-1',
+			children: (
+				<ListShowAllProgram
+					programsSelected={programsSelected}
+					setProgramsSelected={setProgramsSelected}
+					programs={programs}
+					setPrograms={setPrograms}
+				/>
+			)
+		},
+		{
+			label: (
+				<div>
+					Đã chọn - <span>{programsSelected.length}</span>
+				</div>
+			),
+			key: 'item-2',
+			children: (
+				<ListShowProgramSelected setProgramsSelected={setProgramsSelected} programsSelected={programsSelected} setPrograms={setPrograms} />
+			)
 		}
-	}
-
-	const AllThis = {
-		label: (
-			<div>
-				Tất cả - <span>{programs.length}</span>
-			</div>
-		),
-		key: 'item-1',
-		children: (
-			<ListShowAllProgram
-				programsSelected={programsSelected}
-				setProgramsSelected={onSelect}
-				programs={programs}
-				setPrograms={setPrograms}
-				type={type}
-			/>
-		)
-	}
-
-	const SelectedThis = {
-		label: (
-			<div>
-				Đã chọn - <span>{programsSelected.length}</span>
-			</div>
-		),
-		key: 'item-2',
-		children: <ListShowProgramSelected setProgramsSelected={onSelect} programsSelected={programsSelected} setPrograms={setPrograms} />
-	}
-
-	let items = type == '1-1' ? [AllThis] : [AllThis, SelectedThis]
-
+	]
 	return (
 		<>
-			<PrimaryTooltip id="add-pro" place="top" content="Thêm chương trình">
+			<Tooltip title="Thêm chương trình">
 				<button type="button" onClick={() => setIsModalOpen(true)} className="text-tw-primary">
 					<AiOutlinePlusCircle size={18} />
 				</button>
-			</PrimaryTooltip>
-
+			</Tooltip>
 			<Modal
 				centered
 				title="Thêm chương trình"

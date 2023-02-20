@@ -12,7 +12,7 @@ const ListClassReview = (props) => {
 	}
 	return (
 		<List
-			className="rounded-lg mb-3 p-[3px]"
+			className="rounded-lg mb-3"
 			bordered
 			itemLayout="horizontal"
 			dataSource={classesSelected}

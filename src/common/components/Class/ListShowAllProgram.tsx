@@ -1,33 +1,17 @@
 import { Input, List } from 'antd'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { programApi } from '~/api/program'
 import { ShowNoti } from '~/common/utils'
 import AvatarComponent from '../AvatarComponent'
 import IconButton from '../Primary/IconButton'
-import { RxCheck } from 'react-icons/rx'
 
-type TListShowAllProgram = {
-	programs?: Array<any>
-	programsSelected?: Array<any>
-	setProgramsSelected?: Function
-	setPrograms?: Function
-	type: 'default' | '1-1'
-}
-
-const ListShowAllProgram: FC<TListShowAllProgram> = (props) => {
-	const { programs, setProgramsSelected, setPrograms, programsSelected, type } = props
+const ListShowAllProgram = (props) => {
+	const { programs, setProgramsSelected, setPrograms, programsSelected } = props
 	const [searchValue, setSearchValue] = useState(null)
-
 	const handleAddProgram = (data) => {
-		if (type == 'default') {
-			const temp = programs.filter((item) => item.Id !== data.Id)
-			setProgramsSelected((prev) => [...prev, data])
-			setPrograms(temp)
-		}
-
-		if (type == '1-1') {
-			setProgramsSelected((prev) => [data])
-		}
+		const newPrograms = programs.filter((item) => item.Id !== data.Id)
+		setProgramsSelected((prev) => [...prev, data])
+		setPrograms(newPrograms)
 	}
 
 	const handleSearch = async (data) => {
@@ -39,7 +23,7 @@ const ListShowAllProgram: FC<TListShowAllProgram> = (props) => {
 			const res = await programApi.getAll({
 				search: data
 			})
-			if (res.status == 200) {
+			if (res.status === 200) {
 				const results = res.data.data.filter((item) => !programsSelected.some((data) => data.Id === item.Id))
 				setPrograms(results)
 			}
@@ -58,20 +42,9 @@ const ListShowAllProgram: FC<TListShowAllProgram> = (props) => {
 		}
 	}, [searchValue])
 
-	function checkSelected(params) {
-		let flag = false
-		programsSelected.forEach((element) => {
-			if (element.Id == params.Id) {
-				flag = true
-			}
-		})
-		return flag
-	}
-
 	return (
 		<>
 			<Input className="primary-input mb-3" value={searchValue} onChange={handleSearch} placeholder="Tìm kiếm chương trình" />
-
 			<List
 				className="modal-review-class-program"
 				itemLayout="horizontal"
@@ -79,11 +52,7 @@ const ListShowAllProgram: FC<TListShowAllProgram> = (props) => {
 				renderItem={(item: IClass) => (
 					<List.Item
 						extra={
-							checkSelected(item) ? (
-								<RxCheck size={28} className="mr-[6px] text-[#66BB6A]" />
-							) : (
-								<IconButton icon="add" color="blue" type="button" tooltip="Thêm chương trình" onClick={() => handleAddProgram(item)} />
-							)
+							<IconButton icon="add" color={'blue'} type="button" tooltip={'Thêm chương trình'} onClick={() => handleAddProgram(item)} />
 						}
 					>
 						<div className="wrapper-item-class">
