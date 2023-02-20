@@ -19,4 +19,10 @@ export const rollUpApi = {
     delete(ID) {
 		return instance.delete(`${url}/${ID}`)
 	},
+
+	getRollUpStudent(params) {
+		return instance.get<IApiResultData<IRollUpStudent[]>>(`${url}/roll-up-student`, {
+			params
+		})
+	}
 }

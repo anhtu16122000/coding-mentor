@@ -108,7 +108,7 @@ export const SalaryPage = () => {
 			title: 'Thưởng',
 			width: 80,
 			dataIndex: 'Bonus',
-			render: (text) => <>{text}</>
+			render: (text) => <>{parseToMoney(text)}</>
 		},
 		{
 			title: 'Ghi chú',

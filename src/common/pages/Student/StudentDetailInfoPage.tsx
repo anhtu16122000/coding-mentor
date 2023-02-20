@@ -10,6 +10,9 @@ import TabStudentContract from '~/common/components/Student/TabStudentContract'
 import TabStudentDetail from '~/common/components/Student/TabStudentDetail'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
+import { TabBill } from './TabBill'
+import { TabClassList } from './TabClassList'
+import { TabStudyRoute } from './TabStudyRoute'
 
 export interface IStudentDetailInfoPageProps {}
 
@@ -58,6 +61,21 @@ export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps
 						key: '2',
 						label: `Hợp đồng`,
 						children: <TabStudentContract StudentDetail={studentDetail} />
+					},
+					{
+						key: '3',
+						label: `Lớp học`,
+						children: <TabClassList StudentDetail={studentDetail} />
+					},
+					{
+						key: '4',
+						label: `Lộ trình`,
+						children: <TabStudyRoute StudentDetail={studentDetail} />
+					},
+					{
+						key: '5',
+						label: `Thanh toán`,
+						children: <TabBill StudentDetail={studentDetail} />
 					}
 			  ]
 
