@@ -55,7 +55,7 @@
 		.cc-news-item-header {
 			@apply w-full flex;
 			.cc-news-item-user {
-				@apply flex row-center flex-1;
+				@apply flex flex-col flex-1;
 			}
 		}
 		.cc-news-item-body {
@@ -329,4 +329,13 @@
 	& input {
 		@apply rounded-lg;
 	}
+}
+
+.cc-center-branch-news {
+	@apply flex ml-[55px] gap-1 mt-2;
+	@apply flex-wrap;
+}
+
+.cc_li {
+	@apply cursor-default text-[12px] border-solid border-[#EAECF0] text-[#b1b1b1] border-[1px] pt-1 px-2  rounded-md;
 }

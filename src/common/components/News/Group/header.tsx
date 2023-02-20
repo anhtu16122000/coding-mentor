@@ -7,7 +7,6 @@ import RestApi from '~/api/RestApi'
 import { userInNewsFeedGroup } from '~/api/user'
 import { ShowNostis } from '~/common/utils'
 import GroupForm from './form'
-import defaultAvatar from '../../../../../public/images/default-avatar.svg'
 
 const { Search } = Input
 
