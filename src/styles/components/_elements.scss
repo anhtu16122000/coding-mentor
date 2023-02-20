@@ -852,8 +852,8 @@ body {
 		padding: 20px 10px;
 		transition: 0.3s width;
 		height: calc(100vh - 65px);
-		overflow: auto;
-		overflow-x: hidden;
+		overflow: hidden;
+		// overflow-x: hidden;
 
 		@include max-media(1000px) {
 			width: 100%;

@@ -1,19 +1,18 @@
-import React, { useState } from 'react'
-import { IoMdClose } from 'react-icons/io'
-import { deleteComment, getTimeSince } from '../utils'
-import { Tooltip as ReactTooltip } from 'react-tooltip'
-import { FiMoreVertical } from 'react-icons/fi'
 import { Popover } from 'antd'
+import React, { useState } from 'react'
 import { FaTelegramPlane } from 'react-icons/fa'
-import Loading from '../../BaseLoading'
-import { putComment } from './comment-utils'
-import Reply from './reply'
-import Avatar from '../../Avatar'
-import MenuContext from '../menu-context'
-import { RootState } from '~/store'
+import { FiMoreVertical } from 'react-icons/fi'
+import { IoMdClose } from 'react-icons/io'
 import { useSelector } from 'react-redux'
 import { getDate } from '~/common/utils/super-functions'
+import { RootState } from '~/store'
+import Avatar from '../../Avatar'
+import Loading from '../../BaseLoading'
 import PrimaryTooltip from '../../PrimaryTooltip'
+import MenuContext from '../menu-context'
+import { deleteComment, getTimeSince } from '../utils'
+import { putComment } from './comment-utils'
+import Reply from './reply'
 
 function CommentItem({ item, onRefresh }) {
 	const user = useSelector((state: RootState) => state.user.information)
@@ -54,6 +53,7 @@ function CommentItem({ item, onRefresh }) {
 					onRefresh()
 					setCurrentComment('')
 					setShowEdit(false)
+					setShowReply(true)
 				}
 			}
 		})
@@ -104,7 +104,7 @@ function CommentItem({ item, onRefresh }) {
 								<div className="mr-2 hover:underline">{getTimeSince(CreatedOn)}</div>
 							</PrimaryTooltip>
 							•
-							<div onClick={() => setShowReply(!showReply)} className="news-cmt-info-text none-selection">
+							<div onClick={() => setShowReply((pre) => !pre)} className="news-cmt-info-text none-selection">
 								Trả lời
 							</div>
 						</div>
@@ -173,8 +173,8 @@ function ListComment({ data, onShowAll, totalComment, onRefresh }) {
 
 	return (
 		<div className="cc-list-comment">
-			{data.map((comment, index) => {
-				return <CommentItem key={`cmt-item-${index}`} item={comment} onRefresh={onRefresh} />
+			{data.map((comment) => {
+				return <CommentItem key={comment.Id} item={comment} onRefresh={onRefresh} />
 			})}
 
 			{totalComment > 1 && (
