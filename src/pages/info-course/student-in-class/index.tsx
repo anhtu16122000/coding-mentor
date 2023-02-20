@@ -17,6 +17,7 @@ import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
 import AvatarComponent from '~/common/components/AvatarComponent'
+import Avatar from '~/common/components/Avatar'
 
 const StudentInClassPage = () => {
 	const [loading, setLoading] = React.useState(true)
@@ -52,11 +53,11 @@ const StudentInClassPage = () => {
 
 	const columns = [
 		{
-			title: 'Mã',
+			title: 'Học viên',
 			dataIndex: 'Code',
 			render: (value, item) => (
 				<div className="flex items-center">
-					<AvatarComponent className="h-[42px] w-[42px]" uri={item?.Avatar} />
+					<Avatar className="h-[40px] w-[40px]" uri={item?.Avatar} />
 					<div className="ml-[8px]">
 						<h2 className="text-[16px] font-[600]">{item?.FullName}</h2>
 						<h3 className="text-[14px] font-[400]">{item?.UserCode}</h3>
@@ -65,51 +66,14 @@ const StudentInClassPage = () => {
 			)
 		},
 		{
-			title: 'Người thanh toán',
-			dataIndex: 'FullName',
-			width: 220,
-			render: (value, item) => <p className="font-[600] text-[#1E88E5]">{value}</p>
+			title: 'Điện thoại',
+			dataIndex: 'Mobile',
+			width: 116
 		},
 		{
-			title: 'Tổng số tiền',
-			dataIndex: 'TotalPrice',
-			width: 116,
-			render: (value, item) => <p className="font-[600] text-[#000]">{parseToMoney(value)}</p>
-		},
-		{
-			title: 'Đã thanh toán',
-			dataIndex: 'Paid',
-			width: 126,
-			render: (value, item) => <p className="font-[600] text-[#388E3C]">{parseToMoney(value)}</p>
-		},
-		{
-			title: 'Chưa thanh toán',
-			dataIndex: 'Debt',
-			width: 140,
-			render: (value, item) => <p className="font-[600] text-[#E53935]">{parseToMoney(value)}</p>
-		},
-		{
-			title: 'Phương thức',
-			dataIndex: 'PaymentMethodName',
-			width: 130
-		},
-		{
-			title: 'Ngày',
-			dataIndex: 'ModifiedOn',
-			width: 160,
-			render: (value, item) => <p>{moment(value).format('DD/MM/YYYY HH:mm')}</p>
-		},
-		{
-			title: 'Kỳ tiếp theo',
-			dataIndex: 'PaymentAppointmentDate',
-			width: 130,
-			render: (value, item) => <p>{!!value ? moment(value).format('DD/MM/YYYY') : ''}</p>
-		},
-		{
-			title: 'Người tạo',
-			dataIndex: 'ModifiedBy',
-			width: 160,
-			render: (value, item) => <p className="font-[600] text-[#1E88E5]">{value}</p>
+			title: 'Email',
+			dataIndex: 'Email',
+			width: 140
 		},
 		{
 			title: 'Loại',
@@ -117,9 +81,9 @@ const StudentInClassPage = () => {
 			width: 180,
 			render: (value, item) => (
 				<p className="font-[600] text-[#E53935]">
-					{value == 1 && <span className="tag blue">{item?.TypeName}</span>}
-					{value == 2 && <span className="tag green">{item?.TypeName}</span>}
-					{value == 3 && <span className="tag yellow">{item?.TypeName}</span>}
+					{value == 1 && <span className="tag green">{item?.TypeName}</span>}
+					{value == 2 && <span className="tag yellow">{item?.TypeName}</span>}
+					{value == 3 && <span className="tag blue">{item?.TypeName}</span>}
 				</p>
 			)
 		},
