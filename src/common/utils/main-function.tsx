@@ -40,6 +40,38 @@ export const getFileThumbnails = (type, FileUrl) => {
 	return <img draggable={false} src="/images/docs-other.png" alt="lms thumbnails" className="in-1-line" style={{ height: 125 }} />
 }
 
+export const getFileIcons = (type, FileUrl) => {
+	if (type == 'pdf') {
+		return <img draggable={false} src="/icons/pdf-file.svg" alt="lms icons" className="" style={{ height: 50, width: 50 }} />
+	}
+
+	if (type == 'zip') {
+		return <img draggable={false} src="/icons/zip-file-2.svg" alt="lms icons" className="" style={{ height: 50, width: 50 }} />
+	}
+
+	if (type == 'doc' || type == 'docx' || type == 'word') {
+		return <img draggable={false} src="/icons/doc-file.svg" alt="lms icons" className="" style={{ height: 50, width: 50 }} />
+	}
+
+	if (type == 'xlsx' || type == 'xls' || type == 'excel') {
+		return <img draggable={false} src="/icons/xls-file.svg" alt="lms icons" className="" style={{ height: 45, width: 50 }} />
+	}
+
+	if (type == 'pptx' || type == 'ppt') {
+		return <img draggable={false} src="/icons/ppt-file.svg" alt="lms icons" className="" style={{ height: 50, width: 50 }} />
+	}
+
+	if (type == 'mp4' || type == 'avi') {
+		return <img draggable={false} src="/icons/mp4-file.svg" alt="lms icons" className="" style={{ height: 50, width: 50 }} />
+	}
+
+	if (type == 'jpeg' || type == 'jpg' || type == 'png' || type == 'webp') {
+		return <img draggable={false} src="/icons/jpg-file.svg" alt="lms icons" className="" style={{ height: 50, width: 50 }} />
+	}
+
+	return <img draggable={false} src="/images/docs-other.png" alt="lms icons" className="" style={{ height: 50, width: 50 }} />
+}
+
 export function checkInternet() {
 	console.log('Initially ' + (window.navigator.onLine ? 'on' : 'off') + 'line')
 

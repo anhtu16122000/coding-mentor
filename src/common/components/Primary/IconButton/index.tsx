@@ -3,11 +3,11 @@ import { FC, useRef } from 'react'
 import { Edit, LogIn, Trash, X, FileMinus, Edit3, Book, Trash2 } from 'react-feather'
 import { AiOutlineCheckCircle, AiOutlineEye, AiOutlineInfoCircle, AiOutlineUsergroupAdd } from 'react-icons/ai'
 import { CgAddR, CgFileDocument } from 'react-icons/cg'
-import { FiEdit, FiMenu, FiMoreVertical, FiPrinter, FiSave, FiSend, FiTrash2 } from 'react-icons/fi'
+import { FiArrowDownCircle, FiArrowUpCircle, FiEdit, FiMenu, FiMoreVertical, FiPrinter, FiSave, FiSend, FiTrash2 } from 'react-icons/fi'
 import { HiOutlineFilter } from 'react-icons/hi'
 import { MdOutlineCancel } from 'react-icons/md'
 import { RiExchangeLine } from 'react-icons/ri'
-import { TbDownload } from 'react-icons/tb'
+import { TbDownload, TbUpload } from 'react-icons/tb'
 
 const IconButton: FC<IIconButton> = (props) => {
 	const { tooltip, background, icon, type, onClick, className, color, size, disabled } = props
@@ -107,6 +107,9 @@ const IconButton: FC<IIconButton> = (props) => {
 		if (icon == 'menu') {
 			return <FiMenu />
 		}
+		if (icon == 'upload') {
+			return <TbUpload size={!!size ? size : 22} />
+		}
 		if (icon == 'cancel') {
 			return <MdOutlineCancel size={!!size ? size : 22} />
 		}
@@ -136,6 +139,12 @@ const IconButton: FC<IIconButton> = (props) => {
 		}
 		if (icon == 'save') {
 			return <FiSave size={!!size ? size : 20} />
+		}
+		if (icon == 'up-arrow') {
+			return <FiArrowUpCircle size={!!size ? size : 20} />
+		}
+		if (icon == 'down-arrow') {
+			return <FiArrowDownCircle size={!!size ? size : 20} />
 		}
 	}
 
