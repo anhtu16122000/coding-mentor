@@ -20,8 +20,7 @@ function CommentItem({ item, onRefresh }) {
 	const [showMenu, setShowMenu] = useState(false)
 	const [showEdit, setShowEdit] = useState(false)
 	const [currentComment, setCurrentComment] = useState('')
-	const [loadingComment, setLoadingComment] = useState(false)
-	const [inputFocused, setInputFocused] = useState(false)
+	const [showReply, setShowReply] = useState(false)
 
 	const { Id, Content, CreatedIdBy, CreatedBy, CreatedOn, CommentedAvatar } = item
 
@@ -40,35 +39,8 @@ function CommentItem({ item, onRefresh }) {
 				setShowMenu(false)
 				setShowEdit(true)
 			}}
-			showEdit={user.UserInformationId == CreatedIdBy}
 		/>
 	)
-
-	function _comment() {
-		putComment({
-			apiParams: { Id: Id, Content: currentComment },
-			setLoading: setLoadingComment,
-			onSuccess: () => {
-				{
-					onRefresh()
-					setCurrentComment('')
-					setShowEdit(false)
-					setShowReply(true)
-				}
-			}
-		})
-	}
-
-	function onEditComment() {
-		if (!!currentComment && !loadingComment && currentComment !== Content) _comment()
-	}
-
-	const [showReply, setShowReply] = useState(false)
-
-	function inputKeyup(event) {
-		if (event.keyCode == 13 && !!currentComment && !loadingComment) _comment()
-		if (event.keyCode == 27) setShowEdit(false)
-	}
 
 	return (
 		<>
@@ -111,52 +83,6 @@ function CommentItem({ item, onRefresh }) {
 
 						{showReply && <Reply comment={item} />}
 					</div>
-				</>
-			)}
-
-			{!!showEdit && (
-				<>
-					<div className="cc-news-create-comment mt-[16px]">
-						<Avatar uri={user.Avatar} className="cc-news-avatar" />
-						<div onClick={() => {}} className="relative cc-comment-input">
-							<input
-								onKeyUp={inputKeyup}
-								disabled={loadingComment}
-								placeholder="Nhập nhận xét..."
-								value={currentComment}
-								onChange={(event) => setCurrentComment(event.target.value)}
-								onFocus={() => setInputFocused(true)}
-								onBlur={() => setInputFocused(false)}
-							/>
-							<div onClick={onEditComment} className="cc-comment-submit">
-								{loadingComment ? (
-									<Loading.Blue />
-								) : (
-									<FaTelegramPlane
-										size={20}
-										color={!currentComment || currentComment == Content ? '#0000003d' : '#1E88E5'}
-										className="ml-[-2px]"
-									/>
-								)}
-							</div>
-						</div>
-						<PrimaryTooltip id={`cmt-cancel-${Id}`} place="right" content="Huỷ">
-							<div onClick={() => setShowEdit(false)} className="news-cancel-input">
-								<IoMdClose size={22} color="#E53935" />
-							</div>
-						</PrimaryTooltip>
-					</div>
-
-					{inputFocused && (
-						<div className="the-option text-[12px] text-[#E53935] mt-[8px] font-[500] ml-[56px]">
-							Nhấn ESC để hủy
-							{!!currentComment && currentComment !== item?.commentContent && (
-								<>
-									, <div className="text-[#1E88E5] inline-flex">Enter để lưu</div>
-								</>
-							)}
-						</div>
-					)}
 				</>
 			)}
 		</>
