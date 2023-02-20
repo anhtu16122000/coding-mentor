@@ -28,6 +28,7 @@ const AvatarComponent: FC<TAvatar> = (props) => {
 
 	return (
 		<img
+			draggable={false}
 			onError={(e) => {
 				const targetEvent = e.target as any
 				targetEvent.src = DEFAULT_AVATAR
