@@ -1,8 +1,10 @@
 .wrapper-register-class {
+	@apply max-w-[1200px] mx-auto;
+
 	.tab-item {
 		@apply transition-all text-[15px];
 		&.active {
-			@apply relative text-tw-primary;
+			@apply relative text-tw-primary font-[600];
 			&::after {
 				@apply content-[''] block absolute top-[105%] left-0 right-0 h-[2px] bg-tw-primary;
 			}

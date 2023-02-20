@@ -1,28 +1,29 @@
-import { Form, Modal, Popover, Select, Spin, Tooltip } from 'antd'
+import { Form, Modal, Popover, Select, Tooltip } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AiOutlineCalendar, AiOutlineWarning } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
-import { roomApi } from '~/api/room'
 import { ShowNoti } from '~/common/utils'
-import { parseSelectArray } from '~/common/utils/common'
 import { RootState } from '~/store'
 import { setListCalendar, setLoadingCalendar, setRoom, setShowModal, setTeacher } from '~/store/classReducer'
 import DatePickerField from '../FormControl/DatePickerField'
 import InputTextField from '../FormControl/InputTextField'
-import SelectField from '../FormControl/SelectField'
 import TextBoxField from '../FormControl/TextBoxField'
 import PrimaryButton from '../Primary/Button'
 import ModalRemoveSchedule from './ModalRemoveSchedule'
 import InputMoneyField from '~/common/components/FormControl/InputNumberField'
+import PrimaryTooltip from '../PrimaryTooltip'
 
 const ChangeScheduleClass = (props) => {
 	const { dataRow, checkTeacherAvailable, handleChangeInfo, checkRoomAvailable } = props
-	// const [isLoading, setIsLoading] = useState(false)
-	const [isModalOpen, setIsModalOpen] = useState({ open: false, id: null })
-	const [isDisableButton, setIsDisableButton] = useState(false)
 	const [form] = Form.useForm()
 	const dispatch = useDispatch()
+
+	const refPopover = useRef(null)
+
+	const [isModalOpen, setIsModalOpen] = useState({ open: false, id: null })
+	const [isDisableButton, setIsDisableButton] = useState(false)
+
 	const dataChangeSchedule = useSelector((state: RootState) => state.class.dataChangeSchedule)
 	const listCalendar = useSelector((state: RootState) => state.class.listCalendar)
 	const teacher = useSelector((state: RootState) => state.class.teacher)
@@ -30,7 +31,6 @@ const ChangeScheduleClass = (props) => {
 	const prevSchedule = useSelector((state: RootState) => state.class.prevSchedule)
 	const loadingCalendar = useSelector((state: RootState) => state.class.loadingCalendar)
 	const room = useSelector((state: RootState) => state.class.room)
-	const refPopover = useRef(null)
 
 	useMemo(() => {
 		if (!!showModal.open && showModal.id === dataRow.event.extendedProps.Id) {
@@ -186,6 +186,11 @@ const ChangeScheduleClass = (props) => {
 		dispatch(setShowModal({ open: false, id: null }))
 	}
 
+	function onClickEdit() {
+		handleOpen()
+		refPopover.current.close()
+	}
+
 	return (
 		<>
 			<div className="wrapper-schedule">
@@ -207,19 +212,20 @@ const ChangeScheduleClass = (props) => {
 						<span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
 					</p>
 				</div>
-				<div className="mt-2 flex flex-col gap-2">
-					<PrimaryButton
-						onClick={() => {
-							handleOpen(), refPopover.current.close()
-						}}
-						type="button"
-						background="yellow"
-						icon="edit"
-						className="btn-edit"
+
+				<div className="flex flex-col">
+					<PrimaryTooltip
+						className="w-full px-[8px] mb-[4px]"
+						place="top"
+						content="Chỉnh sửa"
+						id={`edit-sc-${dataRow.event.extendedProps?.Id}`}
 					>
-						Chỉnh sửa
-					</PrimaryButton>
-					<ModalRemoveSchedule dataRow={dataRow} />
+						<PrimaryButton onClick={onClickEdit} type="button" background="yellow" icon="edit" className="w-full" />
+					</PrimaryTooltip>
+
+					<PrimaryTooltip className="w-full px-[8px]" place="top" content="Chỉnh sửa" id={`delete-sc-${dataRow.event.extendedProps?.Id}`}>
+						<ModalRemoveSchedule dataRow={dataRow} />
+					</PrimaryTooltip>
 				</div>
 			</div>
 
@@ -250,18 +256,23 @@ const ChangeScheduleClass = (props) => {
 								<span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
 							</p>
 						</div>
-						<div className="flex items-center justify-between gap-2 mt-2">
-							<PrimaryButton
-								onClick={() => {
-									handleOpen(), refPopover.current.close()
-								}}
-								type="button"
-								background="yellow"
-								icon="edit"
+						<div className="flex flex-col">
+							<PrimaryTooltip
+								className="w-full px-[8px] mb-[4px]"
+								place="top"
+								content="Chỉnh sửa"
+								id={`edit-sc-${dataRow.event.extendedProps?.Id}`}
 							>
-								Chỉnh sửa
-							</PrimaryButton>
-							<ModalRemoveSchedule dataRow={dataRow} />
+								<PrimaryButton onClick={onClickEdit} type="button" background="yellow" icon="edit" className="w-full" />
+							</PrimaryTooltip>
+							<PrimaryTooltip
+								className="w-full px-[8px]"
+								place="top"
+								content="Chỉnh sửa"
+								id={`delete-sc-${dataRow.event.extendedProps?.Id}`}
+							>
+								<ModalRemoveSchedule dataRow={dataRow} />
+							</PrimaryTooltip>
 						</div>
 					</>
 				}
@@ -287,7 +298,7 @@ const ChangeScheduleClass = (props) => {
 				onCancel={modalCancel}
 				footer={
 					<PrimaryButton
-						disable={isDisableButton || loadingCalendar}
+						disable={loadingCalendar}
 						loading={loadingCalendar}
 						icon="save"
 						background="blue"
@@ -344,7 +355,7 @@ const ChangeScheduleClass = (props) => {
 						</Select>
 					</Form.Item>
 
-					{!!dataChangeSchedule.RoomId && (
+					{!!dataChangeSchedule?.RoomId && (
 						<Form.Item className="col-span-2" name="RoomId" label="Phòng học">
 							<Select onChange={() => setIsDisableButton(false)} placeholder="Chọn phòng học">
 								{room.map((item) => {
@@ -364,9 +375,7 @@ const ChangeScheduleClass = (props) => {
 							</Select>
 						</Form.Item>
 					)}
-
 					<InputMoneyField className="col-span-2" label="Lương / buổi" name="TeachingFee" placeholder="Nhập mức lương" isRequired />
-
 					<TextBoxField className="col-span-2" name="Note" label="Ghi chú" />
 				</Form>
 			</Modal>

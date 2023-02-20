@@ -30,13 +30,9 @@ const ModalRemoveSchedule = (props) => {
 				type="button"
 				background="red"
 				icon="remove"
-				className="btn-remove"
-				onClick={() => {
-					setIsModalVisible(true)
-				}}
-			>
-				Xóa
-			</PrimaryButton>
+				className="w-full"
+				onClick={() => setIsModalVisible(true)}
+			/>
 
 			<Modal
 				title={'Xác nhận xóa'}
