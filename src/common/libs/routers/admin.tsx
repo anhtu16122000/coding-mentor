@@ -1,23 +1,15 @@
 import { AiFillSetting, AiOutlineCalendar } from 'react-icons/ai'
 import { BiBookAdd } from 'react-icons/bi'
-import {
-	BsBook, BsFillGridFill
-} from 'react-icons/bs'
-import {
-	FaHouseDamage,
-	FaMoneyBillAlt, FaUserGraduate,
-	FaUserTie
-} from 'react-icons/fa'
+import { BsBook, BsFillGridFill } from 'react-icons/bs'
+import { FaHouseDamage, FaMoneyBillAlt, FaUserGraduate, FaUserTie } from 'react-icons/fa'
 import { FiAirplay } from 'react-icons/fi'
+import { GiTakeMyMoney } from 'react-icons/gi'
 import { GrMoney, GrSettingsOption } from 'react-icons/gr'
 import { HiPresentationChartLine } from 'react-icons/hi'
 import { IoVideocam } from 'react-icons/io5'
-import {
-	MdOutlineSettingsInputComposite,
-	MdPersonalVideo
-} from 'react-icons/md'
-import { RiExchangeBoxFill, RiFileEditLine, RiFileList2Fill } from 'react-icons/ri'
-import { TbFileCertificate } from 'react-icons/tb'
+import { MdOutlineSettingsInputComposite, MdPersonalVideo } from 'react-icons/md'
+import { RiExchangeBoxFill, RiFileEditLine, RiFileList2Fill, RiMoneyDollarBoxFill, RiMoneyDollarCircleFill } from 'react-icons/ri'
+import { TbFileCertificate, TbReportMoney } from 'react-icons/tb'
 import { TiHome } from 'react-icons/ti'
 
 export const AdminMenu = [
@@ -90,6 +82,13 @@ export const AdminChildMenu = [
 		MenuTitle: 'Tài chính',
 		MenuKey: '/finance',
 		MenuItem: [
+			{
+				TypeItem: 'single',
+				Key: '/finance/payment',
+				Route: '/finance/payment',
+				Icon: <RiMoneyDollarCircleFill />,
+				Text: 'Quản lý thanh toán'
+			},
 			{
 				TypeItem: 'single',
 				Key: '/finance/income-expense-management',
