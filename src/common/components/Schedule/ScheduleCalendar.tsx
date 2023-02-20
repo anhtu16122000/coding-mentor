@@ -8,16 +8,16 @@ import PrimaryButton from '../Primary/Button'
 const ScheduleCalendar = (props) => {
 	const { dataRow } = props
 	const router = useRouter()
+
 	const getStatusSchedule = () => {
 		switch (dataRow.event.extendedProps.Status) {
 			case 1:
-				return '!bg-tw-secondary'
+				return '!bg-[#a2a2a2]'
 			case 2:
-				return '!bg-tw-disable'
-			case 3:
-				return '!bg-tw-primary'
+				return '!bg-[#59b96c]'
 		}
 	}
+
 	return (
 		<>
 			<div className="wrapper-schedule">

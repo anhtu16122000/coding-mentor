@@ -1,13 +1,11 @@
-import { Empty, Form, Modal, Upload } from 'antd'
+import { Form, Modal, Spin, Upload } from 'antd'
 import { useEffect, useState } from 'react'
 import { UploadFileApi } from '~/api/common/upload-image'
 import { ShowNoti } from '~/common/utils'
 import { PlusOutlined } from '@ant-design/icons'
 
 const UploadImageField = (props: IUploadImageField) => {
-	const { style, label, name, isRequired, className, disabled, rules, multiple, form, setIsLoadingImage, max } = props
-	// truyền form để lấy link ảnh của item
-	const [imgUrl, setImgUrl] = useState('')
+	const { style, label, name, isRequired, className, disabled, rules, multiple, form, setIsLoadingImage } = props
 	const [loadingImage, setLoadingImage] = useState(false)
 	const [previewOpen, setPreviewOpen] = useState(false)
 	const [previewImage, setPreviewImage] = useState('')
@@ -27,7 +25,6 @@ const UploadImageField = (props: IUploadImageField) => {
 				}
 				ShowNoti('success', 'Upload ảnh thành công')
 				form.setFieldValue(name, res.data.data)
-				setImgUrl(res.data.data)
 			}
 		} catch (error) {
 			ShowNoti('error', error.message)
@@ -42,14 +39,12 @@ const UploadImageField = (props: IUploadImageField) => {
 		const filterImage = fileList.filter((img) => {
 			return img.url !== item.url
 		})
-		setImgUrl('')
 		form.setFieldsValue({ [name]: '' })
 		setFileList(filterImage)
 	}
 
 	useEffect(() => {
 		if (name) {
-			setImgUrl(form.getFieldValue(name))
 			if (form.getFieldValue(name)) {
 				setFileList([{ url: form.getFieldValue(name) }])
 			} else {
@@ -79,12 +74,12 @@ const UploadImageField = (props: IUploadImageField) => {
 	const handleCancel = () => setPreviewOpen(false)
 
 	return (
-		<div className="flex mb-4">
+		<div className="flex">
 			<Form.Item name={name} style={style} label={label} className={`${className}`} required={isRequired} rules={rules}>
 				<Upload
 					maxCount={1}
 					name="avatar"
-					className="avatar-uploader"
+					className="avatar-uploader relative"
 					listType="picture-card"
 					showUploadList={false}
 					disabled={disabled}
@@ -94,48 +89,31 @@ const UploadImageField = (props: IUploadImageField) => {
 					customRequest={(event) => handleChange_img(event.file)}
 					onRemove={(item) => removeImage(item)}
 				>
-					{/* <PrimaryButton loading={loadingImage} background="green" type="button" children={<span>Bấm để tải ảnh</span>} icon="upload" /> */}
-					{/* {checkFileList()?.length >= max ? null : ( */}
-					{/* <div className="bg-upload">
-						<PlusOutlined />
-					</div> */}
-					{/* {fileList?.length > 0 ? null : ( */}
 					{multiple ? (
 						<div className="bg-upload">
 							<PlusOutlined />
 						</div>
-					) : fileList.length === 1 ? null : (
+					) : fileList.length == 1 ? null : (
 						<div className="bg-upload">
 							<PlusOutlined />
 						</div>
 					)}
+
 					{fileList.map((image) => {
 						return <img src={image.url} alt="avatar" style={{ width: '100%' }} />
 					})}
+
+					{loadingImage && (
+						<div className="absolute top-0 left-0 all-center w-full h-full bg-[#0000003d] z-10">
+							<Spin className="loading-white" />
+						</div>
+					)}
 				</Upload>
 			</Form.Item>
 
 			<Modal visible={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
 				<img alt="example" style={{ width: '100%' }} src={previewImage} />
 			</Modal>
-
-			{/* <div className="w-2/4">
-				{!!imgUrl && typeof imgUrl === 'string' ? (
-					<div className="relative">
-						<img src={imgUrl} alt="avatar" className="rounded-4 object-cover" />
-						<IconButton
-							onClick={removeImage}
-							size={18}
-							type="button"
-							color="white"
-							icon="x"
-							className="!absolute top-[5px] right-1 !text-[16px] !bg-[#00000055] hover:!bg-[#000000a8] active:!bg-[#000000d1] !px-1 !py-1 rounded-[4px]"
-						/>
-					</div>
-				) : (
-					<Empty />
-				)}
-			</div> */}
 		</div>
 	)
 }

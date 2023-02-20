@@ -4,7 +4,7 @@ import AvatarComponent from '../AvatarComponent'
 import IconButton from '../Primary/IconButton'
 
 const ListProgramReview = (props) => {
-	const { programsSelected, setProgramsSelected, setPrograms } = props
+	const { programsSelected, setProgramsSelected, setPrograms, type } = props
 	const handleRemoveProgram = (data) => {
 		const newProgramsSelected = programsSelected.filter((item) => item.Id !== data.Id)
 		setProgramsSelected(newProgramsSelected)
@@ -12,12 +12,20 @@ const ListProgramReview = (props) => {
 	}
 	return (
 		<List
-			className="rounded-lg mb-3"
+			className="rounded-[6px] mb-3 p-[2px]"
 			bordered
 			itemLayout="horizontal"
 			dataSource={programsSelected}
 			renderItem={(item: any) => (
-				<List.Item extra={<IconButton icon="remove" color="red" type="button" tooltip="Xóa" onClick={() => handleRemoveProgram(item)} />}>
+				<List.Item
+					extra={
+						type == '1-1' ? (
+							<></>
+						) : (
+							<IconButton icon="remove" color="red" type="button" tooltip="Xóa" onClick={() => handleRemoveProgram(item)} />
+						)
+					}
+				>
 					<div className="wrapper-item-class">
 						<AvatarComponent className="img-class" url={item?.Thumbnail} type="class" />
 						<div className="wrapper-info-class">

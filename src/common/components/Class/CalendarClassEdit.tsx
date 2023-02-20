@@ -232,22 +232,6 @@ const CalenderClassEdit = () => {
 				} else if (parseInt(infoClass?.Type?.toString()) == 2 && !!checkTeacher && !!checkTeacher?.Fit) {
 					handleUpdateSchedule(eventDropInfo)
 				}
-
-				// const newListCalendar = listCalendar.map((item) => {
-				// 	if (eventDropInfo.event.extendedProps.IdSchedule === item.IdSchedule) {
-				// 		return {
-				// 			...item,
-				// 			start: moment(eventDropInfo.event.start).format(),
-				// 			end: moment(eventDropInfo.event.end).format(),
-				// 			StartTime: moment(eventDropInfo.event.start).format(),
-				// 			EndTime: moment(eventDropInfo.event.end).format()
-				// 		}
-				// 	} else {
-				// 		return item
-				// 	}
-				// })
-
-				// dispatch(setListCalendarEdit(newListCalendar))
 			} else {
 				const newListCalendar = [...listCalendar]
 				newListCalendar[eventDropInfo.oldEvent.extendedProps.Id] = {
@@ -294,28 +278,15 @@ const CalenderClassEdit = () => {
 						editable={isEditSchedule}
 						weekends={true}
 						events={listCalendar}
-						eventsSet={(data) => {
-							setTimeStamp(new Date().getTime())
-						}}
-						eventChange={(data) => {
-							console.log('DATA: ', data)
-						}}
+						eventsSet={(data) => setTimeStamp(new Date().getTime())}
+						eventChange={(data) => {}}
 						datesSet={(data) => {
 							getListSchedule({ from: moment(data.start).format(), to: moment(data.end).format(), classId: slug })
 							dispatch(setParamsSchedule({ from: moment(data.start).format(), to: moment(data.end).format(), classId: slug }))
 						}}
 						locale="vi"
-						headerToolbar={{
-							start: 'prev today next',
-							center: 'title',
-							end: 'dayGridMonth,timeGridWeek,timeGridDay'
-						}}
-						buttonText={{
-							today: 'Hôm nay',
-							month: 'Tháng',
-							week: 'Tuần',
-							day: 'Ngày'
-						}}
+						headerToolbar={{ start: 'prev today next', center: 'title', end: 'dayGridMonth,timeGridWeek,timeGridDay' }}
+						buttonText={{ today: 'Hôm nay', month: 'Tháng', week: 'Tuần', day: 'Ngày' }}
 						allDaySlot={false}
 						titleFormat={{ month: 'numeric', year: 'numeric', day: 'numeric' }}
 						dayHeaderFormat={{ weekday: 'long' }}
@@ -343,7 +314,19 @@ const CalenderClassEdit = () => {
 						}}
 					/>
 				) : null}
+
+				<div className="flex items-center mt-[24px]">
+					<div className="flex items-center">
+						<div className="bg-[#a2a2a2] w-[20px] h-[20px] rounded-[4px] mr-[8px]"></div>
+						<span>Chưa học</span>
+					</div>
+					<div className="flex items-center">
+						<div className="bg-[#59b96c] w-[20px] h-[20px] rounded-[4px] mr-[8px] ml-[32px]"></div>
+						<span>Đã học</span>
+					</div>
+				</div>
 			</Card>
+
 			{loadingCalendar && (
 				<div className="overlay-calendar">
 					<Lottie loop animationData={loadingJson} play className="w-52" />

@@ -28,6 +28,12 @@ function Header({ isOpenMenu, isOpen, funcMenuMobile, openMenuMobile }: IHeader)
 		logOut()
 	}
 
+	useEffect(() => {
+		if (userInfo) {
+			console.log('-- USER INFO', userInfo)
+		}
+	}, [userInfo])
+
 	const user = useSelector((state: RootState) => state.user.information)
 	const area = useSelector((state: RootState) => state.area)
 

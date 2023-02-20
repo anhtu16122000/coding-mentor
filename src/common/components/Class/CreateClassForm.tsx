@@ -364,6 +364,7 @@ const CreateClassForm = (props) => {
 			refPopoverWrapperBtn.current.close()
 		}
 	}, [isModalOpen])
+
 	useEffect(() => {
 		if (form.getFieldValue('BranchId') && form.getFieldValue('ProgramId')) {
 			getAllTeacherByBranchAndProgram(form.getFieldValue('BranchId'), form.getFieldValue('ProgramId'))
@@ -381,11 +382,12 @@ const CreateClassForm = (props) => {
 					Tạo lớp offline
 				</PrimaryButton>
 			)}
+
 			<Modal
 				title={<>Tạo lớp {isOnline ? ' online' : ' offline'}</>}
 				open={isModalOpen}
 				onCancel={() => setIsModalOpen(false)}
-				width={900}
+				width={800}
 				footer={
 					<>
 						<PrimaryButton background="blue" type="button" icon="save" onClick={form.submit} disable={isLoading} loading={isLoading}>
@@ -396,7 +398,16 @@ const CreateClassForm = (props) => {
 			>
 				<Form form={form} layout="vertical" onFinish={handleSubmit}>
 					<div className="row">
-						<div className={`${isOnline ? 'col-md-6 col-12' : 'col-12'}`}>
+						<div className="col-12">
+							<UploadImageField form={form} label="Ảnh đại diện lớp học" name="Thumbnail" />
+						</div>
+
+						{!isOnline && (
+							<div className="col-md-6 col-12">
+								<InputTextField isRequired rules={[yupSync]} label="Tên lớp học" name="Name" placeholder="Nhập tên lớp học" />
+							</div>
+						)}
+						<div className={`${isOnline ? 'col-md-6 col-12' : 'col-md-6 col-12'}`}>
 							<SelectField
 								isRequired
 								rules={[yupSync]}
@@ -404,7 +415,7 @@ const CreateClassForm = (props) => {
 								label="Trung tâm"
 								name="BranchId"
 								optionList={branch}
-								onChangeSelect={(value) => handleSelectChange('BranchId', value)}
+								onChangeSelect={(value) => !isOnline && handleSelectChange('BranchId', value)}
 							/>
 						</div>
 						<div className="col-md-6 col-12">
@@ -536,9 +547,9 @@ const CreateClassForm = (props) => {
 						</div>
 						<div className="col-md-6 col-12">
 							<InputNumberField
-								placeholder="Nhập số lượng học viên tối đa (Mặc định 20)"
+								placeholder="Nhập số lượng học viên tối đa (mặc định 20)"
 								className="w-full"
-								label="Số lượng học viên tối đa (Mặc định 20)"
+								label="Số lượng học viên tối đa (mặc định 20)"
 								name="MaxQuantity"
 							/>
 						</div>
@@ -555,12 +566,11 @@ const CreateClassForm = (props) => {
 								optionList={teacher}
 							/>
 						</div>
-						<div className="col-12">
-							<InputTextField isRequired rules={[yupSync]} label="Tên lớp học" name="Name" placeholder="Nhập tên lớp học" />
-						</div>
-						<div className="col-12">
-							<UploadImageField form={form} label="Ảnh đại diện lớp học" name="Thumbnail" />
-						</div>
+						{!!isOnline && (
+							<div className="col-12">
+								<InputTextField isRequired rules={[yupSync]} label="Tên lớp học" name="Name" placeholder="Nhập tên lớp học" />
+							</div>
+						)}
 					</div>
 				</Form>
 			</Modal>

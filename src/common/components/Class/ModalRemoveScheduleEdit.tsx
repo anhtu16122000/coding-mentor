@@ -6,9 +6,10 @@ import { scheduleApi } from '~/api/schedule'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import PrimaryButton from '../Primary/Button'
+import PrimaryTooltip from '../PrimaryTooltip'
 
 const ModalRemoveScheduleEdit = (props) => {
-	const { IdSchedule, startTime, endTime, getListSchedule, refPopover } = props
+	const { IdSchedule, startTime, endTime, getListSchedule, refPopover, dataRow } = props
 	const paramsSchedule = useSelector((state: RootState) => state.class.paramsSchedule)
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
@@ -28,24 +29,28 @@ const ModalRemoveScheduleEdit = (props) => {
 			setIsLoading(false)
 		}
 	}
+
+	function onClickRemove() {
+		setIsModalVisible(true)
+		!!refPopover && refPopover.current.close()
+	}
+
 	return (
 		<>
-			<PrimaryButton
-				loading={isLoading}
-				disable={isLoading}
-				type="button"
-				background="red"
-				icon="remove"
-				className="btn-remove"
-				onClick={() => {
-					setIsModalVisible(true), !!refPopover && refPopover.current.close()
-				}}
-			>
-				Xóa
-			</PrimaryButton>
+			<PrimaryTooltip className="w-full px-[8px] mb-[8px]" place="top" content="Xoá" id={`remove-sc-${dataRow.event.extendedProps?.Id}`}>
+				<PrimaryButton
+					loading={isLoading}
+					disable={isLoading}
+					type="button"
+					background="red"
+					icon="remove"
+					className="w-full"
+					onClick={onClickRemove}
+				/>
+			</PrimaryTooltip>
 
 			<Modal
-				title={'Xác nhận xóa'}
+				title="Xác nhận xóa"
 				open={isModalVisible}
 				onCancel={() => setIsModalVisible(false)}
 				footer={

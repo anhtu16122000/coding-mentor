@@ -19,6 +19,8 @@ import DatePickerField from '../FormControl/DatePickerField'
 import TextBoxField from '../FormControl/TextBoxField'
 import PrimaryButton from '../Primary/Button'
 import ModalRemoveScheduleEdit from './ModalRemoveScheduleEdit'
+import PrimaryTooltip from '../PrimaryTooltip'
+import InputMoneyField from '~/common/components/FormControl/InputNumberField'
 
 const ChangeScheduleClassEdit = (props) => {
 	const { dataRow, checkTeacherAvailable, getListSchedule, checkRoomAvailable } = props
@@ -27,7 +29,6 @@ const ChangeScheduleClassEdit = (props) => {
 	const [form] = Form.useForm()
 	const dispatch = useDispatch()
 	const router = useRouter()
-	// const { BranchId, CurriculumId, Type } = router.query
 	const listCalendar = useSelector((state: RootState) => state.class.listCalendarEdit)
 	const teacher = useSelector((state: RootState) => state.class.teacherEdit)
 	const showModal = useSelector((state: RootState) => state.class.showModalEdit)
@@ -61,13 +62,15 @@ const ChangeScheduleClassEdit = (props) => {
 					item.IdSchedule !== dataRow.event.extendedProps.IdSchedule
 				)
 			})
+
 			if (!checkExistSchedule) {
 				dispatch(setLoadingCalendar(true))
 				let DATA_SUBMIT = {
 					...data,
 					StartTime: moment(data.StartTime).format(),
 					EndTime: moment(data.EndTime).format(),
-					Id: dataRow.event.extendedProps.IdSchedule
+					Id: dataRow.event.extendedProps.IdSchedule,
+					TeachingFee: !data?.TeachingFee ? null : data.TeachingFee.replace(',', '').replace(',', '').replace(',', '').replace(',', '')
 				}
 				try {
 					const res = await scheduleApi.update(DATA_SUBMIT)
@@ -107,6 +110,7 @@ const ChangeScheduleClassEdit = (props) => {
 			form.setFieldsValue({ EndTime: moment(dataRow.event.end) })
 			form.setFieldsValue({ Id: dataRow.event.extendedProps.Id })
 			form.setFieldsValue({ Note: dataRow.event.extendedProps.Note })
+			form.setFieldsValue({ TeachingFee: dataRow.event.extendedProps.TeachingFee })
 		}
 	}, [isModalOpen])
 
@@ -168,54 +172,63 @@ const ChangeScheduleClassEdit = (props) => {
 		})
 		dispatch(setTeacherEdit(listTeacherAvailable))
 	}
+
+	function getStatusColor() {
+		switch (dataRow.event.extendedProps.Status) {
+			case 1:
+				return '!bg-[#a2a2a2]'
+			case 2:
+				return '!bg-[#59b96c]'
+		}
+	}
+
 	return (
 		<>
 			<div className="wrapper-schedule">
-				<button
-					className="btn-edit-title"
-					onClick={() => {
-						!!isEditSchedule ? handleOpen() : null
-					}}
-				>
+				<button className={`btn-edit-title ${getStatusColor()}`} onClick={() => !!isEditSchedule && handleOpen()}>
 					<span>{moment(dataRow.event.start).format('HH:mm')}</span> <span className="mx-1">-</span>{' '}
 					<span>{moment(dataRow.event.end).format('HH:mm')}</span>
 				</button>
+
 				<div className="wrapper-content-schedule">
 					<p>
 						<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
 					</p>
-					{!!dataRow.event.extendedProps.RoomId ? (
+					{!!dataRow.event.extendedProps?.RoomId && (
 						<p>
 							<span className="title">Phòng:</span> {dataRow.event.extendedProps.RoomName}
 						</p>
-					) : null}
+					)}
 					<p>
 						<span className="title">Ghi chú:</span> <span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
 					</p>
 				</div>
 				{!!isEditSchedule ? (
 					<div className="mt-2 flex flex-col gap-2">
-						<PrimaryButton
-							background="yellow"
-							type="button"
-							icon="edit"
-							className="btn-edit"
-							onClick={() => {
-								!!isEditSchedule ? handleOpen() : null
-								refPopover.current.close()
-							}}
-						>
-							Chỉnh sửa
-						</PrimaryButton>
+						<PrimaryTooltip className="w-full px-[8px]" place="top" content="Chỉnh sửa" id={`edit-sc-${dataRow.event.extendedProps?.Id}`}>
+							<PrimaryButton
+								background="yellow"
+								type="button"
+								icon="edit"
+								className="w-full"
+								onClick={() => {
+									!!isEditSchedule ? handleOpen() : null
+									refPopover.current.close()
+								}}
+							/>
+						</PrimaryTooltip>
+
 						<ModalRemoveScheduleEdit
 							IdSchedule={dataRow.event.extendedProps.IdSchedule}
 							startTime={dataRow.event.extendedProps.StartTime}
 							endTime={dataRow.event.extendedProps.EndTime}
 							getListSchedule={getListSchedule}
+							dataRow={dataRow}
 						/>
 					</div>
 				) : null}
 			</div>
+
 			<Popover
 				ref={refPopover}
 				content={
@@ -283,13 +296,13 @@ const ChangeScheduleClassEdit = (props) => {
 					</button>
 				</div>
 			</Popover>
+
 			<Modal
 				title={`Ca ${moment(dataRow.event.extendedProps.StartTime).format('HH:mm')} - ${moment(dataRow.event.extendedProps.EndTime).format(
 					'HH:mm'
 				)} - Ngày ${moment(dataRow.event.extendedProps.StartTime).format('DD/MM')}`}
 				open={!!isModalOpen.open && isModalOpen.id !== null}
 				onCancel={() => {
-					// if (!!isDisableButton) {
 					const newListCalendar = [...listCalendar]
 					newListCalendar[prevSchedule.Id] = {
 						...prevSchedule,
@@ -301,13 +314,12 @@ const ChangeScheduleClassEdit = (props) => {
 					}
 					dispatch(setListCalendarEdit(newListCalendar))
 					handleCheckTeacher(moment(prevSchedule.start).format(), moment(prevSchedule.end).format())
-					// }
 					setIsModalOpen({ open: false, id: null })
 					dispatch(setShowModalEdit({ open: false, id: null }))
 				}}
 				footer={
 					<PrimaryButton
-						disable={isDisableButton || loadingCalendar}
+						disable={loadingCalendar}
 						icon="save"
 						background="blue"
 						type="button"
@@ -318,8 +330,9 @@ const ChangeScheduleClassEdit = (props) => {
 					</PrimaryButton>
 				}
 			>
-				<Form form={form} layout="vertical" onFinish={onSubmit}>
+				<Form form={form} layout="vertical" className="grid grid-cols-2 gap-x-4" onFinish={onSubmit}>
 					<DatePickerField
+						className="col-span-2 w500:col-span-1"
 						mode="single"
 						showTime={'HH:mm'}
 						picker="showTime"
@@ -328,8 +341,10 @@ const ChangeScheduleClassEdit = (props) => {
 						name="StartTime"
 						onChange={getDataAvailable}
 					/>
+
 					<DatePickerField
 						mode="single"
+						className="col-span-2 w500:col-span-1"
 						showTime={'HH:mm'}
 						picker="showTime"
 						format="DD/MM/YYYY HH:mm"
@@ -337,7 +352,8 @@ const ChangeScheduleClassEdit = (props) => {
 						name="EndTime"
 						onChange={getDataAvailable}
 					/>
-					<Form.Item name="TeacherId" label="Giáo viên">
+
+					<Form.Item name="TeacherId" className="col-span-2" label="Giáo viên">
 						<Select onChange={() => setIsDisableButton(false)} placeholder="Chọn giáo viên">
 							{teacher.map((item) => {
 								return (
@@ -355,8 +371,9 @@ const ChangeScheduleClassEdit = (props) => {
 							})}
 						</Select>
 					</Form.Item>
+
 					{!!infoClass?.Type && parseInt(infoClass?.Type.toString()) == 1 && (
-						<Form.Item name="RoomId" label="Phòng học">
+						<Form.Item className="col-span-2" name="RoomId" label="Phòng học">
 							<Select onChange={() => setIsDisableButton(false)} placeholder="Chọn phòng học">
 								{room.map((item) => {
 									return (
@@ -375,7 +392,10 @@ const ChangeScheduleClassEdit = (props) => {
 							</Select>
 						</Form.Item>
 					)}
-					<TextBoxField name="Note" label="Ghi chú" />
+
+					<InputMoneyField className="col-span-2" label="Lương / Buổi" name="TeachingFee" placeholder="Nhập mức lương" isRequired />
+
+					<TextBoxField className="col-span-2" name="Note" label="Ghi chú" />
 				</Form>
 			</Modal>
 		</>

@@ -7,6 +7,7 @@ import PrimaryButton from '../Primary/Button'
 const ModalShowInfoPaymentMethod = (props) => {
 	const { method } = props
 	const [isModalOpen, setIsModalOpen] = useState(false)
+
 	return (
 		<>
 			{!!method && !!method.Description ? (

@@ -73,13 +73,13 @@ const UpdateClassForm = (props) => {
 				}
 			>
 				<Form form={form} layout="vertical" onFinish={onSubmit}>
-					<InputTextField name="Name" label="Tên lớp" />
+					<UploadImageField form={form} name="Thumbnail" label="Hình đại diện" />
 					<div className="row">
 						<div className="col-md-6 col-12">
-							<InputNumberField name="Price" label="Giá lớp học" />
+							<InputTextField name="Name" label="Tên lớp" />
 						</div>
 						<div className="col-md-6 col-12">
-							<InputNumberField name="TeachingFee" label="Lương/Buổi" />
+							<InputNumberField name="Price" label="Giá lớp học" />
 						</div>
 						<div className="col-md-6 col-12">
 							<InputNumberField name="MaxQuantity" label="Số lượng học viên tối đa" />
@@ -102,7 +102,6 @@ const UpdateClassForm = (props) => {
 							<SelectField name="TeacherId" label="Giáo viên" optionList={teacher} />
 						</div>
 					</div>
-					<UploadImageField form={form} name="Thumbnail" label="Hình đại diện" />
 				</Form>
 			</Modal>
 		</>

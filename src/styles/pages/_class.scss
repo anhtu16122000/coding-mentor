@@ -104,10 +104,6 @@
 	}
 }
 
-// .ant-select-selection-item {
-// 	@apply flex;
-// }
-
 // Page Create Class
 .create-class {
 	.wrapper-calendar-class {
@@ -117,18 +113,10 @@
 		@apply z-0;
 		background: none;
 	}
-	.ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(
-			.ant-picker-cell-range-hover-start
-		):not(.ant-picker-cell-range-hover-end)
-		.ant-picker-cell-inner,
-	.ant-picker-cell:hover {
-		// background: none;
-	}
 	.ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date {
 		z-index: 0;
 		background: none;
 	}
-
 	.btn-show-schedule {
 		@apply absolute;
 	}
