@@ -11,6 +11,9 @@ export const curriculumDetailApi = {
 	update(data) {
 		return instance.put(url, data)
 	},
+	updateIndexCurriculumDetail(data) {
+		return instance.put(`${url}/CurriculumDetailIndex`, data)
+	},
 	delete(id) {
 		return instance.delete(`${url}/${id}`)
 	},
@@ -22,5 +25,8 @@ export const curriculumDetailApi = {
 	},
 	deleteFile(fileID) {
 		return instance.delete(`${url}/file/${fileID}`)
+	},
+	updateIndexCurriculumDetailFile(data) {
+		return instance.put(`${url}/FileCurriculumDetailIndex`, data)
 	}
 }

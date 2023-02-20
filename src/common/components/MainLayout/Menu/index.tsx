@@ -37,7 +37,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 	const [mainActivated, setMainActivated] = useState<string>(defaultTab)
 	const [subMenuActive, setSubMenuActive] = useState('')
 
-	log.Blue('parentMenu: ', parentMenu)
+	// log.Blue('parentMenu: ', parentMenu)
 
 	useEffect(() => {
 		if (parentMenu.length > 0) {
@@ -45,17 +45,17 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 		}
 	}, [parentMenu])
 
-	log.Blue('pathname: ', pathname)
-	log.Red('mainActivated: ', mainActivated)
+	// log.Blue('pathname: ', pathname)
+	// log.Red('mainActivated: ', mainActivated)
 
 	function getActiveTab() {
-		console.time('- getActiveTab')
+		// console.time('- getActiveTab')
 
 		if (pathname == '/') {
 			//
 		}
 
-		console.timeEnd('- getActiveTab')
+		// console.timeEnd('- getActiveTab')
 	}
 
 	const changeTabs = (e) => {

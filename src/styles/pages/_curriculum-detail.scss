@@ -133,37 +133,136 @@
 }
 
 .curriculum-content-container {
+	width: 1200px;
 	display: flex;
 	justify-content: center;
-	width: 100%;
-	.curriculum-filename-contain {
+	margin: 0 auto;
 
+	@include max-media(1550px) {
+		width: 100%;
+	}
+
+	.ant-card {
+		width: 100%;
+	}
+
+	.curriculum-collapse-wrap {
 		margin: 0 auto;
-		min-width: 1200px;
-		.item {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			background-color: #ececec;
-			margin-bottom: 4px;
-			border-radius: 8px;
-			padding: 4px 8px;
-			&:hover {
-				
-				background-color: #d9d9d9;
+		width: 100%;
+		margin-bottom: 8px;
+
+		.wrap-not-mobile {
+			display: block;
+			@include max-media(900px) {
+				display: none;
 			}
-			.left {
-				display: flex;
-				gap: 4px;
-				justify-content: start;
-				align-items: center;
-			}
-			.right {
-				display: flex;
-				gap: 4px;
-				justify-content: end;
-				align-items: center;
+
+			.exchange-button {
+				display: none;
 			}
 		}
+
+		.wrap-for-mobile {
+			display: none;
+			@include max-media(900px) {
+				display: block;
+			}
+
+			.exchange-button {
+				display: block;
+			}
+		}
+
+		.title-item-collapse {
+			max-width: 900px;
+			margin-top: 4px;
+		}
+
+		.curriculum-filename-contain {
+			width: 100%;
+			margin: 0 auto;
+			.item {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				gap: 16px;
+				background-color: #ececec;
+				margin-bottom: 4px;
+				border-radius: 8px;
+				padding: 4px 8px;
+				user-select: none;
+				&:hover {
+					background-color: #d9d9d9;
+				}
+				.left {
+					display: flex;
+					gap: 4px;
+					justify-content: start;
+					align-items: center;
+
+					.texts {
+						.time {
+							display: none;
+							@include max-media(870px) {
+								display: block;
+							}
+						}
+					}
+				}
+				.right {
+					display: flex;
+					gap: 4px;
+					justify-content: end;
+					align-items: center;
+
+					@include max-media(870px) {
+						.time {
+							display: none;
+						}
+					}
+
+					.buttons {
+						display: flex;
+						flex-wrap: nowrap;
+					}
+				}
+			}
+		}
+
+		.ant-collapse {
+			border-radius: 8px;
+		}
+	}
+}
+
+@keyframes lineLoading {
+	0% {
+		right: 100%;
+	}
+
+	50% {
+		right: 0;
+		left: 0;
+	}
+
+	100% {
+		right: 0;
+		left: 100%;
+	}
+}
+
+.line-loading-file {
+	width: 100%;
+	height: 5px;
+	position: relative;
+	margin: 8px auto;
+	&::before {
+		content: '';
+		position: absolute;
+		right: auto;
+		left: 0;
+		height: 100%;
+		background-color: #2cccff;
+		animation: lineLoading 1s forwards infinite linear;
 	}
 }

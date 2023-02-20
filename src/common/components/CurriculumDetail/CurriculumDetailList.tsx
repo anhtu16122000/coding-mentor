@@ -1,4 +1,4 @@
-import { Collapse, Skeleton } from 'antd'
+import { Collapse, Popconfirm, Skeleton, Spin, Upload } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { curriculumDetailApi } from '~/api/curriculum-detail'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
@@ -6,18 +6,27 @@ import { ShowNoti } from '~/common/utils'
 import { getFileIcons } from '~/common/utils/main-function'
 import moment from 'moment'
 import IconButton from '../Primary/IconButton'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { useRouter } from 'next/router'
+import PrimaryButton from '../Primary/Button'
+import ModalCurriculumDetailCRUD from './ModalCurriculumDetailCRUD'
 
 export interface ICurriculumDetailListProps {
 	item: ICurriculumDetail
+	onRendering: Function
 }
 
 export default function CurriculumDetailList(props: ICurriculumDetailListProps) {
-	const { item } = props
+	const { item, onRendering } = props
 	const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE, CurriculumDetailId: null }
 	const [dataSource, setDataSource] = useState<ICurriculumDetail[]>([])
-	console.log('🚀 ~ dataSource', dataSource)
 	const [isLoading, setIsLoading] = useState(false)
 	const [todoApi, setTodoApi] = useState(initialParams)
+	const [isUploadFile, setIsUploadFile] = useState(false)
+	const [isChangePosition, setIsChangePosition] = useState(false)
+	const [isLoadingChangePosition, setIsLoadingChangePosition] = useState(false)
+	const router = useRouter()
+	const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
 
 	useEffect(() => {
 		if (item) {
@@ -41,11 +50,100 @@ export default function CurriculumDetailList(props: ICurriculumDetailListProps) 
 		}
 	}
 
-	useEffect(() => {
-		if (todoApi.CurriculumDetailId) {
-			getData()
+	async function getDataNoLoading() {
+		try {
+			const response = await curriculumDetailApi.getFile(todoApi.CurriculumDetailId)
+			if (response.status === 200) {
+				setDataSource(response.data.data)
+			} else {
+				setDataSource([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
 		}
-	}, [todoApi])
+	}
+
+	// useEffect(() => {
+	// 	if (todoApi.CurriculumDetailId) {
+	// 		getData()
+	// 	}
+	// }, [todoApi])
+
+	async function uploadFile(params) {
+		setIsUploadFile(true)
+		try {
+			const formData = new FormData()
+			formData.append('file', params)
+			const response = await curriculumDetailApi.addFile(item.Id, formData)
+			if (response.status == 200) {
+				getDataNoLoading()
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+			setIsUploadFile(false)
+		}
+	}
+
+	const handleDeleteCurriculumDetail = async (data) => {
+		setIsLoading(true)
+		try {
+			const response = await curriculumDetailApi.delete(item.Id)
+			if (response.status === 200) {
+				onRendering && onRendering()
+				return response
+			}
+			if (response.status === 204) {
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	const genExtra = () => {
+		return (
+			<div className="flex  justify-end items-center">
+				<div className="exchange-button">
+					<IconButton
+						type="button"
+						icon="exchange"
+						color="yellow"
+						onClick={() => {
+							setIsChangePosition(!isChangePosition)
+						}}
+						tooltip="Đổi vị trí file"
+					/>
+				</div>
+
+				<Upload
+					name="file"
+					multiple={true}
+					customRequest={(event) => uploadFile(event.file)}
+					onChange={(info) => {
+						// data.push({ fileName: info.file.name, isUploading: true })
+						// setData(data)
+					}}
+					showUploadList={false}
+				>
+					<IconButton type="button" icon="upload" color="blue" tooltip="Thêm file" />
+				</Upload>
+
+				<ModalCurriculumDetailCRUD mode="delete" onSubmit={handleDeleteCurriculumDetail} isLoading={isLoading} />
+			</div>
+		)
+	}
+
+	const handleChangePosition = (index, mode: 'down' | 'up') => {
+		let tempDataSource = [...dataSource]
+		const [reorderedItem] = tempDataSource.splice(index, 1)
+		mode == 'up' ? tempDataSource.splice(index - 1, 0, reorderedItem) : tempDataSource.splice(index + 1, 0, reorderedItem)
+		let tempSubmit = []
+		tempDataSource.forEach((item, index) => tempSubmit.push({ Index: index + 1, Id: item.Id }))
+		handleUpdateIndexCurriculumDetailFile(tempSubmit)
+	}
 
 	function formatFileName(fileName) {
 		const res = fileName.replace('.png', '').replace('.jpg', '').replace('.jpeg', '').replace('.pdf', '').replace('.png', '')
@@ -54,38 +152,218 @@ export default function CurriculumDetailList(props: ICurriculumDetailListProps) 
 		return resss.replace('.zip', '').replace('.rar', '').replace('.json', '').replace('.xml', '')
 	}
 
-	if (isLoading) {
-		return <Skeleton active />
+	const handleUpdateIndexCurriculumDetailFile = async (data) => {
+		setIsLoadingChangePosition(true)
+		try {
+			const response = await curriculumDetailApi.updateIndexCurriculumDetailFile(data)
+			if (response.status === 200) {
+				ShowNoti('success', response.data.message)
+				getDataNoLoading()
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+			setIsLoadingChangePosition(false)
+		}
 	}
 
+	const handleDragEnd = (result) => {
+		if (!result.destination) return
+		const newItems = Array.from(dataSource)
+		const [reorderedItem] = newItems.splice(result.source.index, 1)
+		newItems.splice(result.destination.index, 0, reorderedItem)
+		setDataSource(newItems)
+
+		let temp = []
+		newItems.forEach((item, index) => temp.push({ Index: index + 1, Id: item.Id }))
+		handleUpdateIndexCurriculumDetailFile(temp)
+	}
+
+	const handleChangeCollapse = (data) => {
+		console.log('🚀 ~ data', data)
+		if (data[1]) {
+			getData()
+		}
+	}
+
+	const handleDeleteFile = async (data) => {
+		setIsLoadingSubmit(true)
+		try {
+			const response = await curriculumDetailApi.deleteFile(data.Id)
+			if (response.status === 200) {
+				getDataNoLoading()
+			}
+			if (response.status === 204) {
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+			setIsLoadingSubmit(false)
+		}
+	}
+
+	// if (isLoading) {
+	// 	return <Skeleton active />
+	// }
+
 	return (
-		<div className="curriculum-filename-contain">
-			{dataSource?.map((item, index) => {
-				return (
-					<div className="item">
-						<div className="left">
-							{getFileIcons(item.FileType, item.FileUrl)}
-							<p>{formatFileName(item.FileName)}</p>
+		<div className="curriculum-collapse-wrap">
+			<div className="wrap-not-mobile">
+				<Collapse defaultActiveKey={['1']} onChange={handleChangeCollapse} collapsible="header">
+					<Collapse.Panel header={<p className="title-item-collapse">{item.Name}</p>} key={`CurriculumDetail${item.Id}`} extra={genExtra()}>
+						<DragDropContext onDragEnd={handleDragEnd}>
+							<Droppable droppableId={`CurriculumDetail${item.Id}`}>
+								{(provided) => {
+									return (
+										<div className="curriculum-filename-contain" {...provided.droppableProps} ref={provided.innerRef}>
+											{dataSource.map((item, index) => (
+												<Draggable key={item.Id} draggableId={`ItemCurriculumDetail${item.Id}`} index={index}>
+													{(providedDrag, snip) => {
+														return (
+															<div
+																className="item"
+																{...providedDrag.draggableProps}
+																{...providedDrag.dragHandleProps}
+																ref={providedDrag.innerRef}
+															>
+																<div className="left">
+																	{getFileIcons(item.FileType, item.FileUrl)}
+																	<div className="texts">
+																		<p>{formatFileName(item.FileName)}</p>
+																		<p className="time">{moment(item.CreatedOn).format('DD/MM/YYYY HH:mm')}</p>
+																	</div>
+																</div>
+																<div className="right">
+																	<p className="time">{moment(item.CreatedOn).format('DD/MM/YYYY HH:mm')}</p>
+																	<div className="buttons">
+																		<IconButton
+																			type="button"
+																			icon="download"
+																			color="blue"
+																			onClick={() => {
+																				window.open(item.FileUrl)
+																			}}
+																			className=""
+																			tooltip="Tải tài liệu này"
+																		/>
+																		<Popconfirm
+																			title="Bạn có chắc muốn xóa file này?"
+																			okText="Có"
+																			cancelText="Hủy"
+																			onConfirm={() => handleDeleteFile(item)}
+																		>
+																			<IconButton
+																				type="button"
+																				icon="remove"
+																				color="red"
+																				onClick={() => {}}
+																				className=""
+																				tooltip="Xóa tài liệu này"
+																			/>
+																		</Popconfirm>
+																	</div>
+																</div>
+															</div>
+														)
+													}}
+												</Draggable>
+											))}
+											{provided.placeholder}
+										</div>
+									)
+								}}
+							</Droppable>
+						</DragDropContext>
+						<>{isUploadFile && <div className="line-loading-file"></div>}</>
+					</Collapse.Panel>
+				</Collapse>
+			</div>
+			{/* view for mobile */}
+			<div className="wrap-for-mobile">
+				<Collapse defaultActiveKey={['1']} onChange={handleChangeCollapse} collapsible="header">
+					<Collapse.Panel header={<p className="title-item-collapse">{item.Name}</p>} key={`CurriculumDetail${item.Id}`} extra={genExtra()}>
+						<div className="curriculum-filename-contain">
+							{dataSource.map((item, index) => {
+								let lastItem = dataSource.slice(-1)[0]
+								let firstItem = dataSource[0]
+								return (
+									<div className="item">
+										<div className="left">
+											{getFileIcons(item.FileType, item.FileUrl)}
+											<div className="texts">
+												<p>{formatFileName(item.FileName)}</p>
+												<p className="time">{moment(item.CreatedOn).format('DD/MM/YYYY HH:mm')}</p>
+											</div>
+										</div>
+										<div className="right">
+											<p className="time">{moment(item.CreatedOn).format('DD/MM/YYYY HH:mm')}</p>
+											<div className="buttons">
+												{isChangePosition ? (
+													<>
+														{lastItem.Id != item.Id && (
+															<IconButton
+																type="button"
+																icon="down-arrow"
+																color={isLoadingChangePosition ? 'disabled' : 'red'}
+																className=""
+																disabled={isLoadingChangePosition}
+																onClick={() => {
+																	handleChangePosition(index, 'down')
+																}}
+															/>
+														)}
+														{firstItem.Id != item.Id && (
+															<IconButton
+																disabled={isLoadingChangePosition}
+																type="button"
+																color={isLoadingChangePosition ? 'disabled' : 'green'}
+																icon="up-arrow"
+																className=""
+																onClick={() => {
+																	handleChangePosition(index, 'up')
+																}}
+															/>
+														)}
+													</>
+												) : (
+													<>
+														<IconButton
+															type="button"
+															icon="download"
+															color="blue"
+															onClick={() => {
+																window.open(item.FileUrl)
+															}}
+															className=""
+															tooltip="Tải tài liệu này"
+														/>
+														<Popconfirm
+															title="Bạn có chắc muốn xóa file này?"
+															okText="Có"
+															cancelText="Hủy"
+															onConfirm={() => handleDeleteFile(item)}
+														>
+															<IconButton
+																type="button"
+																icon="remove"
+																color="red"
+																onClick={() => {}}
+																className=""
+																tooltip="Xóa tài liệu này"
+															/>
+														</Popconfirm>
+													</>
+												)}
+											</div>
+										</div>
+									</div>
+								)
+							})}
 						</div>
-						<div className="right">
-							<p>{moment(item.CreatedOn).format('DD/MM/YYYY HH:mm')}</p>
-							<div className="buttons">
-								<IconButton
-									type="button"
-									icon="download"
-									color="blue"
-									onClick={() => {
-										window.open(item.FileUrl)
-									}}
-									className=""
-									tooltip="Tải tài liệu này"
-								/>
-								<IconButton type="button" icon="remove" color="red" onClick={() => {}} className="" tooltip="Xóa tài liệu này" />
-							</div>
-						</div>
-					</div>
-				)
-			})}
+						<>{isUploadFile && <div className="line-loading-file"></div>}</>
+					</Collapse.Panel>
+				</Collapse>
+			</div>
 		</div>
 	)
 }

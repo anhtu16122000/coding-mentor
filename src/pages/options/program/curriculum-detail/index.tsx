@@ -4,12 +4,14 @@ import React, { useEffect, useState } from 'react'
 import { curriculumDetailApi } from '~/api/curriculum-detail'
 import CurriculumDetailList from '~/common/components/CurriculumDetail/CurriculumDetailList'
 import Lessons from '~/common/components/CurriculumDetail/Lessons'
+import ModalCurriculumDetailCRUD from '~/common/components/CurriculumDetail/ModalCurriculumDetailCRUD'
 import Units from '~/common/components/CurriculumDetail/Units'
 import SelectField from '~/common/components/FormControl/SelectField'
 import MainLayout from '~/common/components/MainLayout'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 const CurriculumDetail = () => {
 	// OLD VIEW, USE LATER
@@ -53,7 +55,7 @@ const CurriculumDetail = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [todoApi, setTodoApi] = useState(initialParams)
 	const [curriculumId, setCurriculumId] = useState(null)
-	const [form] = Form.useForm()
+	const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
 	const router = useRouter()
 
 	useEffect(() => {
@@ -72,7 +74,6 @@ const CurriculumDetail = () => {
 				response.data.data.forEach((item) => temp.push({ title: item.Name, value: item.Id }))
 				setDataSource({ list: response.data.data, option: temp })
 				setDataSelected(response.data.data[0])
-				form.setFieldValue('Curriculum', response.data.data[0].Id)
 			}
 			if (response.status === 204) {
 				setDataSource({
@@ -87,42 +88,70 @@ const CurriculumDetail = () => {
 		}
 	}
 
+	const getCurriculumNoLoading = async () => {
+		try {
+			const response = await curriculumDetailApi.getAll(todoApi)
+			if (response.status === 200) {
+				let temp = []
+				response.data.data.forEach((item) => temp.push({ title: item.Name, value: item.Id }))
+				setDataSource({ list: response.data.data, option: temp })
+				setDataSelected(response.data.data[0])
+			}
+			if (response.status === 204) {
+				setDataSource({
+					option: [],
+					list: []
+				})
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+		}
+	}
+
 	useEffect(() => {
 		getCurriculum()
 	}, [todoApi])
 
-	async function uploadFile(params, id) {
+	const handleAddCurriculumDetail = async (data) => {
+		setIsLoadingSubmit(true)
 		try {
-			const formData = new FormData()
-			formData.append('file', params)
-			const response = await curriculumDetailApi.addFile(id, formData)
-			if (response.status == 200) {
-				// getData()
+			const response = await curriculumDetailApi.add({ Name: data.Name, CurriculumId: Number(router.query.name) })
+			if (response.status === 200) {
+				getCurriculumNoLoading()
+				return response
+			}
+			if (response.status === 204) {
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
+		} finally {
+			setIsLoadingSubmit(false)
 		}
 	}
 
-	const genExtra = (data) => {
-		return (
-			<>
-				<Upload
-					name="file"
-					multiple={true}
-					customRequest={(event) => uploadFile(event.file, data.Id)}
-					onChange={(info) => {
-						// data.push({ fileName: info.file.name, isUploading: true })
-						// setData(data)
-					}}
-					showUploadList={false}
-				>
-					<PrimaryButton type="button" icon="upload" background="green">
-						Thêm
-					</PrimaryButton>
-				</Upload>
-			</>
-		)
+	const handleUpdateIndexCurriculumDetail = async (data) => {
+		try {
+			const response = await curriculumDetailApi.updateIndexCurriculumDetail(data)
+			if (response.status === 200) {
+				ShowNoti('success', response.data.message)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+		}
+	}
+
+	const handleDragEnd = (result) => {
+		if (!result.destination) return
+		const newItems = Array.from(dataSource.list)
+		const [reorderedItem] = newItems.splice(result.source.index, 1)
+		newItems.splice(result.destination.index, 0, reorderedItem)
+		setDataSource({ ...dataSource, list: newItems })
+
+		let temp = []
+		newItems.forEach((item, index) => temp.push({ Name: item.Name, Index: index + 1, Id: item.Id }))
+		handleUpdateIndexCurriculumDetail(temp)
 	}
 
 	if (isLoading) {
@@ -131,29 +160,41 @@ const CurriculumDetail = () => {
 
 	return (
 		<div className="curriculum-content-container">
-
-		<Form form={form}>
 			<Card
 				title="Danh sách chủ đề"
 				extra={
 					<>
-						<SelectField
-							name="Curriculum"
-							label=""
-							optionList={dataSource.option}
-							className="m-0"
-							placeholder="Chọn chủ đề"
-							onChangeSelect={(data) => {
-								let temp = dataSource.list.filter((item) => item.Id == data)[0]
-								setDataSelected(temp)
-							}}
-						/>
+						<ModalCurriculumDetailCRUD mode="add" onSubmit={handleAddCurriculumDetail} isLoading={isLoadingSubmit} />
 					</>
 				}
 			>
-				<CurriculumDetailList item={dataSelected} />
+				<DragDropContext onDragEnd={handleDragEnd}>
+					<Droppable droppableId={`CurriculumID-${router.query.name}`}>
+						{(provided) => {
+							return (
+								<div className="" {...provided.droppableProps} ref={provided.innerRef}>
+									{dataSource.list.map((item, index) => (
+										<Draggable key={item.Id} draggableId={`ItemCurriculum${item.Id}`} index={index}>
+											{(providedDrag, snip) => {
+												return (
+													<div className="" {...providedDrag.draggableProps} {...providedDrag.dragHandleProps} ref={providedDrag.innerRef}>
+														<CurriculumDetailList item={item} onRendering={getCurriculumNoLoading} />
+													</div>
+												)
+											}}
+										</Draggable>
+									))}
+									{provided.placeholder}
+								</div>
+							)
+						}}
+					</Droppable>
+				</DragDropContext>
+
+				{/* {dataSource.list.map((item, index) => {
+						return <CurriculumDetailList item={item} />
+					})} */}
 			</Card>
-		</Form>
 		</div>
 	)
 }
