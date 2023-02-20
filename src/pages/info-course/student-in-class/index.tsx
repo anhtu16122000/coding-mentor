@@ -16,8 +16,9 @@ import PrimaryButton from '~/common/components/Primary/Button'
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
+import AvatarComponent from '~/common/components/AvatarComponent'
 
-const PaymentManagementPage = () => {
+const StudentInClassPage = () => {
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
 	const [data, setData] = React.useState([])
@@ -30,7 +31,7 @@ const PaymentManagementPage = () => {
 	async function getData() {
 		setLoading(true)
 		try {
-			const res = await RestApi.get<any>('Bill', filters)
+			const res = await RestApi.get<any>('StudentInClass', filters)
 			if (res.status == 200) {
 				setData(res.data.data)
 				setTotalPage(res.data.totalRow)
@@ -53,7 +54,15 @@ const PaymentManagementPage = () => {
 		{
 			title: 'Mã',
 			dataIndex: 'Code',
-			width: 100
+			render: (value, item) => (
+				<div className="flex items-center">
+					<AvatarComponent className="h-[42px] w-[42px]" uri={item?.Avatar} />
+					<div className="ml-[8px]">
+						<h2 className="text-[16px] font-[600]">{item?.FullName}</h2>
+						<h3 className="text-[14px] font-[400]">{item?.UserCode}</h3>
+					</div>
+				</div>
+			)
 		},
 		{
 			title: 'Người thanh toán',
@@ -129,8 +138,9 @@ const PaymentManagementPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{appConfigs.appName} | Quản lý thanh toán</title>
+				<title>{appConfigs.appName} | Học viên trong khoá</title>
 			</Head>
+
 			<ExpandTable
 				currentPage={filters.PageIndex}
 				totalPage={totalPage && totalPage}
@@ -152,11 +162,10 @@ const PaymentManagementPage = () => {
 						/>
 					</div>
 				}
-				expandable={expandedRowRender}
 			/>
 		</>
 	)
 }
 
-PaymentManagementPage.Layout = MainLayout
-export default PaymentManagementPage
+StudentInClassPage.Layout = MainLayout
+export default StudentInClassPage
