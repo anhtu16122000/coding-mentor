@@ -112,13 +112,6 @@ export const AdminChildMenu = [
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/info-course/student',
-				Route: '/info-course/student',
-				Text: 'Danh sách học viên',
-				Icon: ''
-			},
-			{
-				ItemType: 'single',
 				Key: '/info-course/customer',
 				Route: '/info-course/customer',
 				Text: 'Leads',
@@ -129,6 +122,20 @@ export const AdminChildMenu = [
 				Key: '/info-course/service-appointment-test',
 				Route: '/info-course/service-appointment-test',
 				Text: 'Khách hẹn test',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/student',
+				Route: '/info-course/student',
+				Text: 'Danh sách học viên',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/student-in-class',
+				Route: '/info-course/student-in-class',
+				Text: 'Học viên trong lớp',
 				Icon: ''
 			},
 			{
