@@ -125,6 +125,13 @@ export const AdminChildMenu = [
 				Route: '/info-course/service-appointment-test',
 				Text: 'Khách hẹn test',
 				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/student/student-warning',
+				Route: '/info-course/student/student-warning',
+				Text: 'Cảnh báo học viên',
+				Icon: ''
 			}
 		]
 	},

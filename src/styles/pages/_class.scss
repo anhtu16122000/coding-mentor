@@ -93,6 +93,16 @@
 		padding: 16px 0;
 	}
 }
+.custom-tab-class-list {
+	.ant-collapse-header {
+		display: flex !important;
+		align-items: center !important;
+		.ant-collapse-arrow {
+			display: flex !important;
+			align-items: center;
+		}
+	}
+}
 
 // .ant-select-selection-item {
 // 	@apply flex;

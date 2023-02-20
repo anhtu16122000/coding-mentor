@@ -114,8 +114,8 @@ const ExpandTable = (props) => {
 			<div className="wrap-table table-expand">
 				<Card
 					className={`cardRadius ${props.addClass && props.addClass} ${props.Size ? props.Size : ''}`}
-					title={props.Extra}
-					extra={props.TitleCard}
+					extra={props.Extra}
+					title={props.TitleCard}
 					style={props?.cardStyle}
 				>
 					{props.children}
