@@ -382,6 +382,13 @@ export const AdminChildMenu = [
 						Route: '/options/tags',
 						Text: 'Danh mục từ khoá',
 						Icon: ''
+					},
+					{
+						ItemType: 'single',
+						Key: '/options/paymentPemission',
+						Route: '/options/paymentPemission',
+						Text: 'Cấp quyền thanh toán',
+						Icon: ''
 					}
 				]
 			}

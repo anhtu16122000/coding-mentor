@@ -55,6 +55,7 @@ type IFormSelectField = {
 	onSearch?: function
 	onScroll?: function
 	optionList: ISelectOptionList[]
+	title?: string[] | string
 }
 
 type ISelectOptionList = {
