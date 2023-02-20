@@ -17,14 +17,12 @@ const PaymentPage = () => {
 	const handleDelete = async (id: string) => {
 		try {
 			const res = await RestApi.delete('/PaymentAllow', id)
-			console.log('🚀 ~ file: PaymentPer.tsx:19 ~ handleDelete ~ res', res)
 			getUserPaymentAllow()
 			ShowNoti('success', res.data.message)
 			return res
 		} catch (err) {
 			ShowNoti('error', err.message)
 		}
-		console.log('Vo ne')
 	}
 
 	const columns = [

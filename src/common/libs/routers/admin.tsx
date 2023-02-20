@@ -101,6 +101,13 @@ export const AdminChildMenu = [
 				Route: '/finance/income-expense-management',
 				Icon: <RiExchangeBoxFill />,
 				Text: 'Quản lý thu chi'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/finance/paymentApprove',
+				Route: '/finance/paymentApprove',
+				Icon: <RiExchangeBoxFill />,
+				Text: 'Duyệt thanh toán'
 			}
 		]
 	},
