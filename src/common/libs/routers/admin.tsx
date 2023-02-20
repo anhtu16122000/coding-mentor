@@ -114,13 +114,6 @@ export const AdminChildMenu = [
 			},
 			{
 				ItemType: 'single',
-				Key: '/info-course/student/student-warning',
-				Route: '/info-course/student/student-warning',
-				Text: 'Cảnh báo học viên',
-				Icon: ''
-			},
-			{
-				ItemType: 'single',
 				Key: '/info-course/customer',
 				Route: '/info-course/customer',
 				Text: 'Leads',
@@ -131,6 +124,13 @@ export const AdminChildMenu = [
 				Key: '/info-course/service-appointment-test',
 				Route: '/info-course/service-appointment-test',
 				Text: 'Khách hẹn test',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/student/student-warning',
+				Route: '/info-course/student/student-warning',
+				Text: 'Cảnh báo học viên',
 				Icon: ''
 			}
 		]
