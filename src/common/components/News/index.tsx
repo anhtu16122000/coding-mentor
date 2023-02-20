@@ -80,8 +80,6 @@ function NewsFeed() {
 	}
 
 	const loadMoreData = () => {
-		console.log('--- loadMoreData')
-
 		if (loading) {
 			return
 		}

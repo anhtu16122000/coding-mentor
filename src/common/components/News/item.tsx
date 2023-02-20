@@ -59,7 +59,7 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 	}, [item])
 
 	useEffect(() => {
-		getComments(filterComments, setComments, setLoadingComment, setTotalComment)
+		if (showComment) getComments(filterComments, setComments, setLoadingComment, setTotalComment)
 	}, [filterComments])
 
 	function _setDetail(params) {
