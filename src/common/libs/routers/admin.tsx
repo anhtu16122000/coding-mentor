@@ -6,11 +6,12 @@ import { FiAirplay } from 'react-icons/fi'
 import { GiTakeMyMoney } from 'react-icons/gi'
 import { GrMoney, GrSettingsOption } from 'react-icons/gr'
 import { HiPresentationChartLine } from 'react-icons/hi'
-import { IoVideocam } from 'react-icons/io5'
+import { IoLibrarySharp, IoVideocam } from 'react-icons/io5'
 import { MdOutlineSettingsInputComposite, MdPersonalVideo } from 'react-icons/md'
 import { RiExchangeBoxFill, RiFileEditLine, RiFileList2Fill, RiMoneyDollarBoxFill, RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { TbFileCertificate, TbReportMoney } from 'react-icons/tb'
 import { TiHome } from 'react-icons/ti'
+import { VscLibrary } from 'react-icons/vsc'
 
 export const AdminMenu = [
 	{
@@ -42,6 +43,11 @@ export const AdminMenu = [
 		Key: 'video',
 		TabName: 'Khoá học video',
 		Icon: <IoVideocam size={22} />
+	},
+	{
+		Key: 'library-online',
+		TabName: 'Thư viện online',
+		Icon: <IoLibrarySharp size={22} />
 	},
 	{
 		Key: 'library',
@@ -218,6 +224,21 @@ export const AdminChildMenu = [
 				Icon: <BiBookAdd />,
 				Route: '/class/register',
 				Text: 'Đăng ký học'
+			}
+		]
+	},
+	{
+		MenuName: 'Thư viện online',
+		MenuTitle: 'Thư viện online',
+		Parent: 'library-online',
+		MenuKey: '/library-online',
+		MenuItem: [
+			{
+				ItemType: 'single',
+				Key: '/library-online/library',
+				Route: '/library-online/library',
+				Text: 'Chủ đề',
+				Icon: <VscLibrary />
 			}
 		]
 	},
