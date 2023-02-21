@@ -5,7 +5,7 @@ import { scheduleApi } from '~/api/schedule'
 
 export const ScheduleList = () => {
 	const router = useRouter()
-	const initParameters = { classId: router.query.slug }
+	const initParameters = { classId: router.query.class }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [data, setData] = useState([])
 	const [loading, setLoading] = useState(false)
@@ -28,10 +28,10 @@ export const ScheduleList = () => {
 	}
 
 	useEffect(() => {
-		if (router?.query?.slug) {
+		if (router?.query?.class) {
 			getSchedule(apiParameters)
 		}
-	}, [router?.query?.slug])
+	}, [router?.query?.class])
 
 	return (
 		<div className="ScheduleList">

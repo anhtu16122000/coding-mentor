@@ -27,7 +27,9 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 		setVisible(false)
 	}
 	const onOpen = () => {
-		getStudent()
+		if (mode === 'add') {
+			getStudent()
+		}
 		setVisible(true)
 	}
 
@@ -38,7 +40,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 	const getStudent = async () => {
 		try {
 			setLoadingStudent(true)
-			const res = await studentInClassApi.getStudentAvailable(router?.query?.slug)
+			const res = await studentInClassApi.getStudentAvailable(router?.query?.class)
 			if (res.status === 200) {
 				let temp = []
 				res?.data?.data?.forEach((item) => {
@@ -47,7 +49,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 				setStudent(temp)
 				setLoadingStudent(false)
 			}
-			if (res.status === 204) {
+			if (res.status == 204) {
 				setStudent([])
 			}
 		} catch (error) {
@@ -57,6 +59,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 			setLoadingStudent(false)
 		}
 	}
+
 	const handleRemove = async (Id) => {
 		try {
 			setIsLoading(true)
@@ -125,7 +128,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 
 		if (mode === 'add') {
 			const dataSubmit = {
-				ClassId: Number(router?.query?.slug),
+				ClassId: Number(router?.query?.class),
 				...data
 			}
 			handleCreate(dataSubmit)
@@ -180,8 +183,9 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 					</div>
 				</>
 			)}
+
 			<Modal
-				title={mode === 'add' ? 'Thêm học viên' : mode === 'edit' ? 'Cập nhật học viên' : 'Xác nhận xóa'}
+				title={mode === 'add' ? 'Thêm học viên' : mode == 'edit' ? 'Cập nhật học viên' : 'Xác nhận xóa'}
 				open={visible}
 				onCancel={onClose}
 				footer={
@@ -200,7 +204,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 						/>
 					</>
 				}
-				width={mode != 'delete' ? 800 : 400}
+				width={mode != 'delete' ? 500 : 400}
 			>
 				<div className="container-fluid">
 					<Form form={form} layout="vertical" onFinish={_onSubmit}>
@@ -217,7 +221,6 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 										<>
 											<div className="col-span-2">
 												<SelectField
-													// form={form}
 													label="Học viên"
 													name="StudentId"
 													isLoading={loadingStudent}
@@ -227,9 +230,9 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 													rules={[{ required: true, message: 'Bạn không được để trống' }]}
 												/>
 											</div>
+
 											<div className="col-span-2">
 												<SelectField
-													// form={form}
 													label="Loại"
 													name="Type"
 													optionList={[
@@ -243,6 +246,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 											</div>
 										</>
 									)}
+
 									{mode === 'edit' && (
 										<>
 											<Form.Item name="Warning" label="Cảnh báo" className="custom-form-row-warning">

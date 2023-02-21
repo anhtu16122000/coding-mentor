@@ -13,8 +13,8 @@ import PrimaryTable from '../Primary/Table'
 export const RollUpPage = () => {
 	const router = useRouter()
 	const [loading, setLoading] = useState(false)
-	const initParameters = { classId: router.query.slug, scheduleId: null, pageIndex: 1, pageSize: PAGE_SIZE }
-	const initParametersSchedule = { classId: router.query.slug }
+	const initParameters = { classId: router.query.class, scheduleId: null, pageIndex: 1, pageSize: PAGE_SIZE }
+	const initParametersSchedule = { classId: router.query.class }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [apiParametersSchedule, setApiParametersSchedule] = useState(initParametersSchedule)
 	const [totalRow, setTotalRow] = useState(1)
@@ -108,16 +108,16 @@ export const RollUpPage = () => {
 	}
 
 	useEffect(() => {
-		if (router?.query?.slug) {
+		if (router?.query?.class) {
 			getSchedule(apiParametersSchedule)
 		}
-	}, [router?.query?.slug])
+	}, [router?.query?.class])
 
 	useEffect(() => {
 		if (apiParameters) {
 			getRollUp(apiParameters)
 		}
-	}, [router?.query?.slug, apiParameters])
+	}, [router?.query?.class, apiParameters])
 
 	const columns = [
 		{

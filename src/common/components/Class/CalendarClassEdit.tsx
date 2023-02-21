@@ -39,7 +39,7 @@ const CalenderClassEdit = () => {
 	const paramsSchedule = useSelector((state: RootState) => state.class.paramsSchedule)
 	const loadingCalendar = useSelector((state: RootState) => state.class.loadingCalendar)
 	const infoClass = useSelector((state: RootState) => state.class.infoClass)
-	const { slug } = router.query
+	const { class: slug } = router.query
 	const [timeStamp, setTimeStamp] = useState(0)
 	const thisCalendar = useRef(null)
 	const dispatch = useDispatch()
@@ -225,7 +225,17 @@ const CalenderClassEdit = () => {
 						})
 					)
 					dispatch(setShowModalEdit({ open: true, id: eventDropInfo.event.extendedProps.IdSchedule }))
-					ShowNoti('error', !!checkTeacher ? 'Phòng học không tồn tại' : 'Giáo viên không tồn tại')
+
+					if (!!listCalendar && listCalendar.length > 0) {
+						if (!checkTeacher) {
+							ShowNoti('error', 'Giáo viên không tồn tại')
+						}
+
+						if (!!listCalendar[0]?.RoomId && !!checkTeacher) {
+							ShowNoti('error', 'Phòng học không tồn tại')
+						}
+					}
+
 					dispatch(setLoadingCalendar(false))
 				} else if (parseInt(infoClass?.Type?.toString()) == 1 && !!checkTeacher && !!checkTeacher?.Fit && !!checkRoom && !!checkRoom?.Fit) {
 					handleUpdateSchedule(eventDropInfo)

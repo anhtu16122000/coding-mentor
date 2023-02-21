@@ -44,14 +44,16 @@ const ClassList = (props) => {
 		if (role == 1 || role == 5) {
 			path = {
 				pathname: '/class/list-class/detail',
-				// , type: TypeCourse, CourseName
-				// query: { slug: ID, name: CourseName, CurriculumId: CurriculumId, BranchId: BranchId, ProgramId: ProgramId, Type: Type }
-				query: { slug: ID }
+				query: {
+					class: ID
+				}
 			}
 		} else {
 			path = {
 				pathname: '/class/list-class/detail',
-				query: { slug: ID }
+				query: {
+					class: ID
+				}
 			}
 		}
 

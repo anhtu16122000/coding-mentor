@@ -18,6 +18,7 @@ import Head from 'next/head'
 import appConfigs from '~/appConfig'
 import AvatarComponent from '~/common/components/AvatarComponent'
 import Avatar from '~/common/components/Avatar'
+import Router from 'next/router'
 
 const StudentInClassPage = () => {
 	const [loading, setLoading] = React.useState(true)
@@ -51,6 +52,10 @@ const StudentInClassPage = () => {
 		return <BillDetails bill={item} />
 	}
 
+	function gotoClass(params) {
+		Router.push(`/class/list-class/detail/?class=${params.ClassId}`)
+	}
+
 	const columns = [
 		{
 			title: 'Học viên',
@@ -74,6 +79,20 @@ const StudentInClassPage = () => {
 			title: 'Email',
 			dataIndex: 'Email',
 			width: 140
+		},
+		{
+			title: 'Lớp',
+			dataIndex: 'ClassName',
+			width: 200,
+			render: (value, item) => {
+				return (
+					<PrimaryTooltip id={`class-tip-${item?.Id}`} content={value} place="top">
+						<div onClick={() => gotoClass(item)} className="max-w-[150px] in-1-line cursor-pointer font-[500] text-[#1E88E5]">
+							{value}
+						</div>
+					</PrimaryTooltip>
+				)
+			}
 		},
 		{
 			title: 'Loại',

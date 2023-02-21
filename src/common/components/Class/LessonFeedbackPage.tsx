@@ -11,7 +11,7 @@ import { ModalLessonFeedback } from './ModalLessonFeedback'
 export const LessonFeedbackPage = () => {
 	const router = useRouter()
 	const [loading, setLoading] = useState(false)
-	const initParameters = { classId: router.query.slug }
+	const initParameters = { classId: router.query.class }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [dataTable, setDataTable] = useState([])
 
@@ -35,10 +35,10 @@ export const LessonFeedbackPage = () => {
 	}
 
 	useEffect(() => {
-		if (router?.query?.slug) {
+		if (router?.query?.class) {
 			getTimeLine(apiParameters)
 		}
-	}, [router?.query?.slug])
+	}, [router?.query?.class])
 
 	return (
 		<>

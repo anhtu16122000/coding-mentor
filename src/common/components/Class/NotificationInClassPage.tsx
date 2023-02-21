@@ -9,7 +9,7 @@ import { ModalNotificationInClassCRUD } from './ModalNotificationInClassCRUD'
 export const NotificationInClassPage = () => {
 	const router = useRouter()
 	const [loading, setLoading] = useState(false)
-	const initParameters = { classId: router.query.slug, pageIndex: 1, pageSize: PAGE_SIZE }
+	const initParameters = { classId: router.query.class, pageIndex: 1, pageSize: PAGE_SIZE }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [totalRow, setTotalRow] = useState(1)
 	const [dataTable, setDataTable] = useState([])
@@ -59,10 +59,10 @@ export const NotificationInClassPage = () => {
 		}
 	}
 	useEffect(() => {
-		if (router?.query?.slug) {
+		if (router?.query?.class) {
 			getNotificationInClass(apiParameters)
 		}
-	}, [router?.query?.slug])
+	}, [router?.query?.class])
 	return (
 		<>
 			<PrimaryTable

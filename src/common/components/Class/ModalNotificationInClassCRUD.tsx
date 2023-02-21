@@ -46,7 +46,7 @@ export const ModalNotificationInClassCRUD: React.FC<IModalNotificationInClass> =
 	const _onSubmit = (data) => {
 		if (mode === 'add') {
 			const dataSubmit = {
-				ClassId: router?.query?.slug,
+				ClassId: router?.query?.class,
 				...data
 			}
 			handleCreate(dataSubmit)

@@ -68,7 +68,7 @@ export const ModalLessonFeedback: React.FC<IModalLessonFeedback> = ({ mode, data
 		}
 		if (mode === 'add') {
 			const dataSubmit = {
-				ClassId: router?.query?.slug,
+				ClassId: router?.query?.class,
 				...data
 			}
 			handleCreate(dataSubmit)

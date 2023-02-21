@@ -23,7 +23,7 @@ const ScheduleCalendar = (props) => {
 			<div className="wrapper-schedule">
 				<Tooltip title={dataRow.event.extendedProps.StatusName} placement="top">
 					<button
-						onClick={() => router.push(`/class/list-class/detail/?slug=${dataRow.event.extendedProps.ClassId}`)}
+						onClick={() => router.push(`/class/list-class/detail/?class=${dataRow.event.extendedProps.ClassId}`)}
 						className={`btn-edit-title ${getStatusSchedule()}`}
 					>
 						<span>{moment(dataRow.event.start).format('HH:mm')}</span> <span className="mx-1">-</span>

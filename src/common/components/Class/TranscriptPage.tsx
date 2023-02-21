@@ -123,10 +123,10 @@ export const TranscriptPage = () => {
 	}, [transcriptId])
 
 	useEffect(() => {
-		if (router?.query?.slug) {
-			getTranscriptByClass(router?.query?.slug)
+		if (router?.query?.class) {
+			getTranscriptByClass(router?.query?.class)
 		}
-	}, [router?.query?.slug])
+	}, [router?.query?.class])
 
 	const columns = [
 		{
@@ -210,7 +210,7 @@ export const TranscriptPage = () => {
 				loading={loading}
 				TitleCard={
 					<div className="extra-table">
-						<ModalTranscript mode="add" onRefresh={() => getTranscriptByClass(router?.query?.slug)} setTranscriptId={setTranscriptId} />
+						<ModalTranscript mode="add" onRefresh={() => getTranscriptByClass(router?.query?.class)} setTranscriptId={setTranscriptId} />
 					</div>
 				}
 				Extra={
@@ -239,7 +239,7 @@ export const TranscriptPage = () => {
 								<ModalTranscript
 									mode="delete"
 									Id={transcriptId}
-									onRefresh={() => getTranscriptByClass(router?.query?.slug)}
+									onRefresh={() => getTranscriptByClass(router?.query?.class)}
 									setTranscriptId={setTranscriptId}
 								/>
 							</div>

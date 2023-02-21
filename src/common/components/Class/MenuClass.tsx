@@ -32,8 +32,10 @@ const itemsAdmin = [
 	'Phản hồi buổi học',
 	'Thông báo'
 ]
+
 const itemsStudent = ['Lịch học']
 const itemsTeacher = ['Lịch học']
+
 const MenuClass = () => {
 	const user = useSelector((state: RootState) => state.user.information)
 	const getChildrenClassAdmin = (index) => {
