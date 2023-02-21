@@ -72,17 +72,13 @@ const ReservedPage = () => {
 	function handleColumn(value, item) {
 		return (
 			<div className="flex item-center">
-				<ButtonEye onClick={() => viewStudentDetails(item)} className="" />
+				<PrimaryTooltip content="Thông tin học viên" place="left" id={`view-st-${item?.Id}`}>
+					<ButtonEye onClick={() => viewStudentDetails(item)} />
+				</PrimaryTooltip>
 
 				{item?.Status == 1 && (
 					<>
 						<AddToClass item={item} onRefresh={getData} />
-						<RefundForm item={item} onRefresh={getData} />
-					</>
-				)}
-
-				{item?.Status == 4 && (
-					<>
 						<RefundForm item={item} onRefresh={getData} />
 					</>
 				)}

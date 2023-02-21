@@ -687,16 +687,6 @@ button {
 	@apply absolute w-[26px] h-[26px] bg-[#f1f1f1] hover:bg-[#e6e6e6] active:bg-[#f1f1f1] rounded-full all-center;
 }
 
-.ant-select-dropdown {
-	.ant-select-dropdown-by-chau {
-		display: flex !important;
-		flex-direction: column;
-	}
-	.ant-select-item {
-		border-bottom: 1px #eaeaea solid;
-	}
-}
-
 .ant-select-class-selected {
 	.ant-select-selector {
 		max-height: 84px !important;

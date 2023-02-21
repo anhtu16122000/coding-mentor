@@ -70,7 +70,9 @@ const StudentInClassPage = () => {
 	function handleColumn(value, item) {
 		return (
 			<div className="flex item-center">
-				<ButtonEye onClick={() => viewStudentDetails(item)} className="" />
+				<PrimaryTooltip content="Thông tin học viên" place="left" id={`view-st-${item?.Id}`}>
+					<ButtonEye onClick={() => viewStudentDetails(item)} className="" />
+				</PrimaryTooltip>
 
 				{item?.ClassType !== 3 && (
 					<>

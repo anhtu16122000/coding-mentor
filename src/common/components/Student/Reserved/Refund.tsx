@@ -1,15 +1,16 @@
-import { Card, DatePicker, Form, Input, Modal, Select } from 'antd'
+import { Card, Form, Input, Modal, Select } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
 import { ShowNostis } from '~/common/utils'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import ModalFooter from '../../ModalFooter'
 import { formNoneRequired, formRequired } from '~/common/libs/others/form'
-import { ButtonChange, ButtonPending } from '../../TableButton'
+import { ButtonPending, ButtonRefund } from '../../TableButton'
 import Avatar from '../../Avatar'
 import { MdOpenInNew } from 'react-icons/md'
-import { parseToMoney } from '~/common/utils/common'
 import moment from 'moment'
+import { paymentMethodsApi } from '~/api/payment-method'
+import { branchApi } from '~/api/branch'
 
 interface IRefund {
 	isEdit?: boolean
@@ -18,13 +19,15 @@ interface IRefund {
 	onOpen?: Function
 }
 
-const url = 'ClassReserve'
+const url = 'Refund'
 
 const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 	const [form] = Form.useForm()
 
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(false)
+	const [methods, setMethods] = useState<any>([])
+	const [branch, setBranch] = useState<IBranch[]>(null)
 
 	function toggle() {
 		setVisible(!visible)
@@ -34,12 +37,62 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 		setVisible(!visible)
 	}
 
+	useEffect(() => {
+		if (visible) {
+			getPaymentMethods()
+
+			getBranchs()
+		}
+	}, [visible])
+
+	const [branchLoading, setBranchLoading] = useState(false)
+	const getBranchs = async () => {
+		if (!branch) {
+			setBranchLoading(true)
+			try {
+				const response = await branchApi.getAll({
+					pageIndex: 1,
+					pageSize: 99999
+				})
+				response.status == 200 && setBranch(response.data.data)
+			} catch (err) {
+				ShowNostis.error(err?.message)
+			} finally {
+				form.setFieldValue('BranchId', item?.BranchId)
+				setBranchLoading(false)
+			}
+		}
+	}
+
+	const [methodsLoading, setMethodsLoading] = useState(false)
+	const getPaymentMethods = async () => {
+		if (methods.length == 0) {
+			setMethodsLoading(true)
+			try {
+				const res = await paymentMethodsApi.getAll()
+				if (res.status == 200) {
+					setMethods(res.data.data)
+				}
+				if (res.status == 204) {
+					setMethods([])
+				}
+			} catch (err) {
+				ShowNostis.error(err?.message)
+			} finally {
+				setMethodsLoading(false)
+			}
+		}
+	}
+
 	function onFinish(params) {
 		setLoading(true)
 
 		const DATA_SUBMIT = {
 			...params,
-			StudentInClassId: item?.Id
+			ClassReserveId: item?.Id,
+			Price: item?.Price,
+			Type: 2,
+			StudentId: item?.StudentId
 		}
 
 		console.log('-- DATA_SUBMIT', DATA_SUBMIT)
@@ -96,13 +149,13 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 
 	return (
 		<>
-			<PrimaryTooltip id={`class-pending-${item?.Id}`} place="left" content="Bảo lưu">
-				<ButtonPending onClick={openEdit} className="ml-[16px]" />
+			<PrimaryTooltip id={`class-refund-${item?.Id}`} place="left" content="Hoàn tiền">
+				<ButtonRefund onClick={openEdit} className="ml-[16px]" />
 			</PrimaryTooltip>
 
 			<Modal
-				width={500}
-				title="Bảo lưu"
+				width={600}
+				title="Hoàn tiền"
 				open={visible}
 				onCancel={toggle}
 				footer={<ModalFooter loading={loading} onCancel={toggle} onOK={submitForm} />}
@@ -113,10 +166,10 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 						<div className="flex-1 ml-[16px]">
 							<div className="w-full in-1-line font-[600] text-[16px]">{item?.FullName}</div>
 							<div className="w-full in-1-line font-[400] text-[14px]">
-								<div className="font-[600] inline-flex">Email:</div> {item?.Email}
+								<div className="font-[600] inline-flex">Mã:</div> {item?.UserCode}
 							</div>
 							<div className="w-full in-1-line font-[400] text-[14px]">
-								<div className="font-[600] inline-flex">Phone:</div> {item?.Mobile}
+								<div className="font-[600] inline-flex">Hạn bảo lưu:</div> {moment(item?.Expires).format('DD/MM/YYYY')}
 							</div>
 						</div>
 
@@ -133,24 +186,6 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 					</div>
 				</Card>
 
-				<div className="font-[500] mb-[4px]">Lớp hiện tại</div>
-				<Card className="mb-[16px] card-min-padding">
-					<div className="relative">
-						<div>{item?.ClassName}</div>
-
-						<PrimaryTooltip
-							className="top-[-4px] right-[-4px] absolute w-[28px] h-[18px]"
-							id={`class-in-new-${item?.Id}`}
-							place="right"
-							content="Xem lớp"
-						>
-							<div onClick={() => viewClassDetails(item)} className="btn-open-in-new-tab text-[#43A047]">
-								<MdOpenInNew size={16} />
-							</div>
-						</PrimaryTooltip>
-					</div>
-				</Card>
-
 				<Form
 					form={form}
 					className="grid grid-cols-2 gap-x-4"
@@ -159,18 +194,34 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 					onFinish={onFinish}
 					autoComplete="on"
 				>
-					<Form.Item className="col-span-2 ant-select-class-selected" name="Expires" label="Thời hạn bảo lưu">
-						<DatePicker
+					<Form.Item className="col-span-1" name="PaymentMethodId" label="Phương thức thanh toán" rules={formRequired}>
+						<Select loading={methodsLoading} disabled={loading} placeholder="Chọn phương thức" className="primary-input">
+							{methods.map((thisMethod) => {
+								return (
+									<Select.Option key={thisMethod.Id} value={thisMethod.Id}>
+										{thisMethod?.Name}
+									</Select.Option>
+								)
+							})}
+						</Select>
+					</Form.Item>
+
+					<Form.Item className="col-span-1" name="BranchId" label="Trung tâm thanh toán" rules={formRequired}>
+						<Select
+							loading={branchLoading}
 							disabled={loading}
-							className="primary-input"
-							placeholder="Chọn ngày"
+							className="style-input"
+							showSearch
+							optionFilterProp="children"
 							allowClear={true}
-							format="DD/MM/YYYY"
-							disabledDate={(current) => {
-								return moment().add(-1, 'days') >= current
-							}}
-							showToday={false}
-						/>
+							placeholder="Chọn trung tâm"
+						>
+							{branch?.map((item, index) => (
+								<Select.Option key={index} value={item.Id}>
+									{item.Name}
+								</Select.Option>
+							))}
+						</Select>
 					</Form.Item>
 
 					<Form.Item className="col-span-2" label="Ghi chú" name="Note" rules={formNoneRequired}>

@@ -1,15 +1,15 @@
-import { Card, Form, Input, Modal, Select } from 'antd'
+import { Card, Form, Modal, Select } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
 import { ShowNostis } from '~/common/utils'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import ModalFooter from '../../ModalFooter'
 import { formNoneRequired, formRequired } from '~/common/libs/others/form'
-import { ButtonChange } from '../../TableButton'
 import Avatar from '../../Avatar'
 import { MdOpenInNew } from 'react-icons/md'
 import { parseToMoney } from '~/common/utils/common'
 import moment from 'moment'
+import ButtonMoveTo from '../../TableButton/MOVETO'
 
 interface IAddToClass {
 	isEdit?: boolean
@@ -123,7 +123,7 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
 	return (
 		<>
 			<PrimaryTooltip id={`add-to-${item?.Id}`} place="left" content="Chuyển vào lớp">
-				<ButtonChange onClick={openEdit} className="ml-[16px]" />
+				<ButtonMoveTo onClick={openEdit} className="ml-[16px]" />
 			</PrimaryTooltip>
 
 			<Modal
@@ -167,7 +167,7 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
 					onFinish={onFinish}
 					autoComplete="on"
 				>
-					<Form.Item className="col-span-2 ant-select-class-selected" name="ClassId" label="Lớp chuyển đến">
+					<Form.Item className="col-span-2 ant-select-class-selected" name="ClassId" label="Lớp chuyển đến" rules={formRequired}>
 						<Select disabled={loading} placeholder="Chọn lớp" className="ant-select-item-option-selected-blue">
 							{classes.map((thisClass) => {
 								return (
@@ -185,10 +185,6 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
 							})}
 						</Select>
 					</Form.Item>
-
-					{/* <Form.Item className="col-span-2" label="Ghi chú" name="Note" rules={formNoneRequired}>
-						<Input.TextArea rows={5} placeholder="" disabled={loading} />
-					</Form.Item> */}
 				</Form>
 			</Modal>
 		</>

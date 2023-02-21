@@ -1,7 +1,2 @@
-export const formRequired = [{ required: true, message: 'Bạn không được để trống' }]
-
-export const formNoneRequired = [
-	{
-		required: false
-	}
-]
+export const formRequired = [{ required: true, message: 'Không được để trống' }]
+export const formNoneRequired = [{ required: false }]
