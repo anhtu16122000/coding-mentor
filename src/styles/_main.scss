@@ -674,3 +674,53 @@ button {
 		padding: 8px;
 	}
 }
+
+.card-min-padding {
+	border: 1px solid #dedede;
+	.ant-card-body {
+		@apply p-[16px];
+	}
+}
+
+.btn-open-in-new-tab {
+	@apply top-[-4px] right-[-4px] none-selection cursor-pointer z-50;
+	@apply absolute w-[26px] h-[26px] bg-[#f1f1f1] hover:bg-[#e6e6e6] active:bg-[#f1f1f1] rounded-full all-center;
+}
+
+.ant-select-dropdown {
+	.ant-select-dropdown-by-chau {
+		display: flex !important;
+		flex-direction: column;
+	}
+	.ant-select-item {
+		border-bottom: 1px #eaeaea solid;
+	}
+}
+
+.ant-select-class-selected {
+	.ant-select-selector {
+		max-height: 84px !important;
+		display: block !important;
+		padding-top: 6px !important;
+		position: relative;
+		.ant-select-class-option {
+			flex-direction: column !important;
+			align-items: flex-start;
+		}
+		.ant-select-selection-item {
+			padding: 4px !important;
+			height: unset !important;
+			flex-direction: column;
+			align-items: flex-start !important;
+			line-height: unset !important;
+		}
+		.ant-select-item-option-name {
+			font-weight: 600 !important;
+		}
+	}
+	.ant-select-selection-placeholder {
+		position: absolute !important;
+		top: 4px;
+		left: 16px;
+	}
+}

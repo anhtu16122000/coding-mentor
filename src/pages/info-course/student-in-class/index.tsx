@@ -19,6 +19,10 @@ import appConfigs from '~/appConfig'
 import AvatarComponent from '~/common/components/AvatarComponent'
 import Avatar from '~/common/components/Avatar'
 import Router from 'next/router'
+import { IoMdOpen } from 'react-icons/io'
+import { ImWarning } from 'react-icons/im'
+import { ButtonEye } from '~/common/components/TableButton'
+import { ChangeClass, ReserveForm } from '~/common/components/Student/StudentInClass'
 
 const StudentInClassPage = () => {
 	const [loading, setLoading] = React.useState(true)
@@ -56,13 +60,35 @@ const StudentInClassPage = () => {
 		Router.push(`/class/list-class/detail/?class=${params.ClassId}`)
 	}
 
+	function viewStudentDetails(params) {
+		Router.push({
+			pathname: '/info-course/student/detail',
+			query: { StudentID: params?.StudentId }
+		})
+	}
+
+	function handleColumn(value, item) {
+		return (
+			<div className="flex item-center">
+				<ButtonEye onClick={() => viewStudentDetails(item)} className="" />
+
+				{item?.ClassType !== 3 && (
+					<>
+						<ChangeClass item={item} onRefresh={getData} />
+						<ReserveForm item={item} onRefresh={getData} />
+					</>
+				)}
+			</div>
+		)
+	}
+
 	const columns = [
 		{
 			title: 'Học viên',
 			dataIndex: 'Code',
 			render: (value, item) => (
 				<div className="flex items-center">
-					<Avatar className="h-[40px] w-[40px]" uri={item?.Avatar} />
+					<Avatar className="h-[40px] w-[40px] rounded-[4px]" uri={item?.Avatar} />
 					<div className="ml-[8px]">
 						<h2 className="text-[16px] font-[600]">{item?.FullName}</h2>
 						<h3 className="text-[14px] font-[400]">{item?.UserCode}</h3>
@@ -83,21 +109,24 @@ const StudentInClassPage = () => {
 		{
 			title: 'Lớp',
 			dataIndex: 'ClassName',
-			width: 200,
+			width: 170,
 			render: (value, item) => {
 				return (
-					<PrimaryTooltip id={`class-tip-${item?.Id}`} content={value} place="top">
-						<div onClick={() => gotoClass(item)} className="max-w-[150px] in-1-line cursor-pointer font-[500] text-[#1E88E5]">
+					<PrimaryTooltip className="flex items-center" id={`class-tip-${item?.Id}`} content={'Xem lớp: ' + value} place="top">
+						<a
+							href={`/class/list-class/detail/?class=${item.ClassId}`}
+							className="max-w-[150px] in-1-line cursor-pointer font-[500] text-[#1976D2] hover:text-[#1968b7] hover:underline"
+						>
 							{value}
-						</div>
+						</a>
 					</PrimaryTooltip>
 				)
 			}
 		},
 		{
-			title: 'Loại',
+			title: 'Loại học viên',
 			dataIndex: 'Type',
-			width: 180,
+			width: 120,
 			render: (value, item) => (
 				<p className="font-[600] text-[#E53935]">
 					{value == 1 && <span className="tag green">{item?.TypeName}</span>}
@@ -107,14 +136,32 @@ const StudentInClassPage = () => {
 			)
 		},
 		{
+			title: 'Loại lớp',
+			dataIndex: 'ClassType',
+			width: 110,
+			render: (value, item) => (
+				<p className="font-[600] text-[#E53935]">
+					{value == 1 && <span className="tag green">{item?.ClassTypeName}</span>}
+					{value == 2 && <span className="tag yellow">{item?.ClassTypeName}</span>}
+					{value == 3 && <span className="tag blue">{item?.ClassTypeName}</span>}
+				</p>
+			)
+		},
+		{
+			title: 'Cảnh báo',
+			dataIndex: 'Warning',
+			align: 'center',
+			width: 100,
+			render: (value, item) => {
+				return <ImWarning size={18} className="text-[#EF6C00]" />
+			}
+		},
+		{
 			title: '',
 			dataIndex: 'Type',
 			width: 60,
-			render: (value, item) => (
-				<div className="flex item-center">
-					<PayForm isEdit defaultData={item} onRefresh={getData} />
-				</div>
-			)
+			fixed: 'right',
+			render: handleColumn
 		}
 	]
 
