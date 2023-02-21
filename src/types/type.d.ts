@@ -14,6 +14,7 @@ type ICurriculumDetail = IBaseApi<{
 	FileType: string
 	Id: number
 	Index: number
+	Time: number
 }>
 
 type ITeacherOff = IBaseApi<{

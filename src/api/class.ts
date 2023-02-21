@@ -14,6 +14,9 @@ export const classApi = {
 	checkTeacherAvailable(params) {
 		return instance.get<IApiResultData<any[]>>(`${url}/teacher-available`, { params: params })
 	},
+	checkTeacherTutoringAvailable(params) {
+		return instance.get<IApiResultData<any[]>>(`${url}/teacher-tutoring-available`, { params: params })
+	},
 	checkRoomAvailable(params) {
 		return instance.get<IApiResultData<any[]>>(`${url}/room-available`, { params: params })
 	},
@@ -37,5 +40,14 @@ export const classApi = {
 	},
 	addRoleUpTeacher(Id) {
 		return instance.post(`${url}/roll-up-teacher/${Id}`)
+	},
+	getClassTutoringConfig() {
+		return instance.get(`${url}/tutoring-config`)
+	},
+	updateClassTutoringConfig(data) {
+		return instance.put(`${url}/tutoring-config`, data)
+	},
+	getClassTutoringCurriculum() {
+		return instance.get(`${url}/tutoring-curriculum`)
 	}
 }

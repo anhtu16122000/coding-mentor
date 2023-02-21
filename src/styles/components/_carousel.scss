@@ -1,0 +1,118 @@
+.custom-carousel {
+	.ant-carousel {
+		.slick-arrow {
+			z-index: 11;
+			&.slick-next {
+				right: 10px;
+			}
+			&.slick-prev {
+				left: 10px;
+			}
+		}
+	}
+	.slick-slide {
+		.box {
+			padding: 0 10px;
+			cursor: pointer;
+			.inner {
+				border: 1px solid #ccc;
+				border-radius: 6px;
+				background: #fff;
+				text-align: center;
+				padding: 15px;
+				.month {
+					text-transform: uppercase;
+					font-size: 1.2rem;
+					font-weight: 500;
+				}
+				.day {
+					font-size: 3rem;
+					font-weight: 600;
+				}
+				.value {
+					text-transform: capitalize;
+					font-size: 16px;
+				}
+			}
+			&:hover {
+				.inner {
+					background: linear-gradient(45deg, #17ead9, #6078ea) !important;
+					color: #fff;
+				}
+			}
+			&.active {
+				.inner {
+					background: linear-gradient(45deg, #17ead9, #6078ea) !important;
+					color: #fff;
+				}
+			}
+			&.today {
+				.inner {
+					border: 1px solid $blue;
+				}
+			}
+		}
+	}
+}
+.custom-listTeacher {
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: repeat(4, minmax(0px, 1fr));
+	@include tablet {
+		grid-template-columns: repeat(3, minmax(0px, 1fr));
+	}
+	@include mobile {
+		grid-template-columns: repeat(1, minmax(0px, 1fr));
+	}
+	.item {
+		position: relative;
+
+		border-radius: 6px;
+		cursor: pointer;
+		border: 2px solid #9bc7f1;
+		&.disabled {
+			border: 2px solid #ccc;
+		}
+		&.active {
+			border: 2px solid #0a89ff;
+		}
+
+		.inner-item {
+			.avatar {
+				padding: 16px 0;
+				width: 100px;
+				margin: 0 auto;
+			}
+			.note {
+				padding: 0 16px;
+				text-align: center;
+			}
+			.rating {
+				color: #fadb14;
+				@include flex(center, center);
+				.value {
+					font-size: 1.2rem;
+					margin-left: 10px;
+					font-weight: 500;
+					@include flex(center, center);
+					margin-bottom: 2px;
+				}
+			}
+			.name {
+				text-align: center;
+				font-weight: 500;
+			}
+			.create {
+				text-align: center;
+			}
+			.list-class-of-teacher {
+				.item-class {
+					background: #b5f2ed;
+					padding: 10px;
+					@include flex(center, space-between);
+					border-bottom: 1px solid #fff;
+				}
+			}
+		}
+	}
+}

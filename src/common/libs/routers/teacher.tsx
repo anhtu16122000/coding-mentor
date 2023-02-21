@@ -3,27 +3,32 @@ import { AiOutlineCalendar } from 'react-icons/ai'
 import { BiBookBookmark } from 'react-icons/bi'
 import { BsCalendarX } from 'react-icons/bs'
 import { FiAirplay, FiPieChart } from 'react-icons/fi'
-import { MdAirplay, MdPersonalVideo } from 'react-icons/md'
+import { MdAirplay, MdOutlineEditCalendar, MdPersonalVideo } from 'react-icons/md'
 import { TbHome, TbScreenShare } from 'react-icons/tb'
 
 export const TeacherMenu = [
 	{
+		Key: 'home',
 		TabName: 'tab-home',
 		Icon: <TbHome size={22} />
 	},
 	{
+		Key: 'webinar',
 		TabName: 'Webinar',
 		Icon: <TbScreenShare size={22} />
 	},
 	{
+		Key: 'class',
 		TabName: 'Lớp học',
 		Icon: <MdAirplay size={22} />
 	},
 	{
+		Key: 'course',
 		TabName: 'Khóa học',
 		Icon: <BiBookBookmark size={22} />
 	},
 	{
+		Key: 'assignment',
 		TabName: 'Phân công',
 		Icon: <UserCheck size={22} />
 	}
@@ -32,6 +37,7 @@ export const TeacherMenu = [
 export const TeacherChildMenu = [
 	{
 		MenuName: 'tab-home',
+		Parent: 'home',
 		MenuTitle: 'Quản lý hệ thống',
 		MenuKey: '/home',
 		MenuItem: [
@@ -46,6 +52,7 @@ export const TeacherChildMenu = [
 	},
 	{
 		MenuName: 'Webinar',
+		Parent: 'webinar',
 		MenuTitle: 'xx69x',
 		MenuKey: '/webinars',
 		MenuItem: [
@@ -60,6 +67,7 @@ export const TeacherChildMenu = [
 	},
 	{
 		MenuName: 'Lớp học',
+		Parent: 'class',
 		MenuTitle: 'Lớp học',
 		MenuKey: '/class',
 		MenuItem: [
@@ -82,6 +90,7 @@ export const TeacherChildMenu = [
 	{
 		MenuName: 'Khóa học',
 		MenuTitle: 'Khóa học',
+		Parent: 'course',
 		MenuKey: '/course',
 		MenuItem: [
 			{
@@ -97,6 +106,7 @@ export const TeacherChildMenu = [
 		MenuName: 'Ngân hàng đề thi',
 		MenuTitle: 'Ngân hàng đề thi',
 		MenuKey: '/question-bank',
+		Parent: 'webinar',
 		MenuItem: [
 			{
 				ItemType: 'single',
@@ -117,6 +127,7 @@ export const TeacherChildMenu = [
 	{
 		MenuName: 'Phân công',
 		MenuTitle: 'Phân công',
+		Parent: 'assignment',
 		MenuKey: '/users',
 		MenuItem: [
 			{
@@ -125,6 +136,13 @@ export const TeacherChildMenu = [
 				Route: '/users/teacher/teacher-off',
 				Text: 'Đăng ký lịch nghỉ',
 				Icon: <BsCalendarX />
+			},
+			{
+				ItemType: 'single',
+				Key: '/users/teacher/open-calender',
+				Route: '/users/teacher/open-calender',
+				Text: 'Mở lịch trống',
+				Icon: <MdOutlineEditCalendar />
 			}
 		]
 	}

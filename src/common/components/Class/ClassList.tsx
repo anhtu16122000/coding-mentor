@@ -1,6 +1,7 @@
 import { List, Modal } from 'antd'
 import moment from 'moment'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { classApi } from '~/api/class'
@@ -11,11 +12,13 @@ import { RootState } from '~/store'
 import AvatarComponent from '../AvatarComponent'
 import DeleteTableRow from '../Elements/DeleteTableRow'
 import PrimaryButton from '../Primary/Button'
+import IconButton from '../Primary/IconButton'
 import UpdateClassForm from './UpdateClassForm'
 
 const ClassList = (props) => {
 	const { isLoading, dataSource, setTodoApi, listTodoApi, totalRow, todoApi } = props
 	const state = useSelector((state: RootState) => state)
+	const router = useRouter()
 	const { information: userInformation } = state.user
 	const [isModalOpen, setIsModalOpen] = useState({ id: null, open: null })
 	const [isLoadingDelete, setIsLoadingDelete] = useState(false)
@@ -37,7 +40,7 @@ const ClassList = (props) => {
 		)
 	}
 
-	const returnPathName = (ID) => {
+	const returnPathName = (item) => {
 		if (!userInformation) return ''
 		let role = userInformation?.RoleId
 		let path = null
@@ -46,12 +49,34 @@ const ClassList = (props) => {
 				pathname: '/class/list-class/detail',
 				// , type: TypeCourse, CourseName
 				// query: { slug: ID, name: CourseName, CurriculumId: CurriculumId, BranchId: BranchId, ProgramId: ProgramId, Type: Type }
-				query: { slug: ID }
+				query: { slug: item?.Id, CurriculumId: item?.CurriculumId, BranchId: item?.BranchId }
 			}
 		} else {
 			path = {
 				pathname: '/class/list-class/detail',
-				query: { slug: ID }
+				query: { slug: item?.Id }
+			}
+		}
+
+		return path
+	}
+
+	const handleTutoring = (item) => {
+		if (!userInformation) return ''
+		let role = userInformation?.RoleId
+		let path = null
+
+		if (role == 1 || role == 5) {
+			path = {
+				pathname: '/class/list-class/tutoring',
+				// , type: TypeCourse, CourseName
+				// query: { slug: ID, name: CourseName, CurriculumId: CurriculumId, BranchId: BranchId, ProgramId: ProgramId, Type: Type }
+				query: { slug: item?.Id, CurriculumId: item?.CurriculumId, BranchId: item?.BranchId }
+			}
+		} else {
+			path = {
+				pathname: '/class/list-class/tutoring',
+				query: { slug: item?.Id }
 			}
 		}
 
@@ -158,9 +183,17 @@ const ClassList = (props) => {
 						<List.Item.Meta
 							avatar={checkStatus(item.Status, item.StatusName, item.Thumbnail)}
 							title={
-								<Link href={returnPathName(item.Id)}>
-									<a className="font-medium hover:underline">{item.Name}</a>
-								</Link>
+								item?.Type === 1 ? (
+									<Link href={returnPathName(item)}>
+										<a className="font-medium hover:underline">{item.Name}</a>
+									</Link>
+								) : (
+									<Link href={handleTutoring(item)}>
+										<a>
+											<a className="font-medium hover:underline">{item.Name}</a>
+										</a>
+									</Link>
+								)
 							}
 							description={
 								<div className="content-body">

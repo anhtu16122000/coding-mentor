@@ -51,7 +51,7 @@ const Notification = () => {
 		if (notification?.length === 0) {
 			getDataNotification()
 		}
-	}, [notification])
+	}, [])
 
 	useMemo(() => {
 		let countNotSeen = 0

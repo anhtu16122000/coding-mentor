@@ -28,6 +28,7 @@ type IIconButton = {
 		| 'book'
 		| 'info'
 		| 'save'
+		| 'tutoring'
 	type: 'button' | 'submit'
 	onClick?: Function
 	className?: string

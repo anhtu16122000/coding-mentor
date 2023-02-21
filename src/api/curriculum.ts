@@ -7,7 +7,7 @@ export const curriculumApi = {
 		return instance.get<IApiResultData<ICurriculum[]>>(url, { params: params })
 	},
 	getDetails(Id) {
-		return instance.get<IApiResultData<IContract[]>>(`${url}/${Id}`)
+		return instance.get<IApiResultData<ICurriculumDetail>>(`${url}/${Id}`)
 	},
 	add(data) {
 		return instance.post(url, data)

@@ -3,6 +3,7 @@ import { FC, useRef } from 'react'
 import { Edit, LogIn, Trash, X, FileMinus, Edit3, Book, Trash2 } from 'react-feather'
 import { AiOutlineCheckCircle, AiOutlineEye, AiOutlineInfoCircle, AiOutlineUsergroupAdd } from 'react-icons/ai'
 import { CgAddR, CgFileDocument } from 'react-icons/cg'
+import { FaChalkboardTeacher } from 'react-icons/fa'
 import { FiArrowDownCircle, FiArrowUpCircle, FiEdit, FiMenu, FiMoreVertical, FiPrinter, FiSave, FiSend, FiTrash2 } from 'react-icons/fi'
 import { HiOutlineFilter } from 'react-icons/hi'
 import { MdOutlineCancel } from 'react-icons/md'
@@ -145,6 +146,9 @@ const IconButton: FC<IIconButton> = (props) => {
 		}
 		if (icon == 'down-arrow') {
 			return <FiArrowDownCircle size={!!size ? size : 20} />
+		}
+		if (icon == 'tutoring') {
+			return <FaChalkboardTeacher size={!!size ? size : 20} />
 		}
 	}
 

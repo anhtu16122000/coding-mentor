@@ -1,21 +1,12 @@
 import { AiFillSetting, AiOutlineCalendar } from 'react-icons/ai'
 import { BiBookAdd } from 'react-icons/bi'
-import {
-	BsBook, BsFillGridFill
-} from 'react-icons/bs'
-import {
-	FaHouseDamage,
-	FaMoneyBillAlt, FaUserGraduate,
-	FaUserTie
-} from 'react-icons/fa'
+import { BsBook, BsFillGridFill } from 'react-icons/bs'
+import { FaHouseDamage, FaMoneyBillAlt, FaRegCalendarPlus, FaUserGraduate, FaUserTie } from 'react-icons/fa'
 import { FiAirplay } from 'react-icons/fi'
 import { GrMoney, GrSettingsOption } from 'react-icons/gr'
 import { HiPresentationChartLine } from 'react-icons/hi'
 import { IoVideocam } from 'react-icons/io5'
-import {
-	MdOutlineSettingsInputComposite,
-	MdPersonalVideo
-} from 'react-icons/md'
+import { MdOutlineEditCalendar, MdOutlineSettingsInputComposite, MdPersonalVideo } from 'react-icons/md'
 import { RiExchangeBoxFill, RiFileEditLine, RiFileList2Fill } from 'react-icons/ri'
 import { TbFileCertificate } from 'react-icons/tb'
 import { TiHome } from 'react-icons/ti'
@@ -168,6 +159,13 @@ export const AdminChildMenu = [
 				Route: '/users/salary',
 				Text: 'Bảng lương',
 				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/users/teacher/open-calender',
+				Route: '/users/teacher/open-calender',
+				Text: 'Mở lịch trống',
+				Icon: <MdOutlineEditCalendar />
 			}
 		]
 	},
@@ -219,6 +217,13 @@ export const AdminChildMenu = [
 				Icon: <BiBookAdd />,
 				Route: '/class/register',
 				Text: 'Đăng ký học'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/class/tutoring-config',
+				Icon: <FaRegCalendarPlus />,
+				Route: '/class/tutoring-config',
+				Text: 'Cấu hình thời gian đặt lịch'
 			}
 		]
 	},
