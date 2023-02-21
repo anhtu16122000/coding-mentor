@@ -11,6 +11,7 @@ import InputTextField from '~/common/components/FormControl/InputTextField'
 import PrimaryButton from '~/common/components/Primary/Button'
 import IconButton from '~/common/components/Primary/IconButton'
 import PrimaryTable from '~/common/components/Primary/Table'
+import { ButtonRefund } from '~/common/components/TableButton'
 import { ShowNostis, ShowNoti } from '~/common/utils'
 
 const PAGE_SIZE = 10
@@ -253,7 +254,7 @@ PaymentApprovePage.ApproveMoneyBack = ({ id, onRefresh }) => {
 	return (
 		<>
 			<Tooltip title="Hoàn tiền">
-				<GiPayMoney fontSize={20} color="#1b73e8" onClick={() => setIsModalVisible(true)} />
+				<ButtonRefund size={21} className="ml-[8px] mt-[-2px]" onClick={() => setIsModalVisible(true)} />
 			</Tooltip>
 
 			<Modal centered title={<>Hoàn tiền </>} open={isModalVisible} onCancel={() => setIsModalVisible(false)} footer={null}>
