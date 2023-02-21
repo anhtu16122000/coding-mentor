@@ -154,6 +154,13 @@ export const AdminChildMenu = [
 			},
 			{
 				ItemType: 'single',
+				Key: '/info-course/changed',
+				Route: '/info-course/changed',
+				Text: 'Học viên chuyển khoá',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
 				Key: '/info-course/student/student-warning',
 				Route: '/info-course/student/student-warning',
 				Text: 'Cảnh báo học viên',

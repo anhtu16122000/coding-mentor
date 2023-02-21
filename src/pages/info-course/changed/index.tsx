@@ -1,32 +1,21 @@
-import { Input, Modal } from 'antd'
+import { Input } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { FaMoneyBill } from 'react-icons/fa'
-import { GiReceiveMoney } from 'react-icons/gi'
 import RestApi from '~/api/RestApi'
 import { MainLayout } from '~/common'
 import { PrimaryTooltip } from '~/common/components'
-import PayForm from '~/common/components/Finance/Payment/pay'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNostis } from '~/common/utils'
 import { parseToMoney } from '~/common/utils/common'
-import BillDetails from '../../../common/components/Finance/BillDetails'
 import moment from 'moment'
-import PrimaryButton from '~/common/components/Primary/Button'
-import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
-import AvatarComponent from '~/common/components/AvatarComponent'
 import Avatar from '~/common/components/Avatar'
 import Router from 'next/router'
-import { IoMdOpen } from 'react-icons/io'
-import { ImWarning } from 'react-icons/im'
 import { ButtonEye } from '~/common/components/TableButton'
-import { ChangeClass, ReserveForm } from '~/common/components/Student/StudentInClass'
-import PrimaryEditor from '~/common/components/Editor'
 import { AddToClass, RefundForm } from '~/common/components/Student/Reserved'
 
-const ReservedPage = () => {
+const ChangedPage = () => {
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
 	const [data, setData] = React.useState([])
@@ -39,7 +28,7 @@ const ReservedPage = () => {
 	async function getData() {
 		setLoading(true)
 		try {
-			const res = await RestApi.get<any>('ClassReserve', filters)
+			const res = await RestApi.get<any>('ClassChange', filters)
 			if (res.status == 200) {
 				setData(res.data.data)
 				setTotalPage(res.data.totalRow)
@@ -101,40 +90,46 @@ const ReservedPage = () => {
 			)
 		},
 		{
-			title: 'Trung tâm',
-			dataIndex: 'BranchName',
-			width: 200
-		},
-		{
-			title: 'Số tiền bảo lưu',
-			dataIndex: 'Price',
-			width: 130,
-			render: (value, item) => <p className="font-[600] text-[#1976D2]">{parseToMoney(value)}</p>
-		},
-		{
-			title: 'Trạng thái',
-			dataIndex: 'Status',
-			width: 120,
+			title: 'Lớp cũ',
+			dataIndex: 'OldClassName',
+			width: 180,
 			render: (value, item) => (
-				<p className="font-[600] text-[#E53935]">
-					{value == 1 && <span className="tag yellow">{item?.StatusName}</span>}
-					{value == 2 && <span className="tag blue">{item?.StatusName}</span>}
-					{value == 3 && <span className="tag green">{item?.StatusName}</span>}
-					{value == 4 && <span className="tag red">{item?.StatusName}</span>}
-				</p>
+				<div className="ml-[8px]">
+					<PrimaryTooltip className="flex items-center" id={`old-class-${item?.Id}`} content={'Xem lớp: ' + value} place="top">
+						<a
+							href={`/class/list-class/detail/?class=${item.OldClassId}`}
+							className="max-w-[150px] in-1-line cursor-pointer font-[500] text-[#1976D2] hover:text-[#1968b7] hover:underline"
+						>
+							{value}
+						</a>
+					</PrimaryTooltip>
+					<h3 className="text-[14px] font-[400]">{parseToMoney(item?.OldPrice)}</h3>
+				</div>
 			)
 		},
 		{
-			title: 'Ngày bảo lưu',
+			title: 'Lớp mới',
+			dataIndex: 'NewClassName',
+			width: 180,
+			render: (value, item) => (
+				<div className="ml-[8px]">
+					<PrimaryTooltip className="flex items-center" id={`new-class-${item?.Id}`} content={'Xem lớp: ' + value} place="top">
+						<a
+							href={`/class/list-class/detail/?class=${item.NewClassId}`}
+							className="max-w-[150px] in-1-line cursor-pointer font-[500] text-[#1976D2] hover:text-[#1968b7] hover:underline"
+						>
+							{value}
+						</a>
+					</PrimaryTooltip>
+					<h3 className="text-[14px] font-[400]">{parseToMoney(item?.NewPrice)}</h3>
+				</div>
+			)
+		},
+		{
+			title: 'Ngày chuyển',
 			dataIndex: 'CreatedOn',
 			width: 160,
 			render: (value, item) => <div>{moment(value).format('DD/MM/YYYY HH:mm')}</div>
-		},
-		{
-			title: 'Hạn bảo lưu',
-			dataIndex: 'Expires',
-			width: 120,
-			render: (value, item) => <p className="font-[400]">{moment(value).format('DD/MM/YYYY')}</p>
 		},
 		{
 			title: 'Người tạo',
@@ -154,7 +149,7 @@ const ReservedPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{appConfigs.appName} | Học viên bảo lưu</title>
+				<title>{appConfigs.appName} | Học viên chuyển khoá</title>
 			</Head>
 
 			<ExpandTable
@@ -184,5 +179,5 @@ const ReservedPage = () => {
 	)
 }
 
-ReservedPage.Layout = MainLayout
-export default ReservedPage
+ChangedPage.Layout = MainLayout
+export default ChangedPage
