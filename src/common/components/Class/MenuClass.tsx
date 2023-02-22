@@ -8,12 +8,13 @@ import { GiBlackBook } from 'react-icons/gi'
 import { IoNotificationsOutline } from 'react-icons/io5'
 import { MdAppRegistration } from 'react-icons/md'
 import { RiContactsBook2Line, RiQuillPenLine } from 'react-icons/ri'
-import { VscFeedback } from 'react-icons/vsc'
+import { VscFeedback, VscFolderLibrary } from 'react-icons/vsc'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import CalendarClassEdit from './CalendarClassEdit'
 import CalenderClassStudent from './CalendarClassStudent'
 import CalenderClassTeacher from './CalendarClassTeacher'
+import DocumentsPageInClass from './DocumentsPage'
 import { LessonFeedbackPage } from './LessonFeedbackPage'
 import { ListStudentInClass } from './ListStudentInClass'
 import { NotificationInClassPage } from './NotificationInClassPage'
@@ -26,6 +27,7 @@ const itemsAdmin = [
 	'Lịch học',
 	'Học viên',
 	'Các buổi học',
+	'Tài liệu',
 	'Điểm danh',
 	'Bảng điểm',
 	'Điểm danh giáo viên',
@@ -45,14 +47,16 @@ const MenuClass = () => {
 			case 2:
 				return <ScheduleList />
 			case 3:
-				return <RollUpPage />
+				return <DocumentsPageInClass />
 			case 4:
-				return <TranscriptPage />
+				return <RollUpPage />
 			case 5:
-				return <RollUpTeacherPage />
+				return <TranscriptPage />
 			case 6:
-				return <LessonFeedbackPage />
+				return <RollUpTeacherPage />
 			case 7:
+				return <LessonFeedbackPage />
+			case 8:
 				return <NotificationInClassPage />
 			default:
 				return <CalendarClassEdit />
@@ -81,28 +85,34 @@ const MenuClass = () => {
 			case 3:
 				return (
 					<div className="label-tab">
-						<RiQuillPenLine className="mr-3" size={20} /> <span>{item}</span>
+						<VscFolderLibrary className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 4:
 				return (
 					<div className="label-tab">
-						<CgTranscript className="mr-3" size={20} /> <span>{item}</span>
+						<RiQuillPenLine className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 5:
 				return (
 					<div className="label-tab">
-						<FiUserCheck className="mr-3" size={20} /> <span>{item}</span>
+						<CgTranscript className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 6:
 				return (
 					<div className="label-tab">
-						<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
+						<FiUserCheck className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 7:
+				return (
+					<div className="label-tab">
+						<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 8:
 				return (
 					<div className="label-tab">
 						<IoNotificationsOutline className="mr-3" size={20} /> <span>{item}</span>
@@ -119,6 +129,8 @@ const MenuClass = () => {
 				return <CalenderClassStudent />
 			case 1:
 				return <ListStudentInClass />
+			case 2:
+				return <DocumentsPageInClass />
 			default:
 				return <CalenderClassStudent />
 		}
@@ -138,6 +150,12 @@ const MenuClass = () => {
 					</div>
 				)
 			case 2:
+				return (
+					<div className="label-tab">
+						<VscFolderLibrary className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 3:
 				return <div className="label-tab">{item}</div>
 			default:
 				return 'Lịch học'
@@ -148,6 +166,8 @@ const MenuClass = () => {
 		switch (index) {
 			case 0:
 				return <CalenderClassTeacher />
+			case 2:
+				return <DocumentsPageInClass />
 			default:
 				return <CalenderClassTeacher />
 		}
@@ -158,6 +178,12 @@ const MenuClass = () => {
 				return (
 					<div className="label-tab">
 						<AiOutlineCalendar className="mr-3" /> <span>{item}</span>
+					</div>
+				)
+			case 1:
+				return (
+					<div className="label-tab">
+						<VscFolderLibrary className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 2:

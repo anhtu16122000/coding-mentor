@@ -190,10 +190,6 @@ const CurriculumDetail = () => {
 						}}
 					</Droppable>
 				</DragDropContext>
-
-				{/* {dataSource.list.map((item, index) => {
-						return <CurriculumDetailList item={item} />
-					})} */}
 			</Card>
 		</div>
 	)

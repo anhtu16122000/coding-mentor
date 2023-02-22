@@ -37,5 +37,17 @@ export const classApi = {
 	},
 	addRoleUpTeacher(Id) {
 		return instance.post(`${url}/roll-up-teacher/${Id}`)
-	}
+	},
+	getCurriculumOfClass(classID) {
+		return instance.get(`${url}/curriculum-of-class/${classID}`)
+	},
+	getCurriculumDetailOfClass(classID) {
+		return instance.get(`${url}/curriculum-details-of-class/${classID}`)
+	},
+	getFileCurriculumOfClass(classID) {
+		return instance.get(`${url}/file-curriculum-of-class/${classID}`)
+	},
+	addCurriculumOfClass(data) {
+		return instance.get(`${url}/file-curriculum-of-class`, data)
+	},
 }

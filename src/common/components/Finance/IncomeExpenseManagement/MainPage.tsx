@@ -57,6 +57,11 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 				setDataSource(res.data.data)
 				setTotalPage(res.data.totalRow)
 			}
+			if (res.status == 204) {
+				setDataStatistical({ income: 0, expense: 0, revenue: 0 })
+				setDataSource([])
+				setTotalPage(0)
+			}
 		} catch (error) {
 			ShowNoti('error', error.message)
 		} finally {

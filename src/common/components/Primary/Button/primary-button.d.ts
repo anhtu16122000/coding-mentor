@@ -2,6 +2,8 @@ type IPrimaryButton = {
 	background: 'green' | 'yellow' | 'blue' | 'red' | 'black' | 'disabled' | 'primary' | 'orange' | 'transparent'
 	icon?:
 		| 'add'
+		| 'arrow-up'
+		| 'arrow-down'
 		| 'remove'
 		| 'cancel'
 		| 'save'

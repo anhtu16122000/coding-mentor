@@ -45,8 +45,6 @@ const LibraryFormUnit: FC<IFormUnit> = ({ isEdit, onRefresh, defaultData, curric
 
 		const DATA_SUBMIT = { ...data, CurriculumId: curriculumId }
 
-		console.log('-- DATA_SUBMIT', DATA_SUBMIT, !isEdit)
-
 		if (!isEdit) {
 			post(DATA_SUBMIT)
 		} else {
@@ -111,7 +109,6 @@ const LibraryFormUnit: FC<IFormUnit> = ({ isEdit, onRefresh, defaultData, curric
 			>
 				<Form form={form} layout="vertical" onFinish={onFinish} autoComplete="on">
 					<InputTextField isRequired rules={formRequired} label="Tên chủ đề" name="Name" placeholder="Nhập tên chủ đề" />
-					<TextBoxField label="Ghi chú" name="Description" placeholder="Nhập ghi chú" />
 				</Form>
 			</Modal>
 		</>

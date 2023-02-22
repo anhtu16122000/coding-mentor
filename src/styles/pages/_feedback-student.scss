@@ -1,0 +1,252 @@
+.feedback-student-title {
+	display: flex;
+	gap: 8px;
+	justify-content: start;
+	align-items: start;
+
+	.right {
+		.avatar {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			border: 1px solid #ececec;
+		}
+	}
+	.left {
+		.name {
+			font-weight: 700;
+			font-size: 1rem;
+			display: flex;
+			gap: 16px;
+			justify-content: start;
+			align-items: center;
+
+			.time {
+				font-size: 0.8rem;
+				font-weight: 500;
+				color: #9c9c9c;
+			}
+		}
+		.title {
+			font-weight: 500;
+			font-size: 1rem;
+		}
+	}
+}
+
+// detail page
+.feedback-student-detail {
+	display: flex;
+	justify-content: start;
+	gap: 16px;
+
+	@include max-media(650px) {
+		display: block;
+	}
+	.information-block {
+		width: 25%;
+		background-color: #fff;
+		padding: 8px 16px;
+		border-radius: 16px;
+		box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+
+		@include max-media(1200px) {
+			width: 35%;
+		}
+
+		@include max-media(650px) {
+			width: 100%;
+			margin-bottom: 16px;
+		}
+
+		.horizontal {
+			border-bottom: 1px solid #e8eded;
+		}
+		.back-button {
+			display: flex;
+			justify-content: start;
+			gap: 10px;
+			align-items: center;
+			cursor: pointer;
+			font-weight: 500;
+			width: fit-content;
+			margin-bottom: 8px;
+		}
+
+		.avatar {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding-bottom: 24px;
+			img {
+				object-fit: cover;
+				width: 120px;
+				height: 120px;
+			}
+		}
+
+		.name {
+			text-align: center;
+			font-size: 1.4rem;
+			font-weight: 700;
+		}
+
+		.user-name {
+			text-align: center;
+			font-size: 1rem;
+			font-weight: 500;
+			color: #2e3e3f;
+			padding: 6px 0px 16px 0;
+		}
+
+		.actions {
+			padding: 16px 0;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		.contact {
+			.title {
+				margin-top: 16px;
+				font-size: 1.2rem;
+			}
+
+			.item {
+				display: flex;
+				gap: 8px;
+				justify-content: start;
+				align-items: center;
+				padding: 8px 0;
+
+				.icon {
+					font-size: 20px;
+					background-color: #f1f3f4;
+					border-radius: 50%;
+					color: #2e3e3f;
+					width: 40px;
+					height: 40px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					margin: auto 0;
+				}
+				.text {
+					.title {
+						margin-top: 0;
+						font-size: 1rem;
+						font-weight: 500;
+					}
+				}
+			}
+		}
+	}
+
+	.feedback-block {
+		width: 75%;
+		background-color: #fff;
+		border-radius: 16px;
+		box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+		padding: 8px 16px;
+
+		@include max-media(1200px) {
+			width: 65%;
+		}
+
+		@include max-media(650px) {
+			width: 100%;
+		}
+
+		.detail-information {
+			& > .time {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				.item-wrap {
+					font-size: 0.8rem;
+					font-weight: 500;
+					display: flex;
+					justify-content: start;
+					align-items: center;
+					gap: 8px;
+
+					.icon {
+						color: #a8a9b5;
+					}
+
+					.created-on {
+						margin-top: 3px;
+					}
+				}
+			}
+
+			.title-feedback {
+				font-size: 2rem;
+				padding: 24px 0 14px 0;
+			}
+
+			.content-feedback {
+				font-size: 1rem;
+				margin-bottom: 24px;
+			}
+		}
+
+		.feedback-reply-wrap {
+			border-left: 3px solid #1b73e8;
+			width: 100%;
+			padding-left: 20px;
+			.wrap-content-reply {
+				display: flex;
+				gap: 8px;
+				.item-reply {
+					display: flex;
+					justify-content: start;
+					align-items: start;
+					gap: 8px;
+					width: 100%;
+					border-bottom: 1px solid #e8eded;
+					padding: 16px 0 16px 0px;
+
+					& > .left {
+						flex: 0 1 auto;
+						.avatar {
+							img {
+								width: 40px;
+								height: 40px;
+								border-radius: 50%;
+								border: 1px solid #e8eded;
+							}
+						}
+					}
+
+					& > .right {
+						flex: 1 1 auto;
+						.information {
+							display: flex;
+							justify-content: space-between;
+							align-items: start;
+
+							& > .left {
+								.name {
+									font-size: 1rem;
+									font-weight: 500;
+								}
+							}
+							& > .right {
+								font-weight: 500;
+								font-size: 0.8rem;
+								color: #bec1c0;
+							}
+						}
+
+						.content {
+							font-size: 1.1rem;
+							font-weight: 500;
+						}
+					}
+				}
+			}
+		}
+	}
+}
