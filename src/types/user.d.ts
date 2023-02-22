@@ -112,4 +112,6 @@ type IUserInformation = IBaseApi<{
 	LearningNeedName: string
 	PurposeName: string
 	SaleName: string
+	Extension: string
+	UserCode: string
 }>

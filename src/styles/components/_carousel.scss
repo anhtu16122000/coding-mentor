@@ -66,22 +66,27 @@
 	}
 	.item {
 		position: relative;
-
 		border-radius: 6px;
 		cursor: pointer;
 		border: 2px solid #4caf50;
+		padding-bottom: 16px;
 		&.disabled {
 			border: 2px solid #ccc;
 		}
 		&.active {
 			border: 2px solid #9bc7f1;
+			background: aliceblue;
 		}
 
 		.inner-item {
 			.avatar {
-				padding: 16px 0;
-				width: 100px;
+				width: 160px;
+				height: 160px;
 				margin: 0 auto;
+				> img {
+					padding: 16px 0;
+					border-radius: 50%;
+				}
 			}
 			.note {
 				padding: 0 16px;

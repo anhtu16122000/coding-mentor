@@ -1,23 +1,25 @@
-import { AiOutlineCalendar } from 'react-icons/ai'
 import { BiBookBookmark } from 'react-icons/bi'
-import { FiAirplay, FiPieChart } from 'react-icons/fi'
-import { MdAirplay, MdPersonalVideo } from 'react-icons/md'
-import { TbFileCertificate, TbHome, TbScreenShare } from 'react-icons/tb'
+import { MdAirplay } from 'react-icons/md'
+import { TbHome, TbScreenShare } from 'react-icons/tb'
 
 export const StudentMenu = [
 	{
+		Key: 'home',
 		TabName: 'tab-home',
 		Icon: <TbHome size={22} />
 	},
 	{
+		Key: 'webinar',
 		TabName: 'Webinar',
 		Icon: <TbScreenShare size={22} />
 	},
 	{
+		Key: 'class',
 		TabName: 'Lớp học',
 		Icon: <MdAirplay size={22} />
 	},
 	{
+		Key: 'course',
 		TabName: 'Khóa học',
 		Icon: <BiBookBookmark size={22} />
 	}
@@ -26,6 +28,7 @@ export const StudentMenu = [
 export const StudentChildMenu = [
 	{
 		MenuName: 'tab-home',
+		Parent: 'home',
 		MenuTitle: 'xx69x',
 		MenuKey: '/home',
 		MenuItem: [
@@ -33,7 +36,7 @@ export const StudentChildMenu = [
 				TypeItem: 'single',
 				Key: '/home/dashboard',
 				Route: '/home/dashboard',
-				Icon: <FiPieChart />,
+				Icon: '',
 				Text: 'Thông tin chung'
 			}
 		]
@@ -41,6 +44,7 @@ export const StudentChildMenu = [
 	{
 		MenuName: 'Webinar',
 		MenuTitle: 'xx69x',
+		Parent: 'webinar',
 		MenuKey: '/webinars',
 		MenuItem: [
 			{
@@ -48,13 +52,14 @@ export const StudentChildMenu = [
 				Key: '/webinars',
 				Route: '/webinars',
 				Text: 'Webinar',
-				Icon: <TbScreenShare />
+				Icon: ''
 			}
 		]
 	},
 	{
 		MenuName: 'Lớp học',
 		MenuTitle: 'Lớp học',
+		Parent: 'class',
 		MenuKey: '/class',
 		MenuItem: [
 			{
@@ -62,20 +67,21 @@ export const StudentChildMenu = [
 				Key: '/class/schedule',
 				Route: '/class/schedule',
 				Text: 'Lịch học',
-				Icon: <AiOutlineCalendar />
+				Icon: ''
 			},
 			{
 				ItemType: 'single',
 				Key: '/class/list-class',
 				Route: '/class/list-class',
 				Text: 'Lớp học của bạn',
-				Icon: <FiAirplay />
+				Icon: ''
 			}
 		]
 	},
 	{
 		MenuName: 'Khóa học',
 		MenuTitle: 'Khóa học',
+		Parent: 'course',
 		MenuKey: '/course',
 		MenuItem: [
 			{
@@ -83,14 +89,14 @@ export const StudentChildMenu = [
 				Key: '/course/video-course',
 				Route: '/course/video-course',
 				Text: 'Khóa học',
-				Icon: <MdPersonalVideo />
+				Icon: ''
 			},
 			{
 				ItemType: 'single',
 				Key: '/course/video-course-student',
 				Route: '/course/video-course-student',
 				Text: 'Chứng chỉ',
-				Icon: <TbFileCertificate />
+				Icon: ''
 			}
 		]
 	},
@@ -98,6 +104,7 @@ export const StudentChildMenu = [
 		MenuName: 'Ngân hàng đề thi',
 		MenuTitle: 'Ngân hàng đề thi',
 		MenuKey: '/question-bank',
+		Parent: 'webinar',
 		MenuItem: [
 			{
 				ItemType: 'single',

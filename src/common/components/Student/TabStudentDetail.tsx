@@ -14,6 +14,7 @@ import { RootState } from '~/store'
 import DatePickerField from '../FormControl/DatePickerField'
 import InputTextField from '../FormControl/InputTextField'
 import SelectField from '../FormControl/SelectField'
+import TextBoxField from '../FormControl/TextBoxField'
 import PrimaryButton from '../Primary/Button'
 
 export interface ITabStudentDetailProps {
@@ -194,7 +195,9 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 								placeholder="Chọn trạng thái hoạt động"
 							/>
 						</div>
-
+						<div className="col-md-6 col-12">
+							<TextBoxField name="Extension" label="Giới thiệu thêm" />
+						</div>
 						<Divider>Địa chỉ</Divider>
 
 						<div className="col-12">

@@ -11,6 +11,7 @@ import CalendarClassTutoringEdit from './CalendarClassTutoringEdit'
 import { ListStudentInClass } from './ListStudentInClass'
 import { RollUpPage } from './RollUpPage'
 import { ScheduleList } from './ScheduleList'
+import { StudentAssessment } from './StudentAssessment'
 
 const itemsAdmin = ['Lịch học', 'Đánh giá học viên', 'Đánh giá giáo viên']
 const itemsStudent = ['Lịch học']
@@ -22,7 +23,7 @@ const MenuClassTutoring = () => {
 			case 0:
 				return <CalendarClassTutoringEdit />
 			case 1:
-				return <ListStudentInClass />
+				return <StudentAssessment />
 			case 2:
 				return <ScheduleList />
 			case 3:

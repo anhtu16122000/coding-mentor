@@ -1,11 +1,13 @@
 import { Form, Modal, Select, Tooltip } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineWarning } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { scheduleAvailableApi } from '~/api/schedule-available'
+import { userInformationApi } from '~/api/user'
 import DatePickerField from '~/common/components/FormControl/DatePickerField'
+import SelectField from '~/common/components/FormControl/SelectField'
 import TextBoxField from '~/common/components/FormControl/TextBoxField'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { ShowNoti } from '~/common/utils'
@@ -18,10 +20,28 @@ const ModalAddScheduleAvailableEdit = (props) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [form] = Form.useForm()
 	const user = useSelector((state: RootState) => state.user.information)
+	const [teachers, setTeacher] = useState<{ title: string; value: string }[]>([])
+	const getTeacher = async () => {
+		try {
+			const res = await userInformationApi.getByRole(2)
+			if (res.status === 200) {
+				let temp = []
+				res?.data?.data?.forEach((item) => {
+					temp.push({ title: `${item?.FullName} - ${item?.UserCode}`, value: item?.UserInformationId })
+				})
+				setTeacher(temp)
+			}
+			if (res.status === 204) {
+				setTeacher([])
+			}
+		} catch (error) {
+			console.error(error)
+		}
+	}
 	const onSubmit = async (data) => {
 		if (moment(data.StartTime).format() < moment(data.EndTime).format()) {
 			setIsLoading(true)
-			data.TeacherId = Number(user?.UserInformationId)
+			data.TeacherId = user?.RoleId == 2 ? Number(user?.UserInformationId) : data.TeacherId
 			try {
 				const res = await scheduleAvailableApi.add(data)
 				if (res.status === 200) {
@@ -39,6 +59,12 @@ const ModalAddScheduleAvailableEdit = (props) => {
 			ShowNoti('error', 'Ngày bắt đầu không được lớn hơn ngày kết thúc')
 		}
 	}
+
+	useEffect(() => {
+		if (user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) {
+			getTeacher()
+		}
+	}, [])
 
 	return (
 		<>
@@ -63,6 +89,18 @@ const ModalAddScheduleAvailableEdit = (props) => {
 				}
 			>
 				<Form form={form} layout="vertical" onFinish={onSubmit}>
+					{user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+						<SelectField
+							isRequired
+							rules={[{ required: true, message: 'Bạn không được để trống' }]}
+							name="TeacherId"
+							label="Giáo viên"
+							placeholder="Chọn giáo viên"
+							optionList={teachers}
+						/>
+					) : (
+						''
+					)}
 					<DatePickerField
 						mode="single"
 						showTime={'HH:mm'}

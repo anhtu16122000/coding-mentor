@@ -1,9 +1,6 @@
 import { UserCheck } from 'react-feather'
-import { AiOutlineCalendar } from 'react-icons/ai'
 import { BiBookBookmark } from 'react-icons/bi'
-import { BsCalendarX } from 'react-icons/bs'
-import { FiAirplay, FiPieChart } from 'react-icons/fi'
-import { MdAirplay, MdOutlineEditCalendar, MdPersonalVideo } from 'react-icons/md'
+import { MdAirplay } from 'react-icons/md'
 import { TbHome, TbScreenShare } from 'react-icons/tb'
 
 export const TeacherMenu = [
@@ -45,7 +42,7 @@ export const TeacherChildMenu = [
 				TypeItem: 'single',
 				Key: '/home/dashboard',
 				Route: '/home/dashboard',
-				Icon: <FiPieChart />,
+				Icon: '',
 				Text: 'Thống kê'
 			}
 		]
@@ -61,7 +58,7 @@ export const TeacherChildMenu = [
 				Key: '/webinars',
 				Route: '/webinars',
 				Text: 'Webinar',
-				Icon: <TbScreenShare />
+				Icon: ''
 			}
 		]
 	},
@@ -76,14 +73,14 @@ export const TeacherChildMenu = [
 				Key: '/class/list-class',
 				Route: '/class/list-class',
 				Text: 'Danh sách lớp học',
-				Icon: <FiAirplay />
+				Icon: ''
 			},
 			{
 				ItemType: 'single',
 				Key: '/class/schedule',
 				Route: '/class/schedule',
 				Text: 'Lịch dạy',
-				Icon: <AiOutlineCalendar />
+				Icon: ''
 			}
 		]
 	},
@@ -98,7 +95,7 @@ export const TeacherChildMenu = [
 				Key: '/course/video-course',
 				Route: '/course/video-course',
 				Text: 'Khóa học',
-				Icon: <MdPersonalVideo />
+				Icon: ''
 			}
 		]
 	},
@@ -135,14 +132,14 @@ export const TeacherChildMenu = [
 				Key: '/users/teacher/teacher-off',
 				Route: '/users/teacher/teacher-off',
 				Text: 'Đăng ký lịch nghỉ',
-				Icon: <BsCalendarX />
+				Icon: ''
 			},
 			{
 				ItemType: 'single',
 				Key: '/users/teacher/open-calender',
 				Route: '/users/teacher/open-calender',
 				Text: 'Mở lịch trống',
-				Icon: <MdOutlineEditCalendar />
+				Icon: ''
 			}
 		]
 	}

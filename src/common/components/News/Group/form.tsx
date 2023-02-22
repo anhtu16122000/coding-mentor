@@ -30,20 +30,20 @@ function GroupForm(props) {
 	const [form] = Form.useForm()
 
 	const getAllClass = async () => {
-		// try {
-		// 	setLoading(true)
-		// 	const response = await RestApi.get<any>('/NewsFeedGroup/class-available', {})
-		// 	if (response.status == 200) {
-		// 		const { data } = response.data
-		// 		setClassOption(data)
-		// 	} else {
-		// 		setClassOption([])
-		// 	}
-		// } catch (error) {
-		// 	ShowNostis.error(error.message)
-		// } finally {
-		// 	setLoading(false)
-		// }
+		try {
+			setLoading(true)
+			const response = await RestApi.get<any>('/NewsFeedGroup/class-available', {})
+			if (response.status == 200) {
+				const { data } = response.data
+				setClassOption(data)
+			} else {
+				setClassOption([])
+			}
+		} catch (error) {
+			ShowNostis.error(error.message)
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	useEffect(() => {

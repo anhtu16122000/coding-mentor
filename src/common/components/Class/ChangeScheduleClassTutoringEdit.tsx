@@ -51,7 +51,6 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 			setIsDisableButton(true)
 		}
 	}, [showModal])
-	console.log(dataRow)
 
 	const onSubmit = async (data) => {
 		if (moment(data.StartTime).format() >= moment(data.EndTime).format()) {

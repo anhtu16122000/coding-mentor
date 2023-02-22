@@ -1,17 +1,9 @@
-import { AiFillSetting, AiOutlineCalendar } from 'react-icons/ai'
-import { BiBookAdd } from 'react-icons/bi'
-import { BsBook, BsFillGridFill } from 'react-icons/bs'
-import { FaHouseDamage, FaMoneyBillAlt, FaRegCalendarPlus, FaUserGraduate, FaUserTie } from 'react-icons/fa'
-import { FiAirplay } from 'react-icons/fi'
-import { GiTakeMyMoney } from 'react-icons/gi'
-import { GrMoney, GrSettingsOption } from 'react-icons/gr'
-import { HiPresentationChartLine } from 'react-icons/hi'
+import { AiFillSetting } from 'react-icons/ai'
+import { BsFillGridFill } from 'react-icons/bs'
+import { FaMoneyBillAlt, FaUserGraduate, FaUserTie } from 'react-icons/fa'
 import { IoLibrarySharp, IoVideocam } from 'react-icons/io5'
-import { MdOutlineEditCalendar, MdOutlineSettingsInputComposite, MdPersonalVideo } from 'react-icons/md'
-import { RiExchangeBoxFill, RiFileEditLine, RiFileList2Fill, RiMoneyDollarBoxFill, RiMoneyDollarCircleFill } from 'react-icons/ri'
-import { TbFileCertificate, TbReportMoney } from 'react-icons/tb'
+import { RiFileList2Fill } from 'react-icons/ri'
 import { TiHome } from 'react-icons/ti'
-import { VscLibrary } from 'react-icons/vsc'
 
 export const AdminMenu = [
 	{
@@ -71,14 +63,14 @@ export const AdminChildMenu = [
 				TypeItem: 'single',
 				Key: '/news',
 				Route: '/news',
-				Icon: <FaHouseDamage />,
+				Icon: '',
 				Text: 'Tin tức'
 			},
 			{
 				TypeItem: 'single',
 				Key: '/dashboard',
 				Route: '/dashboard',
-				Icon: <HiPresentationChartLine style={{ width: 18, height: 18 }} />,
+				Icon: '',
 				Text: 'Thống kê'
 			}
 		]
@@ -92,21 +84,21 @@ export const AdminChildMenu = [
 				TypeItem: 'single',
 				Key: '/finance/payment',
 				Route: '/finance/payment',
-				Icon: <RiMoneyDollarCircleFill />,
+				Icon: '',
 				Text: 'Quản lý thanh toán'
 			},
 			{
 				TypeItem: 'single',
 				Key: '/finance/income-expense-management',
 				Route: '/finance/income-expense-management',
-				Icon: <RiExchangeBoxFill />,
+				Icon: '',
 				Text: 'Quản lý thu chi'
 			},
 			{
 				TypeItem: 'single',
 				Key: '/finance/paymentApprove',
 				Route: '/finance/paymentApprove',
-				Icon: <RiExchangeBoxFill />,
+				Icon: '',
 				Text: 'Duyệt thanh toán'
 			}
 		]
@@ -207,7 +199,7 @@ export const AdminChildMenu = [
 				Key: '/users/teacher/open-calender',
 				Route: '/users/teacher/open-calender',
 				Text: 'Mở lịch trống',
-				Icon: <MdOutlineEditCalendar />
+				Icon: ''
 			}
 		]
 	},
@@ -222,7 +214,7 @@ export const AdminChildMenu = [
 				Key: '/exercise/all',
 				Route: '/exercise/all',
 				Text: 'Quản lý đề thi',
-				Icon: <RiFileEditLine />
+				Icon: ''
 			}
 		]
 	},
@@ -237,33 +229,33 @@ export const AdminChildMenu = [
 				Key: '/class/create',
 				Route: '/class/create',
 				Text: 'Tạo lớp học',
-				Icon: <BsBook />
+				Icon: ''
 			},
 			{
 				ItemType: 'single',
 				Key: '/class/list-class',
 				Route: '/class/list-class',
 				Text: 'Danh sách lớp học',
-				Icon: <FiAirplay />
+				Icon: ''
 			},
 			{
 				TypeItem: 'single',
 				Key: '/class/schedule',
-				Icon: <AiOutlineCalendar />,
+				Icon: '',
 				Route: '/class/schedule',
 				Text: 'Kiểm tra lịch'
 			},
 			{
 				TypeItem: 'single',
 				Key: '/class/register',
-				Icon: <BiBookAdd />,
+				Icon: '',
 				Route: '/class/register',
 				Text: 'Đăng ký học'
 			},
 			{
 				TypeItem: 'single',
 				Key: '/class/tutoring-config',
-				Icon: <FaRegCalendarPlus />,
+				Icon: '',
 				Route: '/class/tutoring-config',
 				Text: 'Cấu hình thời gian đặt lịch'
 			}
@@ -280,7 +272,7 @@ export const AdminChildMenu = [
 				Key: '/library-online/library',
 				Route: '/library-online/library',
 				Text: 'Chủ đề',
-				Icon: <VscLibrary />
+				Icon: ''
 			}
 		]
 	},
@@ -295,21 +287,21 @@ export const AdminChildMenu = [
 				Key: '/course/video-course',
 				Route: '/course/video-course',
 				Text: 'Khóa học',
-				Icon: <MdPersonalVideo />
+				Icon: ''
 			},
 			{
 				ItemType: 'single',
 				Key: '/course/video-course-student',
 				Route: '/course/video-course-student',
 				Text: 'Danh sách chứng chỉ',
-				Icon: <TbFileCertificate />
+				Icon: ''
 			},
 			{
 				ItemType: 'single',
 				Key: '/course/video-course-order',
 				Route: '/course/video-course-order',
 				Text: 'Danh sách đơn hàng',
-				Icon: <GrMoney />
+				Icon: ''
 			}
 		]
 	},
@@ -322,7 +314,7 @@ export const AdminChildMenu = [
 			{
 				ItemType: 'sub-menu',
 				Key: 'sub-list-staff-child-303',
-				Icon: <GrSettingsOption />,
+				Icon: '',
 				TitleSub: 'Cấu hình học',
 				SubMenuList: [
 					{
@@ -358,7 +350,7 @@ export const AdminChildMenu = [
 			{
 				ItemType: 'sub-menu',
 				Key: 'sub-list-staff-child-304',
-				Icon: <MdOutlineSettingsInputComposite />,
+				Icon: '',
 				TitleSub: 'Khác',
 				SubMenuList: [
 					{

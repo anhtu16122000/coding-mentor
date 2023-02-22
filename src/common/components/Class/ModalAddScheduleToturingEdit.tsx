@@ -2,10 +2,10 @@ import { Carousel, DatePicker, Form, Modal, Popconfirm, Rate, Select, Spin, Time
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { curriculumApi } from '~/api/curriculum'
 import { scheduleApi } from '~/api/schedule'
-import { ShowNoti } from '~/common/utils'
+import { ShowNoti, _check } from '~/common/utils'
 import { RootState } from '~/store'
 import { setRoomEdit, setTeacherEdit } from '~/store/classReducer'
 import TextBoxField from '../FormControl/TextBoxField'
@@ -13,6 +13,7 @@ import PrimaryButton from '../Primary/Button'
 import type { RangePickerProps } from 'antd/es/date-picker'
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
 import { AiOutlineWarning } from 'react-icons/ai'
+import { setTeacher } from '~/store/classReducer'
 
 const ModalAddScheduleToturingEdit = (props) => {
 	const { checkTeacherAvailable, getListSchedule, paramsSchedule, loadingCheckTeacher } = props
@@ -30,6 +31,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 	const [startTime, setStartTime] = useState(null)
 	const [monthChange, setMonthChange] = useState(null)
 	const [teacherId, setTeacherId] = useState(null)
+	const dispatch = useDispatch()
 	const disabledDate: RangePickerProps['disabledDate'] = (current) => {
 		// Can not select days before today and today
 		return current && current < moment().endOf('day')
@@ -53,6 +55,10 @@ const ModalAddScheduleToturingEdit = (props) => {
 					setOpenModalAdd(false)
 					form.resetFields()
 					ShowNoti('success', res.data.message)
+					setTeacherId(null)
+					setAddClass(null)
+					setDateChoose(null)
+					setStartTime(null)
 				}
 			} catch (err) {
 				ShowNoti('error', err.message)
@@ -63,6 +69,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 			ShowNoti('error', 'Ngày bắt đầu không được lớn hơn ngày kết thúc')
 		}
 	}
+	console.log(teacher)
 
 	const getCurriculumTime = async () => {
 		try {
@@ -95,6 +102,9 @@ const ModalAddScheduleToturingEdit = (props) => {
 		setDateChoose(item)
 		carouselRef.current?.goTo(index)
 		setAddClass(null)
+		if (teacherId) {
+			setTeacherId(null)
+		}
 		if (!!form.getFieldValue('StartTime') && time) {
 			let datetime = moment(moment(item).format('YYYY-MM-DD') + ' ' + moment(form.getFieldValue('StartTime')).format('HH:mm:ss'))
 			setStartTime(moment(datetime))
@@ -150,6 +160,12 @@ const ModalAddScheduleToturingEdit = (props) => {
 		}
 	}, [startTime])
 
+	const onClose = () => {
+		setTeacherEdit([])
+		setRoomEdit([])
+		setOpenModalAdd(false)
+		setIsLoading(false)
+	}
 	return (
 		<>
 			<PrimaryButton onClick={() => setOpenModalAdd(true)} className="ml-3" background="green" type="button" icon="add">
@@ -159,11 +175,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 				title="Thêm buổi học"
 				open={openModalAdd}
 				onCancel={() => {
-					form.resetFields()
-					setTeacherEdit([])
-					setRoomEdit([])
-					setOpenModalAdd(false)
-					setIsLoading(false)
+					onClose()
 				}}
 				footer={
 					<>
@@ -232,7 +244,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 						<div className="grid grid-cols-2 gap-x-4 antd-custom-wrap mt-tw-4">
 							<div className="col span-1">
 								<Form.Item name={'StartTime'} label="Giờ bắt đầu">
-									<TimePicker onChange={onChangeStartTime} format="HH:mm" />
+									<TimePicker value={startTime} onChange={onChangeStartTime} format="HH:mm" disabled={dateChoose ? false : true} />
 								</Form.Item>
 							</div>
 							<div className="col span-1">
@@ -249,7 +261,8 @@ const ModalAddScheduleToturingEdit = (props) => {
 
 							<Spin spinning={loadingCheckTeacher}>
 								<div className="custom-listTeacher mt-tw-4">
-									{teacher?.length > 0 &&
+									{startTime &&
+										teacher?.length > 0 &&
 										teacher?.map((item, index) => (
 											<div className={`item ${teacherId === item?.TeacherId ? 'active' : !item?.Fit ? 'disabled' : ''}`}>
 												<Popconfirm
@@ -260,7 +273,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 												>
 													<div className="inner-item">
 														<div className="avatar">
-															<img src="/images/default-avatar.svg" alt="" />
+															<img src={_check.checkURL(item?.Avatar) ? item?.Avatar : '/images/default-avatar.svg'} alt="" />
 														</div>
 														<div className="rating">
 															<Rate disabled defaultValue={item?.Rate} />

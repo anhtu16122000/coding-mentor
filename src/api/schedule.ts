@@ -20,5 +20,8 @@ export const scheduleApi = {
 	},
 	cancelTutoring(id) {
 		return instance.put(`${url}/tutoring-cancel/${id}`)
+	},
+	updateRateTeacher(data) {
+		return instance.put(`${url}/rate-teacher`, data, {})
 	}
 }

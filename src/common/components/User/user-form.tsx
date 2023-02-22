@@ -21,6 +21,7 @@ import InputPassField from '../FormControl/InputPassField'
 import DatePickerField from '../FormControl/DatePickerField'
 import { branchApi } from '~/api/branch'
 import { setBranch } from '~/store/branchReducer'
+import TextBoxField from '../FormControl/TextBoxField'
 
 const CreateUser: FC<ICreateNew> = (props) => {
 	const { onRefresh, isEdit, defaultData, isStudent, isChangeInfo, className, onOpen, roleStaff, source, purpose, sale, learningNeed } =
@@ -187,7 +188,6 @@ const CreateUser: FC<ICreateNew> = (props) => {
 				: ''
 		}
 		console.log('DATA_SUBMIT: ', !isEdit ? DATA_SUBMIT : { ...DATA_SUBMIT, UserInformationId: defaultData.UserInformationId })
-
 		setLoading(true)
 		if (DATA_SUBMIT.Mobile.match(/^[0-9]+$/) !== null) {
 			await (defaultData?.UserInformationId
@@ -337,6 +337,8 @@ const CreateUser: FC<ICreateNew> = (props) => {
 						) : (
 							<InputTextField className="col-span-2" label="Mật khẩu" name="Password" />
 						)}
+
+						<TextBoxField name="Extension" label="Giới thiệu thêm" className="col-span-4" />
 
 						<Divider className="col-span-4" orientation="center">
 							Địa chỉ

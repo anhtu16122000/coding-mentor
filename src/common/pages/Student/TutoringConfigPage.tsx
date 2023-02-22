@@ -1,4 +1,4 @@
-import { Card, Spin, Timeline } from 'antd'
+import { Card, List, Spin, Timeline } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { Clock } from 'react-feather'
 import { FcClock } from 'react-icons/fc'
@@ -39,21 +39,15 @@ export const TutoringConfigPage = () => {
 		<div className="TutoringConfigPage">
 			<Card title="Cấu hình thời gian đặt lịch">
 				<Spin spinning={loading}>
-					<Timeline mode="left">
+					<List>
 						{dataTable &&
 							dataTable?.length > 0 &&
 							dataTable?.map((item, index) => (
-								<Timeline.Item label={`${item?.Value}h`} key={index} dot={<FcClock />}>
-									<div className="flex justify-between">
-										<div>
-											<p className="font-semibold">{item?.Name}</p>
-											<p>{item?.Code}</p>
-										</div>
-										<ModalTutoringConfig dataRow={item} onRefresh={() => getTutoringConfig()} />
-									</div>
-								</Timeline.Item>
+								<List.Item actions={[<ModalTutoringConfig dataRow={item} onRefresh={() => getTutoringConfig()} />]}>
+									<List.Item.Meta title={item?.Name} description={`${item?.Value} giờ`} />
+								</List.Item>
 							))}
-					</Timeline>
+					</List>
 				</Spin>
 			</Card>
 		</div>

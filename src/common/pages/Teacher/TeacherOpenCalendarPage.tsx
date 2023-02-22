@@ -42,6 +42,7 @@ const TeacherOpenCalendarPage = () => {
 	const { slug } = router.query
 	const [timeStamp, setTimeStamp] = useState(0)
 	const thisCalendar = useRef(null)
+	const user = useSelector((state: RootState) => state.user.information)
 	const dispatch = useDispatch()
 
 	const getClassId = async () => {
