@@ -272,6 +272,12 @@ export const AdminChildMenu = [
 				Icon: '',
 				Route: '/class/tutoring-config',
 				Text: 'Cấu hình thời gian đặt lịch'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/class/zoom-rooms',
+				Route: '/class/zoom-rooms',
+				Text: 'Danh sách phòng Zoom'
 			}
 		]
 	},
@@ -357,6 +363,13 @@ export const AdminChildMenu = [
 						Key: '/options/study-time',
 						Route: '/options/study-time',
 						Text: 'Ca học',
+						Icon: ''
+					},
+					{
+						ItemType: 'single',
+						Key: '/options/zoom',
+						Route: '/options/zoom',
+						Text: 'Cấu hình Zoom',
 						Icon: ''
 					}
 				]
