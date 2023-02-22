@@ -43,7 +43,12 @@ const ModalAddScheduleAvailableEdit = (props) => {
 			setIsLoading(true)
 			data.TeacherId = user?.RoleId == 2 ? Number(user?.UserInformationId) : data.TeacherId
 			try {
-				const res = await scheduleAvailableApi.add(data)
+				const dataSubmit = {
+					...data,
+					StartTime: moment(data.StartTime).format(),
+					EndTime: moment(data.EndTime).format()
+				}
+				const res = await scheduleAvailableApi.add(dataSubmit)
 				if (res.status === 200) {
 					getListSchedule(paramsSchedule)
 					setOpenModalAdd(false)

@@ -22,6 +22,9 @@ const PrimaryTag: FC<IPrimaryTag> = (props) => {
 		if (color == 'disabled') {
 			return 'bg-[#CFD8DC]'
 		}
+		if (color == 'orange') {
+			return 'bg-[#ff7c38]'
+		}
 	}
 
 	function getColor() {
