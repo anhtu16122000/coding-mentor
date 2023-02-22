@@ -69,7 +69,6 @@ const ModalAddScheduleToturingEdit = (props) => {
 			ShowNoti('error', 'Ngày bắt đầu không được lớn hơn ngày kết thúc')
 		}
 	}
-	console.log(teacher)
 
 	const getCurriculumTime = async () => {
 		try {
