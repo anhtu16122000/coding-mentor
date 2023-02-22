@@ -352,6 +352,13 @@ export const AdminChildMenu = [
 						Route: '/options/study-time',
 						Text: 'Ca học',
 						Icon: ''
+					},
+					{
+						ItemType: 'single',
+						Key: '/options/zoom',
+						Route: '/options/zoom',
+						Text: 'Cấu hình Zoom',
+						Icon: ''
 					}
 				]
 			},
