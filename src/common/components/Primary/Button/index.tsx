@@ -6,7 +6,7 @@ import { BiHide, BiReset, BiSearchAlt2 } from 'react-icons/bi'
 import { FiEdit, FiSave, FiSend, FiTrash2, FiXCircle } from 'react-icons/fi'
 import { IoEnterOutline, IoPowerSharp } from 'react-icons/io5'
 import { MdOutlinePayments } from 'react-icons/md'
-import { RiExchangeLine } from 'react-icons/ri'
+import { RiArrowDownSFill, RiArrowUpSFill, RiExchangeLine } from 'react-icons/ri'
 import { SiMicrosoftexcel } from 'react-icons/si'
 import { TbDownload, TbUpload } from 'react-icons/tb'
 
@@ -135,6 +135,12 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 		}
 		if (icon == 'payment') {
 			return <MdOutlinePayments size={18} className="mr-2" />
+		}
+		if (icon == 'arrow-up') {
+			return <RiArrowUpSFill size={18} className="mr-2" />
+		}
+		if (icon == 'arrow-down') {
+			return <RiArrowDownSFill size={18} className="mr-2" />
 		}
 	}
 

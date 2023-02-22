@@ -153,9 +153,23 @@ export const AdminChildMenu = [
 			},
 			{
 				ItemType: 'single',
+				Key: '/info-course/registration',
+				Route: '/info-course/registration',
+				Text: 'Hẹn đăng ký',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
 				Key: '/info-course/student/student-warning',
 				Route: '/info-course/student/student-warning',
 				Text: 'Cảnh báo học viên',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/feedbacks',
+				Route: '/info-course/feedbacks',
+				Text: 'Phản hồi học viên',
 				Icon: ''
 			}
 		]

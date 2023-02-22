@@ -49,5 +49,17 @@ export const classApi = {
 	},
 	getClassTutoringCurriculum(classId) {
 		return instance.get(`${url}/tutoring-curriculum`, { params: classId})
-	}
+	},
+	getCurriculumOfClass(classID) {
+		return instance.get(`${url}/curriculum-of-class/${classID}`)
+	},
+	getCurriculumDetailOfClass(classID) {
+		return instance.get(`${url}/curriculum-details-of-class/${classID}`)
+	},
+	getFileCurriculumOfClass(classID) {
+		return instance.get(`${url}/file-curriculum-of-class/${classID}`)
+	},
+	addCurriculumOfClass(data) {
+		return instance.get(`${url}/file-curriculum-of-class`, data)
+	},
 }

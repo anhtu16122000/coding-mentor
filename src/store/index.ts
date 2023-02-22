@@ -17,6 +17,7 @@ import specializeReducer from './specializeReducer'
 import studyTimeReducer from './studyTimeReducer'
 import classReducer from './classReducer'
 import paymentMethodReducer from './paymentMethodReducer'
+import filterReducer from './filterReducer'
 
 export const store = configureStore({
 	reducer: {
@@ -37,7 +38,8 @@ export const store = configureStore({
 		saler: salerReducer,
 		customerStatus: customerStatusReducer,
 		specialize: specializeReducer,
-		studyTime: studyTimeReducer
+		studyTime: studyTimeReducer,
+		filter: filterReducer
 	}
 })
 

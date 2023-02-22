@@ -2,7 +2,7 @@ import React from 'react'
 import Avatar from '~/common/components/Avatar'
 
 export const userInfoColumn = {
-	title: 'Học viên',
+	title: 'Thông tin',
 	dataIndex: 'Code',
 	render: (value, item) => (
 		<div className="flex items-center">
