@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { areaApi } from '~/api/area'
 import { registerApi, userInformationApi } from '~/api/user'
-import { Popover } from 'antd'
+import { Input, Popover } from 'antd'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
@@ -29,19 +29,23 @@ import { setPurpose } from '~/store/purposeReducer'
 import { setSaler } from '~/store/salerReducer'
 import IconButton from '~/common/components/Primary/IconButton'
 import { useRouter } from 'next/router'
+import { userInfoColumn } from '~/common/libs/columns/user-info'
+import { ButtonEye } from '~/common/components/TableButton'
+import { PrimaryTooltip } from '~/common/components'
 
 const Student: FC<IPersonnel> = (props) => {
 	const { reFresh, allowRegister } = props
+
 	const initParamters = {
-		fullName: '',
-		userCode: '',
 		sort: 0,
 		sortType: false,
-		pageSize: PAGE_SIZE,
-		genders: null,
-		pageIndex: 1,
-		roleIds: props.type == 'personnel' ? '1,2,4,5,6,7' : '3'
+		PageSize: PAGE_SIZE,
+		Genders: null,
+		PageIndex: 1,
+		RoleIds: props.type == 'personnel' ? '1,2,4,5,6,7' : '3',
+		Search: null
 	}
+
 	const [apiParameters, setApiParameters] = useState(initParamters)
 	const [roleStaff, setRoleStaff] = useState([])
 	const [roleSelectFilter, setRoleSelectFilter] = useState([])
@@ -196,11 +200,11 @@ const Student: FC<IPersonnel> = (props) => {
 		setLoading(true)
 		try {
 			const response = await userInformationApi.getAll(param)
-			if (response.status === 200) {
+			if (response.status == 200) {
 				setUser(response.data.data)
 				setTotalRow(response.data.totalRow)
 			}
-			if (response.status === 204) {
+			if (response.status == 204) {
 				setUser([])
 			}
 		} catch (error) {
@@ -241,25 +245,8 @@ const Student: FC<IPersonnel> = (props) => {
 	}
 
 	const columns = [
+		userInfoColumn,
 		{
-			...FilterTable({
-				type: 'search',
-				dataIndex: 'UserCode',
-				handleSearch: (event) => setApiParameters({ ...apiParameters, userCode: event }),
-				handleReset: (event) => setApiParameters(initParamters)
-			}),
-			width: 160,
-			title: 'Mã người dùng',
-			dataIndex: 'UserCode',
-			render: (text) => <p className="font-semibold">{text}</p>
-		},
-		{
-			...FilterTable({
-				type: 'search',
-				dataIndex: 'FullName',
-				handleSearch: (event) => setApiParameters({ ...apiParameters, fullName: event }),
-				handleReset: (event) => setApiParameters(initParamters)
-			}),
 			title: 'Họ tên',
 			dataIndex: 'FullName',
 			render: (text) => <p className="font-semibold">{text}</p>
@@ -273,34 +260,6 @@ const Student: FC<IPersonnel> = (props) => {
 			title: 'Số điện thoại',
 			dataIndex: 'Mobile',
 			render: (text) => <>{text}</>
-		},
-		{
-			width: 110,
-			...FilterTable({
-				type: 'selection',
-				mode: 'multiple',
-				dataIndex: 'RoleName',
-				listFilter: roleStaff,
-				defaultValue: roleSelectFilter,
-				handleSearch: (event) => {
-					setRoleSelectFilter(event)
-					setApiParameters({ ...apiParameters, roleIds: event.join(',') })
-				},
-				handleReset: (event) => {
-					setApiParameters(initParamters), getRoleStaff()
-				}
-			}),
-			title: 'Chức vụ',
-			dataIndex: 'RoleName',
-			render: (text, item) => {
-				return (
-					<>
-						{item.RoleId == 1 && <span className="font-semibold text-tw-blue">{text}</span>}
-						{item.RoleId == 2 && <span className="font-semibold text-tw-green">{text}</span>}
-						{item.RoleId !== 1 && item.RoleId !== 2 && <span className="font-semibold text-[#000]">{text}</span>}
-					</>
-				)
-			}
 		},
 		{
 			title: 'Trạng thái',
@@ -366,29 +325,7 @@ const Student: FC<IPersonnel> = (props) => {
 	]
 
 	const columnsStudent = [
-		{
-			...FilterTable({
-				type: 'search',
-				dataIndex: 'UserCode',
-				handleSearch: (event) => setApiParameters({ ...apiParameters, userCode: event }),
-				handleReset: (event) => setApiParameters(initParamters)
-			}),
-			width: 160,
-			title: 'Mã người dùng',
-			dataIndex: 'UserCode',
-			render: (text) => <p className="font-semibold">{text}</p>
-		},
-		{
-			...FilterTable({
-				type: 'search',
-				dataIndex: 'FullName',
-				handleSearch: (event) => setApiParameters({ ...apiParameters, fullName: event }),
-				handleReset: (event) => setApiParameters(initParamters)
-			}),
-			title: 'Họ tên',
-			dataIndex: 'FullName',
-			render: (text) => <p className="font-semibold">{text}</p>
-		},
+		userInfoColumn,
 		{
 			title: 'Email',
 			dataIndex: 'Email',
@@ -398,20 +335,6 @@ const Student: FC<IPersonnel> = (props) => {
 			title: 'Số điện thoại',
 			dataIndex: 'Mobile',
 			render: (text) => <>{text}</>
-		},
-		{
-			width: 110,
-			title: 'Chức vụ',
-			dataIndex: 'RoleName',
-			render: (text, item) => {
-				return (
-					<>
-						{item.RoleId == 1 && <span className="font-semibold text-tw-blue">{text}</span>}
-						{item.RoleId == 2 && <span className="font-semibold text-tw-green">{text}</span>}
-						{item.RoleId !== 1 && item.RoleId !== 2 && <span className="font-semibold text-[#000]">{text}</span>}
-					</>
-				)
-			}
 		},
 		{
 			title: 'Trạng thái',
@@ -425,12 +348,12 @@ const Student: FC<IPersonnel> = (props) => {
 		},
 		{
 			title: 'Trạng thái học',
-			width: 120,
+			width: 130,
 			dataIndex: 'LearningStatus',
 			align: 'center',
 			render: (data, record) => (
 				<>
-					{data === 1 && <span className="tag red">{record.LearningStatusName}</span>}
+					{data === 1 && <span className="tag yellow">{record.LearningStatusName}</span>}
 					{data === 2 && <span className="tag blue">{record.LearningStatusName}</span>}
 					{data === 3 && <span className="tag green">{record.LearningStatusName}</span>}
 				</>
@@ -444,19 +367,17 @@ const Student: FC<IPersonnel> = (props) => {
 			render: (data, item) => {
 				return (
 					<div className="flex justify-center items-center">
-						<IconButton
-							type="button"
-							icon={'eye'}
-							color="blue"
-							onClick={() => {
-								router.push({
-									pathname: '/info-course/student/detail',
-									query: { StudentID: item.UserInformationId }
-								})
-							}}
-							className=""
-							tooltip="Chi tiết"
-						/>
+						<PrimaryTooltip content="Thông tin học viên" place="left" id={`view-st-${item?.Id}`}>
+							<ButtonEye
+								className="mr-[8px]"
+								onClick={() => {
+									router.push({
+										pathname: '/info-course/student/detail',
+										query: { StudentID: item.UserInformationId }
+									})
+								}}
+							/>
+						</PrimaryTooltip>
 
 						{props.type !== 'student' && (
 							<CreateUser
@@ -515,9 +436,19 @@ const Student: FC<IPersonnel> = (props) => {
 				data={users}
 				total={totalRow}
 				loading={loading}
-				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
+				onChangePage={(event: number) => setApiParameters({ ...apiParameters, PageIndex: event })}
 				TitleCard={
 					<>
+						<Input.Search
+							className="primary-search max-w-[200px] mr-[16px]"
+							onChange={(event) => {
+								if (event.target.value == '') {
+									setApiParameters({ ...apiParameters, PageIndex: 1, Search: '' })
+								}
+							}}
+							onSearch={(event) => setApiParameters({ ...apiParameters, PageIndex: 1, Search: event })}
+							placeholder="Tìm kiếm"
+						/>
 						<SortUser
 							handleChange={(event) => setApiParameters({ ...apiParameters, ...event })}
 							text={props.type === 'student' ? 'Học viên' : 'Nhân viên'}
@@ -581,7 +512,7 @@ const Student: FC<IPersonnel> = (props) => {
 										isStudent={props.type === 'student' ? true : false}
 									/>
 
-									{(apiParameters.fullName !== '' || apiParameters.userCode !== '') && users.length == 0 && (
+									{!!apiParameters.Search && users.length == 0 && (
 										<PrimaryButton
 											className="!w-full mb-3"
 											type="button"

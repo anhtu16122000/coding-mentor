@@ -14,6 +14,7 @@ import Avatar from '~/common/components/Avatar'
 import Router from 'next/router'
 import { ButtonEye } from '~/common/components/TableButton'
 import { AddToClass, RefundForm } from '~/common/components/Student/Reserved'
+import { userInfoColumn } from '~/common/libs/columns/user-info'
 
 const ChangedPage = () => {
 	const [loading, setLoading] = React.useState(true)
@@ -76,19 +77,7 @@ const ChangedPage = () => {
 	}
 
 	const columns = [
-		{
-			title: 'Học viên',
-			dataIndex: 'Code',
-			render: (value, item) => (
-				<div className="flex items-center">
-					<Avatar className="h-[40px] w-[40px] rounded-[4px]" uri={item?.Avatar} />
-					<div className="ml-[8px]">
-						<h2 className="text-[16px] font-[600]">{item?.FullName}</h2>
-						<h3 className="text-[14px] font-[400]">{item?.UserCode}</h3>
-					</div>
-				</div>
-			)
-		},
+		userInfoColumn,
 		{
 			title: 'Lớp cũ',
 			dataIndex: 'OldClassName',

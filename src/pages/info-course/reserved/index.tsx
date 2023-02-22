@@ -25,6 +25,7 @@ import { ButtonEye } from '~/common/components/TableButton'
 import { ChangeClass, ReserveForm } from '~/common/components/Student/StudentInClass'
 import PrimaryEditor from '~/common/components/Editor'
 import { AddToClass, RefundForm } from '~/common/components/Student/Reserved'
+import { userInfoColumn } from '~/common/libs/columns/user-info'
 
 const ReservedPage = () => {
 	const [loading, setLoading] = React.useState(true)
@@ -87,19 +88,7 @@ const ReservedPage = () => {
 	}
 
 	const columns = [
-		{
-			title: 'Học viên',
-			dataIndex: 'Code',
-			render: (value, item) => (
-				<div className="flex items-center">
-					<Avatar className="h-[40px] w-[40px] rounded-[4px]" uri={item?.Avatar} />
-					<div className="ml-[8px]">
-						<h2 className="text-[16px] font-[600]">{item?.FullName}</h2>
-						<h3 className="text-[14px] font-[400]">{item?.UserCode}</h3>
-					</div>
-				</div>
-			)
-		},
+		userInfoColumn,
 		{
 			title: 'Trung tâm',
 			dataIndex: 'BranchName',

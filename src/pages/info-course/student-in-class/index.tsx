@@ -23,6 +23,7 @@ import { IoMdOpen } from 'react-icons/io'
 import { ImWarning } from 'react-icons/im'
 import { ButtonEye } from '~/common/components/TableButton'
 import { ChangeClass, ReserveForm } from '~/common/components/Student/StudentInClass'
+import { userInfoColumn } from '~/common/libs/columns/user-info'
 
 const StudentInClassPage = () => {
 	const [loading, setLoading] = React.useState(true)
@@ -85,19 +86,7 @@ const StudentInClassPage = () => {
 	}
 
 	const columns = [
-		{
-			title: 'Học viên',
-			dataIndex: 'Code',
-			render: (value, item) => (
-				<div className="flex items-center">
-					<Avatar className="h-[40px] w-[40px] rounded-[4px]" uri={item?.Avatar} />
-					<div className="ml-[8px]">
-						<h2 className="text-[16px] font-[600]">{item?.FullName}</h2>
-						<h3 className="text-[14px] font-[400]">{item?.UserCode}</h3>
-					</div>
-				</div>
-			)
-		},
+		userInfoColumn,
 		{
 			title: 'Điện thoại',
 			dataIndex: 'Mobile',
