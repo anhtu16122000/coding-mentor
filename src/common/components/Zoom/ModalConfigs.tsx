@@ -79,7 +79,7 @@ const ModalConfigZoom: FC<IModalConfigZooms> = ({ isEdit, onRefresh, item }) => 
 					autoComplete="on"
 				>
 					<Form.Item className="col-span-2" label="Tên" name="Name" rules={formRequired}>
-						<Input disabled={loading} placeholder="Nhập AccountId" className="primary-input" />
+						<Input disabled={loading} placeholder="Nhập tên" className="primary-input" />
 					</Form.Item>
 
 					<Form.Item className="col-span-2" label="AccountId" name="AccountId" rules={formRequired}>

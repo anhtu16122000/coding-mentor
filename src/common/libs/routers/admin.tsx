@@ -266,6 +266,12 @@ export const AdminChildMenu = [
 				Icon: <BiBookAdd />,
 				Route: '/class/register',
 				Text: 'Đăng ký học'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/class/zoom-rooms',
+				Route: '/class/zoom-rooms',
+				Text: 'Danh sách phòng Zoom'
 			}
 		]
 	},

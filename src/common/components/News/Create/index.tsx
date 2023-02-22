@@ -232,7 +232,7 @@ const CreateNews: FC<TCreateNews> = (props) => {
 								onChange={(value) => setBranchIdSelect(value)}
 								value={branchIdSelect}
 							>
-								{listBranch.map((branch: IBranch) => (
+								{listBranch?.map((branch: IBranch) => (
 									<Select.Option value={branch.Id} key={branch.Id}>
 										{branch.Name} - {branch.Code}
 									</Select.Option>
