@@ -32,6 +32,7 @@ import { useRouter } from 'next/router'
 import { userInfoColumn } from '~/common/libs/columns/user-info'
 import { ButtonEye } from '~/common/components/TableButton'
 import { PrimaryTooltip } from '~/common/components'
+import Filters from '~/common/components/Student/Filters'
 
 const Student: FC<IPersonnel> = (props) => {
 	const { reFresh, allowRegister } = props
@@ -247,11 +248,6 @@ const Student: FC<IPersonnel> = (props) => {
 	const columns = [
 		userInfoColumn,
 		{
-			title: 'Họ tên',
-			dataIndex: 'FullName',
-			render: (text) => <p className="font-semibold">{text}</p>
-		},
-		{
 			title: 'Email',
 			dataIndex: 'Email',
 			render: (text) => <>{text}</>
@@ -260,6 +256,21 @@ const Student: FC<IPersonnel> = (props) => {
 			title: 'Số điện thoại',
 			dataIndex: 'Mobile',
 			render: (text) => <>{text}</>
+		},
+		{
+			title: 'Chức vụ',
+			dataIndex: 'RoleId',
+			render: (value, item) => (
+				<>
+					{value == 1 && <span className="tag green">{item?.RoleName}</span>}
+					{value == 2 && <span className="tag blue">{item?.RoleName}</span>}
+					{value == 4 && <span className="tag yellow">{item?.RoleName}</span>}
+					{value == 5 && <span className="tag blue-weight">{item?.RoleName}</span>}
+					{value == 6 && <span className="tag gray">{item?.RoleName}</span>}
+					{value == 7 && <span className="tag gray">{item?.RoleName}</span>}
+					{value == 8 && <span className="tag gray">{item?.RoleName}</span>}
+				</>
+			)
 		},
 		{
 			title: 'Trạng thái',
@@ -334,7 +345,19 @@ const Student: FC<IPersonnel> = (props) => {
 		{
 			title: 'Số điện thoại',
 			dataIndex: 'Mobile',
+			width: 150,
 			render: (text) => <>{text}</>
+		},
+		{
+			title: 'Giới tính',
+			width: 90,
+			dataIndex: 'Gender',
+			render: (value, record) => (
+				<>
+					{value == 1 && <span className="tag yellow">Nam</span>}
+					{value == 2 && <span className="tag blue">Nữ</span>}
+				</>
+			)
 		},
 		{
 			title: 'Trạng thái',
@@ -350,12 +373,12 @@ const Student: FC<IPersonnel> = (props) => {
 			title: 'Trạng thái học',
 			width: 130,
 			dataIndex: 'LearningStatus',
-			align: 'center',
 			render: (data, record) => (
 				<>
 					{data === 1 && <span className="tag yellow">{record.LearningStatusName}</span>}
 					{data === 2 && <span className="tag blue">{record.LearningStatusName}</span>}
 					{data === 3 && <span className="tag green">{record.LearningStatusName}</span>}
+					{data === 4 && <span className="tag red">{record.LearningStatusName}</span>}
 				</>
 			)
 		},
@@ -439,8 +462,15 @@ const Student: FC<IPersonnel> = (props) => {
 				onChangePage={(event: number) => setApiParameters({ ...apiParameters, PageIndex: event })}
 				TitleCard={
 					<>
+						<Filters
+							showBranch
+							showSort
+							filters={apiParameters}
+							onSubmit={(event) => setApiParameters(event)}
+							onReset={() => setApiParameters(initParamters)}
+						/>
 						<Input.Search
-							className="primary-search max-w-[200px] mr-[16px]"
+							className="primary-search max-w-[250px] ml-[8px]"
 							onChange={(event) => {
 								if (event.target.value == '') {
 									setApiParameters({ ...apiParameters, PageIndex: 1, Search: '' })
@@ -448,10 +478,6 @@ const Student: FC<IPersonnel> = (props) => {
 							}}
 							onSearch={(event) => setApiParameters({ ...apiParameters, PageIndex: 1, Search: event })}
 							placeholder="Tìm kiếm"
-						/>
-						<SortUser
-							handleChange={(event) => setApiParameters({ ...apiParameters, ...event })}
-							text={props.type === 'student' ? 'Học viên' : 'Nhân viên'}
 						/>
 					</>
 				}

@@ -31,12 +31,12 @@ const Avatar: FC<TAvatar> = (props) => {
 				style={{ cursor: !!image || !!uri ? 'pointer' : 'default' }}
 			/>
 
-			<Modal title={image || uri} width={700} open={show} onCancel={toggle} footer={null}>
+			<Modal closable={false} title={null} width={700} open={show} onCancel={toggle} footer={null}>
 				<img
 					onError={() => setImage(DEFAULT_AVATAR)}
 					alt="avatar"
 					src={image || uri || DEFAULT_AVATAR}
-					style={{ width: '100%', maxHeight: '80vh', objectFit: 'cover' }}
+					style={{ width: '100%', maxHeight: '70vh', objectFit: 'cover' }}
 				/>
 			</Modal>
 		</>
