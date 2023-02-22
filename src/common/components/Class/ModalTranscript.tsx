@@ -72,7 +72,7 @@ export const ModalTranscript: React.FC<IModalTranscript> = ({ mode, Id, onRefres
 		}
 		if (mode === 'add') {
 			const dataSubmit = {
-				ClassId: Number(router?.query?.slug),
+				ClassId: Number(router?.query?.class),
 				...data
 			}
 			handleTranscript(dataSubmit)

@@ -47,14 +47,12 @@ const ClassList = (props) => {
 		if (role == 1 || role == 5) {
 			path = {
 				pathname: '/class/list-class/detail',
-				// , type: TypeCourse, CourseName
-				// query: { slug: ID, name: CourseName, CurriculumId: CurriculumId, BranchId: BranchId, ProgramId: ProgramId, Type: Type }
-				query: { slug: item?.Id, CurriculumId: item?.CurriculumId, BranchId: item?.BranchId }
+				query: { class: item?.Id, CurriculumId: item?.CurriculumId, BranchId: item?.BranchId }
 			}
 		} else {
 			path = {
 				pathname: '/class/list-class/detail',
-				query: { slug: item?.Id }
+				query: { class: item?.Id }
 			}
 		}
 
@@ -71,12 +69,12 @@ const ClassList = (props) => {
 				pathname: '/class/list-class/tutoring',
 				// , type: TypeCourse, CourseName
 				// query: { slug: ID, name: CourseName, CurriculumId: CurriculumId, BranchId: BranchId, ProgramId: ProgramId, Type: Type }
-				query: { slug: item?.Id, CurriculumId: item?.CurriculumId, BranchId: item?.BranchId }
+				query: { class: item?.Id, CurriculumId: item?.CurriculumId, BranchId: item?.BranchId }
 			}
 		} else {
 			path = {
 				pathname: '/class/list-class/tutoring',
-				query: { slug: item?.Id }
+				query: { class: item?.Id }
 			}
 		}
 

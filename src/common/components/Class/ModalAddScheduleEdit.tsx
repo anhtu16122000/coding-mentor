@@ -9,10 +9,9 @@ import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import { setRoomEdit, setTeacherEdit } from '~/store/classReducer'
 import DatePickerField from '../FormControl/DatePickerField'
-import InputTextField from '../FormControl/InputTextField'
-import SelectField from '../FormControl/SelectField'
 import TextBoxField from '../FormControl/TextBoxField'
 import PrimaryButton from '../Primary/Button'
+import { classApi } from '~/api/class'
 
 const ModalAddScheduleEdit = (props) => {
 	const { checkTeacherAvailable, checkRoomAvailable, getListSchedule, paramsSchedule } = props
@@ -22,18 +21,24 @@ const ModalAddScheduleEdit = (props) => {
 	const router = useRouter()
 	const teacher = useSelector((state: RootState) => state.class.teacherEdit)
 	const room = useSelector((state: RootState) => state.class.roomEdit)
-	const { slug, BranchId, CurriculumId, Type } = router.query
+
+	const { class: slug, BranchId, CurriculumId, Type } = router.query
+
+	const infoClass = useSelector((state: RootState) => state.class.infoClass)
+
+	console.log('--- infoClass: ', infoClass)
 
 	const getDataAvailable = async () => {
 		if (!!form.getFieldValue('StartTime') && !!form.getFieldValue('EndTime')) {
 			await checkTeacherAvailable({
-				branchId: BranchId,
-				curriculumId: CurriculumId,
+				branchId: BranchId || infoClass?.BranchId,
+				curriculumId: CurriculumId || infoClass?.CurriculumId,
 				startTime: moment(form.getFieldValue('StartTime')).format(),
 				endTime: moment(form.getFieldValue('EndTime')).format()
 			})
+
 			await checkRoomAvailable({
-				branchId: BranchId,
+				branchId: BranchId || infoClass?.BranchId,
 				startTime: moment(form.getFieldValue('StartTime')).format(),
 				endTime: moment(form.getFieldValue('EndTime')).format()
 			})
@@ -43,6 +48,7 @@ const ModalAddScheduleEdit = (props) => {
 	const onSubmit = async (data) => {
 		if (moment(data.StartTime).format() < moment(data.EndTime).format()) {
 			setIsLoading(true)
+
 			let DATA_SUBMIT = {
 				ClassId: parseInt(slug.toString()),
 				RoomId: data.RoomId,
@@ -51,6 +57,7 @@ const ModalAddScheduleEdit = (props) => {
 				TeacherId: data.TeacherId,
 				Note: data.Note
 			}
+
 			try {
 				const res = await scheduleApi.add(DATA_SUBMIT)
 				if (res.status === 200) {
@@ -74,6 +81,7 @@ const ModalAddScheduleEdit = (props) => {
 			<PrimaryButton onClick={() => setOpenModalAdd(true)} className="ml-3" background="green" type="button" icon="add">
 				Thêm lịch
 			</PrimaryButton>
+
 			<Modal
 				title="Thêm buổi học"
 				open={openModalAdd}
@@ -84,11 +92,9 @@ const ModalAddScheduleEdit = (props) => {
 					setOpenModalAdd(false)
 				}}
 				footer={
-					<>
-						<PrimaryButton disable={isLoading} loading={isLoading} background="blue" icon="save" type="button" onClick={form.submit}>
-							Lưu
-						</PrimaryButton>
-					</>
+					<PrimaryButton disable={isLoading} loading={isLoading} background="blue" icon="save" type="button" onClick={form.submit}>
+						Lưu
+					</PrimaryButton>
 				}
 			>
 				<Form form={form} layout="vertical" onFinish={onSubmit}>
@@ -110,7 +116,6 @@ const ModalAddScheduleEdit = (props) => {
 						name="EndTime"
 						onChange={getDataAvailable}
 					/>
-					{/* onChange={() => setIsDisableButton(false)} */}
 					<Form.Item name="TeacherId" label="Giáo viên">
 						<Select placeholder="Chọn giáo viên">
 							{teacher.map((item) => {
@@ -129,6 +134,7 @@ const ModalAddScheduleEdit = (props) => {
 							})}
 						</Select>
 					</Form.Item>
+
 					{!!Type && parseInt(Type.toString()) == 1 ? (
 						<Form.Item name="RoomId" label="Phòng học">
 							<Select placeholder="Chọn phòng học">

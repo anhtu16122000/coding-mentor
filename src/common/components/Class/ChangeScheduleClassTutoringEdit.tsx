@@ -1,4 +1,4 @@
-import { Form, Modal, Popover, Select, Tooltip } from 'antd'
+import { Carousel, DatePicker, Form, Modal, Popconfirm, Popover, Rate, Select, Spin, TimePicker, Tooltip } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -18,12 +18,16 @@ import {
 import DatePickerField from '../FormControl/DatePickerField'
 import TextBoxField from '../FormControl/TextBoxField'
 import PrimaryButton from '../Primary/Button'
-import ModalRemoveScheduleEdit from './ModalRemoveScheduleEdit'
 import PrimaryTooltip from '../PrimaryTooltip'
 import InputMoneyField from '~/common/components/FormControl/InputNumberField'
+import ModalRemoveScheduleTutoringEdit from './ModalRemoveScheduleTutoringEdit'
+import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
+import type { RangePickerProps } from 'antd/es/date-picker'
+import { curriculumApi } from '~/api/curriculum'
+import SelectField from '../FormControl/SelectField'
 
 const ChangeScheduleClassTutoringEdit = (props) => {
-	const { dataRow, checkTeacherAvailable, getListSchedule, checkRoomAvailable } = props
+	const { dataRow, checkTeacherAvailable, getListSchedule, checkRoomAvailable, loadingCheckTeacher } = props
 	const [isModalOpen, setIsModalOpen] = useState({ open: false, id: null })
 	const [isDisableButton, setIsDisableButton] = useState(false)
 	const [form] = Form.useForm()
@@ -38,6 +42,7 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 	const paramsSchedule = useSelector((state: RootState) => state.class.paramsSchedule)
 	const loadingCalendar = useSelector((state: RootState) => state.class.loadingCalendar)
 	const infoClass = useSelector((state: RootState) => state.class.infoClass)
+	const user = useSelector((state: RootState) => state.user.information)
 	const refPopover = useRef(null)
 
 	useMemo(() => {
@@ -46,6 +51,7 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 			setIsDisableButton(true)
 		}
 	}, [showModal])
+	console.log(dataRow)
 
 	const onSubmit = async (data) => {
 		if (moment(data.StartTime).format() >= moment(data.EndTime).format()) {
@@ -66,11 +72,13 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 			if (!checkExistSchedule) {
 				dispatch(setLoadingCalendar(true))
 				let DATA_SUBMIT = {
-					...data,
 					StartTime: moment(data.StartTime).format(),
 					EndTime: moment(data.EndTime).format(),
 					Id: dataRow.event.extendedProps.IdSchedule,
-					TeachingFee: !data?.TeachingFee ? null : data.TeachingFee.replace(',', '').replace(',', '').replace(',', '').replace(',', '')
+					TeacherId: dataRow.event.extendedProps.TeacherId,
+					TeachingFee: !data?.TeachingFee ? null : data.TeachingFee,
+					Note: data?.Note,
+					StatusTutoring: data?.StatusTutoring
 				}
 				try {
 					const res = await scheduleApi.update(DATA_SUBMIT)
@@ -99,16 +107,11 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 			} else {
 				setIsDisableButton(true)
 			}
-			const checkExistRoom = room.find((item) => item.RoomId === dataRow.event.extendedProps.RoomId)
-			if (!!checkExistRoom) {
-				form.setFieldsValue({ RoomId: dataRow.event.extendedProps.RoomId })
-			} else {
-				setIsDisableButton(true)
-			}
 			form.setFieldsValue({ StartTime: moment(dataRow.event.start) })
 			form.setFieldsValue({ EndTime: moment(dataRow.event.end) })
 			form.setFieldsValue({ Id: dataRow.event.extendedProps.Id })
 			form.setFieldsValue({ Note: dataRow.event.extendedProps.Note })
+			form.setFieldsValue({ StatusTutoring: dataRow.event.extendedProps.StatusTutoring })
 			form.setFieldsValue({ TeachingFee: dataRow.event.extendedProps.TeachingFee })
 		}
 	}, [isModalOpen])
@@ -134,33 +137,6 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 		setIsModalOpen({ open: true, id: dataRow.event.extendedProps.IdSchedule })
 	}
 
-	const getDataAvailable = async () => {
-		if (!!form.getFieldValue('StartTime') && !!form.getFieldValue('EndTime')) {
-			const listTeacher = await checkTeacherAvailable({
-				scheduleId: dataRow.event.extendedProps.IdSchedule,
-				branchId: infoClass.BranchId,
-				curriculumId: infoClass.CurriculumId,
-				startTime: moment(form.getFieldValue('StartTime')).format(),
-				endTime: moment(form.getFieldValue('EndTime')).format()
-			})
-			const listRoom = await checkRoomAvailable({
-				scheduleId: dataRow.event.extendedProps.IdSchedule,
-				branchId: infoClass.BranchId,
-				startTime: moment(form.getFieldValue('StartTime')).format(),
-				endTime: moment(form.getFieldValue('EndTime')).format()
-			})
-			const checkTeacher = listTeacher.find((item) => item.TeacherId === dataRow.event.extendedProps.TeacherId)
-			const checkRoom = listRoom.find((item) => item.RoomId === dataRow.event.extendedProps.RoomId)
-			if (!!checkTeacher && !checkTeacher?.Fit) {
-				setIsDisableButton(true)
-			} else if (!!checkRoom && !checkRoom?.Fit) {
-				setIsDisableButton(true)
-			} else {
-				setIsDisableButton(false)
-			}
-		}
-	}
-
 	const handleCheckTeacher = async (startTime, endTime) => {
 		const listTeacherAvailable = await checkTeacherAvailable({
 			scheduleId: dataRow.event.extendedProps.IdSchedule,
@@ -173,7 +149,7 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 	}
 
 	function getStatusColor() {
-		switch (dataRow.event.extendedProps.Status) {
+		switch (dataRow.event.extendedProps.StatusTutoring) {
 			case 1:
 				return '!bg-[#0a89ff]'
 			case 2:
@@ -209,26 +185,32 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 				</div>
 				{!!isEditSchedule ? (
 					<div className="mt-2 flex flex-col gap-2">
-						<PrimaryTooltip className="w-full px-[8px]" place="top" content="Chỉnh sửa" id={`edit-sc-${dataRow.event.extendedProps?.Id}`}>
-							<PrimaryButton
-								background="yellow"
-								type="button"
-								icon="edit"
-								className="w-full"
-								onClick={() => {
-									!!isEditSchedule ? handleOpen() : null
-									refPopover.current.close()
-								}}
-							/>
-						</PrimaryTooltip>
+						{user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+							<PrimaryTooltip className="w-full px-[8px]" place="top" content="Chỉnh sửa" id={`edit-sc-${dataRow.event.extendedProps?.Id}`}>
+								<PrimaryButton
+									background="yellow"
+									type="button"
+									icon="edit"
+									className="w-full"
+									onClick={() => {
+										!!isEditSchedule ? handleOpen() : null
+										refPopover.current.close()
+									}}
+								/>
+							</PrimaryTooltip>
+						) : (
+							''
+						)}
 
-						<ModalRemoveScheduleEdit
-							IdSchedule={dataRow.event.extendedProps.IdSchedule}
-							startTime={dataRow.event.extendedProps.StartTime}
-							endTime={dataRow.event.extendedProps.EndTime}
-							getListSchedule={getListSchedule}
-							dataRow={dataRow}
-						/>
+						{user.RoleId == 3 && (
+							<ModalRemoveScheduleTutoringEdit
+								IdSchedule={dataRow.event.extendedProps.IdSchedule}
+								startTime={dataRow.event.extendedProps.StartTime}
+								endTime={dataRow.event.extendedProps.EndTime}
+								getListSchedule={getListSchedule}
+								dataRow={dataRow}
+							/>
+						)}
 					</div>
 				) : null}
 			</div>
@@ -262,24 +244,30 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 							</div>
 							{!!isEditSchedule ? (
 								<div className="flex items-center justify-between gap-2 mt-2">
-									<ModalRemoveScheduleEdit
-										IdSchedule={dataRow.event.extendedProps.IdSchedule}
-										startTime={dataRow.event.extendedProps.StartTime}
-										endTime={dataRow.event.extendedProps.EndTime}
-										getListSchedule={getListSchedule}
-										refPopover={refPopover}
-									/>
-									<PrimaryButton
-										background="yellow"
-										type="button"
-										icon="edit"
-										onClick={() => {
-											!!isEditSchedule ? handleOpen() : null
-											refPopover.current.close()
-										}}
-									>
-										Chỉnh sửa
-									</PrimaryButton>
+									{user.RoleId == 3 && (
+										<ModalRemoveScheduleTutoringEdit
+											IdSchedule={dataRow.event.extendedProps.IdSchedule}
+											startTime={dataRow.event.extendedProps.StartTime}
+											endTime={dataRow.event.extendedProps.EndTime}
+											getListSchedule={getListSchedule}
+											refPopover={refPopover}
+										/>
+									)}
+									{user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? ( //admin,quanly,hocvu
+										<PrimaryButton
+											background="yellow"
+											type="button"
+											icon="edit"
+											onClick={() => {
+												!!isEditSchedule ? handleOpen() : null
+												refPopover.current.close()
+											}}
+										>
+											Chỉnh sửa
+										</PrimaryButton>
+									) : (
+										''
+									)}
 								</div>
 							) : null}
 						</div>
@@ -334,72 +322,56 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 					</PrimaryButton>
 				}
 			>
-				<Form form={form} layout="vertical" className="grid grid-cols-2 gap-x-4" onFinish={onSubmit}>
-					<DatePickerField
-						className="col-span-2 w500:col-span-1"
-						mode="single"
-						showTime={'HH:mm'}
-						picker="showTime"
-						format="DD/MM/YYYY HH:mm"
-						label="Giờ bắt đầu"
-						name="StartTime"
-						onChange={getDataAvailable}
-					/>
+				<Form form={form} layout="vertical" onFinish={onSubmit}>
+					<div className="antd-custom-wrap">
+						<DatePickerField
+							className="col-span-2 w500:col-span-1"
+							mode="single"
+							showTime={'HH:mm'}
+							picker="showTime"
+							format="DD/MM/YYYY HH:mm"
+							label="Giờ bắt đầu"
+							name="StartTime"
+							disabled
+						/>
 
-					<DatePickerField
-						mode="single"
-						className="col-span-2 w500:col-span-1"
-						showTime={'HH:mm'}
-						picker="showTime"
-						format="DD/MM/YYYY HH:mm"
-						label="Giờ kết thúc"
-						name="EndTime"
-						onChange={getDataAvailable}
-					/>
-
-					<Form.Item name="TeacherId" className="col-span-2" label="Giáo viên">
-						<Select onChange={() => setIsDisableButton(false)} placeholder="Chọn giáo viên">
-							{teacher.map((item) => {
-								return (
-									<Select.Option disabled={!item.Fit} key={item.TeacherId} value={item.TeacherId}>
-										<div className="flex items-center justify-between w-full">
-											{item.TeacherName}
-											{!item.Fit ? (
-												<Tooltip placement="right" title={!!item.Note ? item.Note : `Giáo viên ${item.TeacherName} bị trùng lịch`}>
-													<AiOutlineWarning className="text-tw-red" />
-												</Tooltip>
-											) : null}
-										</div>
-									</Select.Option>
-								)
-							})}
-						</Select>
-					</Form.Item>
-
-					{!!infoClass?.Type && parseInt(infoClass?.Type.toString()) == 1 && (
-						<Form.Item className="col-span-2" name="RoomId" label="Phòng học">
-							<Select onChange={() => setIsDisableButton(false)} placeholder="Chọn phòng học">
-								{room.map((item) => {
+						<DatePickerField
+							mode="single"
+							className="col-span-2 w500:col-span-1"
+							showTime={'HH:mm'}
+							picker="showTime"
+							format="DD/MM/YYYY HH:mm"
+							label="Giờ kết thúc"
+							name="EndTime"
+							disabled
+						/>
+						<Form.Item name="TeacherId" className="col-span-2" label="Giáo viên">
+							<Select onChange={() => setIsDisableButton(false)} placeholder="Chọn giáo viên" disabled>
+								{teacher.map((item) => {
 									return (
-										<Select.Option disabled={!item.Fit} key={item.RoomId} value={item.RoomId}>
-											<div className="flex items-center justify-between w-full">
-												{item.RoomName}
-												{!item.Fit ? (
-													<Tooltip placement="right" title={!!item.Note ? item.Note : `Phòng học ${item.RoomName} bị trùng lịch`}>
-														<AiOutlineWarning className="text-tw-red" />
-													</Tooltip>
-												) : null}
-											</div>
+										<Select.Option disabled={!item.Fit} key={item.TeacherId} value={item.TeacherId}>
+											<div className="flex items-center justify-between w-full">{item.TeacherName}</div>
 										</Select.Option>
 									)
 								})}
 							</Select>
 						</Form.Item>
-					)}
-
-					<InputMoneyField className="col-span-2" label="Lương / Buổi" name="TeachingFee" placeholder="Nhập mức lương" isRequired />
-
-					<TextBoxField className="col-span-2" name="Note" label="Ghi chú" />
+						<InputMoneyField className="col-span-2" label="Lương / Buổi" name="TeachingFee" placeholder="Nhập mức lương" isRequired />
+						<SelectField
+							name="StatusTutoring"
+							label="Trạng thái"
+							optionList={[
+								{ title: 'Mới đặt', value: 1 },
+								{ title: 'Hủy', value: 2 },
+								{ title: 'Đã học', value: 3 },
+								{ title: 'Giáo viên vắng mặt', value: 4 },
+								{ title: 'Sự cố kỹ thuật', value: 5 },
+								{ title: 'Giáo viên vào trễ', value: 6 },
+								{ title: 'Học viên vắng mặt', value: 7 }
+							]}
+						/>
+						<TextBoxField className="col-span-2" name="Note" label="Ghi chú" />
+					</div>
 				</Form>
 			</Modal>
 		</>

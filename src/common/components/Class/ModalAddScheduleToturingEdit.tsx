@@ -2,22 +2,17 @@ import { Carousel, DatePicker, Form, Modal, Popconfirm, Rate, Select, Spin, Time
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import { AiOutlineWarning } from 'react-icons/ai'
-import { FcNext, FcPrevious } from 'react-icons/fc'
 import { useSelector } from 'react-redux'
 import { curriculumApi } from '~/api/curriculum'
 import { scheduleApi } from '~/api/schedule'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import { setRoomEdit, setTeacherEdit } from '~/store/classReducer'
-import DatePickerField from '../FormControl/DatePickerField'
-import InputTextField from '../FormControl/InputTextField'
-import SelectField from '../FormControl/SelectField'
 import TextBoxField from '../FormControl/TextBoxField'
 import PrimaryButton from '../Primary/Button'
 import type { RangePickerProps } from 'antd/es/date-picker'
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
-import PrimaryTag from '../Primary/Tag'
+import { AiOutlineWarning } from 'react-icons/ai'
 
 const ModalAddScheduleToturingEdit = (props) => {
 	const { checkTeacherAvailable, getListSchedule, paramsSchedule, loadingCheckTeacher } = props
@@ -30,7 +25,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 	const [dateChoose, setDateChoose] = useState(null)
 	const [dates, setDates] = useState([])
 	const teacher = useSelector((state: RootState) => state.class.teacherEdit)
-	const { slug, BranchId, CurriculumId, Type } = router.query
+	const { class: slug, BranchId, CurriculumId, Type } = router.query
 	const carouselRef = useRef(null)
 	const [startTime, setStartTime] = useState(null)
 	const [monthChange, setMonthChange] = useState(null)
@@ -41,7 +36,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 	}
 
 	const onSubmit = async (data) => {
-		if (moment(data.StartTime).format() < moment(data.EndTime).format()) {
+		if (moment(startTime).format() < moment(data.EndTime).format()) {
 			setIsLoading(true)
 			let DATA_SUBMIT = {
 				ClassId: parseInt(slug.toString()),
@@ -109,6 +104,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 	const onChangeStartTime = (val) => {
 		let datetime = moment(moment(dateChoose).format('YYYY-MM-DD') + ' ' + moment(val).format('HH:mm:ss'))
 		setStartTime(moment(datetime))
+		setTeacherId(null)
 	}
 
 	const config = {
@@ -125,8 +121,13 @@ const ModalAddScheduleToturingEdit = (props) => {
 		prevArrow: <GrFormPrevious />
 	}
 
-	const handleChooseTeacher = (Id) => {
-		setTeacherId(Id)
+	const handleChooseTeacher = (item) => {
+		if (item?.Fit) {
+			setTeacherId(item?.TeacherId)
+		} else {
+			setTeacherId(null)
+			ShowNoti('warning', item?.Note)
+		}
 	}
 
 	useEffect(() => {
@@ -231,12 +232,12 @@ const ModalAddScheduleToturingEdit = (props) => {
 						<div className="grid grid-cols-2 gap-x-4 antd-custom-wrap mt-tw-4">
 							<div className="col span-1">
 								<Form.Item name={'StartTime'} label="Giờ bắt đầu">
-									<TimePicker onChange={onChangeStartTime} />
+									<TimePicker onChange={onChangeStartTime} format="HH:mm" />
 								</Form.Item>
 							</div>
 							<div className="col span-1">
 								<Form.Item name={'EndTime'} label="Giờ kết thúc">
-									<TimePicker disabled placeholder="" />
+									<TimePicker disabled placeholder="" format="HH:mm" />
 								</Form.Item>
 							</div>
 						</div>
@@ -251,35 +252,32 @@ const ModalAddScheduleToturingEdit = (props) => {
 									{teacher?.length > 0 &&
 										teacher?.map((item, index) => (
 											<div className={`item ${teacherId === item?.TeacherId ? 'active' : !item?.Fit ? 'disabled' : ''}`}>
-												<div className="inner-item">
-													<div className="avatar">
-														<img src="/images/default-avatar.svg" alt="" />
+												<Popconfirm
+													title={`Bạn có chắc chọn giáo viên ${item?.TeacherName}?`}
+													okText="Ok"
+													cancelText="No"
+													onConfirm={() => handleChooseTeacher(item)}
+												>
+													<div className="inner-item">
+														<div className="avatar">
+															<img src="/images/default-avatar.svg" alt="" />
+														</div>
+														<div className="rating">
+															<Rate disabled defaultValue={item?.Rate} />
+															<div className="value">{item?.Rate}</div>
+														</div>
+														<div className="name">
+															{item?.TeacherName}
+															{!item.Fit ? (
+																<Tooltip placement="right" title={item.Note}>
+																	<AiOutlineWarning className="text-tw-red ml-2" />
+																</Tooltip>
+															) : null}
+														</div>
+														<div className="create">{item?.TeacherCode}</div>
+														<div className="note">{item?.Extension}</div>
 													</div>
-													<div className="rating">
-														<Rate disabled defaultValue={item?.Rate} />
-														<div className="value">{item?.Rate}</div>
-													</div>
-													<div className="name">{item?.TeacherName}</div>
-													<div className="create">{item?.TeacherCode}</div>
-													<div className="note">{item?.Extension}</div>
-													<div className="flex items-center justify-center mt-tw-4">
-														{item?.Fit && (
-															<Popconfirm
-																title={`Bạn có chắc chọn giá viên ${item?.TeacherName}?`}
-																okText="Ok"
-																cancelText="No"
-																onConfirm={() => handleChooseTeacher(item?.TeacherId)}
-															>
-																<button
-																	type="button"
-																	className={`font-medium none-selection rounded-lg h-[38px] px-3 inline-flex items-center justify-center text-white bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf]`}
-																>
-																	Chọn giáo viên
-																</button>
-															</Popconfirm>
-														)}
-													</div>
-												</div>
+												</Popconfirm>
 											</div>
 										))}
 								</div>

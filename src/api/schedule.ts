@@ -17,5 +17,8 @@ export const scheduleApi = {
 
 	delete(id) {
 		return instance.delete(`${url}/${id}`)
+	},
+	cancelTutoring(id) {
+		return instance.put(`${url}/tutoring-cancel/${id}`)
 	}
 }

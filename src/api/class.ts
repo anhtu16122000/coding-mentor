@@ -47,7 +47,7 @@ export const classApi = {
 	updateClassTutoringConfig(data) {
 		return instance.put(`${url}/tutoring-config`, data)
 	},
-	getClassTutoringCurriculum() {
-		return instance.get(`${url}/tutoring-curriculum`)
+	getClassTutoringCurriculum(classId) {
+		return instance.get(`${url}/tutoring-curriculum`, { params: classId})
 	}
 }

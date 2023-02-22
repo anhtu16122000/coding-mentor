@@ -47,6 +47,10 @@ const ChangeScheduleClassEdit = (props) => {
 		}
 	}, [showModal])
 
+	function removeCommas(str) {
+		return typeof str == 'string' ? str.replace(/,/g, '') : str
+	}
+
 	const onSubmit = async (data) => {
 		if (moment(data.StartTime).format() >= moment(data.EndTime).format()) {
 			ShowNoti('error', 'Lịch học không hợp lệ')
@@ -70,7 +74,7 @@ const ChangeScheduleClassEdit = (props) => {
 					StartTime: moment(data.StartTime).format(),
 					EndTime: moment(data.EndTime).format(),
 					Id: dataRow.event.extendedProps.IdSchedule,
-					TeachingFee: !data?.TeachingFee ? null : data.TeachingFee.replace(',', '').replace(',', '').replace(',', '').replace(',', '')
+					TeachingFee: removeCommas(data?.TeachingFee)
 				}
 				try {
 					const res = await scheduleApi.update(DATA_SUBMIT)

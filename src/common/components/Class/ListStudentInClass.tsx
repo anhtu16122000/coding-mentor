@@ -10,7 +10,14 @@ import { ModalStudentInClassCRUD } from './ModalStudentInClassCRUD'
 export const ListStudentInClass = () => {
 	const router = useRouter()
 	const [loading, setLoading] = useState(false)
-	const initParameters = { classId: router.query.slug, warning: null, sort: null, sortType: null, pageIndex: 1, pageSize: PAGE_SIZE }
+	const initParameters = {
+		classId: router.query.class,
+		warning: null,
+		sort: null,
+		sortType: null,
+		pageIndex: 1,
+		pageSize: PAGE_SIZE
+	}
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [totalRow, setTotalRow] = useState(1)
 	const [dataTable, setDataTable] = useState([])
@@ -36,10 +43,10 @@ export const ListStudentInClass = () => {
 	}
 
 	useEffect(() => {
-		if (router?.query?.slug) {
+		if (router?.query?.class) {
 			getStudentInClass(apiParameters)
 		}
-	}, [router?.query?.slug])
+	}, [router?.query?.class])
 
 	const columns = [
 		{

@@ -159,28 +159,61 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 		<div className="cc-news-item" key={`li-`} id={`li-${index}-32`}>
 			<div className="cc-news-item-header">
 				<div className="cc-news-item-user py-[4px]">
-					<Avatar uri={item?.Avatar} className="cc-news-avatar" />
-					<div className="ml-[16px] mt-[-2px]">
-						<div className="flex">
-							<div className="cc-news-poster-name">{CreatedBy}</div>
-							{!!GroupName && (
-								<>
-									<div className="mx-[8px] inline-block">➤</div>
-									<PrimaryTooltip place="left" id={`group-${Id}`} content={GroupName}>
-										<div onClick={_clickGroup} className="cc-news-poster-name cc-news-poster-group">
-											{GroupName}
-										</div>
-									</PrimaryTooltip>
-								</>
-							)}
-						</div>
-						<div className="flex row-center">
-							{!!RoleName && <div className={`cc-news-post-role ${RoleName == 'Admin' ? 'is-admin' : ''}`}>{RoleName}</div>}
-							<PrimaryTooltip place="left" id={`since-${Id}`} content={CreatedOn}>
-								<div className="cc-news-post-since hover:underline">{getTimeSince(CreatedOn)}</div>{' '}
-							</PrimaryTooltip>
+					<div className="flex items-center">
+						<Avatar uri={item?.Avatar} className="cc-news-avatar" />
+						<div className="ml-[16px] mt-[-2px]">
+							<div className="flex">
+								<div className="cc-news-poster-name">{CreatedBy}</div>
+								{!!GroupName && (
+									<>
+										<div className="mx-[8px] inline-block">➤</div>
+										<PrimaryTooltip place="left" id={`group-${Id}`} content={GroupName}>
+											<div onClick={_clickGroup} className="cc-news-poster-name cc-news-poster-group">
+												{GroupName}
+											</div>
+										</PrimaryTooltip>
+									</>
+								)}
+							</div>
+							<div className="flex row-center">
+								{!!RoleName && <div className={`cc-news-post-role ${RoleName == 'Admin' ? 'is-admin' : ''}`}>{RoleName}</div>}
+								<PrimaryTooltip place="left" id={`since-${Id}`} content={CreatedOn}>
+									<div className="cc-news-post-since hover:underline">{getTimeSince(CreatedOn)}</div>{' '}
+								</PrimaryTooltip>
+							</div>
 						</div>
 					</div>
+					{item.BranchNameList && (
+						<ul className="cc-center-branch-news">
+							{item.BranchNameList &&
+								item.BranchNameList.map((name, index) => {
+									if (index > 2) return
+									else
+										return (
+											<li className="cc_li" key={name + Math.random() * 1000}>
+												{name}
+											</li>
+										)
+								})}
+
+							{item.BranchNameList.length > 3 && (
+								<Popover
+									content={item.BranchNameList.map(
+										(name, index) =>
+											index > 2 && (
+												<li className="text-[12px] text-[#b1b1b1]" key={name + Math.random() * 1000}>
+													{name}
+												</li>
+											)
+									)}
+									showArrow
+									placement="rightTop"
+								>
+									<li className="cursor-pointer select-none cc_li">. . .</li>
+								</Popover>
+							)}
+						</ul>
+					)}
 				</div>
 
 				{user.RoleId == 1 && (
@@ -244,7 +277,6 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 
 					<ButtonPost onClick={_clickComment} title="Nhận xét" icon={<GoCommentDiscussion size={18} className="mr-[8px] text-[#000]" />} />
 				</div>
-
 				{showComment && (
 					<div className="cc-news-comment">
 						<div className="cc-hr my-[8px] mt-[14px] mx-[-6px]" />
@@ -268,7 +300,6 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 									</div>
 								</div>
 							</div>
-
 							<ListComment data={comments} onShowAll={showAllComment} totalComment={totalComment} onRefresh={refreshComment} />
 						</div>
 					</div>

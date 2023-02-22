@@ -193,3 +193,13 @@ export function getRoleName(params: string) {
 
 	return 'Điều phối viên'
 }
+
+/**
+ * Remove commas from a string.
+ * @param str - The string to remove commas from.
+ * @returns A function that takes a string as an argument and returns the string with all commas
+ * removed.
+ */
+export function removeCommas(str) {
+	return typeof str == 'string' ? str.replace(/,/g, '') : str
+}

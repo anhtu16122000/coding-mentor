@@ -69,12 +69,12 @@
 
 		border-radius: 6px;
 		cursor: pointer;
-		border: 2px solid #9bc7f1;
+		border: 2px solid #4caf50;
 		&.disabled {
 			border: 2px solid #ccc;
 		}
 		&.active {
-			border: 2px solid #0a89ff;
+			border: 2px solid #9bc7f1;
 		}
 
 		.inner-item {
@@ -99,7 +99,7 @@
 				}
 			}
 			.name {
-				text-align: center;
+				@include flex(center, center);
 				font-weight: 500;
 			}
 			.create {

@@ -31,6 +31,7 @@ import loadingJson from '~/common/components/json/loading-calendar.json'
 import { setBreadcrumb } from '~/store/globalState'
 import ModalAddScheduleToturingEdit from './ModalAddScheduleToturingEdit'
 import ChangeScheduleClassTutoringEdit from './ChangeScheduleClassTutoringEdit'
+import PrimaryTag from '../Primary/Tag'
 
 const CalendarClassTutoringEdit = () => {
 	const router = useRouter()
@@ -39,16 +40,16 @@ const CalendarClassTutoringEdit = () => {
 	const paramsSchedule = useSelector((state: RootState) => state.class.paramsSchedule)
 	const loadingCalendar = useSelector((state: RootState) => state.class.loadingCalendar)
 	const infoClass = useSelector((state: RootState) => state.class.infoClass)
-	const { slug } = router.query
+	const { class: slug } = router.query
 	const [timeStamp, setTimeStamp] = useState(0)
 	const thisCalendar = useRef(null)
 	const [loadingCheckTeacher, setLoadingCheckTeacher] = useState(false)
 	const dispatch = useDispatch()
 	const [dataTutoring, setDataTutoring] = useState(null)
 
-	const getTutoring = async () => {
+	const getTutoring = async (classId) => {
 		try {
-			const res = await classApi.getClassTutoringCurriculum()
+			const res = await classApi.getClassTutoringCurriculum({ classId })
 			if (res.status === 200) {
 				console.log(res)
 
@@ -82,7 +83,7 @@ const CalendarClassTutoringEdit = () => {
 
 	useEffect(() => {
 		if (!!slug) {
-			getTutoring()
+			getTutoring(slug)
 			getClassId()
 		}
 	}, [slug])
@@ -104,6 +105,7 @@ const CalendarClassTutoringEdit = () => {
 					}
 				})
 				dispatch(setListCalendarEdit(newListCalendar))
+				getTutoring(slug)
 			}
 			if (res.status === 204) {
 				dispatch(setListCalendarEdit([]))
@@ -298,13 +300,14 @@ const CalendarClassTutoringEdit = () => {
 					<>
 						<div className="custom-show-tutoring-curriculum">
 							<div className="item">
-								Buổi học:{' '}
-								<span>
-									{dataTutoring?.Booked}/{dataTutoring?.Lesson}
-								</span>
+								Đã đặt:{' '}
+								<PrimaryTag
+									color="disabled"
+									children={`${dataTutoring?.Booked ? dataTutoring?.Booked : 0}/${dataTutoring?.Lesson ? dataTutoring?.Lesson : 0} buổi`}
+								/>
 							</div>
 							<div className="item">
-								Thời gian: <span>{dataTutoring?.Time}/buổi</span>
+								Thời gian: <span className="text-tw-red font-semibold">{dataTutoring?.Time ? dataTutoring?.Time : 0} </span>phút/buổi
 							</div>
 						</div>
 					</>
@@ -340,6 +343,7 @@ const CalendarClassTutoringEdit = () => {
 								checkTeacherAvailable={checkTeacherAvailable}
 								checkRoomAvailable={checkRoomAvailable}
 								getListSchedule={getListSchedule}
+								loadingCheckTeacher={loadingCheckTeacher}
 							/>
 						)}
 						eventClick={(eventClickInfo) => {

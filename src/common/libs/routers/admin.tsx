@@ -3,13 +3,15 @@ import { BiBookAdd } from 'react-icons/bi'
 import { BsBook, BsFillGridFill } from 'react-icons/bs'
 import { FaHouseDamage, FaMoneyBillAlt, FaRegCalendarPlus, FaUserGraduate, FaUserTie } from 'react-icons/fa'
 import { FiAirplay } from 'react-icons/fi'
+import { GiTakeMyMoney } from 'react-icons/gi'
 import { GrMoney, GrSettingsOption } from 'react-icons/gr'
 import { HiPresentationChartLine } from 'react-icons/hi'
-import { IoVideocam } from 'react-icons/io5'
+import { IoLibrarySharp, IoVideocam } from 'react-icons/io5'
 import { MdOutlineEditCalendar, MdOutlineSettingsInputComposite, MdPersonalVideo } from 'react-icons/md'
-import { RiExchangeBoxFill, RiFileEditLine, RiFileList2Fill } from 'react-icons/ri'
-import { TbFileCertificate } from 'react-icons/tb'
+import { RiExchangeBoxFill, RiFileEditLine, RiFileList2Fill, RiMoneyDollarBoxFill, RiMoneyDollarCircleFill } from 'react-icons/ri'
+import { TbFileCertificate, TbReportMoney } from 'react-icons/tb'
 import { TiHome } from 'react-icons/ti'
+import { VscLibrary } from 'react-icons/vsc'
 
 export const AdminMenu = [
 	{
@@ -41,6 +43,11 @@ export const AdminMenu = [
 		Key: 'video',
 		TabName: 'Khoá học video',
 		Icon: <IoVideocam size={22} />
+	},
+	{
+		Key: 'library-online',
+		TabName: 'Thư viện online',
+		Icon: <IoLibrarySharp size={22} />
 	},
 	{
 		Key: 'library',
@@ -83,10 +90,24 @@ export const AdminChildMenu = [
 		MenuItem: [
 			{
 				TypeItem: 'single',
+				Key: '/finance/payment',
+				Route: '/finance/payment',
+				Icon: <RiMoneyDollarCircleFill />,
+				Text: 'Quản lý thanh toán'
+			},
+			{
+				TypeItem: 'single',
 				Key: '/finance/income-expense-management',
 				Route: '/finance/income-expense-management',
 				Icon: <RiExchangeBoxFill />,
 				Text: 'Quản lý thu chi'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/finance/paymentApprove',
+				Route: '/finance/paymentApprove',
+				Icon: <RiExchangeBoxFill />,
+				Text: 'Duyệt thanh toán'
 			}
 		]
 	},
@@ -96,13 +117,6 @@ export const AdminChildMenu = [
 		MenuKey: '/info-course',
 		Parent: 'student',
 		MenuItem: [
-			{
-				ItemType: 'single',
-				Key: '/info-course/student',
-				Route: '/info-course/student',
-				Text: 'Danh sách học viên',
-				Icon: ''
-			},
 			{
 				ItemType: 'single',
 				Key: '/info-course/customer',
@@ -115,6 +129,34 @@ export const AdminChildMenu = [
 				Key: '/info-course/service-appointment-test',
 				Route: '/info-course/service-appointment-test',
 				Text: 'Khách hẹn test',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/student',
+				Route: '/info-course/student',
+				Text: 'Danh sách học viên',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/student-in-class',
+				Route: '/info-course/student-in-class',
+				Text: 'Học viên trong lớp',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/reserved',
+				Route: '/info-course/reserved',
+				Text: 'Học viên bảo lưu',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/changed',
+				Route: '/info-course/changed',
+				Text: 'Học viên chuyển khoá',
 				Icon: ''
 			},
 			{
@@ -224,6 +266,21 @@ export const AdminChildMenu = [
 				Icon: <FaRegCalendarPlus />,
 				Route: '/class/tutoring-config',
 				Text: 'Cấu hình thời gian đặt lịch'
+			}
+		]
+	},
+	{
+		MenuName: 'Thư viện online',
+		MenuTitle: 'Thư viện online',
+		Parent: 'library-online',
+		MenuKey: '/library-online',
+		MenuItem: [
+			{
+				ItemType: 'single',
+				Key: '/library-online/library',
+				Route: '/library-online/library',
+				Text: 'Chủ đề',
+				Icon: <VscLibrary />
 			}
 		]
 	},
