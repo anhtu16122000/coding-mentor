@@ -247,12 +247,6 @@ const Student: FC<IPersonnel> = (props) => {
 	const columns = [
 		userInfoColumn,
 		{
-			...FilterTable({
-				type: 'search',
-				dataIndex: 'FullName',
-				handleSearch: (event) => setApiParameters({ ...apiParameters, fullName: event }),
-				handleReset: (event) => setApiParameters(initParamters)
-			}),
 			title: 'Họ tên',
 			dataIndex: 'FullName',
 			render: (text) => <p className="font-semibold">{text}</p>
