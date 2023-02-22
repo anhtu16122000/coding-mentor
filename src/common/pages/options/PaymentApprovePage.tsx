@@ -1,4 +1,4 @@
-import { Form, Modal, Select, Tooltip } from 'antd'
+import { Form, Input, Modal, Select, Tooltip } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { GiPayMoney } from 'react-icons/gi'
@@ -13,14 +13,14 @@ import IconButton from '~/common/components/Primary/IconButton'
 import PrimaryTable from '~/common/components/Primary/Table'
 import { ButtonRefund } from '~/common/components/TableButton'
 import { ShowNostis, ShowNoti } from '~/common/utils'
-
+import { _format } from '~/common/utils/format'
 const PAGE_SIZE = 10
 
 const PaymentApprovePage = () => {
 	const [dataPaymentApprove, setDataPaymentApprove] = useState<any>()
 	const [isLoading, setIsLoading] = useState(false)
 	const [totalRow, setTotalRow] = useState(1)
-	const [todoApi, setTodoApi] = useState({ pageSize: PAGE_SIZE, pageIndex: 1 })
+	const [todoApi, setTodoApi] = useState({ pageSize: PAGE_SIZE, pageIndex: 1, search: '' })
 
 	const getPaymentApprove = async () => {
 		try {
@@ -80,17 +80,26 @@ const PaymentApprovePage = () => {
 		},
 		{
 			title: 'Số tiền ',
-			dataIndex: 'Money'
+			dataIndex: 'Money',
+			render: (money) => {
+				return <p>{_format.numberToPrice(money)}</p>
+			}
 		},
 		{
 			title: 'Số tiền chờ duyệt ',
 			dataIndex: 'MoneyApprove',
-			width: 150
+			width: 150,
+			render: (money) => {
+				return <p>{_format.numberToPrice(money)}</p>
+			}
 		},
 		{
-			title: 'Số tiền đã hoàn ',
+			title: 'Số tiền đã duyệt ',
 			dataIndex: 'Refunded',
-			width: 140
+			width: 140,
+			render: (money) => {
+				return <p>{_format.numberToPrice(money)}</p>
+			}
 		},
 		{
 			title: 'Ghi Chú ',
@@ -130,9 +139,22 @@ const PaymentApprovePage = () => {
 			loading={isLoading}
 			total={totalRow}
 			onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
-			TitleCard={<div className="flex justify-end w-full">{/* <PaymentPerForm onRefresh={getUserPaymentAllow} /> */}</div>}
 			data={dataPaymentApprove}
 			columns={columns}
+			TitleCard={
+				<div className="flex items-center justify-between w-full">
+					<Input.Search
+						className="primary-search max-w-[300px]"
+						onChange={(event) => {
+							if (event.target.value == '') {
+								setTodoApi({ ...todoApi, pageIndex: 1, search: '' })
+							}
+						}}
+						onSearch={(event) => setTodoApi({ ...todoApi, pageIndex: 1, search: event })}
+						placeholder="Tìm kiếm"
+					/>
+				</div>
+			}
 		/>
 	)
 }
