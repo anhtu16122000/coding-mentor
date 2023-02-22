@@ -291,7 +291,7 @@ export const AdminChildMenu = [
 				ItemType: 'single',
 				Key: '/library-online/library',
 				Route: '/library-online/library',
-				Text: 'Chủ đề',
+				Text: 'Tài liệu',
 				Icon: ''
 			}
 		]

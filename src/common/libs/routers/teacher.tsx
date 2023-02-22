@@ -1,43 +1,54 @@
 import { UserCheck } from 'react-feather'
 import { BiBookBookmark } from 'react-icons/bi'
+import { BsFillGridFill } from 'react-icons/bs'
+import { FaUserCheck } from 'react-icons/fa'
+import { IoLibrarySharp } from 'react-icons/io5'
 import { MdAirplay } from 'react-icons/md'
+import { RiFileList2Fill } from 'react-icons/ri'
 import { TbHome, TbScreenShare } from 'react-icons/tb'
+import { TiHome } from 'react-icons/ti'
 
 export const TeacherMenu = [
 	{
 		Key: 'home',
-		TabName: 'tab-home',
-		Icon: <TbHome size={22} />
-	},
-	{
-		Key: 'webinar',
-		TabName: 'Webinar',
-		Icon: <TbScreenShare size={22} />
+		TabName: 'Trang chủ',
+		Icon: <TiHome style={{ width: 24, height: 24 }} />
 	},
 	{
 		Key: 'class',
 		TabName: 'Lớp học',
-		Icon: <MdAirplay size={22} />
+		Icon: <BsFillGridFill size={22} />
 	},
 	{
-		Key: 'course',
-		TabName: 'Khóa học',
-		Icon: <BiBookBookmark size={22} />
+		Key: 'library-online',
+		TabName: 'Thư viện online',
+		Icon: <IoLibrarySharp size={22} />
+	},
+	{
+		Key: 'library',
+		TabName: 'Đề thi',
+		Icon: <RiFileList2Fill size={22} />
 	},
 	{
 		Key: 'assignment',
 		TabName: 'Phân công',
-		Icon: <UserCheck size={22} />
+		Icon: <FaUserCheck size={22} />
 	}
 ]
 
 export const TeacherChildMenu = [
 	{
-		MenuName: 'tab-home',
 		Parent: 'home',
 		MenuTitle: 'Quản lý hệ thống',
-		MenuKey: '/home',
+		MenuKey: 'home',
 		MenuItem: [
+			{
+				TypeItem: 'single',
+				Key: '/news',
+				Route: '/news',
+				Icon: '',
+				Text: 'Tin tức'
+			},
 			{
 				TypeItem: 'single',
 				Key: '/home/dashboard',
@@ -48,25 +59,10 @@ export const TeacherChildMenu = [
 		]
 	},
 	{
-		MenuName: 'Webinar',
-		Parent: 'webinar',
-		MenuTitle: 'xx69x',
-		MenuKey: '/webinars',
-		MenuItem: [
-			{
-				ItemType: 'single',
-				Key: '/webinars',
-				Route: '/webinars',
-				Text: 'Webinar',
-				Icon: ''
-			}
-		]
-	},
-	{
 		MenuName: 'Lớp học',
-		Parent: 'class',
 		MenuTitle: 'Lớp học',
 		MenuKey: '/class',
+		Parent: 'class',
 		MenuItem: [
 			{
 				ItemType: 'single',
@@ -85,38 +81,31 @@ export const TeacherChildMenu = [
 		]
 	},
 	{
-		MenuName: 'Khóa học',
-		MenuTitle: 'Khóa học',
-		Parent: 'course',
-		MenuKey: '/course',
+		MenuName: 'Thư viện online',
+		MenuTitle: 'Thư viện online',
+		Parent: 'library-online',
+		MenuKey: '/library-online',
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/course/video-course',
-				Route: '/course/video-course',
-				Text: 'Khóa học',
+				Key: '/library-online/library',
+				Route: '/library-online/library',
+				Text: 'Tài liệu',
 				Icon: ''
 			}
 		]
 	},
 	{
-		MenuName: 'Ngân hàng đề thi',
-		MenuTitle: 'Ngân hàng đề thi',
-		MenuKey: '/question-bank',
-		Parent: 'webinar',
+		MenuName: 'Đề thi',
+		MenuTitle: 'Đề thi',
+		MenuKey: '/exercise',
+		Parent: 'library',
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/question-bank/question-list',
-				Route: '/question-bank/question-list',
-				Text: 'Danh sách câu hỏi',
-				Icon: ''
-			},
-			{
-				ItemType: 'single',
-				Key: '/question-bank/exam-list',
-				Route: '/question-bank/exam-list',
-				Text: 'Danh sách đề thi',
+				Key: '/exercise/all',
+				Route: '/exercise/all',
+				Text: 'Quản lý đề thi',
 				Icon: ''
 			}
 		]
