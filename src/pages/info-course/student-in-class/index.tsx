@@ -24,12 +24,15 @@ import { ImWarning } from 'react-icons/im'
 import { ButtonEye } from '~/common/components/TableButton'
 import { ChangeClass, ReserveForm } from '~/common/components/Student/StudentInClass'
 import { userInfoColumn } from '~/common/libs/columns/user-info'
+import Filters from '~/common/components/Student/Filters'
+
+const initFilters = { PageSize: PAGE_SIZE, PageIndex: 1, Search: '' }
 
 const StudentInClassPage = () => {
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
 	const [data, setData] = React.useState([])
-	const [filters, setFilter] = React.useState({ PageSize: PAGE_SIZE, PageIndex: 1, Search: '' })
+	const [filters, setFilter] = React.useState(initFilters)
 
 	useEffect(() => {
 		getData()
@@ -144,7 +147,10 @@ const StudentInClassPage = () => {
 			align: 'center',
 			width: 100,
 			render: (value, item) => {
-				return <ImWarning size={18} className="text-[#EF6C00]" />
+				if (!!value) {
+					return <ImWarning size={18} className="text-[#EF6C00]" />
+				}
+				return ''
 			}
 		},
 		{
@@ -170,9 +176,17 @@ const StudentInClassPage = () => {
 				dataSource={data}
 				columns={columns}
 				TitleCard={
-					<div className="w-full flex items-center justify-between">
+					<div className="w-full flex items-center">
+						<Filters
+							showClass
+							showSort
+							showWarning
+							filters={filters}
+							onSubmit={(event) => setFilter(event)}
+							onReset={() => setFilter(initFilters)}
+						/>
 						<Input.Search
-							className="primary-search max-w-[300px]"
+							className="primary-search max-w-[250px] ml-[8px]"
 							onChange={(event) => {
 								if (event.target.value == '') {
 									setFilter({ ...filters, PageIndex: 1, Search: '' })

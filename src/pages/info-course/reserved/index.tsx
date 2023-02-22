@@ -26,12 +26,15 @@ import { ChangeClass, ReserveForm } from '~/common/components/Student/StudentInC
 import PrimaryEditor from '~/common/components/Editor'
 import { AddToClass, RefundForm } from '~/common/components/Student/Reserved'
 import { userInfoColumn } from '~/common/libs/columns/user-info'
+import Filters from '~/common/components/Student/Filters'
+
+const initFilters = { PageSize: PAGE_SIZE, PageIndex: 1, Search: '' }
 
 const ReservedPage = () => {
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
 	const [data, setData] = React.useState([])
-	const [filters, setFilter] = React.useState({ PageSize: PAGE_SIZE, PageIndex: 1, Search: '' })
+	const [filters, setFilter] = React.useState(initFilters)
 
 	useEffect(() => {
 		getData()
@@ -154,9 +157,21 @@ const ReservedPage = () => {
 				dataSource={data}
 				columns={columns}
 				TitleCard={
-					<div className="w-full flex items-center justify-between">
+					<div className="w-full flex items-center">
+						<Filters
+							showClass
+							statusList={[
+								{ value: 1, title: 'Đang bảo lưu' },
+								{ value: 2, title: 'Đã học lại' },
+								{ value: 3, title: 'Đã hoàn tiền' },
+								{ value: 4, title: 'Đã hết hạn' }
+							]}
+							filters={filters}
+							onSubmit={(event) => setFilter(event)}
+							onReset={() => setFilter(initFilters)}
+						/>
 						<Input.Search
-							className="primary-search max-w-[300px]"
+							className="primary-search max-w-[250px] ml-[8px]"
 							onChange={(event) => {
 								if (event.target.value == '') {
 									setFilter({ ...filters, PageIndex: 1, Search: '' })

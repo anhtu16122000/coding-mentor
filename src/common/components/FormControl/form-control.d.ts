@@ -38,6 +38,7 @@ type IFormInputNumber = {
 	rules?: array
 	max?: number
 	onChange?: any
+	loading?: boolean
 }
 
 type IFormSelectField = {

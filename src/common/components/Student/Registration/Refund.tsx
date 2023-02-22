@@ -92,9 +92,9 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 
 		const DATA_SUBMIT = {
 			...params,
-			ClassReserveId: item?.Id,
+			ClassRegistrationId: item?.Id,
 			Price: removeCommas(params?.Price),
-			Type: 2,
+			Type: 3,
 			StudentId: item?.StudentId
 		}
 
@@ -172,7 +172,7 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 								<div className="font-[600] inline-flex">Mã:</div> {item?.UserCode}
 							</div>
 							<div className="w-full in-1-line font-[400] text-[14px]">
-								<div className="font-[600] inline-flex">Số tiền bảo lưu:</div> {parseToMoney(item?.Price)}
+								<div className="font-[600] inline-flex">Số tiền đăng ký:</div> {parseToMoney(item?.Price)}
 							</div>
 						</div>
 
