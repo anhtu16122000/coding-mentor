@@ -12,6 +12,8 @@ import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti, _format } from '~/common/utils'
 import { RootState } from '~/store'
 import ModalRefundCRUD from './ModalRefundCRUD'
+import appConfigs from '~/appConfig'
+import Head from 'next/head'
 
 export interface IRefundPageProps {}
 
@@ -288,11 +290,14 @@ export default function RefundPage(props: IRefundPageProps) {
 
 	return (
 		<>
+			<Head>
+				<title>{appConfigs.appName} | Danh sách hoàn tiền</title>
+			</Head>
 			<PrimaryTable
 				loading={isLoading.type == 'GET_ALL' && isLoading.status}
 				total={totalRow}
 				onChangePage={(event: number) => setTodoApi({ ...initialParams, pageIndex: event })}
-				TitleCard={<div className="extra-table">Danh hoàn tiền</div>}
+				TitleCard={<div className="extra-table">Danh sách hoàn tiền</div>}
 				data={dataSource}
 				columns={columns}
 				Extra={
