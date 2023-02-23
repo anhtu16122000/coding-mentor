@@ -122,7 +122,7 @@ export default function RefundPage(props: IRefundPageProps) {
 				tempOption.branch = temp
 
 				tempFilter.push({
-					name: 'BranchIds',
+					name: 'BranchId',
 					title: 'Chi nhánh',
 					type: 'select',
 					col: 'col-span-2',
