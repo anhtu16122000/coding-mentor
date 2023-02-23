@@ -15,6 +15,7 @@ import { RootState } from '~/store'
 let pageIndex = 1
 const TeacherOff = () => {
 	const { information: userInformation } = useSelector((state: RootState) => state.user)
+
 	const listTodoApi = {
 		fullName: null,
 		userCode: null,
@@ -22,6 +23,7 @@ const TeacherOff = () => {
 		pageSize: PAGE_SIZE,
 		pageIndex: pageIndex
 	}
+
 	const [todoApi, setTodoApi] = useState(listTodoApi)
 	const [isLoading, setIsLoading] = useState(false)
 	const [teacherOff, setTeacherOff] = useState<ITeacherOff[]>([])
@@ -47,13 +49,13 @@ const TeacherOff = () => {
 			title: 'Từ ngày',
 			dataIndex: 'StartTime',
 			key: 'StartTime',
-			render: (text, data) => <span>{!!text ? moment(text).format('DD/MM/YYYY') : ''}</span>
+			render: (text, data) => <span className="font-[600] text-[#1976D2]">{!!text ? moment(text).format('DD/MM/YYYY') : ''}</span>
 		},
 		{
 			title: 'Đến ngày',
 			dataIndex: 'EndTime',
 			key: 'EndTime',
-			render: (text, data) => <span>{!!text ? moment(text).format('DD/MM/YYYY') : ''}</span>
+			render: (text, data) => <span className="font-[600] text-[#388E3C]">{!!text ? moment(text).format('DD/MM/YYYY') : ''}</span>
 		},
 		{
 			title: 'Trạng thái',
@@ -219,7 +221,6 @@ const TeacherOff = () => {
 		setCurrentPage(pageNumber)
 		setTodoApi({
 			...todoApi,
-			// ...listFieldSearch,
 			pageIndex: pageIndex
 		})
 	}
@@ -245,8 +246,8 @@ const TeacherOff = () => {
 			totalPage={totalRow}
 			columns={userInformation.RoleId == 2 ? columnsTeacher : columnsAdmin}
 			expandable={expandedRowRender}
-			TitleCard={userInformation.RoleId != 1 && <TeacherOffForm setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
-			Extra={'Danh sách lịch nghỉ'}
+			Extra={userInformation.RoleId != 1 && <TeacherOffForm setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
+			TitleCard={'Danh sách lịch nghỉ'}
 		/>
 	)
 }

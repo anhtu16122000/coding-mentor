@@ -71,25 +71,12 @@ const Permission = () => {
 			render: (text, item) => {
 				return (
 					<>
-						<PermissionEditForm rolePermission={rolePermission} item={item} getFunctionPermission={getFunctionPermission} />
+						<PermissionEditForm rolePermission={rolePermission} item={item} getFunctionPermission={getData} />
 					</>
 				)
 			}
 		}
 	]
-	const getFunctionPermission = async () => {
-		try {
-			const res = await permissionApi.getFunctionPermission()
-			if (res.status === 200) {
-				setDataFunctionPermission(res.data.data)
-			}
-			if (res.status === 204) {
-				setDataFunctionPermission([])
-			}
-		} catch (err) {
-			ShowNoti('error', err.message)
-		}
-	}
 
 	const getRolePermission = async () => {
 		try {
@@ -113,7 +100,6 @@ const Permission = () => {
 	}
 
 	useEffect(() => {
-		getFunctionPermission()
 		getRolePermission()
 	}, [])
 
@@ -121,9 +107,15 @@ const Permission = () => {
 		handShowTable()
 	}, [])
 
-	const onSubmit = async (data) => {
+	const [filters, setFilters] = useState({ search: '' })
+
+	useEffect(() => {
+		getData()
+	}, [filters])
+
+	async function getData() {
 		try {
-			const res = await permissionApi.searchPermession(data)
+			const res = await permissionApi.searchPermession(filters)
 			if (res.status === 200) {
 				setDataFunctionPermission(res.data.data)
 				if (res.data.data.length === 0) {
@@ -133,6 +125,10 @@ const Permission = () => {
 		} catch (err) {
 			ShowNoti('error', err.message)
 		}
+	}
+
+	const onSubmit = async (params) => {
+		setFilters({ ...filters, ...params })
 	}
 
 	return (
