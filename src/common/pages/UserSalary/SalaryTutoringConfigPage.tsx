@@ -116,7 +116,6 @@ export const SalaryTutoringConfigPage = () => {
 
 				// isResetKey={isResetKey}
 			/>
-			s
 		</div>
 	)
 }
