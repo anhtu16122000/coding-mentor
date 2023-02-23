@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart } from 'recharts'
+import { useEffect, useState } from 'react'
+import { Bar, CartesianGrid, ComposedChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 const StatisticTop5Course = (props) => {
-	const { data } = props
+	const { data, titleBar } = props
+
 	const [hideXAxis, setHideXAxis] = useState(false)
 
 	const renderLegend = (props) => {
@@ -40,7 +41,7 @@ const StatisticTop5Course = (props) => {
 					<YAxis />
 					<Tooltip />
 					<Legend content={renderLegend} />
-					<Bar dataKey="Total" name="Thông kê khóa học có nhiều sinh viên nhất" barSize={20} fill="#9194ce" />
+					<Bar dataKey="Value" name={titleBar || 'Thông kê khóa học có nhiều sinh viên nhất'} barSize={20} fill="#9194ce" />
 				</ComposedChart>
 			</ResponsiveContainer>
 		</>
