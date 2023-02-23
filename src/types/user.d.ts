@@ -98,6 +98,7 @@ type IUserInformation = IBaseApi<{
 	AcademicPurposesID: number
 	PlacementTestID: number
 	ParentsOf: string
+	UserCode: string
 	Ratings: string
 	Enable: boolean
 	CreatedOn: string

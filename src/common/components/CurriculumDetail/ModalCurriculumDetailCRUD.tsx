@@ -34,7 +34,7 @@ export default function ModalCurriculumDetailCRUD(props: IModalCurriculumDetailC
 		if (!onSubmit) return
 
 		onSubmit(data).then((res) => {
-			if (res.status === 200) {
+			if (res?.status === 200) {
 				form.resetFields()
 				onClose()
 			}
