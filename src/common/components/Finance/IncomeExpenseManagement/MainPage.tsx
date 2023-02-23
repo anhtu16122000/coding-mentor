@@ -197,7 +197,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 			let res = await userInformationApi.getAll(todoStudentOption)
 			if (res.status == 200) {
 				let temp = []
-				res.data.data.forEach((item) => temp.push({ title: item.FullName, value: item.UserInformationId }))
+				res.data.data.forEach((item) => temp.push({ title: `${item.FullName}-${item.UserCode}`, value: item.UserInformationId }))
 				setStudentOption(temp)
 			}
 		} catch (error) {
@@ -313,7 +313,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 				</div>
 				<div className="item total-revenue">
 					<div className="text">
-						<p className="name">Tổng doanh thu</p>
+						<p className="name">Lợi nhuận</p>
 						<p className="number">{_format.numberToPrice(dataStatistical.revenue)}₫</p>
 					</div>
 					<div className="icon">

@@ -12,6 +12,8 @@ import { parseToMoney } from '~/common/utils/common'
 import FilterTable from '~/common/utils/table-filter'
 import { ModalSalaryCRUD } from './ModalSalaryCRUD'
 import { ModalTeachingDetail } from './ModalTeachingDetail'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 export const SalaryPage = () => {
 	const [valueDate, setValueDate] = useState(moment().subtract(1, 'months'))
@@ -20,12 +22,29 @@ export const SalaryPage = () => {
 	const [totalRow, setTotalRow] = useState(1)
 	const [dataTable, setDataTable] = useState([])
 	const [loading, setLoading] = useState(false)
+
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
 	const handleFilterMonth = (data) => {
-		// const year = Number(moment(data).format('YYYY'))
-		// const month = Number(moment(data).format('MM'))
-		// setApiParameters({ ...apiParameters, month: month, year: year })
 		setValueDate(data)
 	}
+
 	const handleReset = () => {
 		if (valueDate) {
 			const year = Number(moment(valueDate).format('YYYY'))
@@ -167,6 +186,7 @@ export const SalaryPage = () => {
 			}
 		}
 	]
+
 	return (
 		<div className="salary-page-list">
 			<PrimaryTable
@@ -184,22 +204,24 @@ export const SalaryPage = () => {
 				columns={columns}
 				Extra={
 					<>
-						<Popconfirm
-							title={`Xác nhận tính lương từ ${moment().subtract(1, 'months').startOf('month').format('DD-MM-YYYY')} đến ${moment()
-								.subtract(1, 'months')
-								.endOf('month')
-								.format('DD-MM-YYYY')}?`}
-							okText="Ok"
-							cancelText="No"
-							onConfirm={handleSalaryClosing}
-						>
-							<button
-								type="button"
-								className={`font-medium none-selection rounded-lg h-[38px] px-3 inline-flex items-center justify-center text-white bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf]`}
+						{isAdmin() && (
+							<Popconfirm
+								title={`Xác nhận tính lương từ ${moment().subtract(1, 'months').startOf('month').format('DD-MM-YYYY')} đến ${moment()
+									.subtract(1, 'months')
+									.endOf('month')
+									.format('DD-MM-YYYY')}?`}
+								okText="Ok"
+								cancelText="No"
+								onConfirm={handleSalaryClosing}
 							>
-								Tính lương tháng trước
-							</button>
-						</Popconfirm>
+								<button
+									type="button"
+									className={`font-medium none-selection rounded-lg h-[38px] px-3 inline-flex items-center justify-center text-white bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf]`}
+								>
+									Tính lương tháng trước
+								</button>
+							</Popconfirm>
+						)}
 					</>
 				}
 			/>

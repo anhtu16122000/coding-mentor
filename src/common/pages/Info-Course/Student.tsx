@@ -58,6 +58,10 @@ const Student: FC<IPersonnel> = (props) => {
 	const router = useRouter()
 	const dispatch = useDispatch()
 
+	function isManager() {
+		return userInformation?.RoleId == 4
+	}
+
 	const sale = useMemo(() => {
 		if (state.saler.Saler.length > 0) {
 			return parseSelectArray(state.saler.Saler, 'FullName', 'UserInformationId')
@@ -289,7 +293,7 @@ const Student: FC<IPersonnel> = (props) => {
 			fixed: 'right',
 			render: (data, item) => {
 				return (
-					<div className="flex justify-center items-center">
+					<div className="flex items-center">
 						<IconButton
 							type="button"
 							icon={'eye'}
@@ -303,32 +307,34 @@ const Student: FC<IPersonnel> = (props) => {
 							className=""
 							tooltip="Chi tiết"
 						/>
-						{props.type !== 'student' && (
-							<CreateUser
-								isEdit
-								roleStaff={roleStaff}
-								defaultData={item}
-								className="!hidden w700:!inline-flex"
-								onRefresh={() => getUsers(apiParameters)}
-								isStudent={false}
-							/>
+
+						{isAdmin() && (
+							<>
+								<CreateUser
+									isEdit
+									roleStaff={roleStaff}
+									defaultData={item}
+									className="!hidden w700:!inline-flex"
+									onRefresh={() => getUsers(apiParameters)}
+									isStudent={false}
+								/>
+								<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.UserInformationId)} />
+							</>
 						)}
 
-						{props.type == 'student' && (
-							<CreateUser
-								isEdit
-								roleStaff={roleStaff}
-								source={source}
-								learningNeed={learningNeed}
-								purpose={purpose}
-								sale={sale}
-								defaultData={item}
-								className="!hidden w700:!inline-flex"
-								onRefresh={() => getUsers(apiParameters)}
-								isStudent={true}
-							/>
+						{isManager() && item?.RoleId !== 1 && item?.RoleId !== 4 && (
+							<>
+								<CreateUser
+									isEdit
+									roleStaff={roleStaff}
+									defaultData={item}
+									className="!hidden w700:!inline-flex"
+									onRefresh={() => getUsers(apiParameters)}
+									isStudent={false}
+								/>
+								<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.UserInformationId)} />
+							</>
 						)}
-						<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.UserInformationId)} />
 					</div>
 				)
 			}

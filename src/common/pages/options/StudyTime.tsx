@@ -68,6 +68,24 @@ const StudyTime = () => {
 		getDataSource()
 	}, [todoApi])
 
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
 	const columns = [
 		{
 			title: 'Ca học',
@@ -108,21 +126,17 @@ const StudyTime = () => {
 	]
 
 	useEffect(() => {
-		if (!!userInformation && userInformation?.RoleId != 1) {
+		if (!!userInformation && !isAdmin() && !isManager()) {
 			Router.push('/')
 		}
 	}, [userInformation])
 
 	return (
 		<>
-			{userInformation?.RoleId == 1 && (
+			{(isAdmin() || isManager()) && (
 				<PrimaryTable
-					// currentPage={currentPage}
 					total={totalPage && totalPage}
-					// getPagination={(pageNumber: number) => getPagination(pageNumber)}
 					loading={isLoading}
-					// addClass="basic-header modal-medium table-study-time"
-					// TitlePage="Danh sách ca học"
 					onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
 					Extra={<StudyTimeForm getDataSource={getDataSource} />}
 					data={state.studyTime.StudyTime}

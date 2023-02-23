@@ -1,7 +1,5 @@
 import { Card, Table } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
-import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
-import { wait } from '~/common/utils'
 import EmptyData from '../../EmptyData'
 import Popup from './MenuContext'
 
@@ -61,10 +59,6 @@ const PrimaryTable: FC<IPrimaryTable> = (props) => {
 		if (typeof onExpand != 'undefined') {
 			onExpand(record)
 		}
-	}
-
-	const handleOpenMenuContext = () => {
-		console.log('Open')
 	}
 
 	useEffect(() => {

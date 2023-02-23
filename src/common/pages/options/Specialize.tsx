@@ -28,6 +28,24 @@ const Specialize = () => {
 	const [totalPage, setTotalPage] = useState(null)
 	const [todoApi, setTodoApi] = useState(listTodoApi)
 
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
 	const handleDelete = async (id) => {
 		try {
 			const res = await gradeApi.delete(id)
@@ -70,7 +88,7 @@ const Specialize = () => {
 
 	// USE EFFECT - FETCH DATA
 	useEffect(() => {
-		if (userInformation?.RoleId == 1) {
+		if (isAdmin() || isManager()) {
 			getDataSource()
 		}
 	}, [todoApi, userInformation])
@@ -109,15 +127,11 @@ const Specialize = () => {
 
 	return (
 		<>
-			{userInformation?.RoleId == 1 && (
+			{(isAdmin() || isManager()) && (
 				<PrimaryTable
-					// currentPage={currentPage}
 					total={totalPage && totalPage}
-					// getPagination={(pageNumber: number) => getPagination(pageNumber)}
 					loading={isLoading}
 					onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
-					// addClass="basic-header"
-					// TitlePage="Danh sách chuyên môn"
 					Extra={<SpecializeForm setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
 					data={state.specialize.Specialize}
 					columns={columns}

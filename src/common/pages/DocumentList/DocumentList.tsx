@@ -158,8 +158,6 @@ const DocumentList = (props) => {
 
 	return (
 		<div className="h-100">
-			{/* <TitlePage title="Danh sách tài liệu" /> */}
-
 			<Card
 				title={
 					<div className="d-md-inline-block">

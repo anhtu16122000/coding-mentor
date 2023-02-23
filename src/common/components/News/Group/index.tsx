@@ -5,6 +5,8 @@ import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
 import RestApi from '~/api/RestApi'
 import { encode } from '~/common/utils/common'
 import GroupForm from './form'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const GroupThumb = ({ uri }) => {
 	const [thumb, setThumb] = useState('')
@@ -20,42 +22,62 @@ const GroupThumb = ({ uri }) => {
 }
 
 function NewsGroup(props) {
-	const { pageSizeDisplay = 8 } = props
+	const { groups, totalRow, loading } = props
 
-	const [loading, setLoading] = useState(true)
-	const [groups, setGroups] = useState([])
-	const [filter, setFilter] = useState({ pageSize: pageSizeDisplay, pageIndex: 1 })
-	const [totalRow, setTotalRow] = useState(0)
+	// const [loading, setLoading] = useState(true)
+	// const [groups, setGroups] = useState([])
+	const [filter, setFilter] = useState({ pageSize: 8, pageIndex: 1 })
+	// const [totalRow, setTotalRow] = useState(0)
 
-	useEffect(() => {
-		getData()
-	}, [filter])
+	// useEffect(() => {
+	// 	getData()
+	// }, [])
 
-	async function getData() {
-		setLoading(true)
-		try {
-			const res = await RestApi.get<any>('NewsFeedGroup', filter)
-			if (res.status === 200) {
-				setGroups(res.data.data)
-				setTotalRow(res.data.totalRow)
-			}
-		} catch (error) {
-		} finally {
-			setLoading(false)
-		}
+	// async function getData() {
+	// 	console.log('---- NewsFeedGroup ----')
+	// 	console.log('-- filter: ', filter)
+
+	// 	setLoading(true)
+	// 	try {
+	// 		const res = await RestApi.get<any>('NewsFeedGroup', filter)
+	// 		if (res.status === 200) {
+	// 			setGroups(res.data.data)
+	// 			setTotalRow(res.data.totalRow)
+	// 		}
+	// 	} catch (error) {
+	// 	} finally {
+	// 		setLoading(false)
+	// 	}
+	// }
+
+	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return userInformation.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation.RoleId == 2
+	}
+
+	function isStdent() {
+		return userInformation.RoleId == 3
 	}
 
 	return (
 		<div className="p-[16px] cc-news-group">
 			<h4 className="font-semibold text-[16px]">Danh sách nhóm </h4>
 
-			<GroupForm onRefresh={() => setFilter((pre) => ({ ...pre }))} isEdit={false} defaultData={null} />
+			{(isAdmin() || isTeacher()) && (
+				<>
+					<GroupForm onRefresh={() => setFilter((pre) => ({ ...pre }))} isEdit={false} defaultData={null} />
+					<div className="cc-hr my-[16px]" />
+				</>
+			)}
 
-			<div className="cc-hr my-[16px]" />
+			{!loading && !!groups && groups.length == 0 && <Empty description="Không có nhóm nào" className="py-[16px]" />}
 
-			{!loading && groups.length == 0 && <Empty description="Không có nhóm nào" className="py-[16px]" />}
-
-			{!loading && groups.length != 0 && (
+			{!loading && !!groups && groups.length != 0 && (
 				<>
 					{groups.map((group, indexGroup) => {
 						return (
@@ -78,30 +100,6 @@ function NewsGroup(props) {
 							Hiện tất cả
 						</div>
 					)}
-
-					{/* <div
-						onClick={() => {
-							if (filter.pageSize == pageSizeDisplay) {
-								setFilter({ ...filter, pageSize: totalRow })
-							} else {
-								setFilter({ ...filter, pageSize: pageSizeDisplay })
-							}
-						}}
-						className="cc-news-group-more"
-					>
-						{totalRow > filter.pageSize && (
-							<>
-								Hiện tất cả
-								<MdOutlineKeyboardArrowDown size={18} className={` duration-300`} />
-							</>
-						)}
-						{totalRow === filter.pageSize && (
-							<>
-								Ẩn bớt
-								<MdOutlineKeyboardArrowDown size={18} className={`rotate-180  duration-300`} />
-							</>
-						)}
-					</div> */}
 				</>
 			)}
 

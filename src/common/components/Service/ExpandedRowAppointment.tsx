@@ -1,14 +1,29 @@
 import React from 'react'
-import PrimaryTable from '../Primary/Table'
 import CustomerAppointmentNote from '~/common/components/Customer/CustomerAdvisory/CustomerAppointmentNote'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const ExpandedRowAppointment = (props) => {
 	const { rowData } = props
-	// const getWidth = () => {
-	// 	let box = document.querySelector('.ant-table-wrapper')
-	// 	return box?.clientWidth ? box.clientWidth - 150 : 0
-	// }
-	console.log('rowData: ', rowData)
+
+	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return userInformation.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation.RoleId == 2
+	}
+
+	function isManager() {
+		return userInformation.RoleId == 4
+	}
+
+	function isStdent() {
+		return userInformation.RoleId == 3
+	}
+
 	return (
 		<div className="wrapper-expanded-table-appointment">
 			<h2 className="result-appointment-title">Kết quả</h2>
@@ -37,7 +52,8 @@ const ExpandedRowAppointment = (props) => {
 					</td>
 				</tr>
 			</table>
-			<CustomerAppointmentNote dataRow={rowData} />
+
+			{(isAdmin() || isTeacher() || isManager()) && <CustomerAppointmentNote dataRow={rowData} />}
 		</div>
 	)
 }

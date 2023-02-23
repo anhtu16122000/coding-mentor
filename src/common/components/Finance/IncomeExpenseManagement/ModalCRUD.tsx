@@ -8,6 +8,8 @@ import InputTextField from '../../FormControl/InputTextField'
 import SelectField from '../../FormControl/SelectField'
 import SelectFieldSearch from '../../FormControl/SelectFieldSearch'
 import TextBoxField from '../../FormControl/TextBoxField'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 export interface IIncomeExpenseManagementModalCRUDProps {
 	mode: 'add' | 'edit' | 'delete'
@@ -65,43 +67,34 @@ export default function IncomeExpenseManagementModalCRUD(props: IIncomeExpenseMa
 		}
 	}, [dataRow])
 
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
 	return (
 		<>
-			{mode == 'add' && (
-				<PrimaryButton
-					background="green"
-					type="button"
-					children={<span>Thêm phiếu</span>}
-					icon="add"
-					onClick={() => {
-						onOpen()
-					}}
-				/>
-			)}
-			{mode == 'edit' && (
-				<IconButton
-					type="button"
-					icon={'edit'}
-					color="green"
-					onClick={() => {
-						onOpen()
-					}}
-					className="Sửa phiếu"
-					tooltip=""
-				/>
+			{isAdmin() && mode == 'add' && (
+				<PrimaryButton background="green" type="button" children={<span>Thêm phiếu</span>} icon="add" onClick={() => onOpen()} />
 			)}
 
-			{mode == 'delete' && (
-				<IconButton
-					type="button"
-					icon={'remove'}
-					color="red"
-					onClick={() => {
-						onOpen()
-					}}
-					className=""
-					tooltip="Xóa phiếu"
-				/>
+			{mode == 'edit' && <IconButton type="button" icon={'edit'} color="green" onClick={() => onOpen()} className="Sửa phiếu" tooltip="" />}
+
+			{isAdmin() && mode == 'delete' && (
+				<IconButton type="button" icon={'remove'} color="red" onClick={() => onOpen()} className="" tooltip="Xóa phiếu" />
 			)}
 
 			<Modal

@@ -249,30 +249,6 @@ const Dashboard = () => {
 						<StatisticByMonthAdmin statisticGetInMonth={statisticGetInMonth} />
 					</Card>
 					<Row gutter={16}>
-						{/* <Col xs={{ span: 0 }} md={{ span: 0 }} lg={{ span: 8 }}>
-							<Card
-								className="mt-4"
-								title={<h1 className="text-2xl font-medium">Danh sách thông báo</h1>}
-								extra={
-									<div className="-my-4">
-										<Notification />
-									</div>
-								}
-							>
-								<ListNotificate data={dataNotification} onClick={handleSeenNotification} />
-
-								<Modal width={700} title="Danh sách tài liệu" visible={isModalVisible} onCancel={onCloseModal} footer={null}>
-									<div className="flex items-center justify-between">
-										<p className="font-bold text-tw-blue">{contentToShow?.Title}</p>
-										<p>{moment(contentToShow?.CreatedOn).format('DD/MM/YYYY')}</p>
-									</div>
-									<div>
-										<p>{contentToShow?.Content}</p>
-									</div>
-								</Modal>
-							</Card>
-						</Col> */}
-
 						<Col xs={{ span: 24 }} md={{ span: 24 }} lg={{ span: 24 }}>
 							<Card id="wrap-list" className="mt-4" title={<h1 className="text-2xl font-medium">Danh sách Webinar</h1>}>
 								<ListWorkshop columns={columnsWorkshop} data={seminar} />

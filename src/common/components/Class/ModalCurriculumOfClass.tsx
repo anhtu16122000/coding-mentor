@@ -34,7 +34,7 @@ export default function ModalCurriculumOfClassCRUD(props: IModalCurriculumOfClas
 		if (!onSubmit) return
 
 		onSubmit(data).then((res) => {
-			if (res.status === 200) {
+			if (res && res.status === 200) {
 				form.resetFields()
 				onClose()
 			}
@@ -90,7 +90,7 @@ export default function ModalCurriculumOfClassCRUD(props: IModalCurriculumOfClas
 					onClose()
 				}}
 				title={mode == 'add' ? 'Thêm chủ đề' : mode == 'edit' ? 'Cập nhật chủ đề' : 'Xóa chủ đề'}
-				width={mode != 'delete' ? 800 : 400}
+				width={mode != 'delete' ? 600 : 400}
 			>
 				<Form form={form} layout="vertical" onFinish={_onSubmit}>
 					<div className="grid grid-cols-2 gap-x-4 antd-custom-wrap">

@@ -86,10 +86,27 @@ const Discount = () => {
 		setTodoApi({ ...listTodoApi })
 	}
 
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
 	const columns = [
 		{
 			title: 'Mã khuyến mãi',
-			width: 150,
 			dataIndex: 'Code',
 			...FilterColumn('Code', onSearch, handleReset, 'text'),
 			render: (code) => (
@@ -110,7 +127,6 @@ const Discount = () => {
 		{
 			title: 'Khuyến mãi',
 			dataIndex: 'Value',
-			width: 120,
 			render: (text, record) => {
 				if (record.Type == 2) {
 					return <p className="font-weight-primary">{text}%</p>
@@ -122,7 +138,6 @@ const Discount = () => {
 		{
 			title: 'Gói khuyến mãi',
 			dataIndex: 'PackageType',
-			width: 140,
 			render: (text, record) => {
 				return <p className="font-weight-black">{record.PackageTypeName}</p>
 			}
@@ -131,12 +146,10 @@ const Discount = () => {
 			title: 'Khuyến mãi tối đa',
 			dataIndex: 'MaxDiscount',
 			align: 'center',
-			width: 140,
 			render: (text, record) => Intl.NumberFormat('ja-JP').format(text)
 		},
 		{
 			title: 'Trạng thái',
-			width: 150,
 			align: 'center',
 			dataIndex: 'StatusName',
 			render: (text: any, record: any) => {
@@ -153,27 +166,24 @@ const Discount = () => {
 		{
 			title: 'Số lượng',
 			align: 'center',
-			width: 90,
 			dataIndex: 'Quantity'
 		},
 		{
 			title: 'Đã dùng',
-			width: 90,
 			align: 'center',
 			dataIndex: 'UsedQuantity'
 		},
 		{
 			title: 'Ngày hết hạn',
-			width: 120,
 			dataIndex: 'Expired',
 			render: (date) => moment(date).format('DD/MM/YYYY')
 		},
 		{
-			title: 'Chức năng',
+			title: '',
 			fixed: 'right',
 			render: (record, text, index) => (
 				<>
-					{userInformation?.RoleId == 1 && (
+					{(isAdmin() || isManager()) && (
 						<>
 							<DiscountForm rowData={record} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
 							<DeleteTableRow text={text.Code} handleDelete={() => handleDelete(text.Id)} />
@@ -203,6 +213,8 @@ const Discount = () => {
 					break
 				case '6':
 					break
+				case '4':
+					break
 				default:
 					Router.push('/')
 			}
@@ -216,6 +228,9 @@ const Discount = () => {
 					return true
 					break
 				case '6':
+					return true
+					break
+				case '4':
 					return true
 					break
 				default:
@@ -235,7 +250,7 @@ const Discount = () => {
 							currentPage={currentPage}
 							totalPage={totalPage && totalPage}
 							getPagination={getPagination}
-							TitleCard={userInformation?.RoleId == 1 && <DiscountForm setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
+							TitleCard={(isAdmin() || isManager()) && <DiscountForm setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
 							dataSource={state.discount.Discount}
 							columns={columns}
 							expandable={expandedRowRender}

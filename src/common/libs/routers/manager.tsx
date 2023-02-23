@@ -5,7 +5,7 @@ import { IoLibrarySharp, IoVideocam } from 'react-icons/io5'
 import { RiFileList2Fill } from 'react-icons/ri'
 import { TiHome } from 'react-icons/ti'
 
-export const AdminMenu = [
+export const ManagerMenu = [
 	{
 		Key: 'home',
 		TabName: 'Trang chủ',
@@ -53,7 +53,7 @@ export const AdminMenu = [
 	}
 ]
 
-export const AdminChildMenu = [
+export const ManagerChildMenu = [
 	{
 		Parent: 'home',
 		MenuTitle: 'Quản lý hệ thống',
@@ -202,30 +202,9 @@ export const AdminChildMenu = [
 			},
 			{
 				ItemType: 'single',
-				Key: '/users/salary-config',
-				Route: '/users/salary-config',
-				Text: 'Cấu hình lương',
-				Icon: ''
-			},
-			{
-				ItemType: 'single',
 				Key: '/users/salary',
 				Route: '/users/salary',
 				Text: 'Bảng lương',
-				Icon: ''
-			},
-			{
-				ItemType: 'single',
-				Key: '/users/teacher/open-calender',
-				Route: '/users/teacher/open-calender',
-				Text: 'Mở lịch trống',
-				Icon: ''
-			},
-			{
-				ItemType: 'single',
-				Key: '/users/salary-tutoring-config',
-				Route: '/users/salary-tutoring-config',
-				Text: 'Cấu hình lương dạy kèm',
 				Icon: ''
 			}
 		]
@@ -278,19 +257,6 @@ export const AdminChildMenu = [
 				Icon: '',
 				Route: '/class/register',
 				Text: 'Đăng ký học'
-			},
-			{
-				TypeItem: 'single',
-				Key: '/class/tutoring-config',
-				Icon: '',
-				Route: '/class/tutoring-config',
-				Text: 'Cấu hình thời gian đặt lịch'
-			},
-			{
-				TypeItem: 'single',
-				Key: '/class/zoom-rooms',
-				Route: '/class/zoom-rooms',
-				Text: 'Danh sách phòng Zoom'
 			}
 		]
 	},
@@ -376,13 +342,6 @@ export const AdminChildMenu = [
 						Key: '/options/study-time',
 						Route: '/options/study-time',
 						Text: 'Ca học',
-						Icon: ''
-					},
-					{
-						ItemType: 'single',
-						Key: '/options/zoom',
-						Route: '/options/zoom',
-						Text: 'Cấu hình Zoom',
 						Icon: ''
 					}
 				]
@@ -472,23 +431,9 @@ export const AdminChildMenu = [
 					},
 					{
 						ItemType: 'single',
-						Key: '/options/payment',
-						Route: '/options/payment',
-						Text: 'Phương thức thanh toán',
-						Icon: ''
-					},
-					{
-						ItemType: 'single',
 						Key: '/options/tags',
 						Route: '/options/tags',
 						Text: 'Danh mục từ khoá',
-						Icon: ''
-					},
-					{
-						ItemType: 'single',
-						Key: '/options/paymentPemission',
-						Route: '/options/paymentPemission',
-						Text: 'Cấp quyền thanh toán',
 						Icon: ''
 					}
 				]

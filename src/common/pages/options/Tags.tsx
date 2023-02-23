@@ -1,7 +1,9 @@
 import { Tabs } from 'antd'
 import moment from 'moment'
+import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { tagCategoryApi } from '~/api/tagCategory'
+import appConfigs from '~/appConfig'
 import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import TagForm from '~/common/components/Tags/TagForm'
@@ -48,20 +50,20 @@ function TagsPage() {
 	const columns = [
 		{
 			title: 'Tên',
-			width: 200,
 			dataIndex: 'Name',
 			render: (text) => <p className="font-weight-black">{text}</p>
 		},
 		{
 			title: 'Dạng',
-			width: 200,
 			dataIndex: 'TypeName',
 			render: (text) => <p className="font-weight-black">{text}</p>
 		},
-		{ title: 'Người tạo', width: 200, dataIndex: 'ModifiedBy' },
+		{
+			title: 'Người tạo',
+			dataIndex: 'ModifiedBy'
+		},
 		{
 			title: 'Ngày tạo',
-			width: 200,
 			dataIndex: 'ModifiedOn',
 			render: (date) => moment(date).format('DD/MM/YYYY')
 		},
@@ -71,7 +73,6 @@ function TagsPage() {
 			render: (data) => {
 				return (
 					<>
-						{/* <JobForm getDataJob={getDataJob} rowData={data} /> */}
 						<DeleteTableRow text={data.Name} handleDelete={() => handleDelete(data.Id)} />
 					</>
 				)
@@ -102,34 +103,34 @@ function TagsPage() {
 	}, [todoApi])
 
 	return (
-		<ExpandTable
-			loading={isLoading}
-			total={totalRow}
-			onChangePage={(event: number) => {
-				setTodoApi({ ...todoApi, pageIndex: event })
-			}}
-			Extra={<TagForm OptionsList={OptionsList} onAddTag={() => getAllTags()} activeTab={activeTab} />}
-			dataSource={dataTags}
-			columns={columns}
-			pageSize={PAGE_SIZE}
-			TitleCard={
-				<Tabs
-					defaultActiveKey="1"
-					type="card"
-					items={OptionsList.map((item, i) => {
-						return {
-							label: item.title,
-							key: item.value + ''
-						}
-					})}
-					onChange={(tabIndx) => {
-						setActiveTab(+tabIndx)
-						setTodoApi((pre) => ({ ...pre, type: +tabIndx }))
-					}}
-				></Tabs>
-			}
-			expandable={(data) => <TagList tagCategoryId={data.Id} />}
-		/>
+		<>
+			<Head>
+				<title>{appConfigs.appName} | Cấu hình từ khoá</title>
+			</Head>
+			<ExpandTable
+				loading={isLoading}
+				total={totalRow}
+				onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
+				Extra={<TagForm OptionsList={OptionsList} onAddTag={() => getAllTags()} activeTab={activeTab} />}
+				dataSource={dataTags}
+				columns={columns}
+				pageSize={PAGE_SIZE}
+				TitleCard={
+					<Tabs
+						defaultActiveKey="1"
+						type="card"
+						items={OptionsList.map((item, i) => {
+							return { label: item.title, key: item.value + '' }
+						})}
+						onChange={(tabIndx) => {
+							setActiveTab(+tabIndx)
+							setTodoApi((pre) => ({ ...pre, type: +tabIndx }))
+						}}
+					/>
+				}
+				expandable={(data) => <TagList tagCategoryId={data.Id} />}
+			/>
+		</>
 	)
 }
 

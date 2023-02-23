@@ -23,7 +23,7 @@ const ClassList = (props) => {
 	const [isModalOpen, setIsModalOpen] = useState({ id: null, open: null })
 	const [isLoadingDelete, setIsLoadingDelete] = useState(false)
 	const [academic, setAcademic] = useState([])
-	console.log('userInformation: ', userInformation)
+
 	const getPagination = (page) => {
 		setTodoApi({ ...todoApi, pageIndex: page })
 	}

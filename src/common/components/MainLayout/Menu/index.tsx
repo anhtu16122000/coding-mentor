@@ -10,6 +10,7 @@ import { StudentChildMenu, StudentMenu } from '~/common/libs/routers/student'
 import ReactHtmlParser from 'react-html-parser'
 import { log } from '~/common/utils'
 import PrimaryTooltip from '../../PrimaryTooltip'
+import { ManagerChildMenu, ManagerMenu } from '~/common/libs/routers/manager'
 
 const { SubMenu } = Menu
 
@@ -251,20 +252,6 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 		}
 	}, [sameTab])
 
-	function parseJwt(token) {
-		var base64Url = token.split('.')[1]
-		var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-		var jsonPayload = decodeURIComponent(
-			atob(base64)
-				.split('')
-				.map(function (c) {
-					return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-				})
-				.join('')
-		)
-		return JSON.parse(jsonPayload)
-	}
-
 	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	useEffect(() => {
@@ -281,6 +268,10 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 				case 3:
 					setParentMenu(StudentMenu)
 					setChildMenu(StudentChildMenu)
+					break
+				case 4:
+					setParentMenu(ManagerMenu)
+					setChildMenu(ManagerChildMenu)
 					break
 				default:
 					break

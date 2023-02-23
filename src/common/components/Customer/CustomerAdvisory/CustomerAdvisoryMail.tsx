@@ -7,6 +7,8 @@ import { ShowNoti } from '~/common/utils'
 import EditorField from '../../FormControl/EditorField'
 import { FiSend } from 'react-icons/fi'
 import IconButton from '../../Primary/IconButton'
+import Head from 'next/head'
+import appConfigs from '~/appConfig'
 
 const StudentAdvisoryMail = (props) => {
 	const { dataRow, listTodoApi, setTodoApi } = props
@@ -44,12 +46,11 @@ const StudentAdvisoryMail = (props) => {
 
 	return (
 		<div>
-			{/* <Tooltip title="Gửi mail cá nhân">
-				<button className="btn btn-icon exchange text-[20px]" onClick={showModal}>
-					<SendOutlined />
-				</button>
-			</Tooltip> */}
-			<IconButton icon="send" type="button" color="blue" tooltip="Gửi mail cá nhân" />
+			<Head>
+				<title>{appConfigs.appName} | Danh sách Leads</title>
+			</Head>
+
+			<IconButton onClick={showModal} icon="send" type="button" color="blue" tooltip="Gửi thông báo cá nhân" />
 
 			<Modal footer={null} title={'Gửi mail'} visible={isModalVisible} onCancel={handleCancel} width={1400} centered>
 				<Form form={form} layout="vertical" onFinish={onSubmit}>

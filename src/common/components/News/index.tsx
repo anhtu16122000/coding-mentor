@@ -1,5 +1,5 @@
 import { List, Skeleton } from 'antd'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useNewsContext } from '~/common/providers/News'
@@ -9,15 +9,14 @@ import NewsGroup from './Group'
 import GroupHeader from './Group/header'
 import NewsItem from './item'
 import { getNews } from './utils'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
+import RestApi from '~/api/RestApi'
 
 const DEFAULT_FILTER = {
 	newsFeedGroupId: null,
-	accountLogin: null,
-	role: null,
 	pageIndex: 1,
-	pageSize: 4,
-	searchContent: '',
-	orderBy: 0
+	pageSize: 10
 }
 
 function NewsLoading() {
@@ -57,22 +56,43 @@ function NewsFeed() {
 	const [data, setData] = useState<Array<TNews>>([])
 	const [totalItem, setTotalItem] = useState(0)
 
+	const [groups, setGroups] = useState([])
+	const [totalGroup, setTotalGroup] = useState(0)
+	const [groupLoading, setGroupLoading] = useState(true)
+
 	const router = useRouter()
 
 	useEffect(() => {
 		if (!!currentGroup) {
 			setFilter({ ...filter, newsFeedGroupId: currentGroup, pageIndex: 1 })
-		} else {
-			setFilter({ ...filter, newsFeedGroupId: null, pageIndex: 1 })
-		}
+		} else if (!!filter.newsFeedGroupId) setFilter({ ...filter, newsFeedGroupId: null, pageIndex: 1 })
 	}, [currentGroup])
 
 	useEffect(() => {
 		if (!!filter) {
+			if (!!window?.location?.search && !currentGroup) return
 			if (decode(router.query.group) !== currentGroup) return
 			getNews(filter, _setData, setTotalItem, data)
 		}
 	}, [filter])
+
+	useEffect(() => {
+		getGroups()
+	}, [])
+
+	async function getGroups() {
+		setGroupLoading(true)
+		try {
+			const res = await RestApi.get<any>('NewsFeedGroup', filter)
+			if (res.status == 200) {
+				setGroups(res.data.data)
+				setTotalGroup(res.data.totalRow)
+			}
+		} catch (error) {
+		} finally {
+			setGroupLoading(false)
+		}
+	}
 
 	function _setData(params) {
 		setData(params)
@@ -85,6 +105,24 @@ function NewsFeed() {
 		}
 		setLoading(true)
 		setFilter({ ...filter, pageIndex: filter.pageIndex + 1 })
+	}
+
+	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return userInformation.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation.RoleId == 2
+	}
+
+	function isManager() {
+		return userInformation.RoleId == 4
+	}
+
+	function isStdent() {
+		return userInformation.RoleId == 3
 	}
 
 	return (
@@ -100,14 +138,16 @@ function NewsFeed() {
 						</div>
 					)}
 
-					<div className="cc-news-container">
-						<CreateNews onRefresh={() => setFilter({ ...filter, pageIndex: 1 })} />
-					</div>
+					{(isAdmin() || isTeacher() || isManager()) && (
+						<div className="cc-news-container">
+							<CreateNews onRefresh={() => setFilter({ ...filter, pageIndex: 1 })} />
+						</div>
+					)}
 
 					{!currentGroup && (
 						<div className="cc-new-mobile-group ml-[3px]">
 							<div className="bg-[#fff] shadow-md w-full rounded-[6px]">
-								<NewsGroup pageSizeDisplay={2} />
+								<NewsGroup />
 							</div>
 						</div>
 					)}
@@ -146,7 +186,7 @@ function NewsFeed() {
 
 				<div className="min-w-[300px] cc-new-desktop-group" style={{ flex: 1 }}>
 					<div className="bg-[#fff] shadow-md w-full rounded-[6px] cc-news-group">
-						<NewsGroup />
+						<NewsGroup groups={groups} totalRow={totalGroup} loading={groupLoading} />
 					</div>
 				</div>
 			</div>
