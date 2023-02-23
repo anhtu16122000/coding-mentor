@@ -14,6 +14,8 @@ import type { RangePickerProps } from 'antd/es/date-picker'
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
 import { AiOutlineWarning } from 'react-icons/ai'
 import { setTeacher } from '~/store/classReducer'
+import 'moment/locale/vi'
+moment.locale('vi')
 
 const initParameters = { branchId: null, curriculumId: null, startTime: null, endTime: null, pageIndex: 1, pageSize: 8 }
 const ModalAddScheduleToturingEdit = (props) => {
