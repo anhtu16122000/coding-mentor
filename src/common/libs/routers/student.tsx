@@ -1,79 +1,101 @@
 import { BiBookBookmark } from 'react-icons/bi'
+import { BsFillGridFill } from 'react-icons/bs'
+import { FaUserGraduate } from 'react-icons/fa'
+import { IoLibrarySharp, IoVideocam } from 'react-icons/io5'
 import { MdAirplay } from 'react-icons/md'
 import { TbHome, TbScreenShare } from 'react-icons/tb'
+import { TiHome } from 'react-icons/ti'
 
 export const StudentMenu = [
 	{
 		Key: 'home',
-		TabName: 'tab-home',
-		Icon: <TbHome size={22} />
-	},
-	{
-		Key: 'webinar',
-		TabName: 'Webinar',
-		Icon: <TbScreenShare size={22} />
+		TabName: 'Trang chủ',
+		Icon: <TiHome style={{ width: 24, height: 24 }} />
 	},
 	{
 		Key: 'class',
 		TabName: 'Lớp học',
-		Icon: <MdAirplay size={22} />
+		Icon: <BsFillGridFill size={22} />
 	},
 	{
-		Key: 'course',
-		TabName: 'Khóa học',
-		Icon: <BiBookBookmark size={22} />
+		Key: 'student',
+		TabName: 'Học viên',
+		Icon: <FaUserGraduate size={20} />
+	},
+	{
+		Key: 'video',
+		TabName: 'Khoá học video',
+		Icon: <IoVideocam size={22} />
+	},
+	{
+		Key: 'library-online',
+		TabName: 'Thư viện online',
+		Icon: <IoLibrarySharp size={22} />
 	}
 ]
 
 export const StudentChildMenu = [
 	{
-		MenuName: 'tab-home',
 		Parent: 'home',
-		MenuTitle: 'xx69x',
-		MenuKey: '/home',
+		MenuTitle: 'Quản lý hệ thống',
+		MenuKey: 'home',
 		MenuItem: [
 			{
 				TypeItem: 'single',
-				Key: '/home/dashboard',
-				Route: '/home/dashboard',
+				Key: '/news',
+				Route: '/news',
 				Icon: '',
-				Text: 'Thông tin chung'
-			}
-		]
-	},
-	{
-		MenuName: 'Webinar',
-		MenuTitle: 'xx69x',
-		Parent: 'webinar',
-		MenuKey: '/webinars',
-		MenuItem: [
+				Text: 'Tin tức'
+			},
 			{
-				ItemType: 'single',
-				Key: '/webinars',
-				Route: '/webinars',
-				Text: 'Webinar',
-				Icon: ''
+				TypeItem: 'single',
+				Key: '/dashboard',
+				Route: '/dashboard',
+				Icon: '',
+				Text: 'Thống kê'
 			}
 		]
 	},
 	{
 		MenuName: 'Lớp học',
 		MenuTitle: 'Lớp học',
-		Parent: 'class',
 		MenuKey: '/class',
+		Parent: 'class',
 		MenuItem: [
-			{
-				ItemType: 'single',
-				Key: '/class/schedule',
-				Route: '/class/schedule',
-				Text: 'Lịch học',
-				Icon: ''
-			},
 			{
 				ItemType: 'single',
 				Key: '/class/list-class',
 				Route: '/class/list-class',
-				Text: 'Lớp học của bạn',
+				Text: 'Danh sách lớp học',
+				Icon: ''
+			}
+		]
+	},
+	{
+		MenuName: 'Quản lý thông tin học',
+		MenuTitle: 'Thông tin học',
+		MenuKey: '/info-course',
+		Parent: 'student',
+		MenuItem: [
+			{
+				ItemType: 'single',
+				Key: '/info-course/service-appointment-test',
+				Route: '/info-course/service-appointment-test',
+				Text: 'Thôn tin hẹn test',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/student/warning',
+				Route: '/info-course/student/warning',
+				Text: 'Thông tin cảnh báo',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/feedbacks',
+				Route: '/info-course/feedbacks',
+				Text: 'Thông tin phản hồi',
 				Icon: ''
 			}
 		]
@@ -81,7 +103,7 @@ export const StudentChildMenu = [
 	{
 		MenuName: 'Khóa học',
 		MenuTitle: 'Khóa học',
-		Parent: 'course',
+		Parent: 'video',
 		MenuKey: '/course',
 		MenuItem: [
 			{
@@ -90,34 +112,20 @@ export const StudentChildMenu = [
 				Route: '/course/video-course',
 				Text: 'Khóa học',
 				Icon: ''
-			},
-			{
-				ItemType: 'single',
-				Key: '/course/video-course-student',
-				Route: '/course/video-course-student',
-				Text: 'Chứng chỉ',
-				Icon: ''
 			}
 		]
 	},
 	{
-		MenuName: 'Ngân hàng đề thi',
-		MenuTitle: 'Ngân hàng đề thi',
-		MenuKey: '/question-bank',
-		Parent: 'webinar',
+		MenuName: 'Thư viện online',
+		MenuTitle: 'Thư viện online',
+		Parent: 'library-online',
+		MenuKey: '/library-online',
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/question-bank/question-list',
-				Route: '/question-bank/question-list',
-				Text: 'Danh sách câu hỏi',
-				Icon: ''
-			},
-			{
-				ItemType: 'single',
-				Key: '/question-bank/exam-list',
-				Route: '/question-bank/exam-list',
-				Text: 'Danh sách đề thi',
+				Key: '/library-online/library',
+				Route: '/library-online/library',
+				Text: 'Tài liệu',
 				Icon: ''
 			}
 		]

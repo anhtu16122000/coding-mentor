@@ -6,6 +6,8 @@ import { documentLibraryDirectoryApi } from '~/api/document-library'
 import { ShowNoti } from '~/common/utils'
 import LibraryContextItem from './LibraryContextItem'
 import LibraryFormUnit from './LibraryUnitForm'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const LibraryUnits = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 	const listTodoApi = { pageIndex: 1, pageSize: 9999 }
@@ -13,6 +15,24 @@ const LibraryUnits = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 	const [data, setData] = useState([])
 	const [filters, setFilters] = useState(listTodoApi)
 	const [showPop, setShowPop] = useState('')
+
+	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return userInformation.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation.RoleId == 2
+	}
+
+	function isManager() {
+		return userInformation.RoleId == 4
+	}
+
+	function isStdent() {
+		return userInformation.RoleId == 3
+	}
 
 	async function _delete(id) {
 		setLoading(true)
@@ -64,7 +84,7 @@ const LibraryUnits = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 						<div className="flex-1 in-1-line mb-2 w400:mb-0">Danh sách chủ đề</div>
 					</div>
 				}
-				extra={<LibraryFormUnit curriculumId={curriculumId} onRefresh={getData} />}
+				extra={<>{(isAdmin() || isTeacher() || isManager()) && <LibraryFormUnit curriculumId={curriculumId} onRefresh={getData} />}</>}
 			>
 				<div className="relative scrollable max-h-[calc(100vh-400px)] mb-[10px] mr-[-22px] pr-[12px]">
 					{data.length !== 0 && loading && (
@@ -86,34 +106,38 @@ const LibraryUnits = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 											}`}
 										>
 											<div className="docs-unit-name">{item?.Name}</div>
-											<div className="unit-menu">
-												<Popover
-													open={showPop == item?.Id}
-													onOpenChange={(event) => setShowPop(event ? item?.Id : '')}
-													placement="right"
-													content={() => {
-														return (
-															<>
-																<LibraryContextItem
-																	onClick={() => _delete(item?.Id)}
-																	Icon={<CgCloseO size={20} className="mr-2" />}
-																	title="Xoá"
-																/>
-																<hr className="border-[#00000014] my-2" />
-																<LibraryFormUnit isEdit onOpen={() => setShowPop('')} defaultData={item} onRefresh={getData} />
-															</>
-														)
-													}}
-												>
-													<FiMoreHorizontal size={18} />
-												</Popover>
-											</div>
+
+											{(isAdmin() || isTeacher() || isManager()) && (
+												<div className="unit-menu">
+													<Popover
+														open={showPop == item?.Id}
+														onOpenChange={(event) => setShowPop(event ? item?.Id : '')}
+														placement="right"
+														content={() => {
+															return (
+																<>
+																	<LibraryContextItem
+																		onClick={() => _delete(item?.Id)}
+																		Icon={<CgCloseO size={20} className="mr-2" />}
+																		title="Xoá"
+																	/>
+																	<hr className="border-[#00000014] my-2" />
+																	<LibraryFormUnit isEdit onOpen={() => setShowPop('')} defaultData={item} onRefresh={getData} />
+																</>
+															)
+														}}
+													>
+														<FiMoreHorizontal size={18} />
+													</Popover>
+												</div>
+											)}
 										</div>
 									)
 								})}
 							</>
 						)}
 					</>
+
 					<>
 						{data.length == 0 && !loading && (
 							<div className="w-full all-center">

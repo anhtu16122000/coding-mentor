@@ -72,7 +72,7 @@ const MonaSupportPattern = () => {
 			<Form form={form} onFinish={onSubmit}>
 				<div className="m-4 flex">
 					<Form.Item name="PassDev" className="mr-4">
-						<Input.Password placeholder="PassDev" className="border-2 rounded-md mr-4 p-2 text-xl" />
+						<Input defaultValue="m0n4medi" placeholder="PassDev" className="border-2 rounded-md mr-4 p-2 text-xl" />
 					</Form.Item>
 
 					<Form.Item name="Id" className="mr-4">

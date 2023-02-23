@@ -12,16 +12,25 @@ import { parseSelectArray } from '~/common/utils/common'
 import { RootState } from '~/store'
 import { setBranch } from '~/store/branchReducer'
 
+const listTodoApi = {
+	name: null,
+	status: null,
+	branchIds: null,
+	pageSize: PAGE_SIZE,
+	pageIndex: 1,
+	sort: 0,
+	sortType: false
+}
+
+let listFieldFilter = {
+	pageIndex: 1,
+	pageSize: PAGE_SIZE,
+	name: null,
+	status: null,
+	branchIds: null
+}
+
 const ListClass = () => {
-	const listTodoApi = {
-		name: null,
-		status: null,
-		branchIds: null,
-		pageSize: PAGE_SIZE,
-		pageIndex: 1,
-		sort: 0,
-		sortType: false
-	}
 	const [dataFilter, setDataFilter] = useState([
 		{
 			name: 'name',
@@ -55,12 +64,27 @@ const ListClass = () => {
 			optionList: []
 		}
 	])
+
 	const [todoApi, setTodoApi] = useState(listTodoApi)
 	const [listClass, setListClass] = useState<IClass[]>([])
 	const [totalRow, setTotalRow] = useState(null)
 	const [isLoading, setIsLoading] = useState(false)
 	const state = useSelector((state: RootState) => state)
 	const dispatch = useDispatch()
+
+	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return userInformation.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation.RoleId == 2
+	}
+
+	function isStdent() {
+		return userInformation.RoleId == 3
+	}
 
 	const getAllClass = async () => {
 		setIsLoading(true)
@@ -79,26 +103,23 @@ const ListClass = () => {
 			setIsLoading(false)
 		}
 	}
+
 	const getAllBranch = async () => {
-		try {
-			const res = await branchApi.getAll()
-			if (res.status === 200) {
-				dispatch(setBranch(res.data.data))
+		if (isAdmin()) {
+			try {
+				const res = await branchApi.getAll()
+				if (res.status === 200) {
+					dispatch(setBranch(res.data.data))
+				}
+				if (res.status === 204) {
+					dispatch(setBranch([]))
+				}
+			} catch (err) {
+				ShowNoti('error', err.message)
 			}
-			if (res.status === 204) {
-				dispatch(setBranch([]))
-			}
-		} catch (err) {
-			ShowNoti('error', err.message)
 		}
 	}
-	let listFieldFilter = {
-		pageIndex: 1,
-		pageSize: PAGE_SIZE,
-		name: null,
-		status: null,
-		branchIds: null
-	}
+
 	const handleFilter = (listFilter) => {
 		let newListFilter = { ...listFieldFilter }
 		listFilter.forEach((item, index) => {
@@ -120,11 +141,13 @@ const ListClass = () => {
 	const handleReset = () => {
 		setTodoApi({ ...listTodoApi })
 	}
+
 	useEffect(() => {
 		if (state.branch.Branch.length === 0) {
 			getAllBranch()
 		}
 	}, [])
+
 	useEffect(() => {
 		if (state.branch.Branch.length > 0) {
 			const convertData = parseSelectArray(state.branch.Branch, 'Name', 'Id')
@@ -132,9 +155,11 @@ const ListClass = () => {
 			setDataFilter([...dataFilter])
 		}
 	}, [state])
+
 	useEffect(() => {
 		getAllClass()
 	}, [todoApi])
+
 	return (
 		<div className="wrapper-class">
 			<div className="row">
