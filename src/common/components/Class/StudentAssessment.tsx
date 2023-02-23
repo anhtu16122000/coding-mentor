@@ -135,7 +135,6 @@ export const StudentAssessment = () => {
 						onChange={(val) => handleChangeListening(val, index)}
 						value={item?.Listening}
 						className="rounded-lg h-[36px]"
-						type="number"
 					/>
 				</div>
 			)
@@ -156,7 +155,6 @@ export const StudentAssessment = () => {
 							onChange={(val) => handleChangeSpeaking(val, index)}
 							value={item?.Speaking}
 							className="rounded-lg h-[36px]"
-							type="number"
 						/>
 					</div>
 				</>
@@ -178,7 +176,6 @@ export const StudentAssessment = () => {
 							onChange={(val) => handleChangeReading(val, index)}
 							value={item?.Reading}
 							className="rounded-lg h-[36px]"
-							type="number"
 						/>
 					</div>
 				</>
@@ -200,7 +197,6 @@ export const StudentAssessment = () => {
 							onChange={(val) => handleChangeWriting(val, index)}
 							value={item?.Writing}
 							className="rounded-lg h-[36px]"
-							type="number"
 						/>
 					</div>
 				</>
@@ -233,7 +229,7 @@ export const StudentAssessment = () => {
 			dataIndex: 'Action',
 			render: (text, item, index) => (
 				<>
-					{moment() >= moment(item?.StartTime) && user.RoleId == 2 ? (
+					{moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) ? (
 						<IconButton
 							tooltip="Cập nhật"
 							color={`green`}
