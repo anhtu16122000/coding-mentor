@@ -1,4 +1,4 @@
-import { Skeleton } from 'antd'
+import { Input, Skeleton } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -45,7 +45,7 @@ const initialFilter = [
 ]
 
 export default function RefundPage(props: IRefundPageProps) {
-	const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE }
+	const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE, search: '' }
 	const initialParamsStudent = { pageIndex: 1, pageSize: PAGE_SIZE, FullName: '', RoleIds: 3 }
 	const [dataSource, setDataSource] = useState<IRefund[]>()
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
@@ -122,8 +122,9 @@ export default function RefundPage(props: IRefundPageProps) {
 				tempOption.branch = temp
 
 				tempFilter.push({
-					name: 'BranchId',
+					name: 'BranhIds',
 					title: 'Chi nhánh',
+					mode: 'multiple',
 					type: 'select',
 					col: 'col-span-2',
 					optionList: temp
@@ -326,6 +327,7 @@ export default function RefundPage(props: IRefundPageProps) {
 		setTodoApi({
 			...todoApi,
 			...data,
+			BranhIds: data.BranhIds ? data.BranhIds.toString() : '',
 			FromDate: data?.Created?.[0] ? Math.round(new Date(data?.Created?.[0]).setHours(0, 0, 0) / 1000) : null,
 			ToDate: data?.Created?.[1] ? Math.round(new Date(data?.Created?.[1]).setHours(23, 59, 59, 999) / 1000) : null
 		})
@@ -342,13 +344,23 @@ export default function RefundPage(props: IRefundPageProps) {
 				total={totalRow}
 				onChangePage={(event: number) => setTodoApi({ ...initialParams, pageIndex: event })}
 				TitleCard={
-					<div className="extra-table">
+					<div className="flex justify-start items-center">
 						<FilterBaseVer2
 							handleFilter={handleFilter}
 							dataFilter={filterList}
 							handleReset={() => {
 								setTodoApi({ ...initialParams })
 							}}
+						/>
+						<Input.Search
+							className="primary-search max-w-[300px]"
+							onChange={(event) => {
+								if (event.target.value == '') {
+									setTodoApi({ ...todoApi, pageIndex: 1, search: '' })
+								}
+							}}
+							onSearch={(event) => setTodoApi({ ...todoApi, pageIndex: 1, search: event })}
+							placeholder="Tìm kiếm"
 						/>
 					</div>
 				}
