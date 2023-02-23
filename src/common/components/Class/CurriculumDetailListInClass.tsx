@@ -279,7 +279,7 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 																							tooltip="Xóa tài liệu này"
 																						/>
 																					</Popconfirm>
-																					<Checkbox onChange={onChangeCheckCompleteFile}>Checkbox</Checkbox>
+																					<Checkbox onChange={onChangeCheckCompleteFile}></Checkbox>
 																				</>
 																			)}
 																	</div>
