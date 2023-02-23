@@ -100,6 +100,12 @@ export const AdminChildMenu = [
 				Route: '/finance/paymentApprove',
 				Icon: '',
 				Text: 'Duyệt thanh toán'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/finance/refund',
+				Route: '/finance/refund',
+				Text: 'Hoàn tiền'
 			}
 		]
 	},

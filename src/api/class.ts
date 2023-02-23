@@ -50,16 +50,32 @@ export const classApi = {
 	getClassTutoringCurriculum(classId) {
 		return instance.get(`${url}/tutoring-curriculum`, { params: classId})
 	},
+// these apis belong to curriculum in class (rối vãi loz)
 	getCurriculumOfClass(classID) {
-		return instance.get(`${url}/curriculum-of-class/${classID}`)
+		return instance.get(`${url}/curriculum-in-class/${classID}`)
 	},
-	getCurriculumDetailOfClass(classID) {
-		return instance.get(`${url}/curriculum-details-of-class/${classID}`)
+	getCurriculumDetailOfClass(params) {
+		return instance.get(`${url}/curriculum-details-in-class`, { params })
 	},
-	getFileCurriculumOfClass(classID) {
-		return instance.get(`${url}/file-curriculum-of-class/${classID}`)
+	deleteCurriculumDetailOfClass(id) {
+		return instance.delete(`${url}/curriculum-detail-in-class/${id}`)
+	},
+	updateIndexCurriculumDetailOfClass(data) {
+		return instance.put(`${url}/curriculum-detail-in-class-index`, data)
+	},
+	getFileCurriculumOfClass(params) {
+		return instance.get(`${url}/file-curriculum-in-class`, { params })
+	},
+	updateIndexFileCurriculumDetailOfClass(data) {
+		return instance.put(`${url}/file-curriculum-in-class-index`, data)
+	},
+	deleteFileCurriculumDetailOfClass(id) {
+		return instance.delete(`${url}/file-curriculum-in-class/${id}`)
 	},
 	addCurriculumOfClass(data) {
-		return instance.get(`${url}/file-curriculum-of-class`, data)
+		return instance.post(`${url}/curriculum-detail-in-class`, data)
 	},
+	addFileCurriculumDetailInClass(id, data) {
+		return instance.post(`${url}/file-curriculum-in-class/${id}`, data)
+	}
 }

@@ -2,19 +2,19 @@ import { Collapse, Popconfirm, Upload } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import { curriculumDetailApi } from '~/api/curriculum-detail'
+import { classApi } from '~/api/class'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { getFileIcons } from '~/common/utils/main-function'
 import IconButton from '../Primary/IconButton'
-import ModalCurriculumDetailCRUD from './ModalCurriculumDetailCRUD'
+import ModalCurriculumOfClassCRUD from './ModalCurriculumOfClass'
 
-export interface ICurriculumDetailListProps {
+export interface ICurriculumDetailListInClassProps {
 	item: ICurriculumDetail
 	onRendering: Function
 }
 
-export default function CurriculumDetailList(props: ICurriculumDetailListProps) {
+export default function CurriculumDetailListInClass(props: ICurriculumDetailListInClassProps) {
 	const { item, onRendering } = props
 	const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE, CurriculumDetailId: null }
 	const [dataSource, setDataSource] = useState<ICurriculumDetail[]>([])
@@ -34,7 +34,7 @@ export default function CurriculumDetailList(props: ICurriculumDetailListProps) 
 	async function getData() {
 		setIsLoading(true)
 		try {
-			const response = await curriculumDetailApi.getFile(todoApi.CurriculumDetailId)
+			const response = await classApi.getFileCurriculumOfClass({ CurriculumDetailInClassId: todoApi.CurriculumDetailId })
 			if (response.status === 200) {
 				setDataSource(response.data.data)
 			} else {
@@ -49,7 +49,7 @@ export default function CurriculumDetailList(props: ICurriculumDetailListProps) 
 
 	async function getDataNoLoading() {
 		try {
-			const response = await curriculumDetailApi.getFile(todoApi.CurriculumDetailId)
+			const response = await classApi.getFileCurriculumOfClass({ CurriculumDetailInClassId: todoApi.CurriculumDetailId })
 			if (response.status === 200) {
 				setDataSource(response.data.data)
 			} else {
@@ -72,7 +72,7 @@ export default function CurriculumDetailList(props: ICurriculumDetailListProps) 
 		try {
 			const formData = new FormData()
 			formData.append('file', params)
-			const response = await curriculumDetailApi.addFile(item.Id, formData)
+			const response = await classApi.addFileCurriculumDetailInClass(item.Id, formData)
 			if (response.status == 200) {
 				getDataNoLoading()
 			}
@@ -86,7 +86,7 @@ export default function CurriculumDetailList(props: ICurriculumDetailListProps) 
 	const handleDeleteCurriculumDetail = async (data) => {
 		setIsLoading(true)
 		try {
-			const response = await curriculumDetailApi.delete(item.Id)
+			const response = await classApi.deleteCurriculumDetailOfClass(item.Id)
 			if (response.status === 200) {
 				onRendering && onRendering()
 				return response
@@ -128,7 +128,7 @@ export default function CurriculumDetailList(props: ICurriculumDetailListProps) 
 					<IconButton type="button" icon="upload" color="blue" tooltip="Thêm file" />
 				</Upload>
 
-				<ModalCurriculumDetailCRUD mode="delete" onSubmit={handleDeleteCurriculumDetail} isLoading={isLoading} />
+				<ModalCurriculumOfClassCRUD mode="delete" onSubmit={handleDeleteCurriculumDetail} isLoading={isLoading} />
 			</div>
 		)
 	}
@@ -152,7 +152,7 @@ export default function CurriculumDetailList(props: ICurriculumDetailListProps) 
 	const handleUpdateIndexCurriculumDetailFile = async (data) => {
 		setIsLoadingChangePosition(true)
 		try {
-			const response = await curriculumDetailApi.updateIndexCurriculumDetailFile(data)
+			const response = await classApi.updateIndexFileCurriculumDetailOfClass(data)
 			if (response.status === 200) {
 				ShowNoti('success', response.data.message)
 				getDataNoLoading()
@@ -185,7 +185,7 @@ export default function CurriculumDetailList(props: ICurriculumDetailListProps) 
 	const handleDeleteFile = async (data) => {
 		setIsLoadingSubmit(true)
 		try {
-			const response = await curriculumDetailApi.deleteFile(data.Id)
+			const response = await classApi.deleteFileCurriculumDetailOfClass(data.Id)
 			if (response.status === 200) {
 				getDataNoLoading()
 			}

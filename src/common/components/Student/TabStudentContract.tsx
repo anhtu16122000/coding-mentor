@@ -128,7 +128,9 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 									}}
 								/>
 
-								<PrimaryButton background="green" type="submit" children={<span>Lưu thay đổi</span>} icon="save" onClick={() => {}} />
+								{contracts.list.length > 0 && (
+									<PrimaryButton background="green" type="submit" children={<span>Lưu thay đổi</span>} icon="save" onClick={() => {}} />
+								)}
 							</>
 						)}
 						{modeEdit == 'edit' && userInformation.RoleId !== '3' && (
@@ -176,15 +178,17 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 													}}
 												/>
 
-												<PrimaryButton
-													background="green"
-													type="submit"
-													children={<span>Lưu thay đổi</span>}
-													icon="save"
-													onClick={() => {
-														setIsOpenPopover(false)
-													}}
-												/>
+												{contracts.list.length > 0 && (
+													<PrimaryButton
+														background="green"
+														type="submit"
+														children={<span>Lưu thay đổi</span>}
+														icon="save"
+														onClick={() => {
+															setIsOpenPopover(false)
+														}}
+													/>
+												)}
 											</>
 										)}
 										{modeEdit == 'edit' && userInformation.RoleId !== '3' && (

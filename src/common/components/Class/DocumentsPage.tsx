@@ -1,9 +1,10 @@
 import { Card } from 'antd'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { useEffect, useState } from 'react'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { classApi } from '~/api/class'
 import { ShowNoti } from '~/common/utils'
+import CurriculumDetailListInClass from './CurriculumDetailListInClass'
 import ModalCurriculumOfClassCRUD from './ModalCurriculumOfClass'
 
 export interface IDocumentsPageInClassProps {}
@@ -11,16 +12,17 @@ export interface IDocumentsPageInClassProps {}
 export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) {
 	const router = useRouter()
 	const [isLoading, setIsLoading] = useState(false)
+	const [curriculumIdInClass, setCurriculumIdInClass] = useState(null)
 	const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
 	const [dataSource, setDataSource] = useState<{ option: { title: string; value: any }[]; list: ICurriculumDetail[] }>({
 		option: [],
 		list: []
 	})
 
-	const getCurriculum = async () => {
+	const getCurriculumDetail = async (curriculumID) => {
 		setIsLoading(true)
 		try {
-			const response = await classApi.getCurriculumOfClass(router.query.slug)
+			const response = await classApi.getCurriculumDetailOfClass({ CurriculumIdInClassId: curriculumID })
 			if (response.status === 200) {
 				let temp = []
 				response.data.data.forEach((item) => temp.push({ title: item.Name, value: item.Id }))
@@ -38,6 +40,39 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 			setIsLoading(false)
 		}
 	}
+	const getCurriculum = async () => {
+		setIsLoading(true)
+		try {
+			const response = await classApi.getCurriculumOfClass(router.query.class)
+			if (response.status === 200) {
+				getCurriculumDetail(response.data.data[0].Id)
+				setCurriculumIdInClass(response.data.data[0].Id)
+			}
+			if (response.status === 204) {
+				getCurriculumDetail(null)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	const getCurriculumNoLoading = async () => {
+		try {
+			const response = await classApi.getCurriculumOfClass(router.query.class)
+			if (response.status === 200) {
+				getCurriculumDetail(response.data.data[0].Id)
+				setCurriculumIdInClass(response.data.data[0].Id)
+			}
+			if (response.status === 204) {
+				getCurriculumDetail(null)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+		}
+	}
 
 	useEffect(() => {
 		if (router.query) {
@@ -48,8 +83,10 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 	const handleAddCurriculumDetail = async (data) => {
 		setIsLoadingSubmit(true)
 		try {
-			const response = await classApi.addCurriculumOfClass({ Name: data.Name, CurriculumId: Number(router.query.name) })
+			const response = await classApi.addCurriculumOfClass({ Name: data.Name, CurriculumIdInClass: curriculumIdInClass })
 			if (response.status === 200) {
+				getCurriculumDetail(curriculumIdInClass)
+				ShowNoti('success', response.data.message)
 				return response
 			}
 			if (response.status === 204) {
@@ -58,6 +95,19 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 			ShowNoti('error', err.message)
 		} finally {
 			setIsLoadingSubmit(false)
+		}
+	}
+
+	const handleUpdateIndexCurriculumDetail = async (data) => {
+		try {
+			const response = await classApi.updateIndexCurriculumDetailOfClass(data)
+			if (response.status === 200) {
+				getCurriculumNoLoading()
+				ShowNoti('success', response.data.message)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
 		}
 	}
 
@@ -70,6 +120,7 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 
 		let temp = []
 		newItems.forEach((item, index) => temp.push({ Name: item.Name, Index: index + 1, Id: item.Id }))
+		handleUpdateIndexCurriculumDetail(temp)
 	}
 
 	return (
@@ -92,7 +143,7 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 											{(providedDrag, snip) => {
 												return (
 													<div className="" {...providedDrag.draggableProps} {...providedDrag.dragHandleProps} ref={providedDrag.innerRef}>
-														{/* <CurriculumDetailList item={item} onRendering={getCurriculumNoLoading} /> */}
+														<CurriculumDetailListInClass item={item} onRendering={getCurriculumNoLoading} />
 													</div>
 												)
 											}}
