@@ -41,11 +41,11 @@ export const AdminMenu = [
 		TabName: 'Thư viện online',
 		Icon: <IoLibrarySharp size={22} />
 	},
-	{
-		Key: 'library',
-		TabName: 'Đề thi',
-		Icon: <RiFileList2Fill size={22} />
-	},
+	// {
+	// 	Key: 'library',
+	// 	TabName: 'Đề thi',
+	// 	Icon: <RiFileList2Fill size={22} />
+	// },
 	{
 		Key: 'config',
 		TabName: 'Cấu hình',
@@ -160,8 +160,8 @@ export const AdminChildMenu = [
 			},
 			{
 				ItemType: 'single',
-				Key: '/info-course/student/student-warning',
-				Route: '/info-course/student/student-warning',
+				Key: '/info-course/student/warning',
+				Route: '/info-course/student/warning',
 				Text: 'Cảnh báo học viên',
 				Icon: ''
 			},
@@ -279,6 +279,12 @@ export const AdminChildMenu = [
 				Icon: '',
 				Route: '/class/tutoring-config',
 				Text: 'Cấu hình thời gian đặt lịch'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/class/zoom-rooms',
+				Route: '/class/zoom-rooms',
+				Text: 'Danh sách phòng Zoom'
 			}
 		]
 	},
@@ -292,7 +298,7 @@ export const AdminChildMenu = [
 				ItemType: 'single',
 				Key: '/library-online/library',
 				Route: '/library-online/library',
-				Text: 'Chủ đề',
+				Text: 'Tài liệu',
 				Icon: ''
 			}
 		]
@@ -364,6 +370,13 @@ export const AdminChildMenu = [
 						Key: '/options/study-time',
 						Route: '/options/study-time',
 						Text: 'Ca học',
+						Icon: ''
+					},
+					{
+						ItemType: 'single',
+						Key: '/options/zoom',
+						Route: '/options/zoom',
+						Text: 'Cấu hình Zoom',
 						Icon: ''
 					}
 				]

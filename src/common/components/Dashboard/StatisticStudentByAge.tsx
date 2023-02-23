@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart } from 'recharts'
 
 const StatisticStudentByAge = (props) => {
-	const { data } = props
+	const { data, titleBar } = props
 	const [hideXAxis, setHideXAxis] = useState(false)
 
 	useEffect(() => {
@@ -35,11 +35,11 @@ const StatisticStudentByAge = (props) => {
 			<ResponsiveContainer width="100%" height={280}>
 				<ComposedChart width={500} height={300} data={data}>
 					<CartesianGrid stroke="#f5f5f5" />
-					{hideXAxis ? <XAxis hide dataKey="Note" /> : <XAxis dataKey="Note" />}
+					{hideXAxis ? <XAxis hide dataKey="Name" /> : <XAxis dataKey="Name" />}
 					<YAxis />
 					<Tooltip />
 					<Legend content={renderLegend} />
-					<Bar dataKey="Count" name="Thống kê độ tuổi của học viên" barSize={20} fill="#f492a0" />
+					<Bar dataKey="Value" name={titleBar || 'Thống kê độ tuổi của học viên'} barSize={20} fill="#f492a0" />
 				</ComposedChart>
 			</ResponsiveContainer>
 		</>

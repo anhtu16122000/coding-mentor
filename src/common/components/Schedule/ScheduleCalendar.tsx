@@ -4,9 +4,10 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import PrimaryButton from '../Primary/Button'
+import ZoomManager from '../Zoom/ZoomManager'
 
 const ScheduleCalendar = (props) => {
-	const { dataRow } = props
+	const { dataRow, onRefresh } = props
 	const router = useRouter()
 
 	const getStatusSchedule = () => {
@@ -18,37 +19,43 @@ const ScheduleCalendar = (props) => {
 		}
 	}
 
+	function isActive() {
+		return dataRow.event.extendedProps.Status == 1 ? true : false
+	}
+
 	return (
 		<>
-			<div className="wrapper-schedule">
-				<Tooltip title={dataRow.event.extendedProps.StatusName} placement="top">
-					<button
-						onClick={() => router.push(`/class/list-class/detail/?class=${dataRow.event.extendedProps.ClassId}`)}
-						className={`btn-edit-title ${getStatusSchedule()}`}
-					>
-						<span>{moment(dataRow.event.start).format('HH:mm')}</span> <span className="mx-1">-</span>
-						<span>{moment(dataRow.event.end).format('HH:mm')}</span>
-					</button>
+			<div className="wrapper-schedule relative">
+				<button
+					onClick={() => router.push(`/class/list-class/detail/?class=${dataRow.event.extendedProps.ClassId}`)}
+					className={`btn-edit-title ${getStatusSchedule()}`}
+				>
+					<span>{moment(dataRow.event.start).format('HH:mm')}</span> <span className="mx-1">-</span>
+					<span>{moment(dataRow.event.end).format('HH:mm')}</span>
+				</button>
 
-					<div className="wrapper-content-schedule">
+				<div className="wrapper-content-schedule">
+					<p>
+						<span className="title">Lớp:</span> {dataRow.event.extendedProps.ClassName}
+					</p>
+					<p>
+						<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
+					</p>
+					{!!dataRow.event.extendedProps?.RoomId && (
 						<p>
-							<span className="title">Lớp:</span> {dataRow.event.extendedProps.ClassName}
+							<span className="title">Phòng:</span> {dataRow.event.extendedProps.RoomName}
 						</p>
-						<p>
-							<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
-						</p>
-						{!!dataRow.event.extendedProps.RoomId ? (
-							<p>
-								<span className="title">Phòng:</span> {dataRow.event.extendedProps.RoomName}
-							</p>
-						) : null}
-						<p>
-							<span className="title">Ghi chú:</span>
-							<span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
-						</p>
-					</div>
-				</Tooltip>
+					)}
+
+					<p>
+						<span className="title">Ghi chú:</span>
+						<span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
+					</p>
+
+					<ZoomManager data={dataRow.event.extendedProps} onRefresh={onRefresh} />
+				</div>
 			</div>
+
 			<Popover
 				content={
 					<>
@@ -71,24 +78,17 @@ const ScheduleCalendar = (props) => {
 							<p>
 								<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
 							</p>
-							{!!dataRow.event.extendedProps.RoomId ? (
+							{!!dataRow.event.extendedProps.RoomId && (
 								<p>
 									<span className="title">Phòng:</span> {dataRow.event.extendedProps.RoomName}
 								</p>
-							) : null}
+							)}
 							<p>
 								<span className="title">Ghi chú:</span>
 								<span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
 							</p>
-							<PrimaryButton
-								background="green"
-								icon="enter"
-								type="button"
-								className="mt-2"
-								onClick={() => router.push(`/class/list-class/detail/?slug=${dataRow.event.extendedProps.ClassId}`)}
-							>
-								Vào lớp
-							</PrimaryButton>
+
+							<ZoomManager isPopover data={dataRow.event.extendedProps} onRefresh={onRefresh} />
 						</div>
 					</>
 				}

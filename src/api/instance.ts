@@ -61,7 +61,7 @@ const checkResponse = (error: any) => {
 		case 401:
 			// alert('Phiên đăng nhập hết hạn, quay lại đăng nhập!')
 			setTimeout(() => {
-				logOut()
+				// logOut()
 			}, 1000)
 			break
 		case 403:

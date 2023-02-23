@@ -30,7 +30,7 @@ const Schedule = () => {
 	const [paramsSearch, setParamsSearch] = useState({ teacherIds: '', branchIds: '', from: null, to: null })
 	const dispatch = useDispatch()
 	const user = useSelector((state: RootState) => state.user.information)
-	console.log('user: ', user.RoleId)
+
 	const getAllTeacher = async () => {
 		try {
 			const ROLE_TEACHER = 2
@@ -84,11 +84,13 @@ const Schedule = () => {
 			ShowNoti('error', error.message)
 		}
 	}
+
 	useEffect(() => {
 		if (user.RoleId == 1) {
 			getAllTeacher()
 		}
 	}, [])
+
 	useEffect(() => {
 		if (user.RoleId == 1 && branch.length === 0) {
 			getAllBranch()
@@ -121,37 +123,20 @@ const Schedule = () => {
 					selectMirror={true}
 					weekends={true}
 					events={listSchedule}
-					eventsSet={(data) => {
-						setTimeStamp(new Date().getTime())
-					}}
-					eventChange={(data) => {
-						console.log('DATA: ', data)
-					}}
+					eventsSet={(data) => setTimeStamp(new Date().getTime())}
+					eventChange={(data) => console.log('DATA: ', data)}
 					datesSet={(data) => {
-						let DATA_GET = {
-							...paramsSearch,
-							from: moment(data.start).format(),
-							to: moment(data.end).format()
-						}
+						let DATA_GET = { ...paramsSearch, from: moment(data.start).format(), to: moment(data.end).format() }
 						setParamsSearch(DATA_GET)
 					}}
 					locale="vi"
-					headerToolbar={{
-						start: 'prev today next',
-						center: 'title',
-						end: 'dayGridMonth,timeGridWeek,timeGridDay'
-					}}
-					buttonText={{
-						today: 'Hôm nay',
-						month: 'Tháng',
-						week: 'Tuần',
-						day: 'Ngày'
-					}}
+					headerToolbar={{ start: 'prev today next', center: 'title', end: 'dayGridMonth,timeGridWeek,timeGridDay' }}
+					buttonText={{ today: 'Hôm nay', month: 'Tháng', week: 'Tuần', day: 'Ngày' }}
 					allDaySlot={false}
 					titleFormat={{ month: 'numeric', year: 'numeric', day: 'numeric' }}
 					dayHeaderFormat={{ weekday: 'long' }}
 					firstDay={1}
-					eventContent={(eventInfo) => <ScheduleCalendar dataRow={eventInfo} />}
+					eventContent={(eventInfo) => <ScheduleCalendar dataRow={eventInfo} onRefresh={getAllSchedule} />}
 				/>
 
 				<div className="wrapper-status">

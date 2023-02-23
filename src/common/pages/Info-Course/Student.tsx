@@ -450,7 +450,25 @@ const Student: FC<IPersonnel> = (props) => {
 		}
 	}
 
+	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return userInformation.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation.RoleId == 2
+	}
+
+	function isStdent() {
+		return userInformation.RoleId == 3
+	}
+
 	const [visible, setVisible] = useState(false)
+
+	function isShowRegister() {
+		return isAdmin() && props.type == 'student' && !!allowRegister
+	}
 
 	return (
 		<div className="info-course-student">
@@ -483,7 +501,7 @@ const Student: FC<IPersonnel> = (props) => {
 				}
 				Extra={
 					<>
-						{props.type == 'student' && allowRegister !== undefined && (
+						{isShowRegister() && (
 							<PrimaryButton
 								loading={loadingAllow}
 								className="mr-2 btn-block-registration"

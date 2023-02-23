@@ -1,22 +1,14 @@
-import { Card, Tooltip } from 'antd'
 import moment from 'moment'
-import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import { Book } from 'react-feather'
 import { branchApi } from '~/api/branch'
-import { studentApi } from '~/api/student'
-import { teacherApi } from '~/api/teacher'
 import { testAppointmentApi } from '~/api/test-appointment'
 import FilterBase from '~/common/components/Elements/FilterBase'
 import NotiModal from '~/common/components/Elements/NotiModal'
 import SortBox from '~/common/components/Elements/SortBox'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
-import ServiceTestCustomerForm from '~/common/components/Service/ServiceTestCustomerForm'
 import FilterColumn from '~/common/components/FilterTable/Filter/FilterColumn'
 import { parseSelectArray, parseSelectArrayUser, parseToMoney } from '~/common/utils/common'
 import ScoreModal from '~/common/components/Service/ScoreModal'
-import TestExpanded from '~/common/components/Service/TestExpanded'
-import CustomerAppointmentNote from '~/common/components/Customer/CustomerAdvisory/CustomerAdvisoryNote'
 import TestUpdateStatus from '~/common/components/Service/TestUpdateStatus'
 import { ShowNoti } from '~/common/utils'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
@@ -168,61 +160,6 @@ export default function ServiceAppointmentTest(props) {
 		}
 	}, [])
 
-	// const getDataTolist = (data: any, name: any) => {
-	// 	let newData = makeNewData(data, name)
-	// 	Object.keys(listDataForm).forEach(function (key) {
-	// 		if (key == name) {
-	// 			listDataForm[key] = newData
-	// 		}
-	// 	})
-	// 	setListDataForm({ ...listDataForm })
-	// }
-
-	// GET DATA EXAM
-	// const getDataExam = async () => {
-	// 	try {
-	// 		let res = await examTopicApi.getAll({ selectAll: true, type: 1 })
-	// 		if (res.status === 200) {
-	// 			setDataExam(res.data.data)
-	// 		}
-	// 	} catch (error) {
-	// 		console.log('Error Exam: ', error.message)
-	// 		showNoti('danger', error.message)
-	// 	}
-	// }
-
-	// GET DATA SOURCE
-	// const getDataAll = (arrApi) => {
-	// 	arrApi.forEach((item, index) => {
-	// 		;(async () => {
-	// 			let res = null
-	// 			try {
-	// 				if (item.name == 'Counselors') {
-	// 					res = await item.api.getAll({
-	// 						pageIndex: 1,
-	// 						pageSize: 99999,
-	// 						RoleID: 6,
-	// 						StatusID: 0,
-	// 						Enable: true
-	// 					})
-	// 				} else {
-	// 					res = await item.api.getAll({
-	// 						pageIndex: 1,
-	// 						pageSize: 99999,
-	// 						Enable: true
-	// 					})
-	// 				}
-	// 				res.status == 200 && getDataTolist(res.data.data, item.name)
-	// 				// res.status == 204 && console.log(item.text + ' Không có dữ liệu')
-	// 			} catch (error) {
-	// 				console.log(error)
-	// 				ShowNoti('error', error.message)
-	// 			} finally {
-	// 			}
-	// 		})()
-	// 	})
-	// }
-
 	// GET DATA SOURCE
 	const getDataSource = async () => {
 		setIsLoading(true)
@@ -373,13 +310,6 @@ export default function ServiceAppointmentTest(props) {
 		getAllExamination()
 	}, [])
 
-	// useEffect(() => {
-	// 	getDataAll(listApi)
-	// 	// getDataExam()
-	// 	let currentdate = new Date()
-	// 	setCurrentDate(moment(currentdate).format('DD/MM/yyyy HH:mm'))
-	// }, [])
-
 	const expandedRowRender = (record) => {
 		return <ExpandedRowAppointment rowData={record} />
 	}
@@ -390,6 +320,11 @@ export default function ServiceAppointmentTest(props) {
 
 	const columns = [
 		{
+			title: 'Mã',
+			dataIndex: 'UserCode',
+			width: 110
+		},
+		{
 			title: 'Học viên',
 			dataIndex: 'FullName',
 			width: 180,
@@ -397,24 +332,24 @@ export default function ServiceAppointmentTest(props) {
 			...FilterColumn('FullName', onSearch, handleReset, 'text')
 		},
 		{
-			width: 170,
+			width: 200,
 			title: 'Trung tâm',
 			dataIndex: 'BranchName',
 			render: (a) => <p className="font-weight-black">{a}</p>
 		},
 		{
-			title: 'Ngày hẹn',
+			title: 'Thời gian',
 			dataIndex: 'Time',
 			render: (date: any) => moment(date).format('DD/MM/YYYY HH:mm')
 		},
 		{
-			width: 220,
+			width: 200,
 			title: 'Người hẹn',
 			dataIndex: 'ModifiedBy'
 		},
 		{
-			width: 190,
-			title: 'Giáo viên test',
+			width: 200,
+			title: 'Giáo viên',
 			dataIndex: 'TeacherName'
 		},
 		{
