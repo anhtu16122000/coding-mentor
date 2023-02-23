@@ -127,7 +127,11 @@ export const StudentAssessment = () => {
 			render: (text, item, index) => (
 				<div className="antd-custom-wrap">
 					<Input
-						disabled={moment() >= moment(item?.StartTime) && user.RoleId == 2 ? false : true}
+						disabled={
+							moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
+								? false
+								: true
+						}
 						onChange={(val) => handleChangeListening(val, index)}
 						value={item?.Listening}
 						className="rounded-lg h-[36px]"
@@ -144,7 +148,11 @@ export const StudentAssessment = () => {
 				<>
 					<div className="antd-custom-wrap">
 						<Input
-							disabled={moment() >= moment(item?.StartTime) && user.RoleId == 2 ? false : true}
+							disabled={
+								moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
+									? false
+									: true
+							}
 							onChange={(val) => handleChangeSpeaking(val, index)}
 							value={item?.Speaking}
 							className="rounded-lg h-[36px]"
@@ -162,7 +170,11 @@ export const StudentAssessment = () => {
 				<>
 					<div className="antd-custom-wrap">
 						<Input
-							disabled={moment() >= moment(item?.StartTime) && user.RoleId == 2 ? false : true}
+							disabled={
+								moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
+									? false
+									: true
+							}
 							onChange={(val) => handleChangeReading(val, index)}
 							value={item?.Reading}
 							className="rounded-lg h-[36px]"
@@ -180,7 +192,11 @@ export const StudentAssessment = () => {
 				<>
 					<div className="antd-custom-wrap">
 						<Input
-							disabled={moment() >= moment(item?.StartTime) && user.RoleId == 2 ? false : true}
+							disabled={
+								moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
+									? false
+									: true
+							}
 							onChange={(val) => handleChangeWriting(val, index)}
 							value={item?.Writing}
 							className="rounded-lg h-[36px]"
@@ -197,7 +213,11 @@ export const StudentAssessment = () => {
 			render: (text, item, index) => (
 				<>
 					<InputTextField
-						disabled={moment() >= moment(item?.StartTime) && user.RoleId == 2 ? false : true}
+						disabled={
+							moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
+								? false
+								: true
+						}
 						onChange={(val) => handleChangeNote(val, index)}
 						value={item?.Note}
 						className="rounded-lg mb-0"

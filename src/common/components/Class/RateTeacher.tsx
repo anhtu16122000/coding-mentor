@@ -83,7 +83,6 @@ export const RateTeacher = () => {
 		setScheduleId(data?.Id)
 		form.setFieldValue('RateTeacherComment', data?.RateTeacherComment)
 	}
-	console.log(dataTable)
 
 	useEffect(() => {
 		if (router?.query?.class) {
@@ -141,11 +140,12 @@ export const RateTeacher = () => {
 												<Rate
 													defaultValue={item.RateTeacher}
 													value={item.RateTeacher}
-													disabled={moment() >= moment(item?.StartTime) && user.RoleId == 3 ? false : true}
+													disabled={moment() >= moment(item?.StartTime) && (user.RoleId == 3 || user.RoleId == 1) ? false : true}
 													onChange={(val) => handleChangeRate(val, item)}
 													className="text-tw-yellow group-hover:cursor-pointer"
 												/>
 											</div>
+											{item?.RateTeacherComment ? <div className="p-2 border rounded">{item?.RateTeacherComment}</div> : ''}
 										</div>
 									</div>
 								</Timeline.Item>
