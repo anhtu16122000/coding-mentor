@@ -14,6 +14,8 @@ import { documentLibraryApi } from '~/api/document-library'
 import loadingJson from '~/common/components/json/31696-file-upload.json'
 import PrimaryButton from '../Primary/Button'
 import LibraryContextItem from './LibraryContextItem'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const { Dragger } = Upload
 
@@ -141,17 +143,20 @@ const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 		}
 	}
 
-	const props: UploadProps = {
-		name: 'file',
-		multiple: true,
-		customRequest: (event) => uploadFile(event.file),
-		onChange(info) {
-			data.push({ fileName: info.file.name, isUploading: true })
-			setTimeStamp(new Date().getTime())
-			setData(data)
-		},
-		showUploadList: false
-	}
+	const props: UploadProps =
+		isAdmin() || isTeacher() || isManager()
+			? {
+					name: 'file',
+					multiple: true,
+					customRequest: (event) => uploadFile(event.file),
+					onChange(info) {
+						data.push({ fileName: info.file.name, isUploading: true })
+						setTimeStamp(new Date().getTime())
+						setData(data)
+					},
+					showUploadList: false
+			  }
+			: { showUploadList: false }
 
 	const handleClick = async (url, filename) => {
 		setDownLoading(true)
@@ -166,6 +171,24 @@ const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 		const ress = res.replace('.webp', '').replace('.mp4', '').replace('.avi', '').replace('.pptx', '').replace('.ppt', '')
 		const resss = ress.replace('.docs', '').replace('.doc', '').replace('.xls', '').replace('.xlsx', '').replace('.mp3', '')
 		return resss.replace('.zip', '').replace('.rar', '').replace('.json', '').replace('.xml', '')
+	}
+
+	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return userInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return userInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return userInformation?.RoleId == 3
 	}
 
 	return (
@@ -198,7 +221,7 @@ const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 								Tải xuống
 							</PrimaryButton>
 						)}
-						{!!activatedUnit?.Id && (
+						{(isAdmin() || isManager() || isTeacher()) && !!activatedUnit?.Id && (
 							<Upload {...props}>
 								<PrimaryButton type="button" icon="upload" background="green">
 									Thêm
@@ -258,12 +281,16 @@ const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 													content={() => {
 														return (
 															<>
-																<LibraryContextItem
-																	onClick={() => _delete(item?.Id)}
-																	Icon={<CgCloseO size={20} className="mr-2" />}
-																	title="Xoá"
-																/>
-																<hr className="border-[#00000014] my-1" />
+																{(isAdmin() || isManager() || isTeacher()) && (
+																	<>
+																		<LibraryContextItem
+																			onClick={() => _delete(item?.Id)}
+																			Icon={<CgCloseO size={20} className="mr-2" />}
+																			title="Xoá"
+																		/>
+																		<hr className="border-[#00000014] my-1" />
+																	</>
+																)}
 																<LibraryContextItem
 																	onClick={() => {
 																		if (item?.FileUrl) {

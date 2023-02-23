@@ -8,6 +8,8 @@ import { userInNewsFeedGroup } from '~/api/user'
 import { ShowNostis } from '~/common/utils'
 import GroupForm from './form'
 import Avatar from '../../Avatar'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const { Search } = Input
 
@@ -104,6 +106,20 @@ function GroupHeader({ groupId }) {
 		setStuFinded(studentFinded)
 	}
 
+	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return userInformation.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation.RoleId == 2
+	}
+
+	function isStdent() {
+		return userInformation.RoleId == 3
+	}
+
 	const content = (
 		<div className="w-[400px] max-h-[500px] scrollable">
 			{stuInGroup.map((item) => {
@@ -141,12 +157,14 @@ function GroupHeader({ groupId }) {
 					</div>
 				</div>
 
-				<>
-					<div className="cc-add-member" onClick={() => setShowUser(true)}>
-						<FaUserPlus size={20} />
-					</div>
-					<GroupForm isEdit defaultData={details} onRefresh={getNewsDetail} />
-				</>
+				{(isAdmin() || isTeacher()) && (
+					<>
+						<div className="cc-add-member" onClick={() => setShowUser(true)}>
+							<FaUserPlus size={20} />
+						</div>
+						<GroupForm isEdit defaultData={details} onRefresh={getNewsDetail} />
+					</>
+				)}
 			</div>
 
 			<Modal

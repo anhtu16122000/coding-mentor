@@ -132,6 +132,24 @@ export default function ServiceAppointmentTest(props) {
 	// LIST FILTER
 	const [dataFilter, setDataFilter] = useState(appointmenInitFilter)
 
+	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return userInformation.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation.RoleId == 2
+	}
+
+	function isManager() {
+		return userInformation.RoleId == 4
+	}
+
+	function isStdent() {
+		return userInformation.RoleId == 3
+	}
+
 	useMemo(() => {
 		if (state.branch.Branch.length > 0) {
 			const convertDataBranch = parseSelectArray(state.branch.Branch, 'Name', 'Id')
@@ -141,16 +159,17 @@ export default function ServiceAppointmentTest(props) {
 	}, [state.branch])
 
 	const getAllBranch = async () => {
-		try {
-			const res = await branchApi.getAll({ pageSize: 99999 })
-			if (res.status === 200) {
-				dispatch(setBranch(res.data.data))
+		if (isAdmin() || isManager()) {
+			try {
+				const res = await branchApi.getAll({ pageSize: 99999 })
+				if (res.status == 200) {
+					dispatch(setBranch(res.data.data))
+				} else {
+					dispatch(setBranch([]))
+				}
+			} catch (err) {
+				ShowNoti('error', err.message)
 			}
-			if (res.status === 204) {
-				dispatch(setBranch([]))
-			}
-		} catch (err) {
-			ShowNoti('error', err.message)
 		}
 	}
 
@@ -177,48 +196,6 @@ export default function ServiceAppointmentTest(props) {
 		} finally {
 			setIsLoading(false)
 		}
-	}
-
-	// SET DATA FUN
-	const setDataFunc = (name, data) => {
-		dataFilter.every((item, index) => {
-			if (item.name == name) {
-				item.optionList = data
-				return false
-			}
-			return true
-		})
-		setDataFilter([...dataFilter])
-	}
-
-	// AFTER SUBMIT
-	const afterPost = (mes) => {
-		setTodoApi({ ...listTodoApi, pageIndex: 1 })
-		setCurrentPage(1)
-	}
-
-	// ON SUBMIT
-	const _onSubmit = async (dataSubmit: any) => {
-		setIsLoading(true)
-		let res = null
-		try {
-			if (dataSubmit.ID) {
-				res = await testAppointmentApi.update(dataSubmit)
-				if (res.status == 200) {
-					setTodoApi({ ...todoApi })
-					ShowNoti('success', res.data.message)
-				}
-			} else {
-				res = await testAppointmentApi.add(dataSubmit)
-				res?.status == 200 && afterPost(res.data.message)
-			}
-		} catch (error) {
-			console.log('error: ', error)
-			ShowNoti('error', error.message)
-		} finally {
-			setIsLoading(false)
-		}
-		return res
 	}
 
 	// HANDLE FILTER
@@ -270,6 +247,7 @@ export default function ServiceAppointmentTest(props) {
 		setCurrentPage(pageNumber)
 		setTodoApi({ ...todoApi, pageIndex: pageIndex })
 	}
+
 	const getAllStudentAndTeacher = async () => {
 		try {
 			const res = await userInformationApi.getAll({ roleIds: '2,3' })
@@ -285,25 +263,28 @@ export default function ServiceAppointmentTest(props) {
 			ShowNoti('error', err.message)
 		}
 	}
+
 	const getAllExamination = async () => {
-		try {
-			const res = await examApi.getAll({ pageSize: 9999, search: '', pageIndex: 1 })
-			if (res.status === 200) {
-				const convertDataExamination = parseSelectArray(res.data.data, 'Name', 'Id')
-				setListExamination(convertDataExamination)
+		if (isAdmin() || isManager()) {
+			try {
+				const res = await examApi.getAll({ pageSize: 9999, search: '', pageIndex: 1 })
+				if (res.status === 200) {
+					const convertDataExamination = parseSelectArray(res.data.data, 'Name', 'Id')
+					setListExamination(convertDataExamination)
+				}
+				if (res.status === 204) {
+					setListExamination([])
+				}
+			} catch (err) {
+				ShowNoti('error', err.message)
 			}
-			if (res.status === 204) {
-				setListExamination([])
-			}
-		} catch (err) {
-			ShowNoti('error', err.message)
 		}
 	}
+
 	// USE EFFECT - FETCH DATA
 	useEffect(() => {
 		getDataSource()
 	}, [todoApi])
-	console.log('todoApi: ', todoApi)
 
 	useEffect(() => {
 		getAllStudentAndTeacher()
@@ -365,86 +346,56 @@ export default function ServiceAppointmentTest(props) {
 			}
 		},
 		{
-			align: 'right',
-			title: 'Chức năng',
+			title: '',
 			fixed: 'right',
 			responsive: ['md'],
 			render: (text, data, index) => {
 				return (
 					<div onClick={(e) => e.stopPropagation()}>
-						{/* {data.Status === 1 && (
-							<Link href={{ pathname: '/course/register', query: { key: data.ID } }}>
-								<Tooltip placement="top" title={'Đăng ký học'}>
-									<a className="btn btn-icon menu">
-										<Book size={20} />
-									</a>
-								</Tooltip>
-							</Link>
-						)} */}
-						<TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
-						<StudentForm
-							rowData={data}
-							listStudent={listStudent}
-							listTeacher={listTeacher}
-							listExamination={listExamination}
-							setTodoApi={setTodoApi}
-							listTodoApi={listTodoApi}
-						/>
-						{/* <ServiceTestCustomerForm
-							getIndex={() => {}}
-							index={index}
-							rowData={data}
-							rowID={data.ID}
-							listData={listDataForm}
-							isLoading={isLoading}
-							_onSubmit={(data: any) => _onSubmit(data)}
-							dataExam={dataExam}
-						/> */}
-						{/* {data.Status !== 2 && <TestAddExam dataExam={dataExam} dataRow={data} onFetchData={() => setTodoApi({ ...todoApi })} />} */}
-						{data.Status == 1 && <CancelTest onUpdateData={onUpdateData} dataRow={data} />}
-						{data.Type === 1 && <ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />}
+						{(isAdmin() || isManager() || isTeacher()) && (
+							<TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
+						)}
+						{(isAdmin() || isManager() || isTeacher()) && (
+							<StudentForm
+								rowData={data}
+								listStudent={listStudent}
+								listTeacher={listTeacher}
+								listExamination={listExamination}
+								setTodoApi={setTodoApi}
+								listTodoApi={listTodoApi}
+							/>
+						)}
+						{(isAdmin() || isManager() || isTeacher()) && data.Status == 1 && <CancelTest onUpdateData={onUpdateData} dataRow={data} />}
+						{(isAdmin() || isManager() || isTeacher()) && data.Type === 1 && (
+							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
+						)}
 					</div>
 				)
 			}
 		},
 		{
-			align: 'right',
-			title: 'Chức năng',
+			title: '',
 			responsive: ['xs'],
 			render: (text, data, index) => {
 				return (
 					<div onClick={(e) => e.stopPropagation()}>
-						{/* {data.Status === 1 && (
-							<Link href={{ pathname: '/course/register', query: { key: data.ID } }}>
-								<Tooltip placement="top" title={'Đăng ký học'}>
-									<a className="btn btn-icon menu">
-										<Book size={20} />
-									</a>
-								</Tooltip>
-							</Link>
-						)} */}
-						<TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
-						<StudentForm
-							rowData={data}
-							listStudent={listStudent}
-							listTeacher={listTeacher}
-							listExamination={listExamination}
-							setTodoApi={setTodoApi}
-							listTodoApi={listTodoApi}
-						/>
-						{/* <ServiceTestCustomerForm
-							getIndex={() => {}}
-							index={index}
-							rowData={data}
-							rowID={data.ID}
-							listData={listDataForm}
-							isLoading={isLoading}
-							_onSubmit={(data: any) => _onSubmit(data)}
-							dataExam={dataExam}
-						/> */}
-						{/* {data.Status !== 2 && <TestAddExam dataExam={dataExam} dataRow={data} onFetchData={() => setTodoApi({ ...todoApi })} />} */}
-						{data.Status == 0 && <CancelTest onUpdateData={onUpdateData} dataRow={data} />}
-						{data.Type === 1 && <ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />}
+						{(isAdmin() || isManager() || isTeacher()) && (
+							<TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
+						)}
+						{(isAdmin() || isManager() || isTeacher()) && (
+							<StudentForm
+								rowData={data}
+								listStudent={listStudent}
+								listTeacher={listTeacher}
+								listExamination={listExamination}
+								setTodoApi={setTodoApi}
+								listTodoApi={listTodoApi}
+							/>
+						)}
+						{(isAdmin() || isManager() || isTeacher()) && data.Status == 1 && <CancelTest onUpdateData={onUpdateData} dataRow={data} />}
+						{(isAdmin() || isManager() || isTeacher()) && data.Type === 1 && (
+							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
+						)}
 					</div>
 				)
 			}
@@ -465,24 +416,32 @@ export default function ServiceAppointmentTest(props) {
 					totalPage={totalPage && totalPage}
 					getPagination={(pageNumber: number) => getPagination(pageNumber)}
 					loading={isLoading}
-					// addClass="basic-header"
-					// TitlePage="Danh sách khách hẹn test"
 					dataSource={dataSource}
 					columns={columns}
-					Extra={
+					TitleCard={
 						<div className="extra-table">
-							<FilterBase dataFilter={dataFilter} handleFilter={(listFilter: any) => handleFilter(listFilter)} handleReset={handleReset} />
+							{(isAdmin() || isManager() || isTeacher()) && (
+								<FilterBase
+									dataFilter={dataFilter}
+									handleFilter={(listFilter: any) => handleFilter(listFilter)}
+									handleReset={handleReset}
+								/>
+							)}
 							<SortBox handleSort={(value) => handleSort(value)} dataOption={appointmenDataOption} />
 						</div>
 					}
-					TitleCard={
-						<StudentForm
-							listStudent={listStudent}
-							listTeacher={listTeacher}
-							listExamination={listExamination}
-							setTodoApi={setTodoApi}
-							listTodoApi={listTodoApi}
-						/>
+					Extra={
+						<>
+							{(isAdmin() || isManager() || isTeacher()) && (
+								<StudentForm
+									listStudent={listStudent}
+									listTeacher={listTeacher}
+									listExamination={listExamination}
+									setTodoApi={setTodoApi}
+									listTodoApi={listTodoApi}
+								/>
+							)}
+						</>
 					}
 					expandable={expandedRowRender}
 				/>
