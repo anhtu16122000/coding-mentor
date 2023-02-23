@@ -94,7 +94,7 @@ const Center = () => {
 
 	// USE EFFECT - FETCH DATA
 	useEffect(() => {
-		if (userInformation?.RoleId == 1) {
+		if (isAdmin() || isManager()) {
 			getDataCenter()
 		}
 	}, [todoApi, userInformation])
@@ -176,9 +176,28 @@ const Center = () => {
 			)
 		}
 	]
+
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
 	return (
 		<>
-			{userInformation?.RoleId == 1 && (
+			{(isAdmin() || isManager()) && (
 				<Fragment>
 					<PrimaryTable
 						loading={isLoading}
@@ -190,22 +209,6 @@ const Center = () => {
 						TitleCard={
 							<div className="extra-table">{/* <SortBox handleSort={(value) => handleSort(value)} dataOption={dataOption} /> */}</div>
 						}
-						// menuContext={[
-						// 	{
-						// 		text: 'Cập nhật',
-						// 		components: (
-						// 			<CenterForm
-						// 				dataArea={dataArea}
-						// 				// getIndex={() => setIndexRow(index)}
-						// 				// index={index}
-						// 				// branchId={data.Id}
-						// 				// rowData={data}
-						// 				isLoading={isLoading}
-						// 				_onSubmit={onSubmit}
-						// 			/>
-						// 		)
-						// 	}
-						// ]}
 					/>
 				</Fragment>
 			)}

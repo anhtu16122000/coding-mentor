@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import ReactHtmlParser from 'react-html-parser'
 import { idiomApi } from '~/api/idiom'
@@ -20,18 +21,33 @@ const Idioms = () => {
 
 	const columns = [
 		{
-			title: 'Người tạo',
-			dataIndex: 'CreatedBy',
-			render: (CreatedBy) => <div style={{ width: '120px' }}>{CreatedBy}</div>
-		},
-		{
 			title: 'Câu thành ngữ',
 			dataIndex: 'Content',
 			render: (text) => ReactHtmlParser(text)
 		},
 		{
+			title: 'Ngày tạo',
+			dataIndex: 'CreatedOn',
+			render: (value) => <div>{moment(value).format('DD/MM/YYYY HH:mm')}</div>
+		},
+		{
+			title: 'Người tạo',
+			dataIndex: 'CreatedBy',
+			render: (value) => <div>{value}</div>
+		},
+		{
+			title: 'Ngày sửa',
+			dataIndex: 'ModifiedOn',
+			render: (value) => <div>{moment(value).format('DD/MM/YYYY HH:mm')}</div>
+		},
+		{
+			title: 'Người sửa',
+			dataIndex: 'ModifiedBy',
+			render: (value) => <div>{value}</div>
+		},
+		{
 			fixed: 'right',
-			title: 'Chức năng',
+			title: '',
 			render: (data) => (
 				<>
 					<IdiomsForm rowData={data} getDataIdiom={getDataIdiom} />
@@ -78,12 +94,8 @@ const Idioms = () => {
 
 	return (
 		<PrimaryTable
-			// currentPage={currentPage}
 			loading={isLoading}
 			total={totalPage && totalPage}
-			// getPagination={(pageNumber: number) => getPagination(pageNumber)}
-			// addClass="basic-header"
-			// TitlePage="Thành ngữ lịch"
 			Extra={<IdiomsForm getDataIdiom={getDataIdiom} />}
 			data={idioms}
 			columns={columns}

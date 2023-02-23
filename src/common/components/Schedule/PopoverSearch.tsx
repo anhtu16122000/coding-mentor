@@ -1,5 +1,5 @@
 import { Form, Popover, Select, Spin } from 'antd'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { MdOutlineRestore, MdSearch } from 'react-icons/md'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
@@ -12,7 +12,6 @@ const PopoverSearch = (props) => {
 	const [form] = Form.useForm()
 
 	const onSubmit = (data) => {
-		console.log('data.branchIds: ', data.branchIds)
 		const DATA_GET = {
 			branchIds: !!data.branchIds ? data.branchIds.join(',') : '',
 			teacherIds: !!data.teacherIds ? data.teacherIds.join(',') : ''

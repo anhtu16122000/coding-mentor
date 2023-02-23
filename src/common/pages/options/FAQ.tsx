@@ -7,18 +7,34 @@ import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import { useSelector } from 'react-redux'
+import Head from 'next/head'
+import appConfigs from '~/appConfig'
 
 const FAQ = () => {
 	const [dataSource, setDataSource] = useState([])
 	const [totalPage, setTotalPage] = useState([])
 	const [currentPage, setCurrentPage] = useState(1)
-	const { information: userInformation } = useSelector((state: RootState) => state.user)
-	const todoApiDataSource = {
-		pageIndex: 1,
-		pageSize: PAGE_SIZE
-	}
+	const todoApiDataSource = { pageIndex: 1, pageSize: PAGE_SIZE }
 	const [todoApi, setTodoApi] = useState(todoApiDataSource)
 	const [isLoading, setIsLoading] = useState(false)
+
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
 
 	const columns = [
 		{
@@ -32,10 +48,8 @@ const FAQ = () => {
 			width: 130,
 			render: (text, data) => (
 				<div className="d-flex">
-					{(userInformation?.RoleId == 1 || userInformation?.RoleId == 5) && <QuestionForm rowData={data} getDataSource={getDataSource} />}
-					{(userInformation?.RoleId == 1 || userInformation?.RoleId == 5) && (
-						<DeleteTableRow handleDelete={() => handleDelete(data.Id)} text={data.Question} />
-					)}
+					{(isAdmin() || isManager()) && <QuestionForm rowData={data} getDataSource={getDataSource} />}
+					{(isAdmin() || isManager()) && <DeleteTableRow handleDelete={() => handleDelete(data.Id)} text={data.Question} />}
 				</div>
 			)
 		}
@@ -74,11 +88,7 @@ const FAQ = () => {
 
 	const getPagination = (pageNumber) => {
 		setCurrentPage(pageNumber)
-		setTodoApi({
-			...todoApi,
-			// ...listFieldSearch,
-			pageIndex: pageNumber
-		})
+		setTodoApi({ ...todoApi, pageIndex: pageNumber })
 	}
 
 	useEffect(() => {
@@ -98,6 +108,9 @@ const FAQ = () => {
 
 	return (
 		<>
+			<Head>
+				<title>{appConfigs.appName} | Cấu hình câu hỏi thường gặp</title>
+			</Head>
 			<ExpandTable
 				totalPage={totalPage && totalPage}
 				currentPage={currentPage}
@@ -106,7 +119,7 @@ const FAQ = () => {
 				columns={columns}
 				dataSource={dataSource}
 				TitlePage="Danh sách câu hỏi thường gặp"
-				TitleCard={userInformation?.RoleId == 1 || userInformation?.RoleId == 5 ? <QuestionForm getDataSource={getDataSource} /> : null}
+				TitleCard={(isManager() || isAdmin()) && <QuestionForm getDataSource={getDataSource} />}
 				expandable={expandedRowRender}
 			/>
 		</>

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Form, Spin, Tooltip } from 'antd'
+import { Modal, Form } from 'antd'
 import EditorField from '~/common/components/FormControl/EditorField'
-import { MdAddCircleOutline, MdSave } from 'react-icons/md'
-import { Edit } from 'react-feather'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 import InputNumberField from '~/common/components/FormControl/InputNumberField'
 import SelectField from '~/common/components/FormControl/SelectField'
@@ -56,9 +54,6 @@ const ProgramForm = React.memo((props: any) => {
 			{rowData ? (
 				<IconButton icon="edit" tooltip="Cập nhật" onClick={() => setIsModalVisible(true)} color="yellow" type="button" />
 			) : (
-				// <button className="btn btn-warning add-new" onClick={() => setIsModalVisible(true)}>
-				// 	<MdAddCircleOutline size={18} className="mr-2" /> Thêm mới
-				// </button>
 				<PrimaryButton onClick={() => setIsModalVisible(true)} icon="add" background="green" type="button">
 					Thêm mới
 				</PrimaryButton>
@@ -107,20 +102,6 @@ const ProgramForm = React.memo((props: any) => {
 								/>
 							</div>
 
-							{/* <div className="col-md-6 col-12">
-								<SelectField
-									name="Type"
-									placeholder="Chọn loại"
-									disabled={rowData}
-									label="Loại"
-									rules={[{ required: true, message: 'Bạn không được để trống' }]}
-									optionList={[
-										{ value: 1, title: 'Offline' },
-										{ value: 2, title: 'Online' },
-										{ value: 3, title: 'Dạy kèm' }
-									]}
-								/>
-							</div> */}
 							<div className="col-12">
 								<EditorField
 									id={rowData?.Id}

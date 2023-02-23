@@ -1,13 +1,11 @@
-import { Form, Modal, Spin, Tooltip } from 'antd'
+import { Form, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { Edit } from 'react-feather'
-import { MdAddCircleOutline, MdSave } from 'react-icons/md'
 import * as yup from 'yup'
 import { idiomApi } from '~/api/idiom'
-import EditorField from '~/common/components/FormControl/EditorField'
-import { ShowNoti, wait } from '~/common/utils'
+import { ShowNoti } from '~/common/utils'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
+import TextBoxField from '../FormControl/TextBoxField'
 
 const IdiomsForm = React.memo((props: any) => {
 	const { rowData, getDataIdiom } = props
@@ -81,9 +79,9 @@ const IdiomsForm = React.memo((props: any) => {
 			)}
 
 			<Modal
-				width={1000}
+				width={500}
 				title={<>{rowData ? 'Cập nhật' : 'Thêm mới'}</>}
-				visible={isModalVisible}
+				open={isModalVisible}
 				onCancel={() => setIsModalVisible(false)}
 				footer={null}
 				centered
@@ -92,25 +90,18 @@ const IdiomsForm = React.memo((props: any) => {
 					<Form form={form} layout="vertical" onFinish={onSubmit}>
 						<div className="row">
 							<div className="col-12">
-								<EditorField
-									id={rowData?.Id}
+								<TextBoxField
+									rows={4}
+									className="rounded-lg"
 									label="Câu thành ngữ"
 									name="Content"
-									// content={idiomsDetail ? idiomsDetail.Idioms : idiomsInput}
-									isRequired
-									rules={[yupSync]}
-									onChangeEditor={(value) => form.setFieldValue('Content', value)}
-									height={450}
+									placeholder="Nhập câu thành ngữ"
+									onChange={(value) => form.setFieldValue('Content', value.target.value)}
 								/>
 							</div>
 						</div>
 						<div className="row">
 							<div className="col-12 text-center">
-								{/* <button type="submit" className="btn btn-primary">
-									<MdSave size={18} className="mr-2" />
-									Lưu
-									{loading && <Spin className="loading-base" />}
-								</button> */}
 								<PrimaryButton className="w-full" type="submit" background="blue" icon="save" disable={isLoading} loading={isLoading}>
 									Lưu
 								</PrimaryButton>

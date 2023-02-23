@@ -15,6 +15,8 @@ import EditorField from '~/common/components/FormControl/EditorField'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { customerAdviseApi } from '~/api/customer'
 import { useRouter } from 'next/router'
+import appConfigs from '~/appConfig'
+import Head from 'next/head'
 
 const CustomerAdvisoryMailAll = () => {
 	const [form] = Form.useForm()
@@ -76,8 +78,13 @@ const CustomerAdvisoryMailAll = () => {
 			ShowNoti('error', 'Vui lòng chọn người gửi')
 		}
 	}
+
 	return (
 		<>
+			<Head>
+				<title>{appConfigs.appName} | Gửi thông báo</title>
+			</Head>
+
 			<Card title="Gửi thông báo">
 				<Form layout="vertical" form={form} onFinish={onSubmit}>
 					<SelectField

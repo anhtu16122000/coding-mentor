@@ -62,26 +62,23 @@ const Purpose = () => {
 		{
 			title: 'Mục đích học',
 			dataIndex: 'Name',
-			width: 180,
 			render: (text) => {
-				return <p className="font-weight-black">{text}</p>
+				return <p className="font-[600] text-[#1976D2]">{text}</p>
 			}
 		},
 		{
-			title: 'Thay đổi bởi',
-			width: 150,
-			dataIndex: 'ModifiedBy'
-		},
-		{
-			title: 'Thay đổi lúc',
-			width: 150,
-			dataIndex: 'ModifiedOn',
+			title: 'Ngày tạo',
+			dataIndex: 'CreatedOn',
 			render: (date) => {
-				return <p className="font-weight-primary">{moment(date).format('DD/MM/YYYY')}</p>
+				return <p className="">{moment(date).format('DD/MM/YYYY HH:mm')}</p>
 			}
 		},
 		{
-			title: 'Chức năng',
+			title: 'Người tạo',
+			dataIndex: 'CreatedBy'
+		},
+		{
+			title: '',
 			render: (record) => (
 				<>
 					<PurposeForm rowData={record} getDataTable={getDataTable} />
@@ -99,11 +96,7 @@ const Purpose = () => {
 		<Fragment>
 			<PrimaryTable
 				loading={isLoading}
-				// currentPage={currentPage}
 				total={totalPage && totalPage}
-				// getPagination={getPagination}
-				// addClass="basic-header"
-				// TitlePage="Mục đích học"
 				Extra={<PurposeForm getDataTable={getDataTable} />}
 				data={state.purpose.Purpose}
 				columns={columns}

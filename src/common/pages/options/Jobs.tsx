@@ -11,10 +11,7 @@ const JobsList = () => {
 	const [job, setJob] = useState<IJob[]>([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [totalPage, setTotalPage] = useState(null)
-	const listJobParams = {
-		pageSize: PAGE_SIZE,
-		pageIndex: 1
-	}
+	const listJobParams = { pageSize: PAGE_SIZE, pageIndex: 1 }
 	const [jobParams, setJobParams] = useState(listJobParams)
 
 	const handleDelete = async (id) => {
@@ -33,20 +30,18 @@ const JobsList = () => {
 	const columns = [
 		{
 			title: 'Công việc',
-			width: 200,
 			dataIndex: 'Name',
 			render: (text) => <p className="font-weight-black">{text}</p>
 		},
 		{ title: 'Người tạo', width: 200, dataIndex: 'ModifiedBy' },
 		{
 			title: 'Ngày tạo',
-			width: 200,
 			dataIndex: 'ModifiedOn',
 			render: (date) => moment(date).format('DD/MM/YYYY')
 		},
 
 		{
-			title: 'Chức năng',
+			title: '',
 			render: (data) => {
 				return (
 					<>
@@ -82,12 +77,8 @@ const JobsList = () => {
 
 	return (
 		<PrimaryTable
-			// currentPage={currentPage}
 			loading={isLoading}
 			total={totalPage && totalPage}
-			// getPagination={(pageNumber: number) => getPagination(pageNumber)}
-			// addClass="basic-header"
-			// TitlePage="Danh sách nghề nghiệp"
 			Extra={<JobForm getDataJob={getDataJob} />}
 			data={job}
 			columns={columns}

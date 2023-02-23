@@ -44,7 +44,6 @@ const PermissionEditForm = (props) => {
 			const res = await permissionApi.update(newData)
 			if (res.status === 200) {
 				getFunctionPermission()
-				ShowNoti('success', res.data.message)
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)

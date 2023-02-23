@@ -74,10 +74,10 @@ const Schedule = () => {
 	const getAllBranch = async () => {
 		try {
 			let res = await branchApi.getAll()
-			if (res.status === 200) {
+			if (res.status == 200) {
 				dispatch(setBranch(res.data.data))
 			}
-			if (res.status === 204) {
+			if (res.status == 204) {
 				dispatch(setBranch([]))
 			}
 		} catch (error) {
@@ -86,13 +86,13 @@ const Schedule = () => {
 	}
 
 	useEffect(() => {
-		if (user.RoleId == 1) {
+		if (isAdmin() || isManager()) {
 			getAllTeacher()
 		}
 	}, [])
 
 	useEffect(() => {
-		if (user.RoleId == 1 && branch.length === 0) {
+		if ((isAdmin() || isManager()) && branch.length === 0) {
 			getAllBranch()
 		}
 	}, [branch])
@@ -103,15 +103,33 @@ const Schedule = () => {
 		}
 	}, [paramsSearch])
 
+	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return userInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return userInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return userInformation?.RoleId == 3
+	}
+
 	return (
 		<div className="wrapper-class-schedule wrapper-calendar">
 			<Card
 				extra={
-					user.RoleId == 1 ? (
+					(isAdmin() || isManager()) && (
 						<div className="flex-all-center gap-3">
 							<PopoverSearch setParamsSearch={setParamsSearch} teachers={teachers} isLoading={isLoading} />
 						</div>
-					) : null
+					)
 				}
 			>
 				<FullCalendar

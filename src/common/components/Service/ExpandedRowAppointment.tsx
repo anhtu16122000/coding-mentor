@@ -53,7 +53,7 @@ const ExpandedRowAppointment = (props) => {
 				</tr>
 			</table>
 
-			{(isAdmin() || isTeacher()) && <CustomerAppointmentNote dataRow={rowData} />}
+			{(isAdmin() || isTeacher() || isManager()) && <CustomerAppointmentNote dataRow={rowData} />}
 		</div>
 	)
 }
