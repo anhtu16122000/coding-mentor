@@ -2,8 +2,10 @@ import { Card } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { useSelector } from 'react-redux'
 import { classApi } from '~/api/class'
 import { ShowNoti } from '~/common/utils'
+import { RootState } from '~/store'
 import CurriculumDetailListInClass from './CurriculumDetailListInClass'
 import ModalCurriculumOfClassCRUD from './ModalCurriculumOfClass'
 
@@ -18,11 +20,12 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 		option: [],
 		list: []
 	})
+	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	const getCurriculumDetail = async (curriculumID) => {
 		setIsLoading(true)
 		try {
-			const response = await classApi.getCurriculumDetailOfClass({ CurriculumIdInClassId: curriculumID })
+			const response = await classApi.getCurriculumDetailOfClass({ CurriculumIdInClassId: curriculumID ? curriculumID : 0 })
 			if (response.status === 200) {
 				let temp = []
 				response.data.data.forEach((item) => temp.push({ title: item.Name, value: item.Id }))
@@ -129,7 +132,13 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 				title="Danh sách chủ đề"
 				extra={
 					<>
-						<ModalCurriculumOfClassCRUD mode="add" onSubmit={handleAddCurriculumDetail} isLoading={isLoadingSubmit} />
+						{userInformation &&
+							(userInformation.RoleId == '1' ||
+								userInformation.RoleId == '2' ||
+								userInformation.RoleId == '4' ||
+								userInformation.RoleId == '7') && (
+								<ModalCurriculumOfClassCRUD mode="add" onSubmit={handleAddCurriculumDetail} isLoading={isLoadingSubmit} />
+							)}
 					</>
 				}
 			>

@@ -6,6 +6,7 @@ import { branchApi } from '~/api/branch'
 import { paymentMethodsApi } from '~/api/payment-method'
 import { refundApi } from '~/api/refund'
 import { userInformationApi } from '~/api/user'
+import FilterBaseVer2 from '~/common/components/Elements/FilterBaseVer2'
 import PrimaryTable from '~/common/components/Primary/Table'
 import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
@@ -16,6 +17,34 @@ import appConfigs from '~/appConfig'
 import Head from 'next/head'
 
 export interface IRefundPageProps {}
+
+const initialFilter = [
+	{
+		name: 'Type',
+		title: 'Loại phiếu',
+		type: 'select',
+		col: 'col-span-2',
+		optionList: [
+			{ title: 'Tất cả', value: null },
+			{ title: 'Hoàn tiền thủ công', value: 1 },
+			{ title: 'Hoàn tiền bảo lưu', value: 2 },
+			{ title: 'Hoàn tiền chờ xếp lớp', value: 3 },
+			{ title: 'Hoàn tiền duyệt thanh toán ', value: 4 }
+		]
+	},
+	{
+		name: 'Status',
+		title: 'Trạng thái',
+		type: 'select',
+		col: 'col-span-2',
+		optionList: [
+			{ title: 'Tất cả', value: null },
+			{ title: 'Chờ duyệt', value: 1 },
+			{ title: 'Đã duyệt', value: 2 },
+			{ title: 'Hủy', value: 3 }
+		]
+	}
+]
 
 export default function RefundPage(props: IRefundPageProps) {
 	const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE }
@@ -28,6 +57,7 @@ export default function RefundPage(props: IRefundPageProps) {
 	const userInformation = useSelector((state: RootState) => state.user.information)
 	const [todoStudentOption, setTodoStudentOption] = useState(initialParamsStudent)
 	const [optionStudent, setStudentOption] = useState<{ title: string; value: any }[]>([])
+	const [filterList, setFilterList] = useState([])
 
 	const getListRefund = async () => {
 		setIsLoading({ type: 'GET_ALL', status: true })
@@ -86,11 +116,20 @@ export default function RefundPage(props: IRefundPageProps) {
 			])
 
 			let tempOption = { branch: [], paymentMethod: [] }
+			let tempFilter = []
 
 			if (branchResponse.status == 200) {
 				let temp = []
 				branchResponse.data.data.forEach((data) => temp.push({ title: data.Name, value: data.Id }))
 				tempOption.branch = temp
+
+				tempFilter.push({
+					name: 'BranchId',
+					title: 'Chi nhánh',
+					type: 'select',
+					col: 'col-span-2',
+					optionList: temp
+				})
 			}
 			if (paymentMethod.status == 200) {
 				let temp = []
@@ -98,6 +137,7 @@ export default function RefundPage(props: IRefundPageProps) {
 				tempOption.paymentMethod = temp
 			}
 
+			setFilterList([...initialFilter, ...tempFilter])
 			setOptionList(tempOption)
 		} catch (error) {}
 	}
@@ -284,9 +324,18 @@ export default function RefundPage(props: IRefundPageProps) {
 					}
 			  ]
 
-	if (isLoading.type == 'GET_ALL' && isLoading.status) {
-		return <Skeleton active />
+	const handleFilter = (data) => {
+		setTodoApi({
+			...todoApi,
+			...data,
+			FromDate: data?.Created?.[0] ? Math.round(new Date(data?.Created?.[0]).setHours(0, 0, 0) / 1000) : null,
+			ToDate: data?.Created?.[1] ? Math.round(new Date(data?.Created?.[1]).setHours(23, 59, 59, 999) / 1000) : null
+		})
 	}
+
+	// if (isLoading.type == 'GET_ALL' && isLoading.status) {
+	// 	return <Skeleton active />
+	// }
 
 	return (
 		<>
@@ -297,7 +346,17 @@ export default function RefundPage(props: IRefundPageProps) {
 				loading={isLoading.type == 'GET_ALL' && isLoading.status}
 				total={totalRow}
 				onChangePage={(event: number) => setTodoApi({ ...initialParams, pageIndex: event })}
-				TitleCard={<div className="extra-table">Danh sách hoàn tiền</div>}
+				TitleCard={
+					<div className="extra-table">
+						<FilterBaseVer2
+							handleFilter={handleFilter}
+							dataFilter={filterList}
+							handleReset={() => {
+								setTodoApi({ ...initialParams })
+							}}
+						/>
+					</div>
+				}
 				data={dataSource}
 				columns={columns}
 				Extra={
