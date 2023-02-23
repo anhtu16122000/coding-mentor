@@ -1,4 +1,4 @@
-import { Carousel, DatePicker, Form, Modal, Popconfirm, Rate, Select, Spin, TimePicker, Tooltip } from 'antd'
+import { Carousel, DatePicker, Form, Modal, Pagination, Popconfirm, Rate, Select, Spin, TimePicker, Tooltip } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
@@ -15,8 +15,9 @@ import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
 import { AiOutlineWarning } from 'react-icons/ai'
 import { setTeacher } from '~/store/classReducer'
 
+const initParameters = { branchId: null, curriculumId: null, startTime: null, endTime: null, pageIndex: 1, pageSize: 8 }
 const ModalAddScheduleToturingEdit = (props) => {
-	const { checkTeacherAvailable, getListSchedule, paramsSchedule, loadingCheckTeacher } = props
+	const { checkTeacherAvailable, getListSchedule, paramsSchedule, loadingCheckTeacher, teacherData, setTeacherData, totalPage } = props
 	const [openModalAdd, setOpenModalAdd] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [form] = Form.useForm()
@@ -32,6 +33,8 @@ const ModalAddScheduleToturingEdit = (props) => {
 	const [monthChange, setMonthChange] = useState(null)
 	const [teacherId, setTeacherId] = useState(null)
 	const dispatch = useDispatch()
+	const [current, setCurrent] = useState(1)
+	const [apiParameters, setApiParameters] = useState(initParameters)
 	const disabledDate: RangePickerProps['disabledDate'] = (current) => {
 		// Can not select days before today and today
 		return current && current < moment().endOf('day')
@@ -150,7 +153,8 @@ const ModalAddScheduleToturingEdit = (props) => {
 	useEffect(() => {
 		if (startTime) {
 			form.setFieldValue('EndTime', moment(startTime).add(time, 'minutes'))
-			checkTeacherAvailable({
+			setApiParameters({
+				...apiParameters,
 				branchId: BranchId,
 				curriculumId: CurriculumId,
 				startTime: moment(startTime).format(),
@@ -159,12 +163,27 @@ const ModalAddScheduleToturingEdit = (props) => {
 		}
 	}, [startTime])
 
+	useEffect(() => {
+		if (apiParameters && apiParameters.curriculumId) {
+			checkTeacherAvailable(apiParameters)
+		}
+	}, [apiParameters])
+
 	const onClose = () => {
 		setTeacherEdit([])
 		setRoomEdit([])
 		setOpenModalAdd(false)
 		setIsLoading(false)
 	}
+	const getPagination = (pageNumber: number) => {
+		setCurrent(pageNumber)
+		setApiParameters({
+			...apiParameters,
+			// ...listFieldSearch,
+			pageIndex: pageNumber
+		})
+	}
+	console.log(totalPage)
 	return (
 		<>
 			<PrimaryButton onClick={() => setOpenModalAdd(true)} className="ml-3" background="green" type="button" icon="add">
@@ -254,15 +273,24 @@ const ModalAddScheduleToturingEdit = (props) => {
 						</div>
 
 						<div className="mb-tw-4">
-							<div className="ant-form-item-label">
+							<div className="ant-form-item-label flex items-center justify-between">
 								<label>Giáo viên: </label>
+								<div className="custom-pagination">
+									<Pagination
+										simple
+										current={current}
+										onChange={(pageNumber) => getPagination(pageNumber)}
+										total={totalPage}
+										pageSize={8}
+									/>
+								</div>
 							</div>
 
 							<Spin spinning={loadingCheckTeacher}>
 								<div className="custom-listTeacher mt-tw-4">
 									{startTime &&
-										teacher?.length > 0 &&
-										teacher?.map((item, index) => (
+										teacherData?.length > 0 &&
+										teacherData?.map((item, index) => (
 											<div className={`item ${teacherId === item?.TeacherId ? 'active' : !item?.Fit ? 'disabled' : ''}`}>
 												<Popconfirm
 													title={`Bạn có chắc chọn giáo viên ${item?.TeacherName}?`}
@@ -275,7 +303,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 															<img src={_check.checkURL(item?.Avatar) ? item?.Avatar : '/images/default-avatar.svg'} alt="" />
 														</div>
 														<div className="rating">
-															<Rate disabled defaultValue={item?.Rate} />
+															<Rate disabled defaultValue={item?.Rate} value={item?.Rate} />
 															<div className="value">{item?.Rate}</div>
 														</div>
 														<div className="name">

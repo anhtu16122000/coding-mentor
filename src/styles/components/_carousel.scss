@@ -54,6 +54,11 @@
 		}
 	}
 }
+.custom-pagination {
+	.ant-pagination-simple .ant-pagination-simple-pager input {
+		border: 1px solid #0a89ff;
+	}
+}
 .custom-listTeacher {
 	display: grid;
 	gap: 1rem;

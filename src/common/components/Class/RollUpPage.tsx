@@ -6,6 +6,7 @@ import { rollUpApi } from '~/api/rollup'
 import { scheduleApi } from '~/api/schedule'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
+import InputTextField from '../FormControl/InputTextField'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
 import PrimaryTable from '../Primary/Table'
@@ -178,7 +179,7 @@ export const RollUpPage = () => {
 			dataIndex: 'Note',
 			render: (text, item, index) => (
 				<div className="antd-custom-wrap">
-					<Input onChange={(val) => handleChangeNote(val, index)} value={item?.Note} className="rounded-lg" />
+					<InputTextField onChange={(val) => handleChangeNote(val, index)} value={text} className="rounded-lg mb-0" name="" label="" />
 				</div>
 			)
 		},

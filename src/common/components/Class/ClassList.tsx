@@ -52,7 +52,7 @@ const ClassList = (props) => {
 		} else {
 			path = {
 				pathname: '/class/list-class/detail',
-				query: { class: item?.Id }
+				query: { class: item?.Id, CurriculumId: item?.CurriculumId, BranchId: item?.BranchId }
 			}
 		}
 
@@ -74,7 +74,7 @@ const ClassList = (props) => {
 		} else {
 			path = {
 				pathname: '/class/list-class/tutoring',
-				query: { class: item?.Id }
+				query: { class: item?.Id, CurriculumId: item?.CurriculumId, BranchId: item?.BranchId }
 			}
 		}
 

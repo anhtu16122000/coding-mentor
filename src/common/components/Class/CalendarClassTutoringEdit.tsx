@@ -35,6 +35,7 @@ import PrimaryTag from '../Primary/Tag'
 
 const CalendarClassTutoringEdit = () => {
 	const router = useRouter()
+	const user = useSelector((state: RootState) => state.user.information)
 	const listCalendar = useSelector((state: RootState) => state.class.listCalendarEdit)
 	const isEditSchedule = useSelector((state: RootState) => state.class.isEditSchedule)
 	const paramsSchedule = useSelector((state: RootState) => state.class.paramsSchedule)
@@ -46,13 +47,13 @@ const CalendarClassTutoringEdit = () => {
 	const [loadingCheckTeacher, setLoadingCheckTeacher] = useState(false)
 	const dispatch = useDispatch()
 	const [dataTutoring, setDataTutoring] = useState(null)
+	const [teacherData, setTeacherData] = useState([])
+	const [totalPage, setTotalPage] = useState(0)
 
 	const getTutoring = async (classId) => {
 		try {
 			const res = await classApi.getClassTutoringCurriculum({ classId })
 			if (res.status === 200) {
-				console.log(res)
-
 				setDataTutoring(res?.data?.data)
 			}
 			if (res.status === 204) {
@@ -121,6 +122,8 @@ const CalendarClassTutoringEdit = () => {
 			const res = await classApi.checkTeacherTutoringAvailable(params)
 			if (res.status === 200) {
 				dispatch(setTeacherEdit(res.data.data))
+				setTeacherData(res.data.data)
+				setTotalPage(res.data.totalRow)
 				setLoadingCheckTeacher(false)
 				return res.data.data
 			}
@@ -181,119 +184,31 @@ const CalendarClassTutoringEdit = () => {
 		}
 	}
 
-	const handleEventDrop = async (eventDropInfo) => {
-		if (moment(eventDropInfo.event.start).format() >= moment(eventDropInfo.event.end).format()) {
-			ShowNoti('error', 'Lịch học không hợp lệ')
-		} else {
-			dispatch(setLoadingCalendar(true))
-			const checkExistSchedule = listCalendar.find((item) => {
-				return (
-					(moment(item.StartTime).format() === moment(eventDropInfo.event.start).format() ||
-						moment(item.EndTime).format() === moment(eventDropInfo.event.end).format() ||
-						(moment(item.EndTime).format() > moment(eventDropInfo.event.start).format() &&
-							moment(item.EndTime).format() <= moment(eventDropInfo.event.end).format()) ||
-						(moment(item.StartTime).format() > moment(eventDropInfo.event.start).format() &&
-							moment(item.StartTime).format() < moment(eventDropInfo.event.end).format())) &&
-					item.IdSchedule !== eventDropInfo.event.extendedProps.IdSchedule
-				)
-			})
-			if (!checkExistSchedule) {
-				const listTeacher = await checkTeacherAvailable({
-					scheduleId: eventDropInfo.event.extendedProps.IdSchedule,
-					branchId: infoClass?.BranchId,
-					curriculumId: infoClass?.CurriculumId,
-					startTime: moment(eventDropInfo.event.start).format(),
-					endTime: moment(eventDropInfo.event.end).format()
-				})
-				let checkRoom = null
-				if (!!eventDropInfo.event.extendedProps.RoomId) {
-					const listRoom = await checkRoomAvailable({
-						scheduleId: eventDropInfo.event.extendedProps.IdSchedule,
-						branchId: infoClass?.BranchId,
-						startTime: moment(eventDropInfo.event.start).format(),
-						endTime: moment(eventDropInfo.event.end).format()
-					})
-					checkRoom = listRoom.find((item) => item.RoomId === eventDropInfo.event.extendedProps.RoomId)
-					if (!!checkRoom && !checkRoom?.Fit) {
-						dispatch(
-							setPrevScheduleEdit({
-								...eventDropInfo.oldEvent.extendedProps,
-								start: moment(eventDropInfo.oldEvent.start).format(),
-								end: moment(eventDropInfo.oldEvent.end).format(),
-								title: eventDropInfo.oldEvent.title
-							})
-						)
-						dispatch(setShowModalEdit({ open: true, id: eventDropInfo.event.extendedProps.IdSchedule }))
-						ShowNoti('error', checkRoom.Note)
-						dispatch(setLoadingCalendar(false))
-					}
-				}
-
-				const checkTeacher = listTeacher.find((item) => item.TeacherId === eventDropInfo.event.extendedProps.TeacherId)
-				if (!!checkTeacher && !checkTeacher?.Fit) {
-					dispatch(
-						setPrevScheduleEdit({
-							...eventDropInfo.oldEvent.extendedProps,
-							start: moment(eventDropInfo.oldEvent.start).format(),
-							end: moment(eventDropInfo.oldEvent.end).format(),
-							title: eventDropInfo.oldEvent.title
-						})
-					)
-					dispatch(setShowModalEdit({ open: true, id: eventDropInfo.event.extendedProps.IdSchedule }))
-					ShowNoti('error', checkTeacher.Note)
-					dispatch(setLoadingCalendar(false))
-				}
-
-				if (!checkTeacher || !checkRoom) {
-					dispatch(
-						setPrevScheduleEdit({
-							...eventDropInfo.oldEvent.extendedProps,
-							start: moment(eventDropInfo.oldEvent.start).format(),
-							end: moment(eventDropInfo.oldEvent.end).format(),
-							title: eventDropInfo.oldEvent.title
-						})
-					)
-					dispatch(setShowModalEdit({ open: true, id: eventDropInfo.event.extendedProps.IdSchedule }))
-					ShowNoti('error', !!checkTeacher ? 'Phòng học không tồn tại' : 'Giáo viên không tồn tại')
-					dispatch(setLoadingCalendar(false))
-				} else if (parseInt(infoClass?.Type?.toString()) == 1 && !!checkTeacher && !!checkTeacher?.Fit && !!checkRoom && !!checkRoom?.Fit) {
-					handleUpdateSchedule(eventDropInfo)
-				} else if (parseInt(infoClass?.Type?.toString()) == 2 && !!checkTeacher && !!checkTeacher?.Fit) {
-					handleUpdateSchedule(eventDropInfo)
-				}
-			} else {
-				const newListCalendar = [...listCalendar]
-				newListCalendar[eventDropInfo.oldEvent.extendedProps.Id] = {
-					...newListCalendar[eventDropInfo.oldEvent.extendedProps.Id],
-					StartTime: moment(eventDropInfo.oldEvent.start).format(),
-					EndTime: moment(eventDropInfo.oldEvent.end).format(),
-					end: moment(eventDropInfo.oldEvent.end).format(),
-					start: moment(eventDropInfo.oldEvent.start).format(),
-					title: `${moment(eventDropInfo.oldEvent.start).format('HH:mm')} - ${moment(eventDropInfo.oldEvent.end).format('HH:mm')}`
-				}
-				dispatch(setListCalendarEdit(newListCalendar))
-				ShowNoti('error', 'Buổi học này đã bị trùng lịch')
-				dispatch(setLoadingCalendar(false))
-			}
-		}
-	}
-
 	return (
 		<div className="wrapper-calendar">
 			<Card
 				className="card-calendar"
 				extra={
 					<>
-						<PrimaryButton background="yellow" type="button" icon="edit" onClick={() => dispatch(setIsEditSchedule(!isEditSchedule))}>
-							{isEditSchedule ? 'Hủy' : 'Chỉnh sửa'}
-						</PrimaryButton>
-						<ModalAddScheduleToturingEdit
-							checkTeacherAvailable={checkTeacherAvailable}
-							checkRoomAvailable={checkRoomAvailable}
-							getListSchedule={getListSchedule}
-							paramsSchedule={paramsSchedule}
-							loadingCheckTeacher={loadingCheckTeacher}
-						/>
+						{user.RoleId == 3 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+							<>
+								<PrimaryButton background="yellow" type="button" icon="edit" onClick={() => dispatch(setIsEditSchedule(!isEditSchedule))}>
+									{isEditSchedule ? 'Hủy' : 'Chỉnh sửa'}
+								</PrimaryButton>
+								<ModalAddScheduleToturingEdit
+									checkTeacherAvailable={checkTeacherAvailable}
+									checkRoomAvailable={checkRoomAvailable}
+									getListSchedule={getListSchedule}
+									paramsSchedule={paramsSchedule}
+									loadingCheckTeacher={loadingCheckTeacher}
+									teacherData={teacherData}
+									setTeacherData={setTeacherData}
+									totalPage={totalPage}
+								/>
+							</>
+						) : (
+							''
+						)}
 					</>
 				}
 				title={
@@ -318,10 +233,10 @@ const CalendarClassTutoringEdit = () => {
 						ref={thisCalendar}
 						plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
 						initialView="dayGridMonth"
-						droppable={true}
+						droppable={false}
 						selectable={true}
 						selectMirror={true}
-						editable={isEditSchedule}
+						editable={false}
 						weekends={true}
 						events={listCalendar}
 						eventsSet={(data) => setTimeStamp(new Date().getTime())}
@@ -355,9 +270,6 @@ const CalendarClassTutoringEdit = () => {
 									title: eventClickInfo.event.title
 								})
 							)
-						}}
-						eventDrop={(eventDropInfo) => {
-							handleEventDrop(eventDropInfo)
 						}}
 					/>
 				) : null}

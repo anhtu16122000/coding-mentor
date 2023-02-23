@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { transcriptApi } from '~/api/transcript'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
+import InputTextField from '../FormControl/InputTextField'
 import PrimaryButton from '../Primary/Button'
 import PrimaryTable from '../Primary/Table'
 import { ModalTranscript } from './ModalTranscript'
@@ -141,7 +142,7 @@ export const TranscriptPage = () => {
 			dataIndex: 'Listening',
 			render: (text, item, index) => (
 				<div className="antd-custom-wrap">
-					<Input onChange={(val) => handleChangeListening(val, index)} value={item?.Listening} className="rounded-lg" />
+					<Input onChange={(val) => handleChangeListening(val, index)} value={item?.Listening} className="rounded-lg h-[36px]" />
 				</div>
 			)
 		},
@@ -152,7 +153,7 @@ export const TranscriptPage = () => {
 			render: (text, item, index) => (
 				<>
 					<div className="antd-custom-wrap">
-						<Input onChange={(val) => handleChangeSpeaking(val, index)} value={item?.Speaking} className="rounded-lg" />
+						<Input onChange={(val) => handleChangeSpeaking(val, index)} value={item?.Speaking} className="rounded-lg h-[36px]" />
 					</div>
 				</>
 			)
@@ -164,7 +165,7 @@ export const TranscriptPage = () => {
 			render: (text, item, index) => (
 				<>
 					<div className="antd-custom-wrap">
-						<Input onChange={(val) => handleChangeReading(val, index)} value={item?.Reading} className="rounded-lg" />
+						<Input onChange={(val) => handleChangeReading(val, index)} value={item?.Reading} className="rounded-lg h-[36px]" />
 					</div>
 				</>
 			)
@@ -176,7 +177,7 @@ export const TranscriptPage = () => {
 			render: (text, item, index) => (
 				<>
 					<div className="antd-custom-wrap">
-						<Input onChange={(val) => handleChangeWriting(val, index)} value={item?.Writing} className="rounded-lg" />
+						<Input onChange={(val) => handleChangeWriting(val, index)} value={item?.Writing} className="rounded-lg h-[36px]" />
 					</div>
 				</>
 			)
@@ -188,7 +189,7 @@ export const TranscriptPage = () => {
 			render: (text, item, index) => (
 				<>
 					<div className="antd-custom-wrap">
-						<Input onChange={(val) => handleChangeMedium(val, index)} value={item?.Medium} className="rounded-lg" />
+						<Input onChange={(val) => handleChangeMedium(val, index)} value={item?.Medium} className="rounded-lg h-[36px]" />
 					</div>
 				</>
 			)
@@ -199,7 +200,7 @@ export const TranscriptPage = () => {
 			dataIndex: 'Note',
 			render: (text, item, index) => (
 				<>
-					<Input onChange={(val) => handleChangeNote(val, index)} value={item?.Note} className="rounded-lg" />
+					<InputTextField onChange={(val) => handleChangeNote(val, index)} value={text} className="rounded-lg mb-0" name="" label="" />
 				</>
 			)
 		}

@@ -1,22 +1,26 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { salaryConfigApi } from '~/api/salary'
+import { tutoringFeeApi } from '~/api/tutoring-fee'
+import CCSearch from '~/common/components/CCSearch'
 import PrimaryTable from '~/common/components/Primary/Table'
+import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import FilterTable from '~/common/utils/table-filter'
-import CCSearch from '../../components/CCSearch'
-import { ModalSalaryConfigCRUD } from './ModalSalaryConfigCRUD'
-const initParameters = { fullName: '', userCode: '', pageIndex: 1, pageSize: PAGE_SIZE, search: '' }
-export const SalaryConfigPage = () => {
+import { ModalSalaryTutoringConfigCRUD } from './ModalSalaryTutoringConfigCRUD'
+
+let pageIndex = 1
+export const SalaryTutoringConfigPage = () => {
+	const initParameters = { fullName: '', userCode: '', pageIndex: 1, pageSize: PAGE_SIZE, search: '' }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [totalRow, setTotalRow] = useState(1)
 	const [dataTable, setDataTable] = useState([])
 	const [loading, setLoading] = useState(false)
+	const [currentPage, setCurrentPage] = useState(1)
 
-	const getSalaryConfig = async (params) => {
+	const getSalaryTutoringConfig = async (params) => {
 		try {
 			setLoading(true)
-			const res = await salaryConfigApi.getAll(params)
+			const res = await tutoringFeeApi.getAll(params)
 			if (res.status === 200) {
 				setDataTable(res.data.data)
 				setTotalRow(res.data.totalRow)
@@ -33,36 +37,25 @@ export const SalaryConfigPage = () => {
 
 	useEffect(() => {
 		if (apiParameters) {
-			getSalaryConfig(apiParameters)
+			getSalaryTutoringConfig(apiParameters)
 		}
 	}, [apiParameters])
 
 	const columns = [
 		{
-			...FilterTable({
-				type: 'search',
-				dataIndex: 'UserCode',
-				handleSearch: (event) => setApiParameters({ ...apiParameters, userCode: event }),
-				handleReset: (event) => setApiParameters(initParameters)
-			}),
 			width: 160,
 			title: 'Mã',
-			dataIndex: 'UserCode',
+			dataIndex: 'TeacherCode',
 			render: (text) => <p className="font-semibold">{text}</p>
 		},
 		{
 			title: 'Họ tên',
-			dataIndex: 'FullName',
+			dataIndex: 'TeacherName',
 			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
 		},
 		{
-			title: 'Chức vụ',
-			dataIndex: 'RoleName',
-			render: (text) => <>{text}</>
-		},
-		{
 			title: 'Mức lương',
-			dataIndex: 'Value',
+			dataIndex: 'Fee',
 			render: (text) => <>{Intl.NumberFormat('ja-JP').format(text)}</>
 		},
 		{
@@ -76,20 +69,34 @@ export const SalaryConfigPage = () => {
 			render: (text, item) => {
 				return (
 					<div className="flex items-center">
-						<ModalSalaryConfigCRUD mode="edit" onRefresh={() => getSalaryConfig(apiParameters)} dataRow={item} />
-						<ModalSalaryConfigCRUD mode="delete" onRefresh={() => getSalaryConfig(apiParameters)} dataRow={item} />
+						<ModalSalaryTutoringConfigCRUD mode="edit" onRefresh={() => getSalaryTutoringConfig(apiParameters)} dataRow={item} />
+						<ModalSalaryTutoringConfigCRUD mode="delete" onRefresh={() => getSalaryTutoringConfig(apiParameters)} dataRow={item} />
 					</div>
 				)
 			}
 		}
 	]
 
+	const expandedRowRender = (data) => {
+		return <>Ghi chú: {data?.Note}</>
+	}
+
+	const getPagination = (pageNumber: number) => {
+		pageIndex = pageNumber
+		setCurrentPage(pageNumber)
+		setApiParameters({
+			...apiParameters,
+			// ...listFieldSearch,
+			pageIndex: pageIndex
+		})
+	}
 	return (
 		<div className="salaryConfig-page-list">
-			<PrimaryTable
+			<ExpandTable
+				currentPage={currentPage}
+				totalPage={totalRow && totalRow}
+				getPagination={(pageNumber: number) => getPagination(pageNumber)}
 				loading={loading}
-				total={totalRow}
-				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
 				TitleCard={
 					<div className="extra-table">
 						<div className="flex-1 max-w-[350px] mr-[16px]">
@@ -97,14 +104,19 @@ export const SalaryConfigPage = () => {
 						</div>
 					</div>
 				}
-				data={dataTable}
-				columns={columns}
 				Extra={
 					<>
-						<ModalSalaryConfigCRUD mode="add" onRefresh={() => getSalaryConfig(apiParameters)} />
+						<ModalSalaryTutoringConfigCRUD mode="add" onRefresh={() => getSalaryTutoringConfig(apiParameters)} />
 					</>
 				}
+				// addClass="basic-header"
+				dataSource={dataTable}
+				columns={columns}
+				expandable={expandedRowRender}
+
+				// isResetKey={isResetKey}
 			/>
+			s
 		</div>
 	)
 }

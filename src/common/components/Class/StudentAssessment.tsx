@@ -2,14 +2,18 @@ import { Input } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { studentAssessmentApi } from '~/api/student-assessment'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
+import { RootState } from '~/store'
+import InputTextField from '../FormControl/InputTextField'
 import IconButton from '../Primary/IconButton'
 import PrimaryTable from '../Primary/Table'
 
 export const StudentAssessment = () => {
 	const router = useRouter()
+	const user = useSelector((state: RootState) => state.user.information)
 	const initParameters = { classId: router.query.class, pageIndex: 1, pageSize: PAGE_SIZE }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [loading, setLoading] = useState(false)
@@ -37,12 +41,6 @@ export const StudentAssessment = () => {
 	const handleChangeWriting = (info, index) => {
 		let temp = [...dataTable]
 		temp[index] = { ...temp[index], Writing: info.target.value }
-		setDataTable(temp)
-	}
-
-	const handleChangeMedium = (info, index) => {
-		let temp = [...dataTable]
-		temp[index] = { ...temp[index], Medium: info.target.value }
 		setDataTable(temp)
 	}
 
@@ -129,10 +127,11 @@ export const StudentAssessment = () => {
 			render: (text, item, index) => (
 				<div className="antd-custom-wrap">
 					<Input
-						disabled={moment() >= moment(item?.StartTime) ? false : true}
+						disabled={moment() >= moment(item?.StartTime) && user.RoleId == 2 ? false : true}
 						onChange={(val) => handleChangeListening(val, index)}
 						value={item?.Listening}
-						className="rounded-lg"
+						className="rounded-lg h-[36px]"
+						type="number"
 					/>
 				</div>
 			)
@@ -145,10 +144,11 @@ export const StudentAssessment = () => {
 				<>
 					<div className="antd-custom-wrap">
 						<Input
-							disabled={moment() >= moment(item?.StartTime) ? false : true}
+							disabled={moment() >= moment(item?.StartTime) && user.RoleId == 2 ? false : true}
 							onChange={(val) => handleChangeSpeaking(val, index)}
 							value={item?.Speaking}
-							className="rounded-lg"
+							className="rounded-lg h-[36px]"
+							type="number"
 						/>
 					</div>
 				</>
@@ -162,10 +162,11 @@ export const StudentAssessment = () => {
 				<>
 					<div className="antd-custom-wrap">
 						<Input
-							disabled={moment() >= moment(item?.StartTime) ? false : true}
+							disabled={moment() >= moment(item?.StartTime) && user.RoleId == 2 ? false : true}
 							onChange={(val) => handleChangeReading(val, index)}
 							value={item?.Reading}
-							className="rounded-lg"
+							className="rounded-lg h-[36px]"
+							type="number"
 						/>
 					</div>
 				</>
@@ -179,10 +180,11 @@ export const StudentAssessment = () => {
 				<>
 					<div className="antd-custom-wrap">
 						<Input
-							disabled={moment() >= moment(item?.StartTime) ? false : true}
+							disabled={moment() >= moment(item?.StartTime) && user.RoleId == 2 ? false : true}
 							onChange={(val) => handleChangeWriting(val, index)}
 							value={item?.Writing}
-							className="rounded-lg"
+							className="rounded-lg h-[36px]"
+							type="number"
 						/>
 					</div>
 				</>
@@ -194,11 +196,13 @@ export const StudentAssessment = () => {
 			dataIndex: 'Note',
 			render: (text, item, index) => (
 				<>
-					<Input
-						disabled={moment() >= moment(item?.StartTime) ? false : true}
+					<InputTextField
+						disabled={moment() >= moment(item?.StartTime) && user.RoleId == 2 ? false : true}
 						onChange={(val) => handleChangeNote(val, index)}
 						value={item?.Note}
-						className="rounded-lg"
+						className="rounded-lg mb-0"
+						name=""
+						label=""
 					/>
 				</>
 			)
@@ -209,7 +213,7 @@ export const StudentAssessment = () => {
 			dataIndex: 'Action',
 			render: (text, item, index) => (
 				<>
-					{moment() >= moment(item?.StartTime) ? (
+					{moment() >= moment(item?.StartTime) && user.RoleId == 2 ? (
 						<IconButton
 							tooltip="Cập nhật"
 							color={`green`}

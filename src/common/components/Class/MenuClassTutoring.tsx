@@ -22,8 +22,8 @@ import { ScheduleList } from './ScheduleList'
 import { StudentAssessment } from './StudentAssessment'
 
 const itemsAdmin = ['Lịch học', 'Đánh giá học viên', 'Đánh giá giáo viên', 'Tài liệu', 'Thông báo', 'Phản hồi buổi học']
-const itemsStudent = ['Lịch học']
-const itemsTeacher = ['Lịch học']
+const itemsStudent = ['Lịch học', 'Đánh giá giáo viên', 'Tài liệu', 'Thông báo']
+const itemsTeacher = ['Lịch học', 'Đánh giá học viên', 'Tài liệu', 'Thông báo', 'Phản hồi buổi học']
 const MenuClassTutoring = () => {
 	const user = useSelector((state: RootState) => state.user.information)
 	const getChildrenClassAdmin = (index) => {
@@ -103,11 +103,16 @@ const MenuClassTutoring = () => {
 	const getChildrenClassStudent = (index) => {
 		switch (index) {
 			case 0:
-				return <CalenderClassStudent />
+				return <CalendarClassTutoringEdit />
+
 			case 1:
-				return <ListStudentInClass />
+				return <RateTeacher />
+			case 2:
+				return <DocumentsPageInClass />
+			case 3:
+				return <NotificationInClassPage />
 			default:
-				return <CalenderClassStudent />
+				return <CalendarClassEdit />
 		}
 	}
 	const getLabelClassStudent = (item, index) => {
@@ -115,17 +120,28 @@ const MenuClassTutoring = () => {
 			case 0:
 				return (
 					<div className="label-tab">
-						<AiOutlineCalendar className="mr-3" /> <span>{item}</span>
+						<AiOutlineCalendar className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 1:
 				return (
 					<div className="label-tab">
-						<RiContactsBook2Line className="mr-3" /> <span>{item}</span>
+						<RiMarkPenLine className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 2:
-				return <div className="label-tab">{item}</div>
+				return (
+					<div className="label-tab">
+						<VscFolderLibrary className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 3:
+				return (
+					<div className="label-tab">
+						<IoNotificationsOutline className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+
 			default:
 				return 'Lịch học'
 		}
@@ -134,9 +150,19 @@ const MenuClassTutoring = () => {
 	const getChildrenClassTeacher = (index) => {
 		switch (index) {
 			case 0:
-				return <CalenderClassTeacher />
+				return <CalendarClassTutoringEdit />
+			case 1:
+				return <StudentAssessment />
+			case 2:
+				return <RateTeacher />
+			case 3:
+				return <DocumentsPageInClass />
+			case 4:
+				return <NotificationInClassPage />
+			case 5:
+				return <LessonFeedbackPage />
 			default:
-				return <CalenderClassTeacher />
+				return <CalendarClassEdit />
 		}
 	}
 	const getLabelClassTeacher = (item, index) => {
@@ -144,11 +170,46 @@ const MenuClassTutoring = () => {
 			case 0:
 				return (
 					<div className="label-tab">
-						<AiOutlineCalendar className="mr-3" /> <span>{item}</span>
+						<AiOutlineCalendar className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 1:
+				return (
+					<div className="label-tab">
+						<RiMarkPenLine className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 2:
-				return <div className="label-tab">{item}</div>
+				return (
+					<div className="label-tab">
+						<VscFolderLibrary className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 3:
+				return (
+					<div className="label-tab">
+						<IoNotificationsOutline className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 4:
+				return (
+					<div className="label-tab">
+						<CgTranscript className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 5:
+				return (
+					<div className="label-tab">
+						<FiUserCheck className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 6:
+				return (
+					<div className="label-tab">
+						<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+
 			default:
 				return 'Lịch học'
 		}

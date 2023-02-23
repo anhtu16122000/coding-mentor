@@ -214,6 +214,13 @@ export const AdminChildMenu = [
 				Route: '/users/teacher/open-calender',
 				Text: 'Mở lịch trống',
 				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/users/salary-tutoring-config',
+				Route: '/users/salary-tutoring-config',
+				Text: 'Cấu hình lương dạy kèm',
+				Icon: ''
 			}
 		]
 	},

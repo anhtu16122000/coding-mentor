@@ -9,6 +9,8 @@ type IFormInputText = {
 	disabled?: boolean
 	rules?: array
 	defaultValue?: string
+	onChange?: any
+	value?: any
 }
 
 type IUploadImageField = {
