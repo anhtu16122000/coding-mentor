@@ -24,6 +24,10 @@ const ExpandedRowAppointment = (props) => {
 		return userInformation.RoleId == 3
 	}
 
+	function isSaler() {
+		return userInformation.RoleId == 5
+	}
+
 	return (
 		<div className="wrapper-expanded-table-appointment">
 			<h2 className="result-appointment-title">Kết quả</h2>
