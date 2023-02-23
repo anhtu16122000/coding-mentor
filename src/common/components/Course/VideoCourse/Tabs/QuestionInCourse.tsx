@@ -8,6 +8,7 @@ import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import QuestionInCourseItem from '../QuestionInCourseItem'
+import TextBoxField from '~/common/components/FormControl/TextBoxField'
 
 export interface IQuestionInCourseProps {
 	videoCourseID: number
@@ -62,7 +63,9 @@ export default function QuestionInCourse(props: IQuestionInCourseProps) {
 			<div>
 				{(user == '3' || user == '2') && (
 					<div className={`flex flex-col gap-2`}>
-						<TextArea
+						<TextBoxField
+							name="Question"
+							label="Câu hỏi của bạn"
 							rows={4}
 							className="rounded-lg"
 							onChange={(e) => {

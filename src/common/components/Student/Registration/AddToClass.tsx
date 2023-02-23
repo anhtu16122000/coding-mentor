@@ -80,6 +80,7 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
 
 	function openEdit() {
 		setVisible(!visible)
+		form.setFieldValue('ProgramId', item?.ProgramId)
 	}
 
 	function onFinish(params) {

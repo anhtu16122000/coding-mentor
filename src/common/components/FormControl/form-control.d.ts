@@ -98,8 +98,8 @@ type IUploadFileField = {
 
 type ITextBoxField = {
 	style?: object
-	label: string
-	name: string
+	label?: string
+	name?: string
 	rows?: number
 	isRequired?: boolean
 	className?: string
@@ -108,6 +108,7 @@ type ITextBoxField = {
 	disabled?: boolean
 	rules?: array
 	maxLength?: number
+	onChange?: Function
 }
 
 type IDatePickerField = {

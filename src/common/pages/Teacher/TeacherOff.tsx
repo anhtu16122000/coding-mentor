@@ -44,6 +44,25 @@ const TeacherOff = () => {
 			[dataIndex]: valueSearch
 		})
 	}
+
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
 	const columnsTeacher = [
 		{
 			title: 'Từ ngày',
@@ -246,7 +265,7 @@ const TeacherOff = () => {
 			totalPage={totalRow}
 			columns={userInformation.RoleId == 2 ? columnsTeacher : columnsAdmin}
 			expandable={expandedRowRender}
-			Extra={userInformation.RoleId != 1 && <TeacherOffForm setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
+			Extra={isTeacher() && <TeacherOffForm setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
 			TitleCard={'Danh sách lịch nghỉ'}
 		/>
 	)

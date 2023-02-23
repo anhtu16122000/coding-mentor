@@ -14,13 +14,9 @@ import { RootState } from '~/store'
 import RestApi from '~/api/RestApi'
 
 const DEFAULT_FILTER = {
-	newsFeedGroupId: undefined,
-	accountLogin: null,
-	role: null,
+	newsFeedGroupId: null,
 	pageIndex: 1,
-	pageSize: 10,
-	searchContent: '',
-	orderBy: 0
+	pageSize: 10
 }
 
 function NewsLoading() {
@@ -85,9 +81,6 @@ function NewsFeed() {
 	}, [])
 
 	async function getGroups() {
-		console.log('---- NewsFeedGroup ----')
-		console.log('-- filter: ', filter)
-
 		setGroupLoading(true)
 		try {
 			const res = await RestApi.get<any>('NewsFeedGroup', filter)
@@ -124,6 +117,10 @@ function NewsFeed() {
 		return userInformation.RoleId == 2
 	}
 
+	function isManager() {
+		return userInformation.RoleId == 4
+	}
+
 	function isStdent() {
 		return userInformation.RoleId == 3
 	}
@@ -141,7 +138,7 @@ function NewsFeed() {
 						</div>
 					)}
 
-					{(isAdmin() || isTeacher()) && (
+					{(isAdmin() || isTeacher() || isManager()) && (
 						<div className="cc-news-container">
 							<CreateNews onRefresh={() => setFilter({ ...filter, pageIndex: 1 })} />
 						</div>

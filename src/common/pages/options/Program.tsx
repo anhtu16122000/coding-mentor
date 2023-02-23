@@ -21,6 +21,8 @@ import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'
 import ProgramAddTeacherForm from '~/common/components/Program/ProgramAddTeacherForm'
 import FilterBase from '~/common/components/Elements/FilterBase'
 import IconButton from '~/common/components/Primary/IconButton'
+import Head from 'next/head'
+import appConfigs from '~/appConfig'
 
 let pageIndex = 1
 
@@ -76,22 +78,28 @@ const Programs = () => {
 			value: null,
 			placeholder: 'Chọn chuyên môn'
 		}
-		// {
-		// 	name: 'type',
-		// 	title: 'Hình thức',
-		// 	col: 'col-md-6 col-12',
-		// 	type: 'select',
-		// 	optionList: [
-		// 		{ value: 1, title: 'Offline' },
-		// 		{ value: 2, title: 'Online' },
-		// 		{ value: 3, title: 'Dạy kèm' }
-		// 	],
-		// 	value: null
-		// }
 	])
 	const [isLoading, setIsLoading] = useState(false)
 	const [totalPage, setTotalPage] = useState(null)
 	const [currentPage, setCurrentPage] = useState(1)
+
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
 
 	const listTodoApi = {
 		pageSize: PAGE_SIZE,
@@ -252,23 +260,6 @@ const Programs = () => {
 				)
 			}
 		},
-		// {
-		// 	title: 'Hình thức',
-		// 	width: 100,
-		// 	dataIndex: 'Type',
-		// 	render: (Type, data) => {
-		// 		switch (Type) {
-		// 			case 1:
-		// 				return <p className="tag blue">{data.TypeName}</p>
-		// 			case 2:
-		// 				return <p className="tag green">{data.TypeName}</p>
-		// 			case 3:
-		// 				return <p className="tag red">{data.TypeName}</p>
-		// 			default:
-		// 				return <p className="tag gray">{data.TypeName}</p>
-		// 		}
-		// 	}
-		// },
 		{
 			title: 'Người tạo',
 			width: 110,
@@ -336,13 +327,16 @@ const Programs = () => {
 	]
 
 	useEffect(() => {
-		if (!!userInformation && userInformation?.RoleId != 1) {
+		if (!!userInformation && !isAdmin() && !isManager()) {
 			Router.push('/')
 		}
 	}, [userInformation])
 
 	return (
 		<Fragment>
+			<Head>
+				<title>{appConfigs.appName} | Cấu hình chương trình</title>
+			</Head>
 			<PrimaryTable
 				current={currentPage}
 				total={totalPage && totalPage}

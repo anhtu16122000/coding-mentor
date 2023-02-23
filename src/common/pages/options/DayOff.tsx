@@ -14,11 +14,7 @@ const DayOff = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [totalPage, setTotalPage] = useState(null)
 	const { information: userInformation } = useSelector((state: RootState) => state.user)
-	// FILTER
-	const todoListApi = {
-		pageIndex: 1,
-		pageSize: PAGE_SIZE
-	}
+	const todoListApi = { pageIndex: 1, pageSize: PAGE_SIZE }
 	const [todoApi, setTodoApi] = useState(todoListApi)
 
 	// GET DATA IN FIRST TIME
@@ -57,6 +53,25 @@ const DayOff = () => {
 			ShowNoti('error', err.message)
 		}
 	}
+
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
 	// COLUMN FOR TABLE
 	const columns = [
 		{
@@ -74,21 +89,21 @@ const DayOff = () => {
 			render: (date) => moment(date).format('DD/MM/YYYY')
 		},
 		{
-			title: 'Ngày khởi tạo',
+			title: 'Ngày tạo',
 			dataIndex: 'CreatedOn',
 			render: (date) => moment(date).format('DD/MM/YYYY')
 		},
 		{
-			title: 'Được tạo bởi',
+			title: 'Tạo bởi',
 			width: 120,
 			dataIndex: 'CreatedBy'
 		},
 		{
-			title: 'Chức năng',
+			title: '',
 			fixed: 'right',
 			render: (value, record, idx) => (
 				<div onClick={(e) => e.stopPropagation()}>
-					{userInformation && userInformation?.RoleId == 1 && (
+					{(isAdmin() || isManager()) && (
 						<>
 							<DayOffForm dataRow={record} getAllDayOffList={getAllDayOffList} />
 							<DeleteTableRow text={record.Name} handleDelete={() => onDeleteDayOff(record.Id)} />
@@ -98,16 +113,13 @@ const DayOff = () => {
 			)
 		}
 	]
+
 	// RETURN
 	return (
 		<PrimaryTable
-			// currentPage={filters.pageIndex}
 			total={totalPage}
-			// getPagination={getPagination}
 			loading={isLoading}
-			// addClass="basic-header"
-			// TitlePage="Ngày nghỉ"
-			Extra={userInformation && userInformation?.RoleId == 1 && <DayOffForm getAllDayOffList={getAllDayOffList} />}
+			Extra={(isAdmin() || isManager()) && <DayOffForm getAllDayOffList={getAllDayOffList} />}
 			data={dayOffList}
 			columns={columns}
 			onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
