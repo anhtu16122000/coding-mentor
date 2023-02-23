@@ -181,7 +181,7 @@ const ClassList = (props) => {
 						<List.Item.Meta
 							avatar={checkStatus(item.Status, item.StatusName, item.Thumbnail)}
 							title={
-								item?.Type === 1 ? (
+								item?.Type !== 3 ? (
 									<Link href={returnPathName(item)}>
 										<a className="font-medium hover:underline">{item.Name}</a>
 									</Link>
