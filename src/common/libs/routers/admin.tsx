@@ -41,11 +41,11 @@ export const AdminMenu = [
 		TabName: 'Thư viện online',
 		Icon: <IoLibrarySharp size={22} />
 	},
-	{
-		Key: 'library',
-		TabName: 'Đề thi',
-		Icon: <RiFileList2Fill size={22} />
-	},
+	// {
+	// 	Key: 'library',
+	// 	TabName: 'Đề thi',
+	// 	Icon: <RiFileList2Fill size={22} />
+	// },
 	{
 		Key: 'config',
 		TabName: 'Cấu hình',
@@ -160,8 +160,8 @@ export const AdminChildMenu = [
 			},
 			{
 				ItemType: 'single',
-				Key: '/info-course/student/student-warning',
-				Route: '/info-course/student/student-warning',
+				Key: '/info-course/student/warning',
+				Route: '/info-course/student/warning',
 				Text: 'Cảnh báo học viên',
 				Icon: ''
 			},

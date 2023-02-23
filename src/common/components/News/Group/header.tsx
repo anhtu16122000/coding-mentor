@@ -1,5 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Avatar, Input, Modal, Popover } from 'antd'
+import { Empty, Input, Modal, Popover, Skeleton } from 'antd'
 import { useEffect, useState } from 'react'
 import { FaUserPlus } from 'react-icons/fa'
 import { IoClose, IoPersonAddSharp } from 'react-icons/io5'
@@ -7,16 +7,36 @@ import RestApi from '~/api/RestApi'
 import { userInNewsFeedGroup } from '~/api/user'
 import { ShowNostis } from '~/common/utils'
 import GroupForm from './form'
+import Avatar from '../../Avatar'
 
 const { Search } = Input
 
+const CustomSkeleton = (props) => {
+	const { className } = props
+
+	return (
+		<div className="flex items-center p-[8px]">
+			<Skeleton.Avatar size="large" />
+			<div className="flex-1">
+				<Skeleton active className={`ml-[16px] w-[60%] ${className}`} paragraph={false} />
+			</div>
+			<Skeleton active className="ml-[16px] w-[30px]" paragraph={false} />
+		</div>
+	)
+}
+
 function GroupHeader({ groupId }) {
 	const [details, setDetails] = useState<any>({})
+	const [loading, setLoading] = useState<boolean>(true)
 
 	useEffect(() => {
+		getAllData()
+	}, [groupId])
+
+	function getAllData() {
 		getNewsDetail()
 		getStudentInGroup()
-	}, [groupId])
+	}
 
 	async function getNewsDetail() {
 		try {
@@ -24,9 +44,11 @@ function GroupHeader({ groupId }) {
 			if (response.status == 200) {
 				setDetails(response.data.data)
 			} else {
-				setDetails([])
+				setDetails({})
 			}
-		} catch (error) {}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		}
 	}
 
 	const [showUser, setShowUser] = useState<any>(false)
@@ -48,9 +70,12 @@ function GroupHeader({ groupId }) {
 				setStuFinded(response.data.data)
 			} else {
 				setStudentsNotInGroup([])
+				setStuFinded([])
 			}
 		} catch (error) {
-			ShowNostis.error(error?.resultMessage)
+			ShowNostis.error(error?.message)
+		} finally {
+			setLoading(false)
 		}
 	}
 
@@ -60,9 +85,13 @@ function GroupHeader({ groupId }) {
 	async function getStudentInGroup() {
 		try {
 			const response = await RestApi.get<any>(`UserInNewsFeedGroup`, { newsFeedGroupId: groupId })
-			setStuInGroup(response.data.data)
+			if (response.status == 200) {
+				setStuInGroup(response.data.data)
+			} else {
+				setStuInGroup([])
+			}
 		} catch (error) {
-			console.log('🚀 ~ file: header.tsx:135 ~ getStudentInGroup ~ error', error)
+			ShowNostis.error(error?.message)
 		}
 	}
 
@@ -77,21 +106,19 @@ function GroupHeader({ groupId }) {
 
 	const content = (
 		<div className="w-[400px] max-h-[500px] scrollable">
-			{stuInGroup &&
-				stuInGroup.map((item) => {
-					return (
-						<GroupHeader.UserItem
-							key={`key:>-${Date.now() + Math.random() * 10000}`}
-							onRefresh={() => {
-								getStudentInGroup()
-								getNewsDetail()
-							}}
-							groupId={groupId}
-							item={item}
-							isMember={true}
-						/>
-					)
-				})}
+			{stuInGroup.map((item) => {
+				return (
+					<GroupHeader.UserItem
+						key={`key:>-${Date.now() + Math.random() * 10000}`}
+						onRefresh={getAllData}
+						groupId={groupId}
+						item={item}
+						isMember={true}
+					/>
+				)
+			})}
+
+			{stuInGroup.length == 0 && <Empty />}
 		</div>
 	)
 
@@ -137,20 +164,32 @@ function GroupHeader({ groupId }) {
 					style={{ borderRadius: '8px' }}
 					onSearch={handleSearchUser}
 				/>
+
 				<div className="max-h-[500px] scrollable">
-					{studentsNotInGroup &&
-						stuFinded &&
-						stuFinded.map((item) => (
-							<GroupHeader.UserItem
-								key={`key:>-${Date.now() + Math.random() * 10000}`}
-								onRefresh={() => {
-									getStudentNotInGroup()
-									getNewsDetail()
-								}}
-								groupId={groupId}
-								item={item}
-							/>
-						))}
+					{loading && (
+						<div>
+							<CustomSkeleton />
+							<CustomSkeleton className="!w-[30%]" />
+							<CustomSkeleton className="!w-[70%]" />
+							<CustomSkeleton className="!w-[20%]" />
+						</div>
+					)}
+
+					{!loading && (
+						<>
+							{stuFinded.map((item) => (
+								<GroupHeader.UserItem
+									key={`key:>-${Date.now() + Math.random() * 10000}`}
+									onRefresh={() => {
+										getStudentNotInGroup()
+										getNewsDetail()
+									}}
+									groupId={groupId}
+									item={item}
+								/>
+							))}
+						</>
+					)}
 				</div>
 			</Modal>
 		</div>
@@ -168,12 +207,7 @@ GroupHeader.UserItem = (props) => {
 		try {
 			await userInNewsFeedGroup.addMember({
 				NewsFeedGroupId: groupId,
-				Members: [
-					{
-						UserId: item.UserInformationId || item.Id,
-						Type: 2
-					}
-				]
+				Members: [{ UserId: item.UserInformationId || item.Id, Type: 2 }]
 			})
 
 			await onRefresh()
@@ -199,7 +233,7 @@ GroupHeader.UserItem = (props) => {
 
 	return (
 		<div className="flex row-center mb-[8px] p-[8px] hover:bg-[#eeeaea41] rounded-[6px]">
-			<Avatar src={item.Avatar || '/images/default-avatar.svg'} className="w-[40px] h-[40px] mr-[16px] shadow-sm " />
+			<Avatar disabled uri={item.Avatar} className="w-[40px] h-[40px] mr-[16px] shadow-sm " />
 			<div className="flex-1">
 				<div className="font-[600]">{item?.FullName}</div>
 				<div className={`font-[400] text-[#808080] ${item?.RoleName == 'Admin' ? '!text-[#1E88E5] font-[500]' : ''}`}>{item?.RoleName}</div>

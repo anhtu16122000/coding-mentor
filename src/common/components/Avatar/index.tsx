@@ -4,18 +4,19 @@ import React, { FC, useState } from 'react'
 type TAvatar = {
 	uri: string
 	className?: string
+	disabled?: boolean
 }
 
 const DEFAULT_AVATAR = '/default-avatar.png'
 
 const Avatar: FC<TAvatar> = (props) => {
-	const { uri, className } = props
+	const { uri, className, disabled } = props
 
 	const [image, setImage] = useState('')
 	const [show, setShow] = useState(false)
 
 	function toggle() {
-		if (!!image || !!uri) {
+		if (!disabled && (!!image || !!uri)) {
 			setShow(!show)
 		}
 	}

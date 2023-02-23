@@ -1,9 +1,6 @@
-import { yupResolver } from '@hookform/resolvers/yup'
-import { Form, Modal, Spin, Tooltip } from 'antd'
+import { Form, Modal } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { Edit } from 'react-feather'
-import { MdAddCircleOutline, MdSave } from 'react-icons/md'
 import * as yup from 'yup'
 import { dayOffApi } from '~/api/day-off'
 import DatePickerField from '~/common/components/FormControl/DatePickerField'
@@ -15,6 +12,7 @@ import IconButton from '../Primary/IconButton'
 const DayOffForm = (props) => {
 	const { dataRow, getAllDayOffList } = props
 	const [form] = Form.useForm()
+
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 

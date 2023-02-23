@@ -9,7 +9,10 @@ import PrimaryButton from '../Primary/Button'
 const PermissionEditForm = (props) => {
 	const { item, getFunctionPermission, rolePermission } = props
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [loading, setLoading] = useState(false)
+
 	const [form] = Form.useForm()
+
 	const showModal = () => {
 		setIsModalOpen(true)
 		if (!!item?.Allowed) {
@@ -37,6 +40,7 @@ const PermissionEditForm = (props) => {
 		}
 
 		try {
+			setLoading(true)
 			const res = await permissionApi.update(newData)
 			if (res.status === 200) {
 				getFunctionPermission()
@@ -45,6 +49,7 @@ const PermissionEditForm = (props) => {
 		} catch (err) {
 			ShowNoti('error', err.message)
 		} finally {
+			setLoading(false)
 			setIsModalOpen(false)
 		}
 	}
@@ -57,8 +62,8 @@ const PermissionEditForm = (props) => {
 				onCancel={handleCancel}
 				footer={
 					<>
-						<PrimaryButton onClick={form.submit} background="blue" icon="save" type="button">
-							Lưu
+						<PrimaryButton loading={loading} onClick={form.submit} background="blue" icon="save" type="button">
+							Ficà
 						</PrimaryButton>
 					</>
 				}

@@ -1,8 +1,8 @@
 import { UserCheck } from 'react-feather'
 import { BiBookBookmark } from 'react-icons/bi'
 import { BsFillGridFill } from 'react-icons/bs'
-import { FaUserCheck } from 'react-icons/fa'
-import { IoLibrarySharp } from 'react-icons/io5'
+import { FaMoneyBillAlt, FaUserCheck, FaUserGraduate } from 'react-icons/fa'
+import { IoLibrarySharp, IoVideocam } from 'react-icons/io5'
 import { MdAirplay } from 'react-icons/md'
 import { RiFileList2Fill } from 'react-icons/ri'
 import { TbHome, TbScreenShare } from 'react-icons/tb'
@@ -20,15 +20,30 @@ export const TeacherMenu = [
 		Icon: <BsFillGridFill size={22} />
 	},
 	{
+		Key: 'student',
+		TabName: 'Học viên',
+		Icon: <FaUserGraduate size={20} />
+	},
+	{
+		Key: 'finance',
+		TabName: 'Tài chính',
+		Icon: <FaMoneyBillAlt size={20} />
+	},
+	{
+		Key: 'video',
+		TabName: 'Khoá học video',
+		Icon: <IoVideocam size={22} />
+	},
+	{
 		Key: 'library-online',
 		TabName: 'Thư viện online',
 		Icon: <IoLibrarySharp size={22} />
 	},
-	{
-		Key: 'library',
-		TabName: 'Đề thi',
-		Icon: <RiFileList2Fill size={22} />
-	},
+	// {
+	// 	Key: 'library',
+	// 	TabName: 'Đề thi',
+	// 	Icon: <RiFileList2Fill size={22} />
+	// },
 	{
 		Key: 'assignment',
 		TabName: 'Phân công',
@@ -76,6 +91,64 @@ export const TeacherChildMenu = [
 				Key: '/class/schedule',
 				Route: '/class/schedule',
 				Text: 'Lịch dạy',
+				Icon: ''
+			}
+		]
+	},
+	{
+		Parent: 'finance',
+		MenuTitle: 'Tài chính',
+		MenuKey: '/finance',
+		MenuItem: [
+			{
+				ItemType: 'single',
+				Key: '/users/salary',
+				Route: '/users/salary',
+				Text: 'Bảng lương',
+				Icon: ''
+			}
+		]
+	},
+	{
+		MenuName: 'Khóa học',
+		MenuTitle: 'Khóa học',
+		Parent: 'video',
+		MenuKey: '/course',
+		MenuItem: [
+			{
+				ItemType: 'single',
+				Key: '/course/video-course',
+				Route: '/course/video-course',
+				Text: 'Khóa học',
+				Icon: ''
+			}
+		]
+	},
+	{
+		MenuName: 'Quản lý thông tin học',
+		MenuTitle: 'Thông tin học',
+		MenuKey: '/info-course',
+		Parent: 'student',
+		MenuItem: [
+			{
+				ItemType: 'single',
+				Key: '/info-course/service-appointment-test',
+				Route: '/info-course/service-appointment-test',
+				Text: 'Khách hẹn test',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/student',
+				Route: '/info-course/student',
+				Text: 'Danh sách học viên',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/student/warning',
+				Route: '/info-course/student/warning',
+				Text: 'Cảnh báo học viên',
 				Icon: ''
 			}
 		]

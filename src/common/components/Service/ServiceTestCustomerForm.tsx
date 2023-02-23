@@ -1,57 +1,15 @@
-import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Input, Modal, Select, Spin, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { Edit } from 'react-feather'
-// import { useForm } from 'react-hook-form'
 import { MdSave } from 'react-icons/md'
-// import * as yup from 'yup'
 import DatePickerField from '~/common/components/FormControl/DatePickerField'
 import SelectField from '~/common/components/FormControl/SelectField'
 import TextBoxField from '~/common/components/FormControl/TextBoxField'
 import TimePickerField from '~/common/components/FormControl/TimePickerField'
 
-let returnSchema = {}
-let schema = null
-
 const ServiceTestCustomerForm = (props) => {
-	const { TextArea } = Input
-	const { Option } = Select
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const { isLoading, rowID, _onSubmit, getIndex, index, rowData, listData, dataTeacher } = props
-
-	// -----  HANDLE ALL IN FORM -------------
-	// const defaultValuesInit = {
-	// 	BranchID: null, //int
-	// 	UserInformationID: null,
-	// 	AppointmentDate: null, //số điện thoại
-	// 	Time: '', //
-	// 	Note: null, //int ID nguồn khách
-	// 	TeacherID: null
-	// }
-
-	// ;(function returnSchemaFunc() {
-	// 	returnSchema = { ...defaultValuesInit }
-	// 	Object.keys(returnSchema).forEach(function (key) {
-	// 		switch (key) {
-	// 			case 'Email':
-	// 				returnSchema[key] = yup.string().email('Email nhập sai cú pháp').required('Bạn không được để trống')
-	// 				break
-
-	// 			default:
-	// 				if (key !== 'Note') {
-	// 					returnSchema[key] = yup.mixed().required('Bạn không được để trống')
-	// 				}
-	// 				break
-	// 		}
-	// 	})
-
-	// 	schema = yup.object().shape(returnSchema)
-	// })()
-
-	// const form = useForm({
-	// 	defaultValues: defaultValuesInit,
-	// 	resolver: yupResolver(schema)
-	// })
 
 	const [form] = Form.useForm()
 

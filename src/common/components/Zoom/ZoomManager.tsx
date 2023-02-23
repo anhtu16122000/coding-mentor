@@ -21,12 +21,9 @@ const url = 'Schedule'
 const ZoomManager: FC<TZoomManager> = (props) => {
 	const { data, onRefresh, isPopover } = props
 
-	const userInformation = useSelector((state: RootState) => state.user.information)
-
 	const [loading, setLoading] = useState(null)
 
-	// console.log('-- ZoomManager: ', data)
-	// console.log('-- userInformation: ', userInformation)
+	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	function isAdmin() {
 		return userInformation.RoleId == 1
