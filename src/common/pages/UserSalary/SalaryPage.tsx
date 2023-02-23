@@ -41,6 +41,10 @@ export const SalaryPage = () => {
 		return theInformation?.RoleId == 3
 	}
 
+	function isSaler() {
+		return theInformation.RoleId == 5
+	}
+
 	const handleFilterMonth = (data) => {
 		setValueDate(data)
 	}
@@ -174,10 +178,10 @@ export const SalaryPage = () => {
 			render: (text) => <>{parseToMoney(text)}</>
 		},
 		{
-			title: 'Cập nhật',
-			width: 100,
+			title: '',
 			dataIndex: 'Action',
 			render: (text, item) => {
+				if (isSaler()) return ''
 				return (
 					<div className="flex items-center">
 						<ModalSalaryCRUD onRefresh={() => getSalary(apiParameters)} dataRow={item} />

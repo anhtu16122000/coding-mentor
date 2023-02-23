@@ -142,6 +142,10 @@ export default function ServiceAppointmentTest(props) {
 		return userInformation.RoleId == 2
 	}
 
+	function isSaler() {
+		return userInformation.RoleId == 5
+	}
+
 	function isManager() {
 		return userInformation.RoleId == 4
 	}
@@ -159,7 +163,7 @@ export default function ServiceAppointmentTest(props) {
 	}, [state.branch])
 
 	const getAllBranch = async () => {
-		if (isAdmin() || isManager()) {
+		if (isAdmin() || isSaler() || isManager()) {
 			try {
 				const res = await branchApi.getAll({ pageSize: 99999 })
 				if (res.status == 200) {
@@ -248,24 +252,50 @@ export default function ServiceAppointmentTest(props) {
 		setTodoApi({ ...todoApi, pageIndex: pageIndex })
 	}
 
-	const getAllStudentAndTeacher = async () => {
+	const getTeachers = async () => {
 		try {
-			const res = await userInformationApi.getAll({ roleIds: '2,3' })
+			const res = await userInformationApi.getByRole(2)
 			if (res.status === 200) {
-				const filterStudent = res.data.data.filter((student) => student.RoleId === 3)
-				const filterTeacher = res.data.data.filter((teacher) => teacher.RoleId === 2)
-				const convertDataTeacher = parseSelectArray(filterTeacher, 'FullName', 'UserInformationId')
-				const convertDataStudent = parseSelectArrayUser(filterStudent, 'FullName', 'UserCode', 'UserInformationId')
-				setListStudent(convertDataStudent)
-				setListTeacher(convertDataTeacher)
+				setListTeacher(parseSelectArrayUser(res.data.data, 'FullName', 'UserCode', 'UserInformationId'))
+			} else {
+				setListTeacher([])
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
 		}
 	}
 
+	const getStudents = async () => {
+		try {
+			const res = await userInformationApi.getByRole(3)
+			if (res.status === 200) {
+				setListStudent(parseSelectArrayUser(res.data.data, 'FullName', 'UserCode', 'UserInformationId'))
+			} else {
+				setListStudent([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
+
+	function selectArray(arr: Array<{ [key: string]: any }>, title: string, value: string) {
+		if (Array.isArray(arr) && arr.length > 0) {
+			return arr
+				.filter((item) => (item.Enable == false ? false : item))
+				.map((item) => ({
+					title: item[title],
+					value: item[value]
+				}))
+		}
+	}
+
+	const getAllStudentAndTeacher = async () => {
+		getTeachers()
+		getStudents()
+	}
+
 	const getAllExamination = async () => {
-		if (isAdmin() || isManager()) {
+		if (isAdmin() || isSaler() || isManager()) {
 			try {
 				const res = await examApi.getAll({ pageSize: 9999, search: '', pageIndex: 1 })
 				if (res.status === 200) {
@@ -352,10 +382,10 @@ export default function ServiceAppointmentTest(props) {
 			render: (text, data, index) => {
 				return (
 					<div onClick={(e) => e.stopPropagation()}>
-						{(isAdmin() || isManager() || isTeacher()) && (
+						{(isAdmin() || isManager() || isTeacher() || isSaler()) && (
 							<TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
 						)}
-						{(isAdmin() || isManager() || isTeacher()) && (
+						{(isAdmin() || isManager() || isTeacher() || isSaler()) && (
 							<StudentForm
 								rowData={data}
 								listStudent={listStudent}
@@ -365,8 +395,10 @@ export default function ServiceAppointmentTest(props) {
 								listTodoApi={listTodoApi}
 							/>
 						)}
-						{(isAdmin() || isManager() || isTeacher()) && data.Status == 1 && <CancelTest onUpdateData={onUpdateData} dataRow={data} />}
-						{(isAdmin() || isManager() || isTeacher()) && data.Type === 1 && (
+						{(isAdmin() || isSaler() || isManager() || isTeacher()) && data.Status == 1 && (
+							<CancelTest onUpdateData={onUpdateData} dataRow={data} />
+						)}
+						{(isAdmin() || isSaler() || isManager() || isTeacher()) && data.Type === 1 && (
 							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						)}
 					</div>
@@ -379,10 +411,10 @@ export default function ServiceAppointmentTest(props) {
 			render: (text, data, index) => {
 				return (
 					<div onClick={(e) => e.stopPropagation()}>
-						{(isAdmin() || isManager() || isTeacher()) && (
+						{(isAdmin() || isSaler() || isManager() || isTeacher()) && (
 							<TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
 						)}
-						{(isAdmin() || isManager() || isTeacher()) && (
+						{(isAdmin() || isSaler() || isManager() || isTeacher()) && (
 							<StudentForm
 								rowData={data}
 								listStudent={listStudent}
@@ -392,8 +424,10 @@ export default function ServiceAppointmentTest(props) {
 								listTodoApi={listTodoApi}
 							/>
 						)}
-						{(isAdmin() || isManager() || isTeacher()) && data.Status == 1 && <CancelTest onUpdateData={onUpdateData} dataRow={data} />}
-						{(isAdmin() || isManager() || isTeacher()) && data.Type === 1 && (
+						{(isAdmin() || isSaler() || isManager() || isTeacher()) && data.Status == 1 && (
+							<CancelTest onUpdateData={onUpdateData} dataRow={data} />
+						)}
+						{(isAdmin() || isSaler() || isManager() || isTeacher()) && data.Type === 1 && (
 							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						)}
 					</div>
@@ -420,7 +454,7 @@ export default function ServiceAppointmentTest(props) {
 					columns={columns}
 					TitleCard={
 						<div className="extra-table">
-							{(isAdmin() || isManager() || isTeacher()) && (
+							{(isAdmin() || isSaler() || isManager() || isTeacher()) && (
 								<FilterBase
 									dataFilter={dataFilter}
 									handleFilter={(listFilter: any) => handleFilter(listFilter)}
@@ -432,7 +466,7 @@ export default function ServiceAppointmentTest(props) {
 					}
 					Extra={
 						<>
-							{(isAdmin() || isManager() || isTeacher()) && (
+							{(isAdmin() || isSaler() || isManager() || isTeacher()) && (
 								<StudentForm
 									listStudent={listStudent}
 									listTeacher={listTeacher}

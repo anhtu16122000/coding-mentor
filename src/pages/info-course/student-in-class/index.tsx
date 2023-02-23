@@ -25,6 +25,8 @@ import { ButtonEye } from '~/common/components/TableButton'
 import { ChangeClass, ReserveForm } from '~/common/components/Student/StudentInClass'
 import { userInfoColumn } from '~/common/libs/columns/user-info'
 import Filters from '~/common/components/Student/Filters'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const initFilters = { PageSize: PAGE_SIZE, PageIndex: 1, Search: '' }
 
@@ -71,7 +73,31 @@ const StudentInClassPage = () => {
 		})
 	}
 
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
+	function isSaler() {
+		return theInformation.RoleId == 5
+	}
+
 	function handleColumn(value, item) {
+		if (isSaler()) return ''
+
 		return (
 			<div className="flex item-center">
 				<PrimaryTooltip content="Thông tin học viên" place="left" id={`view-st-${item?.Id}`}>
@@ -92,13 +118,11 @@ const StudentInClassPage = () => {
 		userInfoColumn,
 		{
 			title: 'Điện thoại',
-			dataIndex: 'Mobile',
-			width: 116
+			dataIndex: 'Mobile'
 		},
 		{
 			title: 'Email',
-			dataIndex: 'Email',
-			width: 140
+			dataIndex: 'Email'
 		},
 		{
 			title: 'Lớp',
@@ -107,12 +131,12 @@ const StudentInClassPage = () => {
 			render: (value, item) => {
 				return (
 					<PrimaryTooltip className="flex items-center" id={`class-tip-${item?.Id}`} content={'Xem lớp: ' + value} place="top">
-						<a
-							href={`/class/list-class/detail/?class=${item.ClassId}`}
+						<div
+							// href={`/class/list-class/detail/?class=${item.ClassId}`}
 							className="max-w-[150px] in-1-line cursor-pointer font-[500] text-[#1976D2] hover:text-[#1968b7] hover:underline"
 						>
 							{value}
-						</a>
+						</div>
 					</PrimaryTooltip>
 				)
 			}

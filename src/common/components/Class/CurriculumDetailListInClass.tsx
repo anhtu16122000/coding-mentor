@@ -1,11 +1,13 @@
-import { Collapse, Popconfirm, Upload } from 'antd'
+import { Checkbox, Collapse, Popconfirm, Upload } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { useSelector } from 'react-redux'
 import { classApi } from '~/api/class'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { getFileIcons } from '~/common/utils/main-function'
+import { RootState } from '~/store'
 import IconButton from '../Primary/IconButton'
 import ModalCurriculumOfClassCRUD from './ModalCurriculumOfClass'
 
@@ -24,6 +26,7 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 	const [isChangePosition, setIsChangePosition] = useState(false)
 	const [isLoadingChangePosition, setIsLoadingChangePosition] = useState(false)
 	const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
+	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	useEffect(() => {
 		if (item) {
@@ -198,6 +201,8 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 		}
 	}
 
+	const onChangeCheckCompleteFile = async () => {}
+
 	// if (isLoading) {
 	// 	return <Skeleton active />
 	// }
@@ -206,7 +211,18 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 		<div className="curriculum-collapse-wrap">
 			<div className="wrap-not-mobile">
 				<Collapse defaultActiveKey={['1']} onChange={handleChangeCollapse} collapsible="header">
-					<Collapse.Panel header={<p className="title-item-collapse">{item.Name}</p>} key={`CurriculumDetail${item.Id}`} extra={genExtra()}>
+					<Collapse.Panel
+						header={<p className="title-item-collapse">{item.Name}</p>}
+						key={`CurriculumDetail${item.Id}`}
+						extra={
+							userInformation &&
+							(userInformation.RoleId == '1' ||
+								userInformation.RoleId == '2' ||
+								userInformation.RoleId == '4' ||
+								userInformation.RoleId == '7') &&
+							genExtra()
+						}
+					>
 						<DragDropContext onDragEnd={handleDragEnd}>
 							<Droppable droppableId={`CurriculumDetail${item.Id}`}>
 								{(provided) => {
@@ -242,21 +258,30 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 																			className=""
 																			tooltip="Tải tài liệu này"
 																		/>
-																		<Popconfirm
-																			title="Bạn có chắc muốn xóa file này?"
-																			okText="Có"
-																			cancelText="Hủy"
-																			onConfirm={() => handleDeleteFile(item)}
-																		>
-																			<IconButton
-																				type="button"
-																				icon="remove"
-																				color="red"
-																				onClick={() => {}}
-																				className=""
-																				tooltip="Xóa tài liệu này"
-																			/>
-																		</Popconfirm>
+																		{userInformation &&
+																			(userInformation.RoleId == '1' ||
+																				userInformation.RoleId == '2' ||
+																				userInformation.RoleId == '4' ||
+																				userInformation.RoleId == '7') && (
+																				<>
+																					<Popconfirm
+																						title="Bạn có chắc muốn xóa file này?"
+																						okText="Có"
+																						cancelText="Hủy"
+																						onConfirm={() => handleDeleteFile(item)}
+																					>
+																						<IconButton
+																							type="button"
+																							icon="remove"
+																							color="red"
+																							onClick={() => {}}
+																							className=""
+																							tooltip="Xóa tài liệu này"
+																						/>
+																					</Popconfirm>
+																					<Checkbox onChange={onChangeCheckCompleteFile}></Checkbox>
+																				</>
+																			)}
 																	</div>
 																</div>
 															</div>
@@ -277,7 +302,18 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 			{/* view for mobile */}
 			<div className="wrap-for-mobile">
 				<Collapse defaultActiveKey={['1']} onChange={handleChangeCollapse} collapsible="header">
-					<Collapse.Panel header={<p className="title-item-collapse">{item.Name}</p>} key={`CurriculumDetail${item.Id}`} extra={genExtra()}>
+					<Collapse.Panel
+						header={<p className="title-item-collapse">{item.Name}</p>}
+						key={`CurriculumDetail${item.Id}`}
+						extra={
+							userInformation &&
+							(userInformation.RoleId == '1' ||
+								userInformation.RoleId == '2' ||
+								userInformation.RoleId == '4' ||
+								userInformation.RoleId == '7') &&
+							genExtra()
+						}
+					>
 						<div className="curriculum-filename-contain">
 							{dataSource.map((item, index) => {
 								let lastItem = dataSource.slice(-1)[0]
@@ -333,21 +369,27 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 															className=""
 															tooltip="Tải tài liệu này"
 														/>
-														<Popconfirm
-															title="Bạn có chắc muốn xóa file này?"
-															okText="Có"
-															cancelText="Hủy"
-															onConfirm={() => handleDeleteFile(item)}
-														>
-															<IconButton
-																type="button"
-																icon="remove"
-																color="red"
-																onClick={() => {}}
-																className=""
-																tooltip="Xóa tài liệu này"
-															/>
-														</Popconfirm>
+														{userInformation &&
+															(userInformation.RoleId == '1' ||
+																userInformation.RoleId == '2' ||
+																userInformation.RoleId == '4' ||
+																userInformation.RoleId == '7') && (
+																<Popconfirm
+																	title="Bạn có chắc muốn xóa file này?"
+																	okText="Có"
+																	cancelText="Hủy"
+																	onConfirm={() => handleDeleteFile(item)}
+																>
+																	<IconButton
+																		type="button"
+																		icon="remove"
+																		color="red"
+																		onClick={() => {}}
+																		className=""
+																		tooltip="Xóa tài liệu này"
+																	/>
+																</Popconfirm>
+															)}
 													</>
 												)}
 											</div>

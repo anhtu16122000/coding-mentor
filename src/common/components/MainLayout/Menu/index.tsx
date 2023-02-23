@@ -11,6 +11,7 @@ import ReactHtmlParser from 'react-html-parser'
 import { log } from '~/common/utils'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import { ManagerChildMenu, ManagerMenu } from '~/common/libs/routers/manager'
+import { SalerChildMenu, SalerMenu } from '~/common/libs/routers/saler'
 
 const { SubMenu } = Menu
 
@@ -272,6 +273,10 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 				case 4:
 					setParentMenu(ManagerMenu)
 					setChildMenu(ManagerChildMenu)
+					break
+				case 5:
+					setParentMenu(SalerMenu)
+					setChildMenu(SalerChildMenu)
 					break
 				default:
 					break

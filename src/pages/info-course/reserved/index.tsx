@@ -27,6 +27,8 @@ import PrimaryEditor from '~/common/components/Editor'
 import { AddToClass, RefundForm } from '~/common/components/Student/Reserved'
 import { userInfoColumn } from '~/common/libs/columns/user-info'
 import Filters from '~/common/components/Student/Filters'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const initFilters = { PageSize: PAGE_SIZE, PageIndex: 1, Search: '' }
 
@@ -73,7 +75,31 @@ const ReservedPage = () => {
 		})
 	}
 
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
+	function isSaler() {
+		return theInformation.RoleId == 5
+	}
+
 	function handleColumn(value, item) {
+		if (isSaler()) return ''
+
 		return (
 			<div className="flex item-center">
 				<PrimaryTooltip content="Thông tin học viên" place="left" id={`view-st-${item?.Id}`}>
