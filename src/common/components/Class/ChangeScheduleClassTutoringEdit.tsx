@@ -184,19 +184,35 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 				</div>
 				{!!isEditSchedule ? (
 					<div className="mt-2 flex flex-col gap-2">
-						{user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
-							<PrimaryTooltip className="w-full px-[8px]" place="top" content="Chỉnh sửa" id={`edit-sc-${dataRow.event.extendedProps?.Id}`}>
-								<PrimaryButton
-									background="yellow"
-									type="button"
-									icon="edit"
-									className="w-full"
-									onClick={() => {
-										!!isEditSchedule ? handleOpen() : null
-										refPopover.current.close()
-									}}
-								/>
-							</PrimaryTooltip>
+						{dataRow?.event?.extendedProps?.StatusTutoring == 1 ||
+						dataRow?.event?.extendedProps?.StatusTutoring == 3 ||
+						dataRow?.event?.extendedProps?.StatusTutoring == 6 ||
+						dataRow?.event?.extendedProps?.StatusTutoring == 7 ? (
+							<>
+								{user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+									<>
+										<PrimaryTooltip
+											className="w-full px-[8px]"
+											place="top"
+											content="Chỉnh sửa"
+											id={`edit-sc-${dataRow.event.extendedProps?.Id}`}
+										>
+											<PrimaryButton
+												background="yellow"
+												type="button"
+												icon="edit"
+												className="w-full"
+												onClick={() => {
+													!!isEditSchedule ? handleOpen() : null
+													refPopover.current.close()
+												}}
+											/>
+										</PrimaryTooltip>
+									</>
+								) : (
+									''
+								)}
+							</>
 						) : (
 							''
 						)}
@@ -252,21 +268,30 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 											refPopover={refPopover}
 										/>
 									)}
-									{(user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) &&
-									(dataRow?.event?.extendedProps?.StatusTutoring !== 2 ||
-										dataRow?.event?.extendedProps?.StatusTutoring !== 4 ||
-										dataRow?.event?.extendedProps?.StatusTutoring !== 5) ? ( //admin,quanly,hocvu
-										<PrimaryButton
-											background="yellow"
-											type="button"
-											icon="edit"
-											onClick={() => {
-												!!isEditSchedule ? handleOpen() : null
-												refPopover.current.close()
-											}}
-										>
-											Chỉnh sửa
-										</PrimaryButton>
+
+									{dataRow?.event?.extendedProps?.StatusTutoring == 1 ||
+									dataRow?.event?.extendedProps?.StatusTutoring == 3 ||
+									dataRow?.event?.extendedProps?.StatusTutoring == 6 ||
+									dataRow?.event?.extendedProps?.StatusTutoring == 7 ? (
+										<>
+											{user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? ( //admin,quanly,hocvu
+												<>
+													<PrimaryButton
+														background="yellow"
+														type="button"
+														icon="edit"
+														onClick={() => {
+															!!isEditSchedule ? handleOpen() : null
+															refPopover.current.close()
+														}}
+													>
+														Chỉnh sửa
+													</PrimaryButton>
+												</>
+											) : (
+												''
+											)}
+										</>
 									) : (
 										''
 									)}
