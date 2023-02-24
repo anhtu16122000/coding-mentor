@@ -84,7 +84,7 @@ const ChangedPage = () => {
 		{
 			title: 'Lớp cũ',
 			dataIndex: 'OldClassName',
-			width: 180,
+			width: 220,
 			render: (value, item) => (
 				<div className="ml-[8px]">
 					<PrimaryTooltip className="flex items-center" id={`old-class-${item?.Id}`} content={'Xem lớp: ' + value} place="top">
@@ -102,7 +102,7 @@ const ChangedPage = () => {
 		{
 			title: 'Lớp mới',
 			dataIndex: 'NewClassName',
-			width: 180,
+			width: 220,
 			render: (value, item) => (
 				<div className="ml-[8px]">
 					<PrimaryTooltip className="flex items-center" id={`new-class-${item?.Id}`} content={'Xem lớp: ' + value} place="top">
@@ -121,7 +121,7 @@ const ChangedPage = () => {
 			title: 'Trung tâm',
 			dataIndex: 'BranchName',
 			className: 'font-[600]',
-			width: 200
+			width: 220
 		},
 		{
 			title: 'Ngày chuyển',
@@ -132,7 +132,7 @@ const ChangedPage = () => {
 		{
 			title: 'Người tạo',
 			dataIndex: 'CreatedBy',
-			width: 150,
+			width: 200,
 			render: (value, item) => <p className="font-[600] text-[#1976D2]">{value}</p>
 		},
 		{

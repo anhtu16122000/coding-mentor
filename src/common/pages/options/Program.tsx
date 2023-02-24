@@ -101,6 +101,10 @@ const Programs = () => {
 		return theInformation?.RoleId == 3
 	}
 
+	function isAcademic() {
+		return theInformation?.RoleId == 7
+	}
+
 	const listTodoApi = {
 		pageSize: PAGE_SIZE,
 		pageIndex: pageIndex,
@@ -327,7 +331,7 @@ const Programs = () => {
 	]
 
 	useEffect(() => {
-		if (!!userInformation && !isAdmin() && !isManager()) {
+		if (!!userInformation && !isAdmin() && !isManager() && !isAcademic()) {
 			Router.push('/')
 		}
 	}, [userInformation])

@@ -45,6 +45,10 @@ export const ModalSalaryCRUD: React.FC<IModalSalary> = ({ dataRow, onRefresh }) 
 	const _onSubmit = (data) => {
 		data.Id = dataRow?.Id
 
+		const DATA_SUBMIT = { ...data }
+
+		console.log('--- DATA SUBMIT: ', DATA_SUBMIT)
+
 		handleUpdate(data)
 	}
 
@@ -92,32 +96,24 @@ export const ModalSalaryCRUD: React.FC<IModalSalary> = ({ dataRow, onRefresh }) 
 							<div className="col-span-2">
 								<InputNumberField name="Deduction" label="Trừ tạm ứng" placeholder="Nhập trừ tạm ứng" isRequired />
 							</div>
+
 							<div className="col-span-2">
-								<InputNumberField name="Bonus" label="Thưởng" placeholder="Nhập trừ tạm ứng" isRequired />
+								<InputNumberField name="Bonus" label="Thưởng" placeholder="Nhập thưởng" isRequired />
 							</div>
+
 							<div className="col-span-2">
 								<SelectField
-									// form={form}
 									label="Trạng thái"
 									name="Status"
 									optionList={[
-										{
-											title: 'Chưa chốt',
-											value: 1
-										},
-										{
-											title: 'Đã chốt',
-											value: 2
-										},
-										{
-											title: 'Đã thanh toán',
-											value: 3
-										}
+										{ title: 'Chưa chốt', value: 1 },
+										{ title: 'Đã chốt', value: 2 },
+										{ title: 'Đã thanh toán', value: 3 }
 									]}
 									placeholder=""
-									// rules={[{ required: true, message: 'Bạn không được để trống' }]}
 								/>
 							</div>
+
 							<div className="col-span-2">
 								<TextBoxField name="Note" label="Ghi chú" />
 							</div>

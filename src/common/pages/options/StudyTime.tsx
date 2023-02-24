@@ -86,6 +86,10 @@ const StudyTime = () => {
 		return theInformation?.RoleId == 3
 	}
 
+	function isAcademic() {
+		return theInformation?.RoleId == 7
+	}
+
 	const columns = [
 		{
 			title: 'Ca học',
@@ -126,14 +130,14 @@ const StudyTime = () => {
 	]
 
 	useEffect(() => {
-		if (!!userInformation && !isAdmin() && !isManager()) {
+		if (!!userInformation && !isAdmin() && !isManager() && !isAcademic()) {
 			Router.push('/')
 		}
 	}, [userInformation])
 
 	return (
 		<>
-			{(isAdmin() || isManager()) && (
+			{(isAdmin() || isManager() || isAcademic()) && (
 				<PrimaryTable
 					total={totalPage && totalPage}
 					loading={isLoading}

@@ -46,6 +46,10 @@ const Specialize = () => {
 		return theInformation?.RoleId == 3
 	}
 
+	function isAcademic() {
+		return theInformation?.RoleId == 7
+	}
+
 	const handleDelete = async (id) => {
 		try {
 			const res = await gradeApi.delete(id)
@@ -88,7 +92,7 @@ const Specialize = () => {
 
 	// USE EFFECT - FETCH DATA
 	useEffect(() => {
-		if (isAdmin() || isManager()) {
+		if (isAdmin() || isManager() || isAcademic()) {
 			getDataSource()
 		}
 	}, [todoApi, userInformation])
@@ -127,7 +131,7 @@ const Specialize = () => {
 
 	return (
 		<>
-			{(isAdmin() || isManager()) && (
+			{(isAdmin() || isManager() || isAcademic()) && (
 				<PrimaryTable
 					total={totalPage && totalPage}
 					loading={isLoading}

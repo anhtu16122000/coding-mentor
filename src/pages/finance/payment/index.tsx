@@ -123,7 +123,6 @@ const PaymentManagementPage = () => {
 			render: (value, item) => (
 				<div className="flex item-center">
 					<PayForm isEdit defaultData={item} onRefresh={getData} />
-
 					{item?.Debt < 0 && <RefundForm onRefresh={getData} item={item} />}
 				</div>
 			)

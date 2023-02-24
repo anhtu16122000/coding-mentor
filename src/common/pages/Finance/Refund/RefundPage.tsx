@@ -85,6 +85,10 @@ export default function RefundPage(props: IRefundPageProps) {
 		return theInformation?.RoleId == 6
 	}
 
+	function isAcademic() {
+		return theInformation?.RoleId == 7
+	}
+
 	const getListRefund = async () => {
 		setIsLoading({ type: 'GET_ALL', status: true })
 		try {
@@ -368,13 +372,7 @@ export default function RefundPage(props: IRefundPageProps) {
 				onChangePage={(event: number) => setTodoApi({ ...initialParams, pageIndex: event })}
 				TitleCard={
 					<div className="flex justify-start items-center">
-						<FilterBaseVer2
-							handleFilter={handleFilter}
-							dataFilter={filterList}
-							handleReset={() => {
-								setTodoApi({ ...initialParams })
-							}}
-						/>
+						<FilterBaseVer2 handleFilter={handleFilter} dataFilter={filterList} handleReset={() => setTodoApi({ ...initialParams })} />
 						<Input.Search
 							className="primary-search max-w-[300px]"
 							onChange={(event) => {
@@ -391,7 +389,7 @@ export default function RefundPage(props: IRefundPageProps) {
 				columns={columns}
 				Extra={
 					<>
-						{userInformation && userInformation.RoleId != '3' && (
+						{(isAdmin() || isManager() || isAccountant() || isSaler() || isTeacher()) && (
 							<ModalRefundCRUD
 								dataOption={optionList}
 								mode="add"

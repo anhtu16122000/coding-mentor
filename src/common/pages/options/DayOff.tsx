@@ -72,6 +72,10 @@ const DayOff = () => {
 		return theInformation?.RoleId == 3
 	}
 
+	function isAcademic() {
+		return theInformation?.RoleId == 7
+	}
+
 	// COLUMN FOR TABLE
 	const columns = [
 		{
@@ -103,7 +107,7 @@ const DayOff = () => {
 			fixed: 'right',
 			render: (value, record, idx) => (
 				<div onClick={(e) => e.stopPropagation()}>
-					{(isAdmin() || isManager()) && (
+					{(isAdmin() || isManager() || isAcademic()) && (
 						<>
 							<DayOffForm dataRow={record} getAllDayOffList={getAllDayOffList} />
 							<DeleteTableRow text={record.Name} handleDelete={() => onDeleteDayOff(record.Id)} />
@@ -119,7 +123,7 @@ const DayOff = () => {
 		<PrimaryTable
 			total={totalPage}
 			loading={isLoading}
-			Extra={(isAdmin() || isManager()) && <DayOffForm getAllDayOffList={getAllDayOffList} />}
+			Extra={(isAdmin() || isManager() || isAcademic()) && <DayOffForm getAllDayOffList={getAllDayOffList} />}
 			data={dayOffList}
 			columns={columns}
 			onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}

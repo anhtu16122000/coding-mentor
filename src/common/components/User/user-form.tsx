@@ -125,23 +125,56 @@ const CreateUser: FC<ICreateNew> = (props) => {
 		}
 	}
 
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
+	function isSaler() {
+		return theInformation?.RoleId == 5
+	}
+
+	function isAccountant() {
+		return theInformation?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return theInformation?.RoleId == 7
+	}
+
 	const postEditUser = async (param) => {
 		try {
 			const response = await userInformationApi.update(param)
 			if (response.status === 200) {
 				ShowNoti('success', response.data.message)
-				const res = await accountApi.newToken()
-				if (res.status === 200) {
-					const token = res?.data?.Token || ''
-					const user = parseJwt(token) || ''
-					const userData = { token: token, user: user }
 
-					await localStorage.setItem('userData', JSON.stringify(userData))
-					await localStorage.setItem('token', token)
+				if (param?.UserInformationId == theInformation?.UserInformationId) {
+					const res = await accountApi.newToken()
+					if (res.status === 200) {
+						const token = res?.data?.Token || ''
+						const user = parseJwt(token) || ''
+						const userData = { token: token, user: user }
 
-					dispatch(setUser(user))
-					dispatch(setAuthData(user))
-					dispatch(setAuthLoading(false))
+						await localStorage.setItem('userData', JSON.stringify(userData))
+						await localStorage.setItem('token', token)
+
+						dispatch(setUser(user))
+						dispatch(setAuthData(user))
+						dispatch(setAuthLoading(false))
+					}
 				}
 				if (!!onRefresh) {
 					onRefresh()

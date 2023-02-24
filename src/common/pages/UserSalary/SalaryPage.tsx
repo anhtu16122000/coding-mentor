@@ -60,6 +60,10 @@ export const SalaryPage = () => {
 		return theInformation?.RoleId == 6
 	}
 
+	function isAcademic() {
+		return theInformation?.RoleId == 7
+	}
+
 	const handleFilterMonth = (data) => {
 		setValueDate(data)
 	}
@@ -166,11 +170,7 @@ export const SalaryPage = () => {
 			title: 'Lương hằng tháng',
 			width: 150,
 			dataIndex: 'TeachingSalary',
-			render: (text, item) => (
-				<>
-					<ModalTeachingDetail dataRow={item} />
-				</>
-			)
+			render: (text, item) => <ModalTeachingDetail dataRow={item} />
 		},
 		{
 			title: 'Lương tổng',
@@ -182,7 +182,7 @@ export const SalaryPage = () => {
 			title: '',
 			dataIndex: 'Action',
 			render: (text, item) => {
-				if (isSaler()) return ''
+				if (isSaler() || isAcademic() || isTeacher()) return ''
 				return (
 					<div className="flex items-center">
 						<ModalSalaryCRUD onRefresh={() => getSalary(apiParameters)} dataRow={item} />

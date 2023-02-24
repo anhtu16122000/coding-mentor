@@ -135,23 +135,27 @@ export default function ServiceAppointmentTest(props) {
 	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	function isAdmin() {
-		return userInformation.RoleId == 1
+		return userInformation?.RoleId == 1
 	}
 
 	function isTeacher() {
-		return userInformation.RoleId == 2
+		return userInformation?.RoleId == 2
 	}
 
 	function isSaler() {
-		return userInformation.RoleId == 5
+		return userInformation?.RoleId == 5
 	}
 
 	function isManager() {
-		return userInformation.RoleId == 4
+		return userInformation?.RoleId == 4
 	}
 
 	function isStdent() {
-		return userInformation.RoleId == 3
+		return userInformation?.RoleId == 3
+	}
+
+	function isAcademic() {
+		return userInformation?.RoleId == 7
 	}
 
 	useMemo(() => {
@@ -278,17 +282,6 @@ export default function ServiceAppointmentTest(props) {
 		}
 	}
 
-	function selectArray(arr: Array<{ [key: string]: any }>, title: string, value: string) {
-		if (Array.isArray(arr) && arr.length > 0) {
-			return arr
-				.filter((item) => (item.Enable == false ? false : item))
-				.map((item) => ({
-					title: item[title],
-					value: item[value]
-				}))
-		}
-	}
-
 	const getAllStudentAndTeacher = async () => {
 		getTeachers()
 		getStudents()
@@ -382,10 +375,10 @@ export default function ServiceAppointmentTest(props) {
 			render: (text, data, index) => {
 				return (
 					<div onClick={(e) => e.stopPropagation()}>
-						{(isAdmin() || isManager() || isTeacher() || isSaler()) && (
+						{(isAdmin() || isManager() || isTeacher() || isSaler() || isAcademic()) && (
 							<TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
 						)}
-						{(isAdmin() || isManager() || isTeacher() || isSaler()) && (
+						{(isAdmin() || isManager() || isTeacher() || isSaler() || isAcademic()) && (
 							<StudentForm
 								rowData={data}
 								listStudent={listStudent}
@@ -395,10 +388,10 @@ export default function ServiceAppointmentTest(props) {
 								listTodoApi={listTodoApi}
 							/>
 						)}
-						{(isAdmin() || isSaler() || isManager() || isTeacher()) && data.Status == 1 && (
+						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Status == 1 && (
 							<CancelTest onUpdateData={onUpdateData} dataRow={data} />
 						)}
-						{(isAdmin() || isSaler() || isManager() || isTeacher()) && data.Type === 1 && (
+						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Type === 1 && (
 							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						)}
 					</div>
@@ -411,10 +404,10 @@ export default function ServiceAppointmentTest(props) {
 			render: (text, data, index) => {
 				return (
 					<div onClick={(e) => e.stopPropagation()}>
-						{(isAdmin() || isSaler() || isManager() || isTeacher()) && (
+						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && (
 							<TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
 						)}
-						{(isAdmin() || isSaler() || isManager() || isTeacher()) && (
+						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && (
 							<StudentForm
 								rowData={data}
 								listStudent={listStudent}
@@ -424,10 +417,10 @@ export default function ServiceAppointmentTest(props) {
 								listTodoApi={listTodoApi}
 							/>
 						)}
-						{(isAdmin() || isSaler() || isManager() || isTeacher()) && data.Status == 1 && (
+						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Status == 1 && (
 							<CancelTest onUpdateData={onUpdateData} dataRow={data} />
 						)}
-						{(isAdmin() || isSaler() || isManager() || isTeacher()) && data.Type === 1 && (
+						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Type === 1 && (
 							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						)}
 					</div>
@@ -454,7 +447,7 @@ export default function ServiceAppointmentTest(props) {
 					columns={columns}
 					TitleCard={
 						<div className="extra-table">
-							{(isAdmin() || isSaler() || isManager() || isTeacher()) && (
+							{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && (
 								<FilterBase
 									dataFilter={dataFilter}
 									handleFilter={(listFilter: any) => handleFilter(listFilter)}
@@ -466,7 +459,7 @@ export default function ServiceAppointmentTest(props) {
 					}
 					Extra={
 						<>
-							{(isAdmin() || isSaler() || isManager() || isTeacher()) && (
+							{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && (
 								<StudentForm
 									listStudent={listStudent}
 									listTeacher={listTeacher}

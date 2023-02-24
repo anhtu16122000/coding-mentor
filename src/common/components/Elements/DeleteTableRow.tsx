@@ -16,7 +16,7 @@ const DeleteTableRow = (props) => {
 		setIsLoading(true)
 		handleDelete()
 			.then((res) => {
-				if (res.status === 200) {
+				if (res?.status == 200) {
 					setIsModalVisible(false)
 				}
 			})

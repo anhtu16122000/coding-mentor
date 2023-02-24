@@ -1,14 +1,12 @@
 import { Popconfirm, Popover, Rate, Skeleton, Spin } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { BsFillTelephoneFill } from 'react-icons/bs'
 import { HiMail, HiPhone } from 'react-icons/hi'
 import { MdKeyboardArrowLeft } from 'react-icons/md'
 import { TiLocation } from 'react-icons/ti'
 import { feedbackStudentApi } from '~/api/feedbacks-student'
 import { userInformationApi } from '~/api/user'
 import PrimaryButton from '~/common/components/Primary/Button'
-import IconButton from '~/common/components/Primary/IconButton'
 import { ShowNoti } from '~/common/utils'
 import FeedbackBlock from './FeedbackBlock'
 
@@ -17,7 +15,6 @@ export interface IFeedbackDetailPageProps {}
 export default function FeedbackDetailPage(props: IFeedbackDetailPageProps) {
 	const router = useRouter()
 	const [dataSource, setDataSource] = useState<IFeedbackStudent>()
-	console.log('🚀 ~ dataSource:', dataSource)
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
 	const [userInformation, setUserInformation] = useState<IUserResponse>()
 	const [isVisiblePopover, setIsVisiblePopover] = useState(false)
@@ -97,12 +94,7 @@ export default function FeedbackDetailPage(props: IFeedbackDetailPageProps) {
 	const contentRating = (
 		<div className="rounded-xl">
 			<div className="flex justify-start items-center gap-4">
-				<Rate
-					defaultValue={dataSource?.StarRating}
-					onChange={(data) => {
-						handleRating(data)
-					}}
-				/>
+				<Rate defaultValue={dataSource?.StarRating} onChange={(data) => handleRating(data)} />
 				{isLoading.type == 'PUT_RATING' && isLoading.status && <Spin />}
 			</div>
 		</div>
@@ -118,12 +110,7 @@ export default function FeedbackDetailPage(props: IFeedbackDetailPageProps) {
 				<Skeleton active />
 			) : (
 				<div className="information-block">
-					<div
-						className="back-button"
-						onClick={() => {
-							router.back()
-						}}
-					>
+					<div className="back-button" onClick={() => router.back()}>
 						<MdKeyboardArrowLeft /> Quay lại
 					</div>
 

@@ -86,13 +86,13 @@ const Schedule = () => {
 	}
 
 	useEffect(() => {
-		if (isAdmin() || isManager()) {
+		if (isAdmin() || isManager() || isAcademic()) {
 			getAllTeacher()
 		}
 	}, [])
 
 	useEffect(() => {
-		if ((isAdmin() || isManager()) && branch.length === 0) {
+		if ((isAdmin() || isManager() || isAcademic()) && branch.length === 0) {
 			getAllBranch()
 		}
 	}, [branch])
@@ -121,11 +121,15 @@ const Schedule = () => {
 		return userInformation?.RoleId == 3
 	}
 
+	function isAcademic() {
+		return userInformation?.RoleId == 7
+	}
+
 	return (
 		<div className="wrapper-class-schedule wrapper-calendar">
 			<Card
 				extra={
-					(isAdmin() || isManager()) && (
+					(isAdmin() || isManager() || isAcademic()) && (
 						<div className="flex-all-center gap-3">
 							<PopoverSearch setParamsSearch={setParamsSearch} teachers={teachers} isLoading={isLoading} />
 						</div>
