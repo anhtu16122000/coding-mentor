@@ -2,10 +2,7 @@ import { DatePicker, Popconfirm } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { staffSalaryApi } from '~/api/staff-salary'
-import DatePickerField from '~/common/components/FormControl/DatePickerField'
-import PrimaryButton from '~/common/components/Primary/Button'
 import PrimaryTable from '~/common/components/Primary/Table'
-import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { parseToMoney } from '~/common/utils/common'
@@ -22,6 +19,20 @@ export const SalaryPage = () => {
 	const [totalRow, setTotalRow] = useState(1)
 	const [dataTable, setDataTable] = useState([])
 	const [loading, setLoading] = useState(false)
+
+	useEffect(() => {
+		if (valueDate) {
+			const year = Number(moment(valueDate).format('YYYY'))
+			const month = Number(moment(valueDate).format('MM'))
+			setApiParameters({ ...apiParameters, month: month, year: year })
+		}
+	}, [valueDate])
+
+	useEffect(() => {
+		if (!!apiParameters?.year) {
+			getSalary(apiParameters)
+		}
+	}, [apiParameters])
 
 	const theInformation = useSelector((state: RootState) => state.user.information)
 
@@ -42,7 +53,11 @@ export const SalaryPage = () => {
 	}
 
 	function isSaler() {
-		return theInformation.RoleId == 5
+		return theInformation?.RoleId == 5
+	}
+
+	function isAccountant() {
+		return theInformation?.RoleId == 6
 	}
 
 	const handleFilterMonth = (data) => {
@@ -70,37 +85,23 @@ export const SalaryPage = () => {
 			ShowNoti('error', error.message)
 		}
 	}
+
 	const getSalary = async (params) => {
 		try {
 			setLoading(true)
 			const res = await staffSalaryApi.getAll(params)
-			if (res.status === 200) {
+			if (res.status == 200) {
 				setDataTable(res.data.data)
 				setTotalRow(res.data.totalRow)
-			}
-			if (res.status === 204) {
+			} else {
 				setDataTable([])
 			}
 		} catch (error) {
-			setLoading(true)
+			ShowNoti('error', error.message)
 		} finally {
 			setLoading(false)
 		}
 	}
-
-	useEffect(() => {
-		if (valueDate) {
-			const year = Number(moment(valueDate).format('YYYY'))
-			const month = Number(moment(valueDate).format('MM'))
-			setApiParameters({ ...apiParameters, month: month, year: year })
-		}
-	}, [valueDate])
-
-	useEffect(() => {
-		if (apiParameters) {
-			getSalary(apiParameters)
-		}
-	}, [apiParameters])
 
 	const columns = [
 		{
@@ -208,7 +209,7 @@ export const SalaryPage = () => {
 				columns={columns}
 				Extra={
 					<>
-						{isAdmin() && (
+						{(isAdmin() || isAccountant()) && (
 							<Popconfirm
 								title={`Xác nhận tính lương từ ${moment().subtract(1, 'months').startOf('month').format('DD-MM-YYYY')} đến ${moment()
 									.subtract(1, 'months')

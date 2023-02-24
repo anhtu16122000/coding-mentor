@@ -6,6 +6,7 @@ import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import FilterTable from '~/common/utils/table-filter'
 import CCSearch from '../../components/CCSearch'
 import { ModalSalaryConfigCRUD } from './ModalSalaryConfigCRUD'
+import { Input } from 'antd'
 const initParameters = { fullName: '', userCode: '', pageIndex: 1, pageSize: PAGE_SIZE, search: '' }
 export const SalaryConfigPage = () => {
 	const [apiParameters, setApiParameters] = useState(initParameters)
@@ -39,13 +40,7 @@ export const SalaryConfigPage = () => {
 
 	const columns = [
 		{
-			...FilterTable({
-				type: 'search',
-				dataIndex: 'UserCode',
-				handleSearch: (event) => setApiParameters({ ...apiParameters, userCode: event }),
-				handleReset: (event) => setApiParameters(initParameters)
-			}),
-			width: 160,
+			width: 100,
 			title: 'Mã',
 			dataIndex: 'UserCode',
 			render: (text) => <p className="font-semibold">{text}</p>
@@ -57,13 +52,23 @@ export const SalaryConfigPage = () => {
 		},
 		{
 			title: 'Chức vụ',
-			dataIndex: 'RoleName',
-			render: (text) => <>{text}</>
+			dataIndex: 'RoleId',
+			render: (value, item) => (
+				<>
+					{value == 1 && <span className="tag green">{item?.RoleName}</span>}
+					{value == 2 && <span className="tag blue">{item?.RoleName}</span>}
+					{value == 4 && <span className="tag yellow">{item?.RoleName}</span>}
+					{value == 5 && <span className="tag blue-weight">{item?.RoleName}</span>}
+					{value == 6 && <span className="tag gray">{item?.RoleName}</span>}
+					{value == 7 && <span className="tag gray">{item?.RoleName}</span>}
+					{value == 8 && <span className="tag gray">{item?.RoleName}</span>}
+				</>
+			)
 		},
 		{
 			title: 'Mức lương',
 			dataIndex: 'Value',
-			render: (text) => <>{Intl.NumberFormat('ja-JP').format(text)}</>
+			render: (text) => <div className="font-[600] text-[#388E3C]">{Intl.NumberFormat('ja-JP').format(text)}</div>
 		},
 		{
 			title: 'Thêm lúc',
@@ -71,7 +76,12 @@ export const SalaryConfigPage = () => {
 			render: (date) => moment(date).format('DD/MM/YYYY')
 		},
 		{
-			title: 'Chức năng',
+			title: 'Ghi chú',
+			dataIndex: 'Note'
+		},
+		{
+			fixed: 'right',
+			title: '',
 			dataIndex: 'Action',
 			render: (text, item) => {
 				return (
@@ -91,19 +101,22 @@ export const SalaryConfigPage = () => {
 				total={totalRow}
 				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
 				TitleCard={
-					<div className="extra-table">
-						<div className="flex-1 max-w-[350px] mr-[16px]">
-							<CCSearch onSubmit={(value) => setApiParameters({ ...apiParameters, search: value })} />
-						</div>
+					<div className="flex-1">
+						<Input.Search
+							className="primary-search max-w-[250px]"
+							onChange={(event) => {
+								if (event.target.value == '') {
+									setApiParameters({ ...apiParameters, pageIndex: 1, search: '' })
+								}
+							}}
+							onSearch={(event) => setApiParameters({ ...apiParameters, pageIndex: 1, search: event })}
+							placeholder="Tìm kiếm"
+						/>
 					</div>
 				}
 				data={dataTable}
 				columns={columns}
-				Extra={
-					<>
-						<ModalSalaryConfigCRUD mode="add" onRefresh={() => getSalaryConfig(apiParameters)} />
-					</>
-				}
+				Extra={<ModalSalaryConfigCRUD mode="add" onRefresh={() => getSalaryConfig(apiParameters)} />}
 			/>
 		</div>
 	)

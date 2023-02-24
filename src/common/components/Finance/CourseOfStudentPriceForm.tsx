@@ -18,32 +18,6 @@ function CourseOfStudentPriceForm(props) {
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const { isPayTuition, isUpdate, isLoading, updateObj, paymentMethodOptionList, handleSubmit, optionBranchList } = props
 
-	// const schema = yup.object().shape({
-	// 	StudentName: yup.string().required('Bạn không được để trống'),
-	// 	PriceLeft: yup.string().required('Bạn không được để trống'),
-	// 	PaymentMethodsID: yup.number().required('Bạn không được để trống'),
-	// 	PayBranchID: yup.number().nullable().required('Bạn không được để trống')
-	// 	// PayDate: yup
-	// 	// 	.date()
-	// 	// 	.nullable()
-	// 	// 	.min(moment().format('YYYY/MM/DD'), 'Ngày thanh toán tiếp theo không hợp lệ')
-	// 	// 	.required('Bạn không được để trống')
-	// })
-
-	// const defaultValuesInit = {
-	// 	StudentName: '',
-	// 	PriceLeft: '',
-	// 	Paid: '',
-	// 	PaymentMethodsID: 1,
-	// 	PayBranchID: null,
-	// 	PayDate: moment().format('YYYY/MM/DD')
-	// }
-
-	// const form = useForm({
-	// 	defaultValues: defaultValuesInit,
-	// 	resolver: yupResolver(schema)
-	// })
-
 	const [form] = Form.useForm()
 
 	useEffect(() => {

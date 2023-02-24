@@ -100,13 +100,15 @@ const BillDetails = ({ bill }) => {
 			<div>
 				<div className="font-[600]">Ghi chú:</div> {bill?.Note}
 			</div>
-			<PrimaryTable
-				current={filters.PageIndex}
-				total={totalPage && totalPage}
-				onChangePage={(page: number) => setFilter({ ...filters, PageIndex: page })}
-				data={data}
-				columns={columns}
-			/>
+			<div className="w-[13	00px]">
+				<PrimaryTable
+					current={filters.PageIndex}
+					total={totalPage && totalPage}
+					onChangePage={(page: number) => setFilter({ ...filters, PageIndex: page })}
+					data={data}
+					columns={columns}
+				/>
+			</div>
 		</>
 	)
 }

@@ -12,6 +12,7 @@ import { log } from '~/common/utils'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import { ManagerChildMenu, ManagerMenu } from '~/common/libs/routers/manager'
 import { SalerChildMenu, SalerMenu } from '~/common/libs/routers/saler'
+import { AccountantChildMenu, AccountantMenu } from '~/common/libs/routers/accountant'
 
 const { SubMenu } = Menu
 
@@ -277,6 +278,10 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 				case 5:
 					setParentMenu(SalerMenu)
 					setChildMenu(SalerChildMenu)
+					break
+				case 6:
+					setParentMenu(AccountantMenu)
+					setChildMenu(AccountantChildMenu)
 					break
 				default:
 					break

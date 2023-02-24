@@ -23,11 +23,12 @@ export interface IIncomeExpenseManagementModalCRUDProps {
 }
 
 export default function IncomeExpenseManagementModalCRUD(props: IIncomeExpenseManagementModalCRUDProps) {
-	const { mode, dataOption, handleSearchForOptionList, handleLoadOnScrollForOptionList, optionStudent, dataRow, isLoading, onSubmit } =
-		props
+	const { optionStudent, dataRow, isLoading, onSubmit } = props
+	const { mode, dataOption, handleSearchForOptionList, handleLoadOnScrollForOptionList } = props
+
 	const [visible, setVisible] = useState(false)
 	const [form] = Form.useForm()
-	const { TabPane } = Tabs
+
 	useEffect(() => {
 		if (dataRow) {
 			form.setFieldsValue(dataRow)
@@ -85,24 +86,26 @@ export default function IncomeExpenseManagementModalCRUD(props: IIncomeExpenseMa
 		return theInformation?.RoleId == 3
 	}
 
+	function isAccountant() {
+		return theInformation?.RoleId == 6
+	}
+
 	return (
 		<>
-			{isAdmin() && mode == 'add' && (
+			{(isAdmin() || isAccountant()) && mode == 'add' && (
 				<PrimaryButton background="green" type="button" children={<span>Thêm phiếu</span>} icon="add" onClick={() => onOpen()} />
 			)}
 
 			{mode == 'edit' && <IconButton type="button" icon={'edit'} color="green" onClick={() => onOpen()} className="Sửa phiếu" tooltip="" />}
 
-			{isAdmin() && mode == 'delete' && (
+			{(isAdmin() || isAccountant()) && mode == 'delete' && (
 				<IconButton type="button" icon={'remove'} color="red" onClick={() => onOpen()} className="" tooltip="Xóa phiếu" />
 			)}
 
 			<Modal
 				footer={null}
 				open={visible}
-				onCancel={() => {
-					onClose()
-				}}
+				onCancel={() => onClose()}
 				title={mode == 'add' ? 'Thêm phiếu' : mode == 'edit' ? 'Cập nhật phiếu' : 'Xóa phiếu'}
 				width={mode != 'delete' ? 800 : 400}
 			>
@@ -113,6 +116,7 @@ export default function IncomeExpenseManagementModalCRUD(props: IIncomeExpenseMa
 								<p>Bạn xác nhận muốn xóa phiếu này?</p>
 							</div>
 						)}
+
 						{mode != 'delete' && (
 							<>
 								<div className="col-span-2">
