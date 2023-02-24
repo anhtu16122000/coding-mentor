@@ -252,7 +252,10 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 											refPopover={refPopover}
 										/>
 									)}
-									{user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? ( //admin,quanly,hocvu
+									{(user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) &&
+									(dataRow?.event?.extendedProps?.StatusTutoring !== 2 ||
+										dataRow?.event?.extendedProps?.StatusTutoring !== 4 ||
+										dataRow?.event?.extendedProps?.StatusTutoring !== 5) ? ( //admin,quanly,hocvu
 										<PrimaryButton
 											background="yellow"
 											type="button"
