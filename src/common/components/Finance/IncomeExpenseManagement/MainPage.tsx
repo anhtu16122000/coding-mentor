@@ -1,3 +1,4 @@
+import { Input } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -17,7 +18,7 @@ import IncomeExpenseManagementModalCRUD from './ModalCRUD'
 
 export interface IIncomeExpenseManagementPageProps {}
 
-const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE, Type: null }
+const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE, Type: null, search: '' }
 
 const initialParamsStudent = { pageIndex: 1, pageSize: PAGE_SIZE, FullName: '', RoleIds: 3 }
 
@@ -345,7 +346,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 					</>
 				}
 				TitleCard={
-					<>
+					<div className="flex items-center justify-between w-full">
 						<FilterBaseVer2
 							handleFilter={handleFilter}
 							dataFilter={filterList}
@@ -353,7 +354,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 								setTodoApi({ ...initialParams })
 							}}
 						/>
-					</>
+					</div>
 				}
 			>
 				{dataSource && renderStatistical()}

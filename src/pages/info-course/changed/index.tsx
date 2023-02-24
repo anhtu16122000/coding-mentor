@@ -144,6 +144,10 @@ const ChangedPage = () => {
 		}
 	]
 
+	// function isSaler() {
+	// 	return userInformation.RoleId == 5
+	// }
+
 	return (
 		<>
 			<Head>
