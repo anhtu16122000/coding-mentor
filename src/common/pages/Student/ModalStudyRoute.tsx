@@ -47,7 +47,9 @@ export const ModalStudyRoute: React.FC<IModalStudyRoute> = ({ mode, onRefresh, d
 		setVisible(false)
 	}
 	const onOpen = () => {
-		getProgram()
+		if (mode !== 'delete') {
+			getProgram()
+		}
 		setVisible(true)
 	}
 

@@ -50,4 +50,10 @@ export const staticsticalApi = {
 	getRateTeacher(params) {
 		return instance.get('/api/Statistical/rate-teacher', {params})
 	},
+	getStatisticialTestAppointment(params) {
+		return instance.get('/api/Statistical/api/Dashboard/StatisticialTestAppointment', {params})
+	},
+	getStatisticalNewCustomerofsales(params) {
+		return instance.get('/api/Statistical/new-customerofsales', {params})
+	}
 }

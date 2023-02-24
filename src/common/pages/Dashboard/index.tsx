@@ -18,10 +18,6 @@ import { seminarApi } from '~/api/seminar'
 import LearningProgress from '~/common/components/Dashboard/LearningProgress'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { branchApi } from '~/api/branch'
-const listTodoApi = {
-	branchIds: '',
-	year: ''
-}
 
 import { IoAnalytics } from 'react-icons/io5'
 import RestApi from '~/api/RestApi'
@@ -88,9 +84,19 @@ const Dashboard = () => {
 	const [form] = Form.useForm()
 	const [type, setType] = useState('offline')
 	const user = useSelector((state: RootState) => state.user.information)
+	const listTodoApi = {
+		branchIds: '',
+		year: ''
+	}
+
+	const listTodoApiOverView = {
+		branchIds: '',
+		userId: ''
+	}
+
 	const [todoApi, setTodoApi] = useState(listTodoApi)
+	const [todoApiOverView, setTodoApiOverView] = useState(listTodoApiOverView)
 	const [allBranch, setAllBranch] = useState([])
-	const [dataStaticsOverview, setDataStaticsOverview] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [idClass, setIdClass] = useState(null)
 	const [listClass, setListClass] = useState<{ label: string; value: string }[]>([])
@@ -107,6 +113,8 @@ const Dashboard = () => {
 	const [statisticNewCustomer, setStatisticNewCustomer] = useState([])
 	const [statisticFeedRating, setStatisticFeedRating] = useState([])
 	const [statisticTeacherRate, setStatisticTeacherRate] = useState([])
+	const [statisticCustomerofSales, setStatisticCustomerofSales] = useState([])
+	const [statisticialTestAppointment, setStatisticialTestAppointment] = useState([])
 	const [statisticTotalScheduleTeacher, setStatisticTotalScheduleTeacher] = useState([])
 	const [statisticTotalScheduleStudent, setStatisticTotalScheduleStudent] = useState([])
 	const initialFeedback = { pageSize: PAGE_SIZE, pageIndex: 1 }
@@ -192,7 +200,7 @@ const Dashboard = () => {
 
 	const getOverView = async () => {
 		try {
-			const res = await staticsticalApi.getOverview(todoApi)
+			const res = await staticsticalApi.getOverview(todoApiOverView)
 			if (res.status === 200) {
 				setStatisticOverview(res.data.data)
 			}
@@ -320,6 +328,30 @@ const Dashboard = () => {
 		} catch (error) {}
 	}
 
+	const getStatisticialTestAppointment = async () => {
+		try {
+			const res = await staticsticalApi.getStatisticialTestAppointment(todoFeedback)
+			if (res.status === 200) {
+				setStatisticialTestAppointment(res.data.data)
+			}
+			if (res.status === 204) {
+				setStatisticialTestAppointment([])
+			}
+		} catch (error) {}
+	}
+
+	const getNewCustomerofsales = async () => {
+		try {
+			const res = await staticsticalApi.getStatisticalNewCustomerofsales(todoFeedback)
+			if (res.status === 200) {
+				setStatisticCustomerofSales(res.data.data)
+			}
+			if (res.status === 204) {
+				setStatisticCustomerofSales([])
+			}
+		} catch (error) {}
+	}
+
 	const handleChangeClass = (val) => {
 		setIdClass(val)
 	}
@@ -340,7 +372,6 @@ const Dashboard = () => {
 		getTopSource()
 		getTopJob()
 
-		getOverView()
 		getRevenue()
 		getNewClassInMonth()
 		getNewCustomer()
@@ -349,7 +380,13 @@ const Dashboard = () => {
 		getTotalScheduleTeacher()
 		getFeedback()
 		getTotalScheduleStudent()
+		getStatisticialTestAppointment()
+		getNewCustomerofsales()
 	}, [todoApi])
+
+	useEffect(() => {
+		getOverView()
+	}, [todoApiOverView])
 
 	useEffect(() => {
 		if (apiParameters) {
@@ -374,9 +411,12 @@ const Dashboard = () => {
 			<div className="flex justify-between mb-4">
 				<p className="title">Xin chào, {user.FullName}</p>
 				<Form form={form}>
-					<div className="flex items-center ">
+					<div className="flex items-center pr-4">
 						<Select
-							onChange={(e) => setTodoApi((pre) => ({ ...pre, year: e }))}
+							onChange={(e) => {
+								setTodoApi((pre) => ({ ...pre, year: e }))
+								setTodoApiOverView((pre) => ({ ...pre, year: e }))
+							}}
 							options={dataYear}
 							className="w-[100px] h-[36px] mr-2"
 						></Select>
@@ -393,6 +433,7 @@ const Dashboard = () => {
 							type="button"
 							onClick={() => {
 								setTodoApi(listTodoApi)
+								setTodoApiOverView(listTodoApiOverView)
 								form.resetFields()
 							}}
 							tooltip="Reset bộ lọc"
@@ -452,11 +493,15 @@ const Dashboard = () => {
 					))}
 			</div>
 
-			{user.RoleId == 1 ? (
+			{user.RoleId == 1 || user.RoleId == 4 || user.RoleId == 7 ? (
 				<>
-					<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Doanh Thu</h1>}>
-						<StatisticPositiveAndNegativeChart data={statisticRevenue} titleBar="Doanh thu" />
-					</Card>
+					{user.RoleId != 7 ? (
+						<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Doanh Thu</h1>}>
+							<StatisticPositiveAndNegativeChart data={statisticRevenue} titleBar="Doanh thu" />
+						</Card>
+					) : (
+						''
+					)}
 
 					<div className="grid grid-cols-6 gap-tw-4">
 						<Card className="col-span-3 mt-tw-4" title={<h1 className="text-2xl font-medium">Top 5 nhu cầu học</h1>}>
@@ -488,9 +533,13 @@ const Dashboard = () => {
 						<StatisticStudentByAge data={statisticStudentAge} titleBar="Độ tuổi học viên " />
 					</Card>
 
-					<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Tỉ lệ đánh giá phản hồi</h1>}>
-						<StatisticPie data={statisticFeedRating} />
-					</Card>
+					{user.RoleId != 7 ? (
+						<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Tỉ lệ đánh giá phản hồi</h1>}>
+							<StatisticPie data={statisticFeedRating} />
+						</Card>
+					) : (
+						''
+					)}
 				</>
 			) : user.RoleId == 2 ? ( // giáo viên
 				<>
@@ -503,7 +552,7 @@ const Dashboard = () => {
 						</Card>
 					</div>
 				</>
-			) : user.RoleId == 3 ? ( //học viên
+			) : user.RoleId == 3 || user.RoleId == 8 ? ( //học viên phụ huynh
 				<>
 					<Card
 						className="mt-tw-4 custom-point-student-class"
@@ -556,6 +605,32 @@ const Dashboard = () => {
 					<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Tổng số buổi học trong từng tháng</h1>}>
 						<StatisticRateTeacher data={statisticTotalScheduleStudent} titleBar="Buổi học trong từng tháng" type={1} />
 					</Card>
+				</>
+			) : user.RoleId == 5 ? (
+				<>
+					<div className="grid grid-cols-6 gap-tw-4">
+						<Card className="col-span-3 mt-tw-4" title={<h1 className="text-2xl font-medium">Khách mới mỗi tháng</h1>}>
+							<StatisticClassNew data={statisticCustomerofSales} titleBar="Khách mới mỗi tháng" type={1} />
+						</Card>
+						<Card className="col-span-3 mt-tw-4" title={<h1 className="text-2xl font-medium">Kiểm tra đầu vào trong tháng</h1>}>
+							<StatisticClassNew data={statisticialTestAppointment} titleBar="Kiểm tra đầu vào trong tháng" type={2} />
+						</Card>
+					</div>
+				</>
+			) : user.RoleId == 6 ? (
+				<>
+					<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Doanh Thu</h1>}>
+						<StatisticPositiveAndNegativeChart data={statisticRevenue} titleBar="Doanh thu" />
+					</Card>
+					<div className="grid grid-cols-6 gap-tw-4">
+						<Card className="col-span-3 mt-tw-4 " title={<h1 className="text-2xl font-medium">Lớp mới mỗi tháng</h1>}>
+							<StatisticClassNew data={statisticNewClass} titleBar="Lớp mới mỗi tháng" type={1} />
+						</Card>
+
+						<Card className="col-span-3 mt-tw-4" title={<h1 className="text-2xl font-medium">Khách mới mỗi tháng</h1>}>
+							<StatisticClassNew data={statisticNewCustomer} titleBar="Khách mới mỗi tháng" type={2} />
+						</Card>
+					</div>
 				</>
 			) : (
 				''

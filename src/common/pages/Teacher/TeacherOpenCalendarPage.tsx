@@ -74,8 +74,6 @@ const TeacherOpenCalendarPage = () => {
 		try {
 			const res = await scheduleAvailableApi.getAll(params)
 			if (res.status === 200) {
-				console.log(res.data.data)
-
 				// dispatch(setDataChangeScheduleEdit({ CurriculumId: infoClass?.CurriculumId, BranchId: infoClass?.BranchId }))
 				const newListCalendar = res.data.data.map((item, index) => {
 					return {
