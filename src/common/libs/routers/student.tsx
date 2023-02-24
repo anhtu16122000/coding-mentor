@@ -108,9 +108,9 @@ export const StudentChildMenu = [
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/course/video-course',
-				Route: '/course/video-course',
-				Text: 'Khóa học',
+				Key: '/course/videos',
+				Route: '/course/videos',
+				Text: 'Danh sách khoá học',
 				Icon: ''
 			}
 		]

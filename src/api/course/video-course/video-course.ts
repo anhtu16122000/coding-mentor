@@ -1,6 +1,6 @@
 import { instance } from '../../instance'
 
-const url = '/api/VideoCourse'
+const url = '/api/product'
 export const VideoCourseApi = {
 	// Lấy tất cả data
 	getAll(params) {

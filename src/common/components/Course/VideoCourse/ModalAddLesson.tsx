@@ -150,7 +150,8 @@ const ModalAddLesson = (props: Props) => {
 								<div className="grid-cols-1">
 									<InputText name="Name" label="Bài học" placeholder="Nhập tên bài học" />
 								</div>
-								<div className="grid-cols-1">
+
+								{/* <div className="grid-cols-1">
 									<SelectField
 										onChangeSelect={(value) => setType(value)}
 										name="Type"
@@ -158,7 +159,7 @@ const ModalAddLesson = (props: Props) => {
 										label="Loại"
 										placeholder="Chọn loại bài học"
 									/>
-								</div>
+								</div> */}
 
 								{type == 1 ? (
 									<>
@@ -168,18 +169,12 @@ const ModalAddLesson = (props: Props) => {
 										</Radio.Group>
 
 										{typeUrl == 1 ? (
-											<div className="grid-cols-1">
-												<UploadFileField
-													name="VideoUrl"
-													label="Tải lên video"
-													form={form}
-													buttonText="Bấm để tải lên video"
-													onChangeFile={onChangeFile}
-												/>
+											<div className="grid-cols-1 mt-[8px]">
+												<UploadFileField name="VideoUrl" label="" form={form} buttonText="Tải video lên " onChangeFile={onChangeFile} />
 											</div>
 										) : (
-											<div className="grid-cols-1">
-												<InputText name="VideoUrl" label="Đường dẫn video" placeholder="Nhập đường dẫn video" />
+											<div className="grid-cols-1 mt-[8px]">
+												<InputText name="VideoUrl" label="" placeholder="Nhập đường dẫn video" />
 											</div>
 										)}
 									</>

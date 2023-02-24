@@ -1,55 +1,22 @@
 import { Dropdown, Rate } from 'antd'
 import { useRouter } from 'next/router'
-import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import { FiUsers } from 'react-icons/fi'
 import { GiRoundStar } from 'react-icons/gi'
 import { StudentListInCourseApi } from '~/api/course/video-course/student-list-in-video-course'
 import { VideoCourseApi } from '~/api/course/video-course/video-course'
 import { ShowNoti } from '~/common/utils'
 import PrimaryButton from '../../Primary/Button'
-import ModalAddVideoCourse from './ModalAddVideoCourse'
+import CreateVideoCourse from './CreateVideoCourse'
+import { parseToMoney } from '~/common/utils/common'
+import { FaUsers } from 'react-icons/fa'
 
 const VideoCourseItem = (props) => {
-	const { Item, onFetchData, prerequisiteCourse, UserRoleID } = props
+	const { Item, onFetchData, UserRoleID, onRefresh } = props
+
 	const router = useRouter()
-	const [isLoading, setIsLoading] = useState({ type: '', status: false })
-
-	const onUpdateCourse = async (data) => {
-		setIsLoading({ type: 'SUBMIT_SECTION', status: true })
-		try {
-			let res = await VideoCourseApi.update(data)
-			if (res.status == 200) {
-				ShowNoti('success', res.data.message)
-				onFetchData && onFetchData()
-			}
-			return true
-		} catch (error) {
-			ShowNoti('error', error.message)
-		} finally {
-			setIsLoading({ type: 'SUBMIT_SECTION', status: false })
-		}
-	}
-
-	const onRemoveCourse = async (data) => {
-		setIsLoading({ type: 'SUBMIT_SECTION', status: true })
-		try {
-			let res = await VideoCourseApi.delete(data.Id)
-			if (res.status == 200) {
-				ShowNoti('success', res.data.message)
-				onFetchData && onFetchData()
-			}
-			return true
-		} catch (error) {
-			ShowNoti('error', error.message)
-		} finally {
-			setIsLoading({ type: 'SUBMIT_SECTION', status: false })
-		}
-	}
 
 	const onActiveCourse = async () => {
-		setIsLoading({ type: 'SUBMIT_SECTION', status: true })
 		try {
 			let res = await VideoCourseApi.update({ Id: Item.Id, Active: !Item.Active })
 			if (res.status == 200) {
@@ -60,17 +27,15 @@ const VideoCourseItem = (props) => {
 		} catch (error) {
 			ShowNoti('error', error.message)
 		} finally {
-			setIsLoading({ type: 'SUBMIT_SECTION', status: false })
 		}
 	}
 
 	const onRegisterCourse = async (Id) => {
-		setIsLoading({ type: 'REGISTER_COURSE', status: true })
 		try {
 			let res = await StudentListInCourseApi.addVideoCourse(Id)
 			if (res.status == 200) {
 				router.push({
-					pathname: '/course/video-course/detail',
+					pathname: '/course/videos/detail',
 					query: { slug: Id }
 				})
 				ShowNoti('success', res.data.message)
@@ -78,7 +43,23 @@ const VideoCourseItem = (props) => {
 		} catch (error) {
 			ShowNoti('error', error.message)
 		} finally {
-			setIsLoading({ type: 'REGISTER_COURSE', status: false })
+		}
+	}
+
+	/**
+	 * Delete a course
+	 * @param data - The data of the course that you want to delete
+	 */
+	const onDeleteCourse = async (data) => {
+		try {
+			let res = await VideoCourseApi.delete(Item.Id)
+			if (res.status == 200) {
+				ShowNoti('success', res.data.message)
+				onRefresh()
+			}
+		} catch (error) {
+			ShowNoti('error', error.message)
+		} finally {
 		}
 	}
 
@@ -91,51 +72,33 @@ const VideoCourseItem = (props) => {
 				icon={Item.Active ? 'hide' : 'eye'}
 				onClick={() => onActiveCourse()}
 			/>
-			<ModalAddVideoCourse
-				item={Item}
-				mode="edit"
-				prerequisiteCourse={prerequisiteCourse}
-				isLoading={isLoading}
-				onSubmit={onUpdateCourse}
-			/>
-			<ModalAddVideoCourse
-				item={Item}
-				mode="remove"
-				prerequisiteCourse={prerequisiteCourse}
-				isLoading={isLoading}
-				onSubmit={onRemoveCourse}
-			/>
+			<CreateVideoCourse defaultData={Item} isEdit onRefresh={onRefresh} />
+			<PrimaryButton background="red" type="button" icon="remove" onClick={onDeleteCourse}>
+				Xoá khoá học
+			</PrimaryButton>
 		</div>
 	)
 
 	return (
-		<div className="video_course-item antd-custom-wrap m-2 rounded-xl group bg-tw-white hover:drop-shadow-lg linear duration-400">
+		<div className="video-item-container group">
 			<div className="relative video_course">
-				{/* tag */}
 				{UserRoleID == '1' && (
-					<div
-						className={`absolute ${
-							Item.Active ? 'bg-tw-green' : 'bg-[#c4c4c4]'
-						} top-0 left-0 text-tw-white px-3 py-2 rounded-tl-xl rounded-br-xl z-20`}
-					>
-						{Item.Active ? 'Hiện' : 'Ẩn'}
-					</div>
+					<div className={`${Item.Active ? 'bg-tw-green' : 'bg-[#c4c4c4]'} video-status-tag`}>{Item.Active ? 'Hiện' : 'Ẩn'}</div>
 				)}
+
 				{UserRoleID == '3' && (
-					<div
-						className={`absolute ${
-							Item.Status == 1 ? 'bg-tw-primary' : Item.Status == 2 ? 'bg-tw-yellow' : 'bg-tw-green'
-						} top-0 left-0 text-tw-white px-3 py-2 rounded-tl-xl rounded-br-xl z-20`}
-					>
+					<div className={`${Item.Status == 1 ? 'bg-tw-primary' : Item.Status == 2 ? 'bg-tw-yellow' : 'bg-tw-green'} video-status-tag`}>
 						{Item.Status == 1 ? 'Chưa học' : Item.Status == 2 ? 'Đang học' : 'Hoàn thành'}
 					</div>
 				)}
-				{/*  */}
+
 				<img
 					src={Item.Thumbnail?.length > 0 ? Item.Thumbnail : '/images/video-course-alt.jpg'}
 					className="object-cover w-full h-56 rounded-xl group-hover:rounded-br-none group-hover:rounded-bl-none linear duration-400"
 				/>
+
 				<div className="absolute top-0 bottom-0 left-0 right-0 backdrop-blur-none group-hover:backdrop-blur-sm z-10 linear duration-500 rounded-xl group-hover:rounded-bl-none group-hover:rounded-br-none"></div>
+
 				<div className="absolute top-8 group-hover:top-0 bottom-0 right-0 left-0 opacity-tw-0 group-hover:opacity-tw-10 linear duration-500 z-20 flex justify-center items-center ">
 					<div>
 						{(UserRoleID == '1' || UserRoleID == '2' || (UserRoleID == '3' && Item.Status != 1)) && (
@@ -146,7 +109,7 @@ const VideoCourseItem = (props) => {
 								icon="eye"
 								onClick={() => {
 									router.push({
-										pathname: '/course/video-course/detail',
+										pathname: '/course/videos/detail',
 										query: { slug: Item?.Id }
 									})
 								}}
@@ -154,6 +117,7 @@ const VideoCourseItem = (props) => {
 								Xem khóa học
 							</PrimaryButton>
 						)}
+
 						{UserRoleID == '3' && Item.Status == 1 && (
 							<PrimaryButton
 								background="green"
@@ -170,13 +134,24 @@ const VideoCourseItem = (props) => {
 
 			<div className="p-3">
 				<p className="text-[18px] font-[600] mb-2 line-clamp-1">{Item.Name}</p>
+				<div className="text-[16px] font-[600] mb-2 text-[#E64A19]">{parseToMoney(Item.Price)}</div>
+
 				<div className="flex justify-between items-center">
 					<div className="flex items-center gap-2 w-3/4 ">
-						<p className="text-base text-[#666666]">
-							<FiUsers />
+						<p className="text-base text-[#000000]">
+							<FaUsers className="mt-[-2px]" size={20} />
 						</p>
+
 						<p className="text-base text-[#666666] font-semibold">{Item.TotalStudent}</p>
-						<Rate defaultValue={Item.TotalRate} allowHalf character={<GiRoundStar />} disabled className="text-tw-yellow" />
+
+						<Rate
+							defaultValue={Item.TotalRate}
+							allowHalf
+							character={<GiRoundStar />}
+							disabled
+							className="text-tw-yellow ml-[8px]"
+							style={{ lineHeight: 0 }}
+						/>
 					</div>
 
 					{UserRoleID == '1' && (
@@ -195,25 +170,3 @@ const VideoCourseItem = (props) => {
 }
 
 export default VideoCourseItem
-VideoCourseItem.propTypes = {
-	Item: PropTypes.shape({
-		Name: PropTypes.string,
-		Thumbnail: PropTypes.string,
-		Stag: PropTypes.string,
-		Description: PropTypes.string,
-		Active: PropTypes.bool,
-		BeforeCourseId: PropTypes.number,
-		BeforeCourseName: PropTypes.string,
-		TotalRate: PropTypes.number,
-		TotalStudent: PropTypes.number,
-		Id: PropTypes.number,
-		Enable: PropTypes.bool,
-		CreatedOn: PropTypes.string,
-		CreatedBy: PropTypes.string,
-		ModifiedOn: PropTypes.string,
-		ModifiedBy: PropTypes.string
-	}),
-	prerequisiteCourse: PropTypes.array,
-	UserRoleID: PropTypes.object,
-	onFetchData: PropTypes.func
-}
