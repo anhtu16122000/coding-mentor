@@ -15,7 +15,7 @@ import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
 import { AiOutlineWarning } from 'react-icons/ai'
 import { setTeacher } from '~/store/classReducer'
 import 'moment/locale/vi'
-moment.locale('vi')
+// moment.locale('vi')
 
 const initParameters = { branchId: null, curriculumId: null, startTime: null, endTime: null, pageIndex: 1, pageSize: 8 }
 const ModalAddScheduleToturingEdit = (props) => {
@@ -104,7 +104,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 
 	const handleChooseDate = async (item, index) => {
 		setDateChoose(item)
-		carouselRef.current?.goTo(index)
+		// carouselRef.current?.goTo(index)
 		setAddClass(null)
 		if (teacherId) {
 			setTeacherId(null)
@@ -185,7 +185,6 @@ const ModalAddScheduleToturingEdit = (props) => {
 			pageIndex: pageNumber
 		})
 	}
-	console.log(totalPage)
 	return (
 		<>
 			<PrimaryButton onClick={() => setOpenModalAdd(true)} className="ml-3" background="green" type="button" icon="add">
@@ -237,7 +236,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 							</div>
 						</div>
 						<div className="custom-carousel">
-							<Carousel {...config} ref={carouselRef}>
+							<Carousel {...config} ref={dates.length > 4 ? carouselRef : null}>
 								{dates?.length > 0 &&
 									dates?.map((item, index) => (
 										<div

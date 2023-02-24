@@ -29,5 +29,8 @@ export const transcriptApi = {
     
     getTranscriptPoint(ID) {
         return instance.get(`${url}/point/${ID}`)
+    },
+    getPointByStudentClass(params) {
+        return instance.get<IApiResultData<ITranscriptByStudentClass[]>>(`${url}/get-point-by-student-class`, { params })
     }
 }

@@ -2,6 +2,7 @@ import { Tooltip } from 'antd'
 import { FC, useRef } from 'react'
 import { Edit, LogIn, Trash, X, FileMinus, Edit3, Book, Trash2 } from 'react-feather'
 import { AiOutlineCheckCircle, AiOutlineEye, AiOutlineInfoCircle, AiOutlineUsergroupAdd } from 'react-icons/ai'
+import { BiReset } from 'react-icons/bi'
 import { CgAddR, CgFileDocument } from 'react-icons/cg'
 import { FaChalkboardTeacher } from 'react-icons/fa'
 import { FiArrowDownCircle, FiArrowUpCircle, FiEdit, FiMenu, FiMoreVertical, FiPrinter, FiSave, FiSend, FiTrash2 } from 'react-icons/fi'
@@ -149,6 +150,9 @@ const IconButton: FC<IIconButton> = (props) => {
 		}
 		if (icon == 'tutoring') {
 			return <FaChalkboardTeacher size={!!size ? size : 20} />
+		}
+		if (icon == 'reset') {
+			return <BiReset size={!!size ? size : 20} />
 		}
 	}
 

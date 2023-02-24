@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react'
-import { Bar, CartesianGrid, ComposedChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import React, { useEffect, useState } from 'react'
+import { AreaChart, CartesianGrid, ComposedChart, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-const StatisticTop5Course = (props) => {
+export const StatisticClassNew = (props) => {
 	const { data, titleBar, type } = props
-	console.log(data)
-
 	const [hideXAxis, setHideXAxis] = useState(false)
 
 	const renderLegend = (props) => {
@@ -22,38 +20,33 @@ const StatisticTop5Course = (props) => {
 		}, [])
 
 		return (
-			<ul className={`relative top-[10px] text-center ${type == 1 ? 'text-[#EF8B43]' : type == 2 ? 'text-[#0262DB]' : 'text-[#9194ce]'}`}>
+			<ul className={` relative top-[10px] text-center ${type == 1 ? 'text-[#9194ce]' : 'text-[#D44141]'}`}>
 				{payload.map((entry, index) => (
 					<li key={`item-${index}`}>
-						<span
-							className={`inline-block w-3 h-3 ${type == 1 ? 'bg-[#EF8B43]' : type == 2 ? 'bg-[#0262DB]' : 'bg-[#9194ce]'} mr-2`}
-						></span>
+						<span className={`inline-block w-3 h-3 ${type == 1 ? 'bg-[#9194ce]' : 'bg-[#D44141]'} mr-2`}></span>
 						{entry.value}
 					</li>
 				))}
 			</ul>
 		)
 	}
-
 	return (
 		<>
 			<ResponsiveContainer width="100%" height={280}>
-				<ComposedChart width={500} height={500} data={data}>
+				<LineChart width={500} height={500} data={data}>
 					<CartesianGrid stroke="#f5f5f5" />
 					{hideXAxis ? <XAxis hide dataKey="Name" /> : <XAxis dataKey="Name" />}
 					<YAxis />
 					<Tooltip />
 					<Legend content={renderLegend} />
-					<Bar
-						dataKey="Value"
+					<Line
+						type="monotone"
 						name={titleBar || 'Thông kê khóa học có nhiều sinh viên nhất'}
-						barSize={20}
-						fill={type == 1 ? '#EF8B43' : type == 2 ? '#0262DB' : '#8884d8'}
+						dataKey="Value"
+						stroke={type == 1 ? '#8884d8' : '#D44141'}
 					/>
-				</ComposedChart>
+				</LineChart>
 			</ResponsiveContainer>
 		</>
 	)
 }
-
-export default StatisticTop5Course

@@ -1,0 +1,139 @@
+$green: #4caf50;
+.dashboard {
+	.title {
+		font-size: 1.5rem;
+	}
+	.custom-point-student-class {
+		.ant-card {
+			border: 0;
+			.ant-card-body {
+				padding: 0;
+			}
+		}
+	}
+	.ant-select .ant-select-selector {
+		margin-right: 0;
+	}
+	.dashboard-content {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(2, minmax(0px, 1fr));
+		@include max-media(1920px) {
+			grid-template-columns: repeat(4, minmax(0px, 1fr));
+		}
+		@include max-media(1600px) {
+			grid-template-columns: repeat(2, minmax(0px, 1fr));
+		}
+		@include mobile {
+			grid-template-columns: repeat(1, minmax(0px, 1fr));
+		}
+		.items {
+			border-radius: 8px;
+			background: #fff;
+			.inner-item {
+				.name {
+					border-top-right-radius: 8px;
+					border-top-left-radius: 8px;
+
+					@include flex(center, space-between);
+					padding: 10px 24px;
+					&.kh {
+						background-color: #ef8b43;
+					}
+					&.dt {
+						background-color: #599f50;
+					}
+					&.gd {
+						background-color: #0262db;
+					}
+					&.ht {
+						background-color: #d44141;
+					}
+					.ttl {
+						font-size: 1.1rem;
+						font-weight: 500;
+						text-transform: uppercase;
+						color: #fff;
+					}
+					.icon {
+						font-size: 26px;
+						width: 42px;
+						height: 42px;
+						text-align: center;
+						border-radius: 12px;
+						@include flex(center, center);
+						color: #fff;
+						background-color: rgba(244, 220, 203, 0.3);
+					}
+				}
+				.value {
+					padding-bottom: 16px;
+					.item {
+						@include flex(center, space-between);
+						padding: 10px 24px;
+						border-bottom: 2px dashed #eaeaea;
+						&:last-child {
+							border: 0;
+						}
+						.left {
+							.n {
+								font-size: 14px;
+								font-weight: 500;
+								color: #08569f;
+							}
+							.sub {
+								font-size: 12px;
+								color: grey;
+								display: flex;
+								align-items: flex-end;
+								.ic {
+									font-size: 16px;
+									margin-left: 5px;
+								}
+								.up {
+									color: #4caf50;
+								}
+								.down {
+									color: $red;
+								}
+							}
+						}
+						.right {
+							font-size: 1.5rem;
+							font-weight: 500;
+						}
+					}
+				}
+			}
+		}
+	}
+	.custom-dashboard-list-class {
+		@include flex(center, center);
+		.list-class {
+			.ant-select {
+				.ant-select-selector {
+					height: 34px;
+				}
+			}
+		}
+		.class-type {
+			.content {
+				@include flex(center, center);
+				background: #d7d7d7ca;
+				border-radius: 6px;
+
+				.item {
+					border-radius: 6px;
+					padding: 6px;
+
+					cursor: pointer;
+					&.active {
+						color: #fff;
+						font-weight: 500;
+						background: $red;
+					}
+				}
+			}
+		}
+	}
+}

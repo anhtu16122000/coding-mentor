@@ -24,7 +24,7 @@ const StatisticPositiveAndNegativeChart = (props) => {
 				<Tooltip />
 				<Legend />
 				<ReferenceLine y={0} stroke="#000" />
-				<Bar dataKey="Value" name={titleBar || 'Thông kê khóa học có nhiều sinh viên nhất'} fill="#8884d8" />
+				<Bar dataKey="Value" name={titleBar || 'Thông kê khóa học có nhiều sinh viên nhất'} fill="#599F50" />
 			</BarChart>
 		</ResponsiveContainer>
 	)
