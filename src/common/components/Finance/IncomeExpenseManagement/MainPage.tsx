@@ -87,7 +87,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 							Người tạo: <span>{item.CreatedBy}</span>
 						</p>
 						<p className="table-row-sub-text">
-							Thời gian tạo: <span> {moment(item.CreatedOn).format('DD/MM/YYY HH:mm')}</span>
+							Thời gian: <span> {moment(item.CreatedOn).format('DD/MM/YYY HH:mm')}</span>
 						</p>
 					</>
 				)
@@ -113,7 +113,9 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 			render: (text, item) => {
 				return (
 					<>
-						<p className={`table-row-main-text ${item.Type == 1 ? 'text-tw-green' : 'text-tw-red'}`}>{_format.numberToPrice(text)} VND</p>
+						<p className={`table-row-main-text ${item.Type == 1 ? 'text-tw-green' : 'text-tw-red'} !font-[600]`}>
+							{_format.numberToPrice(text)} VND
+						</p>
 						<p className="table-row-sub-text">
 							Phương thức thanh toán: <span className="table-row-main-text">{item.PaymentMethodName}</span>
 						</p>
@@ -126,11 +128,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 			width: 100,
 			dataIndex: 'TypeName',
 			render: (text, item) => {
-				return (
-					<>
-						<PrimaryTag children={<span>{text}</span>} color={item.Type == 1 ? 'green' : 'red'} />
-					</>
-				)
+				return <PrimaryTag children={<span>{text}</span>} color={item.Type == 1 ? 'green' : 'red'} />
 			}
 		},
 		{
@@ -138,11 +136,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 			width: 200,
 			dataIndex: 'Reason',
 			render: (text) => {
-				return (
-					<>
-						<p className="table-row-main-text">{text}</p>
-					</>
-				)
+				return <p className="">{text}</p>
 			}
 		},
 		{
@@ -150,11 +144,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 			width: 200,
 			dataIndex: 'Note',
 			render: (text) => {
-				return (
-					<>
-						<p className="table-row-main-text">{text}</p>
-					</>
-				)
+				return <p className="">{text}</p>
 			}
 		},
 		{
@@ -334,26 +324,18 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 				onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
 				loading={isLoading}
 				Extra={
-					<>
-						<IncomeExpenseManagementModalCRUD
-							mode="add"
-							handleSearchForOptionList={handleSearchForOptionList}
-							handleLoadOnScrollForOptionList={handleLoadOnScrollForOptionList}
-							onSubmit={onSubmit}
-							optionStudent={optionStudent}
-							dataOption={optionList}
-						/>
-					</>
+					<IncomeExpenseManagementModalCRUD
+						mode="add"
+						handleSearchForOptionList={handleSearchForOptionList}
+						handleLoadOnScrollForOptionList={handleLoadOnScrollForOptionList}
+						onSubmit={onSubmit}
+						optionStudent={optionStudent}
+						dataOption={optionList}
+					/>
 				}
 				TitleCard={
 					<div className="flex items-center justify-between w-full">
-						<FilterBaseVer2
-							handleFilter={handleFilter}
-							dataFilter={filterList}
-							handleReset={() => {
-								setTodoApi({ ...initialParams })
-							}}
-						/>
+						<FilterBaseVer2 handleFilter={handleFilter} dataFilter={filterList} handleReset={() => setTodoApi({ ...initialParams })} />
 					</div>
 				}
 			>

@@ -62,7 +62,7 @@ const PayForm: FC<IPayForm> = ({ isEdit, onRefresh, defaultData }) => {
 				form.resetFields()
 			}
 		} catch (error) {
-			ShowNostis.error(error?.resultMessage)
+			ShowNostis.error(error?.message)
 		} finally {
 			setLoading(false)
 		}
@@ -78,7 +78,7 @@ const PayForm: FC<IPayForm> = ({ isEdit, onRefresh, defaultData }) => {
 				form.resetFields()
 			}
 		} catch (error) {
-			ShowNostis.error(error?.resultMessage)
+			ShowNostis.error(error?.message)
 		} finally {
 			setLoading(false)
 		}
@@ -114,6 +114,7 @@ const PayForm: FC<IPayForm> = ({ isEdit, onRefresh, defaultData }) => {
 					autoComplete="on"
 				>
 					<InputNumberField
+						disabled={loading}
 						onChange={(event) => form.setFieldValue('Paid', event.target.value)}
 						label="Số tiền thanh toán"
 						name="Paid"
@@ -122,11 +123,16 @@ const PayForm: FC<IPayForm> = ({ isEdit, onRefresh, defaultData }) => {
 					/>
 
 					<Form.Item className="col-span-2" name="PaymentAppointmentDate" label="Ngày thanh toán tiếp theo" rules={formNoneRequired}>
-						<DatePicker placeholder="Chọn ngày" className="style-input" onChange={(e) => form.setFieldValue('PaymentAppointmentDate', e)} />
+						<DatePicker
+							disabled={loading}
+							placeholder="Chọn ngày"
+							className="style-input"
+							onChange={(e) => form.setFieldValue('PaymentAppointmentDate', e)}
+						/>
 					</Form.Item>
 
 					<Form.Item className="col-span-2" label="Ghi chú" name="Note" rules={formNoneRequired}>
-						<Input.TextArea rows={5} placeholder="" disabled={loading} />
+						<Input.TextArea disabled={loading} rows={5} placeholder="" />
 					</Form.Item>
 				</Form>
 			</Modal>

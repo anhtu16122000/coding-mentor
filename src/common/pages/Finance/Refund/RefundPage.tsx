@@ -59,6 +59,32 @@ export default function RefundPage(props: IRefundPageProps) {
 	const [optionStudent, setStudentOption] = useState<{ title: string; value: any }[]>([])
 	const [filterList, setFilterList] = useState([])
 
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return theInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return theInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return theInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return theInformation?.RoleId == 3
+	}
+
+	function isSaler() {
+		return theInformation?.RoleId == 5
+	}
+
+	function isAccountant() {
+		return theInformation?.RoleId == 6
+	}
+
 	const getListRefund = async () => {
 		setIsLoading({ type: 'GET_ALL', status: true })
 		try {
@@ -182,7 +208,7 @@ export default function RefundPage(props: IRefundPageProps) {
 	}
 
 	const columns =
-		userInformation && userInformation.RoleId == '1'
+		isAdmin() || isAccountant()
 			? [
 					{
 						title: 'Tên học viên',
@@ -200,11 +226,7 @@ export default function RefundPage(props: IRefundPageProps) {
 						title: 'Số tiền yêu cầu',
 						width: 200,
 						dataIndex: 'Price',
-						render: (text, item) => (
-							<>
-								<p className="table-row-main-text">{_format.numberToPrice(text)} VND</p>
-							</>
-						)
+						render: (text, item) => <p className="font-[600] text-[#D32F2F]">{_format.numberToPrice(text)} VND</p>
 					},
 					{
 						title: 'Loại yêu cầu',
@@ -285,11 +307,7 @@ export default function RefundPage(props: IRefundPageProps) {
 						title: 'Số tiền yêu cầu',
 						width: 200,
 						dataIndex: 'Price',
-						render: (text, item) => (
-							<>
-								<p className="table-row-main-text">{_format.numberToPrice(text)} VND</p>
-							</>
-						)
+						render: (text, item) => <div className="font-[600] text-[#D32F2F]">{_format.numberToPrice(text)} VND</div>
 					},
 					{
 						title: 'Loại yêu cầu',

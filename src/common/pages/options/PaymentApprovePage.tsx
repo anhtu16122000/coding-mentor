@@ -79,24 +79,8 @@ const PaymentApprovePage = () => {
 			render: (date) => moment(date).format('DD/MM/YYYY')
 		},
 		{
-			title: 'Số tiền ',
+			title: 'Số tiền',
 			dataIndex: 'Money',
-			render: (money) => {
-				return <p>{_format.numberToPrice(money)}</p>
-			}
-		},
-		{
-			title: 'Số tiền chờ duyệt ',
-			dataIndex: 'MoneyApprove',
-			width: 150,
-			render: (money) => {
-				return <p>{_format.numberToPrice(money)}</p>
-			}
-		},
-		{
-			title: 'Số tiền đã duyệt ',
-			dataIndex: 'Refunded',
-			width: 140,
 			render: (money) => {
 				return <p>{_format.numberToPrice(money)}</p>
 			}
@@ -125,7 +109,7 @@ const PaymentApprovePage = () => {
 				return (
 					<div className="flex items-center">
 						<DeleteTableRow handleDelete={() => handleDelete(data.Id)} />
-						<PaymentApprovePage.ApproveMoneyBack id={data.Id} onRefresh={getPaymentApprove} />
+						{/* <PaymentApprovePage.ApproveMoneyBack id={data.Id} onRefresh={getPaymentApprove} /> */}
 						{data.Status === 1 && <PaymentApprovePage.ApproveMoney id={data.Id} onRefresh={getPaymentApprove} />}
 					</div>
 				)

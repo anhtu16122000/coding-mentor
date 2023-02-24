@@ -16,6 +16,7 @@ import PrimaryButton from '~/common/components/Primary/Button'
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
+import RefundForm from './Refund'
 
 const PaymentManagementPage = () => {
 	const [loading, setLoading] = React.useState(true)
@@ -85,24 +86,6 @@ const PaymentManagementPage = () => {
 			width: 130
 		},
 		{
-			title: 'Ngày',
-			dataIndex: 'ModifiedOn',
-			width: 160,
-			render: (value, item) => <p>{moment(value).format('DD/MM/YYYY HH:mm')}</p>
-		},
-		{
-			title: 'Kỳ tiếp theo',
-			dataIndex: 'PaymentAppointmentDate',
-			width: 130,
-			render: (value, item) => <p>{!!value ? moment(value).format('DD/MM/YYYY') : ''}</p>
-		},
-		{
-			title: 'Người tạo',
-			dataIndex: 'ModifiedBy',
-			width: 160,
-			render: (value, item) => <p className="font-[600] text-[#1E88E5]">{value}</p>
-		},
-		{
 			title: 'Loại',
 			dataIndex: 'Type',
 			width: 180,
@@ -115,12 +98,33 @@ const PaymentManagementPage = () => {
 			)
 		},
 		{
+			title: 'Người tạo',
+			dataIndex: 'ModifiedBy',
+			width: 220,
+			render: (value, item) => <p className="font-[600] text-[#1E88E5]">{value}</p>
+		},
+		{
+			title: 'Ngày',
+			dataIndex: 'ModifiedOn',
+			width: 160,
+			render: (value, item) => <p>{moment(value).format('DD/MM/YYYY HH:mm')}</p>
+		},
+		{
+			title: 'Kỳ tiếp theo',
+			dataIndex: 'PaymentAppointmentDate',
+			width: 130,
+			render: (value, item) => <p>{!!value ? moment(value).format('DD/MM/YYYY') : ''}</p>
+		},
+		{
 			title: '',
 			dataIndex: 'Type',
+			fixed: 'right',
 			width: 60,
 			render: (value, item) => (
 				<div className="flex item-center">
 					<PayForm isEdit defaultData={item} onRefresh={getData} />
+
+					{item?.Debt < 0 && <RefundForm onRefresh={getData} item={item} />}
 				</div>
 			)
 		}
