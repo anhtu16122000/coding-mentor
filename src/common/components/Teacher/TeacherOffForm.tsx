@@ -13,7 +13,9 @@ const TeacherOffForm = (props) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [form] = Form.useForm()
+
 	const onSubmit = async (data) => {
+		console.time('Call Api teacherOffApi: ')
 		setIsLoading(true)
 		try {
 			let DATA_SUBMIT = {
@@ -31,19 +33,17 @@ const TeacherOffForm = (props) => {
 			ShowNoti('error', err.message)
 		} finally {
 			setIsLoading(false)
+			console.timeEnd('Call Api teacherOffApi: ')
 		}
 	}
+
 	return (
 		<div>
-			<button
-				className="btn btn-warning add-new"
-				onClick={() => {
-					setIsModalOpen(true)
-				}}
-			>
+			<button className="btn btn-warning add-new" onClick={() => setIsModalOpen(true)}>
 				<MdAddCircleOutline size={18} className="mr-2" />
 				Thêm mới
 			</button>
+
 			<Modal
 				title="Đăng ký lịch nghỉ"
 				open={isModalOpen}

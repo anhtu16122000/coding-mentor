@@ -8,6 +8,7 @@ import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { ShowNoti } from '~/common/utils'
 
 const initParameters = { fullName: '', userCode: '', pageIndex: 1, pageSize: 10 }
+
 const PaymentPage = () => {
 	const [loading, setLoading] = useState(false)
 	const [totalRow, setTotalRow] = useState(1)
@@ -38,14 +39,14 @@ const PaymentPage = () => {
 			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
 		},
 		{
-			title: 'Người cấp ',
-			dataIndex: 'CreatedBy',
-			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+			title: 'Ngày cấp',
+			dataIndex: 'CreatedOn',
+			render: (date) => moment(date).format('DD/MM/YYYY HH:mm')
 		},
 		{
-			title: 'Thêm lúc',
-			dataIndex: 'CreatedOn',
-			render: (date) => moment(date).format('DD/MM/YYYY')
+			title: 'Người cấp',
+			dataIndex: 'CreatedBy',
+			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
 		},
 		{
 			title: 'Chức năng',
@@ -65,7 +66,6 @@ const PaymentPage = () => {
 			const res = await RestApi.get<any>('/PaymentAllow', apiParameters)
 			if (res.status === 200) {
 				setDataTable(res.data.data)
-				console.log('🚀 ~ file: PaymentPer.tsx:62 ~ getUserPaymentAllow ~ res.data.data', res.data.data)
 				setTotalRow(res.data.totalRow)
 			}
 			if (res.status === 204) {

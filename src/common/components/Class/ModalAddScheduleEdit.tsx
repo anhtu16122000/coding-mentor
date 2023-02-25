@@ -12,6 +12,8 @@ import DatePickerField from '../FormControl/DatePickerField'
 import TextBoxField from '../FormControl/TextBoxField'
 import PrimaryButton from '../Primary/Button'
 import { classApi } from '~/api/class'
+import ModalFooter from '../ModalFooter'
+import { formRequired } from '~/common/libs/others/form'
 
 const ModalAddScheduleEdit = (props) => {
 	const { checkTeacherAvailable, checkRoomAvailable, getListSchedule, paramsSchedule } = props
@@ -76,6 +78,13 @@ const ModalAddScheduleEdit = (props) => {
 		}
 	}
 
+	function _cancel() {
+		form.resetFields()
+		setTeacherEdit([])
+		setRoomEdit([])
+		setOpenModalAdd(false)
+	}
+
 	return (
 		<>
 			<PrimaryButton onClick={() => setOpenModalAdd(true)} className="ml-3" background="green" type="button" icon="add">
@@ -85,17 +94,8 @@ const ModalAddScheduleEdit = (props) => {
 			<Modal
 				title="Thêm buổi học"
 				open={openModalAdd}
-				onCancel={() => {
-					form.resetFields()
-					setTeacherEdit([])
-					setRoomEdit([])
-					setOpenModalAdd(false)
-				}}
-				footer={
-					<PrimaryButton disable={isLoading} loading={isLoading} background="blue" icon="save" type="button" onClick={form.submit}>
-						Lưu
-					</PrimaryButton>
-				}
+				onCancel={_cancel}
+				footer={<ModalFooter loading={isLoading} onOK={form.submit} onCancel={_cancel} />}
 			>
 				<Form form={form} layout="vertical" onFinish={onSubmit}>
 					<DatePickerField
@@ -116,7 +116,7 @@ const ModalAddScheduleEdit = (props) => {
 						name="EndTime"
 						onChange={getDataAvailable}
 					/>
-					<Form.Item name="TeacherId" label="Giáo viên">
+					<Form.Item name="TeacherId" label="Giáo viên" rules={formRequired}>
 						<Select placeholder="Chọn giáo viên">
 							{teacher.map((item) => {
 								return (
@@ -136,7 +136,7 @@ const ModalAddScheduleEdit = (props) => {
 					</Form.Item>
 
 					{!!Type && parseInt(Type.toString()) == 1 ? (
-						<Form.Item name="RoomId" label="Phòng học">
+						<Form.Item name="RoomId" label="Phòng học" rules={formRequired}>
 							<Select placeholder="Chọn phòng học">
 								{room.map((item) => {
 									return (

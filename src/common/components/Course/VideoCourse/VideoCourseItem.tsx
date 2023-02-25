@@ -92,10 +92,7 @@ const VideoCourseItem = (props) => {
 					</div>
 				)}
 
-				<img
-					src={Item.Thumbnail?.length > 0 ? Item.Thumbnail : '/images/video-course-alt.jpg'}
-					className="object-cover w-full h-56 rounded-xl group-hover:rounded-br-none group-hover:rounded-bl-none linear duration-400"
-				/>
+				<img src={!!Item?.Thumbnail ? Item.Thumbnail : '/video-default-thumnails.jpg'} className="videos-thumnail linear" />
 
 				<div className="absolute top-0 bottom-0 left-0 right-0 backdrop-blur-none group-hover:backdrop-blur-sm z-10 linear duration-500 rounded-xl group-hover:rounded-bl-none group-hover:rounded-br-none"></div>
 
@@ -107,26 +104,16 @@ const VideoCourseItem = (props) => {
 								type="button"
 								disable={UserRoleID == '3' && Item.Disable}
 								icon="eye"
-								onClick={() => {
-									router.push({
-										pathname: '/course/videos/detail',
-										query: { slug: Item?.Id }
-									})
-								}}
+								onClick={() => router.push({ pathname: '/course/videos/detail', query: { slug: Item?.Id } })}
 							>
 								Xem khóa học
 							</PrimaryButton>
 						)}
 
 						{UserRoleID == '3' && Item.Status == 1 && (
-							<PrimaryButton
-								background="green"
-								type="button"
-								className="w-fit"
-								children={<span>Đăng ký học</span>}
-								icon="edit"
-								onClick={() => onRegisterCourse(Item.Id)}
-							/>
+							<PrimaryButton background="green" type="button" className="w-fit" icon="edit" onClick={() => onRegisterCourse(Item.Id)}>
+								Đăng ký học
+							</PrimaryButton>
 						)}
 					</div>
 				</div>
@@ -134,7 +121,8 @@ const VideoCourseItem = (props) => {
 
 			<div className="p-3">
 				<p className="text-[18px] font-[600] mb-2 line-clamp-1">{Item.Name}</p>
-				<div className="text-[16px] font-[600] mb-2 text-[#E64A19]">{parseToMoney(Item.Price)}</div>
+				{!!Item?.Price && <div className="text-[16px] font-[600] mb-2 text-[#E64A19]">{parseToMoney(Item.Price)}</div>}
+				{!Item?.Price && <div className="text-[16px] font-[600] mb-2 text-[#1976D2]">Miễn phí</div>}
 
 				<div className="flex justify-between items-center">
 					<div className="flex items-center gap-2 w-3/4 ">

@@ -108,6 +108,7 @@ const VideoCourse = () => {
 	return (
 		<>
 			<Fireworks showFirework={showFirework} />
+
 			<Modal width={600} centered visible={showModalSuccess} footer={null} onCancel={handleCancel}>
 				<div className="text-center">
 					<Lottie loop animationData={successAnimate} play className="inner w-[250px] mx-auto" />

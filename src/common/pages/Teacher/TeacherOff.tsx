@@ -11,6 +11,7 @@ import TeacherOffViewNote from '~/common/components/Teacher/TeacherOffViewNote'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
+import ExpandTeacherOff from './ExpandTeacherOff'
 
 let pageIndex = 1
 const TeacherOff = () => {
@@ -250,10 +251,14 @@ const TeacherOff = () => {
 
 	const expandedRowRender = (data) => {
 		return (
-			<p>
-				<span>Lý do: </span>
-				{data.Reason}
-			</p>
+			<>
+				<p>
+					<span>Lý do: </span>
+					{data.Reason}
+				</p>
+
+				<ExpandTeacherOff item={data} />
+			</>
 		)
 	}
 	return (
@@ -266,7 +271,7 @@ const TeacherOff = () => {
 			columns={userInformation.RoleId == 2 ? columnsTeacher : columnsAdmin}
 			expandable={expandedRowRender}
 			Extra={isTeacher() && <TeacherOffForm setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
-			TitleCard={'Danh sách lịch nghỉ'}
+			TitleCard="Danh sách lịch nghỉ"
 		/>
 	)
 }

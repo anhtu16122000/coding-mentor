@@ -14,6 +14,9 @@ import InputTextField from '../FormControl/InputTextField'
 import SelectField from '../FormControl/SelectField'
 import TextBoxField from '../FormControl/TextBoxField'
 import PrimaryButton from '../Primary/Button'
+import ModalFooter from '../ModalFooter'
+import InputNumberField from '../FormControl/InputNumberField'
+import { formRequired } from '~/common/libs/others/form'
 
 const ModalAddSchedule = (props) => {
 	const { checkTeacherAvailable, checkRoomAvailable, refPopoverWrapperBtn, className } = props
@@ -88,6 +91,13 @@ const ModalAddSchedule = (props) => {
 		}
 	}
 
+	function _cancel() {
+		form.resetFields()
+		setTeacherEdit([])
+		setRoomEdit([])
+		setOpenModalAdd(false)
+	}
+
 	return (
 		<>
 			<PrimaryButton
@@ -105,22 +115,12 @@ const ModalAddSchedule = (props) => {
 			<Modal
 				title="Thêm buổi học"
 				open={openModalAdd}
-				onCancel={() => {
-					form.resetFields()
-					setTeacherEdit([])
-					setRoomEdit([])
-					setOpenModalAdd(false)
-				}}
-				footer={
-					<>
-						<PrimaryButton disable={isLoading} loading={isLoading} background="blue" icon="save" type="button" onClick={form.submit}>
-							Lưu
-						</PrimaryButton>
-					</>
-				}
+				onCancel={_cancel}
+				footer={<ModalFooter loading={isLoading} onOK={form.submit} onCancel={_cancel} />}
 			>
-				<Form form={form} layout="vertical" onFinish={onSubmit}>
+				<Form className="grid grid-cols-2 gap-x-4" form={form} layout="vertical" onFinish={onSubmit}>
 					<DatePickerField
+						className="col-span-1"
 						mode="single"
 						showTime={'HH:mm'}
 						picker="showTime"
@@ -130,6 +130,7 @@ const ModalAddSchedule = (props) => {
 						onChange={getDataAvailable}
 					/>
 					<DatePickerField
+						className="col-span-1"
 						mode="single"
 						showTime={'HH:mm'}
 						picker="showTime"
@@ -138,13 +139,14 @@ const ModalAddSchedule = (props) => {
 						name="EndTime"
 						onChange={getDataAvailable}
 					/>
-					<Form.Item name="TeacherId" label="Giáo viên">
+
+					<Form.Item className="col-span-2" name="TeacherId" label="Giáo viên" rules={formRequired}>
 						<Select placeholder="Chọn giáo viên">
 							{teacher.map((item) => {
 								return (
 									<Select.Option disabled={!item.Fit} key={item.TeacherId} value={item.TeacherId}>
 										<div className="flex items-center justify-between w-full">
-											{item.TeacherName}
+											{item.TeacherName} - {item.TeacherCode}
 											{!item.Fit ? (
 												<Tooltip placement="right" title={item.Note}>
 													<AiOutlineWarning className="text-tw-red" />
@@ -156,8 +158,9 @@ const ModalAddSchedule = (props) => {
 							})}
 						</Select>
 					</Form.Item>
+
 					{!!dataChangeSchedule && parseInt(dataChangeSchedule.Type?.toString()) == 1 ? (
-						<Form.Item name="RoomId" label="Phòng học">
+						<Form.Item className="col-span-2" name="RoomId" label="Phòng học" rules={formRequired}>
 							<Select placeholder="Chọn phòng học">
 								{room.map((item) => {
 									return (
@@ -177,7 +180,9 @@ const ModalAddSchedule = (props) => {
 						</Form.Item>
 					) : null}
 
-					<TextBoxField name="Note" label="Ghi chú" />
+					<InputNumberField className="col-span-2" label="Lương / buổi" name="TeachingFee" placeholder="Nhập mức lương" isRequired />
+
+					<TextBoxField className="col-span-2" name="Note" label="Ghi chú" />
 				</Form>
 			</Modal>
 		</>

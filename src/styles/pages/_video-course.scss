@@ -33,7 +33,11 @@
 }
 
 .video-status-tag {
-	@apply absolute top-0 left-0 text-[#fff] px-3 py-2 rounded-tl-xl rounded-br-xl z-20;
+	@apply absolute top-0 left-0 text-[#fff] px-[8px] py-[4px] rounded-tl-xl rounded-br-xl z-20;
+}
+
+.videos-thumnail {
+	@apply object-cover w-full h-56 rounded-xl rounded-br-none rounded-bl-none duration-300;
 }
 
 .video-section-container {

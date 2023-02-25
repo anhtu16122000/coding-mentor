@@ -15,10 +15,13 @@ const PaymentPerForm = (props) => {
 	const onSubmit = async (data: any) => {
 		setIsLoading(true)
 		try {
-			await RestApi.post('/PaymentAllow', data)
-			setIsModalVisible(false)
-			onRefresh()
-			ShowNostis.success('Thành công')
+			const res = await RestApi.post('/PaymentAllow', data)
+			if (res.status === 200) {
+				setIsModalVisible(false)
+				onRefresh()
+				ShowNostis.success('Thành công')
+				form.resetFields()
+			}
 		} catch (error) {
 			ShowNostis.error(error.message)
 		}
@@ -45,21 +48,15 @@ const PaymentPerForm = (props) => {
 	}
 
 	useEffect(() => {
-		getAllUserAvailable()
-	}, [])
+		if (!!isModalVisible) getAllUserAvailable()
+	}, [isModalVisible])
 
 	return (
 		<>
-			<PrimaryButton
-				onClick={() => {
-					setIsModalVisible(true)
-				}}
-				type="button"
-				icon="add"
-				background="green"
-			>
+			<PrimaryButton onClick={() => setIsModalVisible(true)} type="button" icon="add" background="green">
 				Thêm mới
 			</PrimaryButton>
+
 			<Modal title={<>Thêm mới</>} open={isModalVisible} onCancel={() => setIsModalVisible(false)} footer={null}>
 				<div className="container-fluid">
 					<Form form={form} layout="vertical" onFinish={onSubmit}>
