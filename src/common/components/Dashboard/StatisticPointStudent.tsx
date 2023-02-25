@@ -76,13 +76,13 @@ export const StatisticPointStudent = (props) => {
 	}, [type, idClass])
 
 	useEffect(() => {
-		if (apiParametersAssessment) {
+		if (apiParametersAssessment.classId) {
 			getStudentAssessment(apiParametersAssessment)
 		}
 	}, [apiParametersAssessment])
 
 	useEffect(() => {
-		if (apiParametersByStudentClass) {
+		if (apiParametersByStudentClass.studentId && apiParametersByStudentClass.classId) {
 			getPointByStudentClass(apiParametersByStudentClass)
 		}
 	}, [apiParametersByStudentClass])

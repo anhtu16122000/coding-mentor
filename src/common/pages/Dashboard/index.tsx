@@ -40,6 +40,7 @@ import { classApi } from '~/api/class'
 import { feedbackApi } from '~/api/feedback'
 import { ListFeedback } from '~/common/components/Dashboard/ListFeedback'
 import { feedbackStudentApi } from '~/api/feedbacks-student'
+import { userInformationApi } from '~/api/user'
 
 const dataYear = [
 	{
@@ -86,7 +87,7 @@ const Dashboard = () => {
 	const user = useSelector((state: RootState) => state.user.information)
 	const listTodoApi = {
 		branchIds: '',
-		year: ''
+		year: moment().year()
 	}
 
 	const listTodoApiOverView = {
@@ -100,6 +101,7 @@ const Dashboard = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [idClass, setIdClass] = useState(null)
 	const [listClass, setListClass] = useState<{ label: string; value: string }[]>([])
+	const [student, setStudent] = useState<{ label: string; value: string }[]>([])
 	const initParameters = { pageSize: 99999, pageIndex: 1, sort: 0, sortType: false, types: '1' }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [statisticRevenue, setStatisticRevenue] = useState<IStatisticTopCourse[]>([])
@@ -352,6 +354,24 @@ const Dashboard = () => {
 		} catch (error) {}
 	}
 
+	const getUser = async () => {
+		try {
+			const res = await userInformationApi.getAll({ pageIndex: 1, pageSize: 9999, parentIds: user.UserInformationId.toString() })
+			if (res.status == 200) {
+				let temp = []
+				res?.data?.data?.forEach((item) => {
+					temp.push({ label: `${item?.FullName} - ${item.UserCode}`, value: item?.UserInformationId })
+				})
+				setStudent(temp)
+			}
+			if (res.status == 204) {
+				setStudent([])
+			}
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
 	const handleChangeClass = (val) => {
 		setIdClass(val)
 	}
@@ -363,25 +383,30 @@ const Dashboard = () => {
 		}
 	}
 
+	const handleChangeStudent = (val) => {
+		setTodoApiOverView({ ...todoApiOverView, userId: val })
+	}
+
 	useEffect(() => {
-		getAllBranch()
-		getStaticStudentAge()
+		if (todoApi.year) {
+			getStaticStudentAge()
 
-		getTopLearningNeed()
-		getTopPurpose()
-		getTopSource()
-		getTopJob()
+			getTopLearningNeed()
+			getTopPurpose()
+			getTopSource()
+			getTopJob()
 
-		getRevenue()
-		getNewClassInMonth()
-		getNewCustomer()
-		getFeedbackRating()
-		getTeacherRate()
-		getTotalScheduleTeacher()
-		getFeedback()
-		getTotalScheduleStudent()
-		getStatisticialTestAppointment()
-		getNewCustomerofsales()
+			getRevenue()
+			getNewClassInMonth()
+			getNewCustomer()
+			getFeedbackRating()
+			getTeacherRate()
+			getTotalScheduleTeacher()
+
+			getTotalScheduleStudent()
+			getStatisticialTestAppointment()
+			getNewCustomerofsales()
+		}
 	}, [todoApi])
 
 	useEffect(() => {
@@ -389,10 +414,21 @@ const Dashboard = () => {
 	}, [todoApiOverView])
 
 	useEffect(() => {
-		if (apiParameters) {
+		if (apiParameters?.types) {
 			getAllClass(apiParameters)
 		}
 	}, [apiParameters])
+
+	useEffect(() => {
+		if (user.UserInformationId) {
+			getUser()
+		}
+	}, [user])
+
+	useEffect(() => {
+		getFeedback()
+		getAllBranch()
+	}, [])
 
 	useEffect(() => {
 		if (type == 'offline') {
@@ -412,6 +448,7 @@ const Dashboard = () => {
 				<p className="title">Xin chào, {user.FullName}</p>
 				<Form form={form}>
 					<div className="flex items-center pr-4">
+						{user.RoleId == 8 ? <Select onChange={handleChangeStudent} options={student} className="w-[100px] h-[36px] mr-2"></Select> : ''}
 						<Select
 							onChange={(e) => {
 								setTodoApi((pre) => ({ ...pre, year: e }))
@@ -421,11 +458,12 @@ const Dashboard = () => {
 							className="w-[100px] h-[36px] mr-2"
 						></Select>
 						<Select className="w-[200px] h-[36px] mr-2" mode="multiple" onChange={handleChangeBranch} allowClear placeholder="Trung tâm">
-							{allBranch.map((branch, index) => (
-								<Select.Option value={branch.Id} key={index}>
-									{branch.Name}
-								</Select.Option>
-							))}
+							{allBranch?.length > 0 &&
+								allBranch?.map((branch, index) => (
+									<Select.Option value={branch.Id} key={index}>
+										{branch.Name}
+									</Select.Option>
+								))}
 						</Select>
 						<IconButton
 							color="red"
