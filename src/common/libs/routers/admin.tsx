@@ -106,6 +106,12 @@ export const AdminChildMenu = [
 				Key: '/finance/refund',
 				Route: '/finance/refund',
 				Text: 'Hoàn tiền'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/finance/donation-history',
+				Route: '/finance/donation-history',
+				Text: 'Lịch sử thanh toán'
 			}
 		]
 	},
