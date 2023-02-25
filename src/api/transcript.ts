@@ -32,5 +32,8 @@ export const transcriptApi = {
     },
     getPointByStudentClass(params) {
         return instance.get<IApiResultData<ITranscriptByStudentClass[]>>(`${url}/get-point-by-student-class`, { params })
+    },
+    getStudentPoint(params) {
+        return instance.get(`${url}/student-point`, { params })
     }
 }

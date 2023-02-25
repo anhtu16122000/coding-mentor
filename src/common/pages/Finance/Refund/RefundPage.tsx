@@ -238,7 +238,12 @@ export default function RefundPage(props: IRefundPageProps) {
 						dataIndex: 'TypeName',
 						render: (text, item) => (
 							<>
-								<p className="table-row-main-text">{text}</p>
+								<p className="font-[600] text-[#E53935]">
+									{item.Type == 1 && <span className="tag blue">{text}</span>}
+									{item.Type == 2 && <span className="tag green">{text}</span>}
+									{item.Type == 3 && <span className="tag yellow">{text}</span>}
+									{item.Type == 4 && <span className="tag gray">{text}</span>}
+								</p>
 							</>
 						)
 					},
@@ -258,9 +263,7 @@ export default function RefundPage(props: IRefundPageProps) {
 						dataIndex: 'StatusName',
 						render: (text, item) => (
 							<>
-								{item.Status == 1 && <PrimaryTag children={<>{item.StatusName}</>} color="disabled" />}
-								{item.Status == 2 && <PrimaryTag children={<>{item.StatusName}</>} color="green" />}
-								{item.Status == 3 && <PrimaryTag children={<>{item.StatusName}</>} color="red" />}
+								<PrimaryTag children={text} color={`${item.Status == 1 ? 'disabled' : item?.Status == 2 ? 'green' : 'red'}`} />
 							</>
 						)
 					},
@@ -315,11 +318,16 @@ export default function RefundPage(props: IRefundPageProps) {
 					},
 					{
 						title: 'Loại yêu cầu',
-						width: 150,
+						width: 200,
 						dataIndex: 'TypeName',
 						render: (text, item) => (
 							<>
-								<p className="table-row-main-text">{text}</p>
+								<p className="font-[600] text-[#E53935]">
+									{item.Type == 1 && <span className="tag blue">{text}</span>}
+									{item.Type == 2 && <span className="tag green">{text}</span>}
+									{item.Type == 3 && <span className="tag yellow">{text}</span>}
+									{item.Type == 4 && <span className="tag gray">{text}</span>}
+								</p>
 							</>
 						)
 					},

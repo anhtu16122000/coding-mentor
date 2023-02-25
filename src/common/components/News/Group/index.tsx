@@ -60,6 +60,14 @@ function NewsGroup(props) {
 		return userInformation.RoleId == 2
 	}
 
+	function isManager() {
+		return userInformation?.RoleId == 4
+	}
+
+	function isAcademic() {
+		return userInformation?.RoleId == 7
+	}
+
 	function isStdent() {
 		return userInformation.RoleId == 3
 	}
@@ -68,7 +76,7 @@ function NewsGroup(props) {
 		<div className="p-[16px] cc-news-group">
 			<h4 className="font-semibold text-[16px]">Danh sách nhóm </h4>
 
-			{(isAdmin() || isTeacher()) && (
+			{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
 				<>
 					<GroupForm onRefresh={() => setFilter((pre) => ({ ...pre }))} isEdit={false} defaultData={null} />
 					<div className="cc-hr my-[16px]" />
