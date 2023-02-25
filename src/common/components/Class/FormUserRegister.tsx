@@ -1,5 +1,6 @@
 import { Form, Input, Select } from 'antd'
 import moment from 'moment'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { billApi } from '~/api/bill'
 import { userInformationApi } from '~/api/user'
@@ -7,6 +8,7 @@ import { ShowNoti } from '~/common/utils'
 import Avatar from '../Avatar'
 
 const FormUserRegister = (props) => {
+	const router = useRouter()
 	const { form, setClasses, isReset } = props
 	const [students, setStudents] = useState([])
 	const [userInfo, setUserInfo] = useState<IUserInformation>()
@@ -32,7 +34,7 @@ const FormUserRegister = (props) => {
 
 	const handleGetStudent = async (data) => {
 		const getStudent = students.find((student) => student.UserInformationId == data)
-		form.setFieldsValue({ StudentId: getStudent.UserInformationId })
+		form.setFieldsValue({ StudentId: getStudent?.UserInformationId })
 		setUserInfo(getStudent)
 		if (!!form.getFieldValue('BranchId')) {
 			try {
@@ -57,6 +59,12 @@ const FormUserRegister = (props) => {
 	useEffect(() => {
 		getAllStudent()
 	}, [])
+
+	useEffect(() => {
+		if (router?.query?.userId) {
+			handleGetStudent(router?.query?.userId)
+		}
+	}, [router?.query?.userId, students])
 
 	return (
 		<div className="form-user-register">

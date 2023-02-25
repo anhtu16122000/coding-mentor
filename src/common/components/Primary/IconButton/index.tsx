@@ -9,7 +9,7 @@ import { FiArrowDownCircle, FiArrowUpCircle, FiEdit, FiMenu, FiMoreVertical, FiP
 import { HiOutlineFilter } from 'react-icons/hi'
 import { MdOutlineCancel } from 'react-icons/md'
 import { RiExchangeLine } from 'react-icons/ri'
-import { TbDownload, TbUpload } from 'react-icons/tb'
+import { TbDownload, TbSchool, TbUpload } from 'react-icons/tb'
 
 const IconButton: FC<IIconButton> = (props) => {
 	const { tooltip, background, icon, type, onClick, className, color, size, disabled } = props
@@ -153,6 +153,9 @@ const IconButton: FC<IIconButton> = (props) => {
 		}
 		if (icon == 'reset') {
 			return <BiReset size={!!size ? size : 20} />
+		}
+		if (icon == 'study') {
+			return <TbSchool size={!!size ? size : 20} />
 		}
 	}
 

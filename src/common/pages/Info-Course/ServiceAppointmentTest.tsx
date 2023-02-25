@@ -21,6 +21,8 @@ import StudentForm from '~/common/components/Student/StudentForm'
 import { examApi } from '~/api/exam'
 import { userInformationApi } from '~/api/user'
 import ExpandedRowAppointment from '~/common/components/Service/ExpandedRowAppointment'
+import IconButton from '~/common/components/Primary/IconButton'
+import { useRouter } from 'next/router'
 
 const appointmenInitFilter = [
 	{
@@ -105,6 +107,7 @@ let listFieldFilter = {
 
 export default function ServiceAppointmentTest(props) {
 	const state = useSelector((state: RootState) => state)
+	const router = useRouter()
 	const dispatch = useDispatch()
 	const [isOpenNoti, setisOpenNoti] = useState(false)
 	const [listStudent, setListStudent] = useState([])
@@ -393,6 +396,15 @@ export default function ServiceAppointmentTest(props) {
 						)}
 						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Type === 1 && (
 							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
+						)}
+						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Status == 2 && (
+							<IconButton
+								icon="study"
+								tooltip="Đăng ký học"
+								color="green"
+								type="button"
+								onClick={() => router.push({ pathname: '/class/register', query: { userId: data?.StudentId } })}
+							/>
 						)}
 					</div>
 				)
