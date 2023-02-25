@@ -85,12 +85,15 @@ const CalenderClass = () => {
 		setIsLoading(true)
 		try {
 			let dataDispatch = { ...data, StartDay: moment(data.StartDay).format() }
+
 			dispatch(setDataChangeSchedule(dataDispatch))
 
 			const res = await classApi.createLesson(data)
 			if (res.status === 200) {
-				ShowNoti('success', res.data.message)
+				ShowNoti('success', res.data?.message)
+
 				thisCalendar.current.calendar.gotoDate(moment(res.data.data[0].StartTime).format())
+
 				if (res.data.data.length > 0) {
 					const newListCalendar = res.data.data.map((item, index) => {
 						return {
@@ -98,7 +101,8 @@ const CalenderClass = () => {
 							Id: index,
 							title: `${moment(item.StartTime).format('HH:mm')} - ${moment(item.EndTime).format('HH:mm')}`,
 							start: item.StartTime,
-							end: item.EndTime
+							end: item.EndTime,
+							TeachingFee: data?.TeachingFee
 						}
 					})
 					dispatch(setListCalendar(newListCalendar))

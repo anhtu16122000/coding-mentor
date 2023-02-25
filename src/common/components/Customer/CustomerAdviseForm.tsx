@@ -1,4 +1,4 @@
-import { Divider, Form, Modal, Spin, Tooltip } from 'antd'
+import { Divider, Form, Modal, Select, Spin, Tooltip } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Edit, LogIn } from 'react-feather'
 import { MdSave } from 'react-icons/md'
@@ -18,22 +18,12 @@ import DatePickerField from '../FormControl/DatePickerField'
 import UploadImageField from '../FormControl/UploadImageField'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
+import RestApi from '~/api/RestApi'
 
 const CustomerAdviseForm = React.memo((props: any) => {
-	const {
-		source,
-		learningNeed,
-		purpose,
-		sale,
-		branch,
-		customerStatus,
-		rowData,
-		listTodoApi,
-		setTodoApi,
-		isStudent,
-		className,
-		refPopover
-	} = props
+	const { source, learningNeed, purpose, sale, branch } = props
+	const { customerStatus, rowData, listTodoApi, setTodoApi, isStudent, className, refPopover } = props
+
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [existCustomer, setExistCustomer] = useState(false)
@@ -42,6 +32,18 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	const [wards, setWards] = useState([])
 
 	const area = useSelector((state: RootState) => state.area.Area)
+
+	const [jobs, setJobs] = useState([])
+	const getJobs = async () => {
+		try {
+			const res = await RestApi.get<any>('job', { pageIndex: 1, pageSize: 99999 })
+			if (res.status === 200) {
+				setJobs(res.data.data)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
 
 	const convertAreaSelect = useMemo(() => {
 		return parseSelectArray(area, 'Name', 'Id')
@@ -114,6 +116,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 
 	useEffect(() => {
 		if (isModalVisible) {
+			getJobs()
 			if (rowData) {
 				if (isStudent) {
 					form.setFieldsValue({ Password: '123456' })
@@ -174,39 +177,9 @@ const CustomerAdviseForm = React.memo((props: any) => {
 		<>
 			{rowData ? (
 				isStudent ? (
-					<>
-						<IconButton
-							tooltip="Tạo học viên"
-							icon="login"
-							color="green"
-							type="button"
-							onClick={() => {
-								setIsModalVisible(true)
-							}}
-						/>
-					</>
+					<IconButton tooltip="Tạo học viên" icon="login" color="green" type="button" onClick={() => setIsModalVisible(true)} />
 				) : (
-					<>
-						{/* <button
-							className="btn btn-icon edit"
-							onClick={() => {
-								setIsModalVisible(true)
-							}}
-						>
-							<Tooltip title="Cập nhật">
-								<Edit size={20} />
-							</Tooltip>
-						</button> */}
-						<IconButton
-							type="button"
-							color="yellow"
-							tooltip="Cập nhật"
-							icon="edit"
-							onClick={() => {
-								setIsModalVisible(true)
-							}}
-						/>
-					</>
+					<IconButton type="button" color="yellow" tooltip="Cập nhật" icon="edit" onClick={() => setIsModalVisible(true)} />
 				)
 			) : (
 				<PrimaryButton
@@ -256,10 +229,26 @@ const CustomerAdviseForm = React.memo((props: any) => {
 								<InputTextField name="Mobile" label="Số điện thoại" isRequired={true} rules={[yupSync]} />
 							</div>
 						</div>
-						<div className="row">
-							<div className={`${isStudent ? 'col-md-6 col-12' : 'col-md-12 col-12'}`}>
+
+						<div className="w-full grid grid-cols-2 gap-x-4">
+							<Form.Item name="JobId" className="col-span-1" label="Công việc" rules={formRequired}>
+								<Select className="primary-input" placeholder="Chọn công việc">
+									{jobs.map((item) => {
+										return (
+											<Select.Option key={item.Id} value={item.Id}>
+												{item.Name}
+											</Select.Option>
+										)
+									})}
+								</Select>
+							</Form.Item>
+
+							<div className="col-span-1">
 								<InputTextField name="Email" label="Email" isRequired={true} rules={[yupSync]} />
 							</div>
+						</div>
+
+						<div className="row">
 							{isStudent && (
 								<>
 									<div className="col-md-6 col-12">
@@ -281,6 +270,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 								</>
 							)}
 						</div>
+
 						<Divider className="col-span-4" orientation="center">
 							Địa chỉ
 						</Divider>

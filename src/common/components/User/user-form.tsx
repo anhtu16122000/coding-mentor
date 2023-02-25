@@ -1,4 +1,4 @@
-import { Modal, Form, Divider } from 'antd'
+import { Modal, Form, Divider, Select } from 'antd'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 import { userInformationApi } from '~/api/user'
 import { parseJwt, ShowNoti } from '~/common/utils'
@@ -22,6 +22,9 @@ import DatePickerField from '../FormControl/DatePickerField'
 import { branchApi } from '~/api/branch'
 import { setBranch } from '~/store/branchReducer'
 import TextBoxField from '../FormControl/TextBoxField'
+import RestApi from '~/api/RestApi'
+import { formNoneRequired, formRequired } from '~/common/libs/others/form'
+import Router from 'next/router'
 
 const CreateUser: FC<ICreateNew> = (props) => {
 	const { onRefresh, isEdit, defaultData, isStudent, isChangeInfo, className, onOpen, roleStaff, source, purpose, sale, learningNeed } =
@@ -64,6 +67,30 @@ const CreateUser: FC<ICreateNew> = (props) => {
 		}
 	}
 
+	const [programs, setPrograms] = useState([])
+	const getPrograms = async () => {
+		try {
+			const res = await RestApi.get<any>('program', { pageIndex: 1, pageSize: 99999 })
+			if (res.status === 200) {
+				setPrograms(res.data.data)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
+
+	const [jobs, setJobs] = useState([])
+	const getJobs = async () => {
+		try {
+			const res = await RestApi.get<any>('job', { pageIndex: 1, pageSize: 99999 })
+			if (res.status === 200) {
+				setJobs(res.data.data)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
+
 	const getAllBranch = async () => {
 		try {
 			const res = await branchApi.getAll({ pageSize: 99999 })
@@ -98,6 +125,12 @@ const CreateUser: FC<ICreateNew> = (props) => {
 		}
 		if (!isEdit && !isChangeInfo) {
 			form.setFieldsValue({ Password: '123456' })
+		}
+		if (!!isModalVisible && jobs.length == 0) {
+			getJobs()
+		}
+		if (!!isModalVisible && programs.length == 0) {
+			getPrograms()
 		}
 	}, [isModalVisible])
 
@@ -189,7 +222,6 @@ const CreateUser: FC<ICreateNew> = (props) => {
 	}
 
 	const postNewUser = async (param) => {
-		console.log(param)
 		try {
 			const response = await userInformationApi.add(param)
 			if (response.status === 200) {
@@ -207,6 +239,16 @@ const CreateUser: FC<ICreateNew> = (props) => {
 		}
 	}
 
+	function convertToString(arr) {
+		if (!arr) return ''
+		return arr.join(',')
+	}
+
+	function convertToArray(str) {
+		if (!str) return []
+		return str.split(',').map(Number)
+	}
+
 	const onFinish = async (values) => {
 		const DATA_SUBMIT = {
 			...values,
@@ -218,9 +260,11 @@ const CreateUser: FC<ICreateNew> = (props) => {
 						? values.BranchIds.join(',')
 						: values.BranchIds
 					: values.BranchIds.join(',')
-				: ''
+				: '',
+			ProgramIds: !values?.ProgramIds ? null : convertToString(values?.ProgramIds)
 		}
 		console.log('DATA_SUBMIT: ', !isEdit ? DATA_SUBMIT : { ...DATA_SUBMIT, UserInformationId: defaultData.UserInformationId })
+
 		setLoading(true)
 		if (DATA_SUBMIT.Mobile.match(/^[0-9]+$/) !== null) {
 			await (defaultData?.UserInformationId
@@ -349,6 +393,37 @@ const CreateUser: FC<ICreateNew> = (props) => {
 								{ value: 2, title: 'Khác' }
 							]}
 						/>
+
+						{/* !isStudent */}
+
+						{Router.asPath.includes('info-course/customer') && (
+							<Form.Item name="JobId" className="col-span-2" label="Công việc" rules={formRequired}>
+								<Select className="primary-input" placeholder="Chọn công việc">
+									{jobs.map((item) => {
+										return (
+											<Select.Option key={item.Id} value={item.Id}>
+												<div className="flex items-center justify-between w-full">{item.Name}</div>
+											</Select.Option>
+										)
+									})}
+								</Select>
+							</Form.Item>
+						)}
+
+						{!isEdit && Router.asPath.includes('users/personnel') && (
+							<Form.Item name="ProgramIds" className="col-span-2" label="Chương trình" rules={formNoneRequired}>
+								<Select className="primary-input" mode="tags" placeholder="Chọn chương trình">
+									{programs.map((item) => {
+										return (
+											<Select.Option key={item.Id} value={item.Id}>
+												<div className="flex items-center justify-between w-full">{item.Name}</div>
+											</Select.Option>
+										)
+									})}
+								</Select>
+							</Form.Item>
+						)}
+
 						<InputTextField className="col-span-2" label="Địa chỉ Email" name="Email" isRequired rules={[yupSync]} />
 						<InputTextField className="col-span-2" label="Số điện thoại" name="Mobile" isRequired rules={[yupSync]} />
 						<DatePickerField className="col-span-2" label="Ngày sinh" name="DOB" mode="single" format="DD/MM/YYYY" />

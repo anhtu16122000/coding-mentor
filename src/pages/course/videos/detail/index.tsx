@@ -12,10 +12,11 @@ import { RootState } from '~/store'
 const VideoCourseDetail = () => {
 	const user = useSelector((state: RootState) => state.user.information)
 
-	const [userRoleId, setUserRoleId] = useState(null)
-	const [openMenuCourse, setOpenMenuCourse] = useState(false)
 	const router = useRouter()
 	const { slug: courseID } = router.query
+
+	const [userRoleId, setUserRoleId] = useState(null)
+	const [openMenuCourse, setOpenMenuCourse] = useState(false)
 	const [courseDetail, setCourseDetail] = useState<IVideoCourse>()
 	const [section, setSection] = useState<IVideoCourseSection[]>()
 	const [lessonSelected, setLessonSelected] = useState<IVideoCourseSectionLesson>()
@@ -43,10 +44,9 @@ const VideoCourseDetail = () => {
 
 	const getSection = async () => {
 		try {
-			let res = await VideoCourseSectionApi.getByVideoID(courseID)
+			let res: any = await VideoCourseSectionApi.getByVideoID(courseID)
 			if (res.status == 200) {
 				setSection(res.data.data)
-				// @ts-ignore
 				setCompletedPercent(res.data.complete !== 'NaN' ? res.data.complete : 0)
 			}
 			if (res.status == 204) {
@@ -82,14 +82,14 @@ const VideoCourseDetail = () => {
 		<>
 			<header className="flex justify-between align-center h-16 bg-tw-primary">
 				<div className="flex justify-start align-center gap-4 px-8">
-					<button className="text-[#ffffff] text-2xl" onClick={() => router.push('/course/video-course')}>
+					<button className="text-[#ffffff] text-2xl" onClick={() => router.push('/course/videos')}>
 						{<IoIosArrowBack />}
 					</button>
 					<p className="m-auto in-1-line text-2xl font-bold text-white">{courseDetail?.Name}</p>
 				</div>
 
 				<div className="flex justify-end align-center gap-4 px-8">
-					{userRoleId === '3' && (
+					{userRoleId == '3' && (
 						<p className="hidden tablet:block desktop:block text-tw-white m-auto font-bold">
 							Đã hoàn thành: {completedPercent?.toFixed(2)}%
 						</p>
@@ -102,7 +102,7 @@ const VideoCourseDetail = () => {
 					</button>
 				</div>
 			</header>
-			{/* Lesson & Section & Tab */}
+
 			<WrapLesson
 				section={section}
 				lessonSelected={lessonSelected}

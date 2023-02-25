@@ -317,22 +317,22 @@ export const AdminChildMenu = [
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/course/video-course',
-				Route: '/course/video-course',
-				Text: 'Khóa học',
+				Key: '/course/videos',
+				Route: '/course/videos',
+				Text: 'Danh sách khoá học',
 				Icon: ''
 			},
 			{
 				ItemType: 'single',
-				Key: '/course/video-course-student',
-				Route: '/course/video-course-student',
+				Key: '/course/videos-student',
+				Route: '/course/videos-student',
 				Text: 'Danh sách chứng chỉ',
 				Icon: ''
 			},
 			{
 				ItemType: 'single',
-				Key: '/course/video-course-order',
-				Route: '/course/video-course-order',
+				Key: '/course/videos-order',
+				Route: '/course/videos-order',
 				Text: 'Danh sách đơn hàng',
 				Icon: ''
 			}

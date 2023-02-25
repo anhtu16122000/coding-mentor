@@ -56,7 +56,9 @@ const ExpandedRowAppointment = (props) => {
 				</tr>
 				<tr className="last-row">
 					<td>
-						<span className="font-semibold">Ghi chú:</span> {rowData?.Note}
+						<div className="max-w-[500px]">
+							<div className="font-semibold">Ghi chú:</div> {rowData?.Note}
+						</div>
 					</td>
 				</tr>
 			</table>

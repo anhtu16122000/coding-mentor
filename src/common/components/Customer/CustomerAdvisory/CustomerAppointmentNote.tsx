@@ -35,10 +35,10 @@ const CustomerAppointmentNote = (props) => {
 
 	const columns = [
 		{
-			width: 550,
+			width: 300,
 			title: 'Ghi chú',
 			dataIndex: 'Note',
-			render: (text) => <p>{ReactHtmlParser(text)}</p>
+			render: (text) => <div className="max-w-[300px]">{ReactHtmlParser(text)}</div>
 		},
 		{
 			title: 'Tạo ngày',

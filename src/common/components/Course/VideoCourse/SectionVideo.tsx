@@ -136,6 +136,7 @@ const SectionVideo = (props) => {
 												) : (
 													<div className="flex justify-center items-center">
 														<IconButton
+															className="!mt-[6px]"
 															type="button"
 															icon="exchange"
 															color="yellow"

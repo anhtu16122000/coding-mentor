@@ -1,10 +1,7 @@
-import { Input, Modal } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { FaMoneyBill } from 'react-icons/fa'
-import { GiReceiveMoney } from 'react-icons/gi'
+import { Input } from 'antd'
+import React, { useEffect } from 'react'
 import RestApi from '~/api/RestApi'
 import { MainLayout } from '~/common'
-import { PrimaryTooltip } from '~/common/components'
 import PayForm from '~/common/components/Finance/Payment/pay'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
@@ -12,11 +9,10 @@ import { ShowNostis } from '~/common/utils'
 import { parseToMoney } from '~/common/utils/common'
 import BillDetails from '../../../common/components/Finance/BillDetails'
 import moment from 'moment'
-import PrimaryButton from '~/common/components/Primary/Button'
-import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
 import RefundForm from './Refund'
+import PaymentForm from '~/common/components/Finance/Payment/Create'
 
 const PaymentManagementPage = () => {
 	const [loading, setLoading] = React.useState(true)
@@ -134,6 +130,7 @@ const PaymentManagementPage = () => {
 			<Head>
 				<title>{appConfigs.appName} | Quản lý thanh toán</title>
 			</Head>
+
 			<ExpandTable
 				currentPage={filters.PageIndex}
 				totalPage={totalPage && totalPage}
@@ -153,6 +150,8 @@ const PaymentManagementPage = () => {
 							onSearch={(event) => setFilter({ ...filters, PageIndex: 1, Search: event })}
 							placeholder="Tìm kiếm"
 						/>
+
+						<PaymentForm onRefresh={getData} />
 					</div>
 				}
 				expandable={expandedRowRender}

@@ -9,6 +9,7 @@ import { RootState } from '~/store'
 import PreviewExercise from '../../Exercise/Preview'
 import ModalAddLesson from './ModalAddLesson'
 import ModalShowFile from './ModalShowFile'
+import PrimaryTooltip from '../../PrimaryTooltip'
 
 type IProps = {
 	item: any
@@ -32,6 +33,30 @@ const VideoLessionContent = (props: IProps) => {
 	const { isChangePositionLesson, onChangePosition, isLoading, onUpdateSection, onRemoveSection, onCompletedLesson } = props
 
 	const user = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return user?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
+
+	function isManager() {
+		return user?.RoleId == 4
+	}
+
+	function isStdent() {
+		return user?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return user?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return user?.RoleId == 7
+	}
 
 	const [visiblePreview, setVisiblePreview] = useState(false)
 
@@ -57,6 +82,10 @@ const VideoLessionContent = (props: IProps) => {
 		setOpenMenuCourse(false)
 	}
 
+	function isActive() {
+		return activeID == item.Id
+	}
+
 	return (
 		<>
 			{!!item?.ExamId && (
@@ -70,11 +99,10 @@ const VideoLessionContent = (props: IProps) => {
 			)}
 
 			<div
-				className={`grid grid-flow-col py-2 px-4 mb-2 hover:bg-tw-gray rounded  group ${
-					activeID == item.Id ? 'bg-[#d0d8e4]' : 'bg-tw-white'
-				} ${getDisable()}`}
+				// 1b73e8
+				className={`video-section-container group ${isActive() ? 'bg-[#d0d8e4]' : 'bg-[#fff]'} ${getDisable()}`}
 				onClick={() => {
-					if (user.RoleId == 1) {
+					if (isAdmin()) {
 						openPreview(item)
 					} else {
 						if (disabledAll ? disabledAll : index - 1 < 0 ? false : lesson[index - 1].isCompleted ? false : true) {
@@ -85,23 +113,17 @@ const VideoLessionContent = (props: IProps) => {
 					}
 				}}
 			>
-				<div
-					className={`grid-cols-3/4 flex align-center items-center justify-start gap-2 group-hover:text-tw-black ${
-						activeID == item.Id ? 'text-[#151515] font-bold' : 'text-tw-black'
-					}`}
-				>
-					<span className="my-auto">{item.Type == 1 ? <VscPlayCircle size={22} /> : <HiOutlineBookOpen size={20} />}</span>
-
-					<div>
-						<span className="my-auto select-none line-clamp-1">{item.Name}</span>
-
-						{item.Type == 1 && (
-							<span className="my-auto select-none text-[#7c7c7c] line-clamp-1 text-[12px] font-[500] !mt-[-3px]">{item.Minute} phút</span>
-						)}
+				<PrimaryTooltip className="flex-1" id={`pr-tip-${item.Id}`} place="top" content={item.Name}>
+					<div className={`video-section-body ${activeID == item.Id ? 'text-[#151515] font-bold' : 'text-tw-black'}`}>
+						<span className="my-auto">{item.Type == 1 ? <VscPlayCircle size={22} /> : <HiOutlineBookOpen size={20} />}</span>
+						<div className="flex-1 ml-[8px]">
+							<span className="video-section-title">{item.Name}</span>
+							{item.Type == 1 && <span className="video-section-time">{item.Minute} phút</span>}
+						</div>
 					</div>
-				</div>
+				</PrimaryTooltip>
 
-				<div className="grid-cols-1/4 flex justify-end align-center">
+				<div className="flex justify-end align-center">
 					{user?.RoleId == 1 && (
 						<>
 							{isChangePositionLesson ? (

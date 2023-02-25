@@ -26,6 +26,7 @@ import PrimaryButton from '../Primary/Button'
 import * as yup from 'yup'
 import { formRequired } from '~/common/libs/others/form'
 import { setRoom } from '~/store/classReducer'
+import { removeCommas } from '~/common/utils/super-functions'
 
 const dayOfWeek = [
 	{
@@ -59,6 +60,7 @@ const dayOfWeek = [
 ]
 
 const { Option } = Select
+
 const CreateClassForm = (props) => {
 	const { isOnline, onSubmit, refPopoverWrapperBtn } = props
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -225,7 +227,7 @@ const CreateClassForm = (props) => {
 		})
 		setListDisabledTimeFrames((prev) => [
 			...listDisabledTimeFrames,
-			{ Id: prev[prev.length - 1].Id + 1, DayOfWeek: null, StudyTimeId: null }
+			{ Id: prev[prev.length - 1]?.Id + 1, DayOfWeek: null, StudyTimeId: null }
 		])
 	}
 	const handleRemoveListTimeFrame = (Id) => {
@@ -305,16 +307,15 @@ const CreateClassForm = (props) => {
 	const handleSubmit = async (data) => {
 		setIsLoading(true)
 		const convertListTimeFrame = listTimeFrames.map((timeFrame) => {
-			return {
-				DayOfWeek: timeFrame.DayOfWeek,
-				StudyTimeId: timeFrame.StudyTimeId
-			}
+			return { DayOfWeek: timeFrame.DayOfWeek, StudyTimeId: timeFrame.StudyTimeId }
 		})
+
 		const getBranchNameById = branch.find((item) => item.value === data.BranchId)
 		const getCurriculumNameById = curriculum.find((item) => item.value === data.CurriculumId)
 		const getProgramNameById = program.find((item) => item.value === data.ProgramId)
 		const getAcademicNameById = academic.find((item) => item.value === data.AcademicId)
 		const getRoomNameById = room.find((item) => item.value === data.RoomId)
+
 		let DATA_LESSON_WHEN_CREATE = {
 			CurriculumId: data.CurriculumId,
 			CurriculumName: getCurriculumNameById?.title,
@@ -330,22 +331,23 @@ const CreateClassForm = (props) => {
 			Name: data.Name,
 			Thumbnail: data.Thumbnail,
 			GradeId: data.GradeId,
-			Price: typeof data.Price == 'number' ? Intl.NumberFormat('ja-JP').format(data.Price) : data.Price,
+			Price: removeCommas(data.Price),
 			AcademicId: data.AcademicId,
 			AcademicName: getAcademicNameById?.title,
-			TeachingFee: data.TeachingFee,
+			TeachingFee: removeCommas(data.TeachingFee),
 			MaxQuantity: data.MaxQuantity || 20,
 			Type: isOnline ? 2 : 1
 		}
+
 		try {
 			const res = await onSubmit(DATA_LESSON_WHEN_CREATE)
-			if (res.status === 200) {
+			if (res.status == 200) {
 				setIsModalOpen(false)
 				setListTimeFrames([{ Id: 1, DayOfWeek: null, StudyTimeId: null }])
 			}
 		} catch (err) {
 		} finally {
-			form.resetFields()
+			// form.resetFields()
 			setIsLoading(false)
 		}
 	}
@@ -370,6 +372,10 @@ const CreateClassForm = (props) => {
 			getAllTeacherByBranchAndProgram(form.getFieldValue('BranchId'), form.getFieldValue('ProgramId'))
 		}
 	}, [form.getFieldValue('BranchId'), form.getFieldValue('ProgramId')])
+
+	const listCalendar = useSelector((state: RootState) => state.class.listCalendar)
+
+	console.log('--- listCalendar: ', listCalendar)
 
 	return (
 		<>
@@ -402,11 +408,10 @@ const CreateClassForm = (props) => {
 							<UploadImageField form={form} label="Ảnh đại diện lớp học" name="Thumbnail" />
 						</div>
 
-						{!isOnline && (
-							<div className="col-md-6 col-12">
-								<InputTextField isRequired rules={[yupSync]} label="Tên lớp học" name="Name" placeholder="Nhập tên lớp học" />
-							</div>
-						)}
+						<div className="col-md-6 col-12">
+							<InputTextField isRequired rules={[yupSync]} label="Tên lớp học" name="Name" placeholder="Nhập tên lớp học" />
+						</div>
+
 						<div className={`${isOnline ? 'col-md-6 col-12' : 'col-md-6 col-12'}`}>
 							<SelectField
 								isRequired
@@ -441,17 +446,19 @@ const CreateClassForm = (props) => {
 								/>
 							</div>
 						)}
+
 						<div className="col-md-6 col-12">
 							<SelectField
 								isRequired
 								rules={[yupSync]}
-								placeholder="Chọn khóa học"
-								label="Khóa học"
+								placeholder="Chọn chương trình"
+								label="Chương trình"
 								name="ProgramId"
 								optionList={program}
 								onChangeSelect={(value) => handleSelectChange('ProgramId', value)}
 							/>
 						</div>
+
 						<div className="col-md-6 col-12">
 							<SelectField
 								isRequired
@@ -566,11 +573,6 @@ const CreateClassForm = (props) => {
 								optionList={teacher}
 							/>
 						</div>
-						{!!isOnline && (
-							<div className="col-12">
-								<InputTextField isRequired rules={[yupSync]} label="Tên lớp học" name="Name" placeholder="Nhập tên lớp học" />
-							</div>
-						)}
 					</div>
 				</Form>
 			</Modal>

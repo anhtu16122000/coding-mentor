@@ -75,7 +75,7 @@ ShowNoti('error', 'Bạn đã bị đuổi')
 
 ```tsx
 router.push({
-	pathname: '/course/video-course/detail/[slug]',
+	pathname: '/course/videos/detail/[slug]',
 	query: { slug: Id }
 })
 ```
@@ -84,7 +84,7 @@ router.push({
 
 ```javascript
 router.push({
-	pathname: '/course/video-course/detail',
+	pathname: '/course/videos/detail',
 	query: { slug: Id }
 })
 ```

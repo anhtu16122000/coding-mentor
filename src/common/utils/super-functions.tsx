@@ -201,5 +201,5 @@ export function getRoleName(params: string) {
  * removed.
  */
 export function removeCommas(str) {
-	return typeof str == 'string' ? str.replace(/,/g, '') : str
+	return typeof str == 'string' ? parseInt(str.replace(/,/g, '')) : str
 }

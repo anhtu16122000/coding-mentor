@@ -1,24 +1,3 @@
-// .video_course-item {
-// 	.video_course-img {
-// 		transition: all 0.5s;
-
-// 		&:hover {
-//             .video_course-overlay {
-//                 opacity: 0.3;
-//                 z-index: 3;
-// 			}
-// 		}
-//         .video-course-overlay {
-//             transition: all 0.5s;
-//             opacity: 0;
-//             z-index: -1;
-//         }
-// 	}
-// }
-
-// .black-candal {
-//     opacity: 0;
-// }
 .collapse-wrap-admin {
 	& .ant-collapse-header-text {
 		width: 65%;
@@ -46,5 +25,46 @@
 .collapse-wrap {
 	& .ant-collapse-header-text {
 		width: 100%;
+	}
+}
+
+.video-item-container {
+	@apply m-[8px] rounded-xl bg-[#fff] hover:drop-shadow-lg duration-300 shadow-md;
+}
+
+.video-status-tag {
+	@apply absolute top-0 left-0 text-[#fff] px-[8px] py-[4px] rounded-tl-xl rounded-br-xl z-20;
+}
+
+.videos-thumnail {
+	@apply object-cover w-full h-56 rounded-xl rounded-br-none rounded-bl-none duration-300;
+}
+
+.video-section-container {
+	@apply flex items-center py-[8px] px-[8px] mb-2 hover:bg-tw-gray rounded;
+}
+
+.video-course-section {
+	.ant-collapse-header {
+		padding: 8px 32px 13px 8px !important;
+	}
+}
+
+.video-section-body {
+	@apply flex flex-1 items-center justify-start ml-[8px] group-hover:text-[#000];
+}
+
+.video-section-title {
+	@apply my-auto select-none in-1-line w-full;
+}
+
+.video-section-time {
+	@apply my-auto select-none text-[#7c7c7c] line-clamp-1 text-[12px] font-[500] mt-[-3px];
+}
+
+.ant-collapse-expand-icon {
+	.ant-collapse-arrow {
+		height: 13px !important;
+		right: 8px !important;
 	}
 }

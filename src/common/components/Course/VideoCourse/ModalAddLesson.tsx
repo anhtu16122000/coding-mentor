@@ -46,10 +46,62 @@ const ModalAddLesson = (props: Props) => {
 		setVisibleModalLesson(false)
 	}
 
+	/**
+	 * It takes a string and returns a string
+	 * @param url - The URL of the YouTube video.
+	 * @returns The video ID of the youtube video.
+	 */
+	function getYoutubeLink(url) {
+		if (typeof url !== 'string') return ''
+
+		const theLinkYTB = 'https://www.youtube.com/embed/'
+
+		if (url.indexOf('youtube.com/watch') !== -1) {
+			const match = url.match(/[?&]v=([^&]+)/)
+			if (match) {
+				return theLinkYTB + match[1]
+			}
+		}
+
+		if (url.includes('https://youtu.be')) {
+			const match = url.match(/youtu\.be\/([^\?]+)/)
+			if (match) {
+				return theLinkYTB + match[1]
+			}
+		}
+
+		if (url.includes('<iframe') && url.includes('youtube.com')) {
+			const div = document.createElement('div')
+			div.innerHTML = url
+			const iframe = div.querySelector('iframe')
+			const src = iframe.getAttribute('src')
+			const match = src.match(/\/embed\/([^\?]+)/)
+			if (match) {
+				return theLinkYTB + match[1]
+			}
+		}
+
+		if (url.includes('youtube.com/embed')) {
+			const videoId = url.split('/').pop()
+			const index = videoId.indexOf('?')
+			if (index !== -1) {
+				return videoId.substring(0, index)
+			}
+			return theLinkYTB + videoId
+		}
+
+		return theLinkYTB + url
+	}
+
 	const onFinish = (data) => {
+		const SUBMIT_DATA = { ...data, VideoUrl: getYoutubeLink(data.VideoUrl) }
+
+		console.log('--- SUBMIT_DATA: ', SUBMIT_DATA)
+
+		/* A conditional statement. */
 		if (mode == 'add') {
 			if (onSubmit) {
-				onSubmit({ ...data, FileType: typeUrl == 2 ? 'LinkYoutube' : 'FileUpload', Type: type }).then((res) => {
+				onSubmit({ ...SUBMIT_DATA, FileType: typeUrl == 2 ? 'LinkYoutube' : 'FileUpload', Type: type }).then((res) => {
 					if (res) {
 						onCloseModal()
 						form.resetFields()
@@ -59,7 +111,7 @@ const ModalAddLesson = (props: Props) => {
 		} else {
 			if (onSubmit) {
 				if (onSubmit) {
-					onSubmit({ ...data, Id: item.Id, FileType: typeUrl == 2 ? 'LinkYoutube' : 'FileUpload', Type: type }).then((res) => {
+					onSubmit({ ...SUBMIT_DATA, Id: item.Id, FileType: typeUrl == 2 ? 'LinkYoutube' : 'FileUpload', Type: type }).then((res) => {
 						onCloseModal()
 						form.resetFields()
 					})
@@ -150,7 +202,8 @@ const ModalAddLesson = (props: Props) => {
 								<div className="grid-cols-1">
 									<InputText name="Name" label="Bài học" placeholder="Nhập tên bài học" />
 								</div>
-								<div className="grid-cols-1">
+
+								{/* <div className="grid-cols-1">
 									<SelectField
 										onChangeSelect={(value) => setType(value)}
 										name="Type"
@@ -158,7 +211,7 @@ const ModalAddLesson = (props: Props) => {
 										label="Loại"
 										placeholder="Chọn loại bài học"
 									/>
-								</div>
+								</div> */}
 
 								{type == 1 ? (
 									<>
@@ -168,18 +221,12 @@ const ModalAddLesson = (props: Props) => {
 										</Radio.Group>
 
 										{typeUrl == 1 ? (
-											<div className="grid-cols-1">
-												<UploadFileField
-													name="VideoUrl"
-													label="Tải lên video"
-													form={form}
-													buttonText="Bấm để tải lên video"
-													onChangeFile={onChangeFile}
-												/>
+											<div className="grid-cols-1 mt-[8px]">
+												<UploadFileField name="VideoUrl" label="" form={form} buttonText="Tải video lên" onChangeFile={onChangeFile} />
 											</div>
 										) : (
-											<div className="grid-cols-1">
-												<InputText name="VideoUrl" label="Đường dẫn video" placeholder="Nhập đường dẫn video" />
+											<div className="grid-cols-1 mt-[8px]">
+												<InputText name="VideoUrl" label="" placeholder="Nhập đường dẫn video" />
 											</div>
 										)}
 									</>

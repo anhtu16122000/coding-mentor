@@ -1,4 +1,4 @@
-import { Tabs } from 'antd'
+import { Card, Empty, Tabs } from 'antd'
 import React, { useState } from 'react'
 import { RiExchangeLine } from 'react-icons/ri'
 import { useSelector } from 'react-redux'
@@ -10,68 +10,84 @@ import QuestionInCourse from './Tabs/QuestionInCourse'
 import ReviewVideoCourse from './Tabs/ReviewVideoCourse'
 import StudentListInCourse from './Tabs/StudentListInCourse'
 
+const { TabPane } = Tabs
+
 const WrapLesson = (props) => {
-	const {
-		lessonSelected,
-		setLessonSelected,
-		section,
-		getSection,
-		completedPercent,
-		courseID,
-		getCourseDetail,
-		openMenuCourse,
-		setOpenMenuCourse,
-		courseDetail
-	} = props
+	const { lessonSelected, setLessonSelected, section, getSection, completedPercent, courseID } = props
+	const { getCourseDetail, openMenuCourse, setOpenMenuCourse, courseDetail } = props
+
 	const user = useSelector((state: RootState) => state.user.information)
+
 	const [onReloadReviewTab, setOnReloadReviewTab] = useState(0)
 	const [isChangePositionSection, setIsChangePositionSection] = useState(false)
-	const { TabPane } = Tabs
+
+	function isAdmin() {
+		return user?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
+
+	function isManager() {
+		return user?.RoleId == 4
+	}
+
+	function isStdent() {
+		return user?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return user?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return user?.RoleId == 7
+	}
+
 	return (
 		<div className={`relative antd-custom-wrap flex justify-start align-center h-[calc(100vh_-_56px)] overflow-y-auto`}>
-			{/* content */}
 			<div className="desktop:w-3/4 w-full h-[calc(100vh_-_56px)] overflow-y-auto scrollbar">
-				{!lessonSelected ? (
-					<>
-						<div className="w-full">
-							<img className="w-full aspect-video" src={'/images/empty-course-full-size.jpg'} />
-							<div className="smartphone:m-3 tablet:m-6 desktop:m-12">
-								<Tabs
-									type="card"
-									onChange={(data) => {
-										data == '5' && setOnReloadReviewTab(onReloadReviewTab + 1)
-									}}
-								>
-									<TabPane tab="Giới thiệu" key="1">
-										<VideoCourseDescription
-											courseDetail={courseDetail}
-											User={user}
-											onFetchData={() => {
-												getCourseDetail()
-											}}
-										/>
-									</TabPane>
-									<TabPane tab="Hỏi đáp" key="2">
-										<QuestionInCourse videoCourseID={Number(courseID)} />
-									</TabPane>
-									<TabPane tab="Thông báo" key="3">
-										<NotificationInVideoCourse videoCourseID={Number(courseID)} />
-									</TabPane>
-									{(user?.RoleId == '1' || user?.RoleId == '2') && (
-										<TabPane tab="Học viên" key="4">
-											<StudentListInCourse videoCourseID={Number(courseID)} />
-										</TabPane>
-									)}
-									<TabPane tab="Đánh giá" key="5">
-										<ReviewVideoCourse videoCourseID={Number(courseID)} onReloadReviewTab={onReloadReviewTab} />
-									</TabPane>
-								</Tabs>
-							</div>
-						</div>
-					</>
-				) : lessonSelected?.Type == 1 ? (
+				{!lessonSelected && (
 					<div className="w-full">
-						{lessonSelected.VideoUrl?.length > 0 ? (
+						<Card className="m-[16px]">
+							<div className="w-full h-[300px] all-center">
+								<Empty />
+							</div>
+						</Card>
+
+						<div className="smartphone:m-3 tablet:m-6 desktop:m-12">
+							<Tabs
+								type="card"
+								onChange={(data) => {
+									data == '5' && setOnReloadReviewTab(onReloadReviewTab + 1)
+								}}
+							>
+								<TabPane tab="Giới thiệu" key="1">
+									<VideoCourseDescription courseDetail={courseDetail} User={user} onFetchData={() => getCourseDetail()} />
+								</TabPane>
+								<TabPane tab="Hỏi đáp" key="2">
+									<QuestionInCourse videoCourseID={Number(courseID)} />
+								</TabPane>
+								<TabPane tab="Thông báo" key="3">
+									<NotificationInVideoCourse videoCourseID={Number(courseID)} />
+								</TabPane>
+								{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
+									<TabPane tab="Học viên" key="4">
+										<StudentListInCourse videoCourseID={Number(courseID)} />
+									</TabPane>
+								)}
+								<TabPane tab="Đánh giá" key="5">
+									<ReviewVideoCourse videoCourseID={Number(courseID)} onReloadReviewTab={onReloadReviewTab} />
+								</TabPane>
+							</Tabs>
+						</div>
+					</div>
+				)}
+
+				{!!lessonSelected && lessonSelected?.Type == 1 && (
+					<div className="w-full">
+						{lessonSelected.VideoUrl?.length > 0 && (
 							<iframe
 								className="w-full aspect-video"
 								src={lessonSelected.VideoUrl}
@@ -80,9 +96,16 @@ const WrapLesson = (props) => {
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 								allowFullScreen
 							/>
-						) : (
-							<img className="w-full aspect-video" src={'/images/empty-course-full-size.jpg'} />
 						)}
+
+						{lessonSelected.VideoUrl?.length == 0 && (
+							<Card className="m-[16px]">
+								<div className="w-full h-[300px] all-center">
+									<Empty />
+								</div>
+							</Card>
+						)}
+
 						<div className="smartphone:m-3 tablet:m-6 desktop:m-12 pt-6 text-2xl font-bold in-1-line">{lessonSelected.Name}</div>
 						<div className="smartphone:m-3 tablet:m-6 desktop:m-12 pt-0">
 							<Tabs
@@ -92,13 +115,7 @@ const WrapLesson = (props) => {
 								}}
 							>
 								<TabPane tab="Giới thiệu" key="1">
-									<VideoCourseDescription
-										courseDetail={courseDetail}
-										User={user}
-										onFetchData={() => {
-											getCourseDetail()
-										}}
-									/>
+									<VideoCourseDescription courseDetail={courseDetail} User={user} onFetchData={getCourseDetail} />
 								</TabPane>
 								<TabPane tab="Hỏi đáp" key="2">
 									<QuestionInCourse videoCourseID={Number(courseID)} />
@@ -117,11 +134,9 @@ const WrapLesson = (props) => {
 							</Tabs>
 						</div>
 					</div>
-				) : (
-					<></>
 				)}
 			</div>
-			{/* section */}
+
 			<div
 				className={`desktop:w-1/4 transition-all h-[calc(100vh_-_56px)] overflow-y-auto border-x border-tw-gray bg-tw-white ${
 					openMenuCourse
@@ -131,10 +146,11 @@ const WrapLesson = (props) => {
 			>
 				<div className="h-16 bg-tw-white flex justify-between align-center">
 					<p className="desktop:pt-0 text-base my-auto px-4 font-bold">Nội dung khóa học</p>
-					{user?.RoleId === '3' && (
+					{user?.RoleId == '3' && (
 						<p className="tablet:hidden my-auto px-4 text-base font-bold text-[#ab1d38]">{completedPercent?.toFixed(2)}%</p>
 					)}
-					{user?.RoleId === '1' && (
+
+					{user?.RoleId == '1' && (
 						<button
 							onClick={() => setIsChangePositionSection(!isChangePositionSection)}
 							className="w-fit my-4 pr-4 flex items-center justify-center"

@@ -8,6 +8,7 @@ import ReactHtmlParser from 'react-html-parser'
 import { GiRoundStar } from 'react-icons/gi'
 import { StudentListInCourseApi } from '~/api/course/video-course/student-list-in-video-course'
 import TextArea from 'antd/lib/input/TextArea'
+import PrimaryEditor from '~/common/components/Editor'
 
 type Props = {
 	courseDetail: IVideoCourse
@@ -89,22 +90,12 @@ const VideoCourseDescription = (props: Props) => {
 							className="h-full w-full rounded-xl "
 							rows={5}
 							placeholder="Nhận xét của bạn"
-							onChange={(event) => {
-								setReviewContent({ ...reviewContent, review: event.target.value })
-							}}
+							onChange={(event) => setReviewContent({ ...reviewContent, review: event.target.value })}
 						/>
 					</div>
 
 					<div className="col-span-1 flex item-center justify-center">
-						<PrimaryButton
-							background="blue"
-							type="button"
-							children={<span>Lưu</span>}
-							icon="save"
-							onClick={() => {
-								onPostReview()
-							}}
-						/>
+						<PrimaryButton background="blue" type="button" children={<span>Lưu</span>} icon="save" onClick={() => onPostReview()} />
 					</div>
 				</div>
 			</Modal>
@@ -113,18 +104,16 @@ const VideoCourseDescription = (props: Props) => {
 				<Form layout="vertical" form={form} onFinish={onFinish}>
 					<div>
 						<div>
-							<EditorField
-								name="Description"
-								onChangeEditor={onChangeEditor}
-								placeholder="Nhập giới thiệu khóa học"
-								initialValue={courseDetail?.Description}
-								disableButton={(status) => {
-									setIsLoading({ type: 'SUBMIT_VIDEO', status: status })
-								}}
-							/>
+							<Form.Item className="col-span-4 mb-0" label="Nội dung" name="Description">
+								<PrimaryEditor
+									id={`content-${new Date().getTime()}`}
+									height={210}
+									initialValue={courseDetail?.Description || ''}
+									onChange={(event) => form.setFieldValue('Description', event)}
+								/>
+							</Form.Item>
 						</div>
-
-						<div className="flex justify-center">
+						<div className="flex justify-center mt-[16px]">
 							<PrimaryButton
 								disable={isLoading.type == 'SUBMIT_VIDEO' && isLoading.status}
 								loading={isLoading.type == 'SUBMIT_VIDEO' && isLoading.status}
