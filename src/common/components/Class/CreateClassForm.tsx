@@ -76,8 +76,12 @@ const CreateClassForm = (props) => {
 	const [listDisabledTimeFrames, setListDisabledTimeFrames] = useState([])
 	const state = useSelector((state: RootState) => state)
 	const room = useSelector((state: RootState) => state.class.room)
+	const user = useSelector((state: RootState) => state.user.information)
 	const dispatch = useDispatch()
 	const [form] = Form.useForm()
+	function isAcademic() {
+		return user?.RoleId == 7
+	}
 	let schema = yup.object().shape({
 		BranchId: yup.string().required('Bạn không được để trống'),
 		Name: yup.string().required('Bạn không được để trống'),
@@ -272,6 +276,12 @@ const CreateClassForm = (props) => {
 	const handleSelectChange = async (name, value) => {
 		if (name === 'GradeId') {
 			getAllProgramByGrade(value)
+			if (form.getFieldValue('ProgramId')) {
+				form.setFieldValue('ProgramId', null)
+			}
+			if (form.getFieldValue('CurriculumId')) {
+				form.setFieldValue('CurriculumId', null)
+			}
 		}
 		if (name === 'ProgramId') {
 			const findProgramByID = programs.find((item) => {
@@ -305,7 +315,6 @@ const CreateClassForm = (props) => {
 		return !!checkExist
 	}
 	const handleSubmit = async (data) => {
-		setIsLoading(true)
 		const convertListTimeFrame = listTimeFrames.map((timeFrame) => {
 			return { DayOfWeek: timeFrame.DayOfWeek, StudyTimeId: timeFrame.StudyTimeId }
 		})
@@ -313,7 +322,9 @@ const CreateClassForm = (props) => {
 		const getBranchNameById = branch.find((item) => item.value === data.BranchId)
 		const getCurriculumNameById = curriculum.find((item) => item.value === data.CurriculumId)
 		const getProgramNameById = program.find((item) => item.value === data.ProgramId)
-		const getAcademicNameById = academic.find((item) => item.value === data.AcademicId)
+		const getAcademicNameById = academic.find((item) =>
+			isAcademic() ? item.value === Number(user.UserInformationId) : item.value === data.AcademicId
+		)
 		const getRoomNameById = room.find((item) => item.value === data.RoomId)
 
 		let DATA_LESSON_WHEN_CREATE = {
@@ -332,7 +343,7 @@ const CreateClassForm = (props) => {
 			Thumbnail: data.Thumbnail,
 			GradeId: data.GradeId,
 			Price: removeCommas(data.Price),
-			AcademicId: data.AcademicId,
+			AcademicId: isAcademic() ? Number(user.UserInformationId) : data.AcademicId,
 			AcademicName: getAcademicNameById?.title,
 			TeachingFee: removeCommas(data.TeachingFee),
 			MaxQuantity: data.MaxQuantity || 20,
@@ -340,6 +351,7 @@ const CreateClassForm = (props) => {
 		}
 
 		try {
+			setIsLoading(true)
 			const res = await onSubmit(DATA_LESSON_WHEN_CREATE)
 			if (res.status == 200) {
 				setIsModalOpen(false)
@@ -560,9 +572,20 @@ const CreateClassForm = (props) => {
 								name="MaxQuantity"
 							/>
 						</div>
-						<div className="col-md-6 col-12">
-							<SelectField isRequired rules={[yupSync]} placeholder="Chọn học vụ" label="Học vụ" name="AcademicId" optionList={academic} />
-						</div>
+						{!isAcademic() ? (
+							<div className="col-md-6 col-12">
+								<SelectField
+									isRequired
+									rules={[yupSync]}
+									placeholder="Chọn học vụ"
+									label="Học vụ"
+									name="AcademicId"
+									optionList={academic}
+								/>
+							</div>
+						) : (
+							''
+						)}
 						<div className="col-md-6 col-12">
 							<SelectField
 								isRequired

@@ -35,8 +35,18 @@ const itemsAdmin = [
 	'Thông báo'
 ]
 
-const itemsStudent = ['Lịch học']
-const itemsTeacher = ['Lịch học']
+const itemsStudent = ['Lịch học', 'Phản hồi buổi học']
+const itemsTeacher = [
+	'Lịch học',
+	'Học viên',
+	'Các buổi học',
+	'Tài liệu',
+	'Điểm danh',
+	'Bảng điểm',
+	'Điểm danh giáo viên',
+	'Phản hồi buổi học',
+	'Thông báo'
+]
 
 const MenuClass = () => {
 	const user = useSelector((state: RootState) => state.user.information)
@@ -130,7 +140,7 @@ const MenuClass = () => {
 			case 0:
 				return <CalenderClassStudent />
 			case 1:
-				return <ListStudentInClass />
+				return <LessonFeedbackPage />
 			case 2:
 				return <DocumentsPageInClass />
 			default:
@@ -148,7 +158,7 @@ const MenuClass = () => {
 			case 1:
 				return (
 					<div className="label-tab">
-						<RiContactsBook2Line className="mr-3" /> <span>{item}</span>
+						<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 2:
@@ -167,11 +177,25 @@ const MenuClass = () => {
 	const getChildrenClassTeacher = (index) => {
 		switch (index) {
 			case 0:
-				return <CalenderClassTeacher />
+				return <CalendarClassEdit />
+			case 1:
+				return <ListStudentInClass />
 			case 2:
+				return <ScheduleList />
+			case 3:
 				return <DocumentsPageInClass />
+			case 4:
+				return <RollUpPage />
+			case 5:
+				return <TranscriptPage />
+			case 6:
+				return <RollUpTeacherPage />
+			case 7:
+				return <LessonFeedbackPage />
+			case 8:
+				return <NotificationInClassPage />
 			default:
-				return <CalenderClassTeacher />
+				return <CalendarClassEdit />
 		}
 	}
 	const getLabelClassTeacher = (item, index) => {
@@ -179,24 +203,64 @@ const MenuClass = () => {
 			case 0:
 				return (
 					<div className="label-tab">
-						<AiOutlineCalendar className="mr-3" /> <span>{item}</span>
+						<AiOutlineCalendar className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 1:
 				return (
 					<div className="label-tab">
-						<VscFolderLibrary className="mr-3" size={20} /> <span>{item}</span>
+						<RiContactsBook2Line className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 2:
-				return <div className="label-tab">{item}</div>
+				return (
+					<div className="label-tab">
+						<BsCalendar2Week className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 3:
+				return (
+					<div className="label-tab">
+						<VscFolderLibrary className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 4:
+				return (
+					<div className="label-tab">
+						<RiQuillPenLine className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 5:
+				return (
+					<div className="label-tab">
+						<CgTranscript className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 6:
+				return (
+					<div className="label-tab">
+						<FiUserCheck className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 7:
+				return (
+					<div className="label-tab">
+						<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 8:
+				return (
+					<div className="label-tab">
+						<IoNotificationsOutline className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
 			default:
 				return 'Lịch học'
 		}
 	}
 	return (
 		<>
-			{user.RoleId == 1 || user.RoleId == 4 ? (
+			{user.RoleId == 1 || user.RoleId == 4 || user.RoleId == 5 || user.RoleId == 6 || user.RoleId == 7 || user.RoleId == 8 ? (
 				<Tabs
 					defaultActiveKey="0"
 					tabPosition="left"

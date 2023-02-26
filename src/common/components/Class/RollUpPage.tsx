@@ -2,10 +2,12 @@ import { Form, Input, Select } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { rollUpApi } from '~/api/rollup'
 import { scheduleApi } from '~/api/schedule'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
+import { RootState } from '~/store'
 import InputTextField from '../FormControl/InputTextField'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
@@ -13,6 +15,7 @@ import PrimaryTable from '../Primary/Table'
 
 export const RollUpPage = () => {
 	const router = useRouter()
+	const user = useSelector((state: RootState) => state.user.information)
 	const [loading, setLoading] = useState(false)
 	const initParameters = { classId: router.query.class, scheduleId: null, pageIndex: 1, pageSize: PAGE_SIZE }
 	const initParametersSchedule = { classId: router.query.class }
@@ -144,6 +147,7 @@ export const RollUpPage = () => {
 							{ value: 5, label: 'Về sớm' },
 							{ value: 6, label: 'Nghĩ lễ' }
 						]}
+						disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
 						value={item?.Status}
 					/>
 				</div>
@@ -168,6 +172,7 @@ export const RollUpPage = () => {
 							{ value: 7, label: 'Không cố gắng' },
 							{ value: 8, label: 'Không nhận xét' }
 						]}
+						disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
 						value={item?.LearningStatus}
 					/>
 				</div>
@@ -179,7 +184,14 @@ export const RollUpPage = () => {
 			dataIndex: 'Note',
 			render: (text, item, index) => (
 				<div className="antd-custom-wrap">
-					<InputTextField onChange={(val) => handleChangeNote(val, index)} value={text} className="rounded-lg mb-0" name="" label="" />
+					<InputTextField
+						disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+						onChange={(val) => handleChangeNote(val, index)}
+						value={text}
+						className="rounded-lg mb-0"
+						name=""
+						label=""
+					/>
 				</div>
 			)
 		},
@@ -188,7 +200,13 @@ export const RollUpPage = () => {
 			width: 100,
 			dataIndex: 'Action',
 			render: (text, item, index) => (
-				<IconButton tooltip="Cập nhật" color="green" icon="save" type="button" onClick={() => handleChangeRollUp(item)} size={22} />
+				<>
+					{user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+						<IconButton tooltip="Cập nhật" color="green" icon="save" type="button" onClick={() => handleChangeRollUp(item)} size={22} />
+					) : (
+						''
+					)}
+				</>
 			)
 		}
 	]

@@ -3,13 +3,16 @@ import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { FcClock } from 'react-icons/fc'
+import { useSelector } from 'react-redux'
 import { timeLineApi } from '~/api/timeline'
+import { RootState } from '~/store'
 import EmptyData from '../EmptyData'
 import IconButton from '../Primary/IconButton'
 import { ModalLessonFeedback } from './ModalLessonFeedback'
 
 export const LessonFeedbackPage = () => {
 	const router = useRouter()
+	const user = useSelector((state: RootState) => state.user.information)
 	const [loading, setLoading] = useState(false)
 	const initParameters = { classId: router.query.class }
 	const [apiParameters, setApiParameters] = useState(initParameters)
@@ -45,9 +48,15 @@ export const LessonFeedbackPage = () => {
 			<Card
 				title="Phản hồi buổi học"
 				extra={
-					<>
-						<ModalLessonFeedback mode="add" onRefresh={() => getTimeLine(apiParameters)} />
-					</>
+					user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+						false
+					) : true ? (
+						<>
+							<ModalLessonFeedback mode="add" onRefresh={() => getTimeLine(apiParameters)} />
+						</>
+					) : (
+						''
+					)
 				}
 			>
 				<Spin spinning={loading}>
@@ -60,7 +69,13 @@ export const LessonFeedbackPage = () => {
 										<p>
 											{item?.Note} - {item?.CreatedBy}
 										</p>
-										<ModalLessonFeedback mode="delete" dataRow={item} onRefresh={() => getTimeLine(apiParameters)} />
+										{user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+											false
+										) : true ? (
+											<ModalLessonFeedback mode="delete" dataRow={item} onRefresh={() => getTimeLine(apiParameters)} />
+										) : (
+											''
+										)}
 									</div>
 								</Timeline.Item>
 							))}

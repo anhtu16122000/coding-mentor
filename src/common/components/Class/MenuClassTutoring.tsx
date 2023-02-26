@@ -22,7 +22,7 @@ import { ScheduleList } from './ScheduleList'
 import { StudentAssessment } from './StudentAssessment'
 
 const itemsAdmin = ['Lịch học', 'Đánh giá học viên', 'Đánh giá giáo viên', 'Tài liệu', 'Thông báo', 'Phản hồi buổi học']
-const itemsStudent = ['Lịch học', 'Đánh giá giáo viên', 'Tài liệu', 'Thông báo']
+const itemsStudent = ['Lịch học', 'Đánh giá giáo viên', 'Tài liệu', 'Thông báo', 'Phản hồi buổi học']
 const itemsTeacher = ['Lịch học', 'Đánh giá học viên', 'Tài liệu', 'Thông báo', 'Phản hồi buổi học']
 const MenuClassTutoring = () => {
 	const user = useSelector((state: RootState) => state.user.information)
@@ -111,6 +111,8 @@ const MenuClassTutoring = () => {
 				return <DocumentsPageInClass />
 			case 3:
 				return <NotificationInClassPage />
+			case 4:
+				return <LessonFeedbackPage />
 			default:
 				return <CalendarClassEdit />
 		}
@@ -139,6 +141,12 @@ const MenuClassTutoring = () => {
 				return (
 					<div className="label-tab">
 						<IoNotificationsOutline className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 4:
+				return (
+					<div className="label-tab">
+						<CgTranscript className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 
@@ -216,7 +224,7 @@ const MenuClassTutoring = () => {
 	}
 	return (
 		<>
-			{user.RoleId == 1 ? (
+			{user.RoleId == 1 || user.RoleId == 4 || user.RoleId == 5 || user.RoleId == 6 || user.RoleId == 7 || user.RoleId == 8 ? (
 				<Tabs
 					defaultActiveKey="0"
 					tabPosition="left"

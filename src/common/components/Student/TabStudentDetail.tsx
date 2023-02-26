@@ -168,9 +168,9 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 								name="Gender"
 								label="Giới tính"
 								optionList={[
-									{ value: 0, title: 'Nữ' },
+									{ value: 0, title: 'Khác' },
 									{ value: 1, title: 'Nam' },
-									{ value: 2, title: 'Khác' }
+									{ value: 2, title: 'Nữ' }
 								]}
 							/>
 						</div>

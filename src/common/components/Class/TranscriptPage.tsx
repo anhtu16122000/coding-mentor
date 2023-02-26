@@ -1,9 +1,11 @@
 import { Input, Select } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { transcriptApi } from '~/api/transcript'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
+import { RootState } from '~/store'
 import InputTextField from '../FormControl/InputTextField'
 import PrimaryButton from '../Primary/Button'
 import PrimaryTable from '../Primary/Table'
@@ -11,6 +13,7 @@ import { ModalTranscript } from './ModalTranscript'
 
 export const TranscriptPage = () => {
 	const router = useRouter()
+	const user = useSelector((state: RootState) => state.user.information)
 	const [loading, setLoading] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [dataTable, setDataTable] = useState([])
@@ -142,7 +145,12 @@ export const TranscriptPage = () => {
 			dataIndex: 'Listening',
 			render: (text, item, index) => (
 				<div className="antd-custom-wrap">
-					<Input onChange={(val) => handleChangeListening(val, index)} value={item?.Listening} className="rounded-lg h-[36px]" />
+					<Input
+						disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+						onChange={(val) => handleChangeListening(val, index)}
+						value={item?.Listening}
+						className="rounded-lg h-[36px]"
+					/>
 				</div>
 			)
 		},
@@ -153,7 +161,12 @@ export const TranscriptPage = () => {
 			render: (text, item, index) => (
 				<>
 					<div className="antd-custom-wrap">
-						<Input onChange={(val) => handleChangeSpeaking(val, index)} value={item?.Speaking} className="rounded-lg h-[36px]" />
+						<Input
+							disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+							onChange={(val) => handleChangeSpeaking(val, index)}
+							value={item?.Speaking}
+							className="rounded-lg h-[36px]"
+						/>
 					</div>
 				</>
 			)
@@ -165,7 +178,12 @@ export const TranscriptPage = () => {
 			render: (text, item, index) => (
 				<>
 					<div className="antd-custom-wrap">
-						<Input onChange={(val) => handleChangeReading(val, index)} value={item?.Reading} className="rounded-lg h-[36px]" />
+						<Input
+							disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+							onChange={(val) => handleChangeReading(val, index)}
+							value={item?.Reading}
+							className="rounded-lg h-[36px]"
+						/>
 					</div>
 				</>
 			)
@@ -177,7 +195,12 @@ export const TranscriptPage = () => {
 			render: (text, item, index) => (
 				<>
 					<div className="antd-custom-wrap">
-						<Input onChange={(val) => handleChangeWriting(val, index)} value={item?.Writing} className="rounded-lg h-[36px]" />
+						<Input
+							disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+							onChange={(val) => handleChangeWriting(val, index)}
+							value={item?.Writing}
+							className="rounded-lg h-[36px]"
+						/>
 					</div>
 				</>
 			)
@@ -189,7 +212,12 @@ export const TranscriptPage = () => {
 			render: (text, item, index) => (
 				<>
 					<div className="antd-custom-wrap">
-						<Input onChange={(val) => handleChangeMedium(val, index)} value={item?.Medium} className="rounded-lg h-[36px]" />
+						<Input
+							disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+							onChange={(val) => handleChangeMedium(val, index)}
+							value={item?.Medium}
+							className="rounded-lg h-[36px]"
+						/>
 					</div>
 				</>
 			)
@@ -200,7 +228,14 @@ export const TranscriptPage = () => {
 			dataIndex: 'Note',
 			render: (text, item, index) => (
 				<>
-					<InputTextField onChange={(val) => handleChangeNote(val, index)} value={text} className="rounded-lg mb-0" name="" label="" />
+					<InputTextField
+						disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+						onChange={(val) => handleChangeNote(val, index)}
+						value={text}
+						className="rounded-lg mb-0"
+						name=""
+						label=""
+					/>
 				</>
 			)
 		}
@@ -210,9 +245,13 @@ export const TranscriptPage = () => {
 			<PrimaryTable
 				loading={loading}
 				TitleCard={
-					<div className="extra-table">
-						<ModalTranscript mode="add" onRefresh={() => getTranscriptByClass(router?.query?.class)} setTranscriptId={setTranscriptId} />
-					</div>
+					user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+						<div className="extra-table">
+							<ModalTranscript mode="add" onRefresh={() => getTranscriptByClass(router?.query?.class)} setTranscriptId={setTranscriptId} />
+						</div>
+					) : (
+						''
+					)
 				}
 				Extra={
 					<>
@@ -236,24 +275,32 @@ export const TranscriptPage = () => {
 										))}
 								</Select>
 							</div>
-							<div className="mr-tw-4">
-								<ModalTranscript
-									mode="delete"
-									Id={transcriptId}
-									onRefresh={() => getTranscriptByClass(router?.query?.class)}
-									setTranscriptId={setTranscriptId}
-								/>
-							</div>
+							{user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+								<div className="mr-tw-4">
+									<ModalTranscript
+										mode="delete"
+										Id={transcriptId}
+										onRefresh={() => getTranscriptByClass(router?.query?.class)}
+										setTranscriptId={setTranscriptId}
+									/>
+								</div>
+							) : (
+								''
+							)}
 
-							<PrimaryButton
-								background="green"
-								type="button"
-								children={<span>Cập nhật điểm</span>}
-								icon="save"
-								disable={disabled}
-								onClick={() => handleSave()}
-								loading={isLoading}
-							/>
+							{user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+								<PrimaryButton
+									background="green"
+									type="button"
+									children={<span>Cập nhật điểm</span>}
+									icon="save"
+									disable={disabled}
+									onClick={() => handleSave()}
+									loading={isLoading}
+								/>
+							) : (
+								''
+							)}
 						</div>
 					</>
 				}

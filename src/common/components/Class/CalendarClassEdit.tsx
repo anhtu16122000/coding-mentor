@@ -34,6 +34,7 @@ import { setBreadcrumb } from '~/store/globalState'
 
 const CalenderClassEdit = () => {
 	const router = useRouter()
+	const user = useSelector((state: RootState) => state.user.information)
 	const listCalendar = useSelector((state: RootState) => state.class.listCalendarEdit)
 	const isEditSchedule = useSelector((state: RootState) => state.class.isEditSchedule)
 	const paramsSchedule = useSelector((state: RootState) => state.class.paramsSchedule)
@@ -265,15 +266,21 @@ const CalenderClassEdit = () => {
 				className="card-calendar"
 				extra={
 					<>
-						<PrimaryButton background="yellow" type="button" icon="edit" onClick={() => dispatch(setIsEditSchedule(!isEditSchedule))}>
-							{isEditSchedule ? 'Hủy' : 'Chỉnh sửa'}
-						</PrimaryButton>
-						<ModalAddScheduleEdit
-							checkTeacherAvailable={checkTeacherAvailable}
-							checkRoomAvailable={checkRoomAvailable}
-							getListSchedule={getListSchedule}
-							paramsSchedule={paramsSchedule}
-						/>
+						{user.RoleId == 3 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+							<>
+								<PrimaryButton background="yellow" type="button" icon="edit" onClick={() => dispatch(setIsEditSchedule(!isEditSchedule))}>
+									{isEditSchedule ? 'Hủy' : 'Chỉnh sửa'}
+								</PrimaryButton>
+								<ModalAddScheduleEdit
+									checkTeacherAvailable={checkTeacherAvailable}
+									checkRoomAvailable={checkRoomAvailable}
+									getListSchedule={getListSchedule}
+									paramsSchedule={paramsSchedule}
+								/>
+							</>
+						) : (
+							''
+						)}
 					</>
 				}
 			>

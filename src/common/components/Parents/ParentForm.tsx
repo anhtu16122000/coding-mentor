@@ -35,7 +35,7 @@ interface listData {
 const optionGender = [
 	{
 		value: 0,
-		title: 'Nữ'
+		title: 'Khác'
 	},
 	{
 		value: 1,
@@ -43,7 +43,7 @@ const optionGender = [
 	},
 	{
 		value: 2,
-		title: 'Khác'
+		title: 'Nữ'
 	}
 ]
 

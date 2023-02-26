@@ -261,7 +261,8 @@ const CreateUser: FC<ICreateNew> = (props) => {
 						: values.BranchIds
 					: values.BranchIds.join(',')
 				: '',
-			ProgramIds: !values?.ProgramIds ? null : convertToString(values?.ProgramIds)
+			ProgramIds: !values?.ProgramIds ? null : convertToString(values?.ProgramIds),
+			SaleId: isSaler() ? Number(theInformation.UserInformationId) : values?.SaleId
 		}
 		console.log('DATA_SUBMIT: ', !isEdit ? DATA_SUBMIT : { ...DATA_SUBMIT, UserInformationId: defaultData.UserInformationId })
 
@@ -388,9 +389,9 @@ const CreateUser: FC<ICreateNew> = (props) => {
 							isRequired
 							rules={[yupSync]}
 							optionList={[
-								{ value: 0, title: 'Nữ' },
+								{ value: 0, title: 'Khác' },
 								{ value: 1, title: 'Nam' },
-								{ value: 2, title: 'Khác' }
+								{ value: 2, title: 'Nữ' }
 							]}
 						/>
 
@@ -507,13 +508,18 @@ const CreateUser: FC<ICreateNew> = (props) => {
 									optionList={learningNeed}
 									onChangeSelect={(value) => handleSelect('LearningNeedId', value)}
 								/>
-								<SelectField
-									className="col-span-2"
-									label="Tư vấn viên"
-									name="SaleId"
-									optionList={sale}
-									onChangeSelect={(value) => handleSelect('SaleId', value)}
-								/>
+								{!isSaler() ? (
+									<SelectField
+										className="col-span-2"
+										label="Tư vấn viên"
+										name="SaleId"
+										optionList={sale}
+										onChangeSelect={(value) => handleSelect('SaleId', value)}
+									/>
+								) : (
+									''
+								)}
+
 								<SelectField
 									className="col-span-2"
 									label="Mục đích học"
