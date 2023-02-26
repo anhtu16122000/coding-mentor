@@ -232,7 +232,7 @@ GroupHeader.UserItem = (props) => {
 
 			ShowNostis.success('Thành Công')
 		} catch (error) {
-			ShowNostis.error(error?.resultMessage)
+			ShowNostis.error(error?.message)
 		}
 		setLoading(false)
 	}
@@ -243,7 +243,7 @@ GroupHeader.UserItem = (props) => {
 			await onRefresh()
 			ShowNostis.success('Thành Công')
 		} catch (error) {
-			ShowNostis.error(error?.resultMessage)
+			ShowNostis.error(error?.message)
 		} finally {
 			setLoading(false)
 		}

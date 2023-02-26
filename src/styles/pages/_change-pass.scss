@@ -1,0 +1,15 @@
+.change-password {
+	@apply max-w-[1200px];
+	.cp-container {
+		@apply w-full w1400:w-[1028px];
+	}
+	.cp-main {
+		@apply grid grid-cols-6 gap-x-4 w-full;
+	}
+	.cp-left {
+		@apply col-span-6 w700:col-span-2;
+	}
+	.cp-right {
+		@apply col-span-6 mt-4 w700:col-span-4 w700:mt-[0px];
+	}
+}

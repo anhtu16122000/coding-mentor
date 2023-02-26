@@ -92,6 +92,13 @@ export const AcademicChildMenu = [
 				Key: '/finance/refund',
 				Route: '/finance/refund',
 				Text: 'Hoàn tiền'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/finance/paymentApprove',
+				Route: '/finance/paymentApprove',
+				Icon: '',
+				Text: 'Duyệt thanh toán'
 			}
 		]
 	},

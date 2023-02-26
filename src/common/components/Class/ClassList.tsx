@@ -137,6 +137,7 @@ const ClassList = (props) => {
 					onChange: getPagination,
 					total: totalRow,
 					size: 'small',
+					pageSize: 30,
 					showTotal: () => totalRow && <div className="font-weight-black">Tổng cộng: {totalRow}</div>
 				}}
 				itemLayout="horizontal"
