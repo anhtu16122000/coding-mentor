@@ -132,6 +132,10 @@ const ModalAllDiscount = (props) => {
 										<span className="title">Gói:</span>
 										<span className="font-normal ml-1">{item?.PackageTypeName}</span>
 									</p>
+									<p>
+										<span className="title">Loại:</span>
+										<span className="font-normal ml-1">{item?.TypeName}</span>
+									</p>
 									{item.Type === 2 ? (
 										<>
 											<p>

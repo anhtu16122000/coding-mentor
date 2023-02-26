@@ -54,7 +54,7 @@
 		@apply w-20 h-20 rounded-lg mr-3 object-fill;
 	}
 	.img-discount {
-		@apply w-24 h-24 rounded-lg object-fill;
+		@apply w-[100px] h-[100px] rounded-lg object-fill;
 	}
 	.wrapper-info-class {
 		@apply text-base flex flex-col gap-2;
