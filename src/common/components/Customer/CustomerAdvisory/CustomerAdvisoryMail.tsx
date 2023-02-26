@@ -47,7 +47,7 @@ const StudentAdvisoryMail = (props) => {
 	return (
 		<div>
 			<Head>
-				<title>{appConfigs.appName} | Danh sách Leads</title>
+				<title>{appConfigs.appName} | Danh sách khách hàng</title>
 			</Head>
 
 			<IconButton onClick={showModal} icon="send" type="button" color="blue" tooltip="Gửi thông báo cá nhân" />

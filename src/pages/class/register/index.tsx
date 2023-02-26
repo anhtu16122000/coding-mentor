@@ -403,12 +403,15 @@ const RegisterClass = () => {
 									<Divider />
 									<div className="flex items-center justify-between mb-3">
 										<span className="text-xl font-medium">Thành tiền</span>
+
 										<span className="text-xl font-medium text-tw-secondary">{Intl.NumberFormat('ja-JP').format(leftPrice)}</span>
+
+										{/* {leftPrice < 0 && <span className="text-xl font-medium text-[#016fff]">Miễn Phí</span>} */}
 									</div>
 									<div className="flex-all-center">
 										<PrimaryButton
 											loading={isLoading}
-											disable={isLoading}
+											disable={isLoading || leftPrice < 0}
 											className="w-full"
 											background="blue"
 											icon="payment"

@@ -125,7 +125,7 @@ export const AdminChildMenu = [
 				ItemType: 'single',
 				Key: '/info-course/customer',
 				Route: '/info-course/customer',
-				Text: 'Leads',
+				Text: 'Khách hàng',
 				Icon: ''
 			},
 			{
@@ -182,6 +182,13 @@ export const AdminChildMenu = [
 				Key: '/info-course/feedbacks',
 				Route: '/info-course/feedbacks',
 				Text: 'Phản hồi học viên',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/info-course/parents',
+				Route: '/info-course/parents',
+				Text: 'Phụ huynh',
 				Icon: ''
 			}
 		]
