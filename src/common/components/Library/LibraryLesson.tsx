@@ -144,7 +144,7 @@ const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 	}
 
 	const props: UploadProps =
-		isAdmin() || isTeacher() || isManager()
+		isAdmin() || isTeacher() || isManager() || isAcademic()
 			? {
 					name: 'file',
 					multiple: true,
@@ -187,6 +187,10 @@ const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 		return userInformation?.RoleId == 4
 	}
 
+	function isAcademic() {
+		return userInformation?.RoleId == 7
+	}
+
 	function isStdent() {
 		return userInformation?.RoleId == 3
 	}
@@ -221,7 +225,7 @@ const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 								Tải xuống
 							</PrimaryButton>
 						)}
-						{(isAdmin() || isManager() || isTeacher()) && !!activatedUnit?.Id && (
+						{(isAdmin() || isManager() || isTeacher() || isAcademic()) && !!activatedUnit?.Id && (
 							<Upload {...props}>
 								<PrimaryButton type="button" icon="upload" background="green">
 									Thêm
@@ -281,7 +285,7 @@ const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 													content={() => {
 														return (
 															<>
-																{(isAdmin() || isManager() || isTeacher()) && (
+																{(isAdmin() || isManager() || isTeacher() || isAcademic()) && (
 																	<>
 																		<LibraryContextItem
 																			onClick={() => _delete(item?.Id)}

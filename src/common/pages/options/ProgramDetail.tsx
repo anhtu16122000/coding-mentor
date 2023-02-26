@@ -59,6 +59,7 @@ const ProgramDetail = () => {
 			if (res.status === 200) {
 				setTodoApi(listTodoApi)
 				ShowNoti('success', res.data.message)
+				getAllCurriculum()
 				return res
 			}
 		} catch (err) {
@@ -93,7 +94,7 @@ const ProgramDetail = () => {
 			width: '150px',
 			render: (text, data) => (
 				<>
-					<CurriculumForm dataRow={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
+					<CurriculumForm onRefresh={() => getAllCurriculum()} dataRow={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
 					<IconButton
 						color="blue"
 						type="button"
@@ -122,7 +123,7 @@ const ProgramDetail = () => {
 				data={listCurriculum}
 				loading={isLoading}
 				onChangePage={(event: number) => setTodoApi({ ...listTodoApi, pageIndex: event })}
-				Extra={<CurriculumForm setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
+				Extra={<CurriculumForm onRefresh={() => getAllCurriculum()} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
 				TitleCard={
 					<>
 						Chương trình:<span className="ml-2 text-tw-primary">{name}</span>

@@ -16,5 +16,10 @@ export const billApi = {
 
 	add(data) {
 		return instance.post(url, data)
+	},
+	getDiscountHistory(params) {
+		return instance.get<IApiResultData<IGetDiscountHistory[]>>(`${url}/GetDiscountHistory`, {
+			params
+		})
 	}
 }

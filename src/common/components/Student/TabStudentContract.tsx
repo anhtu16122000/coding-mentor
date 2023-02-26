@@ -102,7 +102,7 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 			if (res.status === 204) {
 			}
 		} catch (err) {
-			ShowNoti('success', err.message)
+			ShowNoti('error', err.message)
 		}
 	}
 

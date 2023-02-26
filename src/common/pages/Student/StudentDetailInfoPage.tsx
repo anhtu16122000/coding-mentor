@@ -12,7 +12,9 @@ import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import { TabBill } from './TabBill'
 import { TabClassList } from './TabClassList'
+import { TabDiscountHistory } from './TabDiscountHistory'
 import { TabStudyRoute } from './TabStudyRoute'
+import { TabTestAppointment } from './TabTestAppointment'
 
 export interface IStudentDetailInfoPageProps {}
 
@@ -76,6 +78,16 @@ export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps
 						key: '5',
 						label: `Thanh toán`,
 						children: <TabBill StudentDetail={studentDetail} />
+					},
+					{
+						key: '6',
+						label: `Mã khuyến mãi`,
+						children: <TabDiscountHistory StudentDetail={studentDetail} />
+					},
+					{
+						key: '7',
+						label: `Kiểm tra đầu vào`,
+						children: <TabTestAppointment StudentDetail={studentDetail} />
 					}
 			  ]
 

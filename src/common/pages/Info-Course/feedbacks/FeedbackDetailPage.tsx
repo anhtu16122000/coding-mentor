@@ -4,16 +4,19 @@ import React, { useEffect, useState } from 'react'
 import { HiMail, HiPhone } from 'react-icons/hi'
 import { MdKeyboardArrowLeft } from 'react-icons/md'
 import { TiLocation } from 'react-icons/ti'
+import { useSelector } from 'react-redux'
 import { feedbackStudentApi } from '~/api/feedbacks-student'
 import { userInformationApi } from '~/api/user'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { ShowNoti } from '~/common/utils'
+import { RootState } from '~/store'
 import FeedbackBlock from './FeedbackBlock'
 
 export interface IFeedbackDetailPageProps {}
 
 export default function FeedbackDetailPage(props: IFeedbackDetailPageProps) {
 	const router = useRouter()
+	const user = useSelector((state: RootState) => state.user.information)
 	const [dataSource, setDataSource] = useState<IFeedbackStudent>()
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
 	const [userInformation, setUserInformation] = useState<IUserResponse>()
@@ -123,16 +126,20 @@ export default function FeedbackDetailPage(props: IFeedbackDetailPageProps) {
 					<div className="horizontal"></div>
 
 					<div className="actions">
-						<Popover
-							placement="bottomLeft"
-							trigger="click"
-							open={isVisiblePopover}
-							onOpenChange={(visible) => setIsVisiblePopover(visible)}
-							content={contentRating}
-							title="Đánh giá"
-						>
-							<PrimaryButton background="yellow" type="button" children={<span>Đánh giá</span>} icon="arrow-down" />
-						</Popover>
+						{user.RoleId == 1 || user.RoleId == 3 ? (
+							<Popover
+								placement="bottomLeft"
+								trigger="click"
+								open={isVisiblePopover}
+								onOpenChange={(visible) => setIsVisiblePopover(visible)}
+								content={contentRating}
+								title="Đánh giá"
+							>
+								<PrimaryButton background="yellow" type="button" children={<span>Đánh giá</span>} icon="arrow-down" />
+							</Popover>
+						) : (
+							''
+						)}
 						<Popconfirm
 							title="Bạn muốn hoàn thành phản hồi này?"
 							onConfirm={() => {

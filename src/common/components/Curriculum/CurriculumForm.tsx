@@ -12,7 +12,7 @@ import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
 
 const CurriculumForm = (props: any) => {
-	const { dataRow, setTodoApi, listTodoApi } = props
+	const { dataRow, setTodoApi, listTodoApi, onRefresh } = props
 	const router = useRouter()
 	const { slug, name } = router.query
 	const [form] = Form.useForm()
@@ -47,6 +47,7 @@ const CurriculumForm = (props: any) => {
 				setIsModalVisible(false)
 				form.resetFields()
 				ShowNoti('success', res.data.message)
+				onRefresh && onRefresh()
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)

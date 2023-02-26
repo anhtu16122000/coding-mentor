@@ -3,6 +3,7 @@ import moment from 'moment'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { scheduleApi } from '~/api/schedule'
+import { scheduleAvailableApi } from '~/api/schedule-available'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
@@ -16,7 +17,7 @@ const ModalRemoveScheduleAvailableEdit = (props) => {
 	const checkHandleDelete = async () => {
 		setIsLoading(true)
 		try {
-			const res = await scheduleApi.delete(IdSchedule)
+			const res = await scheduleAvailableApi.delete(IdSchedule)
 			if (res.status === 200) {
 				getListSchedule(paramsSchedule)
 				setIsModalVisible(false)

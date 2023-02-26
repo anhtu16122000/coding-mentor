@@ -196,7 +196,7 @@ const MenuClass = () => {
 	}
 	return (
 		<>
-			{user.RoleId == 1 ? (
+			{user.RoleId == 1 || user.RoleId == 4 ? (
 				<Tabs
 					defaultActiveKey="0"
 					tabPosition="left"

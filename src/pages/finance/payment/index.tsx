@@ -90,6 +90,7 @@ const PaymentManagementPage = () => {
 					{value == 1 && <span className="tag blue">{item?.TypeName}</span>}
 					{value == 2 && <span className="tag green">{item?.TypeName}</span>}
 					{value == 3 && <span className="tag yellow">{item?.TypeName}</span>}
+					{value == 4 && <span className="tag gray">{item?.TypeName}</span>}
 				</p>
 			)
 		},

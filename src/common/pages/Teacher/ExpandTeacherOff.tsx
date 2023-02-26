@@ -1,4 +1,5 @@
 import moment from 'moment'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import RestApi from '~/api/RestApi'
@@ -67,13 +68,37 @@ const ExpandTeacherOff = ({ item }) => {
 		return theInformation?.RoleId == 3
 	}
 
+	const returnPathName = (item) => {
+		if (!userInformation) return ''
+		let role = userInformation?.RoleId
+		let path = null
+		if (role == 1 || role == 5) {
+			path = {
+				pathname: '/class/list-class/detail',
+				query: { class: item?.Id, CurriculumId: item?.CurriculumId, BranchId: item?.BranchId }
+			}
+		} else {
+			path = {
+				pathname: '/class/list-class/detail',
+				query: { class: item?.Id, CurriculumId: item?.CurriculumId, BranchId: item?.BranchId }
+			}
+		}
+
+		return path
+	}
+
 	const columns = [
 		{
 			title: 'Lớp',
 			dataIndex: 'ClassName',
 			key: 'ClassName',
 			className: 'font-[600] text-[#1E88E5]',
-			width: 300
+			width: 300,
+			render: (text, item) => (
+				<Link href={returnPathName(item)}>
+					<a>{text}</a>
+				</Link>
+			)
 		},
 		{
 			title: 'Bắt đầu',

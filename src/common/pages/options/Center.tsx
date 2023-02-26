@@ -148,9 +148,9 @@ const Center = () => {
 						<IconButton type="button" icon="eye" color="blue" tooltip={'Xem phòng'} />
 					</Link>
 
-					<CenterForm dataArea={dataArea} rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
+					{isAdmin() ? <CenterForm dataArea={dataArea} rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} /> : ''}
 
-					<DeleteTableRow text={data.Name} handleDelete={() => handleDeleteBranch(data.Id)} />
+					{isAdmin() ? <DeleteTableRow text={data.Name} handleDelete={() => handleDeleteBranch(data.Id)} /> : ''}
 				</>
 			)
 		},
@@ -169,9 +169,9 @@ const Center = () => {
 						<IconButton type="button" icon="eye" color="blue" tooltip={'Xem phòng'} />
 					</Link>
 
-					<CenterForm dataArea={dataArea} rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
+					{isAdmin() ? <CenterForm dataArea={dataArea} rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} /> : ''}
 
-					<DeleteTableRow text={data.Name} handleDelete={() => handleDeleteBranch(data.Id)} />
+					{isAdmin() ? <DeleteTableRow text={data.Name} handleDelete={() => handleDeleteBranch(data.Id)} /> : ''}
 				</>
 			)
 		}
@@ -202,7 +202,7 @@ const Center = () => {
 					<PrimaryTable
 						loading={isLoading}
 						total={totalPage && totalPage}
-						Extra={<CenterForm dataArea={dataArea} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
+						Extra={isAdmin() ? <CenterForm dataArea={dataArea} setTodoApi={setTodoApi} listTodoApi={listTodoApi} /> : ''}
 						data={state.branch.Branch}
 						columns={columns}
 						onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
