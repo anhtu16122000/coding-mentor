@@ -1,33 +1,72 @@
-import { Popconfirm, Rate } from 'antd'
+import { Popconfirm, Rate, Select } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { HiStar } from 'react-icons/hi'
 import { RiShieldStarFill } from 'react-icons/ri'
+import { useSelector } from 'react-redux'
 import { feedbackStudentApi } from '~/api/feedbacks-student'
+import { userInformationApi } from '~/api/user'
 import IconButton from '~/common/components/Primary/IconButton'
 import PrimaryTable from '~/common/components/Primary/Table'
 import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
+import { RootState } from '~/store'
 
 export interface IFeedbacksStudentPageProps {}
 
 export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) {
-	const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE }
+	const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE, userIds: '' }
+	const userInformation = useSelector((state: RootState) => state.user.information)
 	const [dataSource, setDataSource] = useState<IFeedbackStudent[]>([])
 	const [totalRow, setTotalRow] = useState(0)
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
 	const [todoApi, setTodoApi] = useState(initialParams)
 	const router = useRouter()
+	const [apiParametersStudent, setApiParametersStudent] = useState({
+		PageSize: 9999,
+		PageIndex: 1,
+		RoleIds: '3',
+		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+	})
+	const [students, setStudents] = useState<{ label: string; value: string }[]>([])
 
+	const getUsers = async (param) => {
+		try {
+			const response = await userInformationApi.getAll(param)
+			if (response.status == 200) {
+				let temp = []
+				response.data.data?.forEach((item) => {
+					temp.push({ label: `${item?.FullName} - ${item.UserCode}`, value: item.UserInformationId })
+				})
+				setStudents(temp)
+			}
+			if (response.status == 204) {
+				setStudents([])
+			}
+		} catch (error) {
+			console.error(error)
+		} finally {
+		}
+	}
 	const getFeedbacks = async () => {
 		setIsLoading({ type: 'GET_ALL', status: true })
 		try {
 			let res = await feedbackStudentApi.getAll(todoApi)
 			if (res.status == 200) {
-				setDataSource(res.data.data)
-				setTotalRow(res.data.totalRow)
+				if (userInformation.RoleId === '8') {
+					if (todoApi.userIds && todoApi.userIds !== '') {
+						setDataSource(res.data.data)
+						setTotalRow(res.data.totalRow)
+					} else {
+						setDataSource([])
+						setTotalRow(0)
+					}
+				} else {
+					setDataSource(res.data.data)
+					setTotalRow(res.data.totalRow)
+				}
 			}
 			if (res.status == 204) {
 				setTotalRow(0)
@@ -43,6 +82,19 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 	useEffect(() => {
 		getFeedbacks()
 	}, [todoApi])
+	useEffect(() => {
+		if (userInformation.RoleId === '8') {
+			getUsers(apiParametersStudent)
+		}
+	}, [])
+
+	const handleChangeStudent = (val) => {
+		if (val) {
+			setTodoApi({ ...todoApi, userIds: val.toString() })
+		} else {
+			setTodoApi(initialParams)
+		}
+	}
 
 	const handleChangeStatus = async (ID) => {
 		setIsLoading({ type: 'GET_ALL', status: true })
@@ -129,24 +181,28 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 			render: (text, item) => {
 				return (
 					<div className="">
-						<Popconfirm
-							title="Bạn muốn hoàn thành phản hồi này?"
-							onConfirm={() => {
-								handleChangeStatus(item.Id)
-							}}
-							placement="topRight"
-							disabled={item.Status == 3}
-							onCancel={() => {}}
-							okText="Xác nhận"
-							cancelText="Hủy"
-						>
-							<IconButton
-								type="button"
-								icon="check"
-								color={item.Status == 3 ? 'disabled' : 'green'}
-								tooltip={item.Status == 3 ? 'Đã xong' : 'Hoàn tất phản hồi'}
-							/>
-						</Popconfirm>
+						{userInformation.RoleId === '8' ? (
+							''
+						) : (
+							<Popconfirm
+								title="Bạn muốn hoàn thành phản hồi này?"
+								onConfirm={() => {
+									handleChangeStatus(item.Id)
+								}}
+								placement="topRight"
+								disabled={item.Status == 3}
+								onCancel={() => {}}
+								okText="Xác nhận"
+								cancelText="Hủy"
+							>
+								<IconButton
+									type="button"
+									icon="check"
+									color={item.Status == 3 ? 'disabled' : 'green'}
+									tooltip={item.Status == 3 ? 'Đã xong' : 'Hoàn tất phản hồi'}
+								/>
+							</Popconfirm>
+						)}
 
 						<IconButton
 							type="button"
@@ -172,6 +228,15 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 				onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
 				columns={columns}
 				data={dataSource}
+				Extra={
+					userInformation.RoleId === '8' ? (
+						<>
+							<Select allowClear className="w-[200px]" onChange={handleChangeStudent} options={students} placeholder="Chọn học viên" />
+						</>
+					) : (
+						''
+					)
+				}
 			/>
 		</>
 	)

@@ -47,6 +47,7 @@ const itemsTeacher = [
 	'Phản hồi buổi học',
 	'Thông báo'
 ]
+const itemsParent = ['Lịch học', 'Các buổi học', 'Điểm danh', 'Bảng điểm']
 
 const MenuClass = () => {
 	const user = useSelector((state: RootState) => state.user.information)
@@ -274,9 +275,59 @@ const MenuClass = () => {
 				return 'Lịch học'
 		}
 	}
+
+	const getChildrenClassParent = (index) => {
+		switch (index) {
+			case 0:
+				return <CalendarClassEdit />
+
+			case 1:
+				return <ScheduleList />
+
+			case 2:
+				return <RollUpPage />
+			case 3:
+				return <TranscriptPage />
+
+			default:
+				return <CalendarClassEdit />
+		}
+	}
+
+	const getLabelClassParent = (item, index) => {
+		switch (index) {
+			case 0:
+				return (
+					<div className="label-tab">
+						<AiOutlineCalendar className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 1:
+				return (
+					<div className="label-tab">
+						<BsCalendar2Week className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 2:
+				return (
+					<div className="label-tab">
+						<RiQuillPenLine className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 3:
+				return (
+					<div className="label-tab">
+						<CgTranscript className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+
+			default:
+				return 'Lịch học'
+		}
+	}
 	return (
 		<>
-			{user.RoleId == 1 || user.RoleId == 4 || user.RoleId == 5 || user.RoleId == 6 || user.RoleId == 7 || user.RoleId == 8 ? (
+			{user.RoleId == 1 || user.RoleId == 4 || user.RoleId == 5 || user.RoleId == 6 || user.RoleId == 7 ? (
 				<Tabs
 					defaultActiveKey="0"
 					tabPosition="left"
@@ -313,6 +364,20 @@ const MenuClass = () => {
 							label: getLabelClassStudent(item, index),
 							key: index.toString(),
 							children: getChildrenClassStudent(index)
+						}
+					})}
+				/>
+			) : null}
+
+			{user.RoleId == 8 ? (
+				<Tabs
+					defaultActiveKey="0"
+					tabPosition="left"
+					items={itemsParent.map((item, index) => {
+						return {
+							label: getLabelClassParent(item, index),
+							key: index.toString(),
+							children: getChildrenClassParent(index)
 						}
 					})}
 				/>

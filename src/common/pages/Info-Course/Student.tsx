@@ -45,8 +45,8 @@ const Student: FC<IPersonnel> = (props) => {
 		Genders: null,
 		PageIndex: 1,
 		RoleIds: props.type == 'personnel' ? '1,2,4,5,6,7' : '3',
-		Search: null
-		// parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId : ''
+		Search: null,
+		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
 	}
 
 	const [apiParameters, setApiParameters] = useState(initParamters)
@@ -410,7 +410,7 @@ const Student: FC<IPersonnel> = (props) => {
 							/>
 						</PrimaryTooltip>
 
-						{props.type !== 'student' && (
+						{props.type !== 'student' && isAdmin() && (
 							<CreateUser
 								isEdit
 								roleStaff={roleStaff}
@@ -421,7 +421,7 @@ const Student: FC<IPersonnel> = (props) => {
 							/>
 						)}
 
-						{props.type == 'student' && (
+						{props.type == 'student' && isAdmin() && (
 							<CreateUser
 								isEdit
 								roleStaff={roleStaff}
@@ -435,7 +435,9 @@ const Student: FC<IPersonnel> = (props) => {
 								isStudent={true}
 							/>
 						)}
-						<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.UserInformationId)} />
+						{isAdmin() && (
+							<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.UserInformationId)} />
+						)}
 					</div>
 				)
 			}
@@ -520,21 +522,23 @@ const Student: FC<IPersonnel> = (props) => {
 							</PrimaryButton>
 						)}
 
-						{props.type == 'student' && (
+						{props.type == 'student' && isAdmin() && (
 							<PrimaryButton
 								className="mr-2 btn-download"
 								type="button"
 								icon="download"
 								background="blue"
 								onClick={() => {
-									window.open(appConfigs.linkDownloadExcel)
+									window.open(`${appConfigs.linkDownloadExcel}?key=${new Date().getTime()}`)
 								}}
 							>
 								File mẫu
 							</PrimaryButton>
 						)}
 
-						{props.type == 'student' && <ImportStudent className="mr-1 btn-import" onFetchData={() => getUsers(apiParameters)} />}
+						{props.type == 'student' && isAdmin() && (
+							<ImportStudent className="mr-1 btn-import" onFetchData={() => getUsers(apiParameters)} />
+						)}
 
 						<Popover
 							placement="bottomLeft"
@@ -611,7 +615,7 @@ const Student: FC<IPersonnel> = (props) => {
 							</PrimaryButton>
 						</Popover>
 
-						{props.type == 'student' && (
+						{props.type == 'student' && isAdmin() && (
 							<CreateUser
 								roleStaff={roleStaff}
 								source={source}
@@ -624,7 +628,7 @@ const Student: FC<IPersonnel> = (props) => {
 							/>
 						)}
 
-						{props.type !== 'student' && (
+						{props.type !== 'student' && isAdmin() && (
 							<CreateUser roleStaff={roleStaff} className="btn-create" onRefresh={() => getUsers(apiParameters)} isStudent={false} />
 						)}
 					</>

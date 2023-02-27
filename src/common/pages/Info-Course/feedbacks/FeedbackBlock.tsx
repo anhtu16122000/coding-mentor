@@ -91,9 +91,13 @@ export default function FeedbackBlock(props: IFeedbackBlockProps) {
 						</span>
 						<span className="created-on">{moment(feedbackDetail?.CreatedOn).format('DD/MM/YYYY HH:mm')}</span>
 					</p>
-					<div>
-						<ModalFeedbackReplyCRUD mode="add" isLoading={isLoading.type == 'SUBMIT' && isLoading.status} onSubmit={_onSubmit} />
-					</div>
+					{userInformation?.RoleId === '8' ? (
+						''
+					) : (
+						<div>
+							<ModalFeedbackReplyCRUD mode="add" isLoading={isLoading.type == 'SUBMIT' && isLoading.status} onSubmit={_onSubmit} />
+						</div>
+					)}
 				</div>
 				<div className="title-feedback">{feedbackDetail?.Title}</div>
 				<div className="content-feedback">{feedbackDetail?.Content}</div>
@@ -130,13 +134,19 @@ export default function FeedbackBlock(props: IFeedbackBlockProps) {
 									</div>
 								</div>
 							</div>
-							{userInformation?.UserInformationId == item.CreatedIdBy && (
-								<ModalFeedbackReplyCRUD
-									mode="delete"
-									isLoading={isLoading.type == 'SUBMIT' && isLoading.status}
-									onSubmit={_onSubmit}
-									dataRow={item}
-								/>
+							{userInformation?.RoleId === '8' ? (
+								''
+							) : (
+								<>
+									{userInformation?.UserInformationId == item.CreatedIdBy && (
+										<ModalFeedbackReplyCRUD
+											mode="delete"
+											isLoading={isLoading.type == 'SUBMIT' && isLoading.status}
+											onSubmit={_onSubmit}
+											dataRow={item}
+										/>
+									)}
+								</>
 							)}
 						</div>
 					)

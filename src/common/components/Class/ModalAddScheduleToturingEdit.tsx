@@ -15,7 +15,7 @@ import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
 import { AiOutlineWarning } from 'react-icons/ai'
 import { setTeacher } from '~/store/classReducer'
 import 'moment/locale/vi'
-// moment.locale('vi')
+moment.locale('vi')
 
 const initParameters = { branchId: null, curriculumId: null, startTime: null, endTime: null, pageIndex: 1, pageSize: 8 }
 const ModalAddScheduleToturingEdit = (props) => {
@@ -123,7 +123,7 @@ const ModalAddScheduleToturingEdit = (props) => {
 
 	const config = {
 		slidesToScroll: 1,
-		slidesToShow: 5,
+		slidesToShow: dates.length >= 5 ? 5 : dates.length,
 		arrows: true,
 		dots: false,
 		infinite: true,

@@ -48,9 +48,9 @@ export const classApi = {
 		return instance.put(`${url}/tutoring-config`, data)
 	},
 	getClassTutoringCurriculum(classId) {
-		return instance.get(`${url}/tutoring-curriculum`, { params: classId})
+		return instance.get(`${url}/tutoring-curriculum`, { params: classId })
 	},
-// these apis belong to curriculum in class (rối vãi loz)
+	// these apis belong to curriculum in class (rối vãi loz)
 	getCurriculumOfClass(classID) {
 		return instance.get(`${url}/curriculum-in-class/${classID}`)
 	},
@@ -63,6 +63,9 @@ export const classApi = {
 	updateIndexCurriculumDetailOfClass(data) {
 		return instance.put(`${url}/curriculum-detail-in-class-index`, data)
 	},
+	checkCompleteCurriculumInClass(id) {
+		return instance.post(`${url}/curriculum-detail-in-class/${id}/complete`)
+	},
 	getFileCurriculumOfClass(params) {
 		return instance.get(`${url}/file-curriculum-in-class`, { params })
 	},
@@ -71,6 +74,9 @@ export const classApi = {
 	},
 	deleteFileCurriculumDetailOfClass(id) {
 		return instance.delete(`${url}/file-curriculum-in-class/${id}`)
+	},
+	checkCompleteFileInClass(id) {
+		return instance.post(`${url}/file-curriculum-in-class/${id}/complete`)
 	},
 	addCurriculumOfClass(data) {
 		return instance.post(`${url}/curriculum-detail-in-class`, data)

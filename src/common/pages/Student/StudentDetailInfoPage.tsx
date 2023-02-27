@@ -40,7 +40,7 @@ export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps
 	}
 
 	const items: TabsProps['items'] =
-		userInformation?.RoleId === 3
+		userInformation?.RoleId === '3' || userInformation?.RoleId === '8'
 			? [
 					{
 						key: '1',
@@ -51,6 +51,16 @@ export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps
 						key: '2',
 						label: `Hợp đồng`,
 						children: <TabStudentContract StudentDetail={studentDetail} />
+					},
+					{
+						key: '3',
+						label: `Lộ trình`,
+						children: <TabStudyRoute StudentDetail={studentDetail} />
+					},
+					{
+						key: '4',
+						label: `Thanh toán`,
+						children: <TabBill StudentDetail={studentDetail} />
 					}
 			  ]
 			: [

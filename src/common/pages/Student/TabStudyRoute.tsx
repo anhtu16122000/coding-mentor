@@ -90,7 +90,15 @@ export const TabStudyRoute: React.FC<ITabStudyRoute> = ({ StudentDetail }) => {
 		<>
 			<Card
 				title=""
-				extra={<>{user.RoleId != 3 ? <ModalStudyRoute mode="add" onRefresh={() => getStudentStudyRoute(apiParameters)} /> : ''}</>}
+				extra={
+					<>
+						{user.RoleId == 3 || user.RoleId == 8 ? (
+							''
+						) : (
+							<ModalStudyRoute mode="add" onRefresh={() => getStudentStudyRoute(apiParameters)} />
+						)}
+					</>
+				}
 			>
 				<Spin spinning={loading}>
 					<Timeline mode="left">
@@ -105,7 +113,9 @@ export const TabStudyRoute: React.FC<ITabStudyRoute> = ({ StudentDetail }) => {
 											<p>Ngày tạo: {moment(item?.CreatedOn).format('DD-MM-YYYY HH:mm A')}</p>
 											<p>Ghi chú: {item?.Note}</p>
 										</div>
-										{user.RoleId != 3 ? (
+										{user.RoleId == 3 || user.RoleId == 8 ? (
+											''
+										) : (
 											<div className="flex items-center">
 												<div className="icon mr-2 cursor-pointer" onClick={() => handleMoveItem(index, item, 'up')}>
 													{index !== 0 && <ImMoveUp size={22} color="#0068ac" />}
@@ -118,8 +128,6 @@ export const TabStudyRoute: React.FC<ITabStudyRoute> = ({ StudentDetail }) => {
 												<ModalStudyRoute mode="edit" onRefresh={() => getStudentStudyRoute(apiParameters)} dataRow={item} />
 												<ModalStudyRoute mode="delete" onRefresh={() => getStudentStudyRoute(apiParameters)} dataRow={item} />
 											</div>
-										) : (
-											''
 										)}
 									</div>
 								</Timeline.Item>

@@ -1,29 +1,41 @@
-import { Input } from 'antd'
+import { Form, Input, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { studentInClassApi } from '~/api/student-in-class'
+import { userInformationApi } from '~/api/user'
 import CCSearch from '~/common/components/CCSearch'
+import IconButton from '~/common/components/Primary/IconButton'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import PrimaryTag from '~/common/components/Primary/Tag'
 import { userInfoColumn } from '~/common/libs/columns/user-info'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
+import { RootState } from '~/store'
 
 let pageIndex = 1
 
-const initParameters = {
-	warning: true,
-	search: null,
-	sortType: null,
-	pageIndex: 1,
-	pageSize: PAGE_SIZE
-}
-
 export const StudentWarningPage = () => {
 	const [loading, setLoading] = useState({ type: '', status: false })
-
+	const userInformation = useSelector((state: RootState) => state.user.information)
+	const initParameters = {
+		warning: true,
+		search: null,
+		sortType: null,
+		pageIndex: 1,
+		pageSize: PAGE_SIZE,
+		studentIds: '',
+		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+	}
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [totalRow, setTotalRow] = useState(1)
 	const [dataTable, setDataTable] = useState([])
 	const [currentPage, setCurrentPage] = useState(1)
+	const [students, setStudents] = useState<{ label: string; value: string }[]>([])
+	const [apiParametersStudent, setApiParametersStudent] = useState({
+		PageSize: PAGE_SIZE,
+		PageIndex: 1,
+		RoleIds: '3',
+		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+	})
 
 	const getStudentInClass = async (params) => {
 		try {
@@ -43,11 +55,44 @@ export const StudentWarningPage = () => {
 		}
 	}
 
+	const getUsers = async (param) => {
+		try {
+			const response = await userInformationApi.getAll(param)
+			if (response.status == 200) {
+				let temp = []
+				response.data.data?.forEach((item) => {
+					temp.push({ label: `${item?.FullName} - ${item.UserCode}`, value: item.UserInformationId })
+				})
+				setStudents(temp)
+			}
+			if (response.status == 204) {
+				setStudents([])
+			}
+		} catch (error) {
+			console.error(error)
+		} finally {
+		}
+	}
+
+	const handleChangeStudent = (val) => {
+		if (val) {
+			setApiParameters({ ...apiParameters, studentIds: val?.toString() })
+		} else {
+			setApiParameters(initParameters)
+		}
+	}
+
 	useEffect(() => {
 		if (apiParameters) {
 			getStudentInClass(apiParameters)
 		}
 	}, [apiParameters])
+
+	useEffect(() => {
+		if (userInformation.RoleId === '8') {
+			getUsers(apiParametersStudent)
+		}
+	}, [])
 
 	const columns = [
 		userInfoColumn,
@@ -107,6 +152,15 @@ export const StudentWarningPage = () => {
 							placeholder="Tìm kiếm"
 						/>
 					</div>
+				}
+				Extra={
+					userInformation.RoleId === '8' ? (
+						<>
+							<Select allowClear className="w-[200px]" onChange={handleChangeStudent} options={students} placeholder="Chọn học viên" />
+						</>
+					) : (
+						''
+					)
 				}
 				dataSource={dataTable}
 				columns={columns}

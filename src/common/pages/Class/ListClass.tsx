@@ -1,9 +1,10 @@
-import { Card } from 'antd'
+import { Card, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { branchApi } from '~/api/branch'
 import { classApi } from '~/api/class'
+import { userInformationApi } from '~/api/user'
 import ClassList from '~/common/components/Class/ClassList'
 import FilterBase from '~/common/components/Elements/FilterBase'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
@@ -19,7 +20,8 @@ const listTodoApi = {
 	pageSize: PAGE_SIZE,
 	pageIndex: 1,
 	sort: 0,
-	sortType: false
+	sortType: false,
+	studentId: null
 }
 
 let listFieldFilter = {
@@ -91,8 +93,18 @@ const ListClass = () => {
 		try {
 			const res = await classApi.getAll(todoApi)
 			if (res.status === 200) {
-				setListClass(res.data.data)
-				setTotalRow(res.data.totalRow)
+				if (userInformation.RoleId === '8') {
+					if (todoApi.studentId && todoApi.studentId !== '') {
+						setListClass(res.data.data)
+						setTotalRow(res.data.totalRow)
+					} else {
+						setListClass([])
+						setTotalRow(0)
+					}
+				} else {
+					setListClass(res.data.data)
+					setTotalRow(res.data.totalRow)
+				}
 			}
 			if (res.status === 204) {
 				setListClass([])
@@ -137,14 +149,50 @@ const ListClass = () => {
 			pageIndex: 1
 		})
 	}
+	const [apiParametersStudent, setApiParametersStudent] = useState({
+		PageSize: 9999,
+		PageIndex: 1,
+		RoleIds: '3',
+		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+	})
+	const [students, setStudents] = useState<{ label: string; value: string }[]>([])
+
+	const getUsers = async (param) => {
+		try {
+			const response = await userInformationApi.getAll(param)
+			if (response.status == 200) {
+				let temp = []
+				response.data.data?.forEach((item) => {
+					temp.push({ label: `${item?.FullName} - ${item.UserCode}`, value: item.UserInformationId })
+				})
+				setStudents(temp)
+			}
+			if (response.status == 204) {
+				setStudents([])
+			}
+		} catch (error) {
+			console.error(error)
+		} finally {
+		}
+	}
 
 	const handleReset = () => {
 		setTodoApi({ ...listTodoApi })
+	}
+	const handleChangeStudent = (val) => {
+		if (val) {
+			setTodoApi({ ...todoApi, studentId: val })
+		} else {
+			setTodoApi(listTodoApi)
+		}
 	}
 
 	useEffect(() => {
 		if (state.branch.Branch.length === 0) {
 			getAllBranch()
+		}
+		if (userInformation.RoleId === '8') {
+			getUsers(apiParametersStudent)
 		}
 	}, [])
 
@@ -170,6 +218,21 @@ const ListClass = () => {
 								<div className="list-action-table">
 									<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />
 								</div>
+							}
+							extra={
+								userInformation.RoleId === '8' ? (
+									<>
+										<Select
+											allowClear
+											className="w-[200px]"
+											onChange={handleChangeStudent}
+											options={students}
+											placeholder="Chọn học viên"
+										/>
+									</>
+								) : (
+									''
+								)
 							}
 						>
 							<div className="course-list-content">

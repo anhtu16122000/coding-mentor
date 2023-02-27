@@ -125,41 +125,45 @@ export default function FeedbackDetailPage(props: IFeedbackDetailPageProps) {
 
 					<div className="horizontal"></div>
 
-					<div className="actions">
-						{user.RoleId == 1 || user.RoleId == 3 ? (
-							<Popover
-								placement="bottomLeft"
-								trigger="click"
-								open={isVisiblePopover}
-								onOpenChange={(visible) => setIsVisiblePopover(visible)}
-								content={contentRating}
-								title="Đánh giá"
+					{user.RoleId === '8' ? (
+						''
+					) : (
+						<div className="actions">
+							{user.RoleId == 1 || user.RoleId == 3 ? (
+								<Popover
+									placement="bottomLeft"
+									trigger="click"
+									open={isVisiblePopover}
+									onOpenChange={(visible) => setIsVisiblePopover(visible)}
+									content={contentRating}
+									title="Đánh giá"
+								>
+									<PrimaryButton background="yellow" type="button" children={<span>Đánh giá</span>} icon="arrow-down" />
+								</Popover>
+							) : (
+								''
+							)}
+							<Popconfirm
+								title="Bạn muốn hoàn thành phản hồi này?"
+								onConfirm={() => {
+									handleChangeStatus(dataSource?.Id)
+								}}
+								placement="topRight"
+								disabled={dataSource?.Status == 3}
+								onCancel={() => {}}
+								okText="Xác nhận"
+								cancelText="Hủy"
 							>
-								<PrimaryButton background="yellow" type="button" children={<span>Đánh giá</span>} icon="arrow-down" />
-							</Popover>
-						) : (
-							''
-						)}
-						<Popconfirm
-							title="Bạn muốn hoàn thành phản hồi này?"
-							onConfirm={() => {
-								handleChangeStatus(dataSource?.Id)
-							}}
-							placement="topRight"
-							disabled={dataSource?.Status == 3}
-							onCancel={() => {}}
-							okText="Xác nhận"
-							cancelText="Hủy"
-						>
-							<PrimaryButton
-								type="button"
-								icon="check"
-								className=""
-								background={dataSource?.Status == 3 ? 'disabled' : 'green'}
-								children={dataSource?.Status == 3 ? 'Đã xong' : 'Hoàn tất phản hồi'}
-							/>
-						</Popconfirm>
-					</div>
+								<PrimaryButton
+									type="button"
+									icon="check"
+									className=""
+									background={dataSource?.Status == 3 ? 'disabled' : 'green'}
+									children={dataSource?.Status == 3 ? 'Đã xong' : 'Hoàn tất phản hồi'}
+								/>
+							</Popconfirm>
+						</div>
+					)}
 
 					<div className="horizontal"></div>
 

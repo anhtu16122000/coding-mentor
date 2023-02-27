@@ -23,6 +23,7 @@ import { userInformationApi } from '~/api/user'
 import ExpandedRowAppointment from '~/common/components/Service/ExpandedRowAppointment'
 import IconButton from '~/common/components/Primary/IconButton'
 import { useRouter } from 'next/router'
+import { Select } from 'antd'
 
 const appointmenInitFilter = [
 	{
@@ -113,6 +114,7 @@ export default function ServiceAppointmentTest(props) {
 	const [listStudent, setListStudent] = useState([])
 	const [listTeacher, setListTeacher] = useState([])
 	const [listExamination, setListExamination] = useState([])
+	const [students, setStudents] = useState<{ label: string; value: string }[]>([])
 
 	// BASE USESTATE TABLE
 	const [dataSource, setDataSource] = useState<ITestCustomer[]>([])
@@ -125,17 +127,23 @@ export default function ServiceAppointmentTest(props) {
 		UserCode: null,
 		BranchIds: null, // lọc
 		Type: null,
-		Status: null
+		Status: null,
+		studentId: null
 	}
 	const [isLoading, setIsLoading] = useState(false)
 	const [totalPage, setTotalPage] = useState(null)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [todoApi, setTodoApi] = useState(listTodoApi)
+	const userInformation = useSelector((state: RootState) => state.user.information)
+	const [apiParametersStudent, setApiParametersStudent] = useState({
+		PageSize: PAGE_SIZE,
+		PageIndex: 1,
+		RoleIds: '3',
+		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+	})
 
 	// LIST FILTER
 	const [dataFilter, setDataFilter] = useState(appointmenInitFilter)
-
-	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	function isAdmin() {
 		return userInformation?.RoleId == 1
@@ -169,6 +177,25 @@ export default function ServiceAppointmentTest(props) {
 		}
 	}, [state.branch])
 
+	const getUsers = async (param) => {
+		try {
+			const response = await userInformationApi.getAll(param)
+			if (response.status == 200) {
+				let temp = []
+				response.data.data?.forEach((item) => {
+					temp.push({ label: `${item?.FullName} - ${item.UserCode}`, value: item.UserInformationId })
+				})
+				setStudents(temp)
+			}
+			if (response.status == 204) {
+				setStudents([])
+			}
+		} catch (error) {
+			console.error(error)
+		} finally {
+		}
+	}
+
 	const getAllBranch = async () => {
 		if (isAdmin() || isSaler() || isManager()) {
 			try {
@@ -188,6 +215,9 @@ export default function ServiceAppointmentTest(props) {
 		if (state.branch.Branch.length === 0) {
 			getAllBranch()
 		}
+		if (userInformation.RoleId === '8') {
+			getUsers(apiParametersStudent)
+		}
 	}, [])
 
 	// GET DATA SOURCE
@@ -196,8 +226,18 @@ export default function ServiceAppointmentTest(props) {
 		try {
 			let res = await testAppointmentApi.getAll(todoApi)
 			if (res.status === 200) {
-				setDataSource(res.data.data)
-				setTotalPage(res.data.totalRow)
+				if (userInformation.RoleId === '8') {
+					if (todoApi.studentId) {
+						setDataSource(res.data.data)
+						setTotalPage(res.data.totalRow)
+					} else {
+						setDataSource([])
+						setTotalPage(0)
+					}
+				} else {
+					setDataSource(res.data.data)
+					setTotalPage(res.data.totalRow)
+				}
 			}
 			if (res.status === 204) {
 				setDataSource([])
@@ -304,6 +344,14 @@ export default function ServiceAppointmentTest(props) {
 			} catch (err) {
 				ShowNoti('error', err.message)
 			}
+		}
+	}
+
+	const handleChangeStudent = (val) => {
+		if (val) {
+			setTodoApi({ ...todoApi, studentId: val })
+		} else {
+			setTodoApi(listTodoApi)
 		}
 	}
 
@@ -479,6 +527,13 @@ export default function ServiceAppointmentTest(props) {
 									setTodoApi={setTodoApi}
 									listTodoApi={listTodoApi}
 								/>
+							)}
+							{userInformation.RoleId === '8' ? (
+								<>
+									<Select allowClear className="w-[200px]" onChange={handleChangeStudent} options={students} placeholder="Chọn học viên" />
+								</>
+							) : (
+								''
 							)}
 						</>
 					}

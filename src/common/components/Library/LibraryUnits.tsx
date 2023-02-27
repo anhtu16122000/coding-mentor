@@ -58,11 +58,11 @@ const LibraryUnits = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 			if (response.status === 200) {
 				setData(response.data.data)
 
-				if (response.data.data.length > 0) {
+				if (response?.data?.data?.length > 0) {
 					setActivatedUnit(response.data.data[0])
 				}
 
-				if (response.data.data.length == 0) {
+				if (response?.data?.data?.length == 0) {
 					setActivatedUnit({ Id: '' })
 				}
 			} else {
@@ -87,15 +87,15 @@ const LibraryUnits = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 				extra={<>{(isAdmin() || isTeacher() || isManager()) && <LibraryFormUnit curriculumId={curriculumId} onRefresh={getData} />}</>}
 			>
 				<div className="relative scrollable max-h-[calc(100vh-400px)] mb-[10px] mr-[-22px] pr-[12px]">
-					{data.length !== 0 && loading && (
+					{data?.length !== 0 && loading && (
 						<div className="all-center w-full mb-4">
 							<Spin className="loading-blue" />
 						</div>
 					)}
 					<>
-						{data.length !== 0 && (
+						{data?.length !== 0 && (
 							<>
-								{data.map((item, index) => {
+								{data?.map((item, index) => {
 									return (
 										<div
 											key={`xnxx-curriculum-detail-${index}`}
@@ -139,13 +139,13 @@ const LibraryUnits = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 					</>
 
 					<>
-						{data.length == 0 && !loading && (
+						{data?.length == 0 && !loading && (
 							<div className="w-full all-center">
 								<Empty />
 							</div>
 						)}
 
-						{data.length == 0 && loading && (
+						{data?.length == 0 && loading && (
 							<>
 								<Skeleton />
 								<Skeleton className="mt-3" />

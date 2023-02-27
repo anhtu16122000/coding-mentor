@@ -715,6 +715,9 @@ button {
 		top: 4px;
 		left: 16px;
 	}
+	.ant-select-selection-search-input {
+		margin-top: 3px !important;
+	}
 }
 
 .ant-tree-select:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-item {
