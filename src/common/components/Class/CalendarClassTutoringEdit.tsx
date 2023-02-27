@@ -50,6 +50,9 @@ const CalendarClassTutoringEdit = () => {
 	const [teacherData, setTeacherData] = useState([])
 	const [totalPage, setTotalPage] = useState(0)
 
+	function isSaler() {
+		return user?.RoleId == 5
+	}
 	const getTutoring = async (classId) => {
 		try {
 			const res = await classApi.getClassTutoringCurriculum({ classId })

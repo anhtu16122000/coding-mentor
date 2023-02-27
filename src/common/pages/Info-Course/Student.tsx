@@ -360,7 +360,8 @@ const Student: FC<IPersonnel> = (props) => {
 			dataIndex: 'Gender',
 			render: (value, record) => (
 				<>
-					{value == 1 && <span className="tag yellow">Nam</span>}
+					{value == 0 && <span className="tag yellow">Khác</span>}
+					{value == 1 && <span className="tag blue">Nam</span>}
 					{value == 2 && <span className="tag blue">Nữ</span>}
 				</>
 			)

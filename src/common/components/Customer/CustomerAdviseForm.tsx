@@ -34,6 +34,10 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	const area = useSelector((state: RootState) => state.area.Area)
 
 	const [jobs, setJobs] = useState([])
+	const theInformation = useSelector((state: RootState) => state.user.information)
+	function isSaler() {
+		return theInformation?.RoleId == 5
+	}
 	const getJobs = async () => {
 		try {
 			const res = await RestApi.get<any>('job', { pageIndex: 1, pageSize: 99999 })
@@ -84,18 +88,25 @@ const CustomerAdviseForm = React.memo((props: any) => {
 
 	// SUBMI FORM
 	const onSubmit = async (data: any) => {
-		setIsLoading(true)
 		try {
+			setIsLoading(true)
 			let DATA_SUBMIT = null
 			if (rowData) {
 				if (isStudent) {
-					DATA_SUBMIT = { ...rowData, ...data, RoleId: 3, customerId: rowData.Id }
+					DATA_SUBMIT = {
+						...rowData,
+						...data,
+						RoleId: 3,
+						customerId: rowData.Id,
+						SaleId: isSaler() ? Number(theInformation.UserInformationId) : data.SaleId
+					}
 				} else {
-					DATA_SUBMIT = { ...rowData, ...data }
+					DATA_SUBMIT = { ...rowData, ...data, SaleId: isSaler() ? Number(theInformation.UserInformationId) : data.SaleId }
 				}
 			} else {
-				DATA_SUBMIT = { ...data }
+				DATA_SUBMIT = { ...data, SaleId: isSaler() ? Number(theInformation.UserInformationId) : data.SaleId }
 			}
+
 			const res = await (rowData?.Id
 				? isStudent
 					? userInformationApi.add(DATA_SUBMIT)
@@ -120,6 +131,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 			if (rowData) {
 				if (isStudent) {
 					form.setFieldsValue({ Password: '123456' })
+					form.setFieldsValue({ BranchIds: !!rowData.BranchId ? parseInt(rowData.BranchId) : null })
 				}
 				!!rowData.AreaId && getDistrictByArea(rowData.AreaId)
 				!!rowData.DistrictId && getWardByDistrict(rowData.DistrictId)
@@ -261,9 +273,9 @@ const CustomerAdviseForm = React.memo((props: any) => {
 											name="Gender"
 											placeholder="Chọn giới tính"
 											optionList={[
-												{ value: 0, title: 'Nữ' },
+												{ value: 0, title: 'Khác' },
 												{ value: 1, title: 'Nam' },
-												{ value: 2, title: 'Khác' }
+												{ value: 2, title: 'Nữ' }
 											]}
 										/>
 									</div>
@@ -338,9 +350,13 @@ const CustomerAdviseForm = React.memo((props: any) => {
 							<div className="col-md-6 col-12">
 								<SelectField name="SourceId" label="Nguồn" placeholder="Chọn nguồn" optionList={source} />
 							</div>
-							<div className="col-md-6 col-12">
-								<SelectField name="SaleId" label="Tư vấn viên" placeholder="Chọn tư vấn viên" optionList={sale} />
-							</div>
+							{!isSaler() ? (
+								<div className="col-md-6 col-12">
+									<SelectField name="SaleId" label="Tư vấn viên" placeholder="Chọn tư vấn viên" optionList={sale} />
+								</div>
+							) : (
+								''
+							)}
 						</div>
 
 						<div className="row mt-3">

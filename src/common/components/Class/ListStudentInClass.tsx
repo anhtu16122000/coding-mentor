@@ -1,13 +1,19 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { TiWarningOutline } from 'react-icons/ti'
+import { useSelector } from 'react-redux'
 import { studentInClassApi } from '~/api/student-in-class'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
+import { RootState } from '~/store'
 import PrimaryTable from '../Primary/Table'
 import PrimaryTag from '../Primary/Tag'
 import { ModalStudentInClassCRUD } from './ModalStudentInClassCRUD'
 
 export const ListStudentInClass = () => {
+	const user = useSelector((state: RootState) => state.user.information)
+	function isSaler() {
+		return user?.RoleId == 5
+	}
 	const router = useRouter()
 	const [loading, setLoading] = useState(false)
 	const initParameters = {
@@ -48,63 +54,109 @@ export const ListStudentInClass = () => {
 		}
 	}, [router?.query?.class])
 
-	const columns = [
-		{
-			title: 'Mã',
-			width: 100,
-			dataIndex: 'UserCode'
-		},
-		{
-			title: 'Tên học viên',
-			width: 200,
-			dataIndex: 'FullName',
-			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
-		},
-		{
-			title: 'Số điện thoại',
-			width: 150,
-			dataIndex: 'Mobile'
-		},
-		{
-			title: 'Email',
-			width: 200,
-			dataIndex: 'Email'
-		},
-		{
-			title: 'Loại',
-			width: 150,
-			dataIndex: 'TypeName',
-			render: (text, item) => (
-				<>
-					<PrimaryTag color={item?.Type == 1 ? 'green' : 'red'} children={text} />
-				</>
-			)
-		},
-		{
-			title: 'Cảnh báo',
-			width: 100,
-			dataIndex: 'Warning',
-			render: (text) => <div className="flex justify-center">{text ? <TiWarningOutline size={18} color="red" /> : ''}</div>
-		},
-		{
-			title: 'Ghi chú',
-			width: 200,
-			dataIndex: 'Note'
-		},
-		{
-			title: 'Chức năng',
-			width: 150,
-			dataIndex: 'Action',
-			render: (text, item) => {
-				return (
-					<div className="flex items-center">
-						<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="edit" dataRow={item} />
-						<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="delete" dataRow={item} />
-					</div>
-				)
-			}
-		}
-	]
+	const columns =
+		user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7
+			? [
+					{
+						title: 'Mã',
+						width: 100,
+						dataIndex: 'UserCode'
+					},
+					{
+						title: 'Tên học viên',
+						width: 200,
+						dataIndex: 'FullName',
+						render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+					},
+					{
+						title: 'Số điện thoại',
+						width: 150,
+						dataIndex: 'Mobile'
+					},
+					{
+						title: 'Email',
+						width: 200,
+						dataIndex: 'Email'
+					},
+					{
+						title: 'Loại',
+						width: 150,
+						dataIndex: 'TypeName',
+						render: (text, item) => (
+							<>
+								<PrimaryTag color={item?.Type == 1 ? 'green' : 'red'} children={text} />
+							</>
+						)
+					},
+					{
+						title: 'Cảnh báo',
+						width: 100,
+						dataIndex: 'Warning',
+						render: (text) => <div className="flex justify-center">{text ? <TiWarningOutline size={18} color="red" /> : ''}</div>
+					},
+					{
+						title: 'Ghi chú',
+						width: 200,
+						dataIndex: 'Note'
+					}
+			  ]
+			: [
+					{
+						title: 'Mã',
+						width: 100,
+						dataIndex: 'UserCode'
+					},
+					{
+						title: 'Tên học viên',
+						width: 200,
+						dataIndex: 'FullName',
+						render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+					},
+					{
+						title: 'Số điện thoại',
+						width: 150,
+						dataIndex: 'Mobile'
+					},
+					{
+						title: 'Email',
+						width: 200,
+						dataIndex: 'Email'
+					},
+					{
+						title: 'Loại',
+						width: 150,
+						dataIndex: 'TypeName',
+						render: (text, item) => (
+							<>
+								<PrimaryTag color={item?.Type == 1 ? 'green' : 'red'} children={text} />
+							</>
+						)
+					},
+					{
+						title: 'Cảnh báo',
+						width: 100,
+						dataIndex: 'Warning',
+						render: (text) => <div className="flex justify-center">{text ? <TiWarningOutline size={18} color="red" /> : ''}</div>
+					},
+					{
+						title: 'Ghi chú',
+						width: 200,
+						dataIndex: 'Note'
+					},
+					{
+						title: 'Chức năng',
+						width: 150,
+						dataIndex: 'Action',
+						render: (text, item) => {
+							return (
+								<div className="flex items-center">
+									<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="edit" dataRow={item} />
+									<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="delete" dataRow={item} />
+								</div>
+							)
+						}
+					}
+			  ]
 
 	return (
 		<>
@@ -116,9 +168,13 @@ export const ListStudentInClass = () => {
 				data={dataTable}
 				columns={columns}
 				Extra={
-					<>
-						<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="add" />
-					</>
+					user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+						<>
+							<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="add" />
+						</>
+					) : (
+						''
+					)
 				}
 			/>
 		</>
