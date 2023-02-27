@@ -201,7 +201,19 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 		}
 	}
 
-	const onChangeCheckCompleteFile = async () => {}
+	const onChangeCheckCompleteFile = async (data) => {
+		console.log('🚀 ~ data:', data)
+		try {
+			const response = await classApi.checkCompleteFileInClass(data.Id)
+			if (response.status === 200) {
+				getDataNoLoading()
+				ShowNoti('success', response.data.message)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+		}
+	}
 
 	// if (isLoading) {
 	// 	return <Skeleton active />
@@ -265,7 +277,7 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 																				userInformation.RoleId == '7') && (
 																				<>
 																					<Popconfirm
-																						title="Bạn có chắc muốn xóa file này?"
+																						title="Bạn có chắc muốn xóa tài liệu này?"
 																						okText="Có"
 																						cancelText="Hủy"
 																						onConfirm={() => handleDeleteFile(item)}
@@ -279,7 +291,21 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 																							tooltip="Xóa tài liệu này"
 																						/>
 																					</Popconfirm>
-																					<Checkbox onChange={onChangeCheckCompleteFile}></Checkbox>
+																					<Popconfirm
+																						title="Bạn có chắc muốn hoàn thành tài liệu này?"
+																						okText="Có"
+																						cancelText="Hủy"
+																						onConfirm={() => onChangeCheckCompleteFile(item)}
+																						disabled={item.IsComplete}
+																					>
+																						<IconButton
+																							type="button"
+																							icon="check"
+																							color={item.IsComplete ? 'green' : 'disabled'}
+																							className=""
+																							tooltip="Hoàn thành tài liệu này"
+																						/>
+																					</Popconfirm>
 																				</>
 																			)}
 																	</div>
@@ -374,21 +400,39 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 																userInformation.RoleId == '2' ||
 																userInformation.RoleId == '4' ||
 																userInformation.RoleId == '7') && (
-																<Popconfirm
-																	title="Bạn có chắc muốn xóa file này?"
-																	okText="Có"
-																	cancelText="Hủy"
-																	onConfirm={() => handleDeleteFile(item)}
-																>
-																	<IconButton
-																		type="button"
-																		icon="remove"
-																		color="red"
-																		onClick={() => {}}
-																		className=""
-																		tooltip="Xóa tài liệu này"
-																	/>
-																</Popconfirm>
+																<>
+																	<Popconfirm
+																		title="Bạn có chắc muốn xóa file này?"
+																		okText="Có"
+																		cancelText="Hủy"
+																		onConfirm={() => handleDeleteFile(item)}
+																	>
+																		<IconButton
+																			type="button"
+																			icon="remove"
+																			color="red"
+																			onClick={() => {}}
+																			className=""
+																			tooltip="Xóa tài liệu này"
+																		/>
+																	</Popconfirm>
+
+																	<Popconfirm
+																		title="Bạn có chắc muốn hoàn thành tài liệu này?"
+																		okText="Có"
+																		cancelText="Hủy"
+																		onConfirm={() => onChangeCheckCompleteFile(item)}
+																		disabled={item.IsComplete}
+																	>
+																		<IconButton
+																			type="button"
+																			icon="check"
+																			color={item.IsComplete ? 'green' : 'disabled'}
+																			className=""
+																			tooltip="Hoàn thành tài liệu này"
+																		/>
+																	</Popconfirm>
+																</>
 															)}
 													</>
 												)}
