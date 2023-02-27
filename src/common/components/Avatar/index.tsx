@@ -5,12 +5,11 @@ type TAvatar = {
 	uri: string
 	className?: string
 	disabled?: boolean
+	isThumbnail?: boolean
 }
 
-const DEFAULT_AVATAR = '/default-avatar.png'
-
 const Avatar: FC<TAvatar> = (props) => {
-	const { uri, className, disabled } = props
+	const { uri, className, disabled, isThumbnail } = props
 
 	const [image, setImage] = useState('')
 	const [show, setShow] = useState(false)
@@ -20,6 +19,8 @@ const Avatar: FC<TAvatar> = (props) => {
 			setShow(!show)
 		}
 	}
+
+	const DEFAULT_AVATAR = isThumbnail ? '/default-thumbnail.png' : '/default-avatar.png'
 
 	return (
 		<>

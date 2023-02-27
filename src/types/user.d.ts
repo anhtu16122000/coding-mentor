@@ -16,6 +16,8 @@ type IUser = {
 	ModifiedOn?: string
 	ModifiedBy?: string
 
+	BranchIds?: any
+
 	UserCode: string
 	UserInformationId: string | number
 }
