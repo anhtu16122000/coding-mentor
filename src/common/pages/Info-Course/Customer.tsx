@@ -33,6 +33,8 @@ import { setCustomerStatus } from '~/store/customerStatusReducer'
 import { Popover } from 'antd'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { BsThreeDots } from 'react-icons/bs'
+import appConfigs from '~/appConfig'
+import ImportCustomer from './ImportCustomer'
 
 let pageIndex = 1
 let dataOption = [
@@ -78,7 +80,12 @@ const CustomerAdvisory = () => {
 	const [totalRow, setTotalRow] = useState(0)
 	const [isLoading, setIsLoading] = useState(false)
 	const dispatch = useDispatch()
-	const state = useSelector((state: RootState) => state)
+	const state = useSelector((state: RootState) => {
+		return state
+	})
+	const userInformation = useSelector((state: RootState) => {
+		return state.user.information
+	})
 	const refVisiblePopover = useRef(null)
 
 	const [dataFilter, setDataFilter] = useState([
@@ -434,6 +441,7 @@ const CustomerAdvisory = () => {
 							listTodoApi={listTodoApi}
 							setTodoApi={setTodoApi}
 						/>
+						<CustomerAdvisoryMail dataRow={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						{data.CustomerStatusId !== 2 && (
 							<CustomerAdviseForm
 								isStudent={true}
@@ -448,8 +456,6 @@ const CustomerAdvisory = () => {
 								setTodoApi={setTodoApi}
 							/>
 						)}
-
-						<CustomerAdvisoryMail dataRow={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 					</div>
 				)
 			}
@@ -474,6 +480,7 @@ const CustomerAdvisory = () => {
 							listTodoApi={listTodoApi}
 							setTodoApi={setTodoApi}
 						/>
+						<CustomerAdvisoryMail dataRow={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						{data.CustomerStatusId !== 2 && (
 							<CustomerAdviseForm
 								isStudent={true}
@@ -488,8 +495,6 @@ const CustomerAdvisory = () => {
 								setTodoApi={setTodoApi}
 							/>
 						)}
-
-						<CustomerAdvisoryMail dataRow={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 					</div>
 				)
 			}
@@ -570,6 +575,29 @@ const CustomerAdvisory = () => {
 				columns={columns}
 				Extra={
 					<div className="extra-table">
+						{(userInformation?.RoleId == 1 ||
+							userInformation?.RoleId == 2 ||
+							userInformation?.RoleId == 4 ||
+							userInformation?.RoleId == 5 ||
+							userInformation?.RoleId == 7) && (
+							<PrimaryButton
+								className="mr-2 btn-download"
+								type="button"
+								icon="download"
+								background="blue"
+								onClick={() => {
+									window.open(`${appConfigs.linkDownloadExcelCustomer}?key=${new Date().getTime()}`)
+								}}
+							>
+								File mẫu
+							</PrimaryButton>
+						)}
+						{(userInformation?.RoleId == 1 ||
+							userInformation?.RoleId == 2 ||
+							userInformation?.RoleId == 4 ||
+							userInformation?.RoleId == 5 ||
+							userInformation?.RoleId == 7) && <ImportCustomer className="mr-1 btn-import" onFetchData={() => getAllCustomer()} />}
+
 						<FilterBase dataFilter={dataFilter} handleFilter={(listFilter: any) => handleFilter(listFilter)} handleReset={handleReset} />
 						<SortBox handleSort={(value) => handleSort(value)} dataOption={dataOption} />
 					</div>

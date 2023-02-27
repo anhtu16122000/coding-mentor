@@ -42,5 +42,12 @@ export const customerAdviseApi = {
 
 	checkExist(data) {
 		return instance.get(`${url}/check-exist`, { params: data })
+	},
+	importCustomer(data) {
+		let fData = new FormData()
+		fData.append('File', data)
+		return instance.post(`${url}/ImportCustomer`, fData, {
+			headers: { 'Content-Type': 'multipart/form-data' }
+		})
 	}
 }
