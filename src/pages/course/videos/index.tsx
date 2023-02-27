@@ -164,11 +164,11 @@ const VideoCourse = () => {
 					extra={
 						<>
 							{userRoleId == '1' && <CreateVideoCourse onRefresh={onRefresh} />}
-							{userRoleId == '3' && (
+							{/* {userRoleId == '3' && (
 								<PrimaryButton onClick={handleCreateCertificate} background="green" icon="add" type="button">
 									Tạo chứng chỉ
 								</PrimaryButton>
-							)}
+							)} */}
 						</>
 					}
 					loading={isLoading.type == 'GET_ALL_COURSE' && isLoading.status}

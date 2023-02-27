@@ -14,6 +14,7 @@ import { ShowNoti } from '~/common/utils'
 import { setArea } from '~/store/areaReducer'
 import { permissionApi } from '~/api/permission'
 import AvatarComponent from '../AvatarComponent'
+import CartButton from '../Cart/button'
 
 let countOpen = 0
 
@@ -195,12 +196,16 @@ function Header({ isOpenMenu, isOpen, funcMenuMobile, openMenuMobile }: IHeader)
 				</div>
 
 				<div className="header-menu">
-					{/* <Notifiaction /> */}
-					<div className="mr-4">
+					<div className="mr-[16px]">
+						<CartButton />
+					</div>
+
+					<div className="mr-[16px]">
 						<Notification />
 					</div>
+
 					<div className="h-10 my-auto border border-tw-gray"></div>
-					{/* User */}
+
 					<div className="ml-4 user">
 						<Popover
 							open={userVisible}

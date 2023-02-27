@@ -23,6 +23,7 @@ type IPrimaryButton = {
 		| 'search'
 		| 'send'
 		| 'payment'
+		| 'cart'
 	type: 'button' | 'submit'
 	onClick?: Function
 	children?: React.ReactNode

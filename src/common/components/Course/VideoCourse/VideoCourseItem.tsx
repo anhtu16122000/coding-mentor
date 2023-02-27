@@ -10,11 +10,42 @@ import PrimaryButton from '../../Primary/Button'
 import CreateVideoCourse from './CreateVideoCourse'
 import { parseToMoney } from '~/common/utils/common'
 import { FaUsers } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
+import RestApi from '~/api/RestApi'
+import { useDispatch } from 'react-redux'
+import { setCartData } from '~/store/cartReducer'
 
 const VideoCourseItem = (props) => {
 	const { Item, onFetchData, UserRoleID, onRefresh } = props
 
 	const router = useRouter()
+
+	const user = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return user?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
+
+	function isManager() {
+		return user?.RoleId == 4
+	}
+
+	function isStdent() {
+		return user?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return user?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return user?.RoleId == 7
+	}
 
 	const onActiveCourse = async () => {
 		try {
@@ -30,19 +61,41 @@ const VideoCourseItem = (props) => {
 		}
 	}
 
-	const onRegisterCourse = async (Id) => {
+	const dispatch = useDispatch()
+
+	/**
+	 * It gets the cart data from the API and sets it in the redux store
+	 */
+	async function getCartData() {
 		try {
-			let res = await StudentListInCourseApi.addVideoCourse(Id)
-			if (res.status == 200) {
-				router.push({
-					pathname: '/course/videos/detail',
-					query: { slug: Id }
-				})
-				ShowNoti('success', res.data.message)
+			const response = await RestApi.get<any>('Cart/my-cart', { pageSize: 99999, pageIndex: 1 })
+			if (response.status == 200) {
+				dispatch(setCartData(response.data.data))
+			} else {
+				dispatch(setCartData([]))
 			}
 		} catch (error) {
-			ShowNoti('error', error.message)
 		} finally {
+			setLoadingAddToCart(false)
+		}
+	}
+
+	const [loadingAddToCart, setLoadingAddToCart] = useState<boolean>(false)
+
+	/**
+	 * Add a product to the cart
+	 */
+	const _addToCart = async () => {
+		setLoadingAddToCart(true)
+		try {
+			let res = await RestApi.post('Cart', { ProductId: Item.Id, Quantity: 1 })
+			if (res.status == 200) {
+				getCartData()
+				ShowNoti('success', 'Thành công')
+			}
+		} catch (error) {
+			ShowNoti('error', error?.message)
+			setLoadingAddToCart(false)
 		}
 	}
 
@@ -82,21 +135,21 @@ const VideoCourseItem = (props) => {
 	return (
 		<div className="video-item-container group">
 			<div className="relative video_course">
-				{UserRoleID == '1' && (
+				{(isAdmin() || isManager() || isAcademic()) && (
 					<div className={`${Item.Active ? 'bg-tw-green' : 'bg-[#c4c4c4]'} video-status-tag`}>{Item.Active ? 'Hiện' : 'Ẩn'}</div>
 				)}
 
-				{UserRoleID == '3' && (
+				{isStdent() && (
 					<div className={`${Item.Status == 1 ? 'bg-tw-primary' : Item.Status == 2 ? 'bg-tw-yellow' : 'bg-tw-green'} video-status-tag`}>
-						{Item.Status == 1 ? 'Chưa học' : Item.Status == 2 ? 'Đang học' : 'Hoàn thành'}
+						{Item?.StatusName}
 					</div>
 				)}
 
 				<img src={!!Item?.Thumbnail ? Item.Thumbnail : '/video-default-thumnails.jpg'} className="videos-thumnail linear" />
 
-				<div className="absolute top-0 bottom-0 left-0 right-0 backdrop-blur-none group-hover:backdrop-blur-sm z-10 linear duration-500 rounded-xl group-hover:rounded-bl-none group-hover:rounded-br-none"></div>
+				<div className="video-blur linear" />
 
-				<div className="absolute top-8 group-hover:top-0 bottom-0 right-0 left-0 opacity-tw-0 group-hover:opacity-tw-10 linear duration-500 z-20 flex justify-center items-center ">
+				<div className="video-option-menu linear">
 					<div>
 						{(UserRoleID == '1' || UserRoleID == '2' || (UserRoleID == '3' && Item.Status != 1)) && (
 							<PrimaryButton
@@ -110,9 +163,9 @@ const VideoCourseItem = (props) => {
 							</PrimaryButton>
 						)}
 
-						{UserRoleID == '3' && Item.Status == 1 && (
-							<PrimaryButton background="green" type="button" className="w-fit" icon="edit" onClick={() => onRegisterCourse(Item.Id)}>
-								Đăng ký học
+						{isStdent() && Item.Status == 1 && (
+							<PrimaryButton background="yellow" type="button" loading={loadingAddToCart} icon="cart" onClick={_addToCart}>
+								Thêm vào giỏ hàng
 							</PrimaryButton>
 						)}
 					</div>
