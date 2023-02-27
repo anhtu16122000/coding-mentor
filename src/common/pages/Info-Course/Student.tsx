@@ -36,7 +36,8 @@ import Filters from '~/common/components/Student/Filters'
 
 const Student: FC<IPersonnel> = (props) => {
 	const { reFresh, allowRegister } = props
-
+	const state = useSelector((state: RootState) => state)
+	const userInformation = useSelector((state: RootState) => state.user.information)
 	const initParamters = {
 		sort: 0,
 		sortType: false,
@@ -45,6 +46,7 @@ const Student: FC<IPersonnel> = (props) => {
 		PageIndex: 1,
 		RoleIds: props.type == 'personnel' ? '1,2,4,5,6,7' : '3',
 		Search: null
+		// parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId : ''
 	}
 
 	const [apiParameters, setApiParameters] = useState(initParamters)
@@ -54,7 +56,6 @@ const Student: FC<IPersonnel> = (props) => {
 	const [totalRow, setTotalRow] = useState(1)
 	const [loading, setLoading] = useState(false)
 	const [loadingAllow, setLoadingAllow] = useState(false)
-	const state = useSelector((state: RootState) => state)
 	const router = useRouter()
 	const dispatch = useDispatch()
 
@@ -456,8 +457,6 @@ const Student: FC<IPersonnel> = (props) => {
 			setLoadingAllow(false)
 		}
 	}
-
-	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	function isAdmin() {
 		return userInformation.RoleId == 1

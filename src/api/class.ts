@@ -77,5 +77,11 @@ export const classApi = {
 	},
 	addFileCurriculumDetailInClass(id, data) {
 		return instance.post(`${url}/file-curriculum-in-class/${id}`, data)
+	},
+	hideCurriculumDetailInClass(Id) {
+		return instance.put(`${url}/hide-curriculum-detail-in-class/${Id}`)
+	},
+	hideFileCurriculumInClass(Id) {
+		return instance.put(`${url}/hide-file-curriculum-in-class/${Id}`)
 	}
 }

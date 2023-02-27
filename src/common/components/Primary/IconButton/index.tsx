@@ -10,6 +10,7 @@ import { HiOutlineFilter } from 'react-icons/hi'
 import { MdOutlineCancel } from 'react-icons/md'
 import { RiExchangeLine } from 'react-icons/ri'
 import { TbDownload, TbSchool, TbUpload } from 'react-icons/tb'
+import { VscRootFolderOpened } from 'react-icons/vsc'
 
 const IconButton: FC<IIconButton> = (props) => {
 	const { tooltip, background, icon, type, onClick, className, color, size, disabled } = props
@@ -156,6 +157,9 @@ const IconButton: FC<IIconButton> = (props) => {
 		}
 		if (icon == 'study') {
 			return <TbSchool size={!!size ? size : 20} />
+		}
+		if (icon == 'hide') {
+			return <VscRootFolderOpened size={!!size ? size : 20} />
 		}
 	}
 

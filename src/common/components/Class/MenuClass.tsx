@@ -35,7 +35,7 @@ const itemsAdmin = [
 	'Thông báo'
 ]
 
-const itemsStudent = ['Lịch học', 'Phản hồi buổi học']
+const itemsStudent = ['Lịch học', 'Các buổi học', 'Tài liệu', 'Bảng điểm', 'Phản hồi buổi học']
 const itemsTeacher = [
 	'Lịch học',
 	'Học viên',
@@ -140,9 +140,13 @@ const MenuClass = () => {
 			case 0:
 				return <CalenderClassStudent />
 			case 1:
-				return <LessonFeedbackPage />
+				return <ScheduleList />
 			case 2:
 				return <DocumentsPageInClass />
+			case 3:
+				return <TranscriptPage />
+			case 4:
+				return <LessonFeedbackPage />
 			default:
 				return <CalenderClassStudent />
 		}
@@ -158,13 +162,25 @@ const MenuClass = () => {
 			case 1:
 				return (
 					<div className="label-tab">
-						<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
+						<BsCalendar2Week className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 2:
 				return (
 					<div className="label-tab">
 						<VscFolderLibrary className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 3:
+				return (
+					<div className="label-tab">
+						<CgTranscript className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 4:
+				return (
+					<div className="label-tab">
+						<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 3:

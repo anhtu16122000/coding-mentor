@@ -14,6 +14,7 @@ import { ManagerChildMenu, ManagerMenu } from '~/common/libs/routers/manager'
 import { SalerChildMenu, SalerMenu } from '~/common/libs/routers/saler'
 import { AccountantChildMenu, AccountantMenu } from '~/common/libs/routers/accountant'
 import { AcademicChildMenu, AcademicMenu } from '~/common/libs/routers/academic'
+import { ParentStudentChildMenu, ParentStudentMenu } from '~/common/libs/routers/parent'
 
 const { SubMenu } = Menu
 
@@ -287,6 +288,10 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 				case 7:
 					setParentMenu(AcademicMenu)
 					setChildMenu(AcademicChildMenu)
+					break
+				case 8:
+					setParentMenu(ParentStudentMenu)
+					setChildMenu(ParentStudentChildMenu)
 					break
 				default:
 					break

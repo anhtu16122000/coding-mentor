@@ -1,4 +1,4 @@
-import { Checkbox, Collapse, Popconfirm, Upload } from 'antd'
+import { Checkbox, Collapse, Popconfirm, Switch, Upload } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
@@ -103,7 +103,45 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 		}
 	}
 
-	const genExtra = () => {
+	const handleHideCurriculumDetailInClass = async (name, Id) => {
+		if (name === 'Chude') {
+			try {
+				setIsLoading(true)
+				const response = await classApi.hideCurriculumDetailInClass(Id)
+				if (response.status === 200) {
+					onRendering && onRendering()
+					getData()
+					ShowNoti('success', response.data.message)
+					return response
+				}
+				if (response.status === 204) {
+				}
+			} catch (err) {
+				ShowNoti('error', err.message)
+			} finally {
+				setIsLoading(false)
+			}
+		} else {
+			try {
+				setIsLoading(true)
+				const response = await classApi.hideFileCurriculumInClass(Id)
+				if (response.status === 200) {
+					onRendering && onRendering()
+					ShowNoti('success', response.data.message)
+					getData()
+					return response
+				}
+				if (response.status === 204) {
+				}
+			} catch (err) {
+				ShowNoti('error', err.message)
+			} finally {
+				setIsLoading(false)
+			}
+		}
+	}
+
+	const genExtra = (item) => {
 		return (
 			<div className="flex  justify-end items-center">
 				<div className="exchange-button">
@@ -117,7 +155,17 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 						tooltip="Đổi vị trí file"
 					/>
 				</div>
-
+				<div className="antd-custom-wrap">
+					<IconButton
+						type="button"
+						icon="hide"
+						color={item.IsHide ? 'disabled' : 'green'}
+						onClick={() => {
+							handleHideCurriculumDetailInClass('Chude', item?.Id)
+						}}
+						tooltip={`${item.IsHide ? 'HIện' : 'Ẩn'} chủ đề`}
+					/>
+				</div>
 				<Upload
 					name="file"
 					multiple={true}
@@ -130,7 +178,6 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 				>
 					<IconButton type="button" icon="upload" color="blue" tooltip="Thêm file" />
 				</Upload>
-
 				<ModalCurriculumOfClassCRUD mode="delete" onSubmit={handleDeleteCurriculumDetail} isLoading={isLoading} />
 			</div>
 		)
@@ -220,7 +267,7 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 								userInformation.RoleId == '2' ||
 								userInformation.RoleId == '4' ||
 								userInformation.RoleId == '7') &&
-							genExtra()
+							genExtra(item)
 						}
 					>
 						<DragDropContext onDragEnd={handleDragEnd}>
@@ -247,7 +294,26 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 																</div>
 																<div className="right">
 																	<p className="time">{moment(item.CreatedOn).format('DD/MM/YYYY HH:mm')}</p>
-																	<div className="buttons">
+																	<div className="buttons flex items-center">
+																		{userInformation.RoleId == '1' ||
+																		userInformation.RoleId == '2' ||
+																		userInformation.RoleId == '4' ||
+																		userInformation.RoleId == '7' ? (
+																			<div className="antd-custom-wrap ml-2">
+																				<IconButton
+																					type="button"
+																					icon="hide"
+																					color={item.IsHide ? 'disabled' : 'green'}
+																					onClick={() => {
+																						handleHideCurriculumDetailInClass('Tailieu', item?.Id)
+																					}}
+																					tooltip={`${item.IsHide ? 'HIện' : 'Ẩn'} chủ đề`}
+																				/>
+																			</div>
+																		) : (
+																			''
+																		)}
+
 																		<IconButton
 																			type="button"
 																			icon="download"
@@ -311,7 +377,7 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 								userInformation.RoleId == '2' ||
 								userInformation.RoleId == '4' ||
 								userInformation.RoleId == '7') &&
-							genExtra()
+							genExtra(item)
 						}
 					>
 						<div className="curriculum-filename-contain">
@@ -359,6 +425,24 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 													</>
 												) : (
 													<>
+														{userInformation.RoleId == '1' ||
+														userInformation.RoleId == '2' ||
+														userInformation.RoleId == '4' ||
+														userInformation.RoleId == '7' ? (
+															<div className="antd-custom-wrap ml-2">
+																<IconButton
+																	type="button"
+																	icon="hide"
+																	color={item.IsHide ? 'disabled' : 'green'}
+																	onClick={() => {
+																		handleHideCurriculumDetailInClass('Tailieu', item?.Id)
+																	}}
+																	tooltip={`${item.IsHide ? 'HIện' : 'Ẩn'} chủ đề`}
+																/>
+															</div>
+														) : (
+															''
+														)}
 														<IconButton
 															type="button"
 															icon="download"

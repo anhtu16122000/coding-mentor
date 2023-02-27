@@ -15,6 +15,7 @@ type ICurriculumDetail = IBaseApi<{
 	Id: number
 	Index: number
 	Time: number
+	IsHide:boolean
 }>
 
 type ITeacherOff = IBaseApi<{
