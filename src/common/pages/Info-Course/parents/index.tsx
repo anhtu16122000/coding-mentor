@@ -102,7 +102,7 @@ export default function Parents(props) {
 		sort: 0,
 		sortType: false
 	}
-	const [isLoading, setIsLoading] = useState(false)
+	const [isLoading, setIsLoading] = useState(true)
 	const [totalPage, setTotalPage] = useState(null)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [todoApi, setTodoApi] = useState(listTodoApi)
@@ -241,6 +241,14 @@ export default function Parents(props) {
 			width: 120
 		},
 		{
+			title: 'Ngày sinh',
+			dataIndex: 'DOB',
+			width: 120,
+			render: (value, record) => {
+				return <p className="font-[600]">{!!value ? moment(value).format('DD/MM/YYYY') : ''}</p>
+			}
+		},
+		{
 			title: 'Giới tính',
 			width: 90,
 			dataIndex: 'Gender',
@@ -248,23 +256,12 @@ export default function Parents(props) {
 				<>
 					{value == 1 && <span className="tag yellow">Nam</span>}
 					{value == 2 && <span className="tag blue">Nữ</span>}
-					{value == 3 && <span className="tag blue">Khác</span>}
+					{value == 3 && <span className="tag gray">Khác</span>}
 				</>
 			)
 		},
 		{
-			title: 'Thời gian',
-			dataIndex: 'Time',
-			render: (date: any) => moment(date).format('DD/MM/YYYY HH:mm')
-		},
-		{
-			width: 200,
-			title: 'Người hẹn',
-			dataIndex: 'ModifiedBy'
-		},
-		{
 			title: '',
-			// fixed: 'right',
 			render: (text, data, index) => {
 				return (
 					<div className="flex items-center">

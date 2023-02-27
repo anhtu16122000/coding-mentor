@@ -1,7 +1,6 @@
 import moment from 'moment'
 import { useEffect, useMemo, useState } from 'react'
 import { branchApi } from '~/api/branch'
-import SortBox from '~/common/components/Elements/SortBox'
 import { parseSelectArray } from '~/common/utils/common'
 import { ShowNostis, ShowNoti } from '~/common/utils'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
@@ -11,8 +10,11 @@ import { useDispatch } from 'react-redux'
 import { setBranch } from '~/store/branchReducer'
 import RestApi from '~/api/RestApi'
 import { userInfoColumn } from '~/common/libs/columns/user-info'
-import ParentsForm from '~/common/pages/Info-Course/parents/Create'
 import PrimaryTable from '~/common/components/Primary/Table'
+import AddChildForm from './AddChild'
+import { ButtonRemove } from '~/common/components/TableButton'
+import { PrimaryTooltip } from '~/common/components'
+import { Popconfirm } from 'antd'
 
 const appointmenInitFilter = [
 	{
@@ -50,37 +52,6 @@ const appointmenInitFilter = [
 	}
 ]
 
-const sortParams = [
-	{
-		dataSort: {
-			sort: 1,
-			sortType: true
-		},
-		text: 'Tên A - Z '
-	},
-	{
-		dataSort: {
-			sort: 0,
-			sortType: false
-		},
-		text: 'Tên Z - A'
-	},
-	{
-		dataSort: {
-			sort: 0,
-			sortType: true
-		},
-		text: 'Ngày hẹn A - Z'
-	},
-	{
-		dataSort: {
-			sort: 0,
-			sortType: false
-		},
-		text: 'Ngày hẹn Z - A'
-	}
-]
-
 let pageIndex = 1
 
 export default function Childs(props) {
@@ -89,6 +60,7 @@ export default function Childs(props) {
 
 	// BASE USESTATE TABLE
 	const [dataSource, setDataSource] = useState<ITestCustomer[]>([])
+
 	const listTodoApi = {
 		pageSize: PAGE_SIZE,
 		pageIndex: pageIndex,
@@ -98,6 +70,7 @@ export default function Childs(props) {
 		sort: 0,
 		sortType: false
 	}
+
 	const [isLoading, setIsLoading] = useState(false)
 	const [totalPage, setTotalPage] = useState(null)
 	const [currentPage, setCurrentPage] = useState(1)
@@ -180,15 +153,21 @@ export default function Childs(props) {
 		}
 	}
 
-	// HANDLE SORT
-	const handleSort = async (option) => {
-		let newTodoApi = {
-			...listTodoApi,
-			pageIndex: 1,
-			sort: option.title.sort,
-			sortType: option.title.sortType
+	async function removeStudent(params) {
+		const DATA_SUBMIT = {
+			UserInformationId: params,
+			ParentId: 0
 		}
-		setCurrentPage(1), setTodoApi(newTodoApi)
+
+		try {
+			const response = await RestApi.put('UserInformation', DATA_SUBMIT)
+			if (response.status == 200) {
+				ShowNostis.success('Thành công')
+				getDataSource()
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		}
 	}
 
 	// GET PAGE_NUMBER
@@ -217,6 +196,18 @@ export default function Childs(props) {
 			width: 120
 		},
 		{
+			title: 'Email',
+			dataIndex: 'Email'
+		},
+		{
+			title: 'Ngày sinh',
+			dataIndex: 'DOB',
+			width: 120,
+			render: (value, record) => {
+				return <p className="font-[600]">{!!value ? moment(value).format('DD/MM/YYYY') : ''}</p>
+			}
+		},
+		{
 			title: 'Giới tính',
 			width: 90,
 			dataIndex: 'Gender',
@@ -229,43 +220,36 @@ export default function Childs(props) {
 			)
 		},
 		{
-			width: 200,
-			title: 'Thời gian',
-			dataIndex: 'Time',
-			render: (date: any) => moment(date).format('DD/MM/YYYY HH:mm')
-		},
-		{
-			width: 200,
-			title: 'Người hẹn',
-			dataIndex: 'ModifiedBy'
+			title: '',
+			dataIndex: 'Gender',
+			render: (value, record) => (
+				<>
+					<PrimaryTooltip id={`dele-${record?.UserInformationId}`} place="left" content="Xoá">
+						<Popconfirm title="Xoá dữ liệu?" onConfirm={() => removeStudent(record?.UserInformationId)}>
+							<ButtonRemove className="ml-[16px]" />
+						</Popconfirm>
+					</PrimaryTooltip>
+				</>
+			)
 		}
 	]
 
 	return (
-		<>
-			<div className="w-[1200px]">
-				<PrimaryTable
-					className="w-[1176px]"
-					current={currentPage}
-					total={totalPage && totalPage}
-					onChangePage={(pageNumber: number) => getPagination(pageNumber)}
-					loading={isLoading}
-					data={dataSource}
-					columns={columns}
-					TitleCard={
-						<div className="extra-table">
-							<SortBox handleSort={(value) => handleSort(value)} dataOption={sortParams} />
-						</div>
-					}
-					Extra={
-						<>
-							{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && (
-								<ParentsForm defaultData={null} onRefresh={getDataSource} />
-							)}
-						</>
-					}
-				/>
-			</div>
-		</>
+		<PrimaryTable
+			className="w-[1176px]"
+			current={currentPage}
+			total={totalPage && totalPage}
+			onChangePage={(pageNumber: number) => getPagination(pageNumber)}
+			loading={isLoading}
+			data={dataSource}
+			columns={columns}
+			Extra={
+				<>
+					{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && (
+						<AddChildForm parent={props?.rowData} onRefresh={getDataSource} />
+					)}
+				</>
+			}
+		/>
 	)
 }
