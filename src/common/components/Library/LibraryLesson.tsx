@@ -23,6 +23,7 @@ const DEFAULT_FILTER = { directoryId: '', pageIndex: 1, pageSize: 9999 }
 
 const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 	const cm = useRef(null)
+	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	const [lessonActivated, setLessonActivated] = useState({ Id: '', FileUrl: '', FileName: '', FileType: '' })
 	const [showPop, setShowPop] = useState('')
@@ -172,8 +173,6 @@ const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 		const resss = ress.replace('.docs', '').replace('.doc', '').replace('.xls', '').replace('.xlsx', '').replace('.mp3', '')
 		return resss.replace('.zip', '').replace('.rar', '').replace('.json', '').replace('.xml', '')
 	}
-
-	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	function isAdmin() {
 		return userInformation?.RoleId == 1

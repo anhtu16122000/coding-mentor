@@ -528,7 +528,7 @@ const Student: FC<IPersonnel> = (props) => {
 								icon="download"
 								background="blue"
 								onClick={() => {
-									window.open(appConfigs.linkDownloadExcel)
+									window.open(`${appConfigs.linkDownloadExcel}?key=${new Date().getTime()}`)
 								}}
 							>
 								File mẫu
