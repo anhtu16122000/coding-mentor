@@ -48,7 +48,8 @@ const ZoomManager: FC<TZoomManager> = (props) => {
 
 			const diffMilliseconds = Math.abs(now - timestamp)
 			const diffMinutes = Math.floor(diffMilliseconds / 60000)
-			return diffMinutes < 15
+
+			return diffMinutes > -15
 		} else {
 			return false
 		}
@@ -58,6 +59,7 @@ const ZoomManager: FC<TZoomManager> = (props) => {
 		if (!!data?.EndTime) {
 			const timestamp = new Date(data?.EndTime).getTime()
 			const now = new Date().getTime()
+
 			const diffMilliseconds = Math.abs(timestamp - now)
 			const diffMinutes = Math.floor(diffMilliseconds / 60000)
 			return diffMinutes < 15
@@ -65,6 +67,14 @@ const ZoomManager: FC<TZoomManager> = (props) => {
 			return false
 		}
 	}
+
+	function isTimeWithinRange(currentTime: Date, startTime: Date, endTime: Date): boolean {
+		const bufferTime = 15 * 60 * 1000 // số miligiây tương ứng với 15 phút
+		return currentTime.getTime() >= startTime.getTime() - bufferTime && currentTime.getTime() <= endTime.getTime() + bufferTime
+	}
+
+	// now >= start -15p
+	// now <= end +15p
 
 	function tinhSoPhutChenhLech() {
 		const timestamp = new Date(data?.EndTime).getTime()
@@ -135,7 +145,7 @@ const ZoomManager: FC<TZoomManager> = (props) => {
 		if (!!data?.JoinUrl) window.open(data?.JoinUrl, '_plank')
 	}
 
-	if (!isStart15Minutes() && !isEnd15Minutes()) {
+	if (!isTimeWithinRange(new Date(), new Date(data?.StartTime), new Date(data?.EndTime))) {
 		return <></>
 	}
 

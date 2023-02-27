@@ -125,6 +125,7 @@ const Discount = () => {
 			)
 		},
 		{
+			width: 150,
 			title: 'Khuyến mãi',
 			dataIndex: 'Value',
 			render: (text, record) => {
@@ -136,6 +137,7 @@ const Discount = () => {
 			}
 		},
 		{
+			width: 140,
 			title: 'Gói khuyến mãi',
 			dataIndex: 'PackageType',
 			render: (text, record) => {
@@ -143,6 +145,7 @@ const Discount = () => {
 			}
 		},
 		{
+			width: 150,
 			title: 'Khuyến mãi tối đa',
 			dataIndex: 'MaxDiscount',
 			align: 'center',
@@ -164,16 +167,19 @@ const Discount = () => {
 			}
 		},
 		{
+			width: 100,
 			title: 'Số lượng',
 			align: 'center',
 			dataIndex: 'Quantity'
 		},
 		{
+			width: 100,
 			title: 'Đã dùng',
 			align: 'center',
 			dataIndex: 'UsedQuantity'
 		},
 		{
+			width: 120,
 			title: 'Ngày hết hạn',
 			dataIndex: 'Expired',
 			render: (date) => moment(date).format('DD/MM/YYYY')
