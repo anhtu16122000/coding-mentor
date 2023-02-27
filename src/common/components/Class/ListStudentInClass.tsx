@@ -98,6 +98,19 @@ export const ListStudentInClass = () => {
 						title: 'Ghi chú',
 						width: 200,
 						dataIndex: 'Note'
+					},
+					{
+						title: 'Chức năng',
+						width: 150,
+						dataIndex: 'Action',
+						render: (text, item) => {
+							return (
+								<div className="flex items-center">
+									<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="edit" dataRow={item} />
+									<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="delete" dataRow={item} />
+								</div>
+							)
+						}
 					}
 			  ]
 			: [
@@ -142,19 +155,6 @@ export const ListStudentInClass = () => {
 						title: 'Ghi chú',
 						width: 200,
 						dataIndex: 'Note'
-					},
-					{
-						title: 'Chức năng',
-						width: 150,
-						dataIndex: 'Action',
-						render: (text, item) => {
-							return (
-								<div className="flex items-center">
-									<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="edit" dataRow={item} />
-									<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="delete" dataRow={item} />
-								</div>
-							)
-						}
 					}
 			  ]
 
