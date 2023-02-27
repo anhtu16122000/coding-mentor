@@ -18,6 +18,8 @@ import { useDispatch } from 'react-redux'
 import { setArea } from '~/store/areaReducer'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
+import DatePickerField from '~/common/components/FormControl/DatePickerField'
+import moment from 'moment'
 
 interface IParentForm {
 	isEdit?: boolean
@@ -40,8 +42,6 @@ const ParentForm: FC<IParentForm> = ({ isEdit, onRefresh, defaultData, item }) =
 	const area = useSelector((state: RootState) => state.area.Area)
 
 	async function toggle() {
-		console.log('--- defaultData: ', defaultData)
-
 		setVisible(!visible)
 	}
 
@@ -49,14 +49,13 @@ const ParentForm: FC<IParentForm> = ({ isEdit, onRefresh, defaultData, item }) =
 		setVisible(!visible)
 		form.setFieldsValue(defaultData)
 		form.setFieldValue('BranchIds', parseInt(defaultData?.BranchIds))
+		form.setFieldValue('DOB', moment(defaultData?.DOB) || null)
 	}
 
 	useEffect(() => {
 		if (visible) {
 			getBranchs()
-
 			getJobs()
-
 			getAllArea()
 		}
 	}, [visible])
@@ -160,7 +159,7 @@ const ParentForm: FC<IParentForm> = ({ isEdit, onRefresh, defaultData, item }) =
 
 	async function edit(params) {
 		try {
-			const response = await RestApi.post(url, { ...params, Id: item?.Id })
+			const response = await RestApi.put(url, { ...params, UserInformationId: defaultData?.UserInformationId })
 			if (response.status == 200) {
 				ShowNostis.success('Thành công')
 				!!onRefresh && onRefresh()
@@ -285,6 +284,8 @@ const ParentForm: FC<IParentForm> = ({ isEdit, onRefresh, defaultData, item }) =
 					) : (
 						<InputTextField className="col-span-1" label="Mật khẩu" name="Password" />
 					)}
+
+					<DatePickerField rules={formRequired} className="col-span-1" label="Ngày sinh" name="DOB" mode="single" format="DD/MM/YYYY" />
 
 					<Divider className="col-span-2" orientation="center">
 						Địa chỉ
