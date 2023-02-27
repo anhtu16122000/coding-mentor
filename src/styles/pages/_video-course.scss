@@ -68,3 +68,13 @@
 		right: 8px !important;
 	}
 }
+
+.video-blur {
+	@apply absolute top-0 bottom-0 left-0 right-0 backdrop-blur-none group-hover:backdrop-blur-sm z-10 duration-500;
+	@apply rounded-xl group-hover:rounded-bl-none group-hover:rounded-br-none;
+}
+
+.video-option-menu {
+	@apply absolute top-8 group-hover:top-0 bottom-0 right-0 left-0 opacity-tw-0 group-hover:opacity-tw-10 duration-500 z-20 flex justify-center items-center bg-[#00000018];
+	@apply rounded-xl group-hover:rounded-bl-none group-hover:rounded-br-none;
+}

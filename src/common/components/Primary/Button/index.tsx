@@ -8,7 +8,7 @@ import { IoEnterOutline, IoPowerSharp } from 'react-icons/io5'
 import { MdOutlinePayments } from 'react-icons/md'
 import { RiArrowDownSFill, RiArrowUpSFill, RiExchangeLine } from 'react-icons/ri'
 import { SiMicrosoftexcel } from 'react-icons/si'
-import { TbDownload, TbUpload } from 'react-icons/tb'
+import { TbDownload, TbShoppingCartPlus, TbUpload } from 'react-icons/tb'
 
 const PrimaryButton: FC<IPrimaryButton> = (props) => {
 	const { background, children, icon, type, onClick, className, disable, loading } = props
@@ -78,6 +78,9 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 	function getIcon() {
 		if (icon == 'add') {
 			return <PlusCircle size={18} className="mr-2" />
+		}
+		if (icon == 'cart') {
+			return <TbShoppingCartPlus size={20} className="mr-2" />
 		}
 		if (icon == 'edit') {
 			return <FiEdit size={18} className="mr-2" />
