@@ -15,6 +15,15 @@ type ICurriculumDetail = IBaseApi<{
 	Id: number
 	Index: number
 	Time: number
+	CreatedBy: string
+	CreatedOn: string
+	CurriculumDetailId: number
+	Enable: boolean
+	FileCurriculumId: number
+	IsComplete: boolean
+	IsHide: boolean
+	ModifiedBy: string
+	ModifiedOn: string
 }>
 
 type ITeacherOff = IBaseApi<{
@@ -81,12 +90,12 @@ type IClass = IBaseApi<{
 }>
 
 type IRollUpTeacher = IBaseApi<{
-	ScheduleId: number,
-	ClassId: number,
-	TeacherId: number,
-	TeacherName: string,
-	TeacherCode: string,
-	StartTime: any,
-	EndTime: any,
+	ScheduleId: number
+	ClassId: number
+	TeacherId: number
+	TeacherName: string
+	TeacherCode: string
+	StartTime: any
+	EndTime: any
 	TeacherAttendanceId: number
 }>
