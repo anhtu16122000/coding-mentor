@@ -254,7 +254,7 @@ GroupHeader.UserItem = (props) => {
 			<Avatar disabled uri={item.Avatar} className="w-[40px] h-[40px] mr-[16px] shadow-sm " />
 			<div className="flex-1">
 				<div className="font-[600]">{item?.FullName}</div>
-				<div className={`font-[400] text-[#808080] ${item?.RoleName == 'Admin' ? '!text-[#1E88E5] font-[500]' : ''}`}>{item?.RoleName}</div>
+				<div className="font-[400] text-[#808080]">{item.TypeName}</div>
 			</div>
 			<div
 				onClick={() => (!loading && isMember ? handleDeleteMember() : handleAddUser())}
