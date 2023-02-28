@@ -10,7 +10,7 @@ import styles from './cart.module.scss'
 import Head from 'next/head'
 import ReactHTMLParser from 'react-html-parser'
 import appConfigs from '~/appConfig'
-import { Card, Divider, Input, Skeleton } from 'antd'
+import { Card, Divider, Empty, Input, Skeleton } from 'antd'
 import Avatar from '../Avatar'
 import { parseToMoney } from '~/common/utils/common'
 import { HiPlus } from 'react-icons/hi'
@@ -24,6 +24,29 @@ import PrimaryTooltip from '../PrimaryTooltip'
 import PrimaryButton from '../Primary/Button'
 
 const CART_ROUTER = '/cart'
+
+const CartLoading = () => {
+	return (
+		<>
+			<div className="cart-item">
+				<Skeleton.Button active className="cart-item-thumbnail" />
+				<div className="w-full">
+					<Skeleton paragraph={false} active className="ml-[8px] w-[40%]" />
+					<Skeleton paragraph={false} active className="ml-[8px] w-[50px] mt-[16px]" />
+					<Skeleton paragraph={false} active className="ml-[8px] w-[80px] mt-[16px]" />
+				</div>
+			</div>
+			<div className="cart-item">
+				<Skeleton.Button active className="cart-item-thumbnail" />
+				<div className="w-full">
+					<Skeleton paragraph={false} active className="ml-[8px] w-[40%]" />
+					<Skeleton paragraph={false} active className="ml-[8px] w-[50px] mt-[16px]" />
+					<Skeleton paragraph={false} active className="ml-[8px] w-[80px] mt-[16px]" />
+				</div>
+			</div>
+		</>
+	)
+}
 
 const MainCart = () => {
 	const dispatch = useDispatch()
@@ -223,6 +246,10 @@ const MainCart = () => {
 
 	console.log('--- appliedDiscount: ', appliedDiscount)
 
+	function isEmptyCart() {
+		return cartData.length == 0 && !loading
+	}
+
 	return (
 		<div onClick={openCart} className={styles.CustomCartContainer}>
 			<Head>
@@ -231,33 +258,16 @@ const MainCart = () => {
 
 			<div className="cart-body w750:h-[calc(100vh-120px)]">
 				<div className="col-span-12 w750:col-span-7 flex flex-col">
-					<Card className="flex-1 shadow-sm w750:h-[calc(100vh-120px)]">
+					<Card className={`flex-1 shadow-sm w750:h-[calc(100vh-120px)] ${cartData.length == 0 && !loading ? 'max-h-[250px]' : ''}`}>
 						<div className="font-[600] text-[18px] mb-[16px]">
 							<FiShoppingCart size={20} className="mr-[16px] mt-[-3px]" />
 							Giỏ hàng
 						</div>
 
 						<div className="w750:max-h-[calc(100vh-220px)] scrollable mr-[-24px] pr-[14px]">
-							{cartData.length == 0 && loading && (
-								<>
-									<div className="cart-item">
-										<Skeleton.Button active className="cart-item-thumbnail" />
-										<div className="w-full">
-											<Skeleton paragraph={false} active className="ml-[8px] w-[40%]" />
-											<Skeleton paragraph={false} active className="ml-[8px] w-[50px] mt-[16px]" />
-											<Skeleton paragraph={false} active className="ml-[8px] w-[80px] mt-[16px]" />
-										</div>
-									</div>
-									<div className="cart-item">
-										<Skeleton.Button active className="cart-item-thumbnail" />
-										<div className="w-full">
-											<Skeleton paragraph={false} active className="ml-[8px] w-[40%]" />
-											<Skeleton paragraph={false} active className="ml-[8px] w-[50px] mt-[16px]" />
-											<Skeleton paragraph={false} active className="ml-[8px] w-[80px] mt-[16px]" />
-										</div>
-									</div>
-								</>
-							)}
+							{cartData.length == 0 && !loading && <Empty />}
+
+							{cartData.length == 0 && loading && <CartLoading />}
 
 							{(cartData.length > 0 || !loading) && (
 								<>
@@ -360,7 +370,7 @@ const MainCart = () => {
 							Thanh toán
 						</div>
 
-						{!appliedDiscount && (
+						{!appliedDiscount && !isEmptyCart() && (
 							<div className="w-full flex mb-[16px]">
 								<Input
 									disabled={loadingDiscount}
@@ -371,13 +381,10 @@ const MainCart = () => {
 									onChange={(event) => setTextDiscount(event.target?.value)}
 									className="primary-input text-[18px] flex-1"
 								/>
-								<div
-									onClick={() => applyDiscount(textDiscount)}
-									className="bg-[#1E88E5] cursor-pointer ml-[8px] h-[36px] px-[16px] rounded-[6px] flex items-center justify-center"
-								>
+								<div onClick={() => applyDiscount(textDiscount)} className="cart-btn-apply-discount">
 									<div className="text-[#fff] font-[600]">Áp dụng</div>
 									{loadingDiscount && (
-										<div className="ml-[8px] mt-[-4px]">
+										<div className="discount-loading">
 											<BaseLoading.White />
 										</div>
 									)}
@@ -388,7 +395,7 @@ const MainCart = () => {
 						{!!textError && <div className="text-[red] mb-[16px]">{textError}</div>}
 
 						{!!appliedDiscount && (
-							<div className="mb-[16px] bg-[#fff] shadow-sm border-[1px] border-[#dedede] p-[8px] rounded-[6px] relative">
+							<div className="cart-discount-container">
 								<div className="flex items-center text-[18px]">
 									<div className="font-[600] mr-[4px]">Mã: </div>
 									<div>{appliedDiscount?.Code}</div>
@@ -414,11 +421,8 @@ const MainCart = () => {
 									<div className="font-[600] mr-[4px]">Tối đa: </div>
 									<div>{parseToMoney(appliedDiscount?.MaxDiscount)}</div>
 								</div>
-								<div
-									onClick={() => setAppliedDiscount(null)}
-									className="h-full pr-[8px] cursor-pointer top-0 right-0 absolute flex items-center"
-								>
-									<PrimaryTooltip id="the-tip-2023" content="Bỏ áp dụng mã" place="top">
+								<div onClick={() => setAppliedDiscount(null)} className="cart-btn-remove-discount">
+									<PrimaryTooltip id="tip-2023" content="Bỏ áp dụng" place="top">
 										<IoMdClose size={20} color="red" />
 									</PrimaryTooltip>
 								</div>
@@ -427,19 +431,17 @@ const MainCart = () => {
 
 						{!!getDiscountValue() && (
 							<>
-								<h4 className="text-[16px] font-[600] mt-[8px]">Tổng tiền: {parseToMoney(getTotalPrice().totalPrice)}</h4>
-								<h4 className="text-[16px] font-[600] text-[#1c73e8] mt-[8px]">Khuyến mãi: {parseToMoney(getDiscountValue())}</h4>
+								<h4 className="cart-text-total">Tổng tiền: {parseToMoney(getTotalPrice().totalPrice)}</h4>
+								<h4 className="cart-text-total text-[#1c73e8]">Khuyến mãi: {parseToMoney(getDiscountValue())}</h4>
 							</>
 						)}
 
-						<h4 className="text-[18px] font-[600] mt-[8px]">
-							Số tiền thanh toán: {parseToMoney(getTotalPrice().totalPrice - getDiscountValue())}
-						</h4>
+						<h4 className="cart-text-total">Số tiền thanh toán: {parseToMoney(getTotalPrice().totalPrice - getDiscountValue())}</h4>
 
 						<PrimaryButton
-							disable={loadingUpdate?.Status || loading}
+							disable={loadingUpdate?.Status || loading || isEmptyCart()}
 							onClick={onSubmit}
-							className="w-full mt-[8px]"
+							className="w-full mt-[16px]"
 							background="blue"
 							type="button"
 						>
