@@ -78,3 +78,11 @@
 	@apply absolute top-8 group-hover:top-0 bottom-0 right-0 left-0 opacity-tw-0 group-hover:opacity-tw-10 duration-500 z-20 flex justify-center items-center bg-[#00000018];
 	@apply rounded-xl group-hover:rounded-bl-none group-hover:rounded-br-none;
 }
+
+.video-price {
+	@apply text-[16px] font-[600] mb-2;
+}
+
+.video-name {
+	@apply text-[18px] font-[600] mb-2 line-clamp-1;
+}

@@ -5,7 +5,7 @@ import { VideoCourseStudentApi } from '~/api/course/video-course-student/video-c
 import { VideoCourseApi } from '~/api/course/video-course/video-course'
 import CreateVideoCourse from '~/common/components/Course/VideoCourse/CreateVideoCourse'
 import SortVideoCourse from '~/common/components/Course/VideoCourse/SortVideoCourse'
-import VideoCourseItem from '~/common/components/Course/VideoCourse/VideoCourseItem'
+import VideoItem from '~/common/components/Course/VideoCourse/CardItem'
 import MainLayout from '~/common/components/MainLayout'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { ShowNoti } from '~/common/utils'
@@ -179,7 +179,7 @@ const VideoCourse = () => {
 						dataSource={data}
 						grid={{ xs: 1, sm: 2, md: 2, lg: 3, xl: 3, xxl: 4 }}
 						renderItem={(item) => (
-							<VideoCourseItem UserRoleID={userRoleId} onFetchData={() => setFilters({ ...filters })} Item={item} onRefresh={onRefresh} />
+							<VideoItem UserRoleID={userRoleId} onFetchData={() => setFilters({ ...filters })} Item={item} onRefresh={onRefresh} />
 						)}
 						pagination={{
 							onChange: getPagination,

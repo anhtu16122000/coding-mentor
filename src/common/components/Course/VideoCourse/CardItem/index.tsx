@@ -6,8 +6,8 @@ import { GiRoundStar } from 'react-icons/gi'
 import { StudentListInCourseApi } from '~/api/course/video-course/student-list-in-video-course'
 import { VideoCourseApi } from '~/api/course/video-course/video-course'
 import { ShowNoti } from '~/common/utils'
-import PrimaryButton from '../../Primary/Button'
-import CreateVideoCourse from './CreateVideoCourse'
+import PrimaryButton from '../../../Primary/Button'
+import CreateVideoCourse from '../CreateVideoCourse'
 import { parseToMoney } from '~/common/utils/common'
 import { FaUsers } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
@@ -15,8 +15,9 @@ import { RootState } from '~/store'
 import RestApi from '~/api/RestApi'
 import { useDispatch } from 'react-redux'
 import { setCartData } from '~/store/cartReducer'
+import StudentControl from './student-control'
 
-const VideoCourseItem = (props) => {
+const VideoItem = (props) => {
 	const { Item, onFetchData, UserRoleID, onRefresh } = props
 
 	const router = useRouter()
@@ -61,44 +62,6 @@ const VideoCourseItem = (props) => {
 		}
 	}
 
-	const dispatch = useDispatch()
-
-	/**
-	 * It gets the cart data from the API and sets it in the redux store
-	 */
-	async function getCartData() {
-		try {
-			const response = await RestApi.get<any>('Cart/my-cart', { pageSize: 99999, pageIndex: 1 })
-			if (response.status == 200) {
-				dispatch(setCartData(response.data.data))
-			} else {
-				dispatch(setCartData([]))
-			}
-		} catch (error) {
-		} finally {
-			setLoadingAddToCart(false)
-		}
-	}
-
-	const [loadingAddToCart, setLoadingAddToCart] = useState<boolean>(false)
-
-	/**
-	 * Add a product to the cart
-	 */
-	const _addToCart = async () => {
-		setLoadingAddToCart(true)
-		try {
-			let res = await RestApi.post('Cart', { ProductId: Item.Id, Quantity: 1 })
-			if (res.status == 200) {
-				getCartData()
-				ShowNoti('success', 'Thành công')
-			}
-		} catch (error) {
-			ShowNoti('error', error?.message)
-			setLoadingAddToCart(false)
-		}
-	}
-
 	/**
 	 * Delete a course
 	 * @param data - The data of the course that you want to delete
@@ -132,6 +95,10 @@ const VideoCourseItem = (props) => {
 		</div>
 	)
 
+	function viewDetails() {
+		router.push({ pathname: '/course/videos/detail', query: { slug: Item?.Id } })
+	}
+
 	return (
 		<div className="video-item-container group">
 			<div className="relative video_course">
@@ -151,34 +118,25 @@ const VideoCourseItem = (props) => {
 
 				<div className="video-option-menu linear">
 					<div>
-						{(UserRoleID == '1' || UserRoleID == '2' || (UserRoleID == '3' && Item.Status != 1)) && (
-							<PrimaryButton
-								background="blue"
-								type="button"
-								disable={UserRoleID == '3' && Item.Disable}
-								icon="eye"
-								onClick={() => router.push({ pathname: '/course/videos/detail', query: { slug: Item?.Id } })}
-							>
+						{(UserRoleID == '1' || UserRoleID == '2' || (isStdent() && Item.Status != 1)) && (
+							<PrimaryButton background="blue" type="button" disable={isStdent() && Item.Disable} icon="eye" onClick={viewDetails}>
 								Xem khóa học
 							</PrimaryButton>
 						)}
 
-						{isStdent() && Item.Status == 1 && (
-							<PrimaryButton background="yellow" type="button" loading={loadingAddToCart} icon="cart" onClick={_addToCart}>
-								Thêm vào giỏ hàng
-							</PrimaryButton>
-						)}
+						<StudentControl item={Item} />
 					</div>
 				</div>
 			</div>
 
 			<div className="p-3">
-				<p className="text-[18px] font-[600] mb-2 line-clamp-1">{Item.Name}</p>
-				{!!Item?.Price && <div className="text-[16px] font-[600] mb-2 text-[#E64A19]">{parseToMoney(Item.Price)}</div>}
-				{!Item?.Price && <div className="text-[16px] font-[600] mb-2 text-[#1976D2]">Miễn phí</div>}
+				<p className="video-name">{Item.Name}</p>
 
-				<div className="flex justify-between items-center">
-					<div className="flex items-center gap-2 w-3/4 ">
+				{!!Item?.Price && <div className="video-price text-[#E64A19]">{parseToMoney(Item.Price)}</div>}
+				{!Item?.Price && <div className="video-price text-[#1976D2]">Miễn phí</div>}
+
+				<div className="all-center">
+					<div className="row-center gap-2 w-full">
 						<p className="text-base text-[#000000]">
 							<FaUsers className="mt-[-2px]" size={20} />
 						</p>
@@ -190,7 +148,7 @@ const VideoCourseItem = (props) => {
 							allowHalf
 							character={<GiRoundStar />}
 							disabled
-							className="text-tw-yellow ml-[8px]"
+							className="text-[#ffe819] ml-[8px]"
 							style={{ lineHeight: 0 }}
 						/>
 					</div>
@@ -210,4 +168,4 @@ const VideoCourseItem = (props) => {
 	)
 }
 
-export default VideoCourseItem
+export default VideoItem
