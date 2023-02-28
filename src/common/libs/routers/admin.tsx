@@ -111,7 +111,7 @@ export const AdminChildMenu = [
 				TypeItem: 'single',
 				Key: '/finance/donation-history',
 				Route: '/finance/donation-history',
-				Text: 'Lịch sử thanh toán'
+				Text: 'Lịch sử tặng'
 			}
 		]
 	},

@@ -13,7 +13,7 @@ type IFeedbackStudent = IBaseApi<{
 	Enable: boolean
 	Id: number
 	IsIncognito: boolean
-	IsPriority: truboolean
+	IsPriority: boolean
 	ModifiedBy: string
 	ModifiedOn: string
 	StarRating: number

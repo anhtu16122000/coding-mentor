@@ -197,7 +197,7 @@ const ParentForm: FC<IParentForm> = ({ isEdit, onRefresh, defaultData, item }) =
 
 			<Modal
 				width={600}
-				title={!isEdit ? 'Cập nhật phụ huynh' : 'Thêm phụ huynh'}
+				title={!isEdit ? 'Thêm phụ huynh' : 'Cập nhật phụ huynh'}
 				open={visible}
 				onCancel={toggle}
 				footer={<ModalFooter loading={loading} onCancel={toggle} onOK={submitForm} />}
