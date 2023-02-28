@@ -50,7 +50,7 @@ export const getFileIcons = (type, FileUrl) => {
 	}
 
 	if (type == 'doc' || type == 'docx' || type == 'word') {
-		return <img draggable={false} src="/icons/doc-file.svg" alt="lms icons" className="" style={{ height: 50, width: 50 }} />
+		return <img draggable={false} src="/icons/doc-svgrepo-com.svg" alt="lms icons" className="" style={{ height: 50, width: 50 }} />
 	}
 
 	if (type == 'xlsx' || type == 'xls' || type == 'excel') {

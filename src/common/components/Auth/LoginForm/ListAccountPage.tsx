@@ -73,7 +73,7 @@ export const ListAccountPage = (props) => {
 			dataIndex: 'Action',
 			render: (text, item) => (
 				<div className="cursor-pointer" onClick={() => handleCoppy(item)}>
-					<PrimaryTag color="blue" children="COPPY" />
+					<PrimaryTag color="blue" children="COPY" />
 				</div>
 			)
 		}
