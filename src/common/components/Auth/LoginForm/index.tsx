@@ -67,6 +67,7 @@ function LoginForm(props: ILoginForm) {
 				<div className="wrap-password mt-3 w-full flex items-center justify-center">
 					<a href="/fogot-password">Quên mật khẩu?</a>
 				</div>
+
 				<div className="list-account mt-3">
 					<ListAccountPage setPassword={setPassword} setUsername={setUsername} form={form} />
 				</div>

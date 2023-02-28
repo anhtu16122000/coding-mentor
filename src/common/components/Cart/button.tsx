@@ -16,8 +16,6 @@ const CartButton = () => {
 	const userInformation = useSelector((state: RootState) => state.user.information)
 	const cartData = useSelector((state: RootState) => state.cart.CartData)
 
-	console.log('---- Cart Data: ', cartData)
-
 	useEffect(() => {
 		getData()
 	}, [])

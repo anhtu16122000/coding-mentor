@@ -62,8 +62,6 @@ const MainCart = () => {
 
 	const [loading, setLoading] = useState<boolean>(true)
 
-	console.log('---- Cart Data: ', cartData)
-
 	useEffect(() => {
 		getData()
 		getPaymentMethods()
