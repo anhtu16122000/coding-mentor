@@ -130,9 +130,7 @@ const Schedule = () => {
 			<Card
 				extra={
 					(isAdmin() || isManager() || isAcademic()) && (
-						<div className="flex-all-center gap-3">
-							<PopoverSearch setParamsSearch={setParamsSearch} teachers={teachers} isLoading={isLoading} />
-						</div>
+						<PopoverSearch setParamsSearch={setParamsSearch} teachers={teachers} isLoading={isLoading} />
 					)
 				}
 			>
