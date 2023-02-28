@@ -16,5 +16,5 @@ type ICreateNew = {
 type IPersonnel = {
 	allowRegister?: boolean
 	reFresh?: Function
-	role?: number
+	role?: any
 }

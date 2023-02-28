@@ -38,6 +38,7 @@ const Student: FC<IPersonnel> = (props) => {
 	const { reFresh, allowRegister, role } = props
 	const state = useSelector((state: RootState) => state)
 	const userInformation = useSelector((state: RootState) => state.user.information)
+
 	const initParamters = {
 		sort: 0,
 		sortType: false,
