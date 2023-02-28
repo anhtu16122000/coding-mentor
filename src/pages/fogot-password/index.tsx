@@ -43,7 +43,7 @@ function ForgotPasswordPage() {
 
 							{step == 1 && (
 								<>
-									<label>Tên đăng nhập hoặc Email</label>
+									<label>Tên đăng nhập</label>
 									<Form.Item name="UserName" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
 										<Input className="input" placeholder="" prefix={<i className="fa fa-user" aria-hidden="true" />} />
 									</Form.Item>

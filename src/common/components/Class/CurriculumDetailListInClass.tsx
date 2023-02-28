@@ -141,6 +141,19 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 		}
 	}
 
+	const onChangeCheckCompleteCurriculumInClass = async () => {
+		try {
+			const response = await classApi.checkCompleteCurriculumInClass(item.Id)
+			if (response.status === 200) {
+				onRendering && onRendering()
+				ShowNoti('success', response.data.message)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+		}
+	}
+
 	const genExtra = (item) => {
 		return (
 			<div className="flex  justify-end items-center">
@@ -163,7 +176,7 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 						onClick={() => {
 							handleHideCurriculumDetailInClass('Chude', item?.Id)
 						}}
-						tooltip={`${item.IsHide ? 'HIện' : 'Ẩn'} chủ đề`}
+						tooltip={`${item.IsHide ? 'Hiện' : 'Ẩn'} chủ đề`}
 					/>
 				</div>
 				<Upload
@@ -179,6 +192,21 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 					<IconButton type="button" icon="upload" color="blue" tooltip="Thêm file" />
 				</Upload>
 				<ModalCurriculumOfClassCRUD mode="delete" onSubmit={handleDeleteCurriculumDetail} isLoading={isLoading} />
+				<Popconfirm
+					title="Bạn có chắc muốn hoàn thành chủ đề này?"
+					okText="Có"
+					cancelText="Hủy"
+					onConfirm={() => onChangeCheckCompleteCurriculumInClass()}
+					disabled={item.IsComplete}
+				>
+					<IconButton
+						type="button"
+						icon="check"
+						color={item.IsComplete ? 'green' : 'disabled'}
+						className=""
+						tooltip={`${item.IsComplete ? '' : 'Hoàn thành chủ đề này'}`}
+					/>
+				</Popconfirm>
 			</div>
 		)
 	}
@@ -319,7 +347,7 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 																					onClick={() => {
 																						handleHideCurriculumDetailInClass('Tailieu', item?.Id)
 																					}}
-																					tooltip={`${item.IsHide ? 'HIện' : 'Ẩn'} chủ đề`}
+																					tooltip={`${item.IsHide ? 'Hiện' : 'Ẩn'} chủ đề`}
 																				/>
 																			</div>
 																		) : (
@@ -369,7 +397,7 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 																							icon="check"
 																							color={item.IsComplete ? 'green' : 'disabled'}
 																							className=""
-																							tooltip="Hoàn thành tài liệu này"
+																							tooltip={`${item.IsComplete ? '' : 'Hoàn thành chủ đề này'}`}
 																						/>
 																					</Popconfirm>
 																				</>
@@ -513,7 +541,7 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 																			icon="check"
 																			color={item.IsComplete ? 'green' : 'disabled'}
 																			className=""
-																			tooltip="Hoàn thành tài liệu này"
+																			tooltip={`${item.IsComplete ? '' : 'Hoàn thành chủ đề này'}`}
 																		/>
 																	</Popconfirm>
 																</>

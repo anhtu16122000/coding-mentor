@@ -34,6 +34,7 @@ const CreateUser: FC<ICreateNew> = (props) => {
 	const [districts, setDistricts] = useState([])
 	const [wards, setWards] = useState([])
 	const [loading, setLoading] = useState(false)
+	const [isTeacherSelect, setIsTeacherSelect] = useState(false)
 
 	const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -379,7 +380,21 @@ const CreateUser: FC<ICreateNew> = (props) => {
 						<InputTextField className={'col-span-2'} label="Tên đăng nhập" name="UserName" isRequired rules={[yupSync]} />
 
 						{!isEdit && !isStudent && !isChangeInfo && (
-							<SelectField className="col-span-2" label="Chức vụ" name="RoleId" isRequired rules={[yupSync]} optionList={roleStaff} />
+							<SelectField
+								className="col-span-2"
+								label="Chức vụ"
+								name="RoleId"
+								isRequired
+								rules={[yupSync]}
+								optionList={roleStaff}
+								onChangeSelect={(val) => {
+									if (val === 2) {
+										setIsTeacherSelect(true)
+									} else {
+										setIsTeacherSelect(false)
+									}
+								}}
+							/>
 						)}
 
 						<SelectField
@@ -411,7 +426,7 @@ const CreateUser: FC<ICreateNew> = (props) => {
 							</Form.Item>
 						)}
 
-						{!isEdit && Router.asPath.includes('users/personnel') && (
+						{!isEdit && Router.asPath.includes('users/personnel') && isTeacherSelect && (
 							<Form.Item name="ProgramIds" className="col-span-2" label="Chương trình" rules={formNoneRequired}>
 								<Select className="primary-input" mode="tags" placeholder="Chọn chương trình">
 									{programs.map((item) => {

@@ -295,7 +295,7 @@ const Student: FC<IPersonnel> = (props) => {
 			render: (data, item) => {
 				return (
 					<div className="flex items-center">
-						<IconButton
+						{/* <IconButton
 							type="button"
 							icon={'eye'}
 							color="blue"
@@ -307,7 +307,7 @@ const Student: FC<IPersonnel> = (props) => {
 							}}
 							className=""
 							tooltip="Chi tiết"
-						/>
+						/> */}
 
 						{isAdmin() && (
 							<>

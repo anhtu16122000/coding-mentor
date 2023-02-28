@@ -63,8 +63,8 @@ export const classApi = {
 	updateIndexCurriculumDetailOfClass(data) {
 		return instance.put(`${url}/curriculum-detail-in-class-index`, data)
 	},
-	checkCompleteCurriculumInClass(id) {
-		return instance.post(`${url}/curriculum-detail-in-class/${id}/complete`)
+	checkCompleteCurriculumInClass(id) { // hoàn thành chủ đề
+		return instance.post(`${url}/curriculum-detail-in-class/complete/${id}`)
 	},
 	getFileCurriculumOfClass(params) {
 		return instance.get(`${url}/file-curriculum-in-class`, { params })
@@ -75,8 +75,8 @@ export const classApi = {
 	deleteFileCurriculumDetailOfClass(id) {
 		return instance.delete(`${url}/file-curriculum-in-class/${id}`)
 	},
-	checkCompleteFileInClass(id) {
-		return instance.post(`${url}/file-curriculum-in-class/${id}/complete`)
+	checkCompleteFileInClass(id) { //Hoàn thành file
+		return instance.post(`${url}/file-curriculum-in-class/complete/${id}`)
 	},
 	addCurriculumOfClass(data) {
 		return instance.post(`${url}/curriculum-detail-in-class`, data)

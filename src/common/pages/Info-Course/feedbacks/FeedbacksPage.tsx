@@ -1,4 +1,4 @@
-import { Popconfirm, Rate, Select } from 'antd'
+import { Form, Popconfirm, Rate, Select } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -20,6 +20,7 @@ export interface IFeedbacksStudentPageProps {}
 
 export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) {
 	const userInformation = useSelector((state: RootState) => state.user.information)
+	const [form] = Form.useForm()
 	const initialParams = {
 		pageIndex: 1,
 		pageSize: PAGE_SIZE,
@@ -118,6 +119,13 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 			setIsLoading({ type: '', status: false })
 		}
 	}
+
+	useEffect(() => {
+		if (students && students?.length > 0) {
+			setTodoApi({ ...todoApi, userIds: students[0].value?.toString() })
+			form.setFieldValue('student', students[0].value)
+		}
+	}, [students])
 
 	const columns = [
 		{
@@ -237,7 +245,11 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 				Extra={
 					userInformation.RoleId === '8' ? (
 						<>
-							<Select allowClear className="w-[200px]" onChange={handleChangeStudent} options={students} placeholder="Chọn học viên" />
+							<Form form={form}>
+								<Form.Item name="student">
+									<Select allowClear className="w-[200px]" onChange={handleChangeStudent} options={students} placeholder="Chọn học viên" />
+								</Form.Item>
+							</Form>
 						</>
 					) : userInformation.RoleId === '3' ? (
 						<ModalFeedback mode="add" onRefresh={() => getFeedbacks()} />

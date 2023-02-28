@@ -59,11 +59,24 @@ const PaymentManagementPage = () => {
 			render: (value, item) => <p className="font-[600] text-[#1E88E5]">{value}</p>
 		},
 		{
+			title: 'Mã khuyến mãi',
+			width: 150,
+			dataIndex: 'DiscountCode'
+		},
+		{
+			title: 'Giảm giá',
+			width: 150,
+			dataIndex: 'Reduced',
+			render: (text) => <>{parseToMoney(text)}</>
+		},
+
+		{
 			title: 'Tổng số tiền',
 			dataIndex: 'TotalPrice',
 			width: 116,
 			render: (value, item) => <p className="font-[600] text-[#000]">{parseToMoney(value)}</p>
 		},
+
 		{
 			title: 'Đã thanh toán',
 			dataIndex: 'Paid',
