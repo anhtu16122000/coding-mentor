@@ -52,5 +52,20 @@
 				@apply text-[#0088ff];
 			}
 		}
+		.cart-text-total {
+			@apply text-[16px] font-[600] mt-[8px];
+		}
+		.cart-btn-remove-discount {
+			@apply h-full pr-[8px] cursor-pointer top-0 right-0 absolute flex items-center;
+		}
+		.cart-discount-container {
+			@apply mb-[16px] bg-[#fff] shadow-sm border-[1px] border-[#dedede] p-[8px] rounded-[6px] relative;
+		}
+		.cart-btn-apply-discount {
+			@apply bg-[#1E88E5] cursor-pointer ml-[8px] h-[36px] px-[16px] rounded-[6px] flex items-center justify-center;
+		}
+		.discount-loading {
+			@apply ml-[8px] mt-[-4px];
+		}
 	}
 }
