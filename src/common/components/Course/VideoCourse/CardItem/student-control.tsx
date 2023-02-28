@@ -7,6 +7,7 @@ import PrimaryButton from '~/common/components/Primary/Button'
 import { ShowNostis } from '~/common/utils'
 import { RootState } from '~/store'
 import { setCartData } from '~/store/cartReducer'
+import ActiveVideo from './active-video'
 
 type TStudentControl = {
 	item?: any
@@ -89,7 +90,7 @@ const StudentControl: FC<TStudentControl> = (props) => {
 	if (!isStdent()) return <></>
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col items-center">
 			{item.Status == 1 && !item?.Price && (
 				<PrimaryButton background="green" type="button" loading={loadingActive} icon="none" onClick={freeActive}>
 					Kích hoạt miễn phí
@@ -97,9 +98,15 @@ const StudentControl: FC<TStudentControl> = (props) => {
 			)}
 
 			{item.Status == 1 && !!item?.Price && (
-				<PrimaryButton background="yellow" type="button" loading={loadingCart} icon="cart" onClick={_addToCart}>
-					Thêm vào giỏ hàng
-				</PrimaryButton>
+				<>
+					<PrimaryButton background="yellow" type="button" loading={loadingCart} icon="cart" onClick={_addToCart}>
+						Thêm vào giỏ hàng
+					</PrimaryButton>
+
+					<div className="mt-[8px]">
+						<ActiveVideo onRefresh={onRefresh} video={item} />
+					</div>
+				</>
 			)}
 
 			{item.Status == 2 && (

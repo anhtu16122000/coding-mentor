@@ -146,13 +146,8 @@ export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps
 							<span className="email">{studentDetail.Email}</span>
 						</div>
 						<div className="avatar">
-							<img src={studentDetail.Avatar} alt="" />
-							<div
-								className="overlay"
-								onClick={() => {
-									setIsVisibleModal(true)
-								}}
-							>
+							<img src={studentDetail.Avatar || '/default-avatar.png'} alt="" />
+							<div className="overlay" onClick={() => setIsVisibleModal(true)}>
 								<Tooltip title="Tải ảnh lên">
 									<FiUpload size={30} color="#d9d9d9" />
 								</Tooltip>

@@ -35,14 +35,13 @@ function ResetPasswordPage() {
 
 	return (
 		<>
-			<div className="w-full scrollable">
-				<Form form={form} onFinish={_submit} className="w-100 login-form center-column ">
-					<img className="logo-register" src="/images/logo-primary.png" alt="" />
+			<div className="w-full scrollable login-forms">
+				<Form layout="vertical" form={form} onFinish={_submit} className="w-100 login-form center-column ">
+					<img className="logo-register" src="/white-logo.png" alt="" />
 
 					<h6 className="mt-5 mb-3 login-title">Lấy lại mật khẩu</h6>
 
-					<label>Mật khẩu mới</label>
-					<Form.Item name="NewPassword" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
+					<Form.Item label="Mật khẩu mới" name="NewPassword" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
 						<Input.Password
 							className="input"
 							type="password"
@@ -51,8 +50,7 @@ function ResetPasswordPage() {
 						/>
 					</Form.Item>
 
-					<label>Nhập lại mật khẩu</label>
-					<Form.Item name="ConfirmNewPassword" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
+					<Form.Item label="Nhập lại mật khẩu" name="ConfirmNewPassword" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
 						<Input.Password
 							className="input"
 							type="password"

@@ -188,9 +188,10 @@ const CreateVideoCourse = (props: TProps) => {
 		<>
 			{!isEdit && (
 				<div className="px-1 flex justify-center">
-					<PrimaryButton background="green" type="button" icon="add" onClick={toggle}>
+					<PrimaryButton className="!hidden w500:!flex" background="green" type="button" icon="add" onClick={toggle}>
 						Thêm khoá
 					</PrimaryButton>
+					<PrimaryButton className="!flex w500:!hidden !pr-[-4px]" background="green" type="button" icon="add" onClick={toggle} />
 				</div>
 			)}
 

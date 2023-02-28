@@ -1,4 +1,4 @@
-import { Form, Popover, Select } from 'antd'
+import { Form, Popover, Select, Tree } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import { ShowNostis } from '~/common/utils'
 import PrimaryTooltip from '../../PrimaryTooltip'
@@ -22,12 +22,13 @@ interface IFilters {
 	showWarning?: boolean
 	showClass?: boolean
 	showSort?: boolean
+	isVideos?: boolean
 	statusList?: Array<{ value: any; title: string }>
 }
 
 const Filters: FC<IFilters> = (props) => {
 	const { filters, onSubmit, onReset, showBranch, showProgram, statusList, showWarning } = props
-	const { showClass, showSort } = props
+	const { showClass, showSort, isVideos } = props
 
 	const [form] = Form.useForm()
 
@@ -38,6 +39,8 @@ const Filters: FC<IFilters> = (props) => {
 	const branches = useSelector((state: RootState) => state.filter.Branchs)
 	const programs = useSelector((state: RootState) => state.filter.Programs)
 	const classes = useSelector((state: RootState) => state.filter.Classes)
+
+	const [tags, setTags] = useState([])
 
 	useEffect(() => {
 		if (visible) {
@@ -52,8 +55,59 @@ const Filters: FC<IFilters> = (props) => {
 			if (!!showClass && classes.length == 0) {
 				getClasses()
 			}
+
+			if (!!isVideos && tags.length == 0) {
+				getTags()
+			}
 		}
 	}, [visible])
+
+	/**
+	 * It takes an array of objects, and returns an array of objects
+	 * @param params - The array of tags that we get from the API
+	 */
+	function formatTreeData(params) {
+		const result = []
+
+		const tagsByCategory = params.reduce((acc, tag) => {
+			if (!acc[tag.TagCategoryId]) {
+				acc[tag.TagCategoryId] = {
+					title: tag.TagCategoryName,
+					value: 'parent-' + tag.TagCategoryId,
+					key: 'parent-' + tag.TagCategoryId,
+					disableCheckbox: true,
+					checkable: false,
+					children: []
+				}
+			}
+
+			acc[tag.TagCategoryId].children.push({
+				title: tag.Name,
+				value: tag.Id,
+				key: tag.Id
+			})
+
+			return acc
+		}, {})
+
+		for (const categoryId in tagsByCategory) {
+			result.push(tagsByCategory[categoryId])
+		}
+
+		setTags(result)
+	}
+
+	const getTags = async () => {
+		try {
+			let res = await RestApi.get<any>('Tag', { type: 1 })
+			if (res.status == 200) {
+				formatTreeData(res.data.data)
+			}
+		} catch (error) {
+			ShowNostis.error(error.message)
+		} finally {
+		}
+	}
 
 	const getBranchs = async () => {
 		try {
@@ -98,11 +152,17 @@ const Filters: FC<IFilters> = (props) => {
 		setVisible(!visible)
 	}
 
+	function convertToString(arr) {
+		if (!arr) return ''
+		return arr.join(',')
+	}
+
 	function onFinish(params) {
 		const DATA_SUBMIT = {
 			...filters,
 			...params,
-			sort: 1
+			sort: 1,
+			tags: convertToString(checkedKeys)
 		}
 
 		console.log('-- DATA_SUBMIT', DATA_SUBMIT)
@@ -119,7 +179,24 @@ const Filters: FC<IFilters> = (props) => {
 	function resetForm() {
 		form.resetFields()
 		if (!!onReset) onReset()
+		setCheckedKeys([])
 		toggle()
+	}
+
+	const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
+	const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([])
+	const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
+
+	const onExpand = (expandedKeysValue: React.Key[]) => {
+		setExpandedKeys(expandedKeysValue)
+	}
+
+	const onCheck = (checkedKeysValue: React.Key[]) => {
+		setCheckedKeys(checkedKeysValue)
+	}
+
+	const onSelect = (selectedKeysValue: React.Key[], info: any) => {
+		setSelectedKeys(selectedKeysValue)
 	}
 
 	const content = (
@@ -213,6 +290,37 @@ const Filters: FC<IFilters> = (props) => {
 							</Select.Option>
 						</Select>
 					</Form.Item>
+				)}
+
+				{!!isVideos && (
+					<>
+						<Form.Item className="col-span-2" name="sortType" label="Sắp xếp" rules={formNoneRequired}>
+							<Select placeholder="Chọn trạng thái" allowClear>
+								<Select.Option key="false" value={false}>
+									Tên A-Z
+								</Select.Option>
+								<Select.Option key="true" value={true}>
+									Tên Z-A
+								</Select.Option>
+							</Select>
+						</Form.Item>
+
+						<div className="ant-col ant-form-item-label">
+							<label title="Bộ lọc">Bộ lọc</label>
+						</div>
+						<Tree
+							className="mb-[16px] ml-[-8px] col-span-2"
+							checkable
+							onExpand={onExpand}
+							expandedKeys={expandedKeys}
+							autoExpandParent={true}
+							onCheck={onCheck}
+							checkedKeys={checkedKeys}
+							onSelect={onSelect}
+							selectedKeys={selectedKeys}
+							treeData={tags}
+						/>
+					</>
 				)}
 			</Form>
 

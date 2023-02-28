@@ -112,6 +112,13 @@ export const StudentChildMenu = [
 				Route: '/course/videos',
 				Text: 'Danh sách khoá học',
 				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/course/codes',
+				Route: '/course/codes',
+				Text: 'Danh sách mã kích hoạt',
+				Icon: ''
 			}
 		]
 	},

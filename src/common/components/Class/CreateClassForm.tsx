@@ -385,9 +385,9 @@ const CreateClassForm = (props) => {
 		}
 	}, [form.getFieldValue('BranchId'), form.getFieldValue('ProgramId')])
 
-	const listCalendar = useSelector((state: RootState) => state.class.listCalendar)
+	// const listCalendar = useSelector((state: RootState) => state.class.listCalendar)
 
-	console.log('--- listCalendar: ', listCalendar)
+	// console.log('--- listCalendar: ', listCalendar)
 
 	return (
 		<>
