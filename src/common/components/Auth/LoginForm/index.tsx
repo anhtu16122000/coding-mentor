@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input, Spin, Form } from 'antd'
 import { ListAccountPage } from './ListAccountPage'
 
@@ -12,10 +12,19 @@ type ILoginForm = {
 
 function LoginForm(props: ILoginForm) {
 	const [form] = Form.useForm()
+	const [username, setUsername] = useState(null)
+	const [password, setPassword] = useState(null)
 
 	const _submit = async (data) => {
 		props?.onSubmit(data)
 	}
+
+	useEffect(() => {
+		if (username && password) {
+			form.setFieldValue('username', username)
+			form.setFieldValue('password', password)
+		}
+	}, [username, password])
 
 	return (
 		<Form autoComplete="on" initialValues={{ remember: true }} form={form} onFinish={_submit} className="w-100 login-forms ">
@@ -26,10 +35,10 @@ function LoginForm(props: ILoginForm) {
 
 				<input name="csrfToken" type="hidden" defaultValue={props?.csrfToken} />
 
-				<label>Email</label>
+				<label>Tài khoản</label>
 
 				<Form.Item name="username" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
-					<Input className="input" placeholder="Nhập email" prefix={<i className="fa fa-user" aria-hidden="true" />} />
+					<Input className="input" placeholder="Nhập tài khoản" prefix={<i className="fa fa-user" aria-hidden="true" />} />
 				</Form.Item>
 
 				<label className="password">Mật khẩu</label>
@@ -59,7 +68,7 @@ function LoginForm(props: ILoginForm) {
 					<a href="/fogot-password">Quên mật khẩu?</a>
 				</div>
 				<div className="list-account mt-3">
-					<ListAccountPage />
+					<ListAccountPage setPassword={setPassword} setUsername={setUsername} form={form} />
 				</div>
 			</div>
 		</Form>
