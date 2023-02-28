@@ -220,11 +220,6 @@ const ClassList = (props) => {
 												<span>Học phí: </span> <span>{parseToMoney(item.Price)} VNĐ</span>
 											</li>
 										)}
-										{userInformation?.RoleId == 1 && (
-											<li>
-												<span>Lương/Buổi: </span> <span>{parseToMoney(item.TeachingFee)} VNĐ</span>
-											</li>
-										)}
 									</ul>
 									<ul className="list-hor">
 										<li>

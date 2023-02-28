@@ -154,7 +154,7 @@ export const ManagerChildMenu = [
 				ItemType: 'single',
 				Key: '/info-course/changed',
 				Route: '/info-course/changed',
-				Text: 'Học viên chuyển khoá',
+				Text: 'Học viên chuyển lớp',
 				Icon: ''
 			},
 			{
