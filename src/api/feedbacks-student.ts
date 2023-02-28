@@ -18,7 +18,8 @@ export const feedbackStudentApi = {
 	},
 	add(data) {
 		return instance.post(url, data)
-	}
+	},
+
 }
 
 const urlReply = '/api/FeedbackReply'

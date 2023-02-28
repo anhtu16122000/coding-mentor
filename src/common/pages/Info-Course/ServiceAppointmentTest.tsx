@@ -530,7 +530,14 @@ export default function ServiceAppointmentTest(props) {
 							)}
 							{userInformation.RoleId === '8' ? (
 								<>
-									<Select allowClear className="w-[200px]" onChange={handleChangeStudent} options={students} placeholder="Chọn học viên" />
+									<Select
+										defaultActiveFirstOption
+										allowClear
+										className="w-[200px]"
+										onChange={handleChangeStudent}
+										options={students}
+										placeholder="Chọn học viên"
+									/>
 								</>
 							) : (
 								''

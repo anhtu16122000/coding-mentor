@@ -14,6 +14,7 @@ import { RootState } from '~/store'
 let pageIndex = 1
 
 export const StudentWarningPage = () => {
+	const [form] = Form.useForm()
 	const [loading, setLoading] = useState({ type: '', status: false })
 	const userInformation = useSelector((state: RootState) => state.user.information)
 	const initParameters = {
@@ -78,13 +79,19 @@ export const StudentWarningPage = () => {
 		if (val) {
 			setApiParameters({ ...apiParameters, studentIds: val?.toString() })
 		} else {
-			setApiParameters(initParameters)
+			setApiParameters({ ...apiParameters, studentIds: '' })
 		}
 	}
 
 	useEffect(() => {
-		if (apiParameters) {
-			getStudentInClass(apiParameters)
+		if (userInformation.RoleId === '8') {
+			if (apiParameters.studentIds) {
+				getStudentInClass(apiParameters)
+			}
+		} else {
+			if (apiParameters) {
+				getStudentInClass(apiParameters)
+			}
 		}
 	}, [apiParameters])
 
@@ -93,6 +100,13 @@ export const StudentWarningPage = () => {
 			getUsers(apiParametersStudent)
 		}
 	}, [])
+
+	useEffect(() => {
+		if (students && students.length > 0) {
+			setApiParameters({ ...apiParameters, studentIds: students[0].value?.toString() })
+			form.setFieldValue('student', students[0].value)
+		}
+	}, [students])
 
 	const columns = [
 		userInfoColumn,
@@ -156,7 +170,18 @@ export const StudentWarningPage = () => {
 				Extra={
 					userInformation.RoleId === '8' ? (
 						<>
-							<Select allowClear className="w-[200px]" onChange={handleChangeStudent} options={students} placeholder="Chọn học viên" />
+							<Form form={form}>
+								<Form.Item name={'student'}>
+									<Select
+										defaultValue={students[0]}
+										allowClear
+										className="w-[200px]"
+										onChange={handleChangeStudent}
+										options={students}
+										placeholder="Chọn học viên"
+									/>
+								</Form.Item>
+							</Form>
 						</>
 					) : (
 						''

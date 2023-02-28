@@ -35,7 +35,7 @@ const itemsAdmin = [
 	'Thông báo'
 ]
 
-const itemsStudent = ['Lịch học', 'Các buổi học', 'Tài liệu', 'Bảng điểm', 'Phản hồi buổi học']
+const itemsStudent = ['Lịch học', 'Các buổi học', 'Tài liệu', 'Bảng điểm']
 const itemsTeacher = [
 	'Lịch học',
 	'Học viên',
@@ -139,7 +139,7 @@ const MenuClass = () => {
 	const getChildrenClassStudent = (index) => {
 		switch (index) {
 			case 0:
-				return <CalenderClassStudent />
+				return <CalendarClassEdit />
 			case 1:
 				return <ScheduleList />
 			case 2:
@@ -149,7 +149,7 @@ const MenuClass = () => {
 			case 4:
 				return <LessonFeedbackPage />
 			default:
-				return <CalenderClassStudent />
+				return <CalendarClassEdit />
 		}
 	}
 	const getLabelClassStudent = (item, index) => {

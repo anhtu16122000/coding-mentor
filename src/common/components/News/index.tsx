@@ -186,7 +186,7 @@ function NewsFeed() {
 
 				<div className="min-w-[300px] cc-new-desktop-group" style={{ flex: 1 }}>
 					<div className="bg-[#fff] shadow-md w-full rounded-[6px] cc-news-group">
-						<NewsGroup groups={groups} totalRow={totalGroup} loading={groupLoading} />
+						<NewsGroup onRefresh={() => getGroups()} groups={groups} totalRow={totalGroup} loading={groupLoading} />
 					</div>
 				</div>
 			</div>

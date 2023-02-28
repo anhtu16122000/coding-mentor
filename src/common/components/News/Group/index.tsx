@@ -22,7 +22,7 @@ const GroupThumb = ({ uri }) => {
 }
 
 function NewsGroup(props) {
-	const { groups, totalRow, loading } = props
+	const { groups, totalRow, loading, onRefresh } = props
 
 	// const [loading, setLoading] = useState(true)
 	// const [groups, setGroups] = useState([])
@@ -78,7 +78,14 @@ function NewsGroup(props) {
 
 			{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
 				<>
-					<GroupForm onRefresh={() => setFilter((pre) => ({ ...pre }))} isEdit={false} defaultData={null} />
+					<GroupForm
+						onRefresh={() => {
+							onRefresh && onRefresh()
+							setFilter((pre) => ({ ...pre }))
+						}}
+						isEdit={false}
+						defaultData={null}
+					/>
 					<div className="cc-hr my-[16px]" />
 				</>
 			)}

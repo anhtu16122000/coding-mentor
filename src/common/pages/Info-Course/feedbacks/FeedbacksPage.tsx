@@ -7,18 +7,24 @@ import { RiShieldStarFill } from 'react-icons/ri'
 import { useSelector } from 'react-redux'
 import { feedbackStudentApi } from '~/api/feedbacks-student'
 import { userInformationApi } from '~/api/user'
+import { ModalLessonFeedback } from '~/common/components/Class/ModalLessonFeedback'
 import IconButton from '~/common/components/Primary/IconButton'
 import PrimaryTable from '~/common/components/Primary/Table'
 import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
+import { ModalFeedback } from './ModalFeedback'
 
 export interface IFeedbacksStudentPageProps {}
 
 export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) {
-	const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE, userIds: '' }
 	const userInformation = useSelector((state: RootState) => state.user.information)
+	const initialParams = {
+		pageIndex: 1,
+		pageSize: PAGE_SIZE,
+		userIds: userInformation.RoleId === '3' ? userInformation.UserInformationId.toString() : ''
+	}
 	const [dataSource, setDataSource] = useState<IFeedbackStudent[]>([])
 	const [totalRow, setTotalRow] = useState(0)
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
@@ -233,6 +239,8 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 						<>
 							<Select allowClear className="w-[200px]" onChange={handleChangeStudent} options={students} placeholder="Chọn học viên" />
 						</>
+					) : userInformation.RoleId === '3' ? (
+						<ModalFeedback mode="add" onRefresh={() => getFeedbacks()} />
 					) : (
 						''
 					)

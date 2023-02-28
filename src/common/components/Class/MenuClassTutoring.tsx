@@ -22,7 +22,7 @@ import { ScheduleList } from './ScheduleList'
 import { StudentAssessment } from './StudentAssessment'
 
 const itemsAdmin = ['Lịch học', 'Đánh giá học viên', 'Đánh giá giáo viên', 'Tài liệu', 'Thông báo', 'Phản hồi buổi học']
-const itemsStudent = ['Lịch học', 'Đánh giá giáo viên', 'Tài liệu', 'Thông báo', 'Phản hồi buổi học']
+const itemsStudent = ['Lịch học', 'Đánh giá giáo viên', 'Tài liệu', 'Thông báo']
 const itemsTeacher = ['Lịch học', 'Đánh giá học viên', 'Tài liệu', 'Thông báo', 'Phản hồi buổi học']
 const MenuClassTutoring = () => {
 	const user = useSelector((state: RootState) => state.user.information)

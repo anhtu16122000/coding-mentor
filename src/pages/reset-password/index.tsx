@@ -36,39 +36,43 @@ function ResetPasswordPage() {
 	return (
 		<>
 			<div className="w-full scrollable">
-				<Form form={form} onFinish={_submit} className="w-100 login-form center-column ">
-					<img className="logo-register" src="/images/logo-primary.png" alt="" />
+				<Form form={form} onFinish={_submit} className="w-100 ">
+					<div className="login-forms">
+						<div className="login-form">
+							<img className="logo-login" src="/images/logo-2.jpg" alt="" />
 
-					<h6 className="mt-5 mb-3 login-title">Lấy lại mật khẩu</h6>
+							<h6 className="mt-5 mb-3 login-title">Lấy lại mật khẩu</h6>
 
-					<label>Mật khẩu mới</label>
-					<Form.Item name="NewPassword" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
-						<Input.Password
-							className="input"
-							type="password"
-							prefix={<i className="fa fa-lock" aria-hidden="true" />}
-							placeholder="Nhập mật khẩu"
-						/>
-					</Form.Item>
+							<label>Mật khẩu mới</label>
+							<Form.Item name="NewPassword" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
+								<Input.Password
+									className="input"
+									type="password"
+									prefix={<i className="fa fa-lock" aria-hidden="true" />}
+									placeholder="Nhập mật khẩu"
+								/>
+							</Form.Item>
 
-					<label>Nhập lại mật khẩu</label>
-					<Form.Item name="ConfirmNewPassword" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
-						<Input.Password
-							className="input"
-							type="password"
-							prefix={<i className="fa fa-lock" aria-hidden="true" />}
-							placeholder="Nhập lại mật khẩu"
-						/>
-					</Form.Item>
+							<label>Nhập lại mật khẩu</label>
+							<Form.Item name="ConfirmNewPassword" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
+								<Input.Password
+									className="input"
+									type="password"
+									prefix={<i className="fa fa-lock" aria-hidden="true" />}
+									placeholder="Nhập lại mật khẩu"
+								/>
+							</Form.Item>
 
-					{!!textError && <div className="error-text response">{textError}</div>}
+							{!!textError && <div className="error-text response">{textError}</div>}
 
-					<button disabled={loading} className="btn-login mt-4" type="submit">
-						Gửi thông tin {loading && <Spin className="loading-white" />}
-					</button>
+							<button disabled={loading} className="btn-login mt-4" type="submit">
+								Gửi thông tin {loading && <Spin className="loading-white" />}
+							</button>
 
-					<div className="mt-4 register">
-						Quay lại trang <a href="/login">Đăng nhập</a>
+							<div className="mt-4 register">
+								Quay lại trang <a href="/login">Đăng nhập</a>
+							</div>
+						</div>
 					</div>
 				</Form>
 			</div>

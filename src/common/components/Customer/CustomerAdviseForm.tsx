@@ -243,7 +243,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 						</div>
 
 						<div className="w-full grid grid-cols-2 gap-x-4">
-							<Form.Item name="JobId" className="col-span-1" label="Công việc" rules={formRequired}>
+							<Form.Item name="JobId" className="col-span-1" label="Công việc">
 								<Select className="primary-input" placeholder="Chọn công việc">
 									{jobs.map((item) => {
 										return (

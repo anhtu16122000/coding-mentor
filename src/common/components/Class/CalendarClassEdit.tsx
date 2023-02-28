@@ -331,7 +331,6 @@ const CalenderClassEdit = () => {
 						}}
 					/>
 				) : null}
-
 				<div className="flex items-center mt-[24px]">
 					<div className="flex items-center">
 						<div className="bg-[#a2a2a2] w-[20px] h-[20px] rounded-[4px] mr-[8px]"></div>
