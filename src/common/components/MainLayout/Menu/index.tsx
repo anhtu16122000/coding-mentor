@@ -370,7 +370,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 										item.ItemType !== 'sub-menu' ? (
 											<Menu.Item key={item.Key} icon={null}>
 												<Link href={item.Route}>
-													<div style={{ width: '100%', height: '100%', display: 'flex', paddingLeft: 12, alignItems: 'center' }}>
+													<div style={{ width: '100%', height: '100%', display: 'flex', paddingLeft: 6, alignItems: 'center' }}>
 														{item?.Icon}
 														<div className="ml-2">{item.Text}</div>
 													</div>

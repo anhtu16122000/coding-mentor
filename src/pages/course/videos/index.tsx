@@ -150,7 +150,7 @@ const VideoCourse = () => {
 				</div>
 			</Modal>
 
-			<div className="container antd-custom-wrap">
+			<div className="antd-custom-wrap">
 				<Card
 					style={{ width: '100%' }}
 					title={
