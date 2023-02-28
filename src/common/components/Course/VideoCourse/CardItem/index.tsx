@@ -16,6 +16,7 @@ import RestApi from '~/api/RestApi'
 import { useDispatch } from 'react-redux'
 import { setCartData } from '~/store/cartReducer'
 import StudentControl from './student-control'
+import AdminControl from './admin-control'
 
 const VideoItem = (props) => {
 	const { Item, onFetchData, UserRoleID, onRefresh } = props
@@ -107,7 +108,7 @@ const VideoItem = (props) => {
 				)}
 
 				{isStdent() && (
-					<div className={`${Item.Status == 1 ? 'bg-tw-primary' : Item.Status == 2 ? 'bg-tw-yellow' : 'bg-tw-green'} video-status-tag`}>
+					<div className={`${Item.Status == 1 ? 'bg-tw-primary' : Item.Status == 2 ? 'bg-[#43A047]' : 'bg-tw-green'} video-status-tag`}>
 						{Item?.StatusName}
 					</div>
 				)}
@@ -117,15 +118,8 @@ const VideoItem = (props) => {
 				<div className="video-blur linear" />
 
 				<div className="video-option-menu linear">
-					<div>
-						{(UserRoleID == '1' || UserRoleID == '2' || (isStdent() && Item.Status != 1)) && (
-							<PrimaryButton background="blue" type="button" disable={isStdent() && Item.Disable} icon="eye" onClick={viewDetails}>
-								Xem khóa học
-							</PrimaryButton>
-						)}
-
-						<StudentControl item={Item} />
-					</div>
+					<AdminControl item={Item} />
+					<StudentControl item={Item} onRefresh={onRefresh} />
 				</div>
 			</div>
 
