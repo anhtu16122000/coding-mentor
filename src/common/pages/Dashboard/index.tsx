@@ -508,7 +508,7 @@ const Dashboard = () => {
 					</div>
 
 					<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Top 5 nguồn khách hàng</h1>}>
-						<StatisticTop5Course data={statisticSource} titleBar="Khách hàng " type={2} />
+						<StatisticTop5Course data={statisticSource} titleBar="Khách hàng" type={2} />
 					</Card>
 
 					<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Top 5 công việc của học viên </h1>}>

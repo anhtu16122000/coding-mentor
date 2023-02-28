@@ -299,12 +299,7 @@ const Student: FC<IPersonnel> = (props) => {
 							type="button"
 							icon={'eye'}
 							color="blue"
-							onClick={() => {
-								router.push({
-									pathname: '/info-course/student/detail',
-									query: { StudentID: item.UserInformationId }
-								})
-							}}
+							onClick={() => router.push({ pathname: '/info-course/student/detail', query: { StudentID: item.UserInformationId } })}
 							className=""
 							tooltip="Chi tiết"
 						/> */}
@@ -363,7 +358,8 @@ const Student: FC<IPersonnel> = (props) => {
 				<>
 					{value == 0 && <span className="tag yellow">Khác</span>}
 					{value == 1 && <span className="tag blue">Nam</span>}
-					{value == 2 && <span className="tag blue">Nữ</span>}
+					{value == 2 && <span className="tag green">Nữ</span>}
+					{value == 3 && <span className="tag yellow">Khác</span>}
 				</>
 			)
 		},
@@ -474,10 +470,6 @@ const Student: FC<IPersonnel> = (props) => {
 
 	const [visible, setVisible] = useState(false)
 
-	function isShowRegister() {
-		return isAdmin() && props.type == 'student' && !!allowRegister
-	}
-
 	return (
 		<div className="info-course-student">
 			<PrimaryTable
@@ -509,7 +501,7 @@ const Student: FC<IPersonnel> = (props) => {
 				}
 				Extra={
 					<>
-						{isShowRegister() && (
+						{isAdmin() && (
 							<PrimaryButton
 								loading={loadingAllow}
 								className="mr-2 btn-block-registration"

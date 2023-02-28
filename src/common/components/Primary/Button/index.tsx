@@ -77,73 +77,73 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 
 	function getIcon() {
 		if (icon == 'add') {
-			return <PlusCircle size={18} className="mr-2" />
+			return <PlusCircle size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'cart') {
-			return <TbShoppingCartPlus size={20} className="mr-2" />
+			return <TbShoppingCartPlus size={20} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'edit') {
-			return <FiEdit size={18} className="mr-2" />
+			return <FiEdit size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'cancel') {
-			return <FiXCircle size={18} className="mr-2" />
+			return <FiXCircle size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'save') {
-			return <FiSave size={18} className="mr-2" />
+			return <FiSave size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'remove') {
-			return <FiTrash2 size={18} className="mr-2" />
+			return <FiTrash2 size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'check') {
-			return <AiOutlineCheckCircle size={18} className="mr-2" />
+			return <AiOutlineCheckCircle size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'exchange') {
-			return <RiExchangeLine size={22} className="mr-2" />
+			return <RiExchangeLine size={22} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'eye') {
-			return <AiOutlineEye size={20} className="mr-2" />
+			return <AiOutlineEye size={20} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'print') {
-			return <AiFillPrinter size={20} className="mr-2" />
+			return <AiFillPrinter size={20} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'hide') {
-			return <BiHide size={18} className="mr-2" />
+			return <BiHide size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'file') {
-			return <AiOutlineFileSearch size={18} className="mr-2" />
+			return <AiOutlineFileSearch size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'download') {
-			return <TbDownload size={22} className="mr-2" />
+			return <TbDownload size={22} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'upload') {
-			return <TbUpload size={22} className="mr-2" />
+			return <TbUpload size={22} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'reset') {
-			return <BiReset size={20} className="mr-2" />
+			return <BiReset size={20} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'search') {
-			return <BiSearchAlt2 size={20} className="mr-2" />
+			return <BiSearchAlt2 size={20} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'excel') {
-			return <SiMicrosoftexcel size={18} className="mr-2" />
+			return <SiMicrosoftexcel size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'power') {
-			return <IoPowerSharp size={20} className="mr-2" />
+			return <IoPowerSharp size={20} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'enter') {
-			return <IoEnterOutline size={20} className="mr-2" />
+			return <IoEnterOutline size={20} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'send') {
-			return <FiSend size={18} className="mr-2" />
+			return <FiSend size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'payment') {
-			return <MdOutlinePayments size={18} className="mr-2" />
+			return <MdOutlinePayments size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'arrow-up') {
-			return <RiArrowUpSFill size={18} className="mr-2" />
+			return <RiArrowUpSFill size={18} className={!!children ? 'mr-2' : ''} />
 		}
 		if (icon == 'arrow-down') {
-			return <RiArrowDownSFill size={18} className="mr-2" />
+			return <RiArrowDownSFill size={18} className={!!children ? 'mr-2' : ''} />
 		}
 	}
 
@@ -168,7 +168,7 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 				}
 				!disable && _onClick()
 			}}
-			className={`font-medium none-selection rounded-lg h-[38px] px-3 inline-flex items-center justify-center ${getBG()} ${getColor()} ${className}`}
+			className={`font-medium none-selection rounded-lg h-[36px] px-[10px] inline-flex items-center justify-center ${getBG()} ${getColor()} ${className}`}
 		>
 			{!!loading && <Spin className="loading-base mr-3" />}
 			{!!icon && !loading && getIcon()}

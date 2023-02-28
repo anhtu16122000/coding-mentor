@@ -33,43 +33,40 @@ function ForgotPasswordPage() {
 
 	return (
 		<>
-			<div className="w-full scrollable">
-				<Form form={form} onFinish={_submit} className="w-100 ">
-					<div className="login-forms">
-						<div className="login-form">
-							<img className="logo-login" src="/images/logo-2.jpg" alt="" />
+			<div className="w-full scrollable login-forms">
+				<Form form={form} onFinish={_submit} className="w-100 login-form center-column ">
+					<img className="logo-register" src="/white-logo.png" alt="" />
 
-							<h6 className="mt-5 mb-3 login-title">Lấy lại mật khẩu</h6>
+					<h6 className="mt-5 mb-3 login-title">Lấy lại mật khẩu</h6>
 
-							{step == 1 && (
-								<>
-									<label>Tên đăng nhập</label>
-									<Form.Item name="UserName" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
-										<Input className="input" placeholder="" prefix={<i className="fa fa-user" aria-hidden="true" />} />
-									</Form.Item>
+					{step == 1 && (
+						<div className="flex items-center flex-col w-full">
+							<label className="font-[600] !text-[18px] mb-[16px]">Tên đăng nhập</label>
 
-									{!!textError && <div className="error-text response">{textError}</div>}
+							<Form.Item name="UserName" rules={[{ required: true, message: 'Bạn không được để trống' }]}>
+								<Input className="input" placeholder="" prefix={<i className="fa fa-user" aria-hidden="true" />} />
+							</Form.Item>
 
-									<button disabled={loading} className="btn-login mt-4" type="submit">
-										Gửi thông tin {loading && <Spin className="loading-white" />}
-									</button>
+							{!!textError && <div className="text-[red]">{textError}</div>}
 
-									<div className="mt-4 register">
-										Bạn đã nhớ ra mật khẩu? <a href="/login">Đăng nhập</a>
-									</div>
-								</>
-							)}
+							<button disabled={loading} className="btn-login mt-4" type="submit">
+								Gửi thông tin {loading && <Spin className="loading-white" />}
+							</button>
 
-							{step == 2 && (
-								<>
-									<div className="text-[red] text-16-600">Vui lòng kiểm tra Email để tạo mật khẩu mới!</div>
-									<div className="mt-4 register">
-										Quay lại <a href="/login">Đăng nhập</a>
-									</div>
-								</>
-							)}
+							<div className="mt-4 register">
+								Bạn đã nhớ ra mật khẩu? <a href="/login">Đăng nhập</a>
+							</div>
 						</div>
-					</div>
+					)}
+
+					{step == 2 && (
+						<>
+							<div className="text-[red] text-16-600">Vui lòng kiểm tra Email để tạo mật khẩu mới!</div>
+							<div className="mt-4 register">
+								Quay lại <a href="/login">Đăng nhập</a>
+							</div>
+						</>
+					)}
 				</Form>
 			</div>
 		</>

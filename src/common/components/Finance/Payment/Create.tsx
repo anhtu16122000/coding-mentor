@@ -113,7 +113,7 @@ const PaymentForm: FC<IPaymentForm> = ({ isEdit, onRefresh, item }) => {
 
 		const DATA_SUBMIT = {
 			...params,
-			Paid: removeCommas(params?.Paid),
+			Price: removeCommas(params?.Price),
 			Type: 4,
 			details: []
 		}
@@ -142,25 +142,6 @@ const PaymentForm: FC<IPaymentForm> = ({ isEdit, onRefresh, item }) => {
 	function submitForm() {
 		form.submit()
 	}
-
-	// {
-	//   "StudentId": 0,
-	//   "DiscountId": 0,
-	//   "PaymentMethodId": 0,
-	//   "PaymentAppointmentDate": "2023-02-25T06:03:50.117Z",
-	//   "BranchId": 0,
-	//   "Note": "string",
-	//   "Type": 0,
-	//   "Paid": 0,
-	//   "Details": [
-	//     {
-	//       "ClassId": 0,
-	//       "ProgramId": 0,
-	//       "CurriculumId": 0,
-	//       "CartId": 0
-	//     }
-	//   ]
-	// }
 
 	return (
 		<>
@@ -227,12 +208,11 @@ const PaymentForm: FC<IPaymentForm> = ({ isEdit, onRefresh, item }) => {
 							})}
 						</Select>
 					</Form.Item>
-
 					<InputNumberField
 						disabled={loading}
-						onChange={(event) => form.setFieldValue('Paid', event.target.value)}
+						onChange={(event) => form.setFieldValue('Price', event.target.value)}
 						label="Số tiền"
-						name="Paid"
+						name="Price"
 						placeholder="Nhập số tiền"
 						className="col-span-1"
 					/>

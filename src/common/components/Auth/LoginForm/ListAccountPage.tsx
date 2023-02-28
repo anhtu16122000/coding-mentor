@@ -11,12 +11,16 @@ export const ListAccountPage = (props) => {
 	const [dataTable, setDataTable] = useState([])
 	const [loading, setLoading] = useState(false)
 
+	function removeFullNameContainingChau(arr) {
+		return arr.filter((person) => !person.FullName.includes('Châu') && !person.FullName.includes('Chau'))
+	}
+
 	const getListAccount = async () => {
 		try {
 			setLoading(true)
 			const res = await userApi.getListAccount()
 			if (res.status === 200) {
-				setDataTable(res.data.data)
+				setDataTable(removeFullNameContainingChau(res.data.data))
 				setLoading(false)
 			}
 			if (res.status === 204) {
@@ -29,6 +33,7 @@ export const ListAccountPage = (props) => {
 			setLoading(false)
 		}
 	}
+
 	useEffect(() => {
 		getListAccount()
 	}, [])

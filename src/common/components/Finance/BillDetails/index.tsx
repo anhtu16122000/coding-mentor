@@ -1,4 +1,6 @@
+import { Tooltip } from 'antd'
 import React, { useEffect } from 'react'
+import { FiCopy } from 'react-icons/fi'
 import RestApi from '~/api/RestApi'
 import PrimaryTable from '~/common/components/Primary/Table'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
@@ -85,6 +87,28 @@ const BillDetails = ({ bill }) => {
 			title: 'Số lượng',
 			dataIndex: 'Quantity',
 			width: 126
+		},
+		{
+			title: 'Mã kích hoạt',
+			dataIndex: 'ActiveCode',
+			width: 170,
+			render: (value, item) => {
+				if (!value) return ''
+				return (
+					<Tooltip title="Sao chép" placement="right">
+						<span
+							className="tag blue is-button bold cursor-pointer"
+							onClick={() => {
+								navigator.clipboard.writeText(value || '')
+								ShowNostis.success('Đã sao chép')
+							}}
+						>
+							{value}
+							<FiCopy size={14} className="ml-2" />
+						</span>
+					</Tooltip>
+				)
+			}
 		}
 	]
 

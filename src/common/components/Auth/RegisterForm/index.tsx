@@ -117,9 +117,9 @@ function RegisterForm(props) {
 					</button>
 
 					<div className="wrap-password mt-3 w-full flex items-center justify-center">
-						Bạn đã có tài khoản{' '}
+						Bạn đã có tài khoản?
 						<Link href="/login">
-							<span className="font-semibold text-tw-blue pl-1">ĐĂNG NHẬP</span>
+							<span className="font-semibold text-tw-blue pl-1 cursor-pointer">ĐĂNG NHẬP</span>
 						</Link>
 					</div>
 				</div>

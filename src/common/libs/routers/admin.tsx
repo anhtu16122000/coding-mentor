@@ -125,7 +125,7 @@ export const AdminChildMenu = [
 				ItemType: 'single',
 				Key: '/info-course/customer',
 				Route: '/info-course/customer',
-				Text: 'Khách hàng',
+				Text: 'Leads',
 				Icon: ''
 			},
 			{

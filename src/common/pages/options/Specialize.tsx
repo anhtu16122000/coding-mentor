@@ -100,8 +100,8 @@ const Specialize = () => {
 	// Columns
 	const columns = [
 		{
-			title: 'Mã chuyên môn',
-			width: 170,
+			title: 'Mã',
+			width: 100,
 			dataIndex: 'Code',
 			...FilterColumn('Code', onSearch, handleReset, 'text'),
 			render: (value) => <span className="weight-600">{value}</span>
@@ -109,14 +109,20 @@ const Specialize = () => {
 		{
 			title: 'Tên chuyên môn',
 			dataIndex: 'Name',
-			width: 150,
+			width: 250,
 			...FilterColumn('Name', onSearch, handleReset, 'text'),
 			render: (value) => <span className="text-primary weight-600">{value}</span>
 		},
 		{
 			title: 'Tạo ngày',
 			dataIndex: 'ModifiedOn',
-			render: (date: any) => moment(date).format('DD/MM/YYYY')
+			render: (date: any) => moment(date).format('DD/MM/YYYY HH:mm')
+		},
+		{
+			width: 250,
+			title: 'Người tạo',
+			dataIndex: 'CreatedBy',
+			className: 'font-[600]'
 		},
 		{
 			title: 'Chức năng',

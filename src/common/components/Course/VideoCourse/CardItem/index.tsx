@@ -118,7 +118,7 @@ const VideoItem = (props) => {
 				<div className="video-blur linear" />
 
 				<div className="video-option-menu linear">
-					<AdminControl item={Item} />
+					<AdminControl item={Item} onRefresh={onRefresh} />
 					<StudentControl item={Item} onRefresh={onRefresh} />
 				</div>
 			</div>

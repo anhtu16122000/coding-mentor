@@ -395,21 +395,15 @@ const VideoCourseList = () => {
 	return (
 		<div>
 			<Card title={Extra()} className="video-course-list" style={{ width: '100%' }}>
-				{userInformation !== null && (
-					<>
-						{(userInformation?.RoleId === 1 || userInformation?.RoleId === 3) && (
-							<CourseVideoTable
-								totalPage={totalPage && totalPage}
-								getPagination={(pageNumber: number) => getPagination(pageNumber)}
-								currentPage={pageIndex}
-								columns={columnsVideoCourse}
-								dataSource={dataFake}
-								loading={{ type: 'GET_ALL', status: loading }}
-								TitleCard={null}
-							/>
-						)}
-					</>
-				)}
+				<CourseVideoTable
+					totalPage={totalPage && totalPage}
+					getPagination={(pageNumber: number) => getPagination(pageNumber)}
+					currentPage={pageIndex}
+					columns={columnsVideoCourse}
+					dataSource={dataFake}
+					loading={{ type: 'GET_ALL', status: loading }}
+					TitleCard={null}
+				/>
 			</Card>
 
 			<Modal

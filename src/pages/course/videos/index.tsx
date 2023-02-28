@@ -18,8 +18,18 @@ import Link from 'next/link'
 import { FiFilter } from 'react-icons/fi'
 import Fireworks from '~/common/components/Fireworks'
 import RestApi from '~/api/RestApi'
+import Filters from '~/common/components/Student/Filters'
 
 const url = 'product'
+
+const initFilters = {
+	pageSize: 8,
+	pageIndex: 1,
+	type: 1,
+	sort: 0,
+	sortType: 0,
+	search: null
+}
 
 const VideoCourse = () => {
 	const [showFirework, setShowFirework] = useState(false)
@@ -30,14 +40,7 @@ const VideoCourse = () => {
 	const [data, setdata] = useState<IVideoCourse[]>([])
 	const [totalPage, setTotalPage] = useState(0)
 
-	const [filters, setFilters] = useState({
-		pageSize: 8,
-		pageIndex: 1,
-		type: 1,
-		sort: 0,
-		sortType: 0,
-		search: null
-	})
+	const [filters, setFilters] = useState(initFilters)
 
 	const user = useSelector((state: RootState) => state.user.information)
 
@@ -105,6 +108,30 @@ const VideoCourse = () => {
 		}
 	}
 
+	function isAdmin() {
+		return user?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
+
+	function isManager() {
+		return user?.RoleId == 4
+	}
+
+	function isStdent() {
+		return user?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return user?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return user?.RoleId == 7
+	}
+
 	return (
 		<>
 			<Fireworks showFirework={showFirework} />
@@ -123,53 +150,22 @@ const VideoCourse = () => {
 				</div>
 			</Modal>
 
-			<div className="container antd-custom-wrap">
+			<div className="antd-custom-wrap">
 				<Card
 					style={{ width: '100%' }}
 					title={
-						<>
-							<div className="smartphone:hidden tablet:block">
-								<Input.Search className="w-48 mr-4" placeholder="Tìm khóa học" onSearch={(e) => setFilters({ ...filters, search: e })} />
-								<SortVideoCourse handleChange={(event) => setFilters({ ...filters, ...event })} text="Khóa học" />
+						<div className="flex items-center justify-between w-full">
+							<div className="row-center flex-1 mr-[4px]">
+								<Filters isVideos onSubmit={(event) => setFilters({ ...filters, ...event })} onReset={(event) => setFilters(initFilters)} />
+								<Input.Search
+									className="flex-1 duration-300 w600:max-w-[250px] ml-[8px]"
+									placeholder="Tìm khóa học"
+									onSearch={(e) => setFilters({ ...filters, search: e })}
+								/>
 							</div>
-							<div className="smartphone:block tablet:hidden">
-								<Popover
-									content={
-										<>
-											<div>
-												<Input.Search
-													className="w-48 mb-3 primary-search"
-													placeholder="Tìm khóa học"
-													onSearch={(e) => setFilters({ ...filters, search: e })}
-												/>
-											</div>
-											<div>
-												<SortVideoCourse handleChange={(event) => setFilters({ ...filters, ...event })} text="Khóa học" />
-											</div>
-										</>
-									}
-									title="Tìm kiếm"
-									trigger="click"
-									open={visible}
-									onOpenChange={handleVisibleChange}
-									placement="bottomLeft"
-								>
-									<div className="h-[36px] w-[36px] bg-tw-gray cursor-pointer rounded flex items-center justify-center">
-										<FiFilter className="text-3xl" size={20} />
-									</div>
-								</Popover>
-							</div>
-						</>
-					}
-					extra={
-						<>
-							{userRoleId == '1' && <CreateVideoCourse onRefresh={onRefresh} />}
-							{/* {userRoleId == '3' && (
-								<PrimaryButton onClick={handleCreateCertificate} background="green" icon="add" type="button">
-									Tạo chứng chỉ
-								</PrimaryButton>
-							)} */}
-						</>
+
+							{isAdmin() && <CreateVideoCourse onRefresh={onRefresh} />}
+						</div>
 					}
 					loading={isLoading.type == 'GET_ALL_COURSE' && isLoading.status}
 				>

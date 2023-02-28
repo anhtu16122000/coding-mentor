@@ -390,7 +390,7 @@ export default function ServiceAppointmentTest(props) {
 		{
 			title: 'Học viên',
 			dataIndex: 'FullName',
-			width: 180,
+			width: 220,
 			render: (a) => <p className="font-weight-primary">{a}</p>,
 			...FilterColumn('FullName', onSearch, handleReset, 'text')
 		},
@@ -411,7 +411,7 @@ export default function ServiceAppointmentTest(props) {
 			dataIndex: 'ModifiedBy'
 		},
 		{
-			width: 200,
+			width: 220,
 			title: 'Giáo viên',
 			dataIndex: 'TeacherName'
 		},
