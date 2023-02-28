@@ -23,7 +23,7 @@ import { userInformationApi } from '~/api/user'
 import ExpandedRowAppointment from '~/common/components/Service/ExpandedRowAppointment'
 import IconButton from '~/common/components/Primary/IconButton'
 import { useRouter } from 'next/router'
-import { Select } from 'antd'
+import { Form, Select } from 'antd'
 
 const appointmenInitFilter = [
 	{
@@ -108,6 +108,7 @@ let listFieldFilter = {
 
 export default function ServiceAppointmentTest(props) {
 	const state = useSelector((state: RootState) => state)
+	const [form] = Form.useForm()
 	const router = useRouter()
 	const dispatch = useDispatch()
 	const [isOpenNoti, setisOpenNoti] = useState(false)
@@ -373,6 +374,13 @@ export default function ServiceAppointmentTest(props) {
 		setTodoApi({ ...todoApi })
 	}
 
+	useEffect(() => {
+		if (students && students?.length > 0) {
+			setTodoApi({ ...todoApi, studentId: students[0].value })
+			form.setFieldValue('student', students[0].value)
+		}
+	}, [students])
+
 	const columns = [
 		{
 			title: 'Mã',
@@ -530,14 +538,18 @@ export default function ServiceAppointmentTest(props) {
 							)}
 							{userInformation.RoleId === '8' ? (
 								<>
-									<Select
-										defaultActiveFirstOption
-										allowClear
-										className="w-[200px]"
-										onChange={handleChangeStudent}
-										options={students}
-										placeholder="Chọn học viên"
-									/>
+									<Form form={form}>
+										<Form.Item name="student">
+											<Select
+												defaultActiveFirstOption
+												allowClear
+												className="w-[200px]"
+												onChange={handleChangeStudent}
+												options={students}
+												placeholder="Chọn học viên"
+											/>
+										</Form.Item>
+									</Form>
 								</>
 							) : (
 								''

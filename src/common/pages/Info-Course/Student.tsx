@@ -295,14 +295,14 @@ const Student: FC<IPersonnel> = (props) => {
 			render: (data, item) => {
 				return (
 					<div className="flex items-center">
-						<IconButton
+						{/* <IconButton
 							type="button"
 							icon={'eye'}
 							color="blue"
 							onClick={() => router.push({ pathname: '/info-course/student/detail', query: { StudentID: item.UserInformationId } })}
 							className=""
 							tooltip="Chi tiết"
-						/>
+						/> */}
 
 						{isAdmin() && (
 							<>

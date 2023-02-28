@@ -1,4 +1,4 @@
-import { Card, Select } from 'antd'
+import { Card, Form, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
@@ -33,6 +33,7 @@ let listFieldFilter = {
 }
 
 const ListClass = () => {
+	const [form] = Form.useForm()
 	const [dataFilter, setDataFilter] = useState([
 		{
 			name: 'name',
@@ -207,6 +208,12 @@ const ListClass = () => {
 	useEffect(() => {
 		getAllClass()
 	}, [todoApi])
+	useEffect(() => {
+		if (students && students?.length > 0) {
+			setTodoApi({ ...todoApi, studentId: students[0].value })
+			form.setFieldValue('student', students[0].value)
+		}
+	}, [students])
 
 	return (
 		<div className="wrapper-class">
@@ -221,15 +228,17 @@ const ListClass = () => {
 							}
 							extra={
 								userInformation.RoleId === '8' ? (
-									<>
-										<Select
-											allowClear
-											className="w-[200px]"
-											onChange={handleChangeStudent}
-											options={students}
-											placeholder="Chọn học viên"
-										/>
-									</>
+									<Form form={form}>
+										<Form.Item name="student">
+											<Select
+												allowClear
+												className="w-[200px]"
+												onChange={handleChangeStudent}
+												options={students}
+												placeholder="Chọn học viên"
+											/>
+										</Form.Item>
+									</Form>
 								) : (
 									''
 								)

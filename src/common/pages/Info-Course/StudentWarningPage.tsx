@@ -102,7 +102,7 @@ export const StudentWarningPage = () => {
 	}, [])
 
 	useEffect(() => {
-		if (students && students.length > 0) {
+		if (students && students?.length > 0) {
 			setApiParameters({ ...apiParameters, studentIds: students[0].value?.toString() })
 			form.setFieldValue('student', students[0].value)
 		}
