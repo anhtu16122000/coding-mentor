@@ -10,7 +10,7 @@ import styles from './cart.module.scss'
 import Head from 'next/head'
 import ReactHTMLParser from 'react-html-parser'
 import appConfigs from '~/appConfig'
-import { Card, Divider, Empty, Input, Skeleton } from 'antd'
+import { Card, Divider, Empty, Input, Modal, Skeleton } from 'antd'
 import Avatar from '../Avatar'
 import { parseToMoney } from '~/common/utils/common'
 import { HiPlus } from 'react-icons/hi'
@@ -22,6 +22,7 @@ import { RiCheckboxCircleFill } from 'react-icons/ri'
 import { IoMdClose } from 'react-icons/io'
 import PrimaryTooltip from '../PrimaryTooltip'
 import PrimaryButton from '../Primary/Button'
+import PaymentSucess from './success'
 
 const CART_ROUTER = '/cart'
 
@@ -61,6 +62,8 @@ const MainCart = () => {
 	const [appliedDiscount, setAppliedDiscount] = useState(null)
 
 	const [loading, setLoading] = useState<boolean>(true)
+
+	const [successVisible, setSuccessVisible] = useState<boolean>(false)
 
 	useEffect(() => {
 		getData()
@@ -161,6 +164,7 @@ const MainCart = () => {
 				getData()
 				setAppliedDiscount(null)
 				setTextDiscount('')
+				setSuccessVisible(true)
 			}
 		} catch (error) {
 			ShowNostis.error(error?.message)
@@ -448,6 +452,15 @@ const MainCart = () => {
 					</Card>
 				</div>
 			</div>
+
+			<Modal footer={null} width={600} open={successVisible}>
+				<PaymentSucess
+					onClose={() => {
+						setSuccessVisible(true)
+						Router.back()
+					}}
+				/>
+			</Modal>
 		</div>
 	)
 }

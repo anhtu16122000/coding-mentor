@@ -166,7 +166,7 @@ const TeacherOpenCalendarPage = () => {
 					headerToolbar={{
 						start: 'prev today next',
 						center: 'title',
-						end: 'dayGridMonth,timeGridWeek,timeGridDay'
+						end: 'dayGridMonth,timeGridWeek'
 					}}
 					buttonText={{
 						today: 'Hôm nay',

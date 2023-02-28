@@ -1,5 +1,5 @@
-import { Card, Divider, Form, Tooltip } from 'antd'
-import React, { useEffect, useMemo, useState } from 'react'
+import { Card, Divider, Form } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { discountApi } from '~/api/discount'
@@ -106,39 +106,47 @@ const RegisterClass = () => {
 		setIsReset(false)
 	}
 
-	useMemo(() => {
-		const totalSelected = classesSelected.length + programsSelected.length
-		let newDiscountPrice = 0
-		if (totalSelected <= 1 && !!detailDiscount) {
-			if (detailDiscount.PackageType === 2) {
-				setDetailDiscount(null)
-				setDiscountPrice(newDiscountPrice)
-			} else {
-				newDiscountPrice = detailDiscount.Value
-				setDiscountPrice(newDiscountPrice)
-			}
-		} else if (totalSelected > 1 && !!detailDiscount) {
-			if (detailDiscount.PackageType === 1) {
-				setDetailDiscount(null)
-				setDiscountPrice(newDiscountPrice)
-			} else {
-				const calculateDiscountPrice = (totalPrice * detailDiscount.Value) / 100
-				if (calculateDiscountPrice > detailDiscount.MaxDiscount) {
-					newDiscountPrice = detailDiscount.MaxDiscount
-				} else {
-					newDiscountPrice = (totalPrice * detailDiscount.Value) / 100
-				}
-				setDiscountPrice(newDiscountPrice)
-			}
-		} else if (totalSelected === 0) {
-			setDetailDiscount(null)
-			setDiscountPrice(newDiscountPrice)
-		} else {
-			setDiscountPrice(newDiscountPrice)
+	function getPercentDiscountValue(total, percent, max) {
+		// Tính số tiền khuyến mãi dựa trên phần trăm khuyến mãi
+		let price = (total * percent) / 100
+		// Nếu số tiền khuyến mãi vượt quá khuyến mãi tối đa thì chỉ lấy khuyến mãi tối đa
+		if (price > max) {
+			price = max
 		}
-		const newLeftPrice = totalPrice - newDiscountPrice - parseStringToNumber(!!form.getFieldValue('Paid') ? form.getFieldValue('Paid') : 0)
+		return price
+	}
+
+	function getNormalDiscountValue(total, max) {
+		// Nếu tổng tiền vượt quá khuyến mãi tối đa thì chỉ lấy khuyến mãi tối đa
+		if (total > max) {
+			return max
+		}
+		// Nếu tổng tiền không vượt quá khuyến mãi tối đa thì trả về tổng tiền
+		return total
+	}
+
+	function getDiscountValue() {
+		if (!detailDiscount) return 0
+
+		if (detailDiscount?.Type == 2) {
+			return getPercentDiscountValue(totalPrice, detailDiscount?.Value, detailDiscount?.MaxDiscount)
+		}
+
+		if (detailDiscount?.Type == 1) {
+			return getNormalDiscountValue(totalPrice, detailDiscount?.MaxDiscount)
+		}
+	}
+
+	useEffect(() => {
+		const discountValue = getDiscountValue()
+		setDiscountPrice(discountValue)
+		const newLeftPrice = totalPrice - discountValue - parseStringToNumber(!!form.getFieldValue('Paid') ? form.getFieldValue('Paid') : 0)
 		setLeftPrice(newLeftPrice)
 	}, [totalPrice, detailDiscount])
+
+	useEffect(() => {
+		setDetailDiscount(null)
+	}, [classesSelected, programsSelected])
 
 	const handleChangeTab = (tab) => {
 		setActiveTab(tab)
@@ -225,6 +233,7 @@ const RegisterClass = () => {
 				Paid: !!data.Paid ? parseStringToNumber(data.Paid) : 0,
 				Details: getDetailSubmit(activeTab.Type)
 			}
+
 			console.log('-- DATA_SUBMIT: ', DATA_SUBMIT)
 			console.time('-- Gọi Api Bill hết')
 			try {
@@ -380,6 +389,7 @@ const RegisterClass = () => {
 											/>
 										</div>
 										<span className="title">{!!detailDiscount && detailDiscount?.Code}</span>
+
 										<span className="title text-tw-primary">{Intl.NumberFormat('ja-JP').format(discountPrice)}</span>
 									</div>
 
@@ -393,6 +403,7 @@ const RegisterClass = () => {
 											className="mb-0"
 										/>
 									</div>
+
 									<div className="flex items-center justify-between mb-3">
 										<span className="title">Ngày hẹn trả</span>
 										<DatePickerField className="mb-0 w-auto" mode="single" name="PaymentAppointmentDate" label="" />
@@ -403,10 +414,7 @@ const RegisterClass = () => {
 									<Divider />
 									<div className="flex items-center justify-between mb-3">
 										<span className="text-xl font-medium">Thành tiền</span>
-
 										<span className="text-xl font-medium text-tw-secondary">{Intl.NumberFormat('ja-JP').format(leftPrice)}</span>
-
-										{/* {leftPrice < 0 && <span className="text-xl font-medium text-[#016fff]">Miễn Phí</span>} */}
 									</div>
 									<div className="flex-all-center">
 										<PrimaryButton

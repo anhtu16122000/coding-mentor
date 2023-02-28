@@ -249,7 +249,7 @@ const CalendarClassTutoringEdit = () => {
 							dispatch(setParamsSchedule({ from: moment(data.start).format(), to: moment(data.end).format(), classId: slug }))
 						}}
 						locale="vi"
-						headerToolbar={{ start: 'prev today next', center: 'title', end: 'dayGridMonth,timeGridWeek,timeGridDay' }}
+						headerToolbar={{ start: 'prev today next', center: 'title', end: 'dayGridMonth,timeGridWeek' }}
 						buttonText={{ today: 'Hôm nay', month: 'Tháng', week: 'Tuần', day: 'Ngày' }}
 						allDaySlot={false}
 						titleFormat={{ month: 'numeric', year: 'numeric', day: 'numeric' }}

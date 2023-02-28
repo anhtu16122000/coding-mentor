@@ -35,7 +35,7 @@ import { PrimaryTooltip } from '~/common/components'
 import Filters from '~/common/components/Student/Filters'
 
 const Student: FC<IPersonnel> = (props) => {
-	const { reFresh, allowRegister } = props
+	const { reFresh, allowRegister, role } = props
 	const state = useSelector((state: RootState) => state)
 	const userInformation = useSelector((state: RootState) => state.user.information)
 	const initParamters = {
@@ -44,7 +44,7 @@ const Student: FC<IPersonnel> = (props) => {
 		PageSize: PAGE_SIZE,
 		Genders: null,
 		PageIndex: 1,
-		RoleIds: props.type == 'personnel' ? '1,2,4,5,6,7' : '3',
+		RoleIds: role,
 		Search: null,
 		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
 	}
@@ -149,7 +149,7 @@ const Student: FC<IPersonnel> = (props) => {
 	}
 
 	useEffect(() => {
-		if (props.type === 'student') {
+		if (role == 3) {
 			if (state.source.Source.length === 0) {
 				getAllSource()
 			}
@@ -406,7 +406,7 @@ const Student: FC<IPersonnel> = (props) => {
 							/>
 						</PrimaryTooltip>
 
-						{props.type !== 'student' && isAdmin() && (
+						{role !== 3 && isAdmin() && (
 							<CreateUser
 								isEdit
 								roleStaff={roleStaff}
@@ -417,7 +417,7 @@ const Student: FC<IPersonnel> = (props) => {
 							/>
 						)}
 
-						{props.type == 'student' && isAdmin() && (
+						{role == 3 && isAdmin() && (
 							<CreateUser
 								isEdit
 								roleStaff={roleStaff}
@@ -473,7 +473,7 @@ const Student: FC<IPersonnel> = (props) => {
 	return (
 		<div className="info-course-student">
 			<PrimaryTable
-				columns={props.type === 'student' ? columnsStudent : columns}
+				columns={role == 3 ? columnsStudent : columns}
 				data={users}
 				total={totalRow}
 				loading={loading}
@@ -514,23 +514,19 @@ const Student: FC<IPersonnel> = (props) => {
 							</PrimaryButton>
 						)}
 
-						{props.type == 'student' && isAdmin() && (
+						{role == 3 && isAdmin() && (
 							<PrimaryButton
 								className="mr-2 btn-download"
 								type="button"
 								icon="download"
 								background="blue"
-								onClick={() => {
-									window.open(`${appConfigs.linkDownloadExcel}?key=${new Date().getTime()}`)
-								}}
+								onClick={() => window.open(`${appConfigs.linkDownloadExcel}?key=${new Date().getTime()}`)}
 							>
 								File mẫu
 							</PrimaryButton>
 						)}
 
-						{props.type == 'student' && isAdmin() && (
-							<ImportStudent className="mr-1 btn-import" onFetchData={() => getUsers(apiParameters)} />
-						)}
+						{role == 3 && isAdmin() && <ImportStudent className="mr-1 btn-import" onFetchData={() => getUsers(apiParameters)} />}
 
 						<Popover
 							placement="bottomLeft"
@@ -538,7 +534,7 @@ const Student: FC<IPersonnel> = (props) => {
 							onVisibleChange={(event) => setVisible(event)}
 							content={
 								<div className="w-[220px]">
-									{props.type == 'student' && allowRegister !== undefined && (
+									{role == 3 && allowRegister !== undefined && (
 										<PrimaryButton
 											loading={loadingAllow}
 											className="mb-3 !w-full"
@@ -553,9 +549,9 @@ const Student: FC<IPersonnel> = (props) => {
 
 									<CreateUser
 										onOpen={() => setVisible(false)}
-										className={`!w-full ${props.type == 'student' && 'mb-3'}`}
+										className={`!w-full ${role == 3 && 'mb-3'}`}
 										onRefresh={() => getUsers(apiParameters)}
-										isStudent={props.type === 'student' ? true : false}
+										isStudent={role == 3 ? true : false}
 									/>
 
 									{!!apiParameters.Search && users.length == 0 && (
@@ -570,21 +566,19 @@ const Student: FC<IPersonnel> = (props) => {
 										</PrimaryButton>
 									)}
 
-									{props.type == 'student' && (
+									{role == 3 && (
 										<PrimaryButton
 											className="!w-full mb-3"
 											type="button"
 											icon="download"
 											background="blue"
-											onClick={() => {
-												window.open(appConfigs.linkDownloadExcel)
-											}}
+											onClick={() => window.open(`${appConfigs.linkDownloadExcel}?key=${new Date().getTime()}`)}
 										>
 											File mẫu
 										</PrimaryButton>
 									)}
 
-									{props.type == 'student' && (
+									{role == 3 && (
 										<ImportStudent
 											className="!w-full"
 											onFetchData={() => {
@@ -599,7 +593,7 @@ const Student: FC<IPersonnel> = (props) => {
 						>
 							<PrimaryButton
 								onClick={() => setVisible(!visible)}
-								className={`${props.type == 'student' ? 'btn-popover-student' : 'btn-popover-personel'} btn-popover`}
+								className={`${role == 3 ? 'btn-popover-student' : 'btn-popover-personel'} btn-popover`}
 								type="button"
 								background="primary"
 							>
@@ -607,7 +601,7 @@ const Student: FC<IPersonnel> = (props) => {
 							</PrimaryButton>
 						</Popover>
 
-						{props.type == 'student' && isAdmin() && (
+						{role == 3 && isAdmin() && (
 							<CreateUser
 								roleStaff={roleStaff}
 								source={source}
@@ -620,7 +614,7 @@ const Student: FC<IPersonnel> = (props) => {
 							/>
 						)}
 
-						{props.type !== 'student' && isAdmin() && (
+						{role !== 3 && isAdmin() && (
 							<CreateUser roleStaff={roleStaff} className="btn-create" onRefresh={() => getUsers(apiParameters)} isStudent={false} />
 						)}
 					</>

@@ -23,7 +23,7 @@ const PersonnelPage = () => {
 		}
 	}
 
-	return <Student type="student" allowRegister={allowed} reFresh={getAllow} />
+	return <Student role={3} allowRegister={allowed} reFresh={getAllow} />
 }
 
 PersonnelPage.Layout = MainLayout

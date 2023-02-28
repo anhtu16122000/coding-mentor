@@ -15,7 +15,7 @@ import { userInfoColumn } from '~/common/libs/columns/user-info'
 import ParentsForm from '~/common/pages/Info-Course/parents/Create'
 import { PrimaryTooltip } from '~/common/components'
 import { ButtonRemove } from '~/common/components/TableButton'
-import { Popconfirm } from 'antd'
+import { Input, Popconfirm } from 'antd'
 import Childs from './Childs'
 
 const appointmenInitFilter = [
@@ -64,24 +64,10 @@ const sortParams = [
 	},
 	{
 		dataSort: {
-			sort: 0,
+			sort: 1,
 			sortType: false
 		},
 		text: 'Tên Z - A'
-	},
-	{
-		dataSort: {
-			sort: 0,
-			sortType: true
-		},
-		text: 'Ngày hẹn A - Z'
-	},
-	{
-		dataSort: {
-			sort: 0,
-			sortType: false
-		},
-		text: 'Ngày hẹn Z - A'
 	}
 ]
 
@@ -93,6 +79,7 @@ export default function Parents(props) {
 
 	// BASE USESTATE TABLE
 	const [dataSource, setDataSource] = useState<ITestCustomer[]>([])
+
 	const listTodoApi = {
 		pageSize: PAGE_SIZE,
 		pageIndex: pageIndex,
@@ -102,6 +89,7 @@ export default function Parents(props) {
 		sort: 0,
 		sortType: false
 	}
+
 	const [isLoading, setIsLoading] = useState(true)
 	const [totalPage, setTotalPage] = useState(null)
 	const [currentPage, setCurrentPage] = useState(1)
@@ -295,6 +283,16 @@ export default function Parents(props) {
 					columns={columns}
 					TitleCard={
 						<div className="extra-table">
+							<Input.Search
+								className="primary-search max-w-[250px] mr-[8px]"
+								onChange={(event) => {
+									if (event.target.value == '') {
+										setTodoApi({ ...listTodoApi, pageIndex: 1, Search: '' })
+									}
+								}}
+								onSearch={(event) => setTodoApi({ ...listTodoApi, pageIndex: 1, Search: event })}
+								placeholder="Tìm kiếm"
+							/>
 							<SortBox handleSort={(value) => handleSort(value)} dataOption={sortParams} />
 						</div>
 					}

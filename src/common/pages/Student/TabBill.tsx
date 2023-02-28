@@ -115,11 +115,7 @@ export const TabBill: React.FC<ITabBill> = ({ StudentDetail }) => {
 	const getPagination = (pageNumber: number) => {
 		pageIndex = pageNumber
 		setCurrentPage(pageNumber)
-		setApiParameters({
-			...apiParameters,
-			// ...listFieldSearch,
-			pageIndex: pageIndex
-		})
+		setApiParameters({ ...apiParameters, pageIndex: pageIndex })
 	}
 
 	return (
@@ -129,11 +125,9 @@ export const TabBill: React.FC<ITabBill> = ({ StudentDetail }) => {
 				totalPage={totalRow && totalRow}
 				getPagination={(pageNumber: number) => getPagination(pageNumber)}
 				loading={isLoading}
-				// addClass="basic-header"
 				dataSource={dataTable}
 				columns={columns}
 				expandable={expandedRowRender}
-				// isResetKey={isResetKey}
 			/>
 		</>
 	)

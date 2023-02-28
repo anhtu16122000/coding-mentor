@@ -150,7 +150,7 @@ const Schedule = () => {
 						setParamsSearch(DATA_GET)
 					}}
 					locale="vi"
-					headerToolbar={{ start: 'prev today next', center: 'title', end: 'dayGridMonth,timeGridWeek,timeGridDay' }}
+					headerToolbar={{ start: 'prev today next', center: 'title', end: 'dayGridMonth,timeGridWeek' }}
 					buttonText={{ today: 'Hôm nay', month: 'Tháng', week: 'Tuần', day: 'Ngày' }}
 					allDaySlot={false}
 					titleFormat={{ month: 'numeric', year: 'numeric', day: 'numeric' }}

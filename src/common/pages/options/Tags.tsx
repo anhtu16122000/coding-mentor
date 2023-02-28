@@ -107,6 +107,7 @@ function TagsPage() {
 			<Head>
 				<title>{appConfigs.appName} | Cấu hình từ khoá</title>
 			</Head>
+
 			<ExpandTable
 				loading={isLoading}
 				total={totalRow}
@@ -116,17 +117,19 @@ function TagsPage() {
 				columns={columns}
 				pageSize={PAGE_SIZE}
 				TitleCard={
-					<Tabs
-						defaultActiveKey="1"
-						type="card"
-						items={OptionsList.map((item, i) => {
-							return { label: item.title, key: item.value + '' }
-						})}
-						onChange={(tabIndx) => {
-							setActiveTab(+tabIndx)
-							setTodoApi((pre) => ({ ...pre, type: +tabIndx }))
-						}}
-					/>
+					<div className="w-[300px] mb-[-20px]">
+						<Tabs
+							defaultActiveKey="1"
+							type="card"
+							items={OptionsList.map((item, i) => {
+								return { label: item.title, key: item.value + '' }
+							})}
+							onChange={(tabIndx) => {
+								setActiveTab(+tabIndx)
+								setTodoApi((pre) => ({ ...pre, type: +tabIndx }))
+							}}
+						/>
+					</div>
 				}
 				expandable={(data) => <TagList tagCategoryId={data.Id} />}
 			/>

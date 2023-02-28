@@ -353,7 +353,7 @@ const CalenderClass = () => {
 					headerToolbar={{
 						start: 'prev today next',
 						center: 'title',
-						end: 'dayGridMonth,timeGridWeek,timeGridDay'
+						end: 'dayGridMonth,timeGridWeek' // end: 'dayGridMonth,timeGridWeek,timeGridDay'
 					}}
 					buttonText={{
 						today: 'Hôm nay',

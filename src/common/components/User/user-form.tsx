@@ -27,8 +27,9 @@ import { formNoneRequired, formRequired } from '~/common/libs/others/form'
 import Router from 'next/router'
 
 const CreateUser: FC<ICreateNew> = (props) => {
-	const { onRefresh, isEdit, defaultData, isStudent, isChangeInfo, className, onOpen, roleStaff, source, purpose, sale, learningNeed } =
-		props
+	const { className, onOpen, roleStaff, source, purpose, sale, learningNeed } = props
+	const { onRefresh, isEdit, defaultData, isStudent, isChangeInfo } = props
+
 	const [form] = Form.useForm()
 
 	const [districts, setDistricts] = useState([])
