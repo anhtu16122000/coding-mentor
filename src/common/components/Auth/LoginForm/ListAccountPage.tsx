@@ -2,9 +2,12 @@ import { message, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { ShowNoti } from '~/common/utils'
 import { userApi } from '~/services/auth'
+import IconButton from '../../Primary/IconButton'
 import PrimaryTable from '../../Primary/Table'
+import PrimaryTag from '../../Primary/Tag'
 
-export const ListAccountPage = () => {
+export const ListAccountPage = (props) => {
+	const { setUsername, setPassword } = props
 	const [dataTable, setDataTable] = useState([])
 	const [loading, setLoading] = useState(false)
 
@@ -30,9 +33,10 @@ export const ListAccountPage = () => {
 		getListAccount()
 	}, [])
 
-	const handleCoppy = (code) => {
+	const handleCoppy = (item) => {
 		try {
-			navigator.clipboard.writeText(code)
+			setPassword('mon4medi4')
+			setUsername(item.UserName)
 			ShowNoti('success', 'Sao chép thành công!')
 		} catch (error) {
 			console.log(error)
@@ -58,22 +62,19 @@ export const ListAccountPage = () => {
 			dataIndex: 'UserName',
 			render: (text, item) => (
 				<Tooltip title="Sao chép">
-					<p className="cursor-pointer" onClick={() => handleCoppy(text)}>
-						{text}
-					</p>
+					<p className="cursor-pointer">{text}</p>
 				</Tooltip>
 			)
 		},
+
 		{
-			title: 'Mật khẩu',
+			title: '',
 			width: 100,
-			dataIndex: 'Password',
+			dataIndex: 'Action',
 			render: (text, item) => (
-				<Tooltip title="Sao chép">
-					<p className="cursor-pointer" onClick={() => handleCoppy(text)}>
-						monamedia
-					</p>
-				</Tooltip>
+				<div className="cursor-pointer" onClick={() => handleCoppy(item)}>
+					<PrimaryTag color="blue" children="COPPY" />
+				</div>
 			)
 		}
 	]
