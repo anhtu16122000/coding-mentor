@@ -1,12 +1,19 @@
 .login-container {
 	width: 100%;
-	height: 100vh;
+	// height: 100vh;
 	background-color: #fff;
+	display: flex;
+	background-repeat: no-repeat;
+	background-position: 0;
+	align-items: stretch;
+	flex-wrap: wrap !important;
 	.left-login {
 		background: url('https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80')
 			no-repeat center center;
 		background-size: cover;
-		position: relative;
+		flex: 1 1;
+		display: flex;
+		height: 100vh;
 		.mask-background {
 			position: absolute;
 			top: 0;
@@ -69,161 +76,213 @@
 		height: 100vh;
 		background-color: rgb(255, 255, 255);
 		box-shadow: 0px 0px 50px #23293143;
+		overflow-x: hidden;
+		position: relative;
+		top: 0;
+		right: 0;
+		z-index: 999;
 		@include max-media(1000px) {
 			width: 100vw;
 		}
-		.logo-login {
-			width: 250px;
-		}
-		.logo-register {
-			width: 150px;
-		}
-		.login-title {
-			font-weight: 700;
-			font-size: 24px;
-			line-height: 40px;
-			color: $second-color;
-		}
-		label {
-			font-weight: 400;
-			font-size: 16px;
-			line-height: 24px;
-			color: #333333;
-			margin-bottom: 8px;
-			width: 70%;
-			&.password {
-				flex: 1;
-			}
-			@include max-media(1200px) {
-				width: 90%;
-			}
-			@include max-media(1000px) {
-				width: 50%;
-			}
-			@include max-media(700px) {
-				width: 70%;
-			}
-			@include max-media(500px) {
-				width: 85%;
-			}
-		}
-		.input {
+		.login-forms {
 			width: 100%;
-			height: 44px;
-			background: #f0f0f0;
-			border: 0.5px solid #cccccc;
-			border-radius: 8px;
-			.ant-input-prefix {
-				color: #6e6e6e;
-			}
-			input {
-				background-color: transparent;
-				margin-left: 8px;
-			}
-		}
-		.ant-form-item {
-			width: 70%;
-			@include max-media(1200px) {
-				width: 90%;
-			}
-			@include max-media(1000px) {
-				width: 50%;
-			}
-			@include max-media(700px) {
-				width: 70%;
-			}
-			@include max-media(500px) {
-				width: 85%;
-			}
-		}
-		.ant-input-affix-wrapper {
-			&:hover {
-				border-color: #a2a2a2;
-				border-width: 1px;
-			}
-		}
-		.ant-input-affix-wrapper-focused {
-			border-color: #9a9a9a;
-			box-shadow: none;
-		}
+			padding: 2vh 0;
+			@include flex(center, center);
+			.login-form {
+				width: 100%;
+				padding: 20px;
 
-		.wrap-password {
-			width: 70%;
-			display: inline-flex;
-			align-items: center;
-			a {
-				font-size: 16px;
-				line-height: 24px;
-				color: $primary-color;
-			}
-			@include max-media(1200px) {
-				width: 90%;
-			}
-			@include max-media(1000px) {
-				width: 50%;
-			}
-			@include max-media(700px) {
-				width: 70%;
-			}
-			@include max-media(500px) {
-				width: 85%;
-			}
-		}
+				.logo-login {
+					width: 250px;
+					margin: 0 auto;
+				}
+				.logo-register {
+					width: 150px;
+					margin: 0 auto;
+				}
+				.login-title {
+					@include flex(center, center);
+					font-weight: 700;
+					font-size: 24px;
+					line-height: 40px;
+					color: $second-color;
+				}
+				> label {
+					font-weight: 400;
+					@include flex(center, flex-start);
 
-		.btn-login {
-			display: inline-flex;
-			flex-direction: row;
-			justify-content: center;
-			align-items: center;
-			width: 70%;
-			height: 44px;
-			padding: 9px 0;
-			background: $primary-color;
-			border-radius: 8px;
-			border-style: none;
-			color: #fff;
-			font-weight: 600;
-			font-size: 16px;
+					font-size: 16px;
+					line-height: 24px;
+					color: #333333;
+					margin-bottom: 8px;
+					width: 70%;
+					&.password {
+						flex: 1;
+					}
+					@include max-media(1200px) {
+						width: 90%;
+						margin: 0 auto;
+					}
+					@include max-media(1000px) {
+						width: 50%;
+						margin: 0 auto;
+					}
+					@include max-media(700px) {
+						width: 70%;
+						margin: 0 auto;
+					}
+					@include max-media(500px) {
+						width: 85%;
+						margin: 0 auto;
+					}
+				}
+				.input {
+					width: 100%;
+					height: 44px;
+					background: #f0f0f0;
+					border: 0.5px solid #cccccc;
+					border-radius: 8px;
+					.ant-input-prefix {
+						color: #6e6e6e;
+					}
+					input {
+						background-color: transparent;
+						margin-left: 8px;
+					}
+				}
+				.ant-form-item {
+					width: 100%;
+					@include max-media(1200px) {
+						width: 90%;
+						margin: 0 auto;
+						margin-bottom: 24px;
+					}
+					@include max-media(1000px) {
+						width: 50%;
+						margin: 0 auto;
+						margin-bottom: 24px;
+					}
+					@include max-media(700px) {
+						width: 70%;
+						margin: 0 auto;
+						margin-bottom: 24px;
+					}
+					@include max-media(500px) {
+						width: 85%;
+						margin: 0 auto;
+						margin-bottom: 24px;
+					}
+				}
+				.ant-input-affix-wrapper {
+					&:hover {
+						border-color: #a2a2a2;
+						border-width: 1px;
+					}
+				}
+				.ant-input-affix-wrapper-focused {
+					border-color: #9a9a9a;
+					box-shadow: none;
+				}
 
-			&:hover {
-				background: $primary-hover;
-			}
+				.wrap-password {
+					width: 100%;
+					display: inline-flex;
+					align-items: center;
+					a {
+						font-size: 16px;
+						line-height: 24px;
+						color: $primary-color;
+					}
+					@include max-media(1200px) {
+						width: 90%;
+						@include flex(center, center);
+						margin: 0 auto;
+					}
+					@include max-media(1000px) {
+						width: 50%;
+						@include flex(center, center);
+						margin: 0 auto;
+					}
+					@include max-media(700px) {
+						width: 70%;
+						@include flex(center, center);
+						margin: 0 auto;
+					}
+					@include max-media(500px) {
+						width: 85%;
+						@include flex(center, center);
+						margin: 0 auto;
+					}
+				}
 
-			&:active {
-				background: $primary-color;
-			}
+				.list-account {
+					width: 100%;
 
-			@include max-media(1200px) {
-				width: 90%;
-			}
-			@include max-media(1000px) {
-				width: 50%;
-			}
-			@include max-media(700px) {
-				width: 70%;
-			}
-			@include max-media(500px) {
-				width: 85%;
-			}
+					.ant-card-body {
+						padding: 0;
+					}
+				}
 
-			.loading-white {
-				margin-top: -6px;
-			}
+				.btn-login {
+					width: 100%;
+					height: 44px;
+					padding: 9px 0;
+					background: $primary-color;
+					border-radius: 8px;
+					border-style: none;
+					color: #fff;
+					font-weight: 600;
+					font-size: 16px;
 
-			&:disabled {
-				background-color: rgb(183, 183, 183);
-				cursor: not-allowed !important;
-			}
-		}
+					&:hover {
+						background: $primary-hover;
+					}
 
-		.register {
-			font-weight: 400;
-			font-size: 16px;
-			line-height: 24px;
-			text-align: center;
-			color: #333333;
-			a {
-				color: $primary-color;
+					&:active {
+						background: $primary-color;
+					}
+
+					@include max-media(1200px) {
+						width: 90%;
+						@include flex(center, center);
+						margin: 0 auto;
+					}
+					@include max-media(1000px) {
+						width: 50%;
+						@include flex(center, center);
+						margin: 0 auto;
+					}
+					@include max-media(700px) {
+						width: 70%;
+						@include flex(center, center);
+						margin: 0 auto;
+					}
+					@include max-media(500px) {
+						width: 85%;
+						@include flex(center, center);
+						margin: 0 auto;
+					}
+
+					.loading-white {
+						margin-top: -6px;
+					}
+
+					&:disabled {
+						background-color: rgb(183, 183, 183);
+						cursor: not-allowed !important;
+					}
+				}
+
+				.register {
+					font-weight: 400;
+					font-size: 16px;
+					line-height: 24px;
+					text-align: center;
+					color: #333333;
+					a {
+						color: $primary-color;
+					}
+				}
 			}
 		}
 	}

@@ -21,5 +21,8 @@ export const userApi = {
 		return instance.post('/api/LoginByDev', formData, {
 			headers: formData.getHeaders()
 		})
+	},
+	getListAccount() {
+		return instance.get('/api/GetAccountTemplate')
 	}
 }

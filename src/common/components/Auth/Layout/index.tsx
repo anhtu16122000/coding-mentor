@@ -73,7 +73,7 @@ function AuthLayout({ children }: IAuthLayout) {
 					<h1 className="content-idiom">{ReactHtmlParser(contentIdiom?.Content)}</h1>
 				</div>
 			</div>
-			<div className="col-md-4 col-12 m-0 right-login center-column">{children}</div>
+			<div className="col-md-4 col-12 m-0 right-login">{children}</div>
 		</div>
 	)
 }

@@ -49,8 +49,6 @@ export const LessonFeedbackPage = () => {
 				title="Phản hồi buổi học"
 				extra={
 					user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
-						false
-					) : true ? (
 						<>
 							<ModalLessonFeedback mode="add" onRefresh={() => getTimeLine(apiParameters)} />
 						</>
@@ -70,8 +68,6 @@ export const LessonFeedbackPage = () => {
 											{item?.Note} - {item?.CreatedBy}
 										</p>
 										{user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
-											false
-										) : true ? (
 											<ModalLessonFeedback mode="delete" dataRow={item} onRefresh={() => getTimeLine(apiParameters)} />
 										) : (
 											''
