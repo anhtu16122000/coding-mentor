@@ -133,6 +133,7 @@ const Dashboard = () => {
 		if (val && val.length > 0) {
 			const branchs = val.toString()
 			setTodoApi({ ...todoApi, branchIds: branchs })
+			setTodoApiOverView({ ...todoApiOverView, branchIds: branchs })
 		}
 	}
 
@@ -353,25 +354,23 @@ const Dashboard = () => {
 	}
 
 	useEffect(() => {
-		if (todoApi.year) {
-			getStaticStudentAge()
+		getStaticStudentAge()
 
-			getTopLearningNeed()
-			getTopPurpose()
-			getTopSource()
-			getTopJob()
+		getTopLearningNeed()
+		getTopPurpose()
+		getTopSource()
+		getTopJob()
 
-			getRevenue()
-			getNewClassInMonth()
-			getNewCustomer()
-			getFeedbackRating()
-			getTeacherRate()
-			getTotalScheduleTeacher()
+		getRevenue()
+		getNewClassInMonth()
+		getNewCustomer()
+		getFeedbackRating()
+		getTeacherRate()
+		getTotalScheduleTeacher()
 
-			getTotalScheduleStudent()
-			getStatisticialTestAppointment()
-			getNewCustomerofsales()
-		}
+		getTotalScheduleStudent()
+		getStatisticialTestAppointment()
+		getNewCustomerofsales()
 	}, [todoApi])
 
 	useEffect(() => {
@@ -395,23 +394,24 @@ const Dashboard = () => {
 				<p className="title">Xin chào, {user.FullName}</p>
 				<Form form={form}>
 					<div className="flex items-center pr-4">
-						{user.RoleId == 8 ? <Select onChange={handleChangeStudent} options={student} className="w-[200px] h-[36px] mr-2"></Select> : ''}
-						<Select
-							onChange={(e) => {
-								setTodoApi((pre) => ({ ...pre, year: e }))
-								setTodoApiOverView((pre) => ({ ...pre, year: e }))
-							}}
-							options={dataYear}
-							className="w-[100px] h-[36px] mr-2"
-						></Select>
-						<Select className="w-[200px] h-[36px] mr-2" mode="multiple" onChange={handleChangeBranch} allowClear placeholder="Trung tâm">
-							{allBranch?.length > 0 &&
-								allBranch?.map((branch, index) => (
-									<Select.Option value={branch.Id} key={index}>
-										{branch.Name}
-									</Select.Option>
-								))}
-						</Select>
+						<Form.Item name="student" className="w-[200px] mr-2">
+							{user.RoleId == 8 ? (
+								<Select onChange={handleChangeStudent} options={student} className="w-[200px] h-[36px] mr-2"></Select>
+							) : (
+								''
+							)}
+						</Form.Item>
+
+						<Form.Item name="branchIds" className="w-[200px]">
+							<Select className="w-[200px] h-[36px] mr-2" mode="multiple" onChange={handleChangeBranch} allowClear placeholder="Trung tâm">
+								{allBranch?.length > 0 &&
+									allBranch?.map((branch, index) => (
+										<Select.Option value={branch.Id} key={index}>
+											{branch.Name}
+										</Select.Option>
+									))}
+							</Select>
+						</Form.Item>
 						<IconButton
 							color="red"
 							icon="reset"
@@ -478,6 +478,16 @@ const Dashboard = () => {
 					))}
 			</div>
 
+			<div className="flex justify-end mt-4">
+				<Select
+					onChange={(e) => {
+						setTodoApi((pre) => ({ ...pre, year: e }))
+						setTodoApiOverView((pre) => ({ ...pre, year: e }))
+					}}
+					options={dataYear}
+					className="w-[100px] h-[36px] mr-2"
+				></Select>
+			</div>
 			{user.RoleId == 1 || user.RoleId == 4 || user.RoleId == 7 ? (
 				<>
 					{user.RoleId != 7 ? (
@@ -594,7 +604,6 @@ Dashboard.CardItem = ({ item }) => {
 	return (
 		<div className="col-span-3 p-3 rounded-md shadow-md bg-tw-white">
 			<p className="text-[24px] ">{item.Name}</p>
-
 			<div className="flex justify-between mt-3">
 				<span className="text-lg font-bold">{item.Value}</span>
 

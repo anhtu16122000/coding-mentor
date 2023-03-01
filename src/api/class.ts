@@ -75,8 +75,8 @@ export const classApi = {
 	deleteFileCurriculumDetailOfClass(id) {
 		return instance.delete(`${url}/file-curriculum-in-class/${id}`)
 	},
-	checkCompleteFileInClass(id) { //Hoàn thành file
-		return instance.post(`${url}/file-curriculum-in-class/complete/${id}`)
+	checkCompleteFileInClass(id, fileCurriculumInClassId) { //Hoàn thành file
+		return instance.post(`${url}/file-curriculum-in-class/complete/${id}`, { fileCurriculumInClassId })
 	},
 	addCurriculumOfClass(data) {
 		return instance.post(`${url}/curriculum-detail-in-class`, data)

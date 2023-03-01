@@ -279,7 +279,7 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 	const onChangeCheckCompleteFile = async (data) => {
 		console.log('🚀 ~ data:', data)
 		try {
-			const response = await classApi.checkCompleteFileInClass(data.Id)
+			const response = await classApi.checkCompleteFileInClass(data.Id, item.Id)
 			if (response.status === 200) {
 				getDataNoLoading()
 				ShowNoti('success', response.data.message)
