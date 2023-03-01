@@ -1,5 +1,4 @@
-import { List } from 'antd'
-import TextArea from 'antd/lib/input/TextArea'
+import { Form, List } from 'antd'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { QuestionInVideoCourseApi } from '~/api/course/video-course/question-in-video-course'
@@ -43,13 +42,16 @@ export default function QuestionInCourse(props: IQuestionInCourseProps) {
 		getDataSource()
 	}, [todoApi])
 
-	const handleAddQuestion = async () => {
+	const [form] = Form.useForm()
+
+	const onCreateQuestion = async () => {
 		setIsLoading({ type: 'ADD_QUESTION', status: true })
 		try {
 			let res = await QuestionInVideoCourseApi.addQuestion({ VideoCourseId: videoCourseID, Content: contentQuestion })
 			if (res.status == 200) {
 				ShowNoti('success', res.data.message)
 				setTodoApi({ ...todoApi })
+				form.resetFields()
 			}
 		} catch (error) {
 			ShowNoti('error', error.message)
@@ -60,49 +62,39 @@ export default function QuestionInCourse(props: IQuestionInCourseProps) {
 
 	return (
 		<div className="container">
-			<div>
-				{(user == '3' || user == '2') && (
-					<div className={`flex flex-col gap-2`}>
-						<TextBoxField
-							name="Question"
-							label="Câu hỏi của bạn"
-							rows={4}
-							className="rounded-lg"
-							onChange={(e) => {
-								setContentQuestion(e.target.value)
-							}}
-							placeholder="Nhập câu hỏi của bạn"
-						/>
-						<PrimaryButton
-							background="blue"
-							disable={isLoading.type == 'ADD_ANSWER' && isLoading.status}
-							loading={isLoading.type == 'ADD_ANSWER' && isLoading.status}
-							type="button"
-							children={<span>Lưu</span>}
-							className="ml-auto"
-							icon="save"
-							onClick={() => {
-								handleAddQuestion()
-							}}
-						/>
-					</div>
-				)}
-			</div>
+			<Form form={form}>
+				<div>
+					{(user == '3' || user == '2') && (
+						<div className={`flex flex-col gap-2`}>
+							<div className="font-[600]">Câu hỏi của bạn</div>
+							<TextBoxField
+								name="Question"
+								rows={4}
+								className="rounded-lg"
+								onChange={(e) => setContentQuestion(e.target.value)}
+								placeholder="Nhập câu hỏi của bạn"
+							/>
+							<PrimaryButton
+								background="blue"
+								disable={isLoading.type == 'ADD_ANSWER' && isLoading.status}
+								loading={isLoading.type == 'ADD_ANSWER' && isLoading.status}
+								type="button"
+								className="ml-auto mt-[-16px]"
+								icon="save"
+								onClick={onCreateQuestion}
+							>
+								Gửi câu hỏi
+							</PrimaryButton>
+						</div>
+					)}
+				</div>
+			</Form>
 
 			<div>
 				<List
 					grid={{ gutter: 16, xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1 }}
 					dataSource={dataSource}
-					renderItem={(item) => (
-						<>
-							<QuestionInCourseItem
-								Item={item}
-								onFetchData={() => {
-									setTodoApi({ ...todoApi })
-								}}
-							/>
-						</>
-					)}
+					renderItem={(item) => <QuestionInCourseItem Item={item} onFetchData={() => setTodoApi({ ...todoApi })} />}
 				/>
 			</div>
 		</div>

@@ -69,6 +69,7 @@ export const NotificationInClassPage = () => {
 	return (
 		<>
 			<PrimaryTable
+				className="shadow-sm"
 				loading={loading}
 				total={totalRow}
 				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}

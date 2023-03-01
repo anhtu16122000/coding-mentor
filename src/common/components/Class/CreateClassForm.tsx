@@ -12,7 +12,7 @@ import { roomApi } from '~/api/room'
 import { studyTimeApi } from '~/api/study-time'
 import { userInformationApi } from '~/api/user'
 import { ShowNoti } from '~/common/utils'
-import { parseSelectArray } from '~/common/utils/common'
+import { parseSelectArray, parseSelectArrayUser } from '~/common/utils/common'
 import { RootState } from '~/store'
 import { setBranch } from '~/store/branchReducer'
 import { setSpecialize } from '~/store/specializeReducer'
@@ -215,7 +215,7 @@ const CreateClassForm = (props) => {
 		try {
 			const res = await classApi.getAllTeacherWhenCreate({ branchId: branchId, programId: programId })
 			if (res.status === 200) {
-				const convertData = parseSelectArray(res.data.data, 'TeacherName', 'TeacherId')
+				const convertData = parseSelectArrayUser(res.data.data, 'TeacherName', 'TeacherCode', 'TeacherId')
 				setTeacher(convertData)
 			}
 			if (res.status === 204) {

@@ -61,6 +61,30 @@ export const RollUpTeacherPage = () => {
 		}
 	}, [router?.query?.class])
 
+	function isAdmin() {
+		return user?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
+
+	function isManager() {
+		return user?.RoleId == 4
+	}
+
+	function isStdent() {
+		return user?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return user?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return user?.RoleId == 7
+	}
+
 	const columns = [
 		{
 			title: 'Giáo viên',
@@ -84,34 +108,31 @@ export const RollUpTeacherPage = () => {
 		{
 			title: 'Điểm danh',
 			dataIndex: 'TeacherAttendanceId',
-			render: (text, item) => (
-				<div className="antd-custom-wrap">
-					{text != 0 ? (
-						<>
-							{user?.RoleId == 1 || user?.RoleId == 7 ? (
-								<Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} defaultChecked disabled />
-							) : (
-								'Đã điểm danh'
-							)}
-						</>
-					) : (
-						<>
-							{user?.RoleId == 1 || user?.RoleId == 7 ? (
-								<Switch
-									checkedChildren={<CheckOutlined />}
-									unCheckedChildren={<CloseOutlined />}
-									onChange={(val) => handleChangeRollUp(item?.ScheduleId)}
-									loading={loadingSwitch}
-								/>
-							) : (
-								'Chưa điểm danh'
-							)}
-						</>
-					)}
-				</div>
-			)
+			render: (text, item) => {
+				if (isAdmin() || isManager() || isAcademic()) {
+					return (
+						<div className="antd-custom-wrap">
+							<Switch
+								checkedChildren={<CheckOutlined />}
+								unCheckedChildren={<CloseOutlined />}
+								loading={loadingSwitch}
+								onChange={(val) => handleChangeRollUp(item?.ScheduleId)}
+								checked={text != 0}
+								disabled={text != 0}
+							/>
+						</div>
+					)
+				}
+
+				if (text != 0) {
+					return 'Đã điểm danh'
+				}
+
+				return 'Chưa điểm danh'
+			}
 		}
 	]
+
 	return (
 		<>
 			<PrimaryTable

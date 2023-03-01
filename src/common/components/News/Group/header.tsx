@@ -120,6 +120,18 @@ function GroupHeader({ groupId }) {
 		return userInformation.RoleId == 3
 	}
 
+	function isManager() {
+		return userInformation?.RoleId == 4
+	}
+
+	function isAccountant() {
+		return userInformation?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return userInformation?.RoleId == 7
+	}
+
 	const content = (
 		<div className="w-[400px] max-h-[500px] scrollable">
 			{stuInGroup.map((item) => {
@@ -157,7 +169,7 @@ function GroupHeader({ groupId }) {
 					</div>
 				</div>
 
-				{(isAdmin() || isTeacher()) && (
+				{(isAdmin() || isTeacher() || isManager()) && (
 					<>
 						<div className="cc-add-member" onClick={() => setShowUser(true)}>
 							<FaUserPlus size={20} />

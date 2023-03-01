@@ -1,4 +1,4 @@
-import { Card, Skeleton, Spin, Timeline } from 'antd'
+import { Card, Empty, Skeleton, Spin, Timeline } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -24,14 +24,11 @@ export const LessonFeedbackPage = () => {
 			const res = await timeLineApi.getAll(params)
 			if (res.status === 200) {
 				setDataTable(res.data.data)
-				setLoading(false)
 			}
 			if (res.status === 204) {
-				setLoading(true)
 				setDataTable([])
 			}
 		} catch (error) {
-			setLoading(true)
 		} finally {
 			setLoading(false)
 		}
@@ -46,37 +43,41 @@ export const LessonFeedbackPage = () => {
 	return (
 		<>
 			<Card
+				className="shadow-sm"
 				title="Phản hồi buổi học"
 				extra={
-					user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
-						<>
-							<ModalLessonFeedback mode="add" onRefresh={() => getTimeLine(apiParameters)} />
-						</>
-					) : (
-						''
+					(user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+						<ModalLessonFeedback mode="add" onRefresh={() => getTimeLine(apiParameters)} />
 					)
 				}
 			>
-				<Spin spinning={loading}>
-					<Timeline mode="left">
-						{dataTable &&
-							dataTable?.length > 0 &&
-							dataTable?.map((item, index) => (
-								<Timeline.Item label={moment(item?.CreatedOn).format('DD-MM-YYYY HH:mm A')} key={index} dot={<FcClock />}>
-									<div className="flex justify-between">
-										<p>
-											{item?.Note} - {item?.CreatedBy}
-										</p>
-										{user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
-											<ModalLessonFeedback mode="delete" dataRow={item} onRefresh={() => getTimeLine(apiParameters)} />
-										) : (
-											''
-										)}
-									</div>
-								</Timeline.Item>
-							))}
-					</Timeline>
-				</Spin>
+				{!loading && dataTable?.length == 0 && (
+					<div className="py-[50px]">
+						<Empty />
+					</div>
+				)}
+
+				{loading && dataTable?.length == 0 && (
+					<div className="py-[50px]">
+						<Skeleton active />
+					</div>
+				)}
+
+				<Timeline mode="left">
+					{dataTable?.map((item, index) => (
+						<Timeline.Item label={moment(item?.CreatedOn).format('DD-MM-YYYY HH:mm A')} key={index} dot={<FcClock />}>
+							<div className="flex justify-between">
+								<p>
+									{item?.Note} - {item?.CreatedBy}
+								</p>
+
+								{(user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+									<ModalLessonFeedback mode="delete" dataRow={item} onRefresh={() => getTimeLine(apiParameters)} />
+								)}
+							</div>
+						</Timeline.Item>
+					))}
+				</Timeline>
 			</Card>
 		</>
 	)

@@ -16,8 +16,10 @@ export interface IQuestionInCourseItemProps {
 }
 
 export default function QuestionInCourseItem(props: IQuestionInCourseItemProps) {
-	const user = useSelector((state: RootState) => state.user.information.RoleId)
 	const { Item, onFetchData } = props
+
+	const user = useSelector((state: RootState) => state.user.information.RoleId)
+
 	const [dataAnswer, setDataAnswer] = useState<IAnswerQuestionInVideoCourse[]>()
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
 	const [isAddAnswer, setIsAddAnswer] = useState(false)
@@ -30,8 +32,7 @@ export default function QuestionInCourseItem(props: IQuestionInCourseItemProps) 
 			if (res.status == 200) {
 				setDataAnswer(res.data.data)
 				setIsAddAnswer(false)
-			}
-			if (res.status == 204) {
+			} else {
 				setDataAnswer([])
 			}
 		} catch (error) {
@@ -100,13 +101,12 @@ export default function QuestionInCourseItem(props: IQuestionInCourseItemProps) 
 
 			<div className="flex gap-2 justify-between items-start">
 				<p>{Item.Content}</p>
+
 				{user == '1' ? (
 					<Popconfirm
 						title="Bạn xác nhận xóa câu hỏi này?"
 						okButtonProps={{ loading: isLoading.type == 'REMOVE' && isLoading.status }}
-						onConfirm={() => {
-							handleRemoveQuestion(Item)
-						}}
+						onConfirm={() => handleRemoveQuestion(Item)}
 						onCancel={() => {}}
 						okText="Xác nhận"
 						cancelText="Hủy"
@@ -117,9 +117,7 @@ export default function QuestionInCourseItem(props: IQuestionInCourseItemProps) 
 					<Popconfirm
 						title="Bạn xác nhận xóa câu hỏi này?"
 						okButtonProps={{ loading: isLoading.type == 'REMOVE' && isLoading.status }}
-						onConfirm={() => {
-							handleRemoveQuestion(Item)
-						}}
+						onConfirm={() => handleRemoveQuestion(Item)}
 						onCancel={() => {}}
 						okText="Xác nhận"
 						cancelText="Hủy"
@@ -134,9 +132,7 @@ export default function QuestionInCourseItem(props: IQuestionInCourseItemProps) 
 			<div className="flex justify-start items-center mb-2">
 				<button
 					className="text-tw-blue font-semibold cursor-pointer opacity-70 hover:opacity-100 mr-2"
-					onClick={() => {
-						setIsAddAnswer(!isAddAnswer)
-					}}
+					onClick={() => setIsAddAnswer(!isAddAnswer)}
 				>
 					Trả lời
 				</button>
@@ -146,7 +142,7 @@ export default function QuestionInCourseItem(props: IQuestionInCourseItemProps) 
 			{isLoading.type == 'GET_ALL' && isLoading.status ? (
 				<Skeleton />
 			) : (
-				<div className="bg-tw-gray rounded-md mx-6 px-4 py-3">
+				<div className="bg-[#f6f6f6] shadow-sm rounded-md mx-6 px-4 py-3">
 					{!!dataAnswer && dataAnswer.length > 0 ? (
 						<>
 							{isAddAnswer && (
@@ -154,9 +150,7 @@ export default function QuestionInCourseItem(props: IQuestionInCourseItemProps) 
 									<TextArea
 										rows={4}
 										className="rounded-lg"
-										onChange={(e) => {
-											setContentAnswer(e.target.value)
-										}}
+										onChange={(e) => setContentAnswer(e.target.value)}
 										placeholder="Nhập câu trả lời"
 									/>
 									<PrimaryButton
@@ -164,18 +158,18 @@ export default function QuestionInCourseItem(props: IQuestionInCourseItemProps) 
 										disable={isLoading.type == 'ADD_ANSWER' && isLoading.status}
 										loading={isLoading.type == 'ADD_ANSWER' && isLoading.status}
 										type="button"
-										children={<span>Lưu</span>}
 										className="ml-auto"
 										icon="save"
-										onClick={() => {
-											handleAddAnswer()
-										}}
-									/>
+										onClick={handleAddAnswer}
+									>
+										Phản hồi
+									</PrimaryButton>
 								</div>
 							)}
+
 							{dataAnswer?.map((item, index) => {
 								return (
-									<div key={index} className="mb-2 pb-2 border-b border-tw-white last:border-b-0">
+									<div key={index} className="p-[8px] mb-[8px] border-b border-[#cfcfcf] last:border-b-0">
 										<div className="flex gap-2 justify-start items-center">
 											<img
 												className="w-9 h-9  rounded-full"
@@ -224,15 +218,13 @@ export default function QuestionInCourseItem(props: IQuestionInCourseItemProps) 
 						</>
 					) : (
 						<>
-							<p className=" mb-3">Chưa có câu trả lời!</p>
+							<p className="">Chưa có câu trả lời!</p>
 							{isAddAnswer && (
 								<div className={`flex flex-col gap-2 h-0 transition-all transition-400 ${isAddAnswer ? 'h-auto' : 'h-0'}`}>
 									<TextArea
 										rows={4}
 										className="rounded-lg"
-										onChange={(e) => {
-											setContentAnswer(e.target.value)
-										}}
+										onChange={(e) => setContentAnswer(e.target.value)}
 										placeholder="Nhập câu trả lời"
 									/>
 									<PrimaryButton
@@ -240,13 +232,12 @@ export default function QuestionInCourseItem(props: IQuestionInCourseItemProps) 
 										disable={isLoading.type == 'ADD_ANSWER' && isLoading.status}
 										loading={isLoading.type == 'ADD_ANSWER' && isLoading.status}
 										type="button"
-										children={<span>Lưu</span>}
 										className="ml-auto"
 										icon="save"
-										onClick={() => {
-											handleAddAnswer()
-										}}
-									/>
+										onClick={handleAddAnswer}
+									>
+										Lưu
+									</PrimaryButton>
 								</div>
 							)}
 						</>

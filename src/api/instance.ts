@@ -37,6 +37,9 @@ export const instance = axios.create({
 instance.interceptors.request.use(
 	async (config: AxiosRequestConfig) => {
 		const url: any = getUrl(config)
+
+		const request_start_at = performance.now()
+
 		if (!url.toString().includes('/auth/')) {
 			const authHeader: any = await authHeader_X()
 			config.headers = {
@@ -49,6 +52,7 @@ instance.interceptors.request.use(
 	},
 	(error: any) => {
 		isShowLog('') && console.log(`%c ${error?.response?.status}  :`, 'color: red; font-weight: bold', error?.response?.data)
+
 		return Promise.reject(error)
 	}
 )

@@ -17,7 +17,9 @@ type Props = {
 
 export default function StudentListInCourse(props: Props) {
 	const { videoCourseID } = props
+
 	const user = useSelector((state: RootState) => state.user.information)
+
 	const [dataSource, setDataSource] = useState<IStudentInVideoCourse[]>()
 	const [detailSections, setDetailSections] = useState(null)
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
@@ -177,12 +179,9 @@ export default function StudentListInCourse(props: Props) {
 				columns={user.RoleId === '1' ? columnsAdmin : columnsTeacher}
 				data={dataSource}
 				loading={isLoading.type == 'GET_ALL' && isLoading.status}
-				TitleCard={
-					<>
-						<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />
-					</>
-				}
+				TitleCard={<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />}
 			/>
+
 			<ModalLearningDetail detailSections={detailSections} />
 		</>
 	)

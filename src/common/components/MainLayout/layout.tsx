@@ -82,6 +82,11 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 	useEffect(() => {
 		if (!!mainMenu && !!path) {
 			const routers = router.pathname.replace('/', '').split('/')
+
+			console.log('--- routers: ', routers)
+			console.log('--- mainMenu: ', mainMenu)
+			console.log('--- childrenMenu: ', childrenMenu)
+
 			let temp = []
 			for (let i = 0; i < routers.length; i++) {
 				const element = routers[i]
@@ -105,9 +110,12 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 					}
 				}
 			}
+
 			setBreadcrumbs(temp)
 		}
-	}, [mainMenu, path])
+	}, [mainMenu, path, childrenMenu])
+
+	console.log('--- breadcrumbs: ', breadcrumbs)
 
 	return (
 		<div className="app">

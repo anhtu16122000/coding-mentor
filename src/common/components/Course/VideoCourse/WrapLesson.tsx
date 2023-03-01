@@ -16,11 +16,10 @@ const WrapLesson = (props) => {
 	const { lessonSelected, setLessonSelected, section, getSection, completedPercent, courseID } = props
 	const { getCourseDetail, openMenuCourse, setOpenMenuCourse, courseDetail } = props
 
-	const user = useSelector((state: RootState) => state.user.information)
-
 	const [onReloadReviewTab, setOnReloadReviewTab] = useState(0)
 	const [isChangePositionSection, setIsChangePositionSection] = useState(false)
 
+	const user = useSelector((state: RootState) => state.user.information)
 	function isAdmin() {
 		return user?.RoleId == 1
 	}
@@ -66,17 +65,21 @@ const WrapLesson = (props) => {
 								<TabPane tab="Giới thiệu" key="1">
 									<VideoCourseDescription courseDetail={courseDetail} User={user} onFetchData={() => getCourseDetail()} />
 								</TabPane>
+
 								<TabPane tab="Hỏi đáp" key="2">
 									<QuestionInCourse videoCourseID={Number(courseID)} />
 								</TabPane>
+
 								<TabPane tab="Thông báo" key="3">
 									<NotificationInVideoCourse videoCourseID={Number(courseID)} />
 								</TabPane>
+
 								{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
 									<TabPane tab="Học viên" key="4">
 										<StudentListInCourse videoCourseID={Number(courseID)} />
 									</TabPane>
 								)}
+
 								<TabPane tab="Đánh giá" key="5">
 									<ReviewVideoCourse videoCourseID={Number(courseID)} onReloadReviewTab={onReloadReviewTab} />
 								</TabPane>

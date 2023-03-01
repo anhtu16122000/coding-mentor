@@ -101,7 +101,7 @@ const RegisterOneVsOne: FC<TRegisterOneVsOne> = (props) => {
 		if (programsSelected.length > 0) {
 			getCurriculums(programsSelected[0]?.Id)
 
-			log.Green('programsSelected: ', programsSelected)
+			// log.Green('programsSelected: ', programsSelected)
 		}
 	}, [programsSelected])
 
