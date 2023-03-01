@@ -85,6 +85,30 @@ const SectionVideo = (props) => {
 		}
 	}
 
+	function isAdmin() {
+		return user?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
+
+	function isManager() {
+		return user?.RoleId == 4
+	}
+
+	function isStdent() {
+		return user?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return user?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return user?.RoleId == 7
+	}
+
 	return (
 		<>
 			{!!section ? (
@@ -169,8 +193,8 @@ const SectionVideo = (props) => {
 							)
 						})}
 					</Collapse>
-					{/* @ts-ignore */}
-					{user.RoleId === '1' && (
+
+					{(isAcademic() || isAdmin() || isManager()) && (
 						<div className="flex gap-2 justify-center items-center p-4">
 							<ModalAddSection mode="add" isLoading={isLoading} onSubmit={onFinish} />
 						</div>

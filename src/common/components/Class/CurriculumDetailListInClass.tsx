@@ -64,12 +64,6 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 		}
 	}
 
-	// useEffect(() => {
-	// 	if (todoApi.CurriculumDetailId) {
-	// 		getData()
-	// 	}
-	// }, [todoApi])
-
 	async function uploadFile(params) {
 		setIsUploadFile(true)
 		try {
@@ -114,8 +108,6 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 					ShowNoti('success', response.data.message)
 					return response
 				}
-				if (response.status === 204) {
-				}
 			} catch (err) {
 				ShowNoti('error', err.message)
 			} finally {
@@ -130,8 +122,6 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 					ShowNoti('success', response.data.message)
 					getData()
 					return response
-				}
-				if (response.status === 204) {
 				}
 			} catch (err) {
 				ShowNoti('error', err.message)
@@ -156,15 +146,13 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 
 	const genExtra = (item) => {
 		return (
-			<div className="flex  justify-end items-center">
+			<div className="flex justify-end items-center">
 				<div className="exchange-button">
 					<IconButton
 						type="button"
 						icon="exchange"
 						color="yellow"
-						onClick={() => {
-							setIsChangePosition(!isChangePosition)
-						}}
+						onClick={() => setIsChangePosition(!isChangePosition)}
 						tooltip="Đổi vị trí file"
 					/>
 				</div>
@@ -179,16 +167,7 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 						tooltip={`${item.IsHide ? 'Hiện' : 'Ẩn'} chủ đề`}
 					/>
 				</div>
-				<Upload
-					name="file"
-					multiple={true}
-					customRequest={(event) => uploadFile(event.file)}
-					onChange={(info) => {
-						// data.push({ fileName: info.file.name, isUploading: true })
-						// setData(data)
-					}}
-					showUploadList={false}
-				>
+				<Upload name="file" multiple={true} customRequest={(event) => uploadFile(event.file)} showUploadList={false}>
 					<IconButton type="button" icon="upload" color="blue" tooltip="Thêm file" />
 				</Upload>
 				<ModalCurriculumOfClassCRUD mode="delete" onSubmit={handleDeleteCurriculumDetail} isLoading={isLoading} />
@@ -277,7 +256,6 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 	}
 
 	const onChangeCheckCompleteFile = async (data) => {
-		console.log('🚀 ~ data:', data)
 		try {
 			const response = await classApi.checkCompleteFileInClass(data.Id, item.Id)
 			if (response.status === 200) {
@@ -289,10 +267,6 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 		} finally {
 		}
 	}
-
-	// if (isLoading) {
-	// 	return <Skeleton active />
-	// }
 
 	return (
 		<div className="curriculum-collapse-wrap">
@@ -419,20 +393,23 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 					</Collapse.Panel>
 				</Collapse>
 			</div>
-			{/* view for mobile */}
+
 			<div className="wrap-for-mobile">
 				<Collapse defaultActiveKey={['1']} onChange={handleChangeCollapse} collapsible="header">
 					<Collapse.Panel
-						header={<p className="title-item-collapse">{item.Name}</p>}
-						key={`CurriculumDetail${item.Id}`}
-						extra={
-							userInformation &&
-							(userInformation.RoleId == '1' ||
-								userInformation.RoleId == '2' ||
-								userInformation.RoleId == '4' ||
-								userInformation.RoleId == '7') &&
-							genExtra(item)
+						header={
+							<div className="flex items-center mt-[-5px] w-[calc(100vw-100px)] w768:w-[calc(100vw-360px)]">
+								<div className="w-[calc(100%-80px)]">{item.Name}</div>
+
+								{userInformation &&
+									(userInformation.RoleId == '1' ||
+										userInformation.RoleId == '2' ||
+										userInformation.RoleId == '4' ||
+										userInformation.RoleId == '7') &&
+									genExtra(item)}
+							</div>
 						}
+						key={`CurriculumDetail${item.Id}`}
 					>
 						<div className="curriculum-filename-contain">
 							{dataSource.map((item, index) => {

@@ -99,10 +99,9 @@ const VideoLessionContent = (props: IProps) => {
 			)}
 
 			<div
-				// 1b73e8
 				className={`video-section-container group ${isActive() ? 'bg-[#d0d8e4]' : 'bg-[#fff]'} ${getDisable()}`}
 				onClick={() => {
-					if (isAdmin()) {
+					if (isAdmin() || isTeacher() || isManager() || isAcademic()) {
 						openPreview(item)
 					} else {
 						if (disabledAll ? disabledAll : index - 1 < 0 ? false : lesson[index - 1].isCompleted ? false : true) {
@@ -124,7 +123,7 @@ const VideoLessionContent = (props: IProps) => {
 				</PrimaryTooltip>
 
 				<div className="flex justify-end align-center">
-					{user?.RoleId == 1 && (
+					{(isAdmin() || isManager() || isAcademic()) && (
 						<>
 							{isChangePositionLesson ? (
 								<>
@@ -175,6 +174,7 @@ const VideoLessionContent = (props: IProps) => {
 									checked={item.isCompleted}
 								/>
 							)}
+
 							{item?.ExamId && item.isCompleted && (
 								<Checkbox
 									disabled={

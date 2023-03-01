@@ -98,9 +98,9 @@ export default function IncomeExpenseManagementModalCRUD(props: IIncomeExpenseMa
 
 			{mode == 'edit' && <IconButton type="button" icon={'edit'} color="green" onClick={() => onOpen()} className="Sửa phiếu" tooltip="" />}
 
-			{(isAdmin() || isAccountant()) && mode == 'delete' && (
+			{/* {(isAdmin() || isAccountant()) && mode == 'delete' && (
 				<IconButton type="button" icon={'remove'} color="red" onClick={() => onOpen()} className="" tooltip="Xóa phiếu" />
-			)}
+			)} */}
 
 			<Modal
 				footer={null}

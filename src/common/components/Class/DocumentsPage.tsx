@@ -13,14 +13,41 @@ export interface IDocumentsPageInClassProps {}
 
 export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) {
 	const router = useRouter()
+
 	const [isLoading, setIsLoading] = useState(false)
+
 	const [curriculumIdInClass, setCurriculumIdInClass] = useState(null)
 	const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
 	const [dataSource, setDataSource] = useState<{ option: { title: string; value: any }[]; list: ICurriculumDetail[] }>({
 		option: [],
 		list: []
 	})
+
 	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return userInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return userInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return userInformation?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return userInformation?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return userInformation?.RoleId == 7
+	}
 
 	const getCurriculumDetail = async (curriculumID) => {
 		setIsLoading(true)
@@ -30,12 +57,8 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 				let temp = []
 				response.data.data.forEach((item) => temp.push({ title: item.Name, value: item.Id }))
 				setDataSource({ list: response.data.data, option: temp })
-			}
-			if (response.status === 204) {
-				setDataSource({
-					option: [],
-					list: []
-				})
+			} else {
+				setDataSource({ option: [], list: [] })
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -50,8 +73,7 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 			if (response.status === 200) {
 				getCurriculumDetail(response.data.data[0].Id)
 				setCurriculumIdInClass(response.data.data[0].Id)
-			}
-			if (response.status === 204) {
+			} else {
 				getCurriculumDetail(null)
 			}
 		} catch (err) {
@@ -67,8 +89,7 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 			if (response.status === 200) {
 				getCurriculumDetail(response.data.data[0].Id)
 				setCurriculumIdInClass(response.data.data[0].Id)
-			}
-			if (response.status === 204) {
+			} else {
 				getCurriculumDetail(null)
 			}
 		} catch (err) {
@@ -91,8 +112,6 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 				getCurriculumDetail(curriculumIdInClass)
 				ShowNoti('success', response.data.message)
 				return response
-			}
-			if (response.status === 204) {
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -132,13 +151,9 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 				title="Danh sách chủ đề"
 				extra={
 					<>
-						{userInformation &&
-							(userInformation.RoleId == '1' ||
-								userInformation.RoleId == '2' ||
-								userInformation.RoleId == '4' ||
-								userInformation.RoleId == '7') && (
-								<ModalCurriculumOfClassCRUD mode="add" onSubmit={handleAddCurriculumDetail} isLoading={isLoadingSubmit} />
-							)}
+						{(isAdmin() || isManager() || isTeacher() || isAcademic()) && (
+							<ModalCurriculumOfClassCRUD mode="add" onSubmit={handleAddCurriculumDetail} isLoading={isLoadingSubmit} />
+						)}
 					</>
 				}
 			>
@@ -151,7 +166,7 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 										<Draggable key={item.Id} draggableId={`ItemCurriculum${item.Id}`} index={index}>
 											{(providedDrag, snip) => {
 												return (
-													<div className="" {...providedDrag.draggableProps} {...providedDrag.dragHandleProps} ref={providedDrag.innerRef}>
+													<div {...providedDrag.draggableProps} {...providedDrag.dragHandleProps} ref={providedDrag.innerRef}>
 														<CurriculumDetailListInClass item={item} onRendering={getCurriculumNoLoading} />
 													</div>
 												)

@@ -17,6 +17,7 @@ export const ModalTranscript: React.FC<IModalTranscript> = ({ mode, Id, onRefres
 	const [visible, setVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [form] = Form.useForm()
+
 	const onClose = () => {
 		setVisible(false)
 	}
@@ -84,28 +85,22 @@ export const ModalTranscript: React.FC<IModalTranscript> = ({ mode, Id, onRefres
 	return (
 		<>
 			{mode == 'add' && (
-				<PrimaryButton
-					background="blue"
-					type="button"
-					children={<span>Thêm đợt thi</span>}
-					icon="add"
-					onClick={() => {
-						onOpen()
-					}}
-				/>
+				<>
+					<PrimaryButton className="!hidden w1300:!flex" background="blue" type="button" icon="add" onClick={onOpen}>
+						Thêm đợt thi
+					</PrimaryButton>
+
+					<PrimaryButton className="!flex w1300:!hidden" background="blue" type="button" icon="add" onClick={onOpen} />
+				</>
 			)}
 
 			{mode == 'delete' && (
 				<>
-					<PrimaryButton
-						background="red"
-						type="button"
-						children={<span>Xóa đợt thi</span>}
-						icon="remove"
-						onClick={() => {
-							onOpen()
-						}}
-					/>
+					<PrimaryButton className="!hidden w1150:!flex" background="red" type="button" icon="remove" onClick={onOpen}>
+						Xóa đợt thi
+					</PrimaryButton>
+
+					<PrimaryButton className="!flex w1150:!hidden" background="red" type="button" icon="remove" onClick={onOpen} />
 				</>
 			)}
 

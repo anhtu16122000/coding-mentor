@@ -1,4 +1,4 @@
-import { Form, Input, Select } from 'antd'
+import { Input, Select } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -9,9 +9,32 @@ import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import InputTextField from '../FormControl/InputTextField'
-import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
 import PrimaryTable from '../Primary/Table'
+
+const InputNote = ({ value, onChange, index }) => {
+	const [note, setNote] = useState('')
+
+	const user = useSelector((state: RootState) => state.user.information)
+
+	useEffect(() => {
+		setNote(value)
+	}, [value])
+
+	function onChangeNote(params, index) {
+		setNote(params.target?.value)
+		onChange(params, index)
+	}
+
+	return (
+		<Input
+			disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+			onChange={(val) => onChangeNote(val, index)}
+			value={note}
+			className="rounded-lg mb-0"
+		/>
+	)
+}
 
 export const RollUpPage = () => {
 	const router = useRouter()
@@ -184,14 +207,7 @@ export const RollUpPage = () => {
 			dataIndex: 'Note',
 			render: (text, item, index) => (
 				<div className="antd-custom-wrap">
-					<InputTextField
-						disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
-						onChange={(val) => handleChangeNote(val, index)}
-						value={text}
-						className="rounded-lg mb-0"
-						name=""
-						label=""
-					/>
+					<InputNote index={index} onChange={(val, inx) => handleChangeNote(val, inx)} value={text} />
 				</div>
 			)
 		},

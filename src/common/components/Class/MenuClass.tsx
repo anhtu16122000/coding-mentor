@@ -51,6 +51,7 @@ const itemsParent = ['Lịch học', 'Các buổi học', 'Điểm danh', 'Bản
 
 const MenuClass = () => {
 	const user = useSelector((state: RootState) => state.user.information)
+
 	const getChildrenClassAdmin = (index) => {
 		switch (index) {
 			case 0:
@@ -75,6 +76,7 @@ const MenuClass = () => {
 				return <CalendarClassEdit />
 		}
 	}
+
 	const getLabelClassAdmin = (item, index) => {
 		switch (index) {
 			case 0:
@@ -152,6 +154,7 @@ const MenuClass = () => {
 				return <CalendarClassEdit />
 		}
 	}
+
 	const getLabelClassStudent = (item, index) => {
 		switch (index) {
 			case 0:
@@ -215,6 +218,7 @@ const MenuClass = () => {
 				return <CalendarClassEdit />
 		}
 	}
+
 	const getLabelClassTeacher = (item, index) => {
 		switch (index) {
 			case 0:
@@ -286,6 +290,7 @@ const MenuClass = () => {
 
 			case 2:
 				return <RollUpPage />
+
 			case 3:
 				return <TranscriptPage />
 

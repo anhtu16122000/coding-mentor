@@ -142,7 +142,7 @@ const VideoItem = (props) => {
 						/>
 					</div>
 
-					{UserRoleID == '1' && (
+					{(isAdmin() || isManager() || isAcademic()) && (
 						<div className="flex items-center justify-end gap-2 w-1/4">
 							<Dropdown overlay={content} placement="topRight" overlayClassName="z-50">
 								<button>

@@ -2,6 +2,7 @@ import { Form, Input, Modal, Select, Tooltip } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { GiPayMoney } from 'react-icons/gi'
+import { useSelector } from 'react-redux'
 import * as yup from 'yup'
 import { branchApi } from '~/api/branch'
 import { paymentMethodsApi } from '~/api/payment-method'
@@ -14,6 +15,7 @@ import PrimaryTable from '~/common/components/Primary/Table'
 import { ButtonRefund } from '~/common/components/TableButton'
 import { ShowNostis, ShowNoti } from '~/common/utils'
 import { _format } from '~/common/utils/format'
+import { RootState } from '~/store'
 const PAGE_SIZE = 10
 
 const PaymentApprovePage = () => {
@@ -55,6 +57,31 @@ const PaymentApprovePage = () => {
 		}
 	}
 
+	const user = useSelector((state: RootState) => state.user.information)
+	function isAdmin() {
+		return user?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
+
+	function isManager() {
+		return user?.RoleId == 4
+	}
+
+	function isStdent() {
+		return user?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return user?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return user?.RoleId == 7
+	}
+
 	const columns = [
 		{
 			width: 120,
@@ -76,11 +103,12 @@ const PaymentApprovePage = () => {
 		{
 			title: 'Thêm lúc',
 			dataIndex: 'CreatedOn',
-			render: (date) => moment(date).format('DD/MM/YYYY')
+			render: (date) => moment(date).format('DD/MM/YYYY HH:mm')
 		},
 		{
 			title: 'Số tiền',
 			dataIndex: 'Money',
+			width: 150,
 			render: (money) => {
 				return <p>{_format.numberToPrice(money)}</p>
 			}
@@ -106,11 +134,12 @@ const PaymentApprovePage = () => {
 		{
 			title: 'Chức năng',
 			render: (data) => {
+				if (!isAdmin() && !isAccountant()) return ''
+
 				return (
 					<div className="flex items-center">
 						<DeleteTableRow handleDelete={() => handleDelete(data.Id)} />
-						{/* <PaymentApprovePage.ApproveMoneyBack id={data.Id} onRefresh={getPaymentApprove} /> */}
-						{data.Status === 1 && <PaymentApprovePage.ApproveMoney id={data.Id} onRefresh={getPaymentApprove} />}
+						{data.Status == 1 && <PaymentApprovePage.ApproveMoney id={data.Id} onRefresh={getPaymentApprove} />}
 					</div>
 				)
 			},

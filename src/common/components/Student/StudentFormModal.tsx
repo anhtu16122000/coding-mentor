@@ -550,7 +550,6 @@ const StudentFormModal = (props) => {
 								<SelectField name="Gender" label="Giới tính" optionList={optionGender} placeholder="Chọn giới tính" />
 							</div>
 							<div className="col-md-6 col-12">
-								{/* <SelectField name="JobID" label="Công việc" optionList={listData.Job} placeholder="Chọn công việc" /> */}
 								<SelectField name="JobID" label="Công việc" optionList={[{ title: 'Giáo viên', value: 1 }]} placeholder="Chọn công việc" />
 							</div>
 							<div className="col-md-6 col-12">

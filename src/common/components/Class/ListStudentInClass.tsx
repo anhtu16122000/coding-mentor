@@ -11,9 +11,31 @@ import { ModalStudentInClassCRUD } from './ModalStudentInClassCRUD'
 
 export const ListStudentInClass = () => {
 	const user = useSelector((state: RootState) => state.user.information)
-	function isSaler() {
-		return user?.RoleId == 5
+
+	function isAdmin() {
+		return user?.RoleId == 1
 	}
+
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
+
+	function isManager() {
+		return user?.RoleId == 4
+	}
+
+	function isStdent() {
+		return user?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return user?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return user?.RoleId == 7
+	}
+
 	const router = useRouter()
 	const [loading, setLoading] = useState(false)
 	const initParameters = {
@@ -55,7 +77,7 @@ export const ListStudentInClass = () => {
 	}, [router?.query?.class])
 
 	const columns =
-		user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7
+		isAdmin() || isAcademic() || isManager()
 			? [
 					{
 						title: 'Mã',
@@ -82,11 +104,7 @@ export const ListStudentInClass = () => {
 						title: 'Loại',
 						width: 150,
 						dataIndex: 'TypeName',
-						render: (text, item) => (
-							<>
-								<PrimaryTag color={item?.Type == 1 ? 'green' : 'red'} children={text} />
-							</>
-						)
+						render: (text, item) => <PrimaryTag color={item?.Type == 1 ? 'green' : 'red'} children={text} />
 					},
 					{
 						title: 'Cảnh báo',
@@ -159,24 +177,18 @@ export const ListStudentInClass = () => {
 			  ]
 
 	return (
-		<>
-			<PrimaryTable
-				loading={loading}
-				total={totalRow}
-				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
-				TitleCard={<div className="extra-table">Danh sách học viên</div>}
-				data={dataTable}
-				columns={columns}
-				Extra={
-					user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
-						<>
-							<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="add" />
-						</>
-					) : (
-						''
-					)
-				}
-			/>
-		</>
+		<PrimaryTable
+			loading={loading}
+			total={totalRow}
+			onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
+			TitleCard={<div className="extra-table">Danh sách học viên</div>}
+			data={dataTable}
+			columns={columns}
+			Extra={
+				(isAdmin() || isAcademic() || isManager()) && (
+					<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="add" />
+				)
+			}
+		/>
 	)
 }

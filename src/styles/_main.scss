@@ -751,3 +751,11 @@ button {
 .ant-menu-item {
 	height: 38px !important;
 }
+
+.class-details-container {
+	.ant-tabs-tabpane {
+		@media screen and (max-width: 768px) {
+			padding-left: 0px !important;
+		}
+	}
+}

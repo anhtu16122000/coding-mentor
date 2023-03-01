@@ -152,9 +152,12 @@ function GroupHeader({ groupId }) {
 
 	return (
 		<div className="w-[calc(100%-8px)] ml-[3px] p-[16px] bg-[#fff] rounded-[6px] shadow-md">
-			{!!details?.BackGround && <img src={details?.BackGround} className="object-cover w-[100%] h-[250px]" />}
-
-			<div className="cc-hr my-[16px]" />
+			{!!details?.BackGround && (
+				<>
+					<div className="cc-hr my-[16px]" />
+					<img src={details?.BackGround} className="object-cover w-[100%] h-[250px]" />
+				</>
+			)}
 
 			<div className="flex row-center">
 				<div className="flex-1 cc-group-info">
@@ -169,7 +172,7 @@ function GroupHeader({ groupId }) {
 					</div>
 				</div>
 
-				{(isAdmin() || isTeacher() || isManager()) && (
+				{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
 					<>
 						<div className="cc-add-member" onClick={() => setShowUser(true)}>
 							<FaUserPlus size={20} />
@@ -264,6 +267,7 @@ GroupHeader.UserItem = (props) => {
 	return (
 		<div className="flex row-center mb-[8px] p-[8px] hover:bg-[#eeeaea41] rounded-[6px]">
 			<Avatar disabled uri={item.Avatar} className="w-[40px] h-[40px] mr-[16px] shadow-sm " />
+
 			<div className="flex-1">
 				<div className="font-[600]">{item?.FullName}</div>
 				<div className="font-[400] text-[#808080]">{item.TypeName}</div>

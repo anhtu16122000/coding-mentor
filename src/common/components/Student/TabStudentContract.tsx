@@ -68,10 +68,6 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 
 	const handlePrint = useReactToPrint({
 		content: () => printAreaRef.current,
-		// documentTitle: "AwesomeFileName",
-		// onBeforeGetContent: handleOnBeforeGetContent,
-		// onBeforePrint: () => ,
-		// onAfterPrint: () => ,
 		removeAfterPrint: true
 	})
 	const handleGetDataToPrint = () => {
@@ -90,6 +86,7 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 				modeEdit == 'add'
 					? await contractApi.addContract({ Name: data.Name, Content: data.Content, StudentId: StudentDetail.UserInformationId })
 					: await contractApi.update({ Name: data.Name, Content: data.Content, Id: data.ContractID })
+
 			if (res.status === 200) {
 				ShowNoti('success', res.data.message)
 				getContractList(StudentDetail.UserInformationId)
@@ -99,10 +96,11 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 				form.setFieldValue('Name', null)
 				form.setFieldValue('Content', null)
 			}
+
 			if (res.status === 204) {
 			}
 		} catch (err) {
-			ShowNoti('error', err.message)
+			// ShowNoti('error', err.message)
 		}
 	}
 

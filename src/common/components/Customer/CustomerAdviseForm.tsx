@@ -1,7 +1,5 @@
-import { Divider, Form, Modal, Select, Spin, Tooltip } from 'antd'
+import { Divider, Form, Modal, Select } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
-import { Edit, LogIn } from 'react-feather'
-import { MdSave } from 'react-icons/md'
 import { useSelector } from 'react-redux'
 import { districtApi, wardApi } from '~/api/area'
 import * as yup from 'yup'
@@ -12,7 +10,7 @@ import { parseSelectArray } from '~/common/utils/common'
 import { RootState } from '~/store'
 import { customerAdviseApi } from '~/api/customer'
 import CustomerModalConfirm from './CustomerModalConfirm'
-import { formRequired } from '~/common/libs/others/form'
+import { formNoneRequired, formRequired } from '~/common/libs/others/form'
 import { userInformationApi } from '~/api/user'
 import DatePickerField from '../FormControl/DatePickerField'
 import UploadImageField from '../FormControl/UploadImageField'
@@ -21,8 +19,8 @@ import IconButton from '../Primary/IconButton'
 import RestApi from '~/api/RestApi'
 
 const CustomerAdviseForm = React.memo((props: any) => {
-	const { source, learningNeed, purpose, sale, branch } = props
-	const { customerStatus, rowData, listTodoApi, setTodoApi, isStudent, className, refPopover } = props
+	const { source, learningNeed, purpose, sale, branch, refPopover } = props
+	const { customerStatus, rowData, listTodoApi, setTodoApi, isStudent, className } = props
 
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
@@ -185,27 +183,31 @@ const CustomerAdviseForm = React.memo((props: any) => {
 		}
 	}
 
+	function removeContaining(arr) {
+		return arr.filter((person) => person?.value !== 2)
+	}
+
+	function onClickCreate() {
+		toggle()
+		if (!!refPopover) {
+			refPopover.current.close()
+		}
+	}
+
+	function toggle() {
+		setIsModalVisible(!isModalVisible)
+	}
+
 	return (
 		<>
 			{rowData ? (
 				isStudent ? (
-					<IconButton tooltip="Tạo học viên" icon="login" color="green" type="button" onClick={() => setIsModalVisible(true)} />
+					<IconButton tooltip="Tạo học viên" icon="login" color="green" type="button" onClick={toggle} />
 				) : (
-					<IconButton type="button" color="yellow" tooltip="Cập nhật" icon="edit" onClick={() => setIsModalVisible(true)} />
+					<IconButton type="button" color="yellow" tooltip="Cập nhật" icon="edit" onClick={toggle} />
 				)
 			) : (
-				<PrimaryButton
-					className={className}
-					background="green"
-					icon="add"
-					type="button"
-					onClick={() => {
-						setIsModalVisible(true)
-						if (!!refPopover) {
-							refPopover.current.close()
-						}
-					}}
-				>
+				<PrimaryButton className={className} background="green" icon="add" type="button" onClick={onClickCreate}>
 					Thêm mới
 				</PrimaryButton>
 			)}
@@ -213,7 +215,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 			<Modal
 				title={rowData ? (isStudent ? 'Chuyển học viên' : 'Cập nhật thông tin khách hàng') : 'Thêm khách hàng'}
 				open={isModalVisible}
-				onCancel={() => setIsModalVisible(false)}
+				onCancel={toggle}
 				footer={null}
 				width={800}
 				centered
@@ -234,16 +236,18 @@ const CustomerAdviseForm = React.memo((props: any) => {
 									</div>
 								</>
 							)}
+
 							<div className="col-md-6 col-12">
 								<InputTextField name="FullName" label="Họ tên" isRequired={true} rules={[yupSync]} />
 							</div>
+
 							<div className="col-md-6 col-12">
 								<InputTextField name="Mobile" label="Số điện thoại" isRequired={true} rules={[yupSync]} />
 							</div>
 						</div>
 
 						<div className="w-full grid grid-cols-2 gap-x-4">
-							<Form.Item name="JobId" className="col-span-1" label="Công việc">
+							<Form.Item name="JobId" className="col-span-1" label="Công việc" rules={formNoneRequired}>
 								<Select className="primary-input" placeholder="Chọn công việc">
 									{jobs.map((item) => {
 										return (
@@ -329,17 +333,19 @@ const CustomerAdviseForm = React.memo((props: any) => {
 									rules={formRequired}
 								/>
 							</div>
+
 							{rowData && !isStudent && (
 								<div className="col-md-6 col-12">
 									<SelectField
 										placeholder="Chọn tình trạng tư vấn"
 										name="CustomerStatusId"
 										label="Tình trạng tư vấn"
-										optionList={customerStatus}
+										optionList={removeContaining(customerStatus)}
 									/>
 								</div>
 							)}
 						</div>
+
 						<div className="row">
 							<div className="col-md-6 col-12">
 								<SelectField placeholder="Chọn nhu cầu học" name="LearningNeedId" label="Nhu cầu học" optionList={learningNeed} />
@@ -350,12 +356,10 @@ const CustomerAdviseForm = React.memo((props: any) => {
 							<div className="col-md-6 col-12">
 								<SelectField name="SourceId" label="Nguồn" placeholder="Chọn nguồn" optionList={source} />
 							</div>
-							{!isSaler() ? (
+							{!isSaler() && (
 								<div className="col-md-6 col-12">
 									<SelectField name="SaleId" label="Tư vấn viên" placeholder="Chọn tư vấn viên" optionList={sale} />
 								</div>
-							) : (
-								''
 							)}
 						</div>
 
@@ -369,6 +373,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 					</Form>
 				</div>
 			</Modal>
+
 			{existCustomer && (
 				<CustomerModalConfirm
 					confirmExistCustomer={existCustomer}

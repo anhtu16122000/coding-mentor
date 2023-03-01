@@ -76,7 +76,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 
 	const columns = [
 		{
-			width: 200,
+			width: 270,
 			title: 'Trung tâm',
 			dataIndex: 'BranchName',
 			render: (text, item) => {
@@ -95,7 +95,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 		},
 		{
 			title: 'Học viên',
-			width: 200,
+			width: 220,
 			dataIndex: 'FullName',
 			render: (text, item) => {
 				return (
@@ -108,7 +108,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 		},
 		{
 			title: 'Giá trị',
-			width: 180,
+			width: 250,
 			dataIndex: 'Value',
 			render: (text, item) => {
 				return (
@@ -117,7 +117,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 							{_format.numberToPrice(text)} VND
 						</p>
 						<p className="table-row-sub-text">
-							Phương thức thanh toán: <span className="table-row-main-text">{item.PaymentMethodName}</span>
+							Phương thức: <span className="table-row-main-text">{item.PaymentMethodName}</span>
 						</p>
 					</>
 				)
@@ -149,7 +149,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 		},
 		{
 			title: '',
-			width: 100,
+			width: 8 - 0,
 			fixed: 'right',
 			dataIndex: 'Actions',
 			render: (text, item) => {

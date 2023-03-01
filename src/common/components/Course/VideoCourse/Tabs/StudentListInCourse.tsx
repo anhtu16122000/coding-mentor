@@ -26,6 +26,30 @@ export default function StudentListInCourse(props: Props) {
 	const initialTodoApi = { videoCourseId: videoCourseID, pageSize: PAGE_SIZE, pageIndex: 1, fromDate: null, toDate: null }
 	const [todoApi, setTodoApi] = useState(initialTodoApi)
 
+	function isAdmin() {
+		return user?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
+
+	function isManager() {
+		return user?.RoleId == 4
+	}
+
+	function isStdent() {
+		return user?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return user?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return user?.RoleId == 7
+	}
+
 	const [dataFilter, setDataFilter] = useState([
 		{
 			name: 'date-range',
@@ -104,16 +128,7 @@ export default function StudentListInCourse(props: Props) {
 			title: 'Chức năng',
 			render: (data, item) => {
 				return (
-					<IconButton
-						type="button"
-						color="red"
-						icon="eye"
-						onClick={() => {
-							handleViewDetail(item)
-						}}
-						className="mt-2"
-						tooltip="Xem chi tiết"
-					/>
+					<IconButton type="button" color="red" icon="eye" onClick={() => handleViewDetail(item)} className="mt-2" tooltip="Xem chi tiết" />
 				)
 			}
 		}
@@ -176,7 +191,7 @@ export default function StudentListInCourse(props: Props) {
 	return (
 		<>
 			<PrimaryTable
-				columns={user.RoleId === '1' ? columnsAdmin : columnsTeacher}
+				columns={isAdmin() || isAcademic() || isManager() ? columnsAdmin : columnsTeacher}
 				data={dataSource}
 				loading={isLoading.type == 'GET_ALL' && isLoading.status}
 				TitleCard={<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />}

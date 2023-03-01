@@ -1,12 +1,12 @@
 import { Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { VideoCourseSectionLessonApi } from '~/api/course/video-course/video-course-section-lesson'
 import { ShowNoti } from '~/common/utils'
-import { RootState } from '~/store'
 import ModalAddLesson from './ModalAddLesson'
 import VideoLessionContent from './VideoCourseLessionContent'
 import { memo } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 type IProps = {
 	Item: IVideoCourseSection
@@ -22,28 +22,36 @@ type IProps = {
 }
 
 const VideoCourseSectionContent = (props: IProps) => {
-	const {
-		Item,
-		User,
-		activeID,
-		setActiveID,
-		setLessonSelected,
-		sectionIndex,
-		isChangePositionLesson,
-		disabledAll,
-		getSection,
-		setOpenMenuCourse
-	} = props
+	const { sectionIndex, isChangePositionLesson, disabledAll, getSection, setOpenMenuCourse } = props
+	const { Item, User, activeID, setActiveID, setLessonSelected } = props
+
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
 	const [lesson, setLesson] = useState<IVideoCourseSectionLesson[]>()
 
-	const onFocus = () => {
-		console.log('Tab is in focus')
-		// getContentSection()
+	const user = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return user?.RoleId == 1
 	}
 
-	const onBlur = () => {
-		console.log('Tab is blurred')
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
+
+	function isManager() {
+		return user?.RoleId == 4
+	}
+
+	function isStdent() {
+		return user?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return user?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return user?.RoleId == 7
 	}
 
 	useEffect(() => {
@@ -62,7 +70,6 @@ const VideoCourseSectionContent = (props: IProps) => {
 			let res = await VideoCourseSectionLessonApi.getBySectionID(Item.Id)
 			if (res.status == 200) {
 				setLesson(res.data.data)
-				// getSection()
 			}
 			if (res.status == 204) {
 				setLesson([])
@@ -109,8 +116,6 @@ const VideoCourseSectionContent = (props: IProps) => {
 
 	const onCompletedLesson = (data, itemID) => {
 		onCompleted(data, itemID)
-		// setOnFetchCompletedSection(onFetchCompletedSection + 1)
-		// getSection()
 	}
 
 	const renderContentSection = () => {
@@ -143,15 +148,7 @@ const VideoCourseSectionContent = (props: IProps) => {
 		)
 	}
 
-	// useEffect(() => {
-	// 	// window.addEventListener('focus', onFocus)
-	// 	// window.addEventListener('blur', onBlur)
-	// 	getContentSection()
-	// }, [onFetchCompletedSection])
-
 	useEffect(() => {
-		// window.addEventListener('focus', onFocus)
-		// window.addEventListener('blur', onBlur)
 		getContentSection()
 	}, [])
 
@@ -220,7 +217,8 @@ const VideoCourseSectionContent = (props: IProps) => {
 		<>
 			<div>
 				<div>{renderContentSection()}</div>
-				{User.RoleId === '1' && <ModalAddLesson mode="add" isLoading={isLoading} onSubmit={onFinish} />}
+
+				{(isAdmin() || isManager() || isAcademic()) && <ModalAddLesson mode="add" isLoading={isLoading} onSubmit={onFinish} />}
 			</div>
 		</>
 	)

@@ -34,7 +34,6 @@ const PayForm: FC<IPayForm> = ({ isEdit, onRefresh, defaultData }) => {
 
 	function openEdit() {
 		setVisible(!visible)
-		// form.setFieldsValue({ ...defaultData })
 	}
 
 	function getTitle() {
@@ -44,7 +43,10 @@ const PayForm: FC<IPayForm> = ({ isEdit, onRefresh, defaultData }) => {
 	function onFinish(params) {
 		setLoading(true)
 
-		const DATA_SUBMIT = { ...params, Paid: removeCommas(params.Paid) }
+		const DATA_SUBMIT = {
+			...params,
+			Paid: removeCommas(params.Paid)
+		}
 
 		console.log('-- DATA_SUBMIT', DATA_SUBMIT)
 

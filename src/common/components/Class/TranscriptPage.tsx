@@ -1,4 +1,4 @@
-import { Input, Select } from 'antd'
+import { Input, Select, Skeleton } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -10,6 +10,30 @@ import InputTextField from '../FormControl/InputTextField'
 import PrimaryButton from '../Primary/Button'
 import PrimaryTable from '../Primary/Table'
 import { ModalTranscript } from './ModalTranscript'
+
+const InputNote = ({ value, onChange, index }) => {
+	const [note, setNote] = useState('')
+
+	const user = useSelector((state: RootState) => state.user.information)
+
+	useEffect(() => {
+		setNote(value)
+	}, [value])
+
+	function onChangeNote(params, index) {
+		setNote(params.target?.value)
+		onChange(params, index)
+	}
+
+	return (
+		<Input
+			disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+			onChange={(val) => onChangeNote(val, index)}
+			value={note}
+			className="rounded-lg mb-0"
+		/>
+	)
+}
 
 export const TranscriptPage = () => {
 	const router = useRouter()
@@ -57,12 +81,18 @@ export const TranscriptPage = () => {
 	}
 
 	const handleChangeNote = (info, index) => {
+		console.log('--- info.target.value: ', info.target.value)
+
 		let temp = [...dataTable]
 		temp[index] = { ...temp[index], Note: info.target.value }
 		setDataTable(temp)
 		setDisabled(false)
 	}
+
+	const [loadingData, setLoadingData] = useState<boolean>(false)
+
 	const getTranscriptByClass = async (Id) => {
+		setLoadingData(true)
 		try {
 			const res = await transcriptApi.getTranscriptByClass(Id)
 			if (res.status === 200) {
@@ -75,10 +105,14 @@ export const TranscriptPage = () => {
 			if (res.status === 204) {
 				setDataTranscript([])
 			}
-		} catch (error) {}
+		} catch (error) {
+		} finally {
+			setLoadingData(false)
+		}
 	}
 
 	const getTranscriptPoint = async (Id) => {
+		setLoadingData(true)
 		try {
 			setLoading(true)
 			const res = await transcriptApi.getTranscriptPoint(Id)
@@ -93,6 +127,7 @@ export const TranscriptPage = () => {
 			setLoading(true)
 		} finally {
 			setLoading(false)
+			setLoadingData(false)
 		}
 	}
 
@@ -226,57 +261,51 @@ export const TranscriptPage = () => {
 			title: 'Ghi chú',
 			width: 180,
 			dataIndex: 'Note',
-			render: (text, item, index) => (
-				<>
-					<InputTextField
-						disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
-						onChange={(val) => handleChangeNote(val, index)}
-						value={text}
-						className="rounded-lg mb-0"
-						name=""
-						label=""
-					/>
-				</>
-			)
+			render: (text, item, index) => {
+				return <InputNote onChange={(x, y) => handleChangeNote(x, y)} value={text} index={index} />
+			}
 		}
 	]
+
 	return (
 		<>
 			<PrimaryTable
+				className="shadow-sm"
 				loading={loading}
 				TitleCard={
-					user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
-						<div className="extra-table">
-							<ModalTranscript mode="add" onRefresh={() => getTranscriptByClass(router?.query?.class)} setTranscriptId={setTranscriptId} />
+					<div className="flex w-full items-center">
+						<div className="flex-1">
+							{(user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+								<div className="extra-table">
+									<ModalTranscript
+										mode="add"
+										onRefresh={() => getTranscriptByClass(router?.query?.class)}
+										setTranscriptId={setTranscriptId}
+									/>
+								</div>
+							)}
 						</div>
-					) : (
-						''
-					)
-				}
-				Extra={
-					<>
+
 						<div className="flex items-center">
-							<div className="font-bold">Đợt thi:</div>
-							<div className="antd-custom-wrap mr-tw-4">
+							<div className="font-bold !hidden w1150:!block">Đợt thi:</div>
+
+							<div className="antd-custom-wrap">
 								<Select
-									className="w-[220px] ml-tw-4 custom-select-transcript"
+									className="w-[140px] ml-tw-4 custom-select-transcript"
 									onChange={(val) => setTranscriptId(val)}
 									placeholder="Chọn đợt thi"
 									value={transcriptId}
 								>
-									{dataTranscript &&
-										dataTranscript?.length > 0 &&
-										dataTranscript?.map((item, index) => (
-											<>
-												<Select.Option key={index} value={item.value}>
-													{item.title}
-												</Select.Option>
-											</>
-										))}
+									{dataTranscript?.map((item, index) => (
+										<Select.Option key={index} value={item.value}>
+											{item.title}
+										</Select.Option>
+									))}
 								</Select>
 							</div>
-							{user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
-								<div className="mr-tw-4">
+
+							{(user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+								<div className="mr-tw-4 ml-[8px]">
 									<ModalTranscript
 										mode="delete"
 										Id={transcriptId}
@@ -284,28 +313,18 @@ export const TranscriptPage = () => {
 										setTranscriptId={setTranscriptId}
 									/>
 								</div>
-							) : (
-								''
 							)}
 
-							{user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
-								<PrimaryButton
-									background="green"
-									type="button"
-									children={<span>Cập nhật điểm</span>}
-									icon="save"
-									disable={disabled}
-									onClick={() => handleSave()}
-									loading={isLoading}
-								/>
-							) : (
-								''
+							{(user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+								<PrimaryButton background="green" type="button" icon="save" disable={disabled} onClick={handleSave} loading={isLoading}>
+									Cập nhật
+								</PrimaryButton>
 							)}
 						</div>
-					</>
+					</div>
 				}
 				data={dataTable}
-				columns={columns}
+				columns={loadingData ? [] : columns}
 			/>
 		</>
 	)

@@ -126,7 +126,7 @@ const WrapLesson = (props) => {
 								<TabPane tab="Thông báo" key="3">
 									<NotificationInVideoCourse videoCourseID={Number(courseID)} />
 								</TabPane>
-								{(user?.RoleId == '1' || user?.RoleId == '2') && (
+								{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
 									<TabPane tab="Học viên" key="4">
 										<StudentListInCourse videoCourseID={Number(courseID)} />
 									</TabPane>
@@ -149,11 +149,9 @@ const WrapLesson = (props) => {
 			>
 				<div className="h-16 bg-tw-white flex justify-between align-center">
 					<p className="desktop:pt-0 text-base my-auto px-4 font-bold">Nội dung khóa học</p>
-					{user?.RoleId == '3' && (
-						<p className="tablet:hidden my-auto px-4 text-base font-bold text-[#ab1d38]">{completedPercent?.toFixed(2)}%</p>
-					)}
+					{isStdent() && <p className="tablet:hidden my-auto px-4 text-base font-bold text-[#ab1d38]">{completedPercent?.toFixed(2)}%</p>}
 
-					{user?.RoleId == '1' && (
+					{(isAdmin() || isManager() || isAcademic()) && (
 						<button
 							onClick={() => setIsChangePositionSection(!isChangePositionSection)}
 							className="w-fit my-4 pr-4 flex items-center justify-center"

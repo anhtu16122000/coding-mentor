@@ -469,6 +469,14 @@ const Student: FC<IPersonnel> = (props) => {
 		return userInformation.RoleId == 3
 	}
 
+	function isAccountant() {
+		return userInformation?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return userInformation?.RoleId == 7
+	}
+
 	const [visible, setVisible] = useState(false)
 
 	return (
@@ -502,7 +510,7 @@ const Student: FC<IPersonnel> = (props) => {
 				}
 				Extra={
 					<>
-						{isAdmin() && (
+						{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
 							<PrimaryButton
 								loading={loadingAllow}
 								className="mr-2 btn-block-registration"
@@ -515,7 +523,7 @@ const Student: FC<IPersonnel> = (props) => {
 							</PrimaryButton>
 						)}
 
-						{role == 3 && isAdmin() && (
+						{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
 							<PrimaryButton
 								className="mr-2 btn-download"
 								type="button"
@@ -602,7 +610,7 @@ const Student: FC<IPersonnel> = (props) => {
 							</PrimaryButton>
 						</Popover>
 
-						{role == 3 && isAdmin() && (
+						{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
 							<CreateUser
 								roleStaff={roleStaff}
 								source={source}
@@ -615,7 +623,7 @@ const Student: FC<IPersonnel> = (props) => {
 							/>
 						)}
 
-						{role !== 3 && isAdmin() && (
+						{role !== 3 && (isAdmin() || isManager() || isAcademic()) && (
 							<CreateUser roleStaff={roleStaff} className="btn-create" onRefresh={() => getUsers(apiParameters)} isStudent={false} />
 						)}
 					</>

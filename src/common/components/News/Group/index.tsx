@@ -1,8 +1,6 @@
 import { Empty, Skeleton } from 'antd'
 import Router from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
-import RestApi from '~/api/RestApi'
+import React, { useState } from 'react'
 import { encode } from '~/common/utils/common'
 import GroupForm from './form'
 import { useSelector } from 'react-redux'
@@ -10,13 +8,12 @@ import { RootState } from '~/store'
 
 const GroupThumb = ({ uri }) => {
 	const [thumb, setThumb] = useState('')
+
 	return (
 		<img
-			onError={() => {
-				setThumb('/images/default-thumb-group.jpg')
-			}}
-			src={thumb || uri || '/images/default-thumb-group.jpg'}
-			className="w-[50px] h-[50px] object-cover shadow-md"
+			onError={() => setThumb('/default-group-thuumbnail.png')}
+			src={thumb || uri || '/default-group-thuumbnail.png'}
+			className="w-[50px] h-[50px] rounded-[6px] object-cover shadow-md border-[1px] border-[#f1f1f1] border-solid"
 		/>
 	)
 }
@@ -24,31 +21,7 @@ const GroupThumb = ({ uri }) => {
 function NewsGroup(props) {
 	const { groups, totalRow, loading, onRefresh } = props
 
-	// const [loading, setLoading] = useState(true)
-	// const [groups, setGroups] = useState([])
 	const [filter, setFilter] = useState({ pageSize: 8, pageIndex: 1 })
-	// const [totalRow, setTotalRow] = useState(0)
-
-	// useEffect(() => {
-	// 	getData()
-	// }, [])
-
-	// async function getData() {
-	// 	console.log('---- NewsFeedGroup ----')
-	// 	console.log('-- filter: ', filter)
-
-	// 	setLoading(true)
-	// 	try {
-	// 		const res = await RestApi.get<any>('NewsFeedGroup', filter)
-	// 		if (res.status === 200) {
-	// 			setGroups(res.data.data)
-	// 			setTotalRow(res.data.totalRow)
-	// 		}
-	// 	} catch (error) {
-	// 	} finally {
-	// 		setLoading(false)
-	// 	}
-	// }
 
 	const userInformation = useSelector((state: RootState) => state.user.information)
 

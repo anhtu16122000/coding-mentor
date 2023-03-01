@@ -1,4 +1,4 @@
-import { Card, Spin, Timeline } from 'antd'
+import { Card, Empty, Spin, Timeline } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { FcClock } from 'react-icons/fc'
@@ -100,6 +100,8 @@ export const TabStudyRoute: React.FC<ITabStudyRoute> = ({ StudentDetail }) => {
 					</>
 				}
 			>
+				{!loading && dataTable?.length == 0 && <Empty />}
+				
 				<Spin spinning={loading}>
 					<Timeline mode="left">
 						{dataTable &&

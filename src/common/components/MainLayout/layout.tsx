@@ -109,9 +109,9 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 		if (!!mainMenu && !!path) {
 			const routers = router.pathname.replace('/', '').split('/')
 
-			console.log('--- routers: ', routers)
-			console.log('--- mainMenu: ', mainMenu)
-			console.log('--- childrenMenu: ', childrenMenu)
+			// console.log('--- routers: ', routers)
+			// console.log('--- mainMenu: ', mainMenu)
+			// console.log('--- childrenMenu: ', childrenMenu)
 
 			let temp = []
 			for (let i = 0; i < routers.length; i++) {
@@ -141,7 +141,7 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 		}
 	}, [mainMenu, path, childrenMenu])
 
-	console.log('--- breadcrumbs: ', breadcrumbs)
+	// console.log('--- breadcrumbs: ', breadcrumbs)
 
 	return (
 		<div className="app">

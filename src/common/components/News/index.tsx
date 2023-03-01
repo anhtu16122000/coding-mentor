@@ -125,6 +125,14 @@ function NewsFeed() {
 		return userInformation.RoleId == 3
 	}
 
+	function isAccountant() {
+		return userInformation?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return userInformation?.RoleId == 7
+	}
+
 	return (
 		<>
 			<div
@@ -138,7 +146,7 @@ function NewsFeed() {
 						</div>
 					)}
 
-					{(isAdmin() || isTeacher() || isManager()) && (
+					{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
 						<div className="cc-news-container">
 							<CreateNews onRefresh={() => setFilter({ ...filter, pageIndex: 1 })} />
 						</div>

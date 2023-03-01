@@ -164,7 +164,7 @@ const VideoCourse = () => {
 								/>
 							</div>
 
-							{isAdmin() && <CreateVideoCourse onRefresh={onRefresh} />}
+							{(isAdmin() || isManager() || isAcademic()) && <CreateVideoCourse onRefresh={onRefresh} />}
 						</div>
 					}
 					loading={isLoading.type == 'GET_ALL_COURSE' && isLoading.status}

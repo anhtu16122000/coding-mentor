@@ -370,10 +370,12 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 										item.ItemType !== 'sub-menu' ? (
 											<Menu.Item key={item.Key} icon={null}>
 												<Link href={item.Route}>
-													<div style={{ width: '100%', height: '100%', display: 'flex', paddingLeft: 6, alignItems: 'center' }}>
-														{item?.Icon}
-														<div className="ml-2">{item.Text}</div>
-													</div>
+													<a>
+														<div style={{ width: '100%', height: '100%', display: 'flex', paddingLeft: 6, alignItems: 'center' }}>
+															{item?.Icon}
+															<div className="ml-2">{item.Text}</div>
+														</div>
+													</a>
 												</Link>
 											</Menu.Item>
 										) : (
@@ -391,8 +393,10 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 															key={`sub-menu-${subitem?.Key}`}
 															icon={typeof subitem.Icon == 'string' ? ReactHtmlParser(subitem.Icon) : subitem.Icon}
 														>
-															<Link href={subitem.Route}>
-																<div style={{ paddingLeft: 24 }}>{subitem.Text}</div>
+															<Link contextMenu="fica" href={subitem.Route}>
+																<a>
+																	<div style={{ paddingLeft: 16 }}>{subitem.Text}</div>
+																</a>
 															</Link>
 														</Menu.Item>
 													)
