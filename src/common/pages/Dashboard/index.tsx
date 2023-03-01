@@ -401,16 +401,7 @@ const Dashboard = () => {
 								''
 							)}
 						</Form.Item>
-						<Form.Item name="year" className="w-[100px] mr-2">
-							<Select
-								onChange={(e) => {
-									setTodoApi((pre) => ({ ...pre, year: e }))
-									setTodoApiOverView((pre) => ({ ...pre, year: e }))
-								}}
-								options={dataYear}
-								className="w-[100px] h-[36px] mr-2"
-							></Select>
-						</Form.Item>
+
 						<Form.Item name="branchIds" className="w-[200px]">
 							<Select className="w-[200px] h-[36px] mr-2" mode="multiple" onChange={handleChangeBranch} allowClear placeholder="Trung tâm">
 								{allBranch?.length > 0 &&
@@ -487,6 +478,16 @@ const Dashboard = () => {
 					))}
 			</div>
 
+			<div className="flex justify-end mt-4">
+				<Select
+					onChange={(e) => {
+						setTodoApi((pre) => ({ ...pre, year: e }))
+						setTodoApiOverView((pre) => ({ ...pre, year: e }))
+					}}
+					options={dataYear}
+					className="w-[100px] h-[36px] mr-2"
+				></Select>
+			</div>
 			{user.RoleId == 1 || user.RoleId == 4 || user.RoleId == 7 ? (
 				<>
 					{user.RoleId != 7 ? (
@@ -603,7 +604,6 @@ Dashboard.CardItem = ({ item }) => {
 	return (
 		<div className="col-span-3 p-3 rounded-md shadow-md bg-tw-white">
 			<p className="text-[24px] ">{item.Name}</p>
-
 			<div className="flex justify-between mt-3">
 				<span className="text-lg font-bold">{item.Value}</span>
 
