@@ -2,13 +2,19 @@ import { Breadcrumb } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AdminMenu, AdminChildMenu } from '~/common/libs/routers/admin'
-import { StudentChildMenu, StudentMenu } from '~/common/libs/routers/student'
-import { TeacherChildMenu, TeacherMenu } from '~/common/libs/routers/teacher'
 import { RootState } from '~/store'
 import { setBreadcrumb } from '~/store/globalState'
 import Header from '../Header'
 import PrimaryMenu from './Menu'
+
+import { AdminMenu, AdminChildMenu } from '~/common/libs/routers/admin'
+import { StudentChildMenu, StudentMenu } from '~/common/libs/routers/student'
+import { TeacherChildMenu, TeacherMenu } from '~/common/libs/routers/teacher'
+import { ManagerChildMenu, ManagerMenu } from '~/common/libs/routers/manager'
+import { SalerChildMenu, SalerMenu } from '~/common/libs/routers/saler'
+import { AccountantChildMenu, AccountantMenu } from '~/common/libs/routers/accountant'
+import { AcademicChildMenu, AcademicMenu } from '~/common/libs/routers/academic'
+import { ParentStudentChildMenu, ParentStudentMenu } from '~/common/libs/routers/parent'
 
 function Layout({ children, home }: { children: React.ReactNode; home?: boolean }) {
 	const [mainMenu, setMainMenu] = useState([])
@@ -70,6 +76,26 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 				case 3:
 					setMainMenu(StudentMenu)
 					setChildrenMenu(StudentChildMenu)
+					break
+				case 4:
+					setMainMenu(ManagerMenu)
+					setChildrenMenu(ManagerChildMenu)
+					break
+				case 5:
+					setMainMenu(SalerMenu)
+					setChildrenMenu(SalerChildMenu)
+					break
+				case 6:
+					setMainMenu(AccountantMenu)
+					setChildrenMenu(AccountantChildMenu)
+					break
+				case 7:
+					setMainMenu(AcademicMenu)
+					setChildrenMenu(AcademicChildMenu)
+					break
+				case 8:
+					setMainMenu(ParentStudentMenu)
+					setChildrenMenu(ParentStudentChildMenu)
 					break
 				default:
 					break
