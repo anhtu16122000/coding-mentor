@@ -373,7 +373,9 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 													<a>
 														<div style={{ width: '100%', height: '100%', display: 'flex', paddingLeft: 6, alignItems: 'center' }}>
 															{item?.Icon}
-															<div className="ml-2">{item.Text}</div>
+															<div className="ml-2" style={{ fontWeight: 500 }}>
+																{item.Text}
+															</div>
 														</div>
 													</a>
 												</Link>
@@ -395,7 +397,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 														>
 															<Link contextMenu="fica" href={subitem.Route}>
 																<a>
-																	<div style={{ paddingLeft: 16 }}>{subitem.Text}</div>
+																	<div style={{ paddingLeft: 16, fontWeight: 500 }}>{subitem.Text}</div>
 																</a>
 															</Link>
 														</Menu.Item>

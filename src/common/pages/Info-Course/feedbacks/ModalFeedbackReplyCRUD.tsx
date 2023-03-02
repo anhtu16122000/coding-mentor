@@ -14,9 +14,11 @@ export interface IModalFeedbackReplyCRUD {
 
 export default function ModalFeedbackReplyCRUD(props: IModalFeedbackReplyCRUD) {
 	const { mode, dataRow, isLoading, onSubmit } = props
+
 	const [visible, setVisible] = useState(false)
+
 	const [form] = Form.useForm()
-	const { TabPane } = Tabs
+
 	useEffect(() => {
 		if (dataRow) {
 			form.setFieldsValue(dataRow)
@@ -55,45 +57,19 @@ export default function ModalFeedbackReplyCRUD(props: IModalFeedbackReplyCRUD) {
 	return (
 		<>
 			{mode == 'add' && (
-				<PrimaryButton
-					background="green"
-					type="button"
-					children={<span>Thêm phản hổi</span>}
-					icon="add"
-					onClick={() => {
-						onOpen()
-					}}
-				/>
-			)}
-			{mode == 'edit' && (
-				<IconButton
-					type="button"
-					icon={'edit'}
-					color="green"
-					onClick={() => {
-						onOpen()
-					}}
-					tooltip="Sửa phản hổi"
-				/>
+				<PrimaryButton background="green" type="button" icon="add" onClick={onOpen}>
+					Thêm phản hổi
+				</PrimaryButton>
 			)}
 
-			{mode == 'delete' && (
-				<IconButton
-					type="button"
-					icon={'remove'}
-					color="red"
-					onClick={() => {
-						onOpen()
-					}}
-					tooltip="Xóa phản hổi"
-				/>
-			)}
+			{mode == 'edit' && <IconButton type="button" icon={'edit'} color="green" onClick={onOpen} tooltip="Sửa phản hổi" />}
+
+			{mode == 'delete' && <IconButton type="button" icon={'remove'} color="red" onClick={onOpen} tooltip="Xóa phản hổi" />}
+
 			<Modal
 				footer={null}
 				open={visible}
-				onCancel={() => {
-					onClose()
-				}}
+				onCancel={onClose}
 				title={mode == 'add' ? 'Thêm phản hổi' : mode == 'edit' ? 'Cập nhật phản hổi' : 'Xóa phản hổi'}
 				width={mode != 'delete' ? 600 : 400}
 			>

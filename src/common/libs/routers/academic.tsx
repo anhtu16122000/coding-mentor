@@ -270,7 +270,7 @@ export const AcademicChildMenu = [
 	},
 	{
 		MenuName: 'Khóa học',
-		MenuTitle: 'Khóa học',
+		MenuTitle: 'Khóa học video',
 		Parent: 'video',
 		MenuKey: '/course',
 		MenuItem: [
@@ -283,16 +283,9 @@ export const AcademicChildMenu = [
 			},
 			{
 				ItemType: 'single',
-				Key: '/course/videos-student',
-				Route: '/course/videos-student',
-				Text: 'Danh sách chứng chỉ',
-				Icon: ''
-			},
-			{
-				ItemType: 'single',
-				Key: '/course/videos-order',
-				Route: '/course/videos-order',
-				Text: 'Danh sách đơn hàng',
+				Key: '/course/codes',
+				Route: '/course/codes',
+				Text: 'Khoá học đã bán',
 				Icon: ''
 			}
 		]

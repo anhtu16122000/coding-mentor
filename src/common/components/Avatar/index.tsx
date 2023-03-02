@@ -6,10 +6,11 @@ type TAvatar = {
 	className?: string
 	disabled?: boolean
 	isThumbnail?: boolean
+	alt?: string
 }
 
 const Avatar: FC<TAvatar> = (props) => {
-	const { uri, className, disabled, isThumbnail } = props
+	const { uri, className, disabled, isThumbnail, alt } = props
 
 	const [image, setImage] = useState('')
 	const [show, setShow] = useState(false)
@@ -36,7 +37,7 @@ const Avatar: FC<TAvatar> = (props) => {
 			<Modal closable={false} title={null} width={700} open={show} onCancel={toggle} footer={null}>
 				<img
 					onError={() => setImage(DEFAULT_AVATAR)}
-					alt="avatar"
+					alt={alt || 'avatar'}
 					src={image || uri || DEFAULT_AVATAR}
 					style={{ width: '100%', maxHeight: '70vh', objectFit: 'cover' }}
 				/>

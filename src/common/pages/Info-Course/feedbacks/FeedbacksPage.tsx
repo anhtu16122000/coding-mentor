@@ -15,6 +15,7 @@ import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import { ModalFeedback } from './ModalFeedback'
+import Avatar from '~/common/components/Avatar'
 
 export interface IFeedbacksStudentPageProps {}
 
@@ -127,27 +128,47 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 		}
 	}, [students])
 
+	function isAdmin() {
+		return userInformation?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return userInformation?.RoleId == 2
+	}
+
+	function isManager() {
+		return userInformation?.RoleId == 4
+	}
+
+	function isStdent() {
+		return userInformation?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return userInformation?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return userInformation?.RoleId == 7
+	}
+
+	function isParent() {
+		return userInformation?.RoleId == 8
+	}
+
 	const columns = [
 		{
 			title: 'Tiêu đề',
-			width: 300,
+			width: 270,
 			dataIndex: 'Title',
 			render: (text, item) => {
 				return (
 					<div className="feedback-student-title">
-						<div className="right">
-							<img
-								className="avatar"
-								src={item.Avatar && item.Avatar.length > 0 ? item.Avatar : '/images/default-avatar.svg'}
-								alt="feedback user avatar"
-							/>
-						</div>
-						<div className="left">
-							<div className="name">
-								<p>{item.CreatedBy}</p>
-								<p className="time">{moment(item.CreateOn).format('DD/MM/YYYY HH:mm')}</p>
-							</div>
-							<div className="title">{text}</div>
+						<Avatar uri={item.Avatar} className="fb-student-avatar shadow-sm" alt="feedback-user-avatar" />
+						<div>
+							<p className="fb-student-name">{item.CreatedBy || 'Ẩn danh'}</p>
+							<div style={{ color: '#9d9d9d', fontSize: 14 }}>{moment(item.CreateOn).format('DD/MM/YYYY HH:mm')}</div>
+							<div className="">{text}</div>
 						</div>
 					</div>
 				)
@@ -163,12 +184,11 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 		},
 		{
 			title: 'Rating',
-			width: 150,
+			width: 170,
 			dataIndex: 'StarRating',
 			render: (text) => {
 				return (
-					<div className="flex gap-2  justify-start">
-						<p className="font-bold text-lg">{text}</p>
+					<div className="custom-rating">
 						<Rate defaultValue={text} disabled={true} />
 					</div>
 				)
@@ -176,7 +196,7 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 		},
 		{
 			title: 'Trạng thái',
-			width: 100,
+			width: 140,
 			dataIndex: 'StatusName',
 			render: (text, item) => {
 				return (
@@ -194,15 +214,11 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 			dataIndex: 'Actions',
 			render: (text, item) => {
 				return (
-					<div className="">
-						{userInformation.RoleId === '8' ? (
-							''
-						) : (
+					<div className="flex items-center">
+						{!isStdent() && !isParent() && (
 							<Popconfirm
 								title="Bạn muốn hoàn thành phản hồi này?"
-								onConfirm={() => {
-									handleChangeStatus(item.Id)
-								}}
+								onConfirm={() => handleChangeStatus(item.Id)}
 								placement="topRight"
 								disabled={item.Status == 3}
 								onCancel={() => {}}
@@ -222,9 +238,7 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 							type="button"
 							icon="eye"
 							color="blue"
-							onClick={() => {
-								router.push({ pathname: '/info-course/feedbacks/detail', query: { feedbackId: item.Id } })
-							}}
+							onClick={() => router.push({ pathname: '/info-course/feedbacks/detail', query: { feedbackId: item.Id } })}
 							className=""
 							tooltip="Chi tiết"
 						/>

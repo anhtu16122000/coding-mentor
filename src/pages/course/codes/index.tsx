@@ -15,6 +15,9 @@ import { FiCopy } from 'react-icons/fi'
 
 const initFilters = { PageSize: PAGE_SIZE, PageIndex: 1, Search: '' }
 
+const TITLE_STUDENT = 'Danh sách mã kích hoạt'
+const TITLE_ADMIN = 'Khoá học đã bán'
+
 const CodesPage = () => {
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
@@ -23,6 +26,34 @@ const CodesPage = () => {
 
 	const user = useSelector((state: RootState) => state.user.information)
 
+	function isAdmin() {
+		return user?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
+
+	function isManager() {
+		return user?.RoleId == 4
+	}
+
+	function isStdent() {
+		return user?.RoleId == 3
+	}
+
+	function isAccountant() {
+		return user?.RoleId == 6
+	}
+
+	function isAcademic() {
+		return user?.RoleId == 7
+	}
+
+	function isParent() {
+		return user?.RoleId == 8
+	}
+
 	useEffect(() => {
 		getData()
 	}, [filters])
@@ -30,7 +61,7 @@ const CodesPage = () => {
 	async function getData() {
 		setLoading(true)
 		try {
-			const res = await RestApi.get<any>('VideoActiveCode', { ...filters, studentId: user?.UserInformationId })
+			const res = await RestApi.get<any>('VideoActiveCode', { ...filters, studentId: isStdent() ? user?.UserInformationId : null })
 			if (res.status == 200) {
 				setData(res.data.data)
 				setTotalPage(res.data.totalRow)
@@ -44,6 +75,22 @@ const CodesPage = () => {
 			setLoading(false)
 		}
 	}
+
+	const adminColumns = [
+		{
+			title: 'Thông học viên',
+			dataIndex: 'Code',
+			width: 300,
+			render: (value, item) => (
+				<div className="flex items-center">
+					<div className="">
+						<h2 className="text-[16px] font-[500]">{item?.StudentName}</h2>
+						<h2 className="text-[14px] font-[400]">{item?.StudentCode}</h2>
+					</div>
+				</div>
+			)
+		}
+	]
 
 	const columns = [
 		{
@@ -108,7 +155,9 @@ const CodesPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{appConfigs.appName} | Danh sách mã kích hoạt</title>
+				<title>
+					{appConfigs.appName} | {isStdent() ? TITLE_STUDENT : TITLE_ADMIN}
+				</title>
 			</Head>
 
 			<ExpandTable
@@ -117,8 +166,8 @@ const CodesPage = () => {
 				getPagination={(page: number) => setFilter({ ...filters, PageIndex: page })}
 				loading={{ type: 'GET_ALL', status: loading }}
 				dataSource={data}
-				columns={columns}
-				TitleCard="Danh sách mã kích hoạt"
+				columns={isStdent() ? columns : [...adminColumns, ...columns]}
+				TitleCard={`${isStdent() ? TITLE_STUDENT : TITLE_ADMIN}`}
 			/>
 		</>
 	)

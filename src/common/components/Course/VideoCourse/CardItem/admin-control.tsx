@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { RootState } from '~/store'
 import DonateVideo from './donate-video'
+import DetailsModal from './details-modal'
 
 type TAdminControl = {
 	item?: any
@@ -35,12 +36,19 @@ const AdminControl: FC<TAdminControl> = (props) => {
 		Router.push({ pathname: '/course/videos/detail', query: { slug: item?.Id } })
 	}
 
+	if (!isManager() && !isAdmin() && !isAcademic() && !isTeacher()) {
+		return <></>
+	}
+
 	return (
 		<div className="flex flex-col items-center w-full">
 			{(isManager() || isAdmin() || isAcademic() || isTeacher()) && (
-				<PrimaryButton background="blue" type="button" disable={item.Disable} icon="eye" onClick={viewDetails}>
-					Xem khóa học
-				</PrimaryButton>
+				<>
+					<PrimaryButton background="blue" type="button" disable={item.Disable} icon="eye" onClick={viewDetails}>
+						Xem khóa học
+					</PrimaryButton>
+					<DetailsModal data={item} />
+				</>
 			)}
 
 			{(isManager() || isAdmin() || isAcademic()) && <DonateVideo onRefresh={onRefresh} video={item} />}

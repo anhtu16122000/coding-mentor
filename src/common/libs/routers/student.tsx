@@ -102,7 +102,7 @@ export const StudentChildMenu = [
 	},
 	{
 		MenuName: 'Khóa học',
-		MenuTitle: 'Khóa học',
+		MenuTitle: 'Khóa học video',
 		Parent: 'video',
 		MenuKey: '/course',
 		MenuItem: [

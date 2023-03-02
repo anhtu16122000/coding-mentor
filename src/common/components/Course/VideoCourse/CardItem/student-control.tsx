@@ -8,6 +8,7 @@ import { ShowNostis } from '~/common/utils'
 import { RootState } from '~/store'
 import { setCartData } from '~/store/cartReducer'
 import ActiveVideo from './active-video'
+import DetailsModal from './details-modal'
 
 type TStudentControl = {
 	item?: any
@@ -114,6 +115,8 @@ const StudentControl: FC<TStudentControl> = (props) => {
 					Xem khóa học
 				</PrimaryButton>
 			)}
+
+			<DetailsModal data={item} />
 		</div>
 	)
 }
