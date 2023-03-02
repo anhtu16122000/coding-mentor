@@ -10,6 +10,7 @@ import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import ModalLearningDetail from '../ModalLearningDetail'
+import moment from 'moment'
 
 type Props = {
 	videoCourseID: number
@@ -100,7 +101,7 @@ export default function StudentListInCourse(props: Props) {
 			title: 'Học viên',
 			dataIndex: 'FullName',
 			align: 'left',
-			render: (text, data) => <>{text}</>
+			render: (text, data) => <div className="font-[600] text-[#1b73e8]">{text}</div>
 		},
 		{
 			title: 'Email',
@@ -115,17 +116,20 @@ export default function StudentListInCourse(props: Props) {
 			render: (text, data) => <>{text}</>
 		},
 		{
+			title: 'Thời gian',
+			dataIndex: 'Mobile',
+			align: 'left',
+			render: (text, item) => <p>{moment(item.CreatedOn).format('DD/MM/YYYY HH:mm')}</p>
+		},
+
+		{
 			title: 'Đánh giá',
 			dataIndex: 'MyRate',
 			align: 'left',
-			render: (text, data) => (
-				<>
-					<Rate defaultValue={Number(text)} allowHalf character={<GiRoundStar />} disabled className="text-tw-yellow" />
-				</>
-			)
+			render: (text, data) => <Rate defaultValue={Number(text)} allowHalf character={<GiRoundStar />} disabled className="text-tw-yellow" />
 		},
 		{
-			title: 'Chức năng',
+			title: '',
 			render: (data, item) => {
 				return (
 					<IconButton type="button" color="red" icon="eye" onClick={() => handleViewDetail(item)} className="mt-2" tooltip="Xem chi tiết" />

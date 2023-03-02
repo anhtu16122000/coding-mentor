@@ -371,9 +371,9 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 											<Menu.Item key={item.Key} icon={null}>
 												<Link href={item.Route}>
 													<a>
-														<div style={{ width: '100%', height: '100%', display: 'flex', paddingLeft: 6, alignItems: 'center' }}>
+														<div style={{ width: '100%', height: '100%', display: 'flex', paddingLeft: 10, alignItems: 'center' }}>
 															{item?.Icon}
-															<div className="ml-2" style={{ fontWeight: 500 }}>
+															<div className="" style={{ fontWeight: 500 }}>
 																{item.Text}
 															</div>
 														</div>

@@ -86,3 +86,22 @@
 .video-name {
 	@apply text-[18px] font-[600] mb-2 line-clamp-1;
 }
+
+.video-detail {
+	.ant-tabs-tab {
+		background: #d8d8d8 !important;
+		.ant-tabs-tab-btn {
+			color: #000 !important;
+		}
+	}
+	.ant-tabs-tab-active {
+		background: #1b73e8 !important;
+		.ant-tabs-tab-btn {
+			color: #fff !important;
+		}
+	}
+	.ant-tabs-tabpane-active {
+		padding-left: 0px !important;
+		padding-right: 0px !important;
+	}
+}

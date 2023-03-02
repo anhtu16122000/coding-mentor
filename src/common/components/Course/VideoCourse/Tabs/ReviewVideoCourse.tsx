@@ -72,16 +72,15 @@ export default function ReviewVideoCourse(props: IReviewVideoCourseProps) {
 		<div className="container">
 			{dataSource?.map((item) => {
 				return (
-					<div className="relative flex gap-4 justify-start items-start mb-tw-6 last:mb-tw-0">
-						<div className="w-tw-10 h-tw-10">
-							<img
-								className="rounded-full w-tw-10.5 h-tw-10.5 max-w-none"
-								src={!!item.Avatar && item.Avatar.length > 0 ? item.Avatar : '/images/default-avatar.svg'}
-								alt="avatar reviewer"
-							/>
-						</div>
+					<div className="relative flex gap-4 justify-start items-start mb-tw-6 last:mb-tw-0 bg-[#f4f4f4] p-[8px] rounded-[6px]">
+						<img
+							className="rounded-full w-[50px] h-[50px] max-w-none"
+							src={!!item.Avatar && item.Avatar.length > 0 ? item.Avatar : '/images/default-avatar.svg'}
+							alt="avatar reviewer"
+						/>
 						<div>
-							<p className="text-tw-2xl font-bold">{item.FullName}.</p>
+							<p className="text-[16px] font-[600]">{item.FullName}</p>
+							<p className="text-[#949494] text-[14px]">{moment(item.CreatedOn).format('DD/MM/YYYY HH:mm')}</p>
 							<div className="flex gap-2 justify-start items-center text-sm my-2">
 								<Rate
 									defaultValue={item.MyRate}
@@ -91,7 +90,6 @@ export default function ReviewVideoCourse(props: IReviewVideoCourseProps) {
 									disabled
 									className="text-tw-yellow group-hover:cursor-pointer"
 								/>
-								<p>{moment(item.CreatedOn).format('DD/MM/YYYY - HH:mm')}</p>
 							</div>
 							<p>{item.RateComment}</p>
 						</div>

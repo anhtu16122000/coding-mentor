@@ -1,6 +1,7 @@
 import { Form, Modal } from 'antd'
 import moment from 'moment'
 import React, { useState, useEffect } from 'react'
+import { BiTimeFive } from 'react-icons/bi'
 import { useSelector } from 'react-redux'
 import { NotificationInVideoCourseApi } from '~/api/course/video-course/notification-in-video-course'
 import InputText from '~/common/components/FormControl/InputTextField'
@@ -84,19 +85,20 @@ export default function NotificationInVideoCourse(props: INotificationInVideoCou
 		<div>
 			{showCreate() && (
 				<PrimaryButton background="green" className="mb-tw-4" type="button" icon="add" onClick={onOpenModal}>
-					Thêm thông báo mới
+					Thêm thông báo
 				</PrimaryButton>
 			)}
 
 			<div>
 				{dataSource?.map((item, index) => {
 					return (
-						<div key={index} className="bg-tw-gray px-4 py-2 rounded-lg mb-tw-4 last:mb-tw-0">
+						<div key={index} className="bg-[#f0f0f0] px-[14px] py-[8px] rounded-lg mb-tw-4 last:mb-tw-0">
 							<div className="flex gap-2 justify-start items-end">
 								<p className="text-2xl font-bold">{item.CreatedBy} </p>
-								<p className="text-sm">{moment(item.CreatedOn).format('DD/MM/YYYY')}</p>
 							</div>
-							<p className="font-bold text-tw-blue">{item.Title}</p>
+							<p className="text-[#949494] text-[14px]">{moment(item.CreatedOn).format('DD/MM/YYYY HH:mm')}</p>
+
+							<p className="font-bold text-[16px] mt-[8px]">{item.Title}</p>
 							<p>{item.Content}</p>
 						</div>
 					)

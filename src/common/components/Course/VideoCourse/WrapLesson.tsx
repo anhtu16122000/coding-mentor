@@ -45,7 +45,7 @@ const WrapLesson = (props) => {
 	}
 
 	return (
-		<div className={`relative antd-custom-wrap flex justify-start align-center h-[calc(100vh_-_56px)] overflow-y-auto`}>
+		<div className={`video-detail relative antd-custom-wrap flex justify-start align-center h-[calc(100vh_-_56px)] overflow-y-auto`}>
 			<div className="desktop:w-3/4 w-full h-[calc(100vh_-_56px)] overflow-y-auto scrollbar">
 				{!lessonSelected && (
 					<div className="w-full">
@@ -55,36 +55,38 @@ const WrapLesson = (props) => {
 							</div>
 						</Card>
 
-						<div className="smartphone:m-3 tablet:m-6 desktop:m-12">
-							<Tabs
-								type="card"
-								onChange={(data) => {
-									data == '5' && setOnReloadReviewTab(onReloadReviewTab + 1)
-								}}
-							>
-								<TabPane tab="Giới thiệu" key="1">
-									<VideoCourseDescription courseDetail={courseDetail} User={user} onFetchData={() => getCourseDetail()} />
-								</TabPane>
-
-								<TabPane tab="Hỏi đáp" key="2">
-									<QuestionInCourse videoCourseID={Number(courseID)} />
-								</TabPane>
-
-								<TabPane tab="Thông báo" key="3">
-									<NotificationInVideoCourse videoCourseID={Number(courseID)} />
-								</TabPane>
-
-								{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
-									<TabPane tab="Học viên" key="4">
-										<StudentListInCourse videoCourseID={Number(courseID)} />
+						<Card className="shadow-sm">
+							<div className="smartphone:m-3 tablet:m-6 desktop:m-12">
+								<Tabs
+									type="card"
+									onChange={(data) => {
+										data == '5' && setOnReloadReviewTab(onReloadReviewTab + 1)
+									}}
+								>
+									<TabPane tab="Giới thiệu" key="1">
+										<VideoCourseDescription courseDetail={courseDetail} User={user} onFetchData={() => getCourseDetail()} />
 									</TabPane>
-								)}
 
-								<TabPane tab="Đánh giá" key="5">
-									<ReviewVideoCourse videoCourseID={Number(courseID)} onReloadReviewTab={onReloadReviewTab} />
-								</TabPane>
-							</Tabs>
-						</div>
+									<TabPane tab="Hỏi đáp" key="2">
+										<QuestionInCourse videoCourseID={Number(courseID)} />
+									</TabPane>
+
+									<TabPane tab="Thông báo" key="3">
+										<NotificationInVideoCourse videoCourseID={Number(courseID)} />
+									</TabPane>
+
+									{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
+										<TabPane tab="Học viên" key="4">
+											<StudentListInCourse videoCourseID={Number(courseID)} />
+										</TabPane>
+									)}
+
+									<TabPane tab="Đánh giá" key="5">
+										<ReviewVideoCourse videoCourseID={Number(courseID)} onReloadReviewTab={onReloadReviewTab} />
+									</TabPane>
+								</Tabs>
+							</div>
+						</Card>
 					</div>
 				)}
 
@@ -110,31 +112,34 @@ const WrapLesson = (props) => {
 						)}
 
 						<div className="smartphone:m-3 tablet:m-6 desktop:m-12 pt-6 text-2xl font-bold in-1-line">{lessonSelected.Name}</div>
+
 						<div className="smartphone:m-3 tablet:m-6 desktop:m-12 pt-0">
-							<Tabs
-								type="card"
-								onChange={(data) => {
-									data == '5' && setOnReloadReviewTab(onReloadReviewTab + 1)
-								}}
-							>
-								<TabPane tab="Giới thiệu" key="1">
-									<VideoCourseDescription courseDetail={courseDetail} User={user} onFetchData={getCourseDetail} />
-								</TabPane>
-								<TabPane tab="Hỏi đáp" key="2">
-									<QuestionInCourse videoCourseID={Number(courseID)} />
-								</TabPane>
-								<TabPane tab="Thông báo" key="3">
-									<NotificationInVideoCourse videoCourseID={Number(courseID)} />
-								</TabPane>
-								{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
-									<TabPane tab="Học viên" key="4">
-										<StudentListInCourse videoCourseID={Number(courseID)} />
+							<Card className="shadow-sm">
+								<Tabs
+									type="card"
+									onChange={(data) => {
+										data == '5' && setOnReloadReviewTab(onReloadReviewTab + 1)
+									}}
+								>
+									<TabPane tab="Giới thiệu" key="1">
+										<VideoCourseDescription courseDetail={courseDetail} User={user} onFetchData={getCourseDetail} />
 									</TabPane>
-								)}
-								<TabPane tab="Đánh giá" key="5">
-									<ReviewVideoCourse videoCourseID={Number(courseID)} onReloadReviewTab={onReloadReviewTab} />
-								</TabPane>
-							</Tabs>
+									<TabPane tab="Hỏi đáp" key="2">
+										<QuestionInCourse videoCourseID={Number(courseID)} />
+									</TabPane>
+									<TabPane tab="Thông báo" key="3">
+										<NotificationInVideoCourse videoCourseID={Number(courseID)} />
+									</TabPane>
+									{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
+										<TabPane tab="Học viên" key="4">
+											<StudentListInCourse videoCourseID={Number(courseID)} />
+										</TabPane>
+									)}
+									<TabPane tab="Đánh giá" key="5">
+										<ReviewVideoCourse videoCourseID={Number(courseID)} onReloadReviewTab={onReloadReviewTab} />
+									</TabPane>
+								</Tabs>
+							</Card>
 						</div>
 					</div>
 				)}
