@@ -4,7 +4,8 @@ const initialState = {
 	loading: true,
 	data: {
 		user: {}
-	}
+	},
+	refreshToken: null
 }
 
 const authSlice = createSlice({
@@ -16,9 +17,12 @@ const authSlice = createSlice({
 		},
 		setAuthData: (state, { payload }: PayloadAction<any>) => {
 			state.data = payload
+		},
+		setRefreshToken: (state, { payload }: PayloadAction<any>) => {
+			state.refreshToken = payload
 		}
 	}
 })
 
-export const { setAuthData, setAuthLoading } = authSlice.actions
+export const { setAuthData, setAuthLoading, setRefreshToken } = authSlice.actions
 export default authSlice.reducer

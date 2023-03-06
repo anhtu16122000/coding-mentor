@@ -51,15 +51,6 @@ export function removeAccents(str) {
 	return str
 }
 
-export function parseJwt(token) {
-	var base64Url = token.split('.')[1]
-	var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-
-	var jsonPayload = decodeURIComponent(Buffer.from(base64, 'base64').toString())
-
-	return JSON.parse(jsonPayload) || {}
-}
-
 export function parseSelectArray(arr: Array<{ [key: string]: any }>, title: string, value: string) {
 	if (Array.isArray(arr) && arr.length > 0) {
 		return arr
@@ -112,10 +103,4 @@ export const parseToMoney = (value: any) => {
 		x1 = x1.replace(rgx, '$1' + ',' + '$2')
 	}
 	return x1 + x2
-}
-
-export async function logOut() {
-	localStorage.clear()
-	const redirect = Router.asPath
-	Router.replace({ pathname: '/login', query: { redirect: redirect } })
 }

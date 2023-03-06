@@ -1,13 +1,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import Router from 'next/router'
 import appConfigs from '~/appConfig'
-import { logOut } from '~/common/utils/common'
+import { logOut } from '~/common/utils/token-handle'
 
 const SHOW_LOG = true
 const NODE_STATUS: any = process.env.NODE_ENV
 
 const isShowLog = (e: any) => {
-	if (e === '/api/Idioms/getRandoms' || e === '/api/Rules') {
+	if (e == '/api/Idioms/getRandoms' || e == '/api/Rules') {
 		return false
 	} else {
 		return NODE_STATUS == 'production' && !!SHOW_LOG ? true : true
@@ -36,9 +35,7 @@ export const instance = axios.create({
 
 instance.interceptors.request.use(
 	async (config: AxiosRequestConfig) => {
-		const url: any = getUrl(config)
-
-		const request_start_at = performance.now()
+		const url = getUrl(config)
 
 		if (!url.toString().includes('/auth/')) {
 			const authHeader: any = await authHeader_X()
@@ -52,25 +49,19 @@ instance.interceptors.request.use(
 	},
 	(error: any) => {
 		isShowLog('') && console.log(`%c ${error?.response?.status}  :`, 'color: red; font-weight: bold', error?.response?.data)
-
 		return Promise.reject(error)
 	}
 )
 
-// THIS FLAG USE TO THROW AN AXIOS CANCEL OPERATION WHEN EVER 401 RESPONSE HAPPEN MORE THAN TWICE
-// let isAbort = false
-
 const checkResponse = (error: any) => {
 	switch (error?.response?.status) {
 		case 401:
-			// alert('Phiên đăng nhập hết hạn, quay lại đăng nhập!')
 			setTimeout(() => {
-				// logOut()
+				logOut()
 			}, 1000)
 			break
 		case 403:
 			console.log(`%cLỖI 403:` + `%c DON'T HAVE PERMISSON`, 'color: red; font-weight: bold', 'color: yellow;')
-			// alert('Bạn không có quyền thực hiện')
 			setTimeout(() => {
 				window.history.back()
 			}, 1000)

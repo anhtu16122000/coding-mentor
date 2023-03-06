@@ -144,7 +144,7 @@ const VideoCourseDescription = (props: Props) => {
 					</div>
 
 					<div className="custom-view-editor">
-						{courseDetail?.Description.length > 0
+						{!!courseDetail?.Description
 							? ReactHtmlParser(courseDetail?.Description)
 							: ReactHtmlParser('<span>Không có giới thiệu khóa học!</span>')}
 					</div>

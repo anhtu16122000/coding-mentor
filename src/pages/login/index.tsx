@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react'
 import AuthLayout from '~/common/components/Auth/Layout'
 import LoginForm from '~/common/components/Auth/LoginForm'
 import { registerApi } from '~/api/user'
-import { parseJwt, ShowNoti } from '~/common/utils'
+import { ShowNoti } from '~/common/utils'
 import { userApi } from '~/services/auth'
 import { useDispatch } from 'react-redux'
-import { setUser } from '~/store/userReducer'
-import { setAuthData, setAuthLoading } from '~/store/authReducer'
-import Router from 'next/router'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
+import { playWithToken } from '~/common/utils/token-handle'
 
 function SignIn({ csrfToken }) {
 	const dispatch = useDispatch()
@@ -23,7 +21,7 @@ function SignIn({ csrfToken }) {
 	const getAllow = async () => {
 		try {
 			const response = await registerApi.getAllowRegister()
-			if (response.status === 200) {
+			if (response.status == 200) {
 				if (response.data.data == 'Allow') {
 					setAlloweRegisters(true)
 				} else {
@@ -38,31 +36,15 @@ function SignIn({ csrfToken }) {
 	const [errorLogin, setErrorLogin] = useState('')
 	const [loading, setLoading] = useState(false)
 
-	const _Submit = async (data) => {
+	const _submit = async (data) => {
 		setErrorLogin('')
 		try {
 			setLoading(true)
 			const response = await userApi.login(data)
-			if (response.status === 200) {
-				const token = response?.data?.token || ''
-				const user = parseJwt(token) || ''
-				const userData = { token: token, user: user }
-
-				await localStorage.setItem('userData', JSON.stringify(userData))
-				await localStorage.setItem('token', token)
-
-				dispatch(setUser(user))
-				dispatch(setAuthData(user))
-				dispatch(setAuthLoading(false))
-
-				// if (!!Router.query?.redirect) {
-				// 	Router.push(Router.query?.redirect + '')
-				// } else {
-				Router.push('/')
-				// }
+			if (response.status == 200) {
+				playWithToken(response?.data, dispatch)
 			}
 		} catch (error) {
-			console.log('Login Error: ', error)
 			setErrorLogin(error?.message)
 		} finally {
 			setLoading(false)
@@ -74,7 +56,7 @@ function SignIn({ csrfToken }) {
 			<Head>
 				<title>{appConfigs.appName} - Đăng nhập</title>
 			</Head>
-			<LoginForm loading={loading} error={errorLogin} onSubmit={_Submit} alloweRegisters={alloweRegisters} />
+			<LoginForm loading={loading} error={errorLogin} onSubmit={_submit} alloweRegisters={alloweRegisters} />
 		</>
 	)
 }

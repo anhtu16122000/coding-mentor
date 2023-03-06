@@ -1,10 +1,10 @@
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { logOut } from '~/common/utils/common'
+import { tokenApi } from '~/api/token-api'
+import { logOut, playWithToken } from '~/common/utils/token-handle'
 import { RootState } from '~/store'
-import { setAuthData, setAuthLoading } from '~/store/authReducer'
-import { setUser } from '~/store/userReducer'
+import { setAuthLoading, setRefreshToken } from '~/store/authReducer'
 
 type IAuthLayout = {
 	children: React.ReactNode
@@ -12,7 +12,7 @@ type IAuthLayout = {
 
 function AuthProvider({ children }: IAuthLayout) {
 	const dispatch = useDispatch()
-	const { loading, data } = useSelector((state: RootState) => state.auth)
+	const { loading, data, refreshToken } = useSelector((state: RootState) => state.auth)
 
 	const router = useRouter()
 
@@ -42,16 +42,45 @@ function AuthProvider({ children }: IAuthLayout) {
 		}
 	}, [data])
 
+	const _refreshToken = async (param) => {
+		console.time('Gọi api RefreshToken hết')
+		try {
+			const response = await tokenApi.refreshToken(param)
+			if (response.status == 200) {
+				playWithToken(response?.data, dispatch)
+			}
+		} catch (error) {
+			console.log('RefreshToken Error: ', error)
+		}
+		console.timeEnd('Gọi api RefreshToken hết')
+	}
+
+	function isPastDate(timestamp) {
+		const date = new Date(timestamp)
+		return date < new Date()
+	}
+
 	async function checkLogin() {
 		try {
 			const response = await JSON.parse(localStorage.getItem('userData'))
-			if (!!response) {
-				dispatch(setUser(response.user))
-				dispatch(setAuthData(response.user))
-				dispatch(setAuthLoading(false))
+			console.log('response: ', response)
+
+			if (!!response?.theRefresh) {
+				const theRefresh = response.theRefresh
+				dispatch(setRefreshToken(theRefresh))
+				if (theRefresh?.refreshTokenExpires) {
+					if (isPastDate(new Date(theRefresh?.refreshTokenExpires).getTime())) {
+						if (allowNoneLogin()) {
+							logOut()
+						}
+					} else {
+						_refreshToken({ RefreshToken: theRefresh?.refreshToken, token: response?.token })
+					}
+				}
 			} else {
 				if (allowNoneLogin()) {
 					logOut()
+					dispatch(setAuthLoading(false))
 				}
 			}
 		} catch (error) {}

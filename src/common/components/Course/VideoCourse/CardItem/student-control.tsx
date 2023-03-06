@@ -57,7 +57,7 @@ const StudentControl: FC<TStudentControl> = (props) => {
 			let res = await RestApi.post('Cart', { ProductId: item.Id, Quantity: 1 })
 			if (res.status == 200) {
 				getCartData()
-				ShowNostis.error('Thành công')
+				ShowNostis.success('Thành công')
 			}
 		} catch (error) {
 			ShowNostis.error(error?.message)

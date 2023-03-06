@@ -6,15 +6,15 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import { useRouter } from 'next/router'
-import CreateUser from '../User/user-form'
 import Notification from './notification'
-import { logOut, parseSelectArray } from '~/common/utils/common'
+import { parseSelectArray } from '~/common/utils/common'
 import { areaApi } from '~/api/area'
 import { ShowNoti } from '~/common/utils'
 import { setArea } from '~/store/areaReducer'
 import { permissionApi } from '~/api/permission'
 import AvatarComponent from '../AvatarComponent'
 import CartButton from '../Cart/button'
+import { logOut } from '~/common/utils/token-handle'
 
 let countOpen = 0
 
@@ -79,16 +79,11 @@ function Header({ isOpenMenu, isOpen, funcMenuMobile, openMenuMobile }: IHeader)
 	const contentLogout = (
 		<ul className="user-function">
 			<li className="mb-1">
-				{/* {user.RoleId == 3 && <CreateUser2 onOpen={() => setUserVisible(false)} isChangeInfo defaultData={user} />} */}
-				{/* {user.RoleId != 3 && <CreateUser onOpen={() => setUserVisible(false)} isChangeInfo defaultData={user} />} */}
-				{user.RoleId == 3 && (
+				{user?.RoleId == 3 && (
 					<div
 						className="inner-function"
 						onClick={() => {
-							router.push({
-								pathname: '/info-course/student/detail',
-								query: { StudentID: userInfo.UserInformationId }
-							})
+							router.push({ pathname: '/info-course/student/detail', query: { StudentID: userInfo.UserInformationId } })
 						}}
 					>
 						<div className="icon">
@@ -97,14 +92,11 @@ function Header({ isOpenMenu, isOpen, funcMenuMobile, openMenuMobile }: IHeader)
 						<div className="function-name">Thông tin</div>
 					</div>
 				)}
-				{user.RoleId != 3 && (
+				{user?.RoleId != 3 && (
 					<div
 						className="inner-function"
 						onClick={() => {
-							router.push({
-								pathname: '/users/info-detail',
-								query: { UserID: userInfo.UserInformationId }
-							})
+							router.push({ pathname: '/users/info-detail', query: { UserID: userInfo.UserInformationId } })
 						}}
 					>
 						<div className="icon">

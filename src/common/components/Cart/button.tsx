@@ -17,8 +17,12 @@ const CartButton = () => {
 	const cartData = useSelector((state: RootState) => state.cart.CartData)
 
 	useEffect(() => {
-		getData()
+		isStdent() && getData()
 	}, [])
+
+	function isStdent() {
+		return userInformation?.RoleId == 3
+	}
 
 	async function getData() {
 		try {
@@ -29,10 +33,6 @@ const CartButton = () => {
 				dispatch(setCartData([]))
 			}
 		} catch (error) {}
-	}
-
-	function isStdent() {
-		return userInformation?.RoleId == 3
 	}
 
 	if (!isStdent()) return <></>
