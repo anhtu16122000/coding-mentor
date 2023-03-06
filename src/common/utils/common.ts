@@ -104,3 +104,7 @@ export const parseToMoney = (value: any) => {
 	}
 	return x1 + x2
 }
+
+import { logOut, parseJwt } from './token-handle'
+
+export { logOut, parseJwt }
