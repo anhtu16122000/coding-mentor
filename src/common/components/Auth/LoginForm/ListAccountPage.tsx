@@ -8,12 +8,13 @@ import PrimaryTag from '../../Primary/Tag'
 
 export const ListAccountPage = (props) => {
 	const { setUsername, setPassword } = props
-	const [dataTable, setDataTable] = useState([])
 	const [loading, setLoading] = useState(false)
 
 	function removeFullNameContainingChau(arr) {
 		return arr.filter((person) => !person.FullName.includes('Châu') && !person.FullName.includes('Chau'))
 	}
+
+	const [dataTable, setDataTable] = useState([])
 
 	const getListAccount = async () => {
 		try {
