@@ -61,7 +61,7 @@ const VideoLessionContent = (props: IProps) => {
 	const [visiblePreview, setVisiblePreview] = useState(false)
 
 	function getDisable() {
-		if (user.RoleId == 1) {
+		if (user?.RoleId == 1) {
 			return 'cursor-pointer'
 		} else {
 			if (disabledAll) {

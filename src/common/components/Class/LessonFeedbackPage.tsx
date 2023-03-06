@@ -46,7 +46,7 @@ export const LessonFeedbackPage = () => {
 				className="shadow-sm"
 				title="Phản hồi buổi học"
 				extra={
-					(user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+					(user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
 						<ModalLessonFeedback mode="add" onRefresh={() => getTimeLine(apiParameters)} />
 					)
 				}
@@ -71,7 +71,7 @@ export const LessonFeedbackPage = () => {
 									{item?.Note} - {item?.CreatedBy}
 								</p>
 
-								{(user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+								{(user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
 									<ModalLessonFeedback mode="delete" dataRow={item} onRefresh={() => getTimeLine(apiParameters)} />
 								)}
 							</div>

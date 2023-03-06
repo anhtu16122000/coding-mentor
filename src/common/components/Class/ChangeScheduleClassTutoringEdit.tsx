@@ -217,7 +217,7 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 							''
 						)}
 
-						{user.RoleId == 3 && (
+						{user?.RoleId == 3 && (
 							<ModalRemoveScheduleTutoringEdit
 								IdSchedule={dataRow.event.extendedProps.IdSchedule}
 								startTime={dataRow.event.extendedProps.StartTime}
@@ -259,7 +259,7 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 							</div>
 							{!!isEditSchedule ? (
 								<div className="flex items-center justify-between gap-2 mt-2">
-									{user.RoleId == 3 && (
+									{user?.RoleId == 3 && (
 										<ModalRemoveScheduleTutoringEdit
 											IdSchedule={dataRow.event.extendedProps.IdSchedule}
 											startTime={dataRow.event.extendedProps.StartTime}

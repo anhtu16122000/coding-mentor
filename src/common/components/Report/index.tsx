@@ -111,7 +111,7 @@ const Report = () => {
 	}
 
 	useEffect(() => {
-		if (user.RoleId === '1') {
+		if (user?.RoleId === '1') {
 			if (type == 0) {
 				getOverviewLearning()
 			}
@@ -578,7 +578,7 @@ const Report = () => {
 	// Rên................................ đơ
 	return (
 		<div className="w-[95%] desktop:w-[85%] mx-auto">
-			{user.RoleId === '1' && (
+			{user?.RoleId === '1' && (
 				<>
 					<Card
 						title={

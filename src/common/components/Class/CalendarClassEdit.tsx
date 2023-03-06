@@ -266,7 +266,7 @@ const CalenderClassEdit = () => {
 				className="card-calendar"
 				extra={
 					<>
-						{user.RoleId == 3 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+						{user?.RoleId == 3 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
 							<>
 								<PrimaryButton background="yellow" type="button" icon="edit" onClick={() => dispatch(setIsEditSchedule(!isEditSchedule))}>
 									{isEditSchedule ? 'Hủy' : 'Chỉnh sửa'}

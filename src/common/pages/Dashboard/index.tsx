@@ -395,7 +395,7 @@ const Dashboard = () => {
 				<Form form={form}>
 					<div className="flex items-center pr-4">
 						<Form.Item name="student" className="w-[200px] mr-2">
-							{user.RoleId == 8 ? (
+							{user?.RoleId == 8 ? (
 								<Select onChange={handleChangeStudent} options={student} className="w-[200px] h-[36px] mr-2"></Select>
 							) : (
 								''
@@ -488,7 +488,7 @@ const Dashboard = () => {
 					className="w-[100px] h-[36px] mr-2"
 				></Select>
 			</div>
-			{user.RoleId == 1 || user.RoleId == 4 || user.RoleId == 7 ? (
+			{user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
 				<>
 					{user.RoleId != 7 ? (
 						<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Doanh Thu</h1>}>
@@ -536,7 +536,7 @@ const Dashboard = () => {
 						''
 					)}
 				</>
-			) : user.RoleId == 2 ? ( // giáo viên
+			) : user?.RoleId == 2 ? ( // giáo viên
 				<>
 					<div className="grid grid-cols-6 gap-tw-4">
 						<Card className="col-span-3 mt-tw-4" title={<h1 className="text-2xl font-medium">Tỉ lệ đánh giá</h1>}>
@@ -547,7 +547,7 @@ const Dashboard = () => {
 						</Card>
 					</div>
 				</>
-			) : user.RoleId == 3 || user.RoleId == 8 ? ( //học viên phụ huynh
+			) : user?.RoleId == 3 || user?.RoleId == 8 ? ( //học viên phụ huynh
 				<>
 					<div className="mt-tw-4">
 						<StatisticPointStudent idStudent={idStudent} />
@@ -565,7 +565,7 @@ const Dashboard = () => {
 						<StatisticRateTeacher data={statisticTotalScheduleStudent} titleBar="Buổi học trong từng tháng" type={1} />
 					</Card>
 				</>
-			) : user.RoleId == 5 ? (
+			) : user?.RoleId == 5 ? (
 				<>
 					<div className="grid grid-cols-6 gap-tw-4">
 						<Card className="col-span-3 mt-tw-4" title={<h1 className="text-2xl font-medium">Khách mới mỗi tháng</h1>}>
@@ -576,7 +576,7 @@ const Dashboard = () => {
 						</Card>
 					</div>
 				</>
-			) : user.RoleId == 6 ? (
+			) : user?.RoleId == 6 ? (
 				<>
 					<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Doanh Thu</h1>}>
 						<StatisticPositiveAndNegativeChart data={statisticRevenue} titleBar="Doanh thu" />

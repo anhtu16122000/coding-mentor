@@ -78,15 +78,15 @@ const ListClass = () => {
 	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	function isAdmin() {
-		return userInformation.RoleId == 1
+		return userInformation?.RoleId == 1
 	}
 
 	function isTeacher() {
-		return userInformation.RoleId == 2
+		return userInformation?.RoleId == 2
 	}
 
 	function isStdent() {
-		return userInformation.RoleId == 3
+		return userInformation?.RoleId == 3
 	}
 
 	const getAllClass = async () => {
@@ -94,7 +94,7 @@ const ListClass = () => {
 		try {
 			const res = await classApi.getAll(todoApi)
 			if (res.status === 200) {
-				if (userInformation.RoleId === '8') {
+				if (userInformation?.RoleId === '8') {
 					if (todoApi.studentId && todoApi.studentId !== '') {
 						setListClass(res.data.data)
 						setTotalRow(res.data.totalRow)
@@ -154,7 +154,7 @@ const ListClass = () => {
 		PageSize: 9999,
 		PageIndex: 1,
 		RoleIds: '3',
-		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+		parentIds: userInformation?.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
 	})
 	const [students, setStudents] = useState<{ label: string; value: string }[]>([])
 
@@ -192,7 +192,7 @@ const ListClass = () => {
 		if (state.branch.Branch.length === 0) {
 			getAllBranch()
 		}
-		if (userInformation.RoleId === '8') {
+		if (userInformation?.RoleId === '8') {
 			getUsers(apiParametersStudent)
 		}
 	}, [])
@@ -227,7 +227,7 @@ const ListClass = () => {
 								</div>
 							}
 							extra={
-								userInformation.RoleId === '8' ? (
+								userInformation?.RoleId === '8' ? (
 									<Form form={form}>
 										<Form.Item name="student">
 											<Select

@@ -268,7 +268,7 @@ const TeacherOff = () => {
 			dataSource={teacherOff}
 			getPagination={(pageNumber: number) => getPagination(pageNumber)}
 			totalPage={totalRow}
-			columns={userInformation.RoleId == 2 ? columnsTeacher : columnsAdmin}
+			columns={userInformation?.RoleId == 2 ? columnsTeacher : columnsAdmin}
 			expandable={expandedRowRender}
 			Extra={isTeacher() && <TeacherOffForm setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
 			TitleCard="Danh sách lịch nghỉ"

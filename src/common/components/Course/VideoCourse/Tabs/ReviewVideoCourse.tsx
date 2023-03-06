@@ -93,7 +93,7 @@ export default function ReviewVideoCourse(props: IReviewVideoCourseProps) {
 							</div>
 							<p>{item.RateComment}</p>
 						</div>
-						{user.RoleId === '3' && user.UserInformationId == item.UserId && (
+						{user?.RoleId === '3' && user.UserInformationId == item.UserId && (
 							<div className="absolute right-0">
 								<IconButton onClick={() => showModal()} type="button" color="red" icon="remove" tooltip="Xóa đánh giá" />
 

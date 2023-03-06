@@ -140,7 +140,7 @@ export default function ServiceAppointmentTest(props) {
 		PageSize: PAGE_SIZE,
 		PageIndex: 1,
 		RoleIds: '3',
-		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+		parentIds: userInformation?.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
 	})
 
 	// LIST FILTER
@@ -216,7 +216,7 @@ export default function ServiceAppointmentTest(props) {
 		if (state.branch.Branch.length === 0) {
 			getAllBranch()
 		}
-		if (userInformation.RoleId === '8') {
+		if (userInformation?.RoleId === '8') {
 			getUsers(apiParametersStudent)
 		}
 	}, [])
@@ -227,7 +227,7 @@ export default function ServiceAppointmentTest(props) {
 		try {
 			let res = await testAppointmentApi.getAll(todoApi)
 			if (res.status === 200) {
-				if (userInformation.RoleId === '8') {
+				if (userInformation?.RoleId === '8') {
 					if (todoApi.studentId) {
 						setDataSource(res.data.data)
 						setTotalPage(res.data.totalRow)
@@ -536,7 +536,7 @@ export default function ServiceAppointmentTest(props) {
 									listTodoApi={listTodoApi}
 								/>
 							)}
-							{userInformation.RoleId === '8' ? (
+							{userInformation?.RoleId === '8' ? (
 								<>
 									<Form form={form}>
 										<Form.Item name="student">

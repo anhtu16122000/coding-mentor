@@ -26,15 +26,15 @@ const ZoomManager: FC<TZoomManager> = (props) => {
 	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	function isAdmin() {
-		return userInformation.RoleId == 1
+		return userInformation?.RoleId == 1
 	}
 
 	function isTeacher() {
-		return userInformation.RoleId == 2
+		return userInformation?.RoleId == 2
 	}
 
 	function isStdent() {
-		return userInformation.RoleId == 3
+		return userInformation?.RoleId == 3
 	}
 
 	function _refresh() {

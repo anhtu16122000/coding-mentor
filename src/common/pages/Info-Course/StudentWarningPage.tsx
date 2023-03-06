@@ -24,7 +24,7 @@ export const StudentWarningPage = () => {
 		pageIndex: 1,
 		pageSize: PAGE_SIZE,
 		studentIds: '',
-		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+		parentIds: userInformation?.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
 	}
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [totalRow, setTotalRow] = useState(1)
@@ -35,7 +35,7 @@ export const StudentWarningPage = () => {
 		PageSize: PAGE_SIZE,
 		PageIndex: 1,
 		RoleIds: '3',
-		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+		parentIds: userInformation?.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
 	})
 
 	const getStudentInClass = async (params) => {
@@ -84,7 +84,7 @@ export const StudentWarningPage = () => {
 	}
 
 	useEffect(() => {
-		if (userInformation.RoleId === '8') {
+		if (userInformation?.RoleId === '8') {
 			if (apiParameters.studentIds) {
 				getStudentInClass(apiParameters)
 			}
@@ -96,7 +96,7 @@ export const StudentWarningPage = () => {
 	}, [apiParameters])
 
 	useEffect(() => {
-		if (userInformation.RoleId === '8') {
+		if (userInformation?.RoleId === '8') {
 			getUsers(apiParametersStudent)
 		}
 	}, [])
@@ -168,7 +168,7 @@ export const StudentWarningPage = () => {
 					</div>
 				}
 				Extra={
-					userInformation.RoleId === '8' ? (
+					userInformation?.RoleId === '8' ? (
 						<>
 							<Form form={form}>
 								<Form.Item name={'student'}>

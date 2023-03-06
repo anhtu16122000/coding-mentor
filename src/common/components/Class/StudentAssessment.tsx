@@ -128,7 +128,7 @@ export const StudentAssessment = () => {
 				<div className="antd-custom-wrap">
 					<Input
 						disabled={
-							moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
+							moment() >= moment(item?.StartTime) && (user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
 								? false
 								: true
 						}
@@ -148,7 +148,7 @@ export const StudentAssessment = () => {
 					<div className="antd-custom-wrap">
 						<Input
 							disabled={
-								moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
+								moment() >= moment(item?.StartTime) && (user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
 									? false
 									: true
 							}
@@ -169,7 +169,7 @@ export const StudentAssessment = () => {
 					<div className="antd-custom-wrap">
 						<Input
 							disabled={
-								moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
+								moment() >= moment(item?.StartTime) && (user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
 									? false
 									: true
 							}
@@ -190,7 +190,7 @@ export const StudentAssessment = () => {
 					<div className="antd-custom-wrap">
 						<Input
 							disabled={
-								moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
+								moment() >= moment(item?.StartTime) && (user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
 									? false
 									: true
 							}
@@ -210,7 +210,7 @@ export const StudentAssessment = () => {
 				<>
 					<InputTextField
 						disabled={
-							moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
+							moment() >= moment(item?.StartTime) && (user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7)
 								? false
 								: true
 						}
@@ -229,7 +229,7 @@ export const StudentAssessment = () => {
 			dataIndex: 'Action',
 			render: (text, item, index) => (
 				<>
-					{moment() >= moment(item?.StartTime) && (user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) ? (
+					{moment() >= moment(item?.StartTime) && (user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) ? (
 						<IconButton
 							tooltip="Cập nhật"
 							color={`green`}

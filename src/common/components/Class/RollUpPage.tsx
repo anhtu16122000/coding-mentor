@@ -28,7 +28,7 @@ const InputNote = ({ value, onChange, index }) => {
 
 	return (
 		<Input
-			disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+			disabled={user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
 			onChange={(val) => onChangeNote(val, index)}
 			value={note}
 			className="rounded-lg mb-0"
@@ -170,7 +170,7 @@ export const RollUpPage = () => {
 							{ value: 5, label: 'Về sớm' },
 							{ value: 6, label: 'Nghĩ lễ' }
 						]}
-						disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+						disabled={user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
 						value={item?.Status}
 					/>
 				</div>
@@ -195,7 +195,7 @@ export const RollUpPage = () => {
 							{ value: 7, label: 'Không cố gắng' },
 							{ value: 8, label: 'Không nhận xét' }
 						]}
-						disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+						disabled={user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
 						value={item?.LearningStatus}
 					/>
 				</div>
@@ -217,7 +217,7 @@ export const RollUpPage = () => {
 			dataIndex: 'Action',
 			render: (text, item, index) => (
 				<>
-					{user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+					{user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
 						<IconButton tooltip="Cập nhật" color="green" icon="save" type="button" onClick={() => handleChangeRollUp(item)} size={22} />
 					) : (
 						''

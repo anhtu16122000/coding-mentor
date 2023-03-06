@@ -224,7 +224,7 @@ const MenuClassTutoring = () => {
 	}
 	return (
 		<>
-			{user.RoleId == 1 || user.RoleId == 4 || user.RoleId == 5 || user.RoleId == 6 || user.RoleId == 7 || user.RoleId == 8 ? (
+			{user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 5 || user?.RoleId == 6 || user?.RoleId == 7 || user?.RoleId == 8 ? (
 				<Tabs
 					defaultActiveKey="0"
 					tabPosition="left"
@@ -238,7 +238,7 @@ const MenuClassTutoring = () => {
 				/>
 			) : null}
 
-			{user.RoleId == 2 ? (
+			{user?.RoleId == 2 ? (
 				<Tabs
 					defaultActiveKey="0"
 					tabPosition="left"
@@ -252,7 +252,7 @@ const MenuClassTutoring = () => {
 				/>
 			) : null}
 
-			{user.RoleId == 3 ? (
+			{user?.RoleId == 3 ? (
 				<Tabs
 					defaultActiveKey="0"
 					tabPosition="left"

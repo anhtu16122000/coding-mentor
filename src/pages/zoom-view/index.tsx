@@ -59,7 +59,7 @@ export default function ZoomView(props: IZoomViewProps) {
 			let temp = dataSeminar.filter((item) => item.Id === Number(router.query.SeminarID))
 			setDataZoom({
 				apiKey: temp[0]?.APIKey,
-				signature: user && (user.RoleId == '1' || user.RoleId == '2') ? temp[0].SignatureTeacher : temp[0].SignatureStudent,
+				signature: user && (user?.RoleId == '1' || user?.RoleId == '2') ? temp[0].SignatureTeacher : temp[0].SignatureStudent,
 				meetingNumber: temp[0].RoomId,
 				userName: user.FullName,
 				passWord: temp[0].RoomPass

@@ -92,7 +92,7 @@ export const TabStudyRoute: React.FC<ITabStudyRoute> = ({ StudentDetail }) => {
 				title=""
 				extra={
 					<>
-						{user.RoleId == 3 || user.RoleId == 8 ? (
+						{user?.RoleId == 3 || user?.RoleId == 8 ? (
 							''
 						) : (
 							<ModalStudyRoute mode="add" onRefresh={() => getStudentStudyRoute(apiParameters)} />
@@ -101,7 +101,7 @@ export const TabStudyRoute: React.FC<ITabStudyRoute> = ({ StudentDetail }) => {
 				}
 			>
 				{!loading && dataTable?.length == 0 && <Empty />}
-				
+
 				<Spin spinning={loading}>
 					<Timeline mode="left">
 						{dataTable &&
@@ -115,7 +115,7 @@ export const TabStudyRoute: React.FC<ITabStudyRoute> = ({ StudentDetail }) => {
 											<p>Ngày tạo: {moment(item?.CreatedOn).format('DD-MM-YYYY HH:mm A')}</p>
 											<p>Ghi chú: {item?.Note}</p>
 										</div>
-										{user.RoleId == 3 || user.RoleId == 8 ? (
+										{user?.RoleId == 3 || user?.RoleId == 8 ? (
 											''
 										) : (
 											<div className="flex items-center">

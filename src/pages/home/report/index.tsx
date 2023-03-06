@@ -7,7 +7,7 @@ import { RootState } from '~/store'
 const ReportPage = () => {
 	const user = useSelector((state: RootState) => state.user.information)
 
-	return <>{user.RoleId == 1 && <Report />}</>
+	return <>{user?.RoleId == 1 && <Report />}</>
 }
 
 ReportPage.Layout = MainLayout

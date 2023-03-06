@@ -25,7 +25,7 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 	const initialParams = {
 		pageIndex: 1,
 		pageSize: PAGE_SIZE,
-		userIds: userInformation.RoleId === '3' ? userInformation.UserInformationId.toString() : ''
+		userIds: userInformation?.RoleId === '3' ? userInformation.UserInformationId.toString() : ''
 	}
 	const [dataSource, setDataSource] = useState<IFeedbackStudent[]>([])
 	const [totalRow, setTotalRow] = useState(0)
@@ -36,7 +36,7 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 		PageSize: 9999,
 		PageIndex: 1,
 		RoleIds: '3',
-		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+		parentIds: userInformation?.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
 	})
 	const [students, setStudents] = useState<{ label: string; value: string }[]>([])
 
@@ -63,7 +63,7 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 		try {
 			let res = await feedbackStudentApi.getAll(todoApi)
 			if (res.status == 200) {
-				if (userInformation.RoleId === '8') {
+				if (userInformation?.RoleId === '8') {
 					if (todoApi.userIds && todoApi.userIds !== '') {
 						setDataSource(res.data.data)
 						setTotalRow(res.data.totalRow)
@@ -91,7 +91,7 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 		getFeedbacks()
 	}, [todoApi])
 	useEffect(() => {
-		if (userInformation.RoleId === '8') {
+		if (userInformation?.RoleId === '8') {
 			getUsers(apiParametersStudent)
 		}
 	}, [])
@@ -257,7 +257,7 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 				columns={columns}
 				data={dataSource}
 				Extra={
-					userInformation.RoleId === '8' ? (
+					userInformation?.RoleId === '8' ? (
 						<>
 							<Form form={form}>
 								<Form.Item name="student">
@@ -265,7 +265,7 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 								</Form.Item>
 							</Form>
 						</>
-					) : userInformation.RoleId === '3' ? (
+					) : userInformation?.RoleId === '3' ? (
 						<ModalFeedback mode="add" onRefresh={() => getFeedbacks()} />
 					) : (
 						''

@@ -77,7 +77,7 @@ export const NotificationInClassPage = () => {
 				data={dataTable}
 				columns={columns}
 				Extra={
-					user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+					user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
 						<>
 							<ModalNotificationInClassCRUD onRefresh={() => getNotificationInClass(apiParameters)} mode="add" />
 						</>

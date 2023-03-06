@@ -216,7 +216,7 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 					)}
 				</div>
 
-				{user.RoleId == 1 && (
+				{user?.RoleId == 1 && (
 					<Popover
 						ref={menuRef}
 						placement="rightTop"

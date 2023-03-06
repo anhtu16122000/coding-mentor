@@ -27,7 +27,7 @@ const InputNote = ({ value, onChange, index }) => {
 
 	return (
 		<Input
-			disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+			disabled={user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
 			onChange={(val) => onChangeNote(val, index)}
 			value={note}
 			className="rounded-lg mb-0"
@@ -181,7 +181,7 @@ export const TranscriptPage = () => {
 			render: (text, item, index) => (
 				<div className="antd-custom-wrap">
 					<Input
-						disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+						disabled={user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
 						onChange={(val) => handleChangeListening(val, index)}
 						value={item?.Listening}
 						className="rounded-lg h-[36px]"
@@ -197,7 +197,7 @@ export const TranscriptPage = () => {
 				<>
 					<div className="antd-custom-wrap">
 						<Input
-							disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+							disabled={user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
 							onChange={(val) => handleChangeSpeaking(val, index)}
 							value={item?.Speaking}
 							className="rounded-lg h-[36px]"
@@ -214,7 +214,7 @@ export const TranscriptPage = () => {
 				<>
 					<div className="antd-custom-wrap">
 						<Input
-							disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+							disabled={user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
 							onChange={(val) => handleChangeReading(val, index)}
 							value={item?.Reading}
 							className="rounded-lg h-[36px]"
@@ -231,7 +231,7 @@ export const TranscriptPage = () => {
 				<>
 					<div className="antd-custom-wrap">
 						<Input
-							disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+							disabled={user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
 							onChange={(val) => handleChangeWriting(val, index)}
 							value={item?.Writing}
 							className="rounded-lg h-[36px]"
@@ -248,7 +248,7 @@ export const TranscriptPage = () => {
 				<>
 					<div className="antd-custom-wrap">
 						<Input
-							disabled={user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
+							disabled={user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? false : true}
 							onChange={(val) => handleChangeMedium(val, index)}
 							value={item?.Medium}
 							className="rounded-lg h-[36px]"
@@ -275,7 +275,7 @@ export const TranscriptPage = () => {
 				TitleCard={
 					<div className="flex w-full items-center">
 						<div className="flex-1">
-							{(user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+							{(user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
 								<div className="extra-table">
 									<ModalTranscript
 										mode="add"
@@ -304,7 +304,7 @@ export const TranscriptPage = () => {
 								</Select>
 							</div>
 
-							{(user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+							{(user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
 								<div className="mr-tw-4 ml-[8px]">
 									<ModalTranscript
 										mode="delete"
@@ -315,7 +315,7 @@ export const TranscriptPage = () => {
 								</div>
 							)}
 
-							{(user.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+							{(user?.RoleId == 2 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
 								<PrimaryButton background="green" type="button" icon="save" disable={disabled} onClick={handleSave} loading={isLoading}>
 									Cập nhật
 								</PrimaryButton>

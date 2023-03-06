@@ -114,7 +114,7 @@ const SectionVideo = (props) => {
 			{!!section ? (
 				<div className="video-course-section scrollbar antd-custom-wrap">
 					<Collapse
-						className={`${user.RoleId === '1' ? 'collapse-wrap-admin' : 'collapse-wrap'}`}
+						className={`${user?.RoleId === '1' ? 'collapse-wrap-admin' : 'collapse-wrap'}`}
 						defaultActiveKey={['0']}
 						collapsible="header"
 						expandIconPosition={'end'}
@@ -125,7 +125,7 @@ const SectionVideo = (props) => {
 								<Collapse.Panel
 									header={
 										<div className="flex mt-2">
-											{user.RoleId == '3' && <Checkbox disabled={true} onChange={(data) => {}} checked={item.isCompleted}></Checkbox>}
+											{user?.RoleId == '3' && <Checkbox disabled={true} onChange={(data) => {}} checked={item.isCompleted}></Checkbox>}
 											<div className="flex flex-col">
 												<span className="ml-2 font-bold text-tw-primary in-1-line">{item.Name}</span>
 												<span className="ml-2 text-[12px] text-[#838383] in-1-line">{item.Minute} phút</span>
@@ -134,7 +134,7 @@ const SectionVideo = (props) => {
 									}
 									key={index}
 									extra={
-										user.RoleId === '1' && (
+										user?.RoleId === '1' && (
 											<>
 												{isChangePositionSection ? (
 													<div className="flex justify-center items-center">

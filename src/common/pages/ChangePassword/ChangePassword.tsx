@@ -50,13 +50,13 @@ const ChangePassword = () => {
 	}
 
 	const getRoleName = () => {
-		if (userInformation.RoleId == 1) {
+		if (userInformation?.RoleId == 1) {
 			return 'Admin'
 		}
-		if (userInformation.RoleId == 2) {
+		if (userInformation?.RoleId == 2) {
 			return 'Giáo viên'
 		}
-		if (userInformation.RoleId == 3) {
+		if (userInformation?.RoleId == 3) {
 			return 'Học viên'
 		}
 		return ''

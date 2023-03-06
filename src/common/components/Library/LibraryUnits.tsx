@@ -19,19 +19,19 @@ const LibraryUnits = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	function isAdmin() {
-		return userInformation.RoleId == 1
+		return userInformation?.RoleId == 1
 	}
 
 	function isTeacher() {
-		return userInformation.RoleId == 2
+		return userInformation?.RoleId == 2
 	}
 
 	function isManager() {
-		return userInformation.RoleId == 4
+		return userInformation?.RoleId == 4
 	}
 
 	function isStdent() {
-		return userInformation.RoleId == 3
+		return userInformation?.RoleId == 3
 	}
 
 	async function _delete(id) {

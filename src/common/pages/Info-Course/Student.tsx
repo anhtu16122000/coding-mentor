@@ -47,7 +47,7 @@ const Student: FC<IPersonnel> = (props) => {
 		PageIndex: 1,
 		RoleIds: role,
 		Search: null,
-		parentIds: userInformation.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+		parentIds: userInformation?.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
 	}
 
 	const [apiParameters, setApiParameters] = useState(initParamters)
@@ -458,15 +458,15 @@ const Student: FC<IPersonnel> = (props) => {
 	}
 
 	function isAdmin() {
-		return userInformation.RoleId == 1
+		return userInformation?.RoleId == 1
 	}
 
 	function isTeacher() {
-		return userInformation.RoleId == 2
+		return userInformation?.RoleId == 2
 	}
 
 	function isStdent() {
-		return userInformation.RoleId == 3
+		return userInformation?.RoleId == 3
 	}
 
 	function isAccountant() {

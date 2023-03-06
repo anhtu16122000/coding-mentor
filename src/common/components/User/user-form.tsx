@@ -443,7 +443,7 @@ const CreateUser: FC<ICreateNew> = (props) => {
 						<InputTextField className="col-span-2" label="Số điện thoại" name="Mobile" isRequired rules={[yupSync]} />
 						<DatePickerField className="col-span-2" label="Ngày sinh" name="DOB" mode="single" format="DD/MM/YYYY" />
 
-						{!isChangeInfo && isEdit && user.RoleId == 1 && (
+						{!isChangeInfo && isEdit && user?.RoleId == 1 && (
 							<SelectField
 								className="col-span-2"
 								label="Trạng thái"
@@ -455,7 +455,7 @@ const CreateUser: FC<ICreateNew> = (props) => {
 							/>
 						)}
 
-						{user.RoleId == 1 && isEdit ? (
+						{user?.RoleId == 1 && isEdit ? (
 							<InputPassField className="col-span-2" label="Mật khẩu" name="Password" />
 						) : (
 							<InputTextField className="col-span-2" label="Mật khẩu" name="Password" />

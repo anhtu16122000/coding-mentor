@@ -277,10 +277,10 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 						key={`CurriculumDetail${item.Id}`}
 						extra={
 							userInformation &&
-							(userInformation.RoleId == '1' ||
-								userInformation.RoleId == '2' ||
-								userInformation.RoleId == '4' ||
-								userInformation.RoleId == '7') &&
+							(userInformation?.RoleId == '1' ||
+								userInformation?.RoleId == '2' ||
+								userInformation?.RoleId == '4' ||
+								userInformation?.RoleId == '7') &&
 							genExtra(item)
 						}
 					>
@@ -309,10 +309,10 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 																<div className="right">
 																	<p className="time">{moment(item.CreatedOn).format('DD/MM/YYYY HH:mm')}</p>
 																	<div className="buttons flex items-center">
-																		{userInformation.RoleId == '1' ||
-																		userInformation.RoleId == '2' ||
-																		userInformation.RoleId == '4' ||
-																		userInformation.RoleId == '7' ? (
+																		{userInformation?.RoleId == '1' ||
+																		userInformation?.RoleId == '2' ||
+																		userInformation?.RoleId == '4' ||
+																		userInformation?.RoleId == '7' ? (
 																			<div className="antd-custom-wrap ml-2">
 																				<IconButton
 																					type="button"
@@ -339,10 +339,10 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 																			tooltip="Tải tài liệu này"
 																		/>
 																		{userInformation &&
-																			(userInformation.RoleId == '1' ||
-																				userInformation.RoleId == '2' ||
-																				userInformation.RoleId == '4' ||
-																				userInformation.RoleId == '7') && (
+																			(userInformation?.RoleId == '1' ||
+																				userInformation?.RoleId == '2' ||
+																				userInformation?.RoleId == '4' ||
+																				userInformation?.RoleId == '7') && (
 																				<>
 																					<Popconfirm
 																						title="Bạn có chắc muốn xóa tài liệu này?"
@@ -402,10 +402,10 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 								<div className="w-[calc(100%-80px)]">{item.Name}</div>
 
 								{userInformation &&
-									(userInformation.RoleId == '1' ||
-										userInformation.RoleId == '2' ||
-										userInformation.RoleId == '4' ||
-										userInformation.RoleId == '7') &&
+									(userInformation?.RoleId == '1' ||
+										userInformation?.RoleId == '2' ||
+										userInformation?.RoleId == '4' ||
+										userInformation?.RoleId == '7') &&
 									genExtra(item)}
 							</div>
 						}
@@ -456,10 +456,10 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 													</>
 												) : (
 													<>
-														{userInformation.RoleId == '1' ||
-														userInformation.RoleId == '2' ||
-														userInformation.RoleId == '4' ||
-														userInformation.RoleId == '7' ? (
+														{userInformation?.RoleId == '1' ||
+														userInformation?.RoleId == '2' ||
+														userInformation?.RoleId == '4' ||
+														userInformation?.RoleId == '7' ? (
 															<div className="antd-custom-wrap ml-2">
 																<IconButton
 																	type="button"
@@ -485,10 +485,10 @@ export default function CurriculumDetailListInClass(props: ICurriculumDetailList
 															tooltip="Tải tài liệu này"
 														/>
 														{userInformation &&
-															(userInformation.RoleId == '1' ||
-																userInformation.RoleId == '2' ||
-																userInformation.RoleId == '4' ||
-																userInformation.RoleId == '7') && (
+															(userInformation?.RoleId == '1' ||
+																userInformation?.RoleId == '2' ||
+																userInformation?.RoleId == '4' ||
+																userInformation?.RoleId == '7') && (
 																<>
 																	<Popconfirm
 																		title="Bạn có chắc muốn xóa file này?"

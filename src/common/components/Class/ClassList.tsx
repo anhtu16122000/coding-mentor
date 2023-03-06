@@ -125,7 +125,7 @@ const ClassList = (props) => {
 		}
 	}
 	useEffect(() => {
-		if (userInformation.RoleId == 1) {
+		if (userInformation?.RoleId == 1) {
 			getAllAcademic()
 		}
 	}, [])
@@ -146,7 +146,7 @@ const ClassList = (props) => {
 					<List.Item
 						extra={
 							<>
-								{userInformation.RoleId == 1 ? (
+								{userInformation?.RoleId == 1 ? (
 									<>
 										<div className="wrapper-btn-class">
 											<UpdateClassForm dataRow={item} setTodoApi={setTodoApi} listTodoApi={listTodoApi} academic={academic} />
@@ -215,7 +215,7 @@ const ClassList = (props) => {
 										<li>
 											<span>Hình thức: </span> <span>{item.TypeName || 'Trống'}</span>
 										</li>
-										{userInformation && userInformation.RoleId == 1 && (
+										{userInformation && userInformation?.RoleId == 1 && (
 											<li>
 												<span>Học phí: </span> <span>{parseToMoney(item.Price)} VNĐ</span>
 											</li>

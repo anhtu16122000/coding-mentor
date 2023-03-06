@@ -692,7 +692,7 @@ const StudentFormModal = (props) => {
 							</div>
 							<div className="col-md-6 col-12">
 								<SelectField
-									disabled={userInformation && userInformation.RoleId === 6}
+									disabled={userInformation && userInformation?.RoleId === 6}
 									name="CounselorsID"
 									label="Tư vấn viên"
 									// optionList={listData.Counselors}

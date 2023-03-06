@@ -147,7 +147,7 @@ const Dashboard = () => {
 	}
 
 	useEffect(() => {
-		if (user.RoleId === '1') {
+		if (user?.RoleId === '1') {
 			getOverview()
 			getStatisticGetInMonth()
 			getStatisticAgeStudent()
@@ -155,14 +155,14 @@ const Dashboard = () => {
 			getNotification()
 			getSeminar()
 		}
-		if (user.RoleId === '2') {
+		if (user?.RoleId === '2') {
 			getOverviewTeacher()
 			getNotification()
 			getStatisticAgeStudent()
 			getStatisticTopCourse()
 			getSeminar()
 		}
-		if (user.RoleId === '3') {
+		if (user?.RoleId === '3') {
 			getOverviewStudent()
 			getSeminar()
 		}
@@ -240,7 +240,7 @@ const Dashboard = () => {
 
 	return (
 		<div className="w-[95%] desktop:w-[85%] mx-auto">
-			{user.RoleId === '1' && (
+			{user?.RoleId === '1' && (
 				<>
 					<Card title={<h1 className="text-2xl font-medium">Thống kê</h1>}>
 						<StatisticOverviewAdmin statisticAll={statisticAll} />
@@ -264,7 +264,7 @@ const Dashboard = () => {
 				</>
 			)}
 
-			{user.RoleId === '2' && (
+			{user?.RoleId === '2' && (
 				<>
 					<Card title={<h1 className="text-2xl font-medium">Thống kê</h1>}>
 						<StatisticOverviewTeacher overviewTeacher={overviewTeacher} />
@@ -285,7 +285,7 @@ const Dashboard = () => {
 				</>
 			)}
 
-			{user.RoleId === '3' && (
+			{user?.RoleId === '3' && (
 				<>
 					<LearningProgress />
 					<Row gutter={16}>

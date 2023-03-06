@@ -29,7 +29,7 @@ const FileExtension = (props) => {
 
 	return (
 		<div className="card-file-box">
-			{!!userInformation && userInformation.RoleId == 1 && (
+			{!!userInformation && userInformation?.RoleId == 1 && (
 				<div className="col-12 d-flex justify-content-end align-items-center">
 					<div className="d-flex">
 						<DocumentListModal
