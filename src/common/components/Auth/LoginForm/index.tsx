@@ -124,7 +124,7 @@ function LoginForm(props: ILoginForm) {
 							<div
 								onClick={() => {
 									setLoadingTrial(true)
-									_submit({ username: user.UserName, password: 'lmsteam' })
+									_submit({ username: user.UserName, password: 'mon4medi4' })
 								}}
 								className="bg-[#0d6efd] shadow-sm none-selection cursor-pointer hover:bg-[#0d60dd] active:bg-[#0d6efd] rounded-[6px] h-[36px] flex items-center justify-center col-span-1"
 							>
