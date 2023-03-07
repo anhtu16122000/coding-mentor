@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Input, Spin, Form, Modal, Divider } from 'antd'
-import { ListAccountPage } from './ListAccountPage'
 import { ImEnter } from 'react-icons/im'
 import { userApi } from '~/services/auth'
 import Lottie from 'react-lottie-player'
@@ -18,15 +17,11 @@ type ILoginForm = {
 
 function LoginForm(props: ILoginForm) {
 	const [form] = Form.useForm()
-	const [username, setUsername] = useState(null)
-	const [password, setPassword] = useState(null)
 
 	const [visible, setVisible] = useState(false)
 
 	const [loadingTrial, setLoadingTrial] = useState(false)
 	const [trialUsers, setTrialUsers] = useState([])
-
-	console.log('-- trialUsers: ', trialUsers)
 
 	function removeFullNameContainingChau(arr) {
 		return arr.filter((person) => !person.FullName.includes('Châu') && !person.FullName.includes('Chau'))
@@ -54,11 +49,9 @@ function LoginForm(props: ILoginForm) {
 	}
 
 	useEffect(() => {
-		if (username && password) {
-			form.setFieldValue('username', username)
-			form.setFieldValue('password', password)
-		}
-	}, [username, password])
+		form.setFieldValue('username', null)
+		form.setFieldValue('password', null)
+	}, [])
 
 	return (
 		<Form autoComplete="on" initialValues={{ remember: true }} form={form} onFinish={_submit} className="w-100 login-forms ">
