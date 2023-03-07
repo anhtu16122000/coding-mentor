@@ -26,6 +26,7 @@ import 'react-tooltip/dist/react-tooltip.css'
 import appConfigs from '~/appConfig'
 import ToastifyContainer from '~/common/providers/Toastify'
 import { checkInternet } from '~/common/utils/main-function'
+import MainHeader from '~/common/libs/SEO/main-header'
 
 function App({ Component, pageProps }: AppProps & IViewProps) {
 	const Layout = Component.Layout || ((props) => <>{props.children}</>)
@@ -37,11 +38,7 @@ function App({ Component, pageProps }: AppProps & IViewProps) {
 
 	return (
 		<>
-			<Head>
-				<link rel="icon" href="/white-logo.png" />
-				<title>{appConfigs.appName}</title>
-				<script src="https://cdn.tiny.cloud/1/lmr9ug3bh4iwjsrap9hgwgxqcngllssiraqluwto4slerrwg/tinymce/6/tinymce.min.js" />
-			</Head>
+			<MainHeader />
 
 			<StoreProvider store={store}>
 				<AuthProvider>
