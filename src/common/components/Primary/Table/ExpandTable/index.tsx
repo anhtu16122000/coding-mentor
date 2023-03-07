@@ -1,8 +1,8 @@
 import { Card, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { GiPayMoney, GiReceiveMoney, GiTakeMyMoney } from 'react-icons/gi';
+import { GiPayMoney, GiReceiveMoney, GiTakeMyMoney } from 'react-icons/gi'
 import EmptyData from '~/common/components/EmptyData'
-import { _format } from '~/common/utils';
+import { _format } from '~/common/utils'
 
 const ExpandTable = (props) => {
 	const [state, setState] = useState({ selectedRowKeys: [] })
@@ -46,28 +46,6 @@ const ExpandTable = (props) => {
 		}
 	}
 
-	const onChangeExpand = (expandedRows) => {
-		setActiveIndex(parseInt(expandedRows[expandedRows.length - 1]))
-		if (rowKeys.some((object) => object['currentPage'] == currentPage)) {
-			let index = rowKeys.findIndex((item) => item.currentPage == currentPage)
-			rowKeys[index].listKeys = expandedRows
-		}
-		setRowKeys([...rowKeys])
-	}
-
-	const returnRowKeys = () => {
-		let rowK = null
-		if (rowKeys.some((object) => object['currentPage'] == currentPage)) {
-			rowK = rowKeys.find((item) => item.currentPage === currentPage).listKeys
-		} else {
-			rowK = []
-		}
-		if (rowK.length > 1) {
-			rowK.splice(rowK.length - 2, 1)
-		}
-		return rowK
-	}
-
 	const onExpand = (expand, record) => {
 		if (typeof props.handleExpand != 'undefined') {
 			props.handleExpand(record)
@@ -85,10 +63,6 @@ const ExpandTable = (props) => {
 	}
 
 	useEffect(() => {
-		// if (props.TitlePage) {
-		// 	getTitlePage(props.TitlePage)
-		// }
-
 		if (props.dataSource) {
 			let dataClone = JSON.parse(JSON.stringify(props.dataSource))
 			dataClone.forEach((item, index) => {
@@ -110,8 +84,7 @@ const ExpandTable = (props) => {
 		}
 	}, [props.isResetKey])
 
-
-	console.log(props.sumPrice);
+	console.log(props.sumPrice)
 
 	const renderStatistical = () => {
 		return (
@@ -149,7 +122,6 @@ const ExpandTable = (props) => {
 		)
 	}
 
-
 	return (
 		<>
 			<div className="wrap-table table-expand">
@@ -169,7 +141,7 @@ const ExpandTable = (props) => {
 						<Table
 							loading={props.loading?.type == 'GET_ALL' && props.loading?.status}
 							bordered={props.haveBorder ? props.haveBorder : false}
-							scroll={{ x: 'max-content', y: window.innerHeight / 1.8 }}
+							scroll={{ x: 'max-content', y: window.innerHeight - 300 }}
 							columns={props.columns}
 							dataSource={dataSource}
 							size="middle"

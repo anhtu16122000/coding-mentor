@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { tokenApi } from '~/api/token-api'
 import { logOut, playWithToken } from '~/common/utils/token-handle'
+import { userApi } from '~/services/auth'
 import { RootState } from '~/store'
 import { setAuthLoading, setRefreshToken } from '~/store/authReducer'
 
@@ -45,7 +46,7 @@ function AuthProvider({ children }: IAuthLayout) {
 	const _refreshToken = async (param) => {
 		console.time('Gọi api RefreshToken hết')
 		try {
-			const response = await tokenApi.refreshToken(param)
+			const response = await userApi.refreshToken(param)
 			if (response.status == 200) {
 				playWithToken(response?.data, dispatch)
 			}

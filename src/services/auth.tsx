@@ -19,5 +19,8 @@ export const userApi = {
 	},
 	getListAccount() {
 		return instance.get('/api/GetAccountTemplate')
+	},
+	refreshToken(params: { RefreshToken: string }) {
+		return instance.post('/api/RefreshToken', { RefreshToken: params?.RefreshToken })
 	}
 }
