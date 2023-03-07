@@ -86,14 +86,13 @@ const PrimaryTable: FC<IPrimaryTable> = (props) => {
 						<Table
 							loading={loading}
 							bordered={bordered}
-							scroll={{ x: 'max-content', y: getHeight() }}
+							scroll={{ x: 'max-content', y: window.innerHeight - 295 }}
 							columns={columns}
 							dataSource={dataSource}
 							size="middle"
 							pagination={{
 								pageSize: pageSize || 30,
 								pageSizeOptions: ['30'],
-								// onShowSizeChange: onShowSizeChange,
 								total: total && total,
 								current: current && current,
 								showTotal: () => total && <div className="font-weight-black">Tổng cộng: {total}</div>,

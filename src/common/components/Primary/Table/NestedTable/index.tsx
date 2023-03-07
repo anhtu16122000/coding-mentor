@@ -39,9 +39,7 @@ const NestedTable = React.memo((props: any) => {
 		<>
 			<div className="nested-table">
 				<Card
-					className={`cardRadius mb-3 ${props.addClass && props.addClass} ${
-						props.Size ? props.Size : '' // table-small || table-medium
-					}`}
+					className={`cardRadius mb-3 ${props.addClass && props.addClass} ${props.Size ? props.Size : ''}`}
 					title={props.Extra}
 					extra={props.TitleCard}
 				>

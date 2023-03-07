@@ -141,7 +141,7 @@ const ExpandTable = (props) => {
 						<Table
 							loading={props.loading?.type == 'GET_ALL' && props.loading?.status}
 							bordered={props.haveBorder ? props.haveBorder : false}
-							scroll={{ x: 'max-content', y: window.innerHeight - 300 }}
+							scroll={{ x: 'max-content', y: window.innerHeight - 295 }}
 							columns={props.columns}
 							dataSource={dataSource}
 							size="middle"

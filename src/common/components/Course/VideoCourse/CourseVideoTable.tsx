@@ -59,18 +59,10 @@ const CourseVideoTable = (props) => {
 	return (
 		<>
 			<div className="wrap-table table-expand">
-				{/* <Card
-					className={`cardRadius ${props.addClass && props.addClass} ${props.Size ? props.Size : ''}`}
-					title={props.Extra}
-					extra={props.TitleCard}
-				>
-					{props.children}
-					{dataSource.length == 0 && <EmptyData loading={props.loading?.status} />}
-					{dataSource.length > 0 && ( */}
 				<Table
 					loading={props.loading?.type == 'GET_ALL' && props.loading?.status}
 					bordered={props.haveBorder ? props.haveBorder : false}
-					scroll={{ x: 'max-content', y: window.innerHeight / 1.8 }}
+					scroll={{ x: 'max-content', y: window.innerHeight - 295 }}
 					columns={props.columns}
 					dataSource={dataSource}
 					size="middle"
@@ -93,8 +85,6 @@ const CourseVideoTable = (props) => {
 						}
 					})}
 				/>
-				{/* )}
-				</Card> */}
 			</div>
 		</>
 	)
