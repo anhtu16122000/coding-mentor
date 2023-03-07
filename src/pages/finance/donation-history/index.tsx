@@ -10,6 +10,8 @@ import moment from 'moment'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
 
+
+
 const DonationHistorytPage = () => {
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
@@ -109,6 +111,7 @@ const DonationHistorytPage = () => {
 					</div>
 				}
 				expandable={expandedRowRender}
+				showdata={''}
 			/>
 		</>
 	)

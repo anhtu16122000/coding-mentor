@@ -16,12 +16,15 @@ import { ButtonRefund } from '~/common/components/TableButton'
 import { ShowNostis, ShowNoti } from '~/common/utils'
 import { _format } from '~/common/utils/format'
 import { RootState } from '~/store'
+import { parseToMoney } from '~/common/utils/common'
+
 const PAGE_SIZE = 10
 
 const PaymentApprovePage = () => {
 	const [dataPaymentApprove, setDataPaymentApprove] = useState<any>()
 	const [isLoading, setIsLoading] = useState(false)
 	const [totalRow, setTotalRow] = useState(1)
+	const [totalMoney, setTotalMoney] = useState()
 	const [todoApi, setTodoApi] = useState({ pageSize: PAGE_SIZE, pageIndex: 1, search: '' })
 
 	const getPaymentApprove = async () => {
@@ -29,8 +32,9 @@ const PaymentApprovePage = () => {
 			setIsLoading(true)
 			const response = await RestApi.get<any>('/PaymentApprove', {})
 			if (response.status == 200) {
-				const { data, totalRow } = response.data
+				const { data, totalRow, totalMoney }: any = response.data
 				setDataPaymentApprove(data)
+				setTotalMoney(totalMoney)
 				setTotalRow(totalRow)
 			} else {
 				setDataPaymentApprove([])
@@ -147,6 +151,7 @@ const PaymentApprovePage = () => {
 		}
 	]
 
+
 	return (
 		<PrimaryTable
 			loading={isLoading}
@@ -166,6 +171,14 @@ const PaymentApprovePage = () => {
 						onSearch={(event) => setTodoApi({ ...todoApi, pageIndex: 1, search: event })}
 						placeholder="Tìm kiếm"
 					/>
+
+					<div
+						className="font-medium none-selection
+					 rounded-lg h-[36px] px-[10px] inline-flex 
+					 items-center justify-center bg-[#4CAF50] 
+					 text-white  undefined">
+						<span>Tổng tiền: {parseToMoney(totalMoney)}đ</span>
+					</div>
 				</div>
 			}
 		/>

@@ -1,6 +1,8 @@
 import { Card, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { GiPayMoney, GiReceiveMoney, GiTakeMyMoney } from 'react-icons/gi';
 import EmptyData from '~/common/components/EmptyData'
+import { _format } from '~/common/utils';
 
 const ExpandTable = (props) => {
 	const [state, setState] = useState({ selectedRowKeys: [] })
@@ -86,6 +88,7 @@ const ExpandTable = (props) => {
 		// if (props.TitlePage) {
 		// 	getTitlePage(props.TitlePage)
 		// }
+
 		if (props.dataSource) {
 			let dataClone = JSON.parse(JSON.stringify(props.dataSource))
 			dataClone.forEach((item, index) => {
@@ -107,6 +110,46 @@ const ExpandTable = (props) => {
 		}
 	}, [props.isResetKey])
 
+
+	console.log(props.sumPrice);
+
+	const renderStatistical = () => {
+		return (
+			<div className="statistical-contain">
+				<div className="item total-income">
+					<div className="text">
+						<p className="name">Tổng nợ</p>
+						<p className="number">{_format.numberToPrice(props.sumPrice.sumDebt)}₫</p>
+					</div>
+					<div className="icon">
+						<GiReceiveMoney />
+					</div>
+				</div>
+
+				<div className="item total-expense">
+					<div className="text">
+						<p className="name">Tổng thanh toán</p>
+						<p className="number">{_format.numberToPrice(props.sumPrice.sumPaid)}₫</p>
+					</div>
+					<div className="icon">
+						<GiPayMoney />
+					</div>
+				</div>
+
+				<div className="item total-revenue">
+					<div className="text">
+						<p className="name">Tổng tiền</p>
+						<p className="number">{_format.numberToPrice(props.sumPrice.sumtotalPrice)}₫</p>
+					</div>
+					<div className="icon">
+						<GiTakeMyMoney />
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+
 	return (
 		<>
 			<div className="wrap-table table-expand">
@@ -117,7 +160,11 @@ const ExpandTable = (props) => {
 					style={props?.cardStyle}
 				>
 					{props.children}
+
+					{props.sumPrice && renderStatistical()}
+
 					{dataSource.length == 0 && <EmptyData loading={props.loading?.status} />}
+
 					{dataSource.length > 0 && (
 						<Table
 							loading={props.loading?.type == 'GET_ALL' && props.loading?.status}

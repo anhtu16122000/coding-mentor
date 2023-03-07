@@ -18,6 +18,7 @@ const PaymentManagementPage = () => {
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
 	const [data, setData] = React.useState([])
+	const [sumPrice, setSumPrice] = React.useState({})
 	const [filters, setFilter] = React.useState({ PageSize: PAGE_SIZE, PageIndex: 1, Search: '' })
 
 	useEffect(() => {
@@ -31,6 +32,7 @@ const PaymentManagementPage = () => {
 			if (res.status == 200) {
 				setData(res.data.data)
 				setTotalPage(res.data.totalRow)
+				setSumPrice(res.data)
 			} else {
 				setData([])
 				setTotalPage(1)
@@ -152,6 +154,7 @@ const PaymentManagementPage = () => {
 				loading={{ type: 'GET_ALL', status: loading }}
 				dataSource={data}
 				columns={columns}
+				sumPrice={sumPrice}
 				TitleCard={
 					<div className="w-full flex items-center justify-between">
 						<Input.Search
