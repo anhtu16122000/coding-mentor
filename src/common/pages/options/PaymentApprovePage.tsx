@@ -17,20 +17,31 @@ import { ShowNostis, ShowNoti } from '~/common/utils'
 import { _format } from '~/common/utils/format'
 import { RootState } from '~/store'
 import { parseToMoney } from '~/common/utils/common'
+import FilterBase from '~/common/components/Elements/FilterBase'
 
 const PAGE_SIZE = 10
 
 const PaymentApprovePage = () => {
+	const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '' }
 	const [dataPaymentApprove, setDataPaymentApprove] = useState<any>()
 	const [isLoading, setIsLoading] = useState(false)
 	const [totalRow, setTotalRow] = useState(1)
 	const [totalMoney, setTotalMoney] = useState()
-	const [todoApi, setTodoApi] = useState({ pageSize: PAGE_SIZE, pageIndex: 1, search: '' })
+	const [todoApi, setTodoApi] = useState(initParamters)
+
+	const [dataFilter, setDataFilter] = useState([
+		{
+			name: 'date-range',
+			title: 'Từ - đến',
+			col: 'grid-cols-1',
+			type: 'date-range'
+		}
+	])
 
 	const getPaymentApprove = async () => {
 		try {
 			setIsLoading(true)
-			const response = await RestApi.get<any>('/PaymentApprove', {})
+			const response = await RestApi.get<any>('/PaymentApprove', todoApi)
 			if (response.status == 200) {
 				const { data, totalRow, totalMoney }: any = response.data
 				setDataPaymentApprove(data)
@@ -151,6 +162,28 @@ const PaymentApprovePage = () => {
 		}
 	]
 
+	const listFieldFilter = {
+		pageIndex: 1,
+		pageSize: PAGE_SIZE,
+		fromDate: null,
+		toDate: null
+	}
+	const handleFilter = (listFilter) => {
+		let newListFilter = { ...listFieldFilter }
+		listFilter.forEach((item, index) => {
+			let key = item.name
+			Object.keys(newListFilter).forEach((keyFilter) => {
+				if (keyFilter == key) {
+					newListFilter[key] = item.value
+				}
+			})
+		})
+		setTodoApi({ ...todoApi, ...newListFilter, pageIndex: 1 })
+	}
+
+	const handleReset = () => {
+		setTodoApi({ ...initParamters })
+	}
 
 	return (
 		<PrimaryTable
@@ -161,22 +194,26 @@ const PaymentApprovePage = () => {
 			columns={columns}
 			TitleCard={
 				<div className="flex items-center justify-between w-full">
-					<Input.Search
-						className="primary-search max-w-[300px]"
-						onChange={(event) => {
-							if (event.target.value == '') {
-								setTodoApi({ ...todoApi, pageIndex: 1, search: '' })
-							}
-						}}
-						onSearch={(event) => setTodoApi({ ...todoApi, pageIndex: 1, search: event })}
-						placeholder="Tìm kiếm"
-					/>
+					<div className="flex items-center">
+						<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />
+						<Input.Search
+							className="primary-search max-w-[300px]"
+							onChange={(event) => {
+								if (event.target.value == '') {
+									setTodoApi({ ...todoApi, pageIndex: 1, search: '' })
+								}
+							}}
+							onSearch={(event) => setTodoApi({ ...todoApi, pageIndex: 1, search: event })}
+							placeholder="Tìm kiếm"
+						/>
+					</div>
 
 					<div
 						className="font-medium none-selection
 					 rounded-lg h-[36px] px-[10px] inline-flex 
 					 items-center justify-center bg-[#4CAF50] 
-					 text-white  undefined">
+					 text-white  undefined"
+					>
 						<span>Tổng tiền: {parseToMoney(totalMoney)}đ</span>
 					</div>
 				</div>

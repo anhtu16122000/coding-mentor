@@ -1,4 +1,4 @@
-import { Input, Skeleton } from 'antd'
+import { Col, Input, Row, Skeleton } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -15,6 +15,7 @@ import { RootState } from '~/store'
 import ModalRefundCRUD from './ModalRefundCRUD'
 import appConfigs from '~/appConfig'
 import Head from 'next/head'
+import { parseToMoney } from '~/common/utils/common'
 
 export interface IRefundPageProps {}
 
@@ -43,11 +44,26 @@ const initialFilter = [
 			{ title: 'Đã duyệt', value: 2 },
 			{ title: 'Hủy', value: 3 }
 		]
+	},
+	{
+		name: 'Dates',
+		title: 'Từ - đến',
+		type: 'date-range',
+		col: 'col-span-2'
 	}
 ]
 
 export default function RefundPage(props: IRefundPageProps) {
-	const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE, search: '' }
+	const initialParams = {
+		pageIndex: 1,
+		pageSize: PAGE_SIZE,
+		search: '',
+		Type: null,
+		BranhIds: '',
+		Status: '',
+		FromDate: null,
+		ToDate: null
+	}
 	const initialParamsStudent = { pageIndex: 1, pageSize: PAGE_SIZE, FullName: '', RoleIds: 3 }
 	const [dataSource, setDataSource] = useState<IRefund[]>()
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
@@ -58,6 +74,7 @@ export default function RefundPage(props: IRefundPageProps) {
 	const [todoStudentOption, setTodoStudentOption] = useState(initialParamsStudent)
 	const [optionStudent, setStudentOption] = useState<{ title: string; value: any }[]>([])
 	const [filterList, setFilterList] = useState([])
+	const [totalMoney, setTotalMoney] = useState()
 
 	const theInformation = useSelector((state: RootState) => state.user.information)
 
@@ -94,7 +111,11 @@ export default function RefundPage(props: IRefundPageProps) {
 		try {
 			let res = await refundApi.getAll(todoApi)
 			if (res.status == 200) {
+				console.log(res.data)
+
+				const { totalPrice }: any = res.data
 				setDataSource(res.data.data)
+				setTotalMoney(totalPrice)
 				setTotalRow(res.data.totalRow)
 			}
 			if (res.status == 204) {
@@ -358,10 +379,11 @@ export default function RefundPage(props: IRefundPageProps) {
 	const handleFilter = (data) => {
 		setTodoApi({
 			...todoApi,
-			...data,
+			Type: data?.Type,
 			BranhIds: data.BranhIds ? data.BranhIds.toString() : '',
-			FromDate: data?.Created?.[0] ? Math.round(new Date(data?.Created?.[0]).setHours(0, 0, 0) / 1000) : null,
-			ToDate: data?.Created?.[1] ? Math.round(new Date(data?.Created?.[1]).setHours(23, 59, 59, 999) / 1000) : null
+			Status: data.Status ? data.Status : '',
+			FromDate: data?.Dates && data?.Dates?.length > 0 ? moment(data?.Dates[0].toDate()).format('YYYY/MM/DD') : null,
+			ToDate: data?.Dates && data?.Dates?.length > 0 ? moment(data?.Dates[1].toDate()).format('YYYY/MM/DD') : null
 		})
 	}
 
@@ -397,6 +419,7 @@ export default function RefundPage(props: IRefundPageProps) {
 				columns={columns}
 				Extra={
 					<>
+						<div className="custom-footer-table">Tổng: {_format.numberToPrice(totalMoney)} VND</div>
 						{(isAdmin() || isManager() || isAccountant() || isSaler() || isTeacher()) && (
 							<ModalRefundCRUD
 								dataOption={optionList}
