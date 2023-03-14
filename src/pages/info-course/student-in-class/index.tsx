@@ -27,6 +27,7 @@ import { userInfoColumn } from '~/common/libs/columns/user-info'
 import Filters from '~/common/components/Student/Filters'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
+import Link from 'next/link'
 
 const initFilters = { PageSize: PAGE_SIZE, PageIndex: 1, Search: '' }
 
@@ -131,12 +132,13 @@ const StudentInClassPage = () => {
 			render: (value, item) => {
 				return (
 					<PrimaryTooltip className="flex items-center" id={`class-tip-${item?.Id}`} content={'Xem lớp: ' + value} place="top">
-						<div
-							// href={`/class/list-class/detail/?class=${item.ClassId}`}
-							className="max-w-[150px] in-1-line cursor-pointer font-[500] text-[#1976D2] hover:text-[#1968b7] hover:underline"
-						>
-							{value}
-						</div>
+						<Link href={`/class/list-class/detail/?class=${item.ClassId}`}>
+							<a>
+								<div className="max-w-[150px] in-1-line cursor-pointer font-[500] text-[#1976D2] hover:text-[#1968b7] hover:underline">
+									{value}
+								</div>
+							</a>
+						</Link>
 					</PrimaryTooltip>
 				)
 			}

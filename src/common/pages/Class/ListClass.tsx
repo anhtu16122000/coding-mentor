@@ -252,6 +252,7 @@ const ListClass = () => {
 									setTodoApi={setTodoApi}
 									listTodoApi={listTodoApi}
 									todoApi={todoApi}
+									getAllClass={getAllClass}
 								/>
 							</div>
 						</Card>
