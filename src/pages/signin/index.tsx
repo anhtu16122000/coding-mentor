@@ -9,7 +9,7 @@ import appConfigs from '~/appConfig'
 import { playWithToken } from '~/common/utils/token-handle'
 import LoginForm from '~/common/components/Auth/LoginForm'
 
-function SignIn({ csrfToken }) {
+function SignInx({ csrfToken }) {
 	const dispatch = useDispatch()
 
 	const [alloweRegisters, setAlloweRegisters] = useState(false)
@@ -61,5 +61,5 @@ function SignIn({ csrfToken }) {
 	)
 }
 
-SignIn.Layout = AuthLayout
-export default SignIn
+SignInx.Layout = AuthLayout
+export default SignInx

@@ -54,7 +54,7 @@ function ForgotPasswordPage() {
 							</button>
 
 							<div className="mt-4 register">
-								Bạn đã nhớ ra mật khẩu? <a href="/login">Đăng nhập</a>
+								Bạn đã nhớ ra mật khẩu? <a href="/signin">Đăng nhập</a>
 							</div>
 						</div>
 					)}
@@ -63,7 +63,7 @@ function ForgotPasswordPage() {
 						<>
 							<div className="text-[red] text-16-600">Vui lòng kiểm tra Email để tạo mật khẩu mới!</div>
 							<div className="mt-4 register">
-								Quay lại <a href="/login">Đăng nhập</a>
+								Quay lại <a href="/signin">Đăng nhập</a>
 							</div>
 						</>
 					)}

@@ -23,10 +23,13 @@ import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import 'react-tooltip/dist/react-tooltip.css'
 
-import appConfigs from '~/appConfig'
 import ToastifyContainer from '~/common/providers/Toastify'
 import { checkInternet } from '~/common/utils/main-function'
 import MainHeader from '~/common/libs/SEO/main-header'
+
+import { GoogleAnalytics } from 'nextjs-google-analytics'
+
+const gaMeasurementId = 'G-KXHWW4100Q'
 
 function App({ Component, pageProps }: AppProps & IViewProps) {
 	const Layout = Component.Layout || ((props) => <>{props.children}</>)
@@ -38,6 +41,8 @@ function App({ Component, pageProps }: AppProps & IViewProps) {
 
 	return (
 		<>
+			<GoogleAnalytics trackPageViews gaMeasurementId={gaMeasurementId} />
+
 			<MainHeader />
 
 			<StoreProvider store={store}>

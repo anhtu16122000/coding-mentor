@@ -41,7 +41,7 @@ async function playWithToken(params, dispatch) {
 
 	const pathname = Router.pathname
 
-	if (pathname == '/login') {
+	if (pathname == '/signin') {
 		Router.push('/')
 	}
 }
@@ -54,9 +54,9 @@ async function logOut() {
 	localStorage.clear()
 	const redirect = Router.pathname
 	if (redirect == '/' || redirect == '/dashboard') {
-		Router.replace({ pathname: '/login' })
+		Router.replace({ pathname: '/signin' })
 	} else {
-		Router.replace({ pathname: '/login', query: { redirect: redirect } })
+		Router.replace({ pathname: '/signin', query: { redirect: redirect } })
 	}
 }
 

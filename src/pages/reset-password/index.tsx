@@ -17,7 +17,7 @@ function ResetPasswordPage() {
 			const response = await accountApi.resetPassword(params)
 			if (response.status === 200) {
 				ShowNoti('success', 'Thành công, vui lòng đăng nhập!')
-				Router.replace('/login')
+				Router.replace('/signin')
 			}
 		} catch (error) {
 			ShowNoti('error', error?.message)
@@ -66,7 +66,7 @@ function ResetPasswordPage() {
 					</button>
 
 					<div className="mt-4 register">
-						Quay lại trang <a href="/login">Đăng nhập</a>
+						Quay lại trang <a href="/signin">Đăng nhập</a>
 					</div>
 				</Form>
 			</div>
