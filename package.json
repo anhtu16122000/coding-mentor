@@ -34,6 +34,7 @@
 		"lodash": "^4.17.21",
 		"moment": "^2.29.4",
 		"next": "12.2.0",
+		"nextjs-google-analytics": "^2.3.3",
 		"primeicons": "^6.0.1",
 		"primereact": "^8.7.0",
 		"react": "18.2.0",
