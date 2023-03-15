@@ -13,17 +13,50 @@ import Head from 'next/head'
 import appConfigs from '~/appConfig'
 import RefundForm from './Refund'
 import PaymentForm from '~/common/components/Finance/Payment/Create'
+import FilterBase from '~/common/components/Elements/FilterBase'
 
+const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '', fromDate: null, toDate: null }
 const PaymentManagementPage = () => {
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
 	const [data, setData] = React.useState([])
 	const [sumPrice, setSumPrice] = React.useState({})
-	const [filters, setFilter] = React.useState({ PageSize: PAGE_SIZE, PageIndex: 1, Search: '' })
+	const [filters, setFilter] = React.useState(initParamters)
 
+	const [dataFilter, setDataFilter] = React.useState([
+		{
+			name: 'date-range',
+			title: 'Từ - đến',
+			col: 'grid-cols-1',
+			type: 'date-range'
+		}
+	])
 	useEffect(() => {
 		getData()
 	}, [filters])
+
+	let listFieldFilter = {
+		pageIndex: 1,
+		pageSize: PAGE_SIZE,
+		fromDate: null,
+		toDate: null
+	}
+	const handleFilter = (listFilter) => {
+		let newListFilter = { ...listFieldFilter }
+		listFilter.forEach((item, index) => {
+			let key = item.name
+			Object.keys(newListFilter).forEach((keyFilter) => {
+				if (keyFilter == key) {
+					newListFilter[key] = item.value
+				}
+			})
+		})
+		setFilter({ ...filters, ...newListFilter, pageIndex: 1 })
+	}
+
+	const handleReset = () => {
+		setFilter({ ...initParamters })
+	}
 
 	async function getData() {
 		setLoading(true)
@@ -148,25 +181,28 @@ const PaymentManagementPage = () => {
 			</Head>
 
 			<ExpandTable
-				currentPage={filters.PageIndex}
+				currentPage={filters.pageIndex}
 				totalPage={totalPage && totalPage}
-				getPagination={(page: number) => setFilter({ ...filters, PageIndex: page })}
+				getPagination={(page: number) => setFilter({ ...filters, pageIndex: page })}
 				loading={{ type: 'GET_ALL', status: loading }}
 				dataSource={data}
 				columns={columns}
 				sumPrice={sumPrice}
 				TitleCard={
 					<div className="w-full flex items-center justify-between">
-						<Input.Search
-							className="primary-search max-w-[300px]"
-							onChange={(event) => {
-								if (event.target.value == '') {
-									setFilter({ ...filters, PageIndex: 1, Search: '' })
-								}
-							}}
-							onSearch={(event) => setFilter({ ...filters, PageIndex: 1, Search: event })}
-							placeholder="Tìm kiếm"
-						/>
+						<div className="flex items-center">
+							<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />
+							<Input.Search
+								className="primary-search max-w-[300px]"
+								onChange={(event) => {
+									if (event.target.value == '') {
+										setFilter({ ...filters, pageIndex: 1, search: '' })
+									}
+								}}
+								onSearch={(event) => setFilter({ ...filters, pageIndex: 1, search: event })}
+								placeholder="Tìm kiếm"
+							/>
+						</div>
 
 						<PaymentForm onRefresh={getData} />
 					</div>
