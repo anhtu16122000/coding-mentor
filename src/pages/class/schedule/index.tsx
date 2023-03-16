@@ -161,7 +161,7 @@ const Schedule = () => {
 
 				<div className="wrapper-status">
 					<div className="wrapper-tag">
-						<div className="bg-[#a2a2a2] w-[20px] h-[20px] rounded-[4px] mr-[8px]"></div>
+						<div className="bg-[#fb862d] w-[20px] h-[20px] rounded-[4px] mr-[8px]"></div>
 						<span>Chưa học</span>
 					</div>
 					<div className="wrapper-tag">
