@@ -1,4 +1,4 @@
-import { Form, Modal, Popover, Select, Tooltip } from 'antd'
+import { Avatar, Collapse, Form, Modal, Popover, Select, Tooltip } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -180,33 +180,71 @@ const ChangeScheduleClassEdit = (props) => {
 	function getStatusColor() {
 		switch (dataRow.event.extendedProps.Status) {
 			case 1:
-				return '!bg-[#a2a2a2]'
+				return '!rounded-md !bg-[#FFF]'
 			case 2:
-				return '!bg-[#59b96c]'
+				return '!rounded-md !bg-[#FFF]'
+		}
+	}
+
+	const getStatusScheduleTag = () => {
+		switch (dataRow.event.extendedProps.Status) {
+			case 1:
+				return '!border-2 !border-solid !border-[#fb862d] !text-[#fb862d] !bg-[#FFF] !rounded-md'
+			case 2:
+				return '!border-2 !border-solid !border-[#43b413] !text-[#43b413] !bg-[#FFF] !rounded-md'
+		}
+	}
+
+	const getStatusScheduleTime = () => {
+		switch (dataRow.event.extendedProps.Status) {
+			case 1:
+				return '!rounded px-[6px] py-[2px]  !text-[12px] !bg-[#fb862d] !text-[#FFF] '
+			case 2:
+				return '!rounded px-[6px] py-[2px]  !text-[12px] !bg-[#43b413] !text-[#FFF] '
+		}
+	}
+
+	function getStatusColorPoppover() {
+		switch (dataRow.event.extendedProps.Status) {
+			case 1:
+				return '!rounded-md !bg-[#FFF] border-2 border-solid border-[#fb862d]'
+			case 2:
+				return '!rounded-md !bg-[#FFF] border-2 border-solid border-[#43b413]'
 		}
 	}
 
 	return (
 		<>
-			<div className="wrapper-schedule">
-				<button className={`btn-edit-title ${getStatusColor()}`} onClick={() => !!isEditSchedule && handleOpen()}>
-					<span>{moment(dataRow.event.start).format('HH:mm')}</span> <span className="mx-1">-</span>{' '}
-					<span>{moment(dataRow.event.end).format('HH:mm')}</span>
-				</button>
+			<div className="wrapper-schedule wrapper-schedule-calender">
+				<Collapse bordered={false} className={`${getStatusScheduleTag()}`}>
+					<Collapse.Panel
+						key={dataRow.event.extendedProps.Id}
+						header={
+							<button
+								className={`${getStatusColor()} !bg-white !text-[#fff] font-semibold  w-full p-[4px] flex justify-start items-center gap-[4px]`}
+								onClick={() => !!isEditSchedule && handleOpen()}
+							>
+								<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.start).format('HH:mm')}</span>{' '}
+								<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.end).format('HH:mm')}</span>
+							</button>
+						}
+					>
+						<div className="wrapper-content-schedule !p-0">
+							<p>
+								<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
+							</p>
+							{!!dataRow.event.extendedProps?.RoomId && (
+								<p>
+									<span className="title">Phòng:</span> {dataRow.event.extendedProps.RoomName}
+								</p>
+							)}
+							<p>
+								<span className="title">Ghi chú:</span> <span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
+							</p>
+						</div>
+					</Collapse.Panel>
+				</Collapse>
 
-				<div className="wrapper-content-schedule">
-					<p>
-						<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
-					</p>
-					{!!dataRow.event.extendedProps?.RoomId && (
-						<p>
-							<span className="title">Phòng:</span> {dataRow.event.extendedProps.RoomName}
-						</p>
-					)}
-					<p>
-						<span className="title">Ghi chú:</span> <span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
-					</p>
-				</div>
 				{!!isEditSchedule ? (
 					<div className="mt-2 flex flex-col gap-2">
 						<PrimaryTooltip className="w-full px-[8px]" place="top" content="Chỉnh sửa" id={`edit-sc-${dataRow.event.extendedProps?.Id}`}>
@@ -237,10 +275,10 @@ const ChangeScheduleClassEdit = (props) => {
 				ref={refPopover}
 				content={
 					<>
-						<div className="wrapper-schedule">
+						<div className="wrapper-schedule !text-[12px]">
 							<span className="title">Ca: </span> <span>{moment(dataRow.event.start).format('HH:mm')}</span> -{' '}
 							<span>{moment(dataRow.event.end).format('HH:mm')}</span>
-							<div className="wrapper-content-schedule">
+							<div className="wrapper-content-schedule !text-[12px]">
 								<p>
 									<span className="title">Ngày bắt đầu:</span> {moment(dataRow.event.start).format('DD/MM/YYYY')}
 								</p>
@@ -289,9 +327,12 @@ const ChangeScheduleClassEdit = (props) => {
 				trigger="click"
 			>
 				<div className="wrapper-schedule wrapper-schedule-tablet">
-					<button className="btn-edit-title">
-						<span>{moment(dataRow.event.start).format('HH:mm')}</span> <span className="mx-1">-</span>
-						<span>{moment(dataRow.event.end).format('HH:mm')}</span>
+					<button
+						// className="btn-edit-title"
+						className={`${getStatusColorPoppover()}  !bg-white !text-[#fff] font-semibold  w-full p-[2px] flex justify-start items-center gap-[2px]`}
+					>
+						<span className={`${getStatusScheduleTime()} !text-[10px] !p-[1px]`}>{moment(dataRow.event.start).format('HH:mm')}</span>{' '}
+						<span className={`${getStatusScheduleTime()} !text-[10px] !p-[1px]`}>{moment(dataRow.event.end).format('HH:mm')}</span>
 					</button>
 				</div>
 				<div className="wrapper-schedule wrapper-schedule-mobile">

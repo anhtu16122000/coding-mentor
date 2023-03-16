@@ -1,4 +1,4 @@
-import { Form, Modal, Popover, Select, Tooltip } from 'antd'
+import { Collapse, Form, Modal, Popover, Select, Tooltip } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -102,24 +102,37 @@ const ChangeScheduleAvailableClassEdit = (props) => {
 
 	return (
 		<>
-			<div className="wrapper-schedule">
-				<button
-					className="btn-edit-title"
-					onClick={() => {
-						!!isEditSchedule ? handleOpen() : null
-					}}
-				>
-					<span>{moment(dataRow.event.start).format('HH:mm')}</span> <span className="mx-1">-</span>{' '}
-					<span>{moment(dataRow.event.end).format('HH:mm')}</span>
-				</button>
-				<div className="wrapper-content-schedule">
-					<p>
-						<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
-					</p>
-					<p>
-						<span className="title">Ghi chú:</span> <span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
-					</p>
-				</div>
+			<div className="wrapper-schedule wrapper-schedule-calender">
+				<Collapse defaultActiveKey={'1'} bordered={false} className="!border-2 !border-solid !border-[#fb862d] rounded">
+					<Collapse.Panel
+						key={'1'}
+						header={
+							<button
+								className={` !text-[#fff] font-semibold  w-full p-[6px] flex justify-start items-center gap-2`}
+								onClick={() => {
+									!!isEditSchedule ? handleOpen() : null
+								}}
+							>
+								<span className="!rounded px-1 py-[2px]  !text-[12px] !bg-[#fb862d] !text-[#FFF]">
+									{moment(dataRow.event.start).format('HH:mm')}
+								</span>{' '}
+								<span className="!rounded px-1 py-[2px]  !text-[12px] !bg-[#fb862d] !text-[#FFF]">
+									{moment(dataRow.event.end).format('HH:mm')}
+								</span>
+							</button>
+						}
+					>
+						<div className="wrapper-content-schedule !p-0">
+							<p>
+								<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
+							</p>
+							<p>
+								<span className="title">Ghi chú:</span> <span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
+							</p>
+						</div>
+					</Collapse.Panel>
+				</Collapse>
+
 				{!!isEditSchedule ? (
 					<div className="mt-2 flex justify-center ">
 						<div className="flex flex-col gap-2">
@@ -149,7 +162,7 @@ const ChangeScheduleAvailableClassEdit = (props) => {
 				ref={refPopover}
 				content={
 					<>
-						<div className="wrapper-schedule">
+						<div className="wrapper-schedule text-[12px]">
 							<span className="title">Ca: </span> <span>{moment(dataRow.event.start).format('HH:mm')}</span> -{' '}
 							<span>{moment(dataRow.event.end).format('HH:mm')}</span>
 							<div className="wrapper-content-schedule">
@@ -196,9 +209,13 @@ const ChangeScheduleAvailableClassEdit = (props) => {
 				trigger="click"
 			>
 				<div className="wrapper-schedule wrapper-schedule-tablet">
-					<button className="btn-edit-title">
-						<span>{moment(dataRow.event.start).format('HH:mm')}</span> <span className="mx-1">-</span>
-						<span>{moment(dataRow.event.end).format('HH:mm')}</span>
+					<button className="btn-edit-title border-2 border-solid !border-[#fb862d] !bg-[#FFF] !flex gap-2 ">
+						<span className="!rounded px-1 py-[2px] !text-[12px] !bg-[#fb862d] !text-[#FFF]">
+							{moment(dataRow.event.start).format('HH:mm')}
+						</span>{' '}
+						<span className="!rounded px-1 py-[2px] !text-[12px] !bg-[#fb862d] !text-[#FFF]">
+							{moment(dataRow.event.end).format('HH:mm')}
+						</span>
 					</button>
 				</div>
 				<div className="wrapper-schedule wrapper-schedule-mobile">

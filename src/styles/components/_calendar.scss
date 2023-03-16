@@ -79,7 +79,7 @@
 		.wrapper-schedule {
 			@apply w-full h-full bg-[#e2e2e4] rounded-lg text-[#000];
 			button.btn-edit-title {
-				@apply flex items-center justify-center h-10 bg-[#1b73e8] text-tw-white font-medium text-base rounded-t-lg z-10 transition-all w-full;
+				@apply flex items-center justify-center h-10 bg-[#1b73e8] text-tw-white font-medium text-base z-10 transition-all w-full;
 				&:hover {
 					@apply text-tw-orange;
 				}
@@ -90,7 +90,7 @@
 					@apply font-medium;
 				}
 				p {
-					@apply whitespace-normal;
+					@apply whitespace-normal text-[12px];
 				}
 			}
 			.btn-remove,

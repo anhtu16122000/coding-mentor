@@ -16,7 +16,7 @@ import IconButton from '../Primary/IconButton'
 import UpdateClassForm from './UpdateClassForm'
 
 const ClassList = (props) => {
-	const { isLoading, dataSource, setTodoApi, listTodoApi, totalRow, todoApi } = props
+	const { isLoading, dataSource, setTodoApi, listTodoApi, totalRow, todoApi, getAllClass } = props
 	const state = useSelector((state: RootState) => state)
 	const router = useRouter()
 	const { information: userInformation } = state.user
@@ -101,6 +101,7 @@ const ClassList = (props) => {
 			if (res.status === 200) {
 				setTodoApi(listTodoApi)
 				setIsModalOpen({ id: Id, open: false })
+				getAllClass()
 				ShowNoti('success', res.data.message)
 			}
 		} catch (err) {
@@ -228,12 +229,17 @@ const ClassList = (props) => {
 										<li>
 											Số buổi đã học: <span>{item.LessonCompleted || 0}</span>
 										</li>
-										<li>
-											Bắt đầu: <span>{moment(item.StartDay).format('DD/MM/YYYY')}</span>
-										</li>
-										<li>
-											Kết thúc: <span>{moment(item.EndDay).format('DD/MM/YYYY')}</span>
-										</li>
+										{item.Type !== 3 ? (
+											<>
+												<li>
+													Bắt đầu: <span>{moment(item.StartDay).format('DD/MM/YYYY')}</span>
+												</li>
+												<li>
+													Kết thúc: <span>{moment(item.EndDay).format('DD/MM/YYYY')}</span>
+												</li>
+											</>
+										) : null}
+
 										<li>
 											Số học viên: <span>{item.TotalStudent || 0}</span>
 										</li>

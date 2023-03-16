@@ -215,7 +215,7 @@ export default function Childs(props) {
 				<>
 					{value == 0 && <span className="tag yellow">Khác</span>}
 					{value == 1 && <span className="tag blue">Nam</span>}
-					{value == 2 && <span className="tag blue">Nữ</span>}
+					{value == 2 && <span className="tag green">Nữ</span>}
 				</>
 			)
 		},
