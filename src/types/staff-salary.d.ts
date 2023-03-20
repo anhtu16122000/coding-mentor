@@ -1,6 +1,6 @@
 type IStaffSalary = IBaseApi<{
 	SalaryID: number
-	UserInformationID: number
+	UserInformationId: number
 	FullName: string
 	UserName: string
 	Email: string

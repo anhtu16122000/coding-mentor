@@ -19,12 +19,14 @@ export const SalaryPage = () => {
 	const [totalRow, setTotalRow] = useState(1)
 	const [dataTable, setDataTable] = useState([])
 	const [loading, setLoading] = useState(false)
+	const [time, setTime] = useState(null)
 
 	useEffect(() => {
 		if (valueDate) {
 			const year = Number(moment(valueDate).format('YYYY'))
 			const month = Number(moment(valueDate).format('MM'))
 			setApiParameters({ ...apiParameters, month: month, year: year })
+			setTime({ month: month, year: year })
 		}
 	}, [valueDate])
 
@@ -167,7 +169,7 @@ export const SalaryPage = () => {
 			render: (text) => <>{parseToMoney(text)}</>
 		},
 		{
-			title: 'Lương hằng tháng',
+			title: 'Lương giảng dạy',
 			width: 150,
 			dataIndex: 'TeachingSalary',
 			render: (text, item) => <ModalTeachingDetail dataRow={item} />
@@ -185,7 +187,7 @@ export const SalaryPage = () => {
 				if (isSaler() || isAcademic() || isTeacher()) return ''
 				return (
 					<div className="flex items-center">
-						<ModalSalaryCRUD onRefresh={() => getSalary(apiParameters)} dataRow={item} />
+						<ModalSalaryCRUD mode="edit" onRefresh={() => getSalary(apiParameters)} dataRow={item} />
 					</div>
 				)
 			}
@@ -209,6 +211,9 @@ export const SalaryPage = () => {
 				columns={columns}
 				Extra={
 					<>
+						<div className="mr-2">
+							<ModalSalaryCRUD time={time} mode="salary" onRefresh={() => getSalary(apiParameters)} />
+						</div>
 						{(isAdmin() || isAccountant()) && (
 							<Popconfirm
 								title={`Xác nhận tính lương từ ${moment().subtract(1, 'months').startOf('month').format('DD-MM-YYYY')} đến ${moment()

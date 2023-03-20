@@ -7,7 +7,7 @@ import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
 
 const DeleteTableRow = (props) => {
-	const { handleDelete, text, title } = props
+	const { handleDelete, text, title, setShowPop } = props
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 
@@ -27,7 +27,16 @@ const DeleteTableRow = (props) => {
 
 	return (
 		<>
-			<IconButton color="primary" type="button" icon="remove" tooltip={title || 'Xóa'} onClick={() => setIsModalVisible(true)} />
+			<IconButton
+				color="primary"
+				type="button"
+				icon="remove"
+				tooltip={title || 'Xóa'}
+				onClick={() => {
+					setIsModalVisible(true)
+					setShowPop && setShowPop('')
+				}}
+			/>
 
 			<Modal
 				title={'Xác nhận xóa'}

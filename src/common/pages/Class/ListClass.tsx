@@ -1,4 +1,4 @@
-import { Card, Form, Select } from 'antd'
+import { Card, Form, Pagination, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
@@ -6,6 +6,7 @@ import { branchApi } from '~/api/branch'
 import { classApi } from '~/api/class'
 import { userInformationApi } from '~/api/user'
 import ClassList from '~/common/components/Class/ClassList'
+import { ClassListContent } from '~/common/components/Class/ClassListContent'
 import FilterBase from '~/common/components/Elements/FilterBase'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
@@ -73,6 +74,7 @@ const ListClass = () => {
 	const [totalRow, setTotalRow] = useState(null)
 	const [isLoading, setIsLoading] = useState(false)
 	const state = useSelector((state: RootState) => state)
+	const [current, setCurrent] = useState(1)
 	const dispatch = useDispatch()
 
 	const userInformation = useSelector((state: RootState) => state.user.information)
@@ -215,6 +217,16 @@ const ListClass = () => {
 		}
 	}, [students])
 
+	const getPagination = (pageNumber: number) => {
+		setCurrent(pageNumber)
+		setTodoApi({
+			...todoApi,
+			// ...listFieldSearch,
+			pageIndex: pageNumber
+		})
+	}
+
+	const showTotal = () => totalRow && <div className="font-weight-black">Tổng cộng: {totalRow}</div>
 	return (
 		<div className="wrapper-class">
 			<div className="row">
@@ -245,7 +257,7 @@ const ListClass = () => {
 							}
 						>
 							<div className="course-list-content">
-								<ClassList
+								<ClassListContent
 									totalRow={totalRow}
 									isLoading={isLoading}
 									dataSource={listClass}
@@ -254,6 +266,25 @@ const ListClass = () => {
 									todoApi={todoApi}
 									getAllClass={getAllClass}
 								/>
+								{/* <ClassList
+									totalRow={totalRow}
+									isLoading={isLoading}
+									dataSource={listClass}
+									setTodoApi={setTodoApi}
+									listTodoApi={listTodoApi}
+									todoApi={todoApi}
+									getAllClass={getAllClass}
+								/> */}
+								<div className="custom-pagination">
+									<Pagination
+										size="small"
+										current={current}
+										onChange={(pageNumber) => getPagination(pageNumber)}
+										total={totalRow}
+										pageSize={PAGE_SIZE}
+										showTotal={showTotal}
+									/>
+								</div>
 							</div>
 						</Card>
 					</div>

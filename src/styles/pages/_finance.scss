@@ -36,10 +36,11 @@
 	}
 
 	.total-income {
-		color: $color-success;
+		color: $red;
+		
 	}
 	.total-expense {
-		color: $red;
+		color: $color-success;
 	}
 	.total-revenue {
 		color: $blue;

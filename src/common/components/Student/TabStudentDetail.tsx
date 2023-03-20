@@ -116,7 +116,7 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 			form.setFieldsValue({
 				...StudentDetail,
 				BranchIds: Number(StudentDetail.BranchIds),
-				DOB: moment(StudentDetail.DOB)
+				DOB: StudentDetail?.DOB ? moment(StudentDetail?.DOB) : null
 			})
 			if (StudentDetail.AreaId) {
 				getDistrict(StudentDetail.AreaId)
@@ -133,7 +133,7 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 			let res = await userInformationApi.update({
 				...data,
 				UserInformationId: StudentDetail.UserInformationId,
-				DOB: StudentDetail.DOB ? new Date(StudentDetail.DOB) : null
+				DOB: data.DOB ? new Date(data.DOB) : null
 			})
 			if (res.status == 200) {
 				ShowNoti('success', res.data.message)

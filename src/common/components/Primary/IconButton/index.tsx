@@ -7,9 +7,9 @@ import { CgAddR, CgFileDocument } from 'react-icons/cg'
 import { FaChalkboardTeacher } from 'react-icons/fa'
 import { FiArrowDownCircle, FiArrowUpCircle, FiEdit, FiMenu, FiMoreVertical, FiPrinter, FiSave, FiSend, FiTrash2 } from 'react-icons/fi'
 import { HiOutlineFilter } from 'react-icons/hi'
-import { MdOutlineCancel } from 'react-icons/md'
+import { MdOutlineCancel, MdOutlineMoney } from 'react-icons/md'
 import { RiExchangeLine } from 'react-icons/ri'
-import { TbDownload, TbSchool, TbUpload } from 'react-icons/tb'
+import { TbDownload, TbReportMoney, TbSchool, TbUpload } from 'react-icons/tb'
 import { VscRootFolderOpened } from 'react-icons/vsc'
 
 const IconButton: FC<IIconButton> = (props) => {
@@ -160,6 +160,9 @@ const IconButton: FC<IIconButton> = (props) => {
 		}
 		if (icon == 'hide') {
 			return <VscRootFolderOpened size={!!size ? size : 20} />
+		}
+		if (icon == 'salary') {
+			return <TbReportMoney size={!!size ? size : 20} />
 		}
 	}
 

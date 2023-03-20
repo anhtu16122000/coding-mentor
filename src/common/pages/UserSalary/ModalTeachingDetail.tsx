@@ -49,19 +49,23 @@ export const ModalTeachingDetail: React.FC<IModalTeachingDetail> = ({ dataRow })
 	const columns = [
 		{
 			title: 'Lớp học',
+			width: 180,
 			dataIndex: 'ClassName'
 		},
 		{
 			title: 'Phòng học',
+			width: 100,
 			dataIndex: 'RoomName'
 		},
 		{
 			title: 'Ngày dạy',
+			width: 100,
 			dataIndex: 'StartTime',
 			render: (text) => <>{moment(text).format('MM-DD-YYYY')}</>
 		},
 		{
 			title: 'Thòi gian học',
+			width: 100,
 			dataIndex: 'Time',
 			render: (text, item) => {
 				return (
@@ -73,6 +77,7 @@ export const ModalTeachingDetail: React.FC<IModalTeachingDetail> = ({ dataRow })
 		},
 		{
 			title: 'Lương buổi học',
+			width: 100,
 			dataIndex: 'TeachingFee',
 			render: (text) => <>{parseToMoney(text)}</>
 		}

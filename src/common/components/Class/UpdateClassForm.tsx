@@ -11,7 +11,7 @@ import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
 
 const UpdateClassForm = (props) => {
-	const { dataRow, setTodoApi, listTodoApi, academic } = props
+	const { dataRow, setTodoApi, listTodoApi, academic, setShowPop, getAllClass } = props
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [form] = Form.useForm()
@@ -27,6 +27,7 @@ const UpdateClassForm = (props) => {
 			if (res.status === 200) {
 				setTodoApi(listTodoApi)
 				setIsModalOpen(false)
+				getAllClass && getAllClass()
 				ShowNoti('success', res.data.message)
 			}
 		} catch (err) {
@@ -60,7 +61,16 @@ const UpdateClassForm = (props) => {
 
 	return (
 		<>
-			<IconButton icon="edit" type="button" tooltip="Cập nhật" color="yellow" onClick={() => setIsModalOpen(true)} />
+			<IconButton
+				icon="edit"
+				type="button"
+				tooltip="Cập nhật"
+				color="yellow"
+				onClick={() => {
+					setIsModalOpen(true)
+					setShowPop && setShowPop('')
+				}}
+			/>
 			<Modal
 				title="Cập nhật lớp học"
 				open={isModalOpen}

@@ -17,11 +17,15 @@ export const staffSalaryApi = {
 	update(data: any) {
 		return instance.put(url, data, {})
 	}, 
-
 	getTeachingDetail(params) {
 		return instance.get<IApiResultData<IStaffSalaryTeachingDetail[]>>(`${url}/teaching-detail`, { params })
 	},
 	addSalaryClosing() {
 		return instance.post(`${url}/salary-closing`)
+	},
+	getUserAvailable(todoApi) {
+		return instance.get<IApiResultData<IStaffSalary[]>>(`${url}/user-available`, {
+			params: todoApi
+		})
 	}
 }

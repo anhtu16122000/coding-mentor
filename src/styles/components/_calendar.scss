@@ -7,6 +7,15 @@
 		@apply absolute inset-0 z-20 bg-[rgba(255,255,255,0.3)] flex items-center justify-center;
 	}
 }
+.fc-col-header {
+	width: 100% !important;
+}
+.fc-daygrid-body {
+	width: 100% !important;
+}
+.fc-scrollgrid-sync-table {
+	width: 100% !important;
+}
 .fc {
 	&.fc-theme-standard {
 		.fc-toolbar {
