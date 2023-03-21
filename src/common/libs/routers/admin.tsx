@@ -186,6 +186,13 @@ export const AdminChildMenu = [
 			},
 			{
 				ItemType: 'single',
+				Key: '/info-course/rollup',
+				Route: '/info-course/rollup',
+				Text: 'Điểm danh học viên (QR)',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
 				Key: '/info-course/parents',
 				Route: '/info-course/parents',
 				Text: 'Phụ huynh',

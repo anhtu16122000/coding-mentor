@@ -1,6 +1,6 @@
 import { Tabs } from 'antd'
 import React from 'react'
-import { AiOutlineCalendar } from 'react-icons/ai'
+import { AiOutlineCalendar, AiOutlineQrcode } from 'react-icons/ai'
 import { BsCalendar2Week, BsUiChecksGrid } from 'react-icons/bs'
 import { CgTranscript } from 'react-icons/cg'
 import { FiUserCheck } from 'react-icons/fi'
@@ -19,6 +19,7 @@ import { LessonFeedbackPage } from './LessonFeedbackPage'
 import { ListStudentInClass } from './ListStudentInClass'
 import { NotificationInClassPage } from './NotificationInClassPage'
 import { RollUpPage } from './RollUpPage'
+import { RollUpStudent } from './RollUpStudent'
 import { RollUpTeacherPage } from './RollUpTeacherPage'
 import { ScheduleList } from './ScheduleList'
 import { TranscriptPage } from './TranscriptPage'
@@ -35,7 +36,7 @@ const itemsAdmin = [
 	'Thông báo'
 ]
 
-const itemsStudent = ['Lịch học', 'Các buổi học', 'Tài liệu', 'Bảng điểm']
+const itemsStudent = ['Lịch học', 'Các buổi học', 'Tài liệu', 'Bảng điểm', 'Điểm danh bằng QR']
 const itemsTeacher = [
 	'Lịch học',
 	'Học viên',
@@ -149,7 +150,7 @@ const MenuClass = () => {
 			case 3:
 				return <TranscriptPage />
 			case 4:
-				return <LessonFeedbackPage />
+				return <RollUpStudent />
 			default:
 				return <CalendarClassEdit />
 		}
@@ -182,6 +183,12 @@ const MenuClass = () => {
 					</div>
 				)
 			case 4:
+				return (
+					<div className="label-tab">
+						<AiOutlineQrcode className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
+			case 5:
 				return (
 					<div className="label-tab">
 						<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
