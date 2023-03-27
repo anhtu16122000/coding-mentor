@@ -76,7 +76,7 @@ const ListClass = () => {
 	const state = useSelector((state: RootState) => state)
 	const [current, setCurrent] = useState(1)
 	const dispatch = useDispatch()
-
+	const [tabStatus, setTabStatus] = useState(null)
 	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	function isAdmin() {
@@ -136,12 +136,16 @@ const ListClass = () => {
 	}
 
 	const handleFilter = (listFilter) => {
+		setTabStatus(null)
 		let newListFilter = { ...listFieldFilter }
 		listFilter.forEach((item, index) => {
 			let key = item.name
 			Object.keys(newListFilter).forEach((keyFilter) => {
 				if (keyFilter == key) {
 					newListFilter[key] = item.value
+				}
+				if (key === 'status') {
+					setTabStatus(item.value)
 				}
 			})
 		})
@@ -180,6 +184,7 @@ const ListClass = () => {
 	}
 
 	const handleReset = () => {
+		setTabStatus(null)
 		setTodoApi({ ...listTodoApi })
 	}
 	const handleChangeStudent = (val) => {
@@ -227,6 +232,11 @@ const ListClass = () => {
 	}
 
 	const showTotal = () => totalRow && <div className="font-weight-black">Tổng cộng: {totalRow}</div>
+
+	const hanskeChangeTab = (val) => {
+		setTabStatus(val)
+		setTodoApi({ ...todoApi, status: val })
+	}
 	return (
 		<div className="wrapper-class">
 			<div className="row">
@@ -234,9 +244,22 @@ const ListClass = () => {
 					<div className="wrap-table">
 						<Card
 							title={
-								<div className="list-action-table">
-									<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />
-								</div>
+								<>
+									<div className="list-action-table">
+										<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />
+									</div>
+									<div className="list-action-button">
+										<div onClick={() => hanskeChangeTab(1)} className={`item ${tabStatus == 1 ? 'active' : ''}`}>
+											Sắp diễn ra
+										</div>
+										<div onClick={() => hanskeChangeTab(2)} className={`item  ${tabStatus == 2 ? 'active' : ''}`}>
+											Đang diễn ra
+										</div>
+										<div onClick={() => hanskeChangeTab(3)} className={`item  ${tabStatus == 3 ? 'active' : ''}`}>
+											Kết thúc
+										</div>
+									</div>
+								</>
 							}
 							extra={
 								userInformation?.RoleId === '8' ? (

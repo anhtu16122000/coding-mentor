@@ -678,6 +678,23 @@ body {
 	.ant-modal-footer {
 		border-radius: 0 0 0.575rem 0.575rem;
 	}
+	.list-action-button {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(3, minmax(0px, 1fr));
+		.item {
+			padding: 6px 12px;
+			cursor: pointer;
+			border-radius: 6px;
+			color: #717171;
+			text-align: center;
+			&.active {
+				background: rgba(27, 115, 232, 0.0901960784);
+				color: #1b73e8;
+			}
+		}
+	}
+
 	.list-action-table {
 		display: flex;
 		align-items: center;
