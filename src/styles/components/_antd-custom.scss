@@ -422,8 +422,9 @@
 }
 
 .wrapper-schedule-calender .ant-collapse-expand-icon {
-	visibility: hidden !important;
-	width: 0 !important;
+	// visibility: hidden !important;
+	// width: 0 !important;
+	display: none;
 }
 .wrapper-schedule-calender .ant-collapse-header {
 	padding: 0 !important;

@@ -1,15 +1,17 @@
 import { Avatar, Collapse, Popover, Tooltip } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import PrimaryButton from '../Primary/Button'
 import ZoomManager from '../Zoom/ZoomManager'
 import { UserOutlined } from '@ant-design/icons'
+import Link from 'next/link'
 
 const ScheduleCalendar = (props) => {
 	const { dataRow, onRefresh } = props
 	const router = useRouter()
+	const [openIds, setOpenIds] = useState(null)
 
 	const getStatusSchedule = () => {
 		switch (dataRow.event.extendedProps.Status) {
@@ -54,48 +56,51 @@ const ScheduleCalendar = (props) => {
 	return (
 		<>
 			<div className="wrapper-schedule wrapper-schedule-calender relative ">
-				<Collapse bordered={false} className={`${getStatusScheduleTag()}`}>
-					<Collapse.Panel
-						key={dataRow.event.extendedProps.ClassId}
-						header={
-							<button
-								onDoubleClick={() => router.push(`/class/list-class/detail/?class=${dataRow.event.extendedProps.ClassId}`)}
-								className={`${getStatusSchedule()} !bg-white !text-[#fff] font-semibold  w-full p-[6px] flex justify-start items-center gap-2`}
-							>
-								<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.start).format('HH:mm')}</span>{' '}
-								<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.end).format('HH:mm')}</span>
-								<Avatar
-									className="w-[24px] h-[24px] p-[2px] bg-[#939292]"
-									src={
-										dataRow.event.extendedProps?.TeacherAvatar ||
-										'https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg'
-									}
-								/>
-							</button>
+				<div className={`${getStatusScheduleTag()}`}>
+					<Popover
+						trigger="click"
+						content={
+							<div className={`wrapper-content-schedule`}>
+								<p>
+									<span className="title">Lớp:</span>{' '}
+									<Link href={`/class/list-class/detail/?class=${dataRow.event.extendedProps.ClassId}`}>
+										<a className="font-medium hover:underline">{dataRow.event.extendedProps.ClassName}</a>
+									</Link>
+								</p>
+								<p>
+									<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
+								</p>
+								{!!dataRow.event.extendedProps?.RoomId && (
+									<p>
+										<span className="title">Phòng:</span> {dataRow.event.extendedProps.RoomName}
+									</p>
+								)}
+
+								<p>
+									<span className="title">Ghi chú:</span>
+									<span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
+								</p>
+
+								<ZoomManager data={dataRow.event.extendedProps} onRefresh={onRefresh} />
+							</div>
 						}
 					>
-						<div className="wrapper-content-schedule !p-0">
-							<p>
-								<span className="title">Lớp:</span> {dataRow.event.extendedProps.ClassName}
-							</p>
-							<p>
-								<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
-							</p>
-							{!!dataRow.event.extendedProps?.RoomId && (
-								<p>
-									<span className="title">Phòng:</span> {dataRow.event.extendedProps.RoomName}
-								</p>
-							)}
-
-							<p>
-								<span className="title">Ghi chú:</span>
-								<span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
-							</p>
-
-							<ZoomManager data={dataRow.event.extendedProps} onRefresh={onRefresh} />
-						</div>
-					</Collapse.Panel>
-				</Collapse>
+						<button
+							// onDoubleClick={() => router.push(`/class/list-class/detail/?class=${dataRow.event.extendedProps.ClassId}`)}
+							className={`${getStatusSchedule()}  !bg-white !text-[#fff] font-semibold  w-full p-[6px] flex justify-start items-center gap-2`}
+						>
+							<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.start).format('HH:mm')}</span>{' '}
+							<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.end).format('HH:mm')}</span>
+							<Avatar
+								className="w-[24px] h-[24px] p-[2px] bg-[#939292]"
+								src={
+									dataRow.event.extendedProps?.TeacherAvatar ||
+									'https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg'
+								}
+							/>
+						</button>
+					</Popover>
+				</div>
 			</div>
 
 			<Popover

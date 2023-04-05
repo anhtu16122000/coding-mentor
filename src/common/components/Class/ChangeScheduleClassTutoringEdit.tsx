@@ -166,22 +166,73 @@ const ChangeScheduleClassTutoringEdit = (props) => {
 		}
 	}
 
+	const getStatusScheduleTag = () => {
+		switch (dataRow.event.extendedProps.StatusTutoring) {
+			case 1:
+				return '!border-2 !border-solid !border-[#0a89ff] !text-[#0a89ff] !bg-[#FFF] !rounded-md'
+			case 2:
+				return '!border-2 !border-solid !border-[#C94A4F] !text-[#C94A4F] !bg-[#FFF] !rounded-md'
+			case 3:
+				return '!border-2 !border-solid !border-[#59b96c] !text-[#59b96c] !bg-[#FFF] !rounded-md'
+			case 4:
+				return '!border-2 !border-solid !border-[#FFBA0A] !text-[#FFBA0A] !bg-[#FFF] !rounded-md'
+			case 5:
+				return '!border-2 !border-solid !border-[#a2a2a2] !text-[#a2a2a2] !bg-[#FFF] !rounded-md'
+			case 6:
+				return '!border-2 !border-solid !border-[#ff7c38] !text-[#ff7c38] !bg-[#FFF] !rounded-md'
+			case 7:
+				return '!border-2 !border-solid !border-[#000] !text-[#000] !bg-[#FFF] !rounded-md'
+		}
+	}
+
+	const getStatusScheduleTime = () => {
+		switch (dataRow.event.extendedProps.StatusTutoring) {
+			case 1:
+				return '!rounded px-1 py-[2px]  !text-[12px] !bg-[#0a89ff] !text-[#FFF] '
+			case 2:
+				return '!rounded px-1 py-[2px]  !text-[12px] !bg-[#C94A4F] !text-[#FFF] '
+			case 3:
+				return '!rounded px-1 py-[2px]  !text-[12px] !bg-[#59b96c] !text-[#FFF] '
+			case 4:
+				return '!rounded px-1 py-[2px]  !text-[12px] !bg-[#FFBA0A] !text-[#FFF] '
+			case 5:
+				return '!rounded px-1 py-[2px]  !text-[12px] !bg-[#a2a2a2] !text-[#000] '
+			case 6:
+				return '!rounded px-1 py-[2px]  !text-[12px] !bg-[#ff7c38] !text-[#FFF] '
+			case 7:
+				return '!rounded px-1 py-[2px]  !text-[12px] !bg-[#000] !text-[#FFF] '
+		}
+	}
+
 	return (
 		<>
 			<div className="wrapper-schedule">
-				<button className={`btn-edit-title ${getStatusColor()}`} onClick={() => !!isEditSchedule && handleOpen()}>
-					<span>{moment(dataRow.event.start).format('HH:mm')}</span> <span className="mx-1">-</span>{' '}
-					<span>{moment(dataRow.event.end).format('HH:mm')}</span>
-				</button>
-
-				<div className="wrapper-content-schedule">
-					<p>
-						<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
-					</p>
-					<p>
-						<span className="title">Ghi chú:</span> <span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
-					</p>
+				<div className={`${getStatusScheduleTag()}`}>
+					<Popover
+						trigger="click"
+						content={
+							<div className="wrapper-content-schedule">
+								<p>
+									<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
+								</p>
+								<p>
+									<span className="title">Ghi chú:</span>{' '}
+									<span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
+								</p>
+							</div>
+						}
+					>
+						<button
+							className={` !rounded-md !bg-[#FFF] btn-edit-title  !bg-white !text-[#fff] font-semibold  w-full p-[6px] flex justify-start items-center gap-2`}
+							onClick={() => !!isEditSchedule && handleOpen()}
+						>
+							<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.start).format('HH:mm')}</span>{' '}
+							{/* <span className="mx-1">-</span>{' '} */}
+							<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.end).format('HH:mm')}</span>
+						</button>
+					</Popover>
 				</div>
+
 				{!!isEditSchedule ? (
 					<div className="mt-2 flex flex-col gap-2">
 						{dataRow?.event?.extendedProps?.StatusTutoring == 1 ||

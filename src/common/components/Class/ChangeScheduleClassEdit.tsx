@@ -216,7 +216,36 @@ const ChangeScheduleClassEdit = (props) => {
 	return (
 		<>
 			<div className="wrapper-schedule wrapper-schedule-calender">
-				<Collapse bordered={false} className={`${getStatusScheduleTag()}`}>
+				<div className={`${getStatusScheduleTag()}`}>
+					<Popover
+						trigger="click"
+						content={
+							<div className="wrapper-content-schedule !p-0">
+								<p>
+									<span className="title">GV:</span> {dataRow.event.extendedProps.TeacherName}
+								</p>
+								{!!dataRow.event.extendedProps?.RoomId && (
+									<p>
+										<span className="title">Phòng:</span> {dataRow.event.extendedProps.RoomName}
+									</p>
+								)}
+								<p>
+									<span className="title">Ghi chú:</span>{' '}
+									<span className="whitespace-pre-line ml-1">{dataRow.event.extendedProps.Note}</span>
+								</p>
+							</div>
+						}
+					>
+						<button
+							className={`${getStatusColor()} !bg-white !text-[#fff] font-semibold  w-full p-[4px] flex justify-start items-center gap-[4px]`}
+							onClick={() => !!isEditSchedule && handleOpen()}
+						>
+							<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.start).format('HH:mm')}</span>{' '}
+							<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.end).format('HH:mm')}</span>
+						</button>
+					</Popover>
+				</div>
+				{/* <Collapse bordered={false} className={`${getStatusScheduleTag()}`}>
 					<Collapse.Panel
 						key={dataRow.event.extendedProps.Id}
 						header={
@@ -243,7 +272,7 @@ const ChangeScheduleClassEdit = (props) => {
 							</p>
 						</div>
 					</Collapse.Panel>
-				</Collapse>
+				</Collapse> */}
 
 				{!!isEditSchedule ? (
 					<div className="mt-2 flex flex-col gap-2">

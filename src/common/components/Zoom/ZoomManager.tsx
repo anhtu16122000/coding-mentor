@@ -155,7 +155,8 @@ const ZoomManager: FC<TZoomManager> = (props) => {
 				<PrimaryTooltip id={`joi-tip-${data?.Id}`} content="Tham gia" place="top">
 					<div onClick={joinRoom} className="h-[32px] all-center w-full rounded-[6px] bg-[#0A89FF] hover:bg-[#157ddd] active:bg-[#0A89FF]">
 						<TbArrowBarToRight size={20} color="#fff" />
-						{!!isPopover && <div className="text-[#fff] ml-[8px]">Tham gia</div>}
+						{/* {!!isPopover && <div className="text-[#fff] ml-[8px]">Tham gia</div>} */}
+						<div className="text-[#fff] ml-[8px]">Tham gia</div>
 					</div>
 				</PrimaryTooltip>
 
@@ -167,7 +168,8 @@ const ZoomManager: FC<TZoomManager> = (props) => {
 						>
 							{!loading && <RiAddCircleLine size={20} color="#fff" />}
 							{loading == 'create' && <BaseLoading.White />}
-							{!!isPopover && <div className="text-[#fff] ml-[8px]">Tạo lại</div>}
+							{/* {!!isPopover && <div className="text-[#fff] ml-[8px]">Tạo lại</div>} */}
+							<div className="text-[#fff] ml-[8px]">Tạo lại</div>
 						</div>
 					</PrimaryTooltip>
 				)}
@@ -180,7 +182,8 @@ const ZoomManager: FC<TZoomManager> = (props) => {
 						>
 							{!loading && <MdClose size={20} color="#fff" />}
 							{loading == 'close' && <BaseLoading.White />}
-							{!!isPopover && <div className="text-[#fff] ml-[8px]">Đóng phòng</div>}
+							{/* {!!isPopover && <div className="text-[#fff] ml-[8px]">Đóng phòng</div>} */}
+							<div className="text-[#fff] ml-[8px]">Đóng phòng</div>
 						</div>
 					</PrimaryTooltip>
 				)}

@@ -209,9 +209,23 @@ export const ClassListContent: React.FC<IClassListContent> = ({
 								</div>
 							</div>
 						</div>
-						<div className="image">
-							<AvatarComponent url={item.Thumbnail} type="class" />
-						</div>
+						{item?.Type !== 3 ? (
+							<Link href={returnPathName(item)}>
+								<a>
+									<div className="image">
+										<AvatarComponent url={item.Thumbnail} type="class" />
+									</div>
+								</a>
+							</Link>
+						) : (
+							<Link href={handleTutoring(item)}>
+								<a>
+									<div className="image">
+										<AvatarComponent url={item.Thumbnail} type="class" />
+									</div>
+								</a>
+							</Link>
+						)}
 						<div className="content">
 							<div className="content-body">
 								<div className="title">
