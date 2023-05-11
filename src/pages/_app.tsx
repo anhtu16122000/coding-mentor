@@ -29,7 +29,7 @@ import MainHeader from '~/common/libs/SEO/main-header'
 
 import { GoogleAnalytics } from 'nextjs-google-analytics'
 
-const gaMeasurementId = 'G-KXHWW4100Q'
+const gaMeasurementId = 'G-HLZL768WH8' // G-KXHWW4100Q
 
 function App({ Component, pageProps }: AppProps & IViewProps) {
 	const Layout = Component.Layout || ((props) => <>{props.children}</>)
