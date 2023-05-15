@@ -61,6 +61,7 @@ export const ParentStudentChildMenu = [
 		MenuTitle: 'Lớp học',
 		MenuKey: '/class',
 		Parent: 'class',
+		Type: 'single',
 		MenuItem: [
 			{
 				ItemType: 'single',
@@ -112,6 +113,7 @@ export const ParentStudentChildMenu = [
 		MenuTitle: 'Khóa học video',
 		Parent: 'video',
 		MenuKey: '/course',
+		Type: 'single',
 		MenuItem: [
 			{
 				ItemType: 'single',
@@ -127,6 +129,7 @@ export const ParentStudentChildMenu = [
 		MenuTitle: 'Thư viện online',
 		Parent: 'library-online',
 		MenuKey: '/library-online',
+		Type: 'single',
 		MenuItem: [
 			{
 				ItemType: 'single',

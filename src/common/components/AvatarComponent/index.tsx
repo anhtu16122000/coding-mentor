@@ -13,7 +13,7 @@ const AvatarComponent: FC<TAvatar> = (props) => {
 
 	switch (type) {
 		case 'user':
-			DEFAULT_AVATAR = 'https://nguyenchau.w3spaces.com/default-avatar.png'
+			DEFAULT_AVATAR = '/default-avatar.png'
 			break
 		case 'class':
 			DEFAULT_AVATAR = '/images/study01.png'

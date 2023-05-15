@@ -15,6 +15,8 @@ import { SalerChildMenu, SalerMenu } from '~/common/libs/routers/saler'
 import { AccountantChildMenu, AccountantMenu } from '~/common/libs/routers/accountant'
 import { AcademicChildMenu, AcademicMenu } from '~/common/libs/routers/academic'
 import { ParentStudentChildMenu, ParentStudentMenu } from '~/common/libs/routers/parent'
+import { log } from '~/common/utils'
+import SimpleMenu from './SimpleMenu'
 
 function Layout({ children, home }: { children: React.ReactNode; home?: boolean }) {
 	const [mainMenu, setMainMenu] = useState([])
@@ -137,17 +139,33 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 		}
 	}, [mainMenu, path, childrenMenu])
 
+	const is = {
+		parent: userInformation?.RoleId == 8
+	}
+
 	return (
-		<div className="app">
+		<div className={`app ${is.parent ? 'simple-menu-pro' : ''}`}>
 			<Header isOpenMenu={isOpenMenu} isOpen={isOpen} funcMenuMobile={funcMenuMobile} openMenuMobile={openMenuMobile} />
 
-			<PrimaryMenu
-				resetMenuMobile={resetMenuMobile}
-				isOpenMenu={isOpenMenu}
-				isOpen={isOpen}
-				openMenuMobile={openMenuMobile}
-				funcMenuMobile={funcMenuMobile}
-			/>
+			{!is.parent && (
+				<PrimaryMenu
+					resetMenuMobile={resetMenuMobile}
+					isOpenMenu={isOpenMenu}
+					isOpen={isOpen}
+					openMenuMobile={openMenuMobile}
+					funcMenuMobile={funcMenuMobile}
+				/>
+			)}
+
+			{is.parent && (
+				<SimpleMenu
+					resetMenuMobile={resetMenuMobile}
+					isOpenMenu={isOpenMenu}
+					isOpen={isOpen}
+					openMenuMobile={openMenuMobile}
+					funcMenuMobile={funcMenuMobile}
+				/>
+			)}
 
 			<main className="app-main">
 				<div className={`app-content ${!isOpen && 'close-app'}`}>

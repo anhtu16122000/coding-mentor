@@ -759,3 +759,83 @@ button {
 		}
 	}
 }
+
+.simple-menu-pro {
+	.menu-child {
+		left: 0 !important;
+		&.false {
+			width: 260px !important;
+		}
+	}
+
+	.app-header {
+		width: 100% !important;
+
+		.app-header-logo {
+			&.open-no-ani {
+				width: 264px !important;
+			}
+			&.open {
+				width: 264px !important;
+			}
+		}
+	}
+
+	.app-content {
+		&.false {
+			@media screen and (min-width: 1000px) {
+				width: calc(100% - 258px);
+			}
+			@media screen and (max-width: 1000px) {
+				width: calc(100% - 0px);
+			}
+		}
+		&.close-app {
+			width: calc(100% - 0px) !important;
+			.breadcrumb {
+				margin-left: -8px !important;
+			}
+		}
+	}
+
+	.menu-bar .menu-child .app-header-logo {
+		padding: 0px !important;
+	}
+	.menu-child {
+		&.false {
+			img {
+				height: 34px !important;
+			}
+		}
+	}
+
+	.menu-child-body {
+		padding: 0px 16px;
+	}
+
+	.ant-menu-item-selected {
+		@apply shadow-sm;
+	}
+
+	.ant-menu-submenu-title {
+		.ant-menu-title-content {
+			margin-left: 2px !important;
+		}
+	}
+
+	.none-selected {
+		background-color: transparent !important;
+		color: #000 !important;
+		@apply shadow-none;
+		.ant-menu-title-content {
+			color: #000 !important;
+			div {
+				color: #000 !important;
+			}
+		}
+	}
+
+	.ant-menu-title-content {
+		color: #000;
+	}
+}

@@ -29,7 +29,8 @@
 }
 
 .video-item-container {
-	@apply m-[8px] rounded-xl bg-[#fff] hover:drop-shadow-lg duration-300 shadow-md;
+	@apply m-[8px] cursor-pointer rounded-xl bg-[#fff] hover:shadow-md duration-300 shadow-sm;
+	border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .video-status-tag {
