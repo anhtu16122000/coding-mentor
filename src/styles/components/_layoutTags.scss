@@ -39,6 +39,12 @@
 	&.yellow {
 		background: rgb(255, 202, 44);
 		background: linear-gradient(0deg, #eaaf00 24%, #ffc107 100%);
+		color: #2b2b2b;
+	}
+
+	&.purple {
+		background: rgb(192, 54, 210);
+		background: linear-gradient(0deg, #a034bd 24%, #ab55c3 100%);
 	}
 
 	&.black {

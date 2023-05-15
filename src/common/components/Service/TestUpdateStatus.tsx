@@ -1,33 +1,33 @@
-import { Tooltip, Modal, Form } from 'antd'
+import { Modal, Form } from 'antd'
 import React, { useEffect, useState } from 'react'
 import SelectField from '~/common/components/FormControl/SelectField'
 import { testAppointmentApi } from '~/api/test-appointment'
-import { FileMinus } from 'react-feather'
-import { MdSave } from 'react-icons/md'
 import { ShowNoti } from '~/common/utils'
-import IconButton from '../Primary/IconButton'
 import PrimaryButton from '../Primary/Button'
+import PrimaryTooltip from '../PrimaryTooltip'
+import { TiArrowSortedDown } from 'react-icons/ti'
 
 const TestUpdateStatus = (props) => {
 	const { rowData, setTodoApi, listTodoApi } = props
-	const [isModalVisible, setIsModalVisible] = useState(false)
+
 	const [form] = Form.useForm()
+
+	const [visible, setVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 
 	const showModal = () => {
-		setIsModalVisible(true)
+		setVisible(true)
 	}
 
 	const handleCancel = () => {
-		setIsModalVisible(false)
+		setVisible(false)
 	}
 
 	const onSubmit = async (data) => {
 		setIsLoading(true)
 		try {
-			const newData = { ...rowData, Status: data.Status }
-			const res = await testAppointmentApi.update(newData)
-			if (res.status === 200) {
+			const res = await testAppointmentApi.update({ ...rowData, Status: data.Status })
+			if (res.status == 200) {
 				handleCancel()
 				setTodoApi(listTodoApi)
 				ShowNoti('success', res.data.message)
@@ -43,20 +43,35 @@ const TestUpdateStatus = (props) => {
 		if (rowData) {
 			form.setFieldsValue(rowData)
 		}
-	}, [isModalVisible])
+	}, [visible])
 
 	return (
 		<>
-			{/* <Tooltip title="Cập nhật trạng thái">
-				<button className="btn btn-icon add " onClick={showModal}>
-					<FileMinus size={20} />
-				</button>
-			</Tooltip> */}
-			<IconButton onClick={showModal} tooltip="Cập nhật trạng thái" color="blue" type="button" icon="file" />
+			<PrimaryTooltip id={rowData?.id + '-fi'} content="Cập nhật trạng thái" place="left">
+				<div onClick={showModal} className="cursor-pointer">
+					{rowData?.Status == 1 && (
+						<p className="tag red">
+							{rowData.StatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
+						</p>
+					)}
+
+					{rowData?.Status == 2 && (
+						<p className="tag blue">
+							{rowData.StatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
+						</p>
+					)}
+
+					{rowData?.Status != 1 && rowData?.Status != 2 && (
+						<p className="tag yellow">
+							{rowData.StatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
+						</p>
+					)}
+				</div>
+			</PrimaryTooltip>
 
 			<Modal
 				title="Cập nhật trạng thái"
-				visible={isModalVisible}
+				open={visible}
 				onCancel={handleCancel}
 				footer={
 					<div className="flex-all-center">
@@ -75,13 +90,6 @@ const TestUpdateStatus = (props) => {
 							{ value: 2, title: 'Đã kiểm tra' }
 						]}
 					/>
-					{/* <button type="submit" className="btn btn-primary w-100">
-						<MdSave size={18} className="mr-2" />
-						Cập nhật
-					</button>
-					<PrimaryButton type="submit" background="blue" icon="save">
-						Cập nhật
-					</PrimaryButton> */}
 				</Form>
 			</Modal>
 		</>

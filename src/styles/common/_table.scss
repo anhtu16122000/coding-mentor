@@ -23,12 +23,18 @@
 }
 
 .wrap-table {
+	.ant-table-cell-row-hover {
+		background-color: unset !important;
+	}
 	.ant-table-body {
 		.ant-table-row {
 			&.active {
-				background-color: #e0e0e0 !important;
+				background-color: #ffed95 !important;
+				&:hover {
+					background-color: #ffed95 !important;
+				}
 				.ant-table-cell-fix-right {
-					background-color: #e0e0e0 !important;
+					background-color: #ffed95 !important;
 				}
 			}
 		}
@@ -38,9 +44,9 @@
 		margin-top: 8px;
 	}
 	.table-row-active {
-		background-color: #e0e0e0 !important;
+		background-color: #ffed95 !important;
 		.ant-table-cell-fix-right {
-			background-color: #e0e0e0 !important;
+			background-color: #ffed95 !important;
 		}
 	}
 	.expanded__row-title {
@@ -311,7 +317,14 @@
 			padding-bottom: 6px !important;
 		}
 
-		tr.ant-table-row:hover {
+		tr.row-light:hover {
+			td {
+				background: #dedede !important;
+				transition: 0.3s;
+			}
+		}
+
+		tr.row-dark:hover {
 			td {
 				background: #dedede !important;
 				transition: 0.3s;

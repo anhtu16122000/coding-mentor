@@ -341,15 +341,19 @@ const Student: FC<IPersonnel> = (props) => {
 	const columnsStudent = [
 		userInfoColumn,
 		{
-			title: 'Email',
-			dataIndex: 'Email',
-			render: (text) => <>{text}</>
-		},
-		{
-			title: 'Số điện thoại',
+			width: 250,
+			title: 'Liên hệ',
 			dataIndex: 'Mobile',
-			width: 150,
-			render: (text) => <>{text}</>
+			render: (a, item) => (
+				<div>
+					<p>
+						<div className="font-[500] inline-block">Điện thoại:</div> {a}
+					</p>
+					<p>
+						<div className="font-[500] inline-block">Email:</div> {item?.Email}
+					</p>
+				</div>
+			)
 		},
 		{
 			title: 'Giới tính',

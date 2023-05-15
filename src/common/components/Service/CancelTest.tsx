@@ -1,19 +1,22 @@
-import { Modal, Tooltip } from 'antd'
+import { Modal } from 'antd'
 import { useState } from 'react'
-import { IoMdTrash } from 'react-icons/io'
 import { testAppointmentApi } from '~/api/test-appointment'
 import { ShowNoti } from '~/common/utils'
-import { CloseOutlined } from '@ant-design/icons'
 import IconButton from '../Primary/IconButton'
 import PrimaryButton from '../Primary/Button'
 
+import Lottie from 'react-lottie-player'
+
+import deleteJson from '~/common/components/json/15120-delete.json'
+
 const CancelTest = (props) => {
 	const { onUpdateData, dataRow } = props
-	const [isModalVisible, setIsModalVisible] = useState(false)
+
+	const [visible, setVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 
 	const showModal = () => {
-		setIsModalVisible(true)
+		setVisible(true)
 	}
 
 	const handleOk = async () => {
@@ -22,7 +25,7 @@ const CancelTest = (props) => {
 			let res = await testAppointmentApi.delete(dataRow.Id)
 			if (res.status == 200) {
 				ShowNoti('success', 'Hủy lịch hẹn test thành công!')
-				setIsModalVisible(false)
+				setVisible(false)
 				onUpdateData && onUpdateData()
 			}
 		} catch (error) {
@@ -33,46 +36,31 @@ const CancelTest = (props) => {
 	}
 
 	const handleCancel = () => {
-		setIsModalVisible(false)
+		setVisible(false)
 	}
 
 	return (
 		<>
-			{/* <Tooltip title="Hủy lịch hẹn">
-				<button className="btn btn-icon delete" onClick={showModal}>
-					<CloseOutlined size={20} />
-				</button>
-			</Tooltip> */}
 			<IconButton icon="cancel" tooltip="Hủy lịch hẹn" color="primary" type="button" onClick={showModal} />
 			<Modal
-				title={
-					// <button className="btn btn-icon delete">
-					// 	<QuestionCircleOutlined />
-					// </button>
-					'Hủy lịch test'
-				}
-				open={isModalVisible}
-				// onOk={handleOk}
+				title="Hủy lịch test"
+				open={visible}
+				width={500}
 				onCancel={handleCancel}
 				okButtonProps={{ loading: isLoading }}
 				footer={
-					<>
-						<PrimaryButton
-							onClick={() => setIsModalVisible(false)}
-							type="button"
-							background="transparent"
-							icon="cancel"
-							className="mr-2 btn-outline"
-						>
-							Hủy
-						</PrimaryButton>
-						<PrimaryButton icon="remove" onClick={() => handleOk()} type="button" background="red" disable={isLoading} loading={isLoading}>
-							Xóa
-						</PrimaryButton>
-					</>
+					<PrimaryButton icon="remove" onClick={() => handleOk()} type="button" background="red" disable={isLoading} loading={isLoading}>
+						Xác nhận huỷ
+					</PrimaryButton>
 				}
 			>
-				<p className="text-base mb-4">Bạn muốn hủy lịch hẹn test của học viên này?</p>
+				<div className="w-full h-[260px] mt-[-30px] flex flex-col items-center justify-center">
+					<Lottie loop animationData={deleteJson} play className="inner w-[200px] mx-auto" />
+				</div>
+
+				<p className="text-center text-[16px]">
+					Hủy lịch hẹn của <div className="inline-block font-[600] text-primary">{dataRow?.FullName}?</div>
+				</p>
 			</Modal>
 		</>
 	)

@@ -35,6 +35,7 @@ import PrimaryButton from '~/common/components/Primary/Button'
 import { BsThreeDots } from 'react-icons/bs'
 import appConfigs from '~/appConfig'
 import ImportCustomer from './ImportCustomer'
+import moment from 'moment'
 
 let pageIndex = 1
 let dataOption = [
@@ -358,53 +359,58 @@ const CustomerAdvisory = () => {
 		{
 			...FilterTable({
 				type: 'search',
-				dataIndex: 'Code',
-				handleSearch: (event) => setTodoApi({ ...listTodoApi, Code: event }),
-				handleReset: (event) => setTodoApi(listTodoApi)
-			}),
-			width: 160,
-			title: 'Mã',
-			dataIndex: 'Code',
-			render: (text) => <p className="font-semibold">{text}</p>
-		},
-		{
-			...FilterTable({
-				type: 'search',
 				dataIndex: 'FullName',
 				handleSearch: (event) => setTodoApi({ ...listTodoApi, FullName: event }),
 				handleReset: (event) => setTodoApi(listTodoApi)
 			}),
-			width: 160,
-			title: 'Họ tên',
+			width: 220,
+			title: 'Thông tin',
 			dataIndex: 'FullName',
-			render: (text) => <p className="font-semibold">{text}</p>
+			render: (a, item) => (
+				<div>
+					<p className="font-weight-primary">{a}</p>
+					<p className="font-[500]">Mã: {item?.Code}</p>
+				</div>
+			)
 		},
 		{
-			width: 160,
-			title: 'Số điện thoại',
-			dataIndex: 'Mobile'
-		},
-		{
-			width: 160,
-			title: 'Email',
-			dataIndex: 'Email'
+			width: 250,
+			title: 'Liên hệ',
+			dataIndex: 'Mobile',
+			render: (a, item) => (
+				<div>
+					<p>
+						<div className="font-[500] inline-block">Điện thoại:</div> {a}
+					</p>
+					<p>
+						<div className="font-[500] inline-block">Email:</div> {item?.Email}
+					</p>
+				</div>
+			)
 		},
 		{
 			width: 160,
 			title: 'Trạng thái',
 			dataIndex: 'CustomerStatusId',
-			align: 'center',
 			render: (id, data) => {
 				switch (id) {
 					case 1:
 						return <p className="font-semibold tag red">{data.CustomerStatusName}</p>
-						break
+
 					case 2:
 						return <p className="font-semibold tag blue">{data.CustomerStatusName}</p>
-						break
+
+					case 3:
+						return <p className="font-semibold tag yellow">{data.CustomerStatusName}</p>
+
+					case 9:
+						return <p className="font-semibold tag purple">{data.CustomerStatusName}</p>
+
+					case 10:
+						return <p className="font-semibold tag gray">{data.CustomerStatusName}</p>
+
 					default:
 						return <p className="font-semibold tag green">{data.CustomerStatusName}</p>
-						break
 				}
 			}
 		},
@@ -419,6 +425,30 @@ const CustomerAdvisory = () => {
 			title: 'Tư vấn viên',
 			dataIndex: 'SaleId',
 			render: (text, data) => <p className="font-semibold">{data.SaleName}</p>
+		},
+		{
+			title: 'Khởi tạo',
+			dataIndex: 'ModifiedOn',
+			render: (date: any, item) => {
+				return (
+					<div>
+						<div className="font-weight-primary">{item?.CreatedBy}</div>
+						<div>{moment(item?.CreatedOn).format('HH:mm DD/MM/YYYY')}</div>
+					</div>
+				)
+			}
+		},
+		{
+			title: 'Cập nhật gần nhất',
+			dataIndex: 'ModifiedOn',
+			render: (date: any, item) => {
+				return (
+					<div>
+						<div className="font-weight-primary">{item?.ModifiedBy}</div>
+						<div>{moment(item?.ModifiedOn).format('HH:mm DD/MM/YYYY')}</div>
+					</div>
+				)
+			}
 		},
 		{
 			width: 160,
@@ -532,7 +562,6 @@ const CustomerAdvisory = () => {
 				totalPage={totalRow && totalRow}
 				getPagination={(pageNumber: number) => getPagination(pageNumber)}
 				loading={isLoading}
-				// addClass="basic-header"
 				TitlePage="Danh sách khách hàng"
 				TitleCard={
 					<div className="d-flex align-items-center justify-content-end">

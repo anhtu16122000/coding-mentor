@@ -24,6 +24,8 @@ import ExpandedRowAppointment from '~/common/components/Service/ExpandedRowAppoi
 import IconButton from '~/common/components/Primary/IconButton'
 import { useRouter } from 'next/router'
 import { Form, Select } from 'antd'
+import Head from 'next/head'
+import appConfigs from '~/appConfig'
 
 const appointmenInitFilter = [
 	{
@@ -383,15 +385,15 @@ export default function ServiceAppointmentTest(props) {
 
 	const columns = [
 		{
-			title: 'Mã',
-			dataIndex: 'UserCode',
-			width: 110
-		},
-		{
 			title: 'Học viên',
 			dataIndex: 'FullName',
 			width: 220,
-			render: (a) => <p className="font-weight-primary">{a}</p>,
+			render: (a, item) => (
+				<div>
+					<p className="font-weight-primary">{a}</p>
+					<p className="font-[500]">Mã: {item?.UserCode}</p>
+				</div>
+			),
 			...FilterColumn('FullName', onSearch, handleReset, 'text')
 		},
 		{
@@ -403,12 +405,24 @@ export default function ServiceAppointmentTest(props) {
 		{
 			title: 'Thời gian',
 			dataIndex: 'Time',
-			render: (date: any) => moment(date).format('DD/MM/YYYY HH:mm')
+			render: (date: any) => moment(date).format('HH:mm DD/MM/YYYY')
 		},
 		{
-			width: 200,
-			title: 'Người hẹn',
-			dataIndex: 'ModifiedBy'
+			title: 'Trạng thái',
+			dataIndex: 'Status',
+			render: (status, data) => {
+				if (isAdmin() || isManager() || isTeacher() || isSaler() || isAcademic()) {
+					return <TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
+				}
+
+				if (status == 1) {
+					return <p className="tag red">{data.StatusName}</p>
+				}
+				if (status == 2) {
+					return <p className="tag blue">{data.StatusName}</p>
+				}
+				return <p className="tag yellow">{data.StatusName}</p>
+			}
 		},
 		{
 			width: 220,
@@ -416,15 +430,15 @@ export default function ServiceAppointmentTest(props) {
 			dataIndex: 'TeacherName'
 		},
 		{
-			title: 'Trạng thái',
-			dataIndex: 'Status',
-			render: (status, data) => {
-				if (status === 1) {
-					return <p className="tag red">{data.StatusName}</p>
-				}
-				if (status === 2) {
-					return <p className="tag blue">{data.StatusName}</p>
-				}
+			title: 'Khởi tạo',
+			dataIndex: 'ModifiedOn',
+			render: (date: any, item) => {
+				return (
+					<div>
+						<div className="font-weight-primary">{item?.CreatedBy}</div>
+						<div>{moment(item?.CreatedOn).format('HH:mm DD/MM/YYYY')}</div>
+					</div>
+				)
 			}
 		},
 		{
@@ -434,9 +448,6 @@ export default function ServiceAppointmentTest(props) {
 			render: (text, data, index) => {
 				return (
 					<div onClick={(e) => e.stopPropagation()}>
-						{(isAdmin() || isManager() || isTeacher() || isSaler() || isAcademic()) && (
-							<TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
-						)}
 						{(isAdmin() || isManager() || isTeacher() || isSaler() || isAcademic()) && (
 							<StudentForm
 								rowData={data}
@@ -499,6 +510,9 @@ export default function ServiceAppointmentTest(props) {
 
 	return (
 		<>
+			<Head>
+				<title>{appConfigs.appName + ' - Danh sách hẹn test'}</title>
+			</Head>
 			<NotiModal
 				isOpen={isOpenNoti}
 				isCancel={() => setisOpenNoti(false)}
