@@ -311,8 +311,6 @@
 				width: 0px;
 			}
 
-			// background: red;
-
 			padding-top: 6px !important;
 			padding-bottom: 6px !important;
 		}
@@ -320,14 +318,24 @@
 		tr.row-light:hover {
 			td {
 				background: #dedede !important;
-				transition: 0.3s;
+			}
+		}
+
+		tr.table-row-light:hover {
+			td {
+				background: #dedede !important;
+			}
+		}
+
+		tr.table-row-dark:hover {
+			td {
+				background: #dedede !important;
 			}
 		}
 
 		tr.row-dark:hover {
 			td {
 				background: #dedede !important;
-				transition: 0.3s;
 			}
 		}
 
