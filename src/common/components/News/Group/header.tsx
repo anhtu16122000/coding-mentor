@@ -154,8 +154,8 @@ function GroupHeader({ groupId }) {
 		<div className="w-[calc(100%-8px)] ml-[3px] p-[16px] bg-[#fff] rounded-[6px] shadow-md">
 			{!!details?.BackGround && (
 				<>
+					<img src={details?.BackGround} className="object-cover w-[100%] h-[250px] rounded-[6px] shadow-sm" />
 					<div className="cc-hr my-[16px]" />
-					<img src={details?.BackGround} className="object-cover w-[100%] h-[250px]" />
 				</>
 			)}
 
