@@ -8,7 +8,7 @@ export const classApi = {
 	getByID(id) {
 		return instance.get<IApiResultData<IClass>>(`${url}/${id}`)
 	},
-	getAllTeacherWhenCreate(params) {
+	getAllTeachers(params) {
 		return instance.get<IApiResultData<ICurriculum[]>>(`${url}/teacher-when-create`, { params: params })
 	},
 	checkTeacherAvailable(params) {
@@ -63,7 +63,8 @@ export const classApi = {
 	updateIndexCurriculumDetailOfClass(data) {
 		return instance.put(`${url}/curriculum-detail-in-class-index`, data)
 	},
-	checkCompleteCurriculumInClass(id) { // hoàn thành chủ đề
+	checkCompleteCurriculumInClass(id) {
+		// hoàn thành chủ đề
 		return instance.post(`${url}/curriculum-detail-in-class/complete/${id}`)
 	},
 	getFileCurriculumOfClass(params) {
@@ -75,7 +76,8 @@ export const classApi = {
 	deleteFileCurriculumDetailOfClass(id) {
 		return instance.delete(`${url}/file-curriculum-in-class/${id}`)
 	},
-	checkCompleteFileInClass(id, fileCurriculumInClassId) { //Hoàn thành file
+	checkCompleteFileInClass(id, fileCurriculumInClassId) {
+		//Hoàn thành file
 		return instance.post(`${url}/file-curriculum-in-class/complete/${id}`, { fileCurriculumInClassId })
 	},
 	addCurriculumOfClass(data) {

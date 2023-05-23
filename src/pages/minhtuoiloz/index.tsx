@@ -51,7 +51,7 @@ const MonaSupportPattern = () => {
 			setLoading(true)
 			const res = await accountApi.loginDev(data)
 			if (res.status === 200) {
-				const token = res?.data?.Token || ''
+				const token = res?.data?.token || ''
 				const user = parseJwt(token) || ''
 				const userData = { token: token, user: user }
 

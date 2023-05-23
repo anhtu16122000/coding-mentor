@@ -30,7 +30,7 @@ const ModalReviewScheduleClass = (props) => {
 			dispatch(setShowModal({ open: false, id: null }))
 			dispatch(setPrevSchedule({}))
 			dispatch(setRoom([]))
-			router.push('/class/list-class')
+			router.push('/class')
 		}
 	}
 	return (

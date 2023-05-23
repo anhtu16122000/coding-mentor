@@ -42,7 +42,7 @@ const CalenderClass = () => {
 	const getAllTeacherByBranchAndProgram = async (branchId, programId) => {
 		setIsLoading(true)
 		try {
-			const res = await classApi.getAllTeacherWhenCreate({ branchId: branchId, programId: programId })
+			const res = await classApi.getAllTeachers({ branchId: branchId, programId: programId })
 			if (res.status == 200) {
 				const convertData = parseSelectArray(res.data.data, 'TeacherName', 'TeacherId')
 				dispatch(setTeacher(convertData))

@@ -4,6 +4,7 @@ import { BiLike } from 'react-icons/bi'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { GoCommentDiscussion } from 'react-icons/go'
 import { ShowNostis, log } from '~/common/utils'
+import ReactHtmlParser from 'react-html-parser'
 import ListComment from './Comment/list'
 import { deleteNews, getComments, getLiked, getNewsDetail, getTimeSince } from './utils'
 import NewsFiles from './files'
@@ -235,10 +236,10 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 			</div>
 
 			<div className="cc-news-item-body">
-				<div className="cc-news-item-content">
-					<ShowMore lines={3}>
-						<span>{Content}</span>
-					</ShowMore>
+				<div>
+					{/* <ShowMore lines={3}> */}
+					<span className="cc-news-item-content">{ReactHtmlParser(Content)}</span>
+					{/* </ShowMore> */}
 				</div>
 
 				{!!details?.FileList && (

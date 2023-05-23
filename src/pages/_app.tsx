@@ -13,15 +13,15 @@ import { Provider as StoreProvider } from 'react-redux'
 import { store } from '~/store'
 
 // css
-import 'bootstrap/dist/css/bootstrap.min.css'
 import 'antd/dist/antd.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-toastify/dist/ReactToastify.css'
-import '../styles/global.scss'
 import 'primereact/resources/themes/saga-blue/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import 'react-tooltip/dist/react-tooltip.css'
+import '../styles/global.scss'
 
 import ToastifyContainer from '~/common/providers/Toastify'
 import { checkInternet } from '~/common/utils/main-function'

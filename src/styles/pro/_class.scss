@@ -1,0 +1,186 @@
+.classes-pro {
+	.btn-filter {
+		height: 32px;
+		width: 32px;
+	}
+
+	.class-status-button {
+		@apply flex items-center;
+
+		.item {
+			@apply mr-[8px] h-[32px] flex items-center px-[8px] rounded-[4px];
+			cursor: pointer;
+			color: #717171;
+			text-align: center;
+			background: #efefef;
+			transition: all 0.3s linear;
+			&:hover {
+				background: rgba(27, 115, 232, 0.0901960784);
+				color: #1b73e8;
+			}
+			&.active {
+				background: #1b73e8;
+				color: #fff;
+			}
+		}
+	}
+
+	.card-class-container {
+		@apply w-full grid grid-cols-1 gap-x-4;
+
+		@media screen and (min-width: 650px) {
+			@apply grid-cols-2;
+		}
+
+		@media screen and (min-width: 1280px) {
+			@apply grid-cols-3;
+		}
+
+		@media screen and (min-width: 1580px) {
+			@apply grid-cols-4;
+		}
+
+		.card-class-item {
+			@apply col-span-1 mb-4 rounded-[6px] shadow-sm flex flex-col relative;
+
+			border: 1px solid #e7e7e7;
+
+			.class-time {
+				@apply text-[14px] text-[#747474];
+			}
+
+			.class-item-footer {
+				@apply flex items-center mt-[8px] justify-between;
+			}
+
+			.class-thubmnail {
+				height: 150px;
+				@apply object-cover rounded-t-[6px] shadow-sm;
+			}
+
+			a {
+				@apply text-[16px] font-[600] text-[#000];
+			}
+
+			.class-info-item {
+				@apply font-[400] mt-[2px] text-[#000];
+				.info-value {
+					@apply font-[600] inline-block;
+				}
+			}
+
+			.class-status {
+				@apply absolute top-[8px] left-[8px] z-10 bg-[#fff] px-[8px] text-[13px] font-[500] rounded-[999px] shadow-sm;
+				border: 1px solid #f7f7f7;
+
+				&.red {
+					@apply text-[#e31616];
+				}
+
+				&.blue {
+					@apply text-[#1b73e8];
+				}
+
+				&.green {
+					@apply text-[#24913c];
+				}
+			}
+
+			.class-type {
+				@apply w-[22px] shadow-sm cursor-pointer h-[22px] flex items-center justify-center text-[#fff] rounded-full duration-300;
+
+				p {
+					display: none;
+					@apply duration-300 ml-[4px];
+				}
+
+				&:hover {
+					width: 80px;
+					p {
+						display: block;
+					}
+				}
+			}
+		}
+	}
+}
+
+.free {
+	@apply font-[500] text-[#30ad3d];
+}
+
+.class-price {
+	@apply font-[500] text-[#1b73e8] text-[14px];
+}
+
+.pro-class-menu {
+	@apply absolute top-[8px] right-[8px] cursor-pointer duration-300;
+	@apply w-[30px] h-[30px] bg-[#fff] rounded-[6px] shadow-sm;
+
+	.icon-menu-close {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		align-items: center;
+		justify-content: center;
+
+		@apply delay-300 max-w-[60px] max-h-[60px];
+	}
+
+	.the-item-pro {
+		font-size: 0px;
+		@apply duration-300 p-0 hidden;
+		div {
+			font-size: 0px;
+		}
+		.pro-trash {
+			display: none;
+			font-size: 0px;
+		}
+		.pro-edit {
+			display: none;
+			font-size: 0px;
+		}
+	}
+
+	.pro-menu-item {
+		@apply flex items-center hover:bg-[#eeeeee] active:bg-[#fafafa] rounded-[4px];
+	}
+
+	.inner-menu-open {
+		@apply absolute;
+	}
+
+	&:hover {
+		@apply w-[118px] h-[92px];
+
+		.icon-menu-close {
+			@apply delay-300;
+			display: none;
+		}
+
+		.inner-menu-open {
+			@apply flex flex-col w-full h-full p-[8px];
+
+			.the-item-pro {
+				@apply p-[8px] flex;
+				font-size: 14px;
+
+				div {
+					@apply flex-shrink-0 delay-100;
+					font-size: 14px;
+				}
+
+				.pro-trash {
+					@apply flex-shrink-0 inline;
+					font-size: 20px;
+				}
+
+				.pro-edit {
+					@apply flex-shrink-0 inline;
+					font-size: 18px;
+				}
+			}
+		}
+	}
+}

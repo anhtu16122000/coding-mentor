@@ -147,13 +147,13 @@ function NewsFeed() {
 					)}
 
 					{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
-						<div className="cc-news-container">
+						<div className="cc-news-container pb-[16px]">
 							<CreateNews onRefresh={() => setFilter({ ...filter, pageIndex: 1 })} />
 						</div>
 					)}
 
 					{!currentGroup && (
-						<div className="cc-new-mobile-group ml-[3px]">
+						<div className="cc-new-mobile-group ml-[3px] !w-[calc(100%-8px)]">
 							<div className="bg-[#fff] shadow-md w-full rounded-[6px]">
 								<NewsGroup />
 							</div>

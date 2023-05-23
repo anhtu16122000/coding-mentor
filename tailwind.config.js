@@ -1,7 +1,9 @@
 /** @type {import('tailwindcss').Config} */
+
 const plugin = require('tailwindcss/plugin')
+
 module.exports = {
-	content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}', './src/common/components/**/*.{js,ts,jsx,tsx}'],
+	content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/common/**/*.{js,ts,jsx,tsx}'],
 	theme: {
 		extend: {
 			gap: {

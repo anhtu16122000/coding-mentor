@@ -46,8 +46,8 @@ function NewsGroup(props) {
 	}
 
 	return (
-		<div className="p-[16px] cc-news-group">
-			<h4 className="font-semibold text-[16px]">Danh sách nhóm </h4>
+		<div className="p-[16px] mb-[16px] cc-news-group">
+			<h4 className="font-semibold text-[16px] mb-[8px]">Danh sách nhóm </h4>
 
 			{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
 				<>

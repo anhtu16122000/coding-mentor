@@ -13,7 +13,7 @@ import AvatarComponent from '../AvatarComponent'
 import DeleteTableRow from '../Elements/DeleteTableRow'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
-import UpdateClassForm from './UpdateClassForm'
+import UpdateClassForm from './ProClass/UpdateClassForm'
 
 const ClassList = (props) => {
 	const { isLoading, dataSource, setTodoApi, listTodoApi, totalRow, todoApi, getAllClass } = props

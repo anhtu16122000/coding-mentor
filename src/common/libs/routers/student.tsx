@@ -64,8 +64,8 @@ export const StudentChildMenu = [
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/class/list-class',
-				Route: '/class/list-class',
+				Key: '/class',
+				Route: '/class',
 				Text: 'Danh sách lớp học',
 				Icon: ''
 			}

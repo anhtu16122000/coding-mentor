@@ -50,7 +50,7 @@
 
 	.cc-news-item {
 		@apply max-w-[670px] w-[calc(100%-26px)] m-auto overflow-hidden;
-		@apply bg-[#fff] rounded-[8px] shadow-md mt-[16px] p-[16px];
+		@apply bg-[#fff] rounded-[8px] shadow-md mb-[16px] p-[16px];
 
 		.cc-news-item-header {
 			@apply w-full flex;
@@ -231,9 +231,12 @@
 }
 
 .cc-new-mobile-group {
-	@apply duration-300;
+	@apply duration-300 m-auto;
 	display: block;
-	margin-top: 16px;
+
+	width: 100%;
+	max-width: 680px;
+
 	@media screen and (min-width: 720px) {
 		display: none;
 	}

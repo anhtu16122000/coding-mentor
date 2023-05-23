@@ -56,13 +56,13 @@ const NewsFiles: FC<TNewsFiles> = React.memo(({ files }) => {
 						<div
 							key={`FILE-POST-${index}-${new Date().getTime()}`}
 							onClick={() => setVisible(item.src)}
-							className={`shadow-md cursor-pointer bg-[#fff] h-full`}
+							className={`shadow-md cursor-pointer bg-[#fff] h-full rounded-[6px]`}
 						>
 							{item.fileType !== 'mp4' && (
 								<img
 									draggable={false}
 									src={item.src}
-									className={`${imagesLength > 1 ? 'max-h-[400px] w-[100%]' : ''} object-cover`}
+									className={`${imagesLength > 1 ? 'max-h-[400px] w-[100%]' : ''} rounded-[6px] object-cover`}
 									width="100%"
 								/>
 							)}

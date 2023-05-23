@@ -17,7 +17,7 @@ import { RootState } from '~/store'
 import AvatarComponent from '../AvatarComponent'
 import DeleteTableRow from '../Elements/DeleteTableRow'
 import PrimaryButton from '../Primary/Button'
-import UpdateClassForm from './UpdateClassForm'
+import UpdateClassForm from './ProClass/UpdateClassForm'
 
 type IClassListContent = {
 	totalRow?: number
@@ -38,6 +38,7 @@ export const ClassListContent: React.FC<IClassListContent> = ({
 	getAllClass
 }) => {
 	const [academic, setAcademic] = useState([])
+
 	const state = useSelector((state: RootState) => state)
 	const { information: userInformation } = state.user
 	const [isLoadingDelete, setIsLoadingDelete] = useState(false)
@@ -55,6 +56,7 @@ export const ClassListContent: React.FC<IClassListContent> = ({
 			</div>
 		)
 	}
+
 	const returnPathName = (item) => {
 		if (!userInformation) return ''
 		let role = userInformation?.RoleId

@@ -213,7 +213,7 @@ const CreateClassForm = (props) => {
 	}
 	const getAllTeacherByBranchAndProgram = async (branchId, programId) => {
 		try {
-			const res = await classApi.getAllTeacherWhenCreate({ branchId: branchId, programId: programId })
+			const res = await classApi.getAllTeachers({ branchId: branchId, programId: programId })
 			if (res.status === 200) {
 				const convertData = parseSelectArrayUser(res.data.data, 'TeacherName', 'TeacherCode', 'TeacherId')
 				setTeacher(convertData)

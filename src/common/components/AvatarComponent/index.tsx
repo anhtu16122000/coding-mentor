@@ -16,7 +16,7 @@ const AvatarComponent: FC<TAvatar> = (props) => {
 			DEFAULT_AVATAR = '/default-avatar.png'
 			break
 		case 'class':
-			DEFAULT_AVATAR = '/images/study01.png'
+			DEFAULT_AVATAR = '/1098.jpg'
 			break
 		case 'cash':
 			DEFAULT_AVATAR = '/images/cash-payment.png'
