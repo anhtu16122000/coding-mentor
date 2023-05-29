@@ -41,11 +41,11 @@ export const AdminMenu = [
 		TabName: 'Thư viện online',
 		Icon: <IoLibrarySharp size={22} />
 	},
-	// {
-	// 	Key: 'library',
-	// 	TabName: 'Đề thi',
-	// 	Icon: <RiFileList2Fill size={22} />
-	// },
+	{
+		Key: 'library',
+		TabName: 'Đề thi',
+		Icon: <RiFileList2Fill size={22} />
+	},
 	{
 		Key: 'config',
 		TabName: 'Cấu hình',
