@@ -395,6 +395,24 @@ button {
 		background-color: #e7e7e7;
 	}
 }
+.none-scrollbar {
+	&::-webkit-scrollbar-track {
+		border-radius: 10px;
+		background-color: white !important;
+	}
+
+	&::-webkit-scrollbar {
+		border: none;
+		width: 0px !important;
+		height: 0px !important;
+		background-color: white !important;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		background-color: #dbdbdb !important;
+	}
+}
 
 .chau-custom-scrollbar {
 	&::-webkit-scrollbar-track {

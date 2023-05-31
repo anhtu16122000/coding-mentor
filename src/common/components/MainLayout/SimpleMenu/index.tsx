@@ -38,8 +38,6 @@ const SimpleMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, res
 	const [mainActivated, setMainActivated] = useState<string>(defaultTab)
 	const [subMenuActive, setSubMenuActive] = useState('')
 
-	console.log('---- subMenuActive: ', subMenuActive)
-
 	useEffect(() => {
 		if (parentMenu.length > 0) {
 			getActiveTab()
@@ -102,14 +100,7 @@ const SimpleMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, res
 			let isPrimary = pathname !== '/'
 			menuItem.MenuItem.forEach((item, ind) => {
 				if (isPrimary) {
-					console.log('--------------- item: ', item)
-					console.log('--------------- item menuItem: ', menuItem)
-
-					// setSubMenuActive
-
 					if (item.Route == pathname) {
-						console.log('--- item.Route == pathname')
-
 						setMainActivated(menuItem.Parent)
 						setSubMenuActive(menuItem?.MenuKey)
 						return false

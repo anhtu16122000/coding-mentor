@@ -10,9 +10,10 @@ import UploadImageField from '../../FormControl/UploadImageField'
 import IconButton from '../../Primary/IconButton'
 import { FaEdit } from 'react-icons/fa'
 import ModalFooter from '../../ModalFooter'
+import PrimaryButton from '../../Primary/Button'
 
 const UpdateClassForm = (props) => {
-	const { dataRow, academic, setShowPop, onRefresh } = props
+	const { dataRow, academic, setShowPop, onRefresh, isDetail, onShow } = props
 
 	const [form] = Form.useForm()
 
@@ -64,15 +65,22 @@ const UpdateClassForm = (props) => {
 	function showMopdal() {
 		toggle()
 		setShowPop && setShowPop('')
+		onShow && onShow()
 	}
 
 	return (
 		<>
-			{!!props?.isPro && (
+			{!!props?.isPro && !isDetail && (
 				<div onClick={showMopdal} className="pro-menu-item text-primary the-item-pro">
 					<FaEdit className="pro-edit" />
 					<div className="ml-[8px] font-[500]">Cập nhật</div>
 				</div>
+			)}
+
+			{props?.isPro && !!isDetail && (
+				<PrimaryButton onClick={showMopdal} icon="edit" background="yellow" type="button" className="mr-3">
+					Cập nhật
+				</PrimaryButton>
 			)}
 
 			{!props?.isPro && <IconButton icon="edit" type="button" tooltip="Cập nhật" color="yellow" onClick={showMopdal} />}

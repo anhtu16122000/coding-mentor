@@ -20,7 +20,7 @@ function parseJwt(token) {
  * @param params - Response from the server after login and refresh tokens
  * @param dispatch - This is the dispatch function that we can use to dispatch actions to the Redux store
  */
-async function playWithToken(params, dispatch) {
+async function playWithToken(params, dispatch, callback?: Function) {
 	const token = params?.token || ''
 	const user = parseJwt(token) || ''
 	const theRefresh = {
@@ -38,6 +38,12 @@ async function playWithToken(params, dispatch) {
 	dispatch(setAuthData(user))
 	dispatch(setRefreshToken(theRefresh))
 	dispatch(setAuthLoading(false))
+
+	if (!!callback) {
+		if (user?.RoleId == '1' || user?.RoleId == '2' || user?.RoleId == '3') {
+			callback()
+		}
+	}
 
 	const pathname = Router.pathname
 

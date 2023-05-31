@@ -4,12 +4,13 @@ type TAvatar = {
 	url: string
 	className?: string
 	type: 'user' | 'class' | 'cash' | 'default'
+	onClick?: Function
 }
 
 let DEFAULT_AVATAR = ''
 
 const AvatarComponent: FC<TAvatar> = (props) => {
-	const { url, className, type } = props
+	const { url, className, type, onClick } = props
 
 	switch (type) {
 		case 'user':
@@ -28,6 +29,7 @@ const AvatarComponent: FC<TAvatar> = (props) => {
 
 	return (
 		<img
+			onClick={() => !!onClick && onClick()}
 			draggable={false}
 			onError={(e) => {
 				const targetEvent = e.target as any

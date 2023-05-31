@@ -107,6 +107,7 @@ module.exports = {
 			tablet: '640px',
 			laptop: '1024px',
 			desktop: '1280px',
+			w350: '350px',
 			w400: '400px',
 			w430: '430px',
 			w450: '450px',

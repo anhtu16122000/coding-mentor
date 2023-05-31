@@ -1,4 +1,4 @@
-import { Card, Empty, Form, Pagination, Select, Skeleton } from 'antd'
+import { Card, Empty, Form, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
@@ -6,14 +6,19 @@ import { branchApi } from '~/api/branch'
 import { classApi } from '~/api/class'
 import { userInformationApi } from '~/api/user'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
-import { ShowNoti, log } from '~/common/utils'
+import { ShowNoti } from '~/common/utils'
 import { parseSelectArray } from '~/common/utils/common'
 import { RootState } from '~/store'
 import { setBranch } from '~/store/branchReducer'
 import ClassFilter from './Filter'
 import CardGrid from './Item/CardGrid'
-import ClassProLoading from './Loading'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { IoGrid } from 'react-icons/io5'
+import { ImList } from 'react-icons/im'
+import CardList from './Item/CardList'
+import ProGridLoading from './Loading/ProGridLoading'
+import ProListLoading from './Loading/ProListLoading'
+import { setListClass, setStatusData, setTotalClass } from '~/store/classReducer'
 
 const initFilter = {
 	name: null,
@@ -51,33 +56,55 @@ const ListClassPro = () => {
 	])
 
 	const [filter, setFilter] = useState(initFilter)
-	const [listClass, setListClass] = useState<IClass[]>([])
-	const [totalRow, setTotalRow] = useState(null)
 	const [loading, setLoading] = useState(false)
-	const [current, setCurrent] = useState(1)
 	const dispatch = useDispatch()
 
-	const userInformation = useSelector((state: RootState) => state.user.information)
+	const userInfo = useSelector((state: RootState) => state.user.information)
 	const state = useSelector((state: RootState) => state)
 
+	const listClassState = useSelector((state: RootState) => state.class.listClass)
+	const totalClassState = useSelector((state: RootState) => state.class.totalClass)
+
 	const is = {
-		parent: userInformation?.RoleId === '8',
-		admin: userInformation?.RoleId === '1'
+		parent: userInfo?.RoleId === '8',
+		admin: userInfo?.RoleId === '1'
 	}
 
 	useEffect(() => {
-		getAllBranchs()
-		getStudents()
-		getAcademics()
+		if (is.admin) {
+			getAllBranchs()
+			getAcademics()
+		}
 	}, [])
 
 	useEffect(() => {
-		getAllClass()
-	}, [filter])
+		if (is.parent) {
+			getStudents()
+		}
+		if (is.admin) {
+			getAllBranchs()
+			getAcademics()
+		}
+	}, [userInfo])
 
 	useEffect(() => {
-		log.Yellow('listClass', listClass)
-	}, [listClass])
+		if (filter != initFilter || listClassState.length == 0) {
+			if (!is.parent) {
+				getAllClass()
+			}
+			if (is.parent && filter.studentId) {
+				getAllClass()
+			}
+		}
+	}, [filter])
+
+	function handleRefresh() {
+		if (filter != initFilter) {
+			setFilter(initFilter)
+		} else {
+			getAllClass()
+		}
+	}
 
 	const getAllClass = async () => {
 		setLoading(true)
@@ -85,29 +112,45 @@ const ListClassPro = () => {
 			const res = await classApi.getAll(filter)
 			if (res.status == 200) {
 				if (is.parent) {
-					if (filter.studentId && filter.studentId !== '') {
-						setListClass([...listClass, ...res.data.data])
-						setTotalRow(res.data.totalRow)
+					if (filter.studentId) {
+						dispatch(setListClass([...listClassState, ...res.data.data]))
+						dispatch(setTotalClass(res.data.totalRow))
+						dispatch(setStatusData({ ...res.data, data: [] }))
 					} else {
-						setListClass([])
-						setTotalRow(0)
+						dispatch(setListClass([]))
+						dispatch(setTotalClass(0))
+						dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
 					}
 				} else {
 					if (filter?.pageIndex == 1) {
-						setListClass([...res.data.data])
+						const temp = [...res.data.data]
+						dispatch(setListClass(temp))
 					} else {
-						setListClass([...listClass, ...res.data.data])
+						const temp = [...listClassState, ...res.data.data]
+						dispatch(setListClass(temp))
 					}
-					setTotalRow(res.data.totalRow)
+					dispatch(setTotalClass(res.data.totalRow))
+					dispatch(setStatusData({ ...res.data, data: [] }))
 				}
 			} else {
-				setListClass([])
+				dispatch(setListClass([]))
+				dispatch(setTotalClass(0))
+				dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
 		} finally {
 			setLoading(false)
 		}
+	}
+
+	async function getStatusData() {
+		try {
+			const res = await classApi.getStatusRow(filter)
+			if (res.status == 200) {
+				dispatch(setStatusData({ ...res.data, data: [] }))
+			}
+		} catch (error) {}
 	}
 
 	const getAllBranchs = async () => {
@@ -160,12 +203,12 @@ const ListClassPro = () => {
 					PageSize: 9999,
 					PageIndex: 1,
 					RoleIds: '3',
-					parentIds: userInformation?.UserInformationId
+					parentIds: userInfo?.UserInformationId
 				})
 				if (response.status == 200) {
 					let temp = []
 					response.data.data?.forEach((item) => {
-						temp.push({ label: `${item?.FullName} - ${item.UserCode}`, value: item.UserInformationId })
+						temp.push({ label: `${item?.FullName}`, value: item.UserInformationId })
 					})
 					setStudents(temp)
 				} else {
@@ -204,13 +247,6 @@ const ListClassPro = () => {
 		}
 	}, [students])
 
-	const getPagination = (pageNumber: number) => {
-		setCurrent(pageNumber)
-		setFilter({ ...filter, pageIndex: pageNumber })
-	}
-
-	const showTotal = () => totalRow && <div className="font-weight-black">Tổng cộng: {totalRow}</div>
-
 	const handleChangeTab = (val) => {
 		setFilter({ ...filter, status: val, pageIndex: 1 })
 	}
@@ -241,11 +277,29 @@ const ListClassPro = () => {
 	}
 
 	function handleUpdate(index, param) {
-		console.log('---- param: ', param)
+		let temp = [...listClassState]
+		temp[index] = { ...listClassState[index], ...param }
+		dispatch(setListClass([...temp]))
 
-		let temp = [...listClass]
-		temp[index] = { ...listClass[index], ...param }
-		setListClass([...temp])
+		getStatusData()
+	}
+
+	const [currentStyle, setCurrentStyle] = useState(0)
+
+	useEffect(() => {
+		getStyleSaved()
+	}, [])
+
+	async function handleChangeStyleSaved(e) {
+		setCurrentStyle(e)
+		await localStorage.setItem('proClassStyle', e + '')
+	}
+
+	async function getStyleSaved() {
+		const res = await localStorage.getItem('proClassStyle')
+		if (!!res) {
+			setCurrentStyle(parseInt(res))
+		}
 	}
 
 	return (
@@ -259,48 +313,92 @@ const ListClassPro = () => {
 						onFilter={handleFilter}
 						onReset={handleReset}
 						onChangeTab={handleChangeTab}
-						total={totalRow}
+						total={totalClassState}
 					/>
 				}
 				extra={
-					is.parent && (
-						<Form form={form}>
-							<Form.Item name="student">
-								<Select allowClear className="w-[200px]" onChange={handleChangeStudent} options={students} placeholder="Chọn học viên" />
-							</Form.Item>
-						</Form>
-					)
+					<div className="flex items-center">
+						{is.parent && (
+							<Form form={form} className="w-[190px] h-[34px] mr-[8px]">
+								<Form.Item name="student">
+									<Select allowClear className="h-[34px]" onChange={handleChangeStudent} options={students} placeholder="Chọn học viên" />
+								</Form.Item>
+							</Form>
+						)}
+
+						<div className="flex items-center w3-animate-right">
+							<div
+								className="border-[1px] h-[32px] w-[32px] flex items-center justify-center cursor-pointer rounded-l-[4px]"
+								onClick={() => handleChangeStyleSaved(0)}
+								style={{
+									backgroundColor: currentStyle == 0 ? '#1b73e8' : '#fff',
+									borderColor: currentStyle == 0 ? '#1b73e8' : '#bdbdbd'
+								}}
+							>
+								<IoGrid className="cursor-pointer" size={20} color={currentStyle == 0 ? '#fff' : '#000'} />
+							</div>
+							<div
+								className="border-[1px] border-l-[0px] border-[#bdbdbd] h-[32px] w-[32px] flex items-center justify-center cursor-pointer rounded-r-[4px]"
+								onClick={() => handleChangeStyleSaved(1)}
+								style={{
+									backgroundColor: currentStyle == 1 ? '#1b73e8' : '#fff',
+									borderColor: currentStyle == 1 ? '#1b73e8' : '#bdbdbd'
+								}}
+							>
+								<ImList className="cursor-pointer" size={16} color={currentStyle == 1 ? '#fff' : '#000'} />
+							</div>
+						</div>
+					</div>
 				}
 			>
-				{!loading && listClass.length == 0 && <Empty />}
+				{!loading && listClassState.length == 0 && <Empty />}
 
-				{loading && listClass.length == 0 && <ClassProLoading />}
+				{loading && listClassState.length == 0 && currentStyle == 0 && <ProGridLoading />}
+				{loading && listClassState.length == 0 && currentStyle == 1 && <ProListLoading />}
 
-				<InfiniteScroll
-					dataLength={listClass.length}
-					next={loadMoreData}
-					hasMore={listClass.length < totalRow}
-					loader={<ClassProLoading />}
-					endMessage=""
-					scrollableTarget="pro-scroll"
-					className="none-ant-row"
-				>
-					{listClass.length > 0 && (
-						<div className="card-class-container">
-							{listClass.map((thisClass: any, index) => {
-								return (
-									<CardGrid
-										key={`class-grid-${index}`}
-										item={thisClass}
-										onRefresh={getAllClass}
-										academics={academics}
-										onUpdate={(param) => handleUpdate(index, param)}
-									/>
-								)
-							})}
-						</div>
-					)}
-				</InfiniteScroll>
+				<div id="pro-scroll" className="scrollable pro-cl-body">
+					<InfiniteScroll
+						dataLength={listClassState.length}
+						next={loadMoreData}
+						hasMore={listClassState.length < totalClassState}
+						loader={null}
+						endMessage=""
+						scrollableTarget="pro-scroll"
+						className="none-ant-row"
+					>
+						{listClassState.length > 0 && (
+							<div className={`gap-[16px] ${currentStyle == 0 ? 'card-class-container' : 'grid grid-cols-1'}`}>
+								{listClassState.map((thisClass: any, index) => {
+									if (currentStyle == 0) {
+										return (
+											<CardGrid
+												key={`class-grid-${index}`}
+												item={thisClass}
+												onRefresh={handleRefresh}
+												academics={academics}
+												onUpdate={(param) => handleUpdate(index, param)}
+											/>
+										)
+									}
+
+									if (currentStyle == 1) {
+										return (
+											<CardList
+												key={`class-grid-${index}`}
+												item={thisClass}
+												onRefresh={handleRefresh}
+												academics={academics}
+												onUpdate={(param) => handleUpdate(index, param)}
+											/>
+										)
+									}
+
+									return <></>
+								})}
+							</div>
+						)}
+					</InfiniteScroll>
+				</div>
 			</Card>
 		</>
 	)

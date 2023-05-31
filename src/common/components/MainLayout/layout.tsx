@@ -168,7 +168,7 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 			)}
 
 			<main className="app-main">
-				<div id="pro-scroll" className={`app-content ${!isOpen && 'close-app'}`}>
+				<div className={`app-content ${!isOpen && 'close-app'}`}>
 					<div className="container w-full container-fluid">
 						<div className="breadcrumb">
 							{breadcrumbs.length > 0 && (

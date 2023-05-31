@@ -16,7 +16,15 @@ const initialState = {
 	isEditSchedule: false,
 	paramsSchedule: { classId: null, from: null, to: null },
 	infoClass: {} as IClass,
-	loadingCalendar: false
+	loadingCalendar: false,
+	listClass: [],
+	totalClass: 0,
+	statusData: {
+		closing: 0,
+		opening: 0,
+		totalRow: 0,
+		upcoming: 0
+	}
 }
 
 const classState = createSlice({
@@ -70,6 +78,15 @@ const classState = createSlice({
 		},
 		setLoadingCalendar: (state, { payload }: PayloadAction<any>) => {
 			state.loadingCalendar = payload
+		},
+		setListClass: (state, { payload }: PayloadAction<any>) => {
+			state.listClass = payload
+		},
+		setTotalClass: (state, { payload }: PayloadAction<any>) => {
+			state.totalClass = payload
+		},
+		setStatusData: (state, { payload }: PayloadAction<any>) => {
+			state.statusData = payload
 		}
 	}
 })
@@ -90,6 +107,9 @@ export const {
 	setIsEditSchedule,
 	setParamsSchedule,
 	setLoadingCalendar,
-	setInfoClass
+	setInfoClass,
+	setListClass,
+	setTotalClass,
+	setStatusData
 } = classState.actions
 export default classState.reducer

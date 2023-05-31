@@ -6,12 +6,15 @@ import ModalFooter from '../../ModalFooter'
 import { BiTrash } from 'react-icons/bi'
 
 const DeleteClass = (props) => {
-	const { dataRow, onRefresh } = props
+	const { dataRow, onRefresh, onShow } = props
 
 	const [visible, setVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 
 	function toggle() {
+		if (!visible && !!onShow) {
+			onShow()
+		}
 		setVisible(!visible)
 	}
 
