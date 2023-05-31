@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev -p 3004",
+		"dev": "next dev -p 3024",
 		"build": "next build",
 		"start": "next start -p $PORT",
 		"lint": "next lint",
@@ -65,6 +65,7 @@
 		"recharts": "^2.1.13",
 		"sass": "^1.53.0",
 		"tinymce": "^6.1.2",
+		"w3-css": "^4.1.0",
 		"xlsx": "^0.18.5",
 		"yup": "^0.32.11"
 	},

@@ -22,6 +22,7 @@ import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import 'react-tooltip/dist/react-tooltip.css'
 import '../styles/global.scss'
+import 'w3-css/w3.css'
 
 import ToastifyContainer from '~/common/providers/Toastify'
 import { checkInternet } from '~/common/utils/main-function'
