@@ -28,13 +28,27 @@ const ModalDetail = (props) => {
 
 	return (
 		<>
+			{!!isDesktop && isMobile && (
+				<Tooltip id={`fica-i-${data?.Id}`} title="Xem thông tin" placement="left">
+					<div
+						onClick={(e) => {
+							e.stopPropagation()
+							setVisible(true)
+						}}
+						className={`btn-class-info`}
+					>
+						<FaInfoCircle size={18} />
+					</div>
+				</Tooltip>
+			)}
+
 			<Tooltip id={`fica-i-${data?.Id}`} title="Xem thông tin" placement="left">
 				<div
 					onClick={(e) => {
 						e.stopPropagation()
 						setVisible(true)
 					}}
-					className={`btn-class-info ${!!isDesktop ? '!hidden w600:!flex' : '!hidden'}`}
+					className={`btn-class-info ${!!isDesktop && !isMobile ? '!hidden w600:!flex' : '!hidden'}`}
 				>
 					<FaInfoCircle size={18} />
 				</div>
@@ -46,7 +60,7 @@ const ModalDetail = (props) => {
 					setVisible(true)
 				}}
 				className={`flex-shrink-0 bg-[#FFBA0A] hover:bg-[#e7ab11] focus:bg-[#d19b10] text-[#000] items-center px-[8px] h-[30px] rounded-[6px] ${
-					!!isMobile ? '!flex w600:!hidden' : '!hidden'
+					!!isMobile && !isDesktop ? '!flex w600:!hidden' : '!hidden'
 				}`}
 			>
 				<FaInfoCircle size={18} className="mr-[4px] hidden w350:inline" />

@@ -26,7 +26,7 @@ const CardGrid = (props) => {
 
 	return (
 		<div className="card-class-item bg-[#fff] hover:!border-[#b7b7b7] cursor-pointer">
-			<ModalDetail data={item} onRefresh={onRefresh} academics={academics} isDesktop />
+			<ModalDetail data={item} onRefresh={onRefresh} academics={academics} isDesktop isMobile />
 
 			<ProClassMenu data={item} onRefresh={onRefresh} academics={academics} />
 
