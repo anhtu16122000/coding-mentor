@@ -91,8 +91,8 @@ const ExpandTable = (props) => {
 			<div className="statistical-contain">
 				<div className="item total-income">
 					<div className="text">
-						<p className="name">Tổng nợ</p>
-						<p className="number">{_format.numberToPrice(props.sumPrice.sumDebt)}₫</p>
+						<div className="name">Tổng nợ</div>
+						<div className="number">{_format.numberToPrice(props?.sumPrice?.sumDebt || 0)}₫</div>
 					</div>
 					<div className="icon">
 						<GiReceiveMoney />
@@ -102,7 +102,7 @@ const ExpandTable = (props) => {
 				<div className="item total-expense">
 					<div className="text">
 						<p className="name">Tổng thanh toán</p>
-						<p className="number">{_format.numberToPrice(props.sumPrice.sumPaid)}₫</p>
+						<p className="number">{_format.numberToPrice(props.sumPrice.sumPaid || 0)}₫</p>
 					</div>
 					<div className="icon">
 						<GiPayMoney />
@@ -112,7 +112,7 @@ const ExpandTable = (props) => {
 				<div className="item total-revenue">
 					<div className="text">
 						<p className="name">Tổng tiền</p>
-						<p className="number">{_format.numberToPrice(props.sumPrice.sumtotalPrice)}₫</p>
+						<p className="number">{_format.numberToPrice(props.sumPrice.sumtotalPrice || 0)}₫</p>
 					</div>
 					<div className="icon">
 						<GiTakeMyMoney />

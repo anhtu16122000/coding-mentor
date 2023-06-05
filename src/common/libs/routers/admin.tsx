@@ -106,12 +106,6 @@ export const AdminChildMenu = [
 				Key: '/finance/refund',
 				Route: '/finance/refund',
 				Text: 'Hoàn tiền'
-			},
-			{
-				TypeItem: 'single',
-				Key: '/finance/donation-history',
-				Route: '/finance/donation-history',
-				Text: 'Lịch sử tặng'
 			}
 		]
 	},
@@ -123,8 +117,8 @@ export const AdminChildMenu = [
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/info-course/customer',
-				Route: '/info-course/customer',
+				Key: '/leads',
+				Route: '/leads',
 				Text: 'Leads',
 				Icon: ''
 			},
@@ -348,6 +342,12 @@ export const AdminChildMenu = [
 				Route: '/course/codes',
 				Text: 'Khoá học đã bán',
 				Icon: ''
+			},
+			{
+				TypeItem: 'single',
+				Key: '/course/donation-history',
+				Route: '/course/donation-history',
+				Text: 'Lịch sử tặng'
 			}
 		]
 	},

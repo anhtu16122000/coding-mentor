@@ -124,15 +124,17 @@ const BillDetails = ({ bill }) => {
 			<div>
 				<div className="font-[600]">Ghi chú:</div> {bill?.Note}
 			</div>
-			<div className="w-[1300px]">
-				<PrimaryTable
-					current={filters.PageIndex}
-					total={totalPage && totalPage}
-					onChangePage={(page: number) => setFilter({ ...filters, PageIndex: page })}
-					data={data}
-					columns={columns}
-				/>
-			</div>
+			{bill?.Type !== 4 && (
+				<div className="w-[1300px]">
+					<PrimaryTable
+						current={filters.PageIndex}
+						total={totalPage && totalPage}
+						onChangePage={(page: number) => setFilter({ ...filters, PageIndex: page })}
+						data={data}
+						columns={columns}
+					/>
+				</div>
+			)}
 		</>
 	)
 }

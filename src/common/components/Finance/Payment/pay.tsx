@@ -1,5 +1,5 @@
-import { DatePicker, Form, Input, Modal } from 'antd'
-import React, { FC, useState } from 'react'
+import { DatePicker, Form, Input, Modal, Select } from 'antd'
+import React, { FC, useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
 import { ShowNostis } from '~/common/utils'
 import PrimaryTooltip from '../../PrimaryTooltip'
@@ -8,6 +8,7 @@ import ModalFooter from '../../ModalFooter'
 import { formNoneRequired, formRequired } from '~/common/libs/others/form'
 import InputNumberField from '../../FormControl/InputNumberField'
 import moment from 'moment'
+import { paymentMethodsApi } from '~/api/payment-method'
 
 interface IPayForm {
 	isEdit?: boolean
@@ -27,6 +28,35 @@ const PayForm: FC<IPayForm> = ({ isEdit, onRefresh, defaultData }) => {
 
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(false)
+
+	const [methods, setMethods] = useState<any>([])
+
+	useEffect(() => {
+		if (visible) {
+			getPaymentMethods()
+		}
+	}, [visible])
+
+	const [methodsLoading, setMethodsLoading] = useState(false)
+
+	const getPaymentMethods = async () => {
+		if (methods.length == 0) {
+			setMethodsLoading(true)
+			try {
+				const res = await paymentMethodsApi.getAll()
+				if (res.status == 200) {
+					setMethods(res.data.data)
+				}
+				if (res.status == 204) {
+					setMethods([])
+				}
+			} catch (err) {
+				ShowNostis.error(err?.message)
+			} finally {
+				setMethodsLoading(false)
+			}
+		}
+	}
 
 	function toggle() {
 		setVisible(!visible)
@@ -95,7 +125,7 @@ const PayForm: FC<IPayForm> = ({ isEdit, onRefresh, defaultData }) => {
 			{isEdit && (
 				<PrimaryTooltip id={`pay-${defaultData?.Code}`} place="left" content="Thanh toán">
 					<div onClick={openEdit} className="px-[4px] cursor-pointer text-[#1E88E5] active:text-[#186fbc]">
-						<FaMoneyBill size={22} />
+						<FaMoneyBill size={22} className="ml-[16px]" />
 					</div>
 				</PrimaryTooltip>
 			)}
@@ -121,8 +151,20 @@ const PayForm: FC<IPayForm> = ({ isEdit, onRefresh, defaultData }) => {
 						label="Số tiền thanh toán"
 						name="Paid"
 						placeholder="Số tiền thanh toán"
-						className="col-span-2"
+						className="col-span-1"
 					/>
+
+					<Form.Item className="col-span-1" name="PaymentMethodId" label="Phương thức thanh toán" rules={formRequired}>
+						<Select loading={methodsLoading} disabled={loading} placeholder="Chọn phương thức" className="primary-input">
+							{methods.map((thisMethod) => {
+								return (
+									<Select.Option key={thisMethod.Id} value={thisMethod.Id}>
+										{thisMethod?.Name}
+									</Select.Option>
+								)
+							})}
+						</Select>
+					</Form.Item>
 
 					<Form.Item className="col-span-2" name="PaymentAppointmentDate" label="Ngày thanh toán tiếp theo" rules={formNoneRequired}>
 						<DatePicker

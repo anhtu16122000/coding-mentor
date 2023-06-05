@@ -271,3 +271,23 @@
 		}
 	}
 }
+
+.calendar-event {
+	&.time {
+		@apply flex-1 rounded px-1 py-[2px] text-[12px] text-[#FFF];
+		&.orange {
+			@apply bg-[#fb862d];
+		}
+		&.green {
+			@apply bg-[#43b413];
+		}
+	}
+}
+
+.fc-button-primary {
+	color: #fff !important;
+	&:hover {
+		background: #1662c5 !important;
+	}
+	box-shadow: none !important;
+}

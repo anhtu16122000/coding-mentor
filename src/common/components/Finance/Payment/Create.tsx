@@ -1,19 +1,13 @@
-import { Card, Form, Input, Modal, Select } from 'antd'
+import { Form, Input, Modal, Select } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
 import { ShowNostis, ShowNoti } from '~/common/utils'
-import PrimaryTooltip from '../../PrimaryTooltip'
 import ModalFooter from '../../ModalFooter'
 import { formNoneRequired, formRequired } from '~/common/libs/others/form'
-import { ButtonPending, ButtonRefund } from '../../TableButton'
-import Avatar from '../../Avatar'
-import { MdOpenInNew } from 'react-icons/md'
-import moment from 'moment'
 import { paymentMethodsApi } from '~/api/payment-method'
 import { branchApi } from '~/api/branch'
 import InputNumberField from '../../FormControl/InputNumberField'
 import { removeCommas } from '~/common/utils/super-functions'
-import { parseToMoney } from '~/common/utils/common'
 import PrimaryButton from '../../Primary/Button'
 import { userInformationApi } from '~/api/user'
 
@@ -46,7 +40,7 @@ const PaymentForm: FC<IPaymentForm> = ({ isEdit, onRefresh, item }) => {
 
 	useEffect(() => {
 		if (visible) {
-			getPaymentMethods()
+			// getPaymentMethods()
 
 			getBranchs()
 
@@ -180,7 +174,7 @@ const PaymentForm: FC<IPaymentForm> = ({ isEdit, onRefresh, item }) => {
 							))}
 						</Select>
 					</Form.Item>
-					<Form.Item className="col-span-2" name="BranchId" label="Trung tâm thanh toán" rules={formRequired}>
+					<Form.Item className="col-span-1" name="BranchId" label="Trung tâm thanh toán" rules={formRequired}>
 						<Select
 							loading={branchLoading}
 							disabled={loading}
@@ -197,7 +191,7 @@ const PaymentForm: FC<IPaymentForm> = ({ isEdit, onRefresh, item }) => {
 							))}
 						</Select>
 					</Form.Item>
-					<Form.Item className="col-span-1" name="PaymentMethodId" label="Phương thức thanh toán" rules={formRequired}>
+					{/* <Form.Item className="col-span-1" name="PaymentMethodId" label="Phương thức thanh toán" rules={formRequired}>
 						<Select loading={methodsLoading} disabled={loading} placeholder="Chọn phương thức" className="primary-input">
 							{methods.map((thisMethod) => {
 								return (
@@ -207,7 +201,7 @@ const PaymentForm: FC<IPaymentForm> = ({ isEdit, onRefresh, item }) => {
 								)
 							})}
 						</Select>
-					</Form.Item>
+					</Form.Item> */}
 					<InputNumberField
 						disabled={loading}
 						onChange={(event) => form.setFieldValue('Price', event.target.value)}
