@@ -15,6 +15,10 @@ export const userInformationApi = {
 		return instance.get<IApiResultData<IUserInformation[]>>(`${url}/user-available/${role}`)
 	},
 
+	getAvailableUser(params) {
+		return instance.get<IApiResultData<IUserInformation[]>>(`${url}/user-available`, { params })
+	},
+
 	getName(params) {
 		return instance.get<IApiResultData<IUserInformation[]>>('/api/Staff', { params: params })
 	},

@@ -70,6 +70,8 @@ const CreateClassForm = (props) => {
 	const [noneConvertCurriculum, setNoneConvertCurriculum] = useState([])
 	const [teacher, setTeacher] = useState([])
 	const [academic, setAcademic] = useState([])
+	const [selectedBranch, setSelectedBranch] = useState(null)
+
 	// Program lúc chưa parse
 	const [programs, setPrograms] = useState([])
 	const [listTimeFrames, setListTimeFrames] = useState([{ Id: 1, DayOfWeek: null, StudyTimeId: null }])
@@ -79,9 +81,11 @@ const CreateClassForm = (props) => {
 	const user = useSelector((state: RootState) => state.user.information)
 	const dispatch = useDispatch()
 	const [form] = Form.useForm()
+
 	function isAcademic() {
 		return user?.RoleId == 7
 	}
+
 	let schema = yup.object().shape({
 		BranchId: yup.string().required('Bạn không được để trống'),
 		Name: yup.string().required('Bạn không được để trống'),
@@ -94,26 +98,31 @@ const CreateClassForm = (props) => {
 		TeachingFee: yup.string().required('Bạn không được để trống'),
 		Price: yup.string().required('Bạn không được để trống')
 	})
+
 	const yupSync = {
 		async validator({ field }, value) {
 			await schema.validateSyncAt(field, { [field]: value })
 		}
 	}
+
 	const branch = useMemo(() => {
 		if (state.branch.Branch.length !== 0) {
 			return parseSelectArray(state.branch.Branch, 'Name', 'Id')
 		}
 	}, [state])
+
 	const specialize = useMemo(() => {
 		if (state.specialize.Specialize.length !== 0) {
 			return parseSelectArray(state.specialize.Specialize, 'Name', 'Id')
 		}
 	}, [state])
+
 	const studyTime = useMemo(() => {
 		if (state.studyTime.StudyTime.length !== 0) {
 			return parseSelectArray(state.studyTime.StudyTime, 'Name', 'Id')
 		}
 	}, [state])
+
 	const getAllBranch = async () => {
 		try {
 			const res = await branchApi.getAll({ pageSize: 9999 })
@@ -127,6 +136,7 @@ const CreateClassForm = (props) => {
 			ShowNoti('error', err.message)
 		}
 	}
+
 	const getAllSpecialize = async () => {
 		try {
 			const res = await gradeApi.getAll({ pageSize: 9999 })
@@ -140,6 +150,7 @@ const CreateClassForm = (props) => {
 			ShowNoti('error', err.message)
 		}
 	}
+
 	const getAllStudyTime = async () => {
 		try {
 			const res = await studyTimeApi.getAll({ pageSize: 9999 })
@@ -153,34 +164,36 @@ const CreateClassForm = (props) => {
 			ShowNoti('error', err.message)
 		}
 	}
-	const getUserInfomationAcademic = async () => {
+
+	// Lấy danh sách học vụ bằng chi nhánh với chương trình
+	const getAcademics = async (branch) => {
 		try {
-			const res = await userInformationApi.getAll({ pageSize: 9999, roleIds: 7 })
+			const res = await userInformationApi.getAll({ pageSize: 9999, roleIds: 7, branchId: branch })
 			if (res.status === 200) {
 				const convertData = parseSelectArray(res.data.data, 'FullName', 'UserInformationId')
 				setAcademic(convertData)
-			}
-			if (res.status === 204) {
+			} else {
 				setAcademic([])
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
 		}
 	}
+
 	const getAllRoomByBranch = async (branchId) => {
 		try {
 			const res = await roomApi.getAll({ pageSize: 9999, branchId: branchId })
 			if (res.status === 200) {
 				const convertData = parseSelectArray(res.data.data, 'Name', 'Id')
 				dispatch(setRoom(convertData))
-			}
-			if (res.status === 204) {
+			} else {
 				dispatch(setRoom([]))
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
 		}
 	}
+
 	const getAllProgramByGrade = async (gradeId) => {
 		try {
 			const res = await programApi.getAll({ pageSize: 9999, gradeId: gradeId })
@@ -188,14 +201,14 @@ const CreateClassForm = (props) => {
 				const convertData = parseSelectArray(res.data.data, 'Name', 'Id')
 				setPrograms(res.data.data)
 				setProgram(convertData)
-			}
-			if (res.status === 204) {
+			} else {
 				setProgram([])
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
 		}
 	}
+
 	const getAllCurriculumByProgram = async (programId) => {
 		try {
 			const res = await curriculumApi.getAll({ pageSize: 9999, programId: programId })
@@ -203,28 +216,29 @@ const CreateClassForm = (props) => {
 				setNoneConvertCurriculum(res.data.data)
 				const convertData = parseSelectArray(res.data.data, 'Name', 'Id')
 				setCurriculum(convertData)
-			}
-			if (res.status === 204) {
+			} else {
 				setCurriculum([])
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
 		}
 	}
-	const getAllTeacherByBranchAndProgram = async (branchId, programId) => {
+
+	// Lấy danh sách giáo viên bằng chi nhánh với chương trình
+	const getTeachers = async (branchId, programId) => {
 		try {
 			const res = await classApi.getAllTeachers({ branchId: branchId, programId: programId })
 			if (res.status === 200) {
 				const convertData = parseSelectArrayUser(res.data.data, 'TeacherName', 'TeacherCode', 'TeacherId')
 				setTeacher(convertData)
-			}
-			if (res.status === 204) {
+			} else {
 				setTeacher([])
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
 		}
 	}
+
 	const handleAddListTimeFrame = () => {
 		setListTimeFrames((prev) => {
 			return [...listTimeFrames, { Id: prev[prev.length - 1].Id + 1, DayOfWeek: null, StudyTimeId: null }]
@@ -234,6 +248,7 @@ const CreateClassForm = (props) => {
 			{ Id: prev[prev.length - 1]?.Id + 1, DayOfWeek: null, StudyTimeId: null }
 		])
 	}
+
 	const handleRemoveListTimeFrame = (Id) => {
 		if (listTimeFrames.length !== 1) {
 			form.setFieldValue(`DayOfWeek-${Id}`, undefined)
@@ -273,6 +288,7 @@ const CreateClassForm = (props) => {
 			setListTimeFrames([...listTimeFrames])
 		}
 	}
+
 	const handleSelectChange = async (name, value) => {
 		if (name === 'GradeId') {
 			getAllProgramByGrade(value)
@@ -283,18 +299,23 @@ const CreateClassForm = (props) => {
 				form.setFieldValue('CurriculumId', null)
 			}
 		}
+
 		if (name === 'ProgramId') {
 			const findProgramByID = programs.find((item) => {
-				return item.Id === value
+				return item.Id == value
 			})
 			if (!!findProgramByID) {
 				form.setFieldsValue({ Price: findProgramByID.Price })
 			}
 			getAllCurriculumByProgram(value)
 		}
+
 		if (name === 'BranchId') {
+			setSelectedBranch(value)
 			getAllRoomByBranch(value)
+			getAcademics(value)
 		}
+
 		if (name === 'CurriculumId') {
 			const getData = noneConvertCurriculum.find((item) => item.Id === value)
 			const filterDisabledStudyTime = state.studyTime.StudyTime.filter((item) => item.Time !== getData.Time).map((data) => data.Id)
@@ -304,6 +325,7 @@ const CreateClassForm = (props) => {
 			setListDisabledTimeFrames([...data, { Id: 1, DayOfWeek: null, StudyTimeId: null }])
 		}
 	}
+
 	const handleDisableSelect = (data, value) => {
 		const checkExist = listDisabledTimeFrames.find((item) => {
 			if (item.DayOfWeek === null) {
@@ -314,6 +336,7 @@ const CreateClassForm = (props) => {
 		})
 		return !!checkExist
 	}
+
 	const handleSubmit = async (data) => {
 		const convertListTimeFrame = listTimeFrames.map((timeFrame) => {
 			return { DayOfWeek: timeFrame.DayOfWeek, StudyTimeId: timeFrame.StudyTimeId }
@@ -363,6 +386,7 @@ const CreateClassForm = (props) => {
 			setIsLoading(false)
 		}
 	}
+
 	useEffect(() => {
 		if (isModalOpen) {
 			if (state.branch.Branch.length === 0) {
@@ -374,20 +398,15 @@ const CreateClassForm = (props) => {
 			if (state.studyTime.StudyTime.length === 0) {
 				getAllStudyTime()
 			}
-			getUserInfomationAcademic()
 			refPopoverWrapperBtn.current.close()
 		}
 	}, [isModalOpen])
 
 	useEffect(() => {
 		if (form.getFieldValue('BranchId') && form.getFieldValue('ProgramId')) {
-			getAllTeacherByBranchAndProgram(form.getFieldValue('BranchId'), form.getFieldValue('ProgramId'))
+			getTeachers(form.getFieldValue('BranchId'), form.getFieldValue('ProgramId'))
 		}
 	}, [form.getFieldValue('BranchId'), form.getFieldValue('ProgramId')])
-
-	// const listCalendar = useSelector((state: RootState) => state.class.listCalendar)
-
-	// console.log('--- listCalendar: ', listCalendar)
 
 	return (
 		<>
@@ -572,7 +591,7 @@ const CreateClassForm = (props) => {
 								name="MaxQuantity"
 							/>
 						</div>
-						{!isAcademic() ? (
+						{!isAcademic() && (
 							<div className="col-md-6 col-12">
 								<SelectField
 									isRequired
@@ -583,8 +602,6 @@ const CreateClassForm = (props) => {
 									optionList={academic}
 								/>
 							</div>
-						) : (
-							''
 						)}
 						<div className="col-md-6 col-12">
 							<SelectField

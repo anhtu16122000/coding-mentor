@@ -19,7 +19,7 @@ import IconButton from '../Primary/IconButton'
 import RestApi from '~/api/RestApi'
 
 const CustomerAdviseForm = React.memo((props: any) => {
-	const { source, learningNeed, purpose, sale, branch, refPopover } = props
+	const { source, learningNeed, purpose, branch, refPopover } = props
 	const { customerStatus, rowData, listTodoApi, setTodoApi, isStudent, className } = props
 
 	const [isModalVisible, setIsModalVisible] = useState(false)
@@ -29,7 +29,30 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	const [districts, setDistricts] = useState([])
 	const [wards, setWards] = useState([])
 
+	const [salers, setSalers] = useState([])
+
 	const area = useSelector((state: RootState) => state.area.Area)
+
+	const getSaler = async (branchIds) => {
+		form.setFieldValue('SaleId', null)
+
+		if (!branchIds) {
+			setSalers([])
+			return
+		}
+
+		try {
+			const res = await userInformationApi.getAll({ pageSize: 99999, roleIds: '5', branchIds: branchIds })
+			if (res.status == 200) {
+				const convertData = parseSelectArray(res.data.data, 'FullName', 'UserInformationId')
+				setSalers(convertData)
+			} else {
+				setSalers([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
 
 	const [jobs, setJobs] = useState([])
 	const theInformation = useSelector((state: RootState) => state.user.information)
@@ -331,6 +354,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 									optionList={branch}
 									isRequired
 									rules={formRequired}
+									onChangeSelect={(e) => getSaler(e)}
 								/>
 							</div>
 
@@ -358,7 +382,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 							</div>
 							{!isSaler() && (
 								<div className="col-md-6 col-12">
-									<SelectField name="SaleId" label="Tư vấn viên" placeholder="Chọn tư vấn viên" optionList={sale} />
+									<SelectField name="SaleId" label="Tư vấn viên" placeholder="Chọn tư vấn viên" optionList={salers} />
 								</div>
 							)}
 						</div>

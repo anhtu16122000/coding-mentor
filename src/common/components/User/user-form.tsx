@@ -27,7 +27,7 @@ import { formNoneRequired, formRequired } from '~/common/libs/others/form'
 import Router from 'next/router'
 
 const CreateUser: FC<ICreateNew> = (props) => {
-	const { className, onOpen, roleStaff, source, purpose, sale, learningNeed } = props
+	const { className, onOpen, roleStaff, source, purpose, learningNeed } = props
 	const { onRefresh, isEdit, defaultData, isStudent, isChangeInfo } = props
 
 	const [form] = Form.useForm()
@@ -42,6 +42,28 @@ const CreateUser: FC<ICreateNew> = (props) => {
 	const user = useSelector((state: RootState) => state.user.information)
 	const area = useSelector((state: RootState) => state.area.Area)
 	const branch = useSelector((state: RootState) => state.branch.Branch)
+	const [saler, setSaler] = useState([])
+
+	const getSaler = async (branchIds) => {
+		form.setFieldValue('SaleId', null)
+
+		if (!branchIds) {
+			setSaler([])
+			return
+		}
+
+		try {
+			const res = await userInformationApi.getAll({ pageSize: 99999, roleIds: '5', branchIds: branchIds })
+			if (res.status == 200) {
+				const convertData = parseSelectArray(res.data.data, 'FullName', 'UserInformationId')
+				setSaler(convertData)
+			} else {
+				setSaler([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
 
 	const convertAreaSelect = useMemo(() => {
 		return parseSelectArray(area, 'Name', 'Id')
@@ -474,6 +496,7 @@ const CreateUser: FC<ICreateNew> = (props) => {
 								isRequired
 								rules={[yupSync]}
 								optionList={convertBranchSelect}
+								onChangeSelect={(e) => getSaler(e)}
 							/>
 						) : (
 							<SelectField
@@ -484,6 +507,7 @@ const CreateUser: FC<ICreateNew> = (props) => {
 								isRequired
 								rules={[yupSync]}
 								optionList={convertBranchSelect}
+								onChangeSelect={(e) => getSaler(e)}
 							/>
 						)}
 
@@ -527,7 +551,7 @@ const CreateUser: FC<ICreateNew> = (props) => {
 										className="col-span-2"
 										label="Tư vấn viên"
 										name="SaleId"
-										optionList={sale}
+										optionList={saler}
 										onChangeSelect={(value) => handleSelect('SaleId', value)}
 									/>
 								) : (

@@ -6,12 +6,16 @@ import { billApi } from '~/api/bill'
 import { userInformationApi } from '~/api/user'
 import { ShowNoti } from '~/common/utils'
 import Avatar from '../Avatar'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const FormUserRegister = (props) => {
 	const router = useRouter()
 	const { form, setClasses, isReset } = props
 	const [students, setStudents] = useState([])
 	const [userInfo, setUserInfo] = useState<IUserInformation>()
+
+	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	useEffect(() => {
 		!!isReset && setUserInfo(null)
@@ -20,7 +24,10 @@ const FormUserRegister = (props) => {
 	const getAllStudent = async () => {
 		try {
 			const ROLE_STUDENT = 3
-			const res = await userInformationApi.getAll({ roleIds: ROLE_STUDENT })
+			const res = await userInformationApi.getAll({
+				roleIds: ROLE_STUDENT,
+				branchIds: userInformation.RoleId == '1' ? null : userInformation.BranchIds
+			})
 			if (res.status == 200) {
 				setStudents(res.data.data)
 			}

@@ -9,6 +9,8 @@ import Lottie from 'react-lottie-player'
 
 import loadingJson from '~/common/components/json/90020-gift.json'
 import moment from 'moment'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 interface IDonateVideo {
 	video?: any
@@ -25,6 +27,8 @@ const DonateVideo: FC<IDonateVideo> = ({ video, onRefresh }) => {
 	const [textError, setTextError] = useState('')
 
 	const [students, setStudents] = useState<any>([])
+
+	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	function toggle() {
 		setVisible(!visible)
@@ -52,7 +56,12 @@ const DonateVideo: FC<IDonateVideo> = ({ video, onRefresh }) => {
 	const getStudents = async () => {
 		setLoading(true)
 		try {
-			let res = await RestApi.get<any>('UserInformation', { pageSize: 9999999, pageIndex: 1, RoleIds: '3' })
+			let res = await RestApi.get<any>('UserInformation', {
+				pageSize: 9999999,
+				pageIndex: 1,
+				RoleIds: '3',
+				branchIds: userInformation.RoleId == '1' ? null : userInformation?.BranchIds
+			})
 			if (res.status == 200) {
 				setStudents(res.data.data)
 			}
@@ -93,7 +102,7 @@ const DonateVideo: FC<IDonateVideo> = ({ video, onRefresh }) => {
 
 			<Modal
 				width={500}
-				title="Mã kích khoá video"
+				title="Tặng khoá video"
 				open={visible}
 				onCancel={toggle}
 				footer={<ModalFooter loading={loading} onCancel={toggle} onOK={submitForm} />}
