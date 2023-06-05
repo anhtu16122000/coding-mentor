@@ -1,4 +1,4 @@
-import { Avatar, Collapse, Popover, Tooltip } from 'antd'
+import { Collapse, Popover, Tooltip } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
@@ -7,6 +7,8 @@ import PrimaryButton from '../Primary/Button'
 import ZoomManager from '../Zoom/ZoomManager'
 import { UserOutlined } from '@ant-design/icons'
 import Link from 'next/link'
+import Avatar from '../Avatar'
+import { log } from '~/common/utils'
 
 const ScheduleCalendar = (props) => {
 	const { dataRow, onRefresh } = props
@@ -53,6 +55,10 @@ const ScheduleCalendar = (props) => {
 		return dataRow.event.extendedProps.Status == 1 ? true : false
 	}
 
+	const thisEvent = dataRow.event.extendedProps
+
+	// log.Yellow('thisEvent', thisEvent)
+
 	return (
 		<>
 			<div className="wrapper-schedule wrapper-schedule-calender relative ">
@@ -86,17 +92,19 @@ const ScheduleCalendar = (props) => {
 						}
 					>
 						<button
-							// onDoubleClick={() => router.push(`/class/list-class/detail/?class=${dataRow.event.extendedProps.ClassId}`)}
 							className={`${getStatusSchedule()}  !bg-white !text-[#fff] font-semibold  w-full p-[6px] flex justify-start items-center gap-2`}
 						>
-							<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.start).format('HH:mm')}</span>{' '}
-							<span className={`${getStatusScheduleTime()}`}>{moment(dataRow.event.end).format('HH:mm')}</span>
+							<span className={`calendar-event time ${thisEvent?.Status == 1 ? 'orange' : 'green'}`}>
+								{moment(thisEvent.StartTime).format('HH:mm')}
+							</span>
+
+							<span className={`calendar-event time ${thisEvent?.Status == 1 ? 'orange' : 'green'}`}>
+								{moment(thisEvent.EndTime).format('HH:mm')}
+							</span>
 							<Avatar
-								className="w-[24px] h-[24px] p-[2px] bg-[#939292]"
-								src={
-									dataRow.event.extendedProps?.TeacherAvatar ||
-									'https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg'
-								}
+								disabled
+								className="w-[24px] h-[24px] rounded-full object-cover border-[1px] border-[#dcdcdc]"
+								uri={dataRow.event.extendedProps?.TeacherAvatar}
 							/>
 						</button>
 					</Popover>

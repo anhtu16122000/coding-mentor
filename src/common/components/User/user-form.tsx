@@ -411,7 +411,7 @@ const CreateUser: FC<ICreateNew> = (props) => {
 							]}
 						/>
 
-						{Router.asPath.includes('info-course/customer') && (
+						{Router.asPath.includes('leads') && (
 							<Form.Item name="JobId" className="col-span-2" label="Công việc">
 								<Select className="primary-input" placeholder="Chọn công việc">
 									{jobs.map((item) => {

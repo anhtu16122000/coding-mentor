@@ -1,5 +1,5 @@
 import { Breadcrumb } from 'antd'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '~/store'
@@ -143,6 +143,26 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 		parent: userInformation?.RoleId == 8
 	}
 
+	function NormalBreadcrumb() {
+		return (
+			<Breadcrumb>
+				{Router.asPath.includes('/leads') && (
+					<Breadcrumb.Item key={`leads-01`}>
+						<a href="/leads" className="font-medium">
+							Leads
+						</a>
+					</Breadcrumb.Item>
+				)}
+
+				{Router.asPath.includes('/send-mail-all') && (
+					<Breadcrumb.Item key={`smail-01`}>
+						<a className="font-medium">Gửi thông báo</a>
+					</Breadcrumb.Item>
+				)}
+			</Breadcrumb>
+		)
+	}
+
 	return (
 		<div className={`app ${is.parent ? 'simple-menu-pro' : ''}`}>
 			<Header isOpenMenu={isOpenMenu} isOpen={isOpen} funcMenuMobile={funcMenuMobile} openMenuMobile={openMenuMobile} />
@@ -207,6 +227,8 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 									)}
 								</Breadcrumb>
 							)}
+
+							{breadcrumbs.length == 0 && <NormalBreadcrumb />}
 						</div>
 					</div>
 

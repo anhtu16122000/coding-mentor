@@ -31,7 +31,7 @@ const Avatar: FC<TAvatar> = (props) => {
 				alt="avatar"
 				src={image || uri || DEFAULT_AVATAR}
 				className={className}
-				style={{ cursor: !!image || !!uri ? 'pointer' : 'default' }}
+				style={{ cursor: !!image || !!uri ? 'pointer' : 'default', borderStyle: !!uri ? 'solid' : 'none' }}
 			/>
 
 			<Modal closable={false} title={null} width={700} open={show} onCancel={toggle} footer={null}>

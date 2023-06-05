@@ -7,6 +7,9 @@ export const scheduleApi = {
 			params: scheduleParams
 		})
 	},
+	getDetails(Id) {
+		return instance.get<IApiResultData<ICurriculumDetail>>(`${url}/${Id}`)
+	},
 	add(data) {
 		return instance.post(url, data)
 	},

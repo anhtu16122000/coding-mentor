@@ -1,5 +1,5 @@
 import { Input } from 'antd'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
 import { MainLayout } from '~/common'
 import PayForm from '~/common/components/Finance/Payment/pay'
@@ -14,6 +14,8 @@ import appConfigs from '~/appConfig'
 import RefundForm from './Refund'
 import PaymentForm from '~/common/components/Finance/Payment/Create'
 import FilterBase from '~/common/components/Elements/FilterBase'
+import { paymentMethodsApi } from '~/api/payment-method'
+import PaymentDetail from './PaymentDetail'
 
 const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '', fromDate: null, toDate: null }
 const PaymentManagementPage = () => {
@@ -91,43 +93,59 @@ const PaymentManagementPage = () => {
 			title: 'Người thanh toán',
 			dataIndex: 'FullName',
 			width: 220,
-			render: (value, item) => <p className="font-[600] text-[#1E88E5]">{value}</p>
-		},
-		{
-			title: 'Mã khuyến mãi',
-			width: 150,
-			dataIndex: 'DiscountCode'
-		},
-		{
-			title: 'Giảm giá',
-			width: 150,
-			dataIndex: 'Reduced',
-			render: (text) => <>{parseToMoney(text)}</>
-		},
+			render: (value, item) => {
+				if (!value) {
+					return ''
+				}
 
-		{
-			title: 'Tổng số tiền',
-			dataIndex: 'TotalPrice',
-			width: 116,
-			render: (value, item) => <p className="font-[600] text-[#000]">{parseToMoney(value)}</p>
+				return (
+					<>
+						<p className="text-[#1E88E5] font-[600]">{value}</p>
+						<p className="text-[#000]">
+							Mã: <div className="inline font-[600]">{item?.UserCode}</div>
+						</p>
+					</>
+				)
+			}
 		},
-
 		{
-			title: 'Đã thanh toán',
+			title: 'Khuyến mãi',
+			dataIndex: 'DiscountCode',
+			render: (value, item) => {
+				if (!value) {
+					return ''
+				}
+
+				return (
+					<>
+						<p className="text-[#000]">
+							Mã: <div className="inline font-[600]">{value}</div>
+						</p>
+						<p className="text-[#000]">
+							Số tiền: <div className="inline font-[600]">{parseToMoney(item?.Reduced)}</div>
+						</p>
+					</>
+				)
+			}
+		},
+		{
+			title: 'Thanh toán',
 			dataIndex: 'Paid',
-			width: 126,
-			render: (value, item) => <p className="font-[600] text-[#388E3C]">{parseToMoney(value)}</p>
-		},
-		{
-			title: 'Chưa thanh toán',
-			dataIndex: 'Debt',
-			width: 140,
-			render: (value, item) => <p className="font-[600] text-[#E53935]">{parseToMoney(value)}</p>
-		},
-		{
-			title: 'Phương thức',
-			dataIndex: 'PaymentMethodName',
-			width: 130
+			render: (value, item) => {
+				return (
+					<>
+						<p className="text-[#000]">
+							Tổng: <div className="inline font-[600] text-[#1E88E5]">{parseToMoney(item?.TotalPrice)}</div>
+						</p>
+						<p className="text-[#000]">
+							Đã thanh toán: <div className="inline font-[600] text-[#388E3C]">{parseToMoney(value)}</div>
+						</p>
+						<p className="text-[#000]">
+							Chưa thanh toán: <div className="inline font-[600] text-[#E53935]">{parseToMoney(item?.Debt)}</div>
+						</p>
+					</>
+				)
+			}
 		},
 		{
 			title: 'Loại',
@@ -143,18 +161,6 @@ const PaymentManagementPage = () => {
 			)
 		},
 		{
-			title: 'Người tạo',
-			dataIndex: 'ModifiedBy',
-			width: 220,
-			render: (value, item) => <p className="font-[600] text-[#1E88E5]">{value}</p>
-		},
-		{
-			title: 'Ngày',
-			dataIndex: 'ModifiedOn',
-			width: 160,
-			render: (value, item) => <p>{moment(value).format('DD/MM/YYYY HH:mm')}</p>
-		},
-		{
 			title: 'Kỳ tiếp theo',
 			dataIndex: 'PaymentAppointmentDate',
 			width: 130,
@@ -167,6 +173,7 @@ const PaymentManagementPage = () => {
 			width: 60,
 			render: (value, item) => (
 				<div className="flex item-center">
+					<PaymentDetail data={item} />
 					<PayForm isEdit defaultData={item} onRefresh={getData} />
 					{item?.Debt < 0 && <RefundForm onRefresh={getData} item={item} />}
 				</div>

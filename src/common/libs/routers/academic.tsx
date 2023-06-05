@@ -110,8 +110,8 @@ export const AcademicChildMenu = [
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/info-course/customer',
-				Route: '/info-course/customer',
+				Key: '/leads',
+				Route: '/leads',
 				Text: 'Leads',
 				Icon: ''
 			},

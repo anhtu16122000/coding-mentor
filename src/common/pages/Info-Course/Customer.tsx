@@ -530,13 +530,14 @@ const CustomerAdvisory = () => {
 			}
 		}
 	]
+
 	const content = (
 		<>
 			<PrimaryButton
 				className="!w-full mb-2"
 				background="yellow"
 				type="button"
-				onClick={() => router.push({ pathname: '/info-course/customer/send-mail-all' })}
+				onClick={() => router.push({ pathname: '/leads/send-mail-all' })}
 				icon="send"
 			>
 				Gửi thông báo
@@ -555,6 +556,7 @@ const CustomerAdvisory = () => {
 			/>
 		</>
 	)
+
 	return (
 		<div className="info-course-customer">
 			<ExpandTable
@@ -570,7 +572,7 @@ const CustomerAdvisory = () => {
 								background="yellow"
 								type="button"
 								icon="send"
-								onClick={() => router.push({ pathname: '/info-course/customer/send-mail-all' })}
+								onClick={() => router.push({ pathname: '/leads/send-mail-all' })}
 								className="mr-2"
 							>
 								Gửi thông báo
