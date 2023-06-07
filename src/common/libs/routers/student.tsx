@@ -1,3 +1,4 @@
+import { AiOutlineCalendar } from 'react-icons/ai'
 import { BiBookBookmark } from 'react-icons/bi'
 import { BsFillGridFill } from 'react-icons/bs'
 import { FaUserGraduate } from 'react-icons/fa'
@@ -62,6 +63,13 @@ export const StudentChildMenu = [
 		MenuKey: '/class',
 		Parent: 'class',
 		MenuItem: [
+			{
+				ItemType: 'single',
+				Key: '/class/schedule',
+				Route: '/class/schedule',
+				Text: 'Lịch học',
+				Icon: ''
+			},
 			{
 				ItemType: 'single',
 				Key: '/class',

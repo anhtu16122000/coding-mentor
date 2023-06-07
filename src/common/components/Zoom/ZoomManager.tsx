@@ -191,7 +191,7 @@ const ZoomManager: FC<TZoomManager> = (props) => {
 		)
 	}
 
-	if (!data?.IsOpenZoom) {
+	if ((isAdmin() || isTeacher()) && !data?.IsOpenZoom) {
 		return (
 			<div className="mt-[8px]">
 				<PrimaryTooltip id={`tip-${data?.Id}`} content="Tạo phòng Zoom" place="top">
