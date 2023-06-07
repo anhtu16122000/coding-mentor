@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { setUser } from '~/store/userReducer'
 import { setAuthData, setAuthLoading } from '~/store/authReducer'
 import Router from 'next/router'
+import { setListClass, setStatusData, setTotalClass } from '~/store/classReducer'
 
 const MonaSupportPattern = () => {
 	const [form] = Form.useForm()
@@ -44,6 +45,10 @@ const MonaSupportPattern = () => {
 
 	useEffect(() => {
 		getAccounts()
+
+		dispatch(setListClass([]))
+		dispatch(setTotalClass(0))
+		dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
 	}, [])
 
 	const onSubmit = async (data) => {

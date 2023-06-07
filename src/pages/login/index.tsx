@@ -8,6 +8,7 @@ import Head from 'next/head'
 import appConfigs from '~/appConfig'
 import { playWithToken } from '~/common/utils/token-handle'
 import LoginForm from '~/common/components/Auth/LoginForm'
+import { setListClass, setStatusData, setTotalClass } from '~/store/classReducer'
 
 function SignIn({ csrfToken }) {
 	const dispatch = useDispatch()
@@ -16,6 +17,10 @@ function SignIn({ csrfToken }) {
 
 	useEffect(() => {
 		getAllow()
+
+		dispatch(setListClass([]))
+		dispatch(setTotalClass(0))
+		dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
 	}, [])
 
 	const getAllow = async () => {
