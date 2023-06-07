@@ -7,6 +7,7 @@ import { setUser } from '~/store/userReducer'
 import { setAuthData, setAuthLoading } from '~/store/authReducer'
 import Router from 'next/router'
 import { setListClass, setStatusData, setTotalClass } from '~/store/classReducer'
+import { playWithToken } from '~/common/utils/token-handle'
 
 const MonaSupportPattern = () => {
 	const [form] = Form.useForm()
@@ -46,32 +47,27 @@ const MonaSupportPattern = () => {
 	useEffect(() => {
 		getAccounts()
 
+		dispatch(setUser(null))
+
 		dispatch(setListClass([]))
 		dispatch(setTotalClass(0))
 		dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
 	}, [])
 
 	const onSubmit = async (data) => {
+		console.log('---- onSubmit: ', data)
+
 		try {
 			setLoading(true)
 			const res = await accountApi.loginDev(data)
-			if (res.status === 200) {
-				const token = res?.data?.token || ''
-				const user = parseJwt(token) || ''
-				const userData = { token: token, user: user }
-
-				await localStorage.setItem('userData', JSON.stringify(userData))
-				await localStorage.setItem('token', token)
-
-				dispatch(setUser(user))
-				dispatch(setAuthData(user))
-				dispatch(setAuthLoading(false))
-				Router.push('/')
+			if (res.status == 200) {
+				playWithToken(res?.data, dispatch)
 			}
 		} catch (error) {
 			alert(`Login Error: ${error?.message}`)
 		}
 	}
+
 	return (
 		<div>
 			<Form form={form} onFinish={onSubmit}>

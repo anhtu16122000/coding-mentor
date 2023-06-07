@@ -1,6 +1,7 @@
 import Router from 'next/router'
 import { setAuthData, setAuthLoading, setRefreshToken } from '~/store/authReducer'
 import { setUser } from '~/store/userReducer'
+import { log } from './log'
 
 /**
  * It takes a JWT token, splits it into three parts, takes the second part, replaces some characters,
@@ -21,6 +22,8 @@ function parseJwt(token) {
  * @param dispatch - This is the dispatch function that we can use to dispatch actions to the Redux store
  */
 async function playWithToken(params, dispatch, callback?: Function) {
+	log.Yellow('playWithToken', params)
+
 	const token = params?.token || ''
 	const user = parseJwt(token) || ''
 	const theRefresh = {
@@ -47,7 +50,7 @@ async function playWithToken(params, dispatch, callback?: Function) {
 
 	const pathname = Router.pathname
 
-	if (pathname == '/signin') {
+	if (pathname == '/signin' || pathname == '/minhtuoiloz') {
 		Router.push('/')
 	}
 }
