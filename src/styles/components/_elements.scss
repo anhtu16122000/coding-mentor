@@ -1513,11 +1513,7 @@ body {
 	}
 	.ant-card-head-wrapper {
 		@include max-media(800px) {
-			// flex-wrap: wrap;
-			// .ant-card-head-title,
-			// .ant-card-extra {
-			// 	width: 100%;
-			// }
+ 
 			.ant-card-extra {
 				.wrap-filter-parent {
 					margin-bottom: 5px;

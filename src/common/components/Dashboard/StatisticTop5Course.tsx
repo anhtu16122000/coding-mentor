@@ -3,7 +3,6 @@ import { Bar, CartesianGrid, ComposedChart, Legend, ResponsiveContainer, Tooltip
 
 const StatisticTop5Course = (props) => {
 	const { data, titleBar, type } = props
-	console.log(data)
 
 	const [hideXAxis, setHideXAxis] = useState(false)
 

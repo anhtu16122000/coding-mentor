@@ -52,6 +52,8 @@ const NewsFiles: FC<TNewsFiles> = React.memo(({ files }) => {
 
 			<div className={`grid grid-cols-${imagesLength} gap-x-2 gap-y-2`}>
 				{images.map((item, index) => {
+					console.log('-- v:', item)
+
 					return (
 						<div
 							key={`FILE-POST-${index}-${new Date().getTime()}`}

@@ -3,7 +3,7 @@ const nextConfig = {
 	// assetPrefix: './', // For export
 	reactStrictMode: false,
 	swcMinify: true,
-	exportTrailingSlash: true,
+	trailingSlash: false,
 	compiler: {
 		removeConsole: process.env.NODE_ENV == 'production'
 	}

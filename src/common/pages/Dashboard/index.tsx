@@ -1,32 +1,17 @@
-import { Col, Row, Card, Select, Form } from 'antd'
-import React, { useEffect, useMemo, useState } from 'react'
+import { Card, Select, Form } from 'antd'
+import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import StatisticOverviewAdmin from '~/common/components/Dashboard/StatisticOverviewAdmin'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '~/store'
-import StatisticOverviewTeacher from '~/common/components/Dashboard/StatisticOverviewTeacher'
-import ListWorkshop from '~/common/components/Dashboard/ListWorkshop'
-import StatisticOverviewStudent from '~/common/components/Dashboard/StatisticOverviewStudent'
 import moment from 'moment'
-import { ShowNoti } from '~/common/utils'
-import { notificationApi } from '~/api/notification'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
-import { getAll } from '~/store/notificateReducer'
-import { dashboardApi } from '~/api/dashboard'
-import StatisticByMonthAdmin from '~/common/components/Dashboard/StatisticByMonthAdmin'
-import { seminarApi } from '~/api/seminar'
-import LearningProgress from '~/common/components/Dashboard/LearningProgress'
-import PrimaryButton from '~/common/components/Primary/Button'
 import { branchApi } from '~/api/branch'
-
 import { IoAnalytics } from 'react-icons/io5'
-import RestApi from '~/api/RestApi'
 import StatisticTop5Course from '~/common/components/Dashboard/StatisticTop5Course'
 import { staticsticalApi } from '~/api/statistic'
 import StatisticStudentByAge from '~/common/components/Dashboard/StatisticStudentByAge'
-import StatisticPositiveAndNegativeChart from '~/common/components/Dashboard/StatisticPositiveAndNegativeChart'
 import StatisticPie from '~/common/components/Dashboard/StatisticPie'
-import { RiMoneyDollarCircleLine, RiUser6Line } from 'react-icons/ri'
+import { RiMoneyDollarCircleLine } from 'react-icons/ri'
 import { HiArrowNarrowDown, HiOutlineUser } from 'react-icons/hi'
 import { GiEvilBook } from 'react-icons/gi'
 import { TbArrowNarrowUp, TbPencil } from 'react-icons/tb'
@@ -38,6 +23,10 @@ import { StatisticPointStudent } from '~/common/components/Dashboard/StatisticPo
 import { ListFeedback } from '~/common/components/Dashboard/ListFeedback'
 import { feedbackStudentApi } from '~/api/feedbacks-student'
 import { userInformationApi } from '~/api/user'
+import Top5DemandChart from './Top5Demand'
+import Top5CourseChart from './Top5Course'
+
+const RevenueChart = dynamic(() => import('./Revenue'))
 
 const dataYear = [
 	{
@@ -77,6 +66,7 @@ const dataYear = [
 		label: '2015'
 	}
 ]
+
 const Dashboard = () => {
 	const dispatch = useDispatch()
 	const [form] = Form.useForm()
@@ -97,13 +87,10 @@ const Dashboard = () => {
 	const [todoApiOverView, setTodoApiOverView] = useState(listTodoApiOverView)
 	const [allBranch, setAllBranch] = useState([])
 	const [student, setStudent] = useState<{ label: string; value: string }[]>([])
-	const [statisticRevenue, setStatisticRevenue] = useState<IStatisticTopCourse[]>([])
 	const [statisticOverview, setStatisticOverview] = useState([])
-	const [statisticTopLearning, setStatisticTopLearning] = useState<IStatisticTopCourse[]>([])
 	const [statisticStudentAge, setStatisticStudentAge] = useState([])
 	const [statisticSource, setStatisticSource] = useState([])
 	const [statisticTopJob, setStatisticTopJob] = useState([])
-	const [statisticTopPurpose, setStatisticTopPurpose] = useState([])
 	const [statisticNewClass, setStatisticNewClass] = useState([])
 	const [statisticNewCustomer, setStatisticNewCustomer] = useState([])
 	const [statisticFeedRating, setStatisticFeedRating] = useState([])
@@ -117,13 +104,51 @@ const Dashboard = () => {
 	const [feedback, setFeedback] = useState([])
 	const [totalFeedback, setTotalFeedback] = useState(0)
 
+	// ----------------------------------------------------------------
+	const [showRevenueChart, setShowRevenueChart] = useState<boolean>(false)
+	const [showTop5Chart, setShowTop5Chart] = useState<boolean>(false)
+
+	useEffect(() => {
+		// the-super-scroll
+		const superScroll = document.getElementById('the-super-scroll')
+
+		const handleScroll = () => {
+			const revenueTag = document.getElementById('revenue-chart')
+			const top5Chart = document.getElementById('top-5-chart')
+
+			var scrollPosition = superScroll.scrollTop
+
+			if (!!revenueTag) {
+				const revenueChartPositon = revenueTag.offsetTop - window.innerHeight
+				if (scrollPosition > revenueChartPositon) {
+					setShowRevenueChart(true)
+				}
+			}
+
+			if (!!top5Chart) {
+				const top5ChartPositon = top5Chart.offsetTop - (window.innerHeight - 150)
+				if (scrollPosition > top5ChartPositon && !showTop5Chart) {
+					setShowTop5Chart(true)
+				}
+			}
+		}
+
+		if (!!superScroll) {
+			superScroll.addEventListener('scroll', handleScroll)
+		}
+
+		return () => {
+			if (!!superScroll) {
+				superScroll.removeEventListener('scroll', handleScroll) // Gỡ bỏ event listener khi component bị unmount
+			}
+		}
+	}, [])
+
 	const getAllBranch = async () => {
 		try {
 			const { data } = await branchApi.getAll()
 			setAllBranch(data.data)
-		} catch (error) {
-			console.log('error', error)
-		}
+		} catch (error) {}
 	}
 
 	const handleChangeBranch = (val) => {
@@ -142,30 +167,6 @@ const Dashboard = () => {
 			}
 			if (res.status === 204) {
 				setStatisticStudentAge([])
-			}
-		} catch (error) {}
-	}
-
-	const getTopLearningNeed = async () => {
-		try {
-			const res = await staticsticalApi.getTopLearningNeed(todoApi)
-			if (res.status === 200) {
-				setStatisticTopLearning(res.data.data)
-			}
-			if (res.status === 204) {
-				setStatisticTopLearning([])
-			}
-		} catch (error) {}
-	}
-
-	const getTopPurpose = async () => {
-		try {
-			const res = await staticsticalApi.getTopPurpose(todoApi)
-			if (res.status === 200) {
-				setStatisticTopPurpose(res.data.data)
-			}
-			if (res.status === 204) {
-				setStatisticTopPurpose([])
 			}
 		} catch (error) {}
 	}
@@ -202,18 +203,6 @@ const Dashboard = () => {
 			}
 			if (res.status === 204) {
 				setStatisticOverview([])
-			}
-		} catch (error) {}
-	}
-
-	const getRevenue = async () => {
-		try {
-			const res = await staticsticalApi.getRevenue(todoApi)
-			if (res.status === 200) {
-				setStatisticRevenue(res.data.data)
-			}
-			if (res.status === 204) {
-				setStatisticRevenue([])
 			}
 		} catch (error) {}
 	}
@@ -340,9 +329,7 @@ const Dashboard = () => {
 			if (res.status == 204) {
 				setStudent([])
 			}
-		} catch (err) {
-			console.log(err)
-		}
+		} catch (err) {}
 	}
 
 	const handleChangeStudent = (val) => {
@@ -353,12 +340,9 @@ const Dashboard = () => {
 	useEffect(() => {
 		getStaticStudentAge()
 
-		getTopLearningNeed()
-		getTopPurpose()
 		getTopSource()
 		getTopJob()
 
-		getRevenue()
 		getNewClassInMonth()
 		getNewCustomer()
 		getFeedbackRating()
@@ -392,11 +376,7 @@ const Dashboard = () => {
 				<Form form={form}>
 					<div className="flex items-center pr-4">
 						<Form.Item name="student" className="w-[200px] mr-2">
-							{user?.RoleId == 8 ? (
-								<Select onChange={handleChangeStudent} options={student} className="w-[200px] h-[36px] mr-2"></Select>
-							) : (
-								''
-							)}
+							{user?.RoleId == 8 && <Select onChange={handleChangeStudent} options={student} className="w-[200px] h-[36px] mr-2"></Select>}
 						</Form.Item>
 
 						<Form.Item name="branchIds" className="w-[200px]">
@@ -423,11 +403,6 @@ const Dashboard = () => {
 					</div>
 				</Form>
 			</div>
-
-			{/* <div className="grid grid-cols-12 gap-4">
-				{dataStaticsOverview &&
-					dataStaticsOverview.map((item) => <Dashboard.CardItem item={item} key={Date.now() + Math.random() * 1000} />)}
-			</div>*/}
 
 			<div className="dashboard-content">
 				{statisticOverview?.length > 0 &&
@@ -475,6 +450,26 @@ const Dashboard = () => {
 					))}
 			</div>
 
+			{(user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+				<div id="revenue-chart">{showRevenueChart && <RevenueChart />}</div>
+			)}
+
+			{(user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7) && (
+				<div id="top-5-chart" className="grid grid-cols-3 w800:grid-cols-6 gap-4 mt-4">
+					{showTop5Chart && (
+						<div className="col-span-3">
+							<Top5DemandChart />
+						</div>
+					)}
+
+					{showTop5Chart && (
+						<div className="col-span-3">
+							<Top5CourseChart />
+						</div>
+					)}
+				</div>
+			)}
+
 			<div className="flex justify-end mt-4">
 				<Select
 					onChange={(e) => {
@@ -483,28 +478,12 @@ const Dashboard = () => {
 					}}
 					options={dataYear}
 					className="w-[100px] h-[36px] mr-2"
-				></Select>
+				/>
 			</div>
+
 			{user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
 				<>
-					{user.RoleId != 7 ? (
-						<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Doanh Thu</h1>}>
-							<StatisticPositiveAndNegativeChart data={statisticRevenue} titleBar="Doanh thu" />
-						</Card>
-					) : (
-						''
-					)}
-
-					<div className="grid grid-cols-6 gap-tw-4">
-						<Card className="col-span-3 mt-tw-4" title={<h1 className="text-2xl font-medium">Top 5 nhu cầu học</h1>}>
-							<StatisticTop5Course data={statisticTopLearning} titleBar="Nhu cầu học" type={1} />
-						</Card>
-						<Card className="col-span-3 mt-tw-4" title={<h1 className="text-2xl font-medium">Top 5 mục đích học</h1>}>
-							<StatisticTop5Course data={statisticTopPurpose} titleBar="Mục đích học " type={2} />
-						</Card>
-					</div>
-
-					<div className="grid grid-cols-6 gap-tw-4">
+					<div className="grid grid-cols-6 gap-4">
 						<Card className="col-span-3 mt-tw-4 " title={<h1 className="text-2xl font-medium">Lớp mới mỗi tháng</h1>}>
 							<StatisticClassNew data={statisticNewClass} titleBar="Lớp mới mỗi tháng" type={1} />
 						</Card>
@@ -575,9 +554,6 @@ const Dashboard = () => {
 				</>
 			) : user?.RoleId == 6 ? (
 				<>
-					<Card className="mt-tw-4" title={<h1 className="text-2xl font-medium">Doanh Thu</h1>}>
-						<StatisticPositiveAndNegativeChart data={statisticRevenue} titleBar="Doanh thu" />
-					</Card>
 					<div className="grid grid-cols-6 gap-tw-4">
 						<Card className="col-span-3 mt-tw-4 " title={<h1 className="text-2xl font-medium">Lớp mới mỗi tháng</h1>}>
 							<StatisticClassNew data={statisticNewClass} titleBar="Lớp mới mỗi tháng" type={1} />

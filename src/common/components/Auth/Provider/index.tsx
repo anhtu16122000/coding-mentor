@@ -70,9 +70,7 @@ function AuthProvider({ children }: IAuthLayout) {
 			if (response.status == 200) {
 				playWithToken(response?.data, dispatch, getClass)
 			}
-		} catch (error) {
-			console.log('RefreshToken Error: ', error)
-		}
+		} catch (error) {}
 		console.timeEnd('Gọi api RefreshToken hết')
 	}
 
@@ -84,7 +82,6 @@ function AuthProvider({ children }: IAuthLayout) {
 	async function checkLogin() {
 		try {
 			const response = await JSON.parse(localStorage.getItem('userData'))
-			console.log('response: ', response)
 
 			if (!!response?.theRefresh) {
 				const theRefresh = response.theRefresh

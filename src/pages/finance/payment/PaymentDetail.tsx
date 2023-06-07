@@ -7,7 +7,7 @@ import InfoItem from '~/common/components/InfoItem'
 import { log } from '~/common/utils'
 import { parseToMoney } from '~/common/utils/common'
 
-const PaymentDetail = (props) => {
+const PaymentDetail = (props: { data: any }) => {
 	const { data } = props
 
 	const [visible, setVisible] = useState<boolean>(false)
@@ -26,9 +26,9 @@ const PaymentDetail = (props) => {
 			</PrimaryTooltip>
 
 			<Modal open={visible} onCancel={toggle} title={<div>Mã đơn: {data?.Code}</div>} footer={null}>
-				<InfoItem title="Tổng tiền" value={parseToMoney(data.TotalPrice)} />
-				<InfoItem title="Đã thanh toán" value={parseToMoney(data.Paid)} />
-				<InfoItem title="Chưa thanh toán" value={parseToMoney(data.Debt)} />
+				<InfoItem title="Tổng tiền" value={parseToMoney(data?.TotalPrice)} />
+				<InfoItem title="Đã thanh toán" value={parseToMoney(data?.Paid)} />
+				<InfoItem title="Chưa thanh toán" value={parseToMoney(data?.Debt)} />
 
 				<Divider className="ant-divider-16" />
 
@@ -46,8 +46,8 @@ const PaymentDetail = (props) => {
 						<FaUser size={20} />
 					</div>
 					<div>
-						<InfoItem title="Người thanh toán" value={data.FullName} />
-						<InfoItem title="Mã" value={data.UserCode} />
+						<InfoItem title="Người thanh toán" value={data?.FullName} />
+						<InfoItem title="Mã" value={data?.UserCode} />
 					</div>
 				</div>
 
@@ -58,8 +58,8 @@ const PaymentDetail = (props) => {
 						<FaUserPlus size={23} />
 					</div>
 					<div>
-						<InfoItem title="Ngưởi tạo" value={data.CreatedBy} />
-						<InfoItem title="Ngày tạo" value={moment(data.CreatedOn).format('HH:mm DD/MM/YYYY')} />
+						<InfoItem title="Ngưởi tạo" value={data?.CreatedBy} />
+						<InfoItem title="Ngày tạo" value={moment(data?.CreatedOn).format('HH:mm DD/MM/YYYY')} />
 					</div>
 				</div>
 
@@ -70,8 +70,8 @@ const PaymentDetail = (props) => {
 						<FaUserEdit size={23} />
 					</div>
 					<div>
-						<InfoItem title="Cập nhật gần nhất" value={data.ModifiedBy} />
-						<InfoItem title="Thời gian" value={moment(data.ModifiedOn).format('HH:mm DD/MM/YYYY')} />
+						<InfoItem title="Cập nhật gần nhất" value={data?.ModifiedBy} />
+						<InfoItem title="Thời gian" value={moment(data?.ModifiedOn).format('HH:mm DD/MM/YYYY')} />
 					</div>
 				</div>
 			</Modal>

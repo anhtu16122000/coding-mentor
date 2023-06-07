@@ -862,3 +862,18 @@ button {
 	white-space: pre-wrap;
 	overflow-wrap: break-word;
 }
+
+.card-beauty-header {
+	.ant-card-head {
+		// padding: 0px !important;
+		// max-width: 0px !important;
+		.ant-card-head-wrapper {
+		}
+	}
+}
+
+.inner-hidden {
+	.fucking-chart {
+		display: none !important;
+	}
+}

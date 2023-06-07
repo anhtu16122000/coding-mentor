@@ -26,3 +26,10 @@ yarn-debug.log*
 yarn-error.log*
 /public/static/videos/*
 .vercel
+/.zip
+.zip
+*.zip
+out
+/out
+minh-tuoi-loz
+/minh-tuoi-loz
