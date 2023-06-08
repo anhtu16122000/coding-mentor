@@ -1,31 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import NestedTable from '~/common/components/Primary/Table/NestedTable'
 import moment from 'moment'
-import { Modal, Tooltip, Spin, Form } from 'antd'
+import { Modal, Tooltip, Form } from 'antd'
 import { customerAdviseApi } from '~/api/customer'
 import ReactHtmlParser from 'react-html-parser'
-import { ShowNoti } from '~/common/utils'
+import { ShowNoti, log } from '~/common/utils'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import DeleteTableRow from '../../Elements/DeleteTableRow'
 import TextBoxField from '../../FormControl/TextBoxField'
+import ModalFooter from '../../ModalFooter'
 
-const CustomerAdvisoryNote = (props) => {
-	const { customerID, setTodoApiCustomer, listTodoApiCustomer } = props
+const StudentNote = (props: { studentId: any }) => {
+	const { studentId } = props
+
 	const listTodoApi = {
-		customerId: customerID,
+		studentId: studentId,
 		pageSize: PAGE_SIZE,
 		pageIndex: 1
 	}
+
 	const [form] = Form.useForm()
 	const [todoApi, setTodoApi] = useState(listTodoApi)
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [loading, setLoading] = useState(false)
-	const [dataSource, setDataSource] = useState([])
+	const [data, setData] = useState([])
+
+	useEffect(() => {
+		if (studentId) {
+			handleGetNotes()
+		}
+	}, [todoApi, studentId])
 
 	const handleDelete = async (id) => {
 		try {
-			const res = await customerAdviseApi.deleteNote(id)
-			if (res.status === 200) {
+			const res = await customerAdviseApi.deleteStudentNote(id)
+			if (res.status == 200) {
 				setIsModalVisible(false)
 				setTodoApi(listTodoApi)
 				ShowNoti('success', res.data.message)
@@ -58,35 +67,28 @@ const CustomerAdvisoryNote = (props) => {
 		}
 	]
 
-	const handleGetAllCustomerNoteByID = async () => {
+	const handleGetNotes = async () => {
 		try {
-			const res = await customerAdviseApi.getNoteByCustomer(todoApi)
-			if (res.status === 200) {
-				setDataSource(res.data.data)
-			}
-			if (res.status === 204) {
-				setDataSource([])
+			const res = await customerAdviseApi.getStudentNotes(todoApi)
+			if (res.status == 200) {
+				setData(res.data.data)
+			} else {
+				setData([])
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
 		}
 	}
 
-	useEffect(() => {
-		if (customerID) {
-			handleGetAllCustomerNoteByID()
-		}
-	}, [todoApi])
-
 	const addNote = async (data) => {
-		let DATA_SUBMIT = { ...data, CustomerId: customerID }
+		let DATA_SUBMIT = { ...data, studentId: studentId }
 		setLoading(true)
 		try {
-			const res = await customerAdviseApi.addNote(DATA_SUBMIT)
+			const res = await customerAdviseApi.addStudentNote(DATA_SUBMIT)
 			if (res.status === 200) {
 				setIsModalVisible(false)
 				form.resetFields()
-				setTodoApiCustomer(listTodoApiCustomer)
+				handleGetNotes()
 				setTodoApi(listTodoApi)
 				ShowNoti('success', res.data.message)
 			}
@@ -112,33 +114,27 @@ const CustomerAdvisoryNote = (props) => {
 	return (
 		<div className="mt-2">
 			<Tooltip title="Thêm ghi chú">
-				<button
-					className="btn btn-warning"
-					onClick={() => {
-						showModal()
-					}}
-				>
+				<button className="btn btn-warning" onClick={showModal}>
 					Thêm ghi chú
 				</button>
 			</Tooltip>
 
-			<Modal footer={null} title="Thêm ghi chú" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} width={1200} centered>
+			<Modal
+				footer={<ModalFooter loading={loading} onOK={form.submit} onCancel={handleCancel} />}
+				title="Thêm ghi chú"
+				open={isModalVisible}
+				onOk={handleOk}
+				onCancel={handleCancel}
+				width={500}
+			>
 				<Form layout="vertical" form={form} onFinish={addNote}>
-					<TextBoxField rows={16} name="Note" label="" />
-					<div className="text-center mt-3">
-						<button type="submit" className="btn btn-primary w-100">
-							Lưu {loading && <Spin className="loading-base" />}
-						</button>
-					</div>
+					<TextBoxField className="primary-input !h-auto !mb-0" rows={8} name="Note" label="" />
 				</Form>
 			</Modal>
-			<div className="row">
-				<div className="col-md-9">
-					<NestedTable addClass="basic-header" dataSource={dataSource} columns={columns} haveBorder={true} />
-				</div>
-			</div>
+
+			<NestedTable addClass="basic-header" dataSource={data} columns={columns} haveBorder={true} />
 		</div>
 	)
 }
 
-export default CustomerAdvisoryNote
+export default StudentNote

@@ -80,8 +80,8 @@ export const ParentStudentChildMenu = [
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/info-course/service-appointment-test',
-				Route: '/info-course/service-appointment-test',
+				Key: '/entry-test',
+				Route: '/entry-test',
 				Text: 'Thông tin hẹn test',
 				Icon: ''
 			},

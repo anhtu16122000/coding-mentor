@@ -87,8 +87,8 @@ export const StudentChildMenu = [
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/info-course/service-appointment-test',
-				Route: '/info-course/service-appointment-test',
+				Key: '/entry-test',
+				Route: '/entry-test',
 				Text: 'Thôn tin hẹn test',
 				Icon: ''
 			},

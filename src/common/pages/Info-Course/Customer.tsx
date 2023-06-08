@@ -23,7 +23,6 @@ import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'
 import FilterBase from '~/common/components/Elements/FilterBase'
 import { customerStatusApi } from '~/api/customer-status'
 import SortBox from '~/common/components/Elements/SortBox'
-import CustomerAdvisoryNote from '~/common/components/Customer/CustomerAdvisory/CustomerAdvisoryNote'
 import { useRouter } from 'next/router'
 import { setSource } from '~/store/sourceReducer'
 import { setSaler } from '~/store/salerReducer'
@@ -36,6 +35,7 @@ import { BsThreeDots } from 'react-icons/bs'
 import appConfigs from '~/appConfig'
 import ImportCustomer from './ImportCustomer'
 import moment from 'moment'
+import { LeadNote, StudentNote } from '~/common/components'
 
 let pageIndex = 1
 let dataOption = [
@@ -314,16 +314,15 @@ const CustomerAdvisory = () => {
 		setCurrentPage(pageNumber)
 		setTodoApi({
 			...todoApi,
-			// ...listFieldSearch,
 			pageIndex: pageIndex
 		})
 	}
 
 	const expandedRowRender = (data) => {
 		return (
-			<>
-				<CustomerAdvisoryNote setTodoApiCustomer={setTodoApi} listTodoApiCustomer={listTodoApi} customerID={data.Id} />
-			</>
+			<div className="w-[1000px]">
+				<LeadNote setTodoApiCustomer={setTodoApi} listTodoApiCustomer={listTodoApi} customerID={data.Id} />
+			</div>
 		)
 	}
 

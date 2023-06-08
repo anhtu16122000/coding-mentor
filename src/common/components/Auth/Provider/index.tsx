@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { classApi } from '~/api/class'
-import { tokenApi } from '~/api/token-api'
 import { logOut, playWithToken } from '~/common/utils/token-handle'
 import { userApi } from '~/services/auth'
 import { RootState } from '~/store'
@@ -25,21 +24,22 @@ function AuthProvider({ children }: IAuthLayout) {
 
 	const allowNoneLogin = () => {
 		if (
-			router.pathname !== '/minhtuoiloz' &&
+			router.pathname.search('support-portal') < 1 &&
+			router.pathname.search('404') < 1 &&
 			router.pathname.search('login') < 1 &&
 			router.pathname.search('fogot-password') < 1 &&
 			router.pathname.search('reset-password') < 1 &&
 			router.pathname.search('register') < 1
 		) {
-			return true
-		} else {
 			return false
+		} else {
+			return true
 		}
 	}
 
 	useEffect(() => {
 		if (!data) {
-			if (allowNoneLogin()) {
+			if (!allowNoneLogin()) {
 				logOut()
 			}
 		}
@@ -64,14 +64,16 @@ function AuthProvider({ children }: IAuthLayout) {
 	}
 
 	const _refreshToken = async (param) => {
-		console.time('Gọi api RefreshToken hết')
-		try {
-			const response = await userApi.refreshToken(param)
-			if (response.status == 200) {
-				playWithToken(response?.data, dispatch, getClass)
-			}
-		} catch (error) {}
-		console.timeEnd('Gọi api RefreshToken hết')
+		if (!allowNoneLogin()) {
+			console.time('Gọi api RefreshToken hết')
+			try {
+				const response = await userApi.refreshToken(param)
+				if (response.status == 200) {
+					playWithToken(response?.data, dispatch, getClass)
+				}
+			} catch (error) {}
+			console.timeEnd('Gọi api RefreshToken hết')
+		}
 	}
 
 	function isPastDate(timestamp) {
@@ -88,7 +90,7 @@ function AuthProvider({ children }: IAuthLayout) {
 				dispatch(setRefreshToken(theRefresh))
 				if (theRefresh?.refreshTokenExpires) {
 					if (isPastDate(new Date(theRefresh?.refreshTokenExpires).getTime())) {
-						if (allowNoneLogin()) {
+						if (!allowNoneLogin()) {
 							logOut()
 						}
 					} else {
@@ -96,7 +98,7 @@ function AuthProvider({ children }: IAuthLayout) {
 					}
 				}
 			} else {
-				if (allowNoneLogin()) {
+				if (!allowNoneLogin()) {
 					logOut()
 					dispatch(setAuthLoading(false))
 				}

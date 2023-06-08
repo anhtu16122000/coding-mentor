@@ -159,6 +159,14 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 						<a className="font-medium">Gửi thông báo</a>
 					</Breadcrumb.Item>
 				)}
+
+				{Router.asPath.includes('/entry-test') && (
+					<Breadcrumb.Item key={`entry-test-01`}>
+						<a href="/entry-test" className="font-medium">
+							Hẹn test
+						</a>
+					</Breadcrumb.Item>
+				)}
 			</Breadcrumb>
 		)
 	}

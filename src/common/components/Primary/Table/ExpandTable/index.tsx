@@ -135,11 +135,11 @@ const ExpandTable = (props) => {
 
 					{props.sumPrice && renderStatistical()}
 
-					{dataSource.length == 0 && <EmptyData loading={props.loading?.status} />}
+					{dataSource.length == 0 && <EmptyData loading={props.loading?.status || props?.loading == true} />}
 
 					{dataSource.length > 0 && (
 						<Table
-							loading={props.loading?.type == 'GET_ALL' && props.loading?.status}
+							loading={(props.loading?.type == 'GET_ALL' && props.loading?.status) || props?.loading == true}
 							bordered={props.haveBorder ? props.haveBorder : false}
 							scroll={{ x: 'max-content', y: window.innerHeight - 295 }}
 							columns={props.columns}

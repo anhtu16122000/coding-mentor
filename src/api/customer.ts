@@ -49,5 +49,17 @@ export const customerAdviseApi = {
 		return instance.post(`${url}/ImportCustomer`, fData, {
 			headers: { 'Content-Type': 'multipart/form-data' }
 		})
+	},
+
+	getStudentNotes(params) {
+		return instance.get('/api/StudentNote', { params: params })
+	},
+
+	addStudentNote(data: any) {
+		return instance.post('/api/StudentNote', data, {})
+	},
+
+	deleteStudentNote(id) {
+		return instance.delete(`/api/StudentNote/${id}`)
 	}
 }

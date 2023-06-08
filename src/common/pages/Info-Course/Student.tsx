@@ -4,7 +4,7 @@ import { areaApi } from '~/api/area'
 import { registerApi, userInformationApi } from '~/api/user'
 import { Input, Popover } from 'antd'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
-import { ShowNoti } from '~/common/utils'
+import { ShowNoti, log } from '~/common/utils'
 import { RootState } from '~/store'
 import { setArea } from '~/store/areaReducer'
 import PrimaryTable from '~/common/components/Primary/Table'
@@ -31,8 +31,9 @@ import IconButton from '~/common/components/Primary/IconButton'
 import { useRouter } from 'next/router'
 import { userInfoColumn } from '~/common/libs/columns/user-info'
 import { ButtonEye } from '~/common/components/TableButton'
-import { PrimaryTooltip } from '~/common/components'
+import { PrimaryTooltip, StudentNote } from '~/common/components'
 import Filters from '~/common/components/Student/Filters'
+import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 
 const Student: FC<IPersonnel> = (props) => {
 	const { reFresh, allowRegister, role } = props
@@ -52,7 +53,6 @@ const Student: FC<IPersonnel> = (props) => {
 
 	const [apiParameters, setApiParameters] = useState(initParamters)
 	const [roleStaff, setRoleStaff] = useState([])
-	const [roleSelectFilter, setRoleSelectFilter] = useState([])
 	const [users, setUser] = useState([])
 	const [totalRow, setTotalRow] = useState(1)
 	const [loading, setLoading] = useState(false)
@@ -87,11 +87,6 @@ const Student: FC<IPersonnel> = (props) => {
 			return parseSelectArray(state.purpose.Purpose, 'Name', 'Id')
 		}
 	}, [state.purpose])
-
-	useEffect(() => {
-		const convertRoleSelectFilter = roleStaff.map((role) => role.value)
-		setRoleSelectFilter(convertRoleSelectFilter)
-	}, [roleStaff])
 
 	const getAllSource = async () => {
 		try {
@@ -483,11 +478,19 @@ const Student: FC<IPersonnel> = (props) => {
 
 	const [visible, setVisible] = useState(false)
 
+	const expandedRowRender = (data) => {
+		return (
+			<div className="w-[1000px]">
+				<StudentNote studentId={data?.UserInformationId} />
+			</div>
+		)
+	}
+
 	return (
 		<div className="info-course-student">
-			<PrimaryTable
+			<ExpandTable
 				columns={role == 3 ? columnsStudent : columns}
-				data={users}
+				dataSource={users}
 				total={totalRow}
 				loading={loading}
 				onChangePage={(event: number) => setApiParameters({ ...apiParameters, PageIndex: event })}
@@ -632,6 +635,7 @@ const Student: FC<IPersonnel> = (props) => {
 						)}
 					</>
 				}
+				expandable={expandedRowRender}
 			/>
 		</div>
 	)

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { studentInClassApi } from '~/api/student-in-class'
 import { userInformationApi } from '~/api/user'
+import { StudentNote } from '~/common/components'
 import CCSearch from '~/common/components/CCSearch'
 import IconButton from '~/common/components/Primary/IconButton'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
@@ -143,7 +144,14 @@ export const StudentWarningPage = () => {
 	}
 
 	const expandedRowRender = (data) => {
-		return <>Ghi chú: {data?.Note}</>
+		return (
+			<>
+				<>Ghi chú: {data?.Note}</>
+				<div className="w-[1000px] mt-[16px]">
+					<StudentNote studentId={data?.StudentId} />
+				</div>
+			</>
+		)
 	}
 
 	return (

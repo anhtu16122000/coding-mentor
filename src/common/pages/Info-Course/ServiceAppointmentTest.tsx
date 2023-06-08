@@ -26,6 +26,7 @@ import { useRouter } from 'next/router'
 import { Form, Select } from 'antd'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
+import { StudentNote } from '~/common/components'
 
 const appointmenInitFilter = [
 	{
@@ -48,19 +49,19 @@ const appointmenInitFilter = [
 			{ value: 2, title: 'Đã kiểm tra' }
 		],
 		value: null
-	},
-	{
-		name: 'Type',
-		title: 'Địa điểm làm bài',
-		col: 'col-md-12 col-12',
-		type: 'select',
-		mode: 'multiple',
-		optionList: [
-			{ value: 1, title: 'Tại trung tâm' },
-			{ value: 2, title: 'Làm bài trực tuyến' }
-		],
-		value: null
 	}
+	// {
+	// 	name: 'Type',
+	// 	title: 'Địa điểm làm bài',
+	// 	col: 'col-md-12 col-12',
+	// 	type: 'select',
+	// 	mode: 'multiple',
+	// 	optionList: [
+	// 		{ value: 1, title: 'Tại trung tâm' },
+	// 		{ value: 2, title: 'Làm bài trực tuyến' }
+	// 	],
+	// 	value: null
+	// }
 ]
 
 const appointmenDataOption = [
@@ -83,14 +84,14 @@ const appointmenDataOption = [
 			sort: 0,
 			sortType: true
 		},
-		text: 'Ngày hẹn A - Z'
+		text: 'Ngày hẹn tăng dần'
 	},
 	{
 		dataSort: {
 			sort: 0,
 			sortType: false
 		},
-		text: 'Ngày hẹn Z - A'
+		text: 'Ngày hẹn giảm dần'
 	}
 ]
 
@@ -114,13 +115,14 @@ export default function ServiceAppointmentTest(props) {
 	const router = useRouter()
 	const dispatch = useDispatch()
 	const [isOpenNoti, setisOpenNoti] = useState(false)
+
 	const [listStudent, setListStudent] = useState([])
 	const [listTeacher, setListTeacher] = useState([])
 	const [listExamination, setListExamination] = useState([])
 	const [students, setStudents] = useState<{ label: string; value: string }[]>([])
 
-	// BASE USESTATE TABLE
 	const [dataSource, setDataSource] = useState<ITestCustomer[]>([])
+
 	const listTodoApi = {
 		pageSize: PAGE_SIZE,
 		pageIndex: pageIndex,
@@ -133,11 +135,13 @@ export default function ServiceAppointmentTest(props) {
 		Status: null,
 		studentId: null
 	}
-	const [isLoading, setIsLoading] = useState(false)
+
+	const [isLoading, setIsLoading] = useState(true)
 	const [totalPage, setTotalPage] = useState(null)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [todoApi, setTodoApi] = useState(listTodoApi)
 	const userInformation = useSelector((state: RootState) => state.user.information)
+
 	const [apiParametersStudent, setApiParametersStudent] = useState({
 		PageSize: PAGE_SIZE,
 		PageIndex: 1,
@@ -241,8 +245,7 @@ export default function ServiceAppointmentTest(props) {
 					setDataSource(res.data.data)
 					setTotalPage(res.data.totalRow)
 				}
-			}
-			if (res.status === 204) {
+			} else {
 				setDataSource([])
 			}
 		} catch (err) {
@@ -318,7 +321,7 @@ export default function ServiceAppointmentTest(props) {
 	const getStudents = async () => {
 		try {
 			const res = await userInformationApi.getByRole(3)
-			if (res.status === 200) {
+			if (res.status == 200) {
 				setListStudent(parseSelectArrayUser(res.data.data, 'FullName', 'UserCode', 'UserInformationId'))
 			} else {
 				setListStudent([])
@@ -369,7 +372,11 @@ export default function ServiceAppointmentTest(props) {
 	}, [])
 
 	const expandedRowRender = (record) => {
-		return <ExpandedRowAppointment rowData={record} />
+		return (
+			<div className="w-[1000px]">
+				<StudentNote studentId={record?.StudentId} />
+			</div>
+		)
 	}
 
 	const onUpdateData = () => {
@@ -486,6 +493,7 @@ export default function ServiceAppointmentTest(props) {
 						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && (
 							<TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
 						)}
+
 						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && (
 							<StudentForm
 								rowData={data}
@@ -510,15 +518,13 @@ export default function ServiceAppointmentTest(props) {
 
 	return (
 		<>
-			<Head>
-				<title>{appConfigs.appName + ' - Danh sách hẹn test'}</title>
-			</Head>
 			<NotiModal
 				isOpen={isOpenNoti}
 				isCancel={() => setisOpenNoti(false)}
 				isOk={() => setisOpenNoti(false)}
 				content="Chưa đến giờ làm đề test"
 			/>
+
 			<div className="test-customer">
 				<ExpandTable
 					currentPage={currentPage}
@@ -536,7 +542,7 @@ export default function ServiceAppointmentTest(props) {
 									handleReset={handleReset}
 								/>
 							)}
-							<SortBox handleSort={(value) => handleSort(value)} dataOption={appointmenDataOption} />
+							<SortBox width={170} handleSort={(value) => handleSort(value)} dataOption={appointmenDataOption} />
 						</div>
 					}
 					Extra={

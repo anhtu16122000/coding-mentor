@@ -2,7 +2,7 @@ import { Input } from 'antd'
 import React, { useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
 import { MainLayout } from '~/common'
-import { PrimaryTooltip } from '~/common/components'
+import { PrimaryTooltip, StudentNote } from '~/common/components'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNostis } from '~/common/utils'
@@ -48,11 +48,15 @@ const ChangedPage = () => {
 	}
 
 	const expandedRowRender = (item) => {
-		return <div>Ghi chú: {item?.Note}</div>
-	}
+		return (
+			<>
+				<div>Ghi chú chuyển lớp: {item?.Note}</div>
 
-	function gotoClass(params) {
-		Router.push(`/class/list-class/detail/?class=${params.ClassId}`)
+				<div className="w-[1000px] mt-[16px]">
+					<StudentNote studentId={item?.StudentId} />
+				</div>
+			</>
+		)
 	}
 
 	function viewStudentDetails(params) {

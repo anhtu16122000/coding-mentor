@@ -124,8 +124,8 @@ export const AdminChildMenu = [
 			},
 			{
 				ItemType: 'single',
-				Key: '/info-course/service-appointment-test',
-				Route: '/info-course/service-appointment-test',
+				Key: '/entry-test',
+				Route: '/entry-test',
 				Text: 'Khách hẹn test',
 				Icon: ''
 			},

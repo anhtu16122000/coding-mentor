@@ -16,6 +16,9 @@ import { TabClassListHistory } from './TabClassListHistory'
 import { TabDiscountHistory } from './TabDiscountHistory'
 import { TabStudyRoute } from './TabStudyRoute'
 import { TabTestAppointment } from './TabTestAppointment'
+import { StudentNote } from '~/common/components'
+import Head from 'next/head'
+import appConfigs from '~/appConfig'
 
 export interface IStudentDetailInfoPageProps {}
 
@@ -32,8 +35,7 @@ export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps
 			const res = await userInformationApi.getByID(router.query.StudentID)
 			if (res.status === 200) {
 				setStudentDetail(res.data.data)
-			}
-			if (res.status === 204) {
+			} else {
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -109,12 +111,15 @@ export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps
 						key: '8',
 						label: `Lịch sử học`,
 						children: <TabClassListHistory StudentDetail={studentDetail} />
+					},
+					{
+						key: '9',
+						label: `Ghi chú`,
+						children: <StudentNote studentId={studentDetail?.UserInformationId} />
 					}
 			  ]
 
-	const onChange = (key: string) => {
-		console.log(key)
-	}
+	const onChange = (key: string) => {}
 
 	useEffect(() => {
 		if (router.query.StudentID) {
@@ -147,43 +152,53 @@ export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps
 	}
 
 	return (
-		<div className="student-detail">
-			<div className="contain">
-				<div className="general-info">
-					<div className="head">
-						<div className="background"></div>
-						<div className="more-info">
-							<div className="name">{studentDetail.FullName}</div>
-							<span className="email">{studentDetail.Email}</span>
-						</div>
-						<div className="avatar">
-							<img src={studentDetail.Avatar || '/default-avatar.png'} alt="" />
-							<div className="overlay" onClick={() => setIsVisibleModal(true)}>
-								<Tooltip title="Tải ảnh lên">
-									<FiUpload size={30} color="#d9d9d9" />
-								</Tooltip>
+		<>
+			{!!studentDetail.FullName && (
+				<Head>
+					<title>
+						{appConfigs.appName} - {studentDetail.FullName}
+					</title>
+				</Head>
+			)}
+
+			<div className="student-detail">
+				<div className="contain">
+					<div className="general-info">
+						<div className="head">
+							<div className="background"></div>
+							<div className="more-info">
+								<div className="name">{studentDetail.FullName}</div>
+								<span className="email">{studentDetail.Email}</span>
+							</div>
+							<div className="avatar">
+								<img src={studentDetail.Avatar || '/default-avatar.png'} alt="" />
+								<div className="overlay" onClick={() => setIsVisibleModal(true)}>
+									<Tooltip title="Tải ảnh lên">
+										<FiUpload size={30} color="#d9d9d9" />
+									</Tooltip>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div className="body">
-						<Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+						<div className="body">
+							<Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+						</div>
 					</div>
 				</div>
+
+				<Modal title="Cập nhật avatar" width={400} open={isVisibleModal} onCancel={() => setIsVisibleModal(false)} footer={null}>
+					<Form form={form} layout="vertical" initialValues={{ remember: true }} onFinish={onFinish}>
+						<div className="grid grid-cols-4 gap-x-4">
+							<div className="col-span-4 flex justify-center items-center">
+								<UploadImageField form={form} label="" name="Avatar" setIsLoadingImage={setIsLoading} />
+							</div>
+
+							<div className="col-span-4 flex justify-center items-center">
+								<PrimaryButton background="blue" loading={isLoading} type="submit" children={<span>Lưu</span>} icon="save" />
+							</div>
+						</div>
+					</Form>
+				</Modal>
 			</div>
-
-			<Modal title="Cập nhật avatar" width={400} open={isVisibleModal} onCancel={() => setIsVisibleModal(false)} footer={null}>
-				<Form form={form} layout="vertical" initialValues={{ remember: true }} onFinish={onFinish}>
-					<div className="grid grid-cols-4 gap-x-4">
-						<div className="col-span-4 flex justify-center items-center">
-							<UploadImageField form={form} label="" name="Avatar" setIsLoadingImage={setIsLoading} />
-						</div>
-
-						<div className="col-span-4 flex justify-center items-center">
-							<PrimaryButton background="blue" loading={isLoading} type="submit" children={<span>Lưu</span>} icon="save" />
-						</div>
-					</div>
-				</Form>
-			</Modal>
-		</div>
+		</>
 	)
 }

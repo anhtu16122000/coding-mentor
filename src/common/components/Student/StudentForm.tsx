@@ -12,6 +12,7 @@ import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
 import * as yup from 'yup'
 import { userInformationApi } from '~/api/user'
+import ModalFooter from '../ModalFooter'
 
 const StudentForm = (props) => {
 	const { rowData, listExamination, setTodoApi, listTodoApi } = props
@@ -119,25 +120,29 @@ const StudentForm = (props) => {
 		}
 	}, [isModalVisible])
 
+	function showEdit() {
+		getStudents(rowData?.BranchId)
+		getTeachers(rowData?.BranchId)
+		setIsModalVisible(true)
+	}
+
 	return (
 		<>
 			{!!rowData ? (
-				<IconButton
-					tooltip="Cập nhật lịch hẹn test"
-					onClick={() => {
-						setIsModalVisible(true)
-					}}
-					color="yellow"
-					type="button"
-					icon="edit"
-				/>
+				<IconButton tooltip="Cập nhật" onClick={showEdit} color="yellow" type="button" icon="edit" />
 			) : (
 				<PrimaryButton background="green" icon="add" type="button" onClick={() => setIsModalVisible(true)}>
 					Thêm mới
 				</PrimaryButton>
 			)}
 
-			<Modal title="Phiếu thông tin cá nhân" open={isModalVisible} onCancel={handleCancel} footer={null} width={600}>
+			<Modal
+				title="Phiếu thông tin cá nhân"
+				open={isModalVisible}
+				onCancel={handleCancel}
+				footer={<ModalFooter onOK={form.submit} onCancel={handleCancel} loading={isLoading} />}
+				width={600}
+			>
 				<Form form={form} layout="vertical" onFinish={onSubmit}>
 					<div className="row">
 						{!rowData && (
@@ -153,7 +158,8 @@ const StudentForm = (props) => {
 								/>
 							</div>
 						)}
-						<div className={rowData ? 'col-12' : 'col-md-6 col-12'}>
+
+						<div className="col-md-6 col-12">
 							<SelectField
 								disabled={!!rowData}
 								name="StudentId"
@@ -164,11 +170,10 @@ const StudentForm = (props) => {
 								rules={[yupSync]}
 							/>
 						</div>
-					</div>
-					<div className="row">
 						<div className="col-md-6 col-12">
 							<SelectField name="TeacherId" label="Giáo viên test" placeholder="Chọn giáo viên" optionList={listTeacher} />
 						</div>
+
 						<div className="col-md-6 col-12">
 							<SelectField
 								name="Type"
@@ -181,8 +186,7 @@ const StudentForm = (props) => {
 								]}
 							/>
 						</div>
-					</div>
-					<div className="row">
+
 						<div className="col-md-6 col-12">
 							<DatePickerField
 								format="DD/MM/YYYY HH:mm"
@@ -198,11 +202,6 @@ const StudentForm = (props) => {
 								<SelectField name="ExamId" label="Đề test" placeholder="Chọn đề test" optionList={listExamination} />
 							</div>
 						)}
-					</div>
-					<div className="flex-all-center">
-						<PrimaryButton background="blue" icon="save" type="submit" disable={isLoading} loading={isLoading}>
-							Lưu
-						</PrimaryButton>
 					</div>
 				</Form>
 			</Modal>

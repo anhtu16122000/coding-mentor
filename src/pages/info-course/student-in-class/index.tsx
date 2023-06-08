@@ -4,7 +4,7 @@ import { FaMoneyBill } from 'react-icons/fa'
 import { GiReceiveMoney } from 'react-icons/gi'
 import RestApi from '~/api/RestApi'
 import { MainLayout } from '~/common'
-import { PrimaryTooltip } from '~/common/components'
+import { PrimaryTooltip, StudentNote } from '~/common/components'
 import PayForm from '~/common/components/Finance/Payment/pay'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
@@ -57,10 +57,6 @@ const StudentInClassPage = () => {
 		} finally {
 			setLoading(false)
 		}
-	}
-
-	const expandedRowRender = (item) => {
-		return <BillDetails bill={item} />
 	}
 
 	function gotoClass(params) {
@@ -118,12 +114,19 @@ const StudentInClassPage = () => {
 	const columns = [
 		userInfoColumn,
 		{
-			title: 'Điện thoại',
-			dataIndex: 'Mobile'
-		},
-		{
-			title: 'Email',
-			dataIndex: 'Email'
+			width: 250,
+			title: 'Liên hệ',
+			dataIndex: 'Mobile',
+			render: (a, item) => (
+				<div>
+					<p>
+						<div className="font-[500] inline-block">Điện thoại:</div> {a}
+					</p>
+					<p>
+						<div className="font-[500] inline-block">Email:</div> {item?.Email}
+					</p>
+				</div>
+			)
 		},
 		{
 			title: 'Lớp',
@@ -188,6 +191,14 @@ const StudentInClassPage = () => {
 		}
 	]
 
+	const expandedRowRender = (data) => {
+		return (
+			<div className="w-[1000px]">
+				<StudentNote studentId={data?.StudentId} />
+			</div>
+		)
+	}
+
 	return (
 		<>
 			<Head>
@@ -223,6 +234,7 @@ const StudentInClassPage = () => {
 						/>
 					</div>
 				}
+				expandable={expandedRowRender}
 			/>
 		</>
 	)

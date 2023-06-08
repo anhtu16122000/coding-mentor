@@ -4,7 +4,7 @@ import { FaMoneyBill } from 'react-icons/fa'
 import { GiReceiveMoney } from 'react-icons/gi'
 import RestApi from '~/api/RestApi'
 import { MainLayout } from '~/common'
-import { PrimaryTooltip } from '~/common/components'
+import { PrimaryTooltip, StudentNote } from '~/common/components'
 import PayForm from '~/common/components/Finance/Payment/pay'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
@@ -61,11 +61,15 @@ const ReservedPage = () => {
 	}
 
 	const expandedRowRender = (item) => {
-		return <div>Ghi chú: {item?.Note}</div>
-	}
+		return (
+			<>
+				<div>Ghi chú bảo lưu: {item?.Note}</div>
 
-	function gotoClass(params) {
-		Router.push(`/class/list-class/detail/?class=${params.ClassId}`)
+				<div className="w-[1000px] mt-[16px]">
+					<StudentNote studentId={item?.StudentId} />
+				</div>
+			</>
+		)
 	}
 
 	function viewStudentDetails(params) {
