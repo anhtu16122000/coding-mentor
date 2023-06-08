@@ -171,14 +171,7 @@ const TeacherTotalLesson = () => {
 					</div>
 				)}
 				{!isLoading.status && (
-					<NestedTable
-						totalPage={1 && 1}
-						loading={isLoading}
-						addClass="basic-header"
-						TitlePage=""
-						dataSource={details}
-						columns={subColumns}
-					/>
+					<NestedTable totalPage={1 && 1} loading={isLoading} addClass="basic-header" dataSource={details} columns={subColumns} />
 				)}
 			</>
 		)
