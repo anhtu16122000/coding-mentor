@@ -23,6 +23,7 @@ import 'primeicons/primeicons.css'
 import 'react-tooltip/dist/react-tooltip.css'
 import '../styles/global.scss'
 import 'w3-css/w3.css'
+import 'react-vertical-timeline-component/style.min.css'
 
 import ToastifyContainer from '~/common/providers/Toastify'
 import { checkInternet } from '~/common/utils/main-function'

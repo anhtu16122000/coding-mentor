@@ -15,7 +15,7 @@ type ICurriculumDetail = IBaseApi<{
 	Id: number
 	Index: number
 	Time: number
-	IsHide:boolean
+	IsHide: boolean
 	CreatedBy: string
 	CreatedOn: string
 	CurriculumDetailId: number
@@ -87,6 +87,7 @@ type IClass = IBaseApi<{
 	TotalLesson: number
 	LessonCompleted: number
 	LessonComple: number
+	Time?: number
 	Id: number
 }>
 

@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { AiOutlineWarning } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { scheduleApi } from '~/api/schedule'
-import { ShowNoti } from '~/common/utils'
+import { ShowNoti, log } from '~/common/utils'
 import { RootState } from '~/store'
 import { setRoomEdit, setTeacherEdit } from '~/store/classReducer'
 import DatePickerField from '../FormControl/DatePickerField'
@@ -28,22 +28,38 @@ const ModalAddScheduleEdit = (props) => {
 
 	const infoClass = useSelector((state: RootState) => state.class.infoClass)
 
-	console.log('--- infoClass: ', infoClass)
+	function addMinutesToMoment(inputMoment, minutes) {
+		if (!moment.isMoment(inputMoment) || typeof minutes !== 'number') {
+			console.error('Đối số đầu vào không hợp lệ.')
+			return null
+		}
+		const resultMoment = moment(inputMoment)
+		resultMoment.add(minutes, 'minutes')
+		return resultMoment
+	}
 
 	const getDataAvailable = async () => {
-		if (!!form.getFieldValue('StartTime') && !!form.getFieldValue('EndTime')) {
-			await checkTeacherAvailable({
-				branchId: BranchId || infoClass?.BranchId,
-				curriculumId: CurriculumId || infoClass?.CurriculumId,
-				startTime: moment(form.getFieldValue('StartTime')).format(),
-				endTime: moment(form.getFieldValue('EndTime')).format()
-			})
+		const startTime = form.getFieldValue('StartTime')
+		const endTime = form.getFieldValue('EndTime')
 
-			await checkRoomAvailable({
+		if (!endTime && !!startTime) {
+			form.setFieldValue('EndTime', addMinutesToMoment(startTime, infoClass?.Time)) // Tự tính giờ kết thúc dựa trên thời gian học của giáo trình (Time)
+		}
+
+		const endTimeSeted = form.getFieldValue('EndTime') // Lấy lại thời gian kết thúc sau khi đã set (nên get lại, tính ẩu ẩu sai bome đó)
+
+		if (!!startTime && !!endTimeSeted) {
+			// Nếu mà nó đã chọn bắt đầu và kết thúc thì check coi GV với phòng nào đang phù hợp
+
+			const apiParams = {
 				branchId: BranchId || infoClass?.BranchId,
-				startTime: moment(form.getFieldValue('StartTime')).format(),
-				endTime: moment(form.getFieldValue('EndTime')).format()
-			})
+				startTime: moment(startTime).format(),
+				endTime: moment(endTimeSeted).format()
+			}
+
+			// Không hiểu sao Long nó bỏ 2 cái hàm ở ngoài. Nhưng, nên thuận theo tự nhiên 😁
+			await checkTeacherAvailable({ ...apiParams, curriculumId: CurriculumId || infoClass?.CurriculumId }) // Gọi api lấy danh sách GV
+			await checkRoomAvailable({ ...apiParams }) // Gọi api lấy danh sách phòng
 		}
 	}
 
@@ -84,6 +100,8 @@ const ModalAddScheduleEdit = (props) => {
 		setRoomEdit([])
 		setOpenModalAdd(false)
 	}
+
+	log.Yellow('infoClass', infoClass)
 
 	return (
 		<>

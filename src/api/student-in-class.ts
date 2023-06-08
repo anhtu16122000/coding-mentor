@@ -24,8 +24,14 @@ export const studentInClassApi = {
 	delete(ID) {
 		return instance.delete(`${url}/${ID}`)
 	},
-    
-    getStudentAvailable(ID) {
-        return instance.get(`${url}/student-available/${ID}`)
-    }
+
+	getStudentAvailable(ID) {
+		return instance.get(`${url}/student-available/${ID}`)
+	}
+}
+
+export const studentHistoriesApi = {
+	getAll(params) {
+		return instance.get<IApiResultData<any[]>>('api/LearningHistory', { params })
+	}
 }

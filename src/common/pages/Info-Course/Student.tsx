@@ -491,9 +491,9 @@ const Student: FC<IPersonnel> = (props) => {
 			<ExpandTable
 				columns={role == 3 ? columnsStudent : columns}
 				dataSource={users}
-				total={totalRow}
+				totalPage={totalRow}
 				loading={loading}
-				onChangePage={(event: number) => setApiParameters({ ...apiParameters, PageIndex: event })}
+				getPagination={(event: number) => setApiParameters({ ...apiParameters, PageIndex: event })}
 				TitleCard={
 					<>
 						<Filters

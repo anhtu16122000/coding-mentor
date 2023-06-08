@@ -1,76 +1,89 @@
-import { List } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { studentInClassApi } from '~/api/student-in-class'
-import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
-import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
+import { studentHistoriesApi } from '~/api/student-in-class'
+import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
+import moment from 'moment'
+import { IoClose } from 'react-icons/io5'
+import { TbLoader } from 'react-icons/tb'
+import { MdMoreHoriz } from 'react-icons/md'
+import { RiFileList2Fill } from 'react-icons/ri'
 
 type ITabClassListHistory = {
 	StudentDetail: IUserResponse
 }
 export const TabClassListHistory: React.FC<ITabClassListHistory> = ({ StudentDetail }) => {
-	const [isLoading, setIsLoading] = useState(false)
-	const [totalRow, setTotalRow] = useState(1)
 	const [dataTable, setDataTable] = useState([])
-	const initParameters = { studentIds: StudentDetail?.UserInformationId, pageIndex: 1, pageSize: PAGE_SIZE, disable: true }
-	const [apiParameters, setApiParameters] = useState(initParameters)
-
-	const getPagination = (page) => {
-		setApiParameters({ ...apiParameters, pageIndex: page })
-	}
+	const initParameters = { studentId: StudentDetail?.UserInformationId, pageIndex: 1, pageSize: 99999 }
 
 	const getData = async (params) => {
 		try {
-			setIsLoading(true)
-			const res = await studentInClassApi.getAll(params)
-			if (res.status === 200) {
+			const res = await studentHistoriesApi.getAll(params)
+			if (res.status == 200) {
 				setDataTable(res.data.data)
-				setTotalRow(res.data.totalRow)
 			}
 		} catch (error) {
-			setIsLoading(true)
 		} finally {
-			setIsLoading(false)
 		}
 	}
 
 	useEffect(() => {
 		if (StudentDetail?.UserInformationId) {
-			getData(apiParameters)
+			getData(initParameters)
 		}
 	}, [StudentDetail])
 
+	function getIcon(params: string) {
+		if (params.includes('xóa') || params.includes('Xóa')) {
+			return <IoClose size={20} />
+		}
+
+		if (params.includes('Chờ') || params.includes('chờ')) {
+			return <TbLoader size={20} />
+		}
+
+		if (params.includes('Đăng ký') || params.includes('đăng ký')) {
+			return <RiFileList2Fill size={16} />
+		}
+
+		return <MdMoreHoriz size={20} />
+	}
+
+	function getIconColor(params: string) {
+		if (params.includes('xóa') || params.includes('Xóa')) {
+			return '#d94a47'
+		}
+
+		if (params.includes('Chờ') || params.includes('chờ')) {
+			return '#FBC02D'
+		}
+
+		if (params.includes('Đăng ký') || params.includes('đăng ký')) {
+			return 'rgb(16, 204, 82)'
+		}
+
+		return '#1b73e8'
+	}
+
 	return (
 		<>
-			<List
-				loading={isLoading}
-				pagination={{
-					onChange: getPagination,
-					total: totalRow,
-					size: 'small',
-					pageSize: 30,
-					showTotal: () => totalRow && <div className="font-weight-black">Tổng cộng: {totalRow}</div>
-				}}
-				itemLayout="horizontal"
-				dataSource={dataTable}
-				renderItem={(item) => (
-					<List.Item>
-						<List.Item.Meta
-							title={
-								<>
-									<p className="font-medium text-[#1b73e8]">{item?.ClassName}</p>
-								</>
-							}
-							description={
-								<>
-									<p>
-										<span className="font-semibold">Hình thức: </span> <span>{item.TypeName || 'Trống'}</span>
-									</p>
-								</>
-							}
-						></List.Item.Meta>
-					</List.Item>
-				)}
-			/>
+			<VerticalTimeline animate={true} layout="1-column-left" lineColor="#b9b9b9">
+				{dataTable.map((item, index) => {
+					return (
+						<VerticalTimelineElement
+							key={index + 'ficax'}
+							className="vertical-timeline-element--work"
+							contentStyle={{ background: '#1b73e8', color: '#fff', borderRadius: 6 }}
+							contentArrowStyle={{ borderRight: `7px solid #1b73e8` }}
+							date={moment(item?.CreatedOn).format('HH:mm DD/MM/YYYY')}
+							iconStyle={{ background: getIconColor(item?.Content), color: '#fff' }}
+							icon={getIcon(item?.Content)}
+						>
+							<h4 className="vertical-timeline-element-title" style={{ color: '#fff' }}>
+								{item?.Content}
+							</h4>
+						</VerticalTimelineElement>
+					)
+				})}
+			</VerticalTimeline>
 		</>
 	)
 }
