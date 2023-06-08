@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { Table, Card } from 'antd'
-// import { useWrap } from '~/src/context/wrap'
 import EmptyData from '~/common/components/EmptyData'
 
-const NestedTable = React.memo((props: any) => {
-	// const { getTitlePage } = useWrap()
+type TNestedTable = {
+	dataSource: Array<any>
+	Extra?: string | React.ReactNode
+	TitleCard?: string | React.ReactNode
+	children?: React.ReactNode
+	addClass?: string
+	Size?: number
+	loading?: any
+	haveBorder?: boolean
+	columns?: Array<any>
+	totalPage?: number
+	currentPage?: number
+	getPagination?: Function
+}
+
+const NestedTable = React.memo((props: TNestedTable) => {
 	const [dataSource, setDataSource] = useState([])
 	const [activeIndex, setActiveIndex] = useState(null)
-
-	console.log('dataSource: ', props.dataSource)
 
 	const selectRow = (record) => {
 		const selectedRowKeys = []
