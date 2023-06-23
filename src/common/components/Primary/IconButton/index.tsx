@@ -13,7 +13,7 @@ import { TbDownload, TbReportMoney, TbSchool, TbUpload } from 'react-icons/tb'
 import { VscRootFolderOpened } from 'react-icons/vsc'
 
 const IconButton: FC<IIconButton> = (props) => {
-	const { tooltip, background, icon, type, onClick, className, color, size, disabled } = props
+	const { tooltip, background, icon, type, onClick, className, color, size, disabled, placementTooltip } = props
 	const refTooltip = useRef(null)
 	function getBG() {
 		if (background == 'green') {
@@ -174,12 +174,12 @@ const IconButton: FC<IIconButton> = (props) => {
 	}
 
 	return (
-		<Tooltip title={tooltip} ref={refTooltip}>
+		<Tooltip placement={placementTooltip || 'top'} title={tooltip} ref={refTooltip}>
 			<button
 				type={type}
-				onClick={_onClick}
+				onClick={!disabled && _onClick}
 				className={`none-selection rounded-lg w-auto inline-flex items-center btn-icon cursor-pointer ${getBG()} ${getColor()} ${className}`}
-				disabled={disabled}
+				// disabled={disabled}
 			>
 				{!!icon && getIcon()}
 			</button>

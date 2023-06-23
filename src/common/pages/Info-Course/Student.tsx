@@ -34,6 +34,7 @@ import { ButtonEye } from '~/common/components/TableButton'
 import { PrimaryTooltip, StudentNote } from '~/common/components'
 import Filters from '~/common/components/Student/Filters'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
+import { exportAllStudentToExcel } from '~/common/utils/export-excel/students'
 
 const Student: FC<IPersonnel> = (props) => {
 	const { reFresh, allowRegister, role } = props
@@ -486,6 +487,79 @@ const Student: FC<IPersonnel> = (props) => {
 		)
 	}
 
+	const [exporting, setExporting] = useState<boolean>(false)
+
+	async function handleExportExcel() {
+		console.time('Xuất danh sách HV hết')
+		setExporting(true)
+		await exportAllStudentToExcel()
+		setExporting(false)
+		console.timeEnd('Xuất danh sách HV hết')
+	}
+
+	const ButtonManager = () => {
+		return (
+			<>
+				{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
+					<PrimaryButton
+						loading={loadingAllow}
+						className="mr-2 btn-block-registration"
+						type="button"
+						icon={allowRegister ? 'cancel' : 'check'}
+						background={allowRegister ? 'red' : 'green'}
+						onClick={() => changeAllow(allowRegister ? 'UnAllow' : 'Allow')}
+					>
+						{allowRegister ? 'Cấm đăng ký' : 'Cho phép đăng ký'}
+					</PrimaryButton>
+				)}
+
+				{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
+					<PrimaryButton
+						className="mr-2 btn-download"
+						type="button"
+						icon="download"
+						background="blue"
+						onClick={() => window.open(`${appConfigs.linkDownloadExcel}?key=${new Date().getTime()}`)}
+					>
+						File mẫu
+					</PrimaryButton>
+				)}
+
+				{role == 3 && isAdmin() && <ImportStudent className="mr-1 btn-import" onFetchData={() => getUsers(apiParameters)} />}
+
+				{(isAdmin() || isManager() || isAcademic()) && (
+					<PrimaryButton
+						className="mr-2 btn-block-registration"
+						type="button"
+						icon="excel"
+						background="orange"
+						loading={exporting}
+						onClick={handleExportExcel}
+					>
+						Xuất file
+					</PrimaryButton>
+				)}
+
+				{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
+					<CreateUser
+						roleStaff={roleStaff}
+						source={source}
+						learningNeed={learningNeed}
+						purpose={purpose}
+						sale={sale}
+						className="btn-create"
+						onRefresh={() => getUsers(apiParameters)}
+						isStudent={true}
+					/>
+				)}
+
+				{role !== 3 && (isAdmin() || isManager() || isAcademic()) && (
+					<CreateUser roleStaff={roleStaff} className="btn-create" onRefresh={() => getUsers(apiParameters)} isStudent={false} />
+				)}
+			</>
+		)
+	}
+
 	return (
 		<div className="info-course-student">
 			<ExpandTable
@@ -517,95 +591,19 @@ const Student: FC<IPersonnel> = (props) => {
 				}
 				Extra={
 					<>
-						{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
-							<PrimaryButton
-								loading={loadingAllow}
-								className="mr-2 btn-block-registration"
-								type="button"
-								icon={allowRegister ? 'cancel' : 'check'}
-								background={allowRegister ? 'red' : 'green'}
-								onClick={() => changeAllow(allowRegister ? 'UnAllow' : 'Allow')}
-							>
-								{allowRegister ? 'Cấm đăng ký' : 'Cho phép đăng ký'}
-							</PrimaryButton>
-						)}
-
-						{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
-							<PrimaryButton
-								className="mr-2 btn-download"
-								type="button"
-								icon="download"
-								background="blue"
-								onClick={() => window.open(`${appConfigs.linkDownloadExcel}?key=${new Date().getTime()}`)}
-							>
-								File mẫu
-							</PrimaryButton>
-						)}
-
-						{role == 3 && isAdmin() && <ImportStudent className="mr-1 btn-import" onFetchData={() => getUsers(apiParameters)} />}
+						<ButtonManager />
 
 						<Popover
 							placement="bottomLeft"
-							visible={visible}
-							onVisibleChange={(event) => setVisible(event)}
+							open={visible}
+							onOpenChange={setVisible}
 							content={
-								<div className="w-[220px]">
-									{role == 3 && allowRegister !== undefined && (
-										<PrimaryButton
-											loading={loadingAllow}
-											className="mb-3 !w-full"
-											type="button"
-											icon={allowRegister ? 'cancel' : 'check'}
-											background={allowRegister ? 'red' : 'green'}
-											onClick={() => changeAllow(allowRegister ? 'UnAllow' : 'Allow')}
-										>
-											{allowRegister ? 'Cấm đăng ký' : 'Cho phép đăng ký'}
-										</PrimaryButton>
-									)}
-
-									<CreateUser
-										onOpen={() => setVisible(false)}
-										className={`!w-full ${role == 3 && 'mb-3'}`}
-										onRefresh={() => getUsers(apiParameters)}
-										isStudent={role == 3 ? true : false}
-									/>
-
-									{!!apiParameters.Search && users.length == 0 && (
-										<PrimaryButton
-											className="!w-full mb-3"
-											type="button"
-											icon="cancel"
-											background="yellow"
-											onClick={() => setApiParameters(initParamters)}
-										>
-											Xoá bộ lọc
-										</PrimaryButton>
-									)}
-
-									{role == 3 && (
-										<PrimaryButton
-											className="!w-full mb-3"
-											type="button"
-											icon="download"
-											background="blue"
-											onClick={() => window.open(`${appConfigs.linkDownloadExcel}?key=${new Date().getTime()}`)}
-										>
-											File mẫu
-										</PrimaryButton>
-									)}
-
-									{role == 3 && (
-										<ImportStudent
-											className="!w-full"
-											onFetchData={() => {
-												setVisible(false)
-												getUsers(apiParameters)
-											}}
-										/>
-									)}
+								<div className="w-[170px] full-w-button">
+									<ButtonManager />
 								</div>
 							}
 							trigger="click"
+							overlayClassName="show-arrow"
 						>
 							<PrimaryButton
 								onClick={() => setVisible(!visible)}
@@ -616,23 +614,6 @@ const Student: FC<IPersonnel> = (props) => {
 								<BsThreeDots />
 							</PrimaryButton>
 						</Popover>
-
-						{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
-							<CreateUser
-								roleStaff={roleStaff}
-								source={source}
-								learningNeed={learningNeed}
-								purpose={purpose}
-								sale={sale}
-								className="btn-create"
-								onRefresh={() => getUsers(apiParameters)}
-								isStudent={true}
-							/>
-						)}
-
-						{role !== 3 && (isAdmin() || isManager() || isAcademic()) && (
-							<CreateUser roleStaff={roleStaff} className="btn-create" onRefresh={() => getUsers(apiParameters)} isStudent={false} />
-						)}
 					</>
 				}
 				expandable={expandedRowRender}

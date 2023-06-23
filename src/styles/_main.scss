@@ -863,15 +863,6 @@ button {
 	overflow-wrap: break-word;
 }
 
-.card-beauty-header {
-	.ant-card-head {
-		// padding: 0px !important;
-		// max-width: 0px !important;
-		.ant-card-head-wrapper {
-		}
-	}
-}
-
 .inner-hidden {
 	.fucking-chart {
 		display: none !important;
@@ -882,4 +873,40 @@ button {
 	border: 3px solid white !important;
 	-webkit-box-shadow: 0 !important;
 	box-shadow: none !important;
+}
+.full-w-button {
+	button {
+		width: 100% !important;
+		margin-top: 8px !important;
+	}
+}
+
+.ant-table-pagination-right {
+	margin-top: 16px !important;
+}
+
+.leads-status-filter {
+	@apply mb-[8px] px-[8px] rounded-[4px] in-1-line hover:opacity-90 font-[500] mr-[8px];
+}
+
+.ant-table-column-sorter-up {
+	svg {
+		fill: #ffffff4f;
+	}
+	&.active {
+		svg {
+			fill: #fff;
+		}
+	}
+}
+
+.ant-table-column-sorter-down {
+	svg {
+		fill: #ffffff4f;
+	}
+	&.active {
+		svg {
+			fill: #fff;
+		}
+	}
 }

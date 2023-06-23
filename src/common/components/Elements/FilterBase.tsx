@@ -47,8 +47,6 @@ const FilterBase = (props) => {
 
 	// ------------- GET VALUE FILTER ----------------
 	const getValueFilter = (value, typeFilter, nameFilter) => {
-		console.log('getValueFilter: ', value)
-
 		switch (typeFilter) {
 			case 'date-range':
 				if (value.length > 1) {

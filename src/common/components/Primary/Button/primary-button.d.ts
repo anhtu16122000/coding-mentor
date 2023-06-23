@@ -1,5 +1,5 @@
 type IPrimaryButton = {
-	background: 'green' | 'yellow' | 'blue' | 'red' | 'black' | 'disabled' | 'primary' | 'orange' | 'transparent'
+	background: 'green' | 'yellow' | 'blue' | 'red' | 'black' | 'disabled' | 'primary' | 'orange' | 'transparent' | 'purple'
 	icon?:
 		| 'add'
 		| 'arrow-up'
@@ -29,6 +29,7 @@ type IPrimaryButton = {
 	onClick?: Function
 	children?: React.ReactNode
 	className?: string
+	iconClassName?: string
 	disable?: boolean
 	loading?: booleans
 }

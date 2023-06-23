@@ -361,8 +361,8 @@ export const AcademicChildMenu = [
 					},
 					{
 						ItemType: 'single',
-						Key: '/options/consultation-status',
-						Route: '/options/consultation-status',
+						Key: '/options/leads-status',
+						Route: '/options/leads-status',
 						Text: 'Trạng thái khách hàng',
 						Icon: ''
 					},

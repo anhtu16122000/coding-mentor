@@ -12,8 +12,8 @@ const SortBox = (props: any) => {
 	return (
 		<>
 			<Select
-				style={{ marginLeft: space ? '10px' : '', width: width ? width : '130px' }}
-				className="style-input"
+				style={{ marginLeft: space ? '10px' : '' }}
+				className={`style-input !w-[110px] w350:w-[${width ? width : '130px'}]`}
 				placeholder="Sắp xếp"
 				onChange={handleChange}
 				size="large"

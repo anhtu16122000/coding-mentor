@@ -115,11 +115,10 @@ const ListClassPro = () => {
 					if (filter.studentId) {
 						dispatch(setListClass([...listClassState, ...res.data.data]))
 						dispatch(setTotalClass(res.data.totalRow))
-						dispatch(setStatusData({ ...res.data, data: [] }))
 					} else {
 						dispatch(setListClass([]))
 						dispatch(setTotalClass(0))
-						dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
+						// dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
 					}
 				} else {
 					if (filter?.pageIndex == 1) {
@@ -130,12 +129,11 @@ const ListClassPro = () => {
 						dispatch(setListClass(temp))
 					}
 					dispatch(setTotalClass(res.data.totalRow))
-					dispatch(setStatusData({ ...res.data, data: [] }))
 				}
 			} else {
 				dispatch(setListClass([]))
 				dispatch(setTotalClass(0))
-				dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
+				// dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -288,6 +286,8 @@ const ListClassPro = () => {
 
 	useEffect(() => {
 		getStyleSaved()
+
+		getStatusData()
 	}, [])
 
 	async function handleChangeStyleSaved(e) {

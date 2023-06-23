@@ -26,8 +26,8 @@ const ImportCustomer = (props) => {
 
 	return (
 		<Upload customRequest={(event) => onChange_ImportExcel(event.file)} className={className} showUploadList={false}>
-			<PrimaryButton className={className} loading={isLoading} type="button" icon="excel" background="yellow">
-				Tạo nhanh
+			<PrimaryButton className={className} iconClassName="m-0" loading={isLoading} type="button" icon="excel" background="orange">
+				<div className="inline w500:hidden w600:inline ml-[8px]">Tạo nhanh</div>
 			</PrimaryButton>
 		</Upload>
 	)

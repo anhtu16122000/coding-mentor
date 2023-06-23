@@ -58,7 +58,7 @@ function AuthProvider({ children }: IAuthLayout) {
 			if (res.status == 200) {
 				dispatch(setListClass([...res.data.data]))
 				dispatch(setTotalClass(res.data?.totalRow))
-				dispatch(setStatusData({ ...res.data, data: [] }))
+				// dispatch(setStatusData({ ...res.data, data: [] }))
 			}
 		} catch (err) {}
 	}

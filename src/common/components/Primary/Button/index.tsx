@@ -11,7 +11,7 @@ import { SiMicrosoftexcel } from 'react-icons/si'
 import { TbDownload, TbShoppingCartPlus, TbUpload } from 'react-icons/tb'
 
 const PrimaryButton: FC<IPrimaryButton> = (props) => {
-	const { background, children, icon, type, onClick, className, disable, loading } = props
+	const { background, children, icon, type, onClick, className, disable, loading, iconClassName } = props
 
 	function getBG() {
 		if (!!disable || !!loading) {
@@ -34,6 +34,9 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 			}
 			if (background == 'primary') {
 				return 'bg-[#1b73e8] hover:bg-[#1369da] focus:bg-[#1b73e8]'
+			}
+			if (background == 'purple') {
+				return 'bg-[#8E24AA] hover:bg-[#7B1FA2] focus:bg-[#8E24AA]'
 			}
 			if (background == 'disabled') {
 				return 'bg-[#cacaca] hover:bg-[#bababa] focus:bg-[#acacac] cursor-not-allowed'
@@ -69,81 +72,86 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 			if (background == 'primary') {
 				return 'text-white'
 			}
+			if (background == 'purple') {
+				return 'text-white'
+			}
 			if (background == 'disabled') {
 				return 'text-white'
 			}
 		}
 	}
 
+	const iconClass = iconClassName ? iconClassName : !!children ? 'mr-2' : ''
+
 	function getIcon() {
 		if (icon == 'add') {
-			return <PlusCircle size={18} className={!!children ? 'mr-2' : ''} />
+			return <PlusCircle size={18} className={iconClass} />
 		}
 		if (icon == 'cart') {
-			return <TbShoppingCartPlus size={20} className={!!children ? 'mr-2' : ''} />
+			return <TbShoppingCartPlus size={20} className={iconClass} />
 		}
 		if (icon == 'edit') {
-			return <FiEdit size={18} className={!!children ? 'mr-2' : ''} />
+			return <FiEdit size={18} className={iconClass} />
 		}
 		if (icon == 'cancel') {
-			return <FiXCircle size={18} className={!!children ? 'mr-2' : ''} />
+			return <FiXCircle size={18} className={iconClass} />
 		}
 		if (icon == 'save') {
-			return <FiSave size={18} className={!!children ? 'mr-2' : ''} />
+			return <FiSave size={18} className={iconClass} />
 		}
 		if (icon == 'remove') {
-			return <FiTrash2 size={18} className={!!children ? 'mr-2' : ''} />
+			return <FiTrash2 size={18} className={iconClass} />
 		}
 		if (icon == 'check') {
-			return <AiOutlineCheckCircle size={18} className={!!children ? 'mr-2' : ''} />
+			return <AiOutlineCheckCircle size={18} className={iconClass} />
 		}
 		if (icon == 'exchange') {
-			return <RiExchangeLine size={22} className={!!children ? 'mr-2' : ''} />
+			return <RiExchangeLine size={22} className={iconClass} />
 		}
 		if (icon == 'eye') {
-			return <AiOutlineEye size={20} className={!!children ? 'mr-2' : ''} />
+			return <AiOutlineEye size={20} className={iconClass} />
 		}
 		if (icon == 'print') {
-			return <AiFillPrinter size={20} className={!!children ? 'mr-2' : ''} />
+			return <AiFillPrinter size={20} className={iconClass} />
 		}
 		if (icon == 'hide') {
-			return <BiHide size={18} className={!!children ? 'mr-2' : ''} />
+			return <BiHide size={18} className={iconClass} />
 		}
 		if (icon == 'file') {
-			return <AiOutlineFileSearch size={18} className={!!children ? 'mr-2' : ''} />
+			return <AiOutlineFileSearch size={18} className={iconClass} />
 		}
 		if (icon == 'download') {
-			return <TbDownload size={22} className={!!children ? 'mr-2' : ''} />
+			return <TbDownload size={22} className={iconClass} />
 		}
 		if (icon == 'upload') {
-			return <TbUpload size={22} className={!!children ? 'mr-2' : ''} />
+			return <TbUpload size={22} className={iconClass} />
 		}
 		if (icon == 'reset') {
-			return <BiReset size={20} className={!!children ? 'mr-2' : ''} />
+			return <BiReset size={20} className={iconClass} />
 		}
 		if (icon == 'search') {
-			return <BiSearchAlt2 size={20} className={!!children ? 'mr-2' : ''} />
+			return <BiSearchAlt2 size={20} className={iconClass} />
 		}
 		if (icon == 'excel') {
-			return <SiMicrosoftexcel size={18} className={!!children ? 'mr-2' : ''} />
+			return <SiMicrosoftexcel size={18} className={iconClass} />
 		}
 		if (icon == 'power') {
-			return <IoPowerSharp size={20} className={!!children ? 'mr-2' : ''} />
+			return <IoPowerSharp size={20} className={iconClass} />
 		}
 		if (icon == 'enter') {
-			return <IoEnterOutline size={20} className={!!children ? 'mr-2' : ''} />
+			return <IoEnterOutline size={20} className={iconClass} />
 		}
 		if (icon == 'send') {
-			return <FiSend size={18} className={!!children ? 'mr-2' : ''} />
+			return <FiSend size={18} className={iconClass} />
 		}
 		if (icon == 'payment') {
-			return <MdOutlinePayments size={18} className={!!children ? 'mr-2' : ''} />
+			return <MdOutlinePayments size={18} className={iconClass} />
 		}
 		if (icon == 'arrow-up') {
-			return <RiArrowUpSFill size={18} className={!!children ? 'mr-2' : ''} />
+			return <RiArrowUpSFill size={18} className={iconClass} />
 		}
 		if (icon == 'arrow-down') {
-			return <RiArrowDownSFill size={18} className={!!children ? 'mr-2' : ''} />
+			return <RiArrowDownSFill size={18} className={iconClass} />
 		}
 	}
 
@@ -168,9 +176,9 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 				}
 				!disable && _onClick()
 			}}
-			className={`font-medium none-selection rounded-lg h-[36px] px-[10px] inline-flex items-center justify-center ${getBG()} ${getColor()} ${className}`}
+			className={`font-medium none-selection rounded-lg h-[36px] px-[10px] inline-flex items-center justify-center !flex-shrink-0 ${getBG()} ${getColor()} ${className}`}
 		>
-			{!!loading && <Spin className="loading-base mr-3" />}
+			{!!loading && <Spin className="loading-base mr-3 !ml-0 !mt-[1px]" />}
 			{!!icon && !loading && getIcon()}
 			{children}
 		</button>

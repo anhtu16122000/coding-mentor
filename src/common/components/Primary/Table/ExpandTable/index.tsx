@@ -8,7 +8,6 @@ const ExpandTable = (props) => {
 	const [state, setState] = useState({ selectedRowKeys: [] })
 	const [dataSource, setDataSource] = useState([])
 	const [rowKeys, setRowKeys] = useState([{ currentPage: 1, listKeys: [] }])
-	const [currentPage, setCurrentPage] = useState(1)
 	const [activeIndex, setActiveIndex] = useState(null)
 
 	const closeAllExpandFunc = () => {
@@ -31,7 +30,6 @@ const ExpandTable = (props) => {
 	}
 
 	const changePagination = (pageNumber, pageSize) => {
-		setCurrentPage(pageNumber)
 		if (!rowKeys.some((object) => object['currentPage'] == pageNumber)) {
 			rowKeys.push({
 				currentPage: pageNumber,
@@ -84,8 +82,6 @@ const ExpandTable = (props) => {
 		}
 	}, [props.isResetKey])
 
-	console.log(props.sumPrice)
-
 	const renderStatistical = () => {
 		return (
 			<div className="statistical-contain">
@@ -122,6 +118,9 @@ const ExpandTable = (props) => {
 		)
 	}
 
+	const tempHeight = props?.height || window.innerHeight - 295
+	const realHeight = tempHeight < 300 ? 300 : tempHeight
+
 	return (
 		<>
 			<div className="wrap-table table-expand">
@@ -141,10 +140,11 @@ const ExpandTable = (props) => {
 						<Table
 							loading={(props.loading?.type == 'GET_ALL' && props.loading?.status) || props?.loading == true}
 							bordered={props.haveBorder ? props.haveBorder : false}
-							scroll={{ x: 'max-content', y: window.innerHeight - 295 }}
+							scroll={{ x: 'max-content', y: realHeight }}
 							columns={props.columns}
 							dataSource={dataSource}
 							size="middle"
+							onChange={!!props.onChange ? props.onChange : () => {}}
 							pagination={{
 								pageSize: 30,
 								pageSizeOptions: ['30'],

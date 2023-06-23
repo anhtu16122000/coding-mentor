@@ -169,7 +169,7 @@ const CreateClassForm = (props) => {
 	const getAcademics = async (branch) => {
 		try {
 			const res = await userInformationApi.getAll({ pageSize: 9999, roleIds: 7, branchId: branch })
-			if (res.status === 200) {
+			if (res.status == 200) {
 				const convertData = parseSelectArray(res.data.data, 'FullName', 'UserInformationId')
 				setAcademic(convertData)
 			} else {
@@ -451,7 +451,7 @@ const CreateClassForm = (props) => {
 								label="Trung tâm"
 								name="BranchId"
 								optionList={branch}
-								onChangeSelect={(value) => !isOnline && handleSelectChange('BranchId', value)}
+								onChangeSelect={(value) => handleSelectChange('BranchId', value)}
 							/>
 						</div>
 						<div className="col-md-6 col-12">

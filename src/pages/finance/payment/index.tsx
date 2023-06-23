@@ -1,5 +1,5 @@
 import { Input } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import RestApi from '~/api/RestApi'
 import { MainLayout } from '~/common'
 import PayForm from '~/common/components/Finance/Payment/pay'
@@ -14,7 +14,6 @@ import appConfigs from '~/appConfig'
 import RefundForm from './Refund'
 import PaymentForm from '~/common/components/Finance/Payment/Create'
 import FilterBase from '~/common/components/Elements/FilterBase'
-import { paymentMethodsApi } from '~/api/payment-method'
 import PaymentDetail from './PaymentDetail'
 
 const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '', fromDate: null, toDate: null }

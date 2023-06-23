@@ -323,6 +323,9 @@ const CreateUser: FC<ICreateNew> = (props) => {
 		}
 		getDistrictByArea(defaultData.AreaId)
 		getWardByDistrict(defaultData.DistrictId)
+
+		setIsTeacherSelect(defaultData?.RoleId == 2)
+
 		setIsModalVisible(true)
 	}
 
@@ -411,7 +414,7 @@ const CreateUser: FC<ICreateNew> = (props) => {
 								rules={[yupSync]}
 								optionList={roleStaff}
 								onChangeSelect={(val) => {
-									if (val === 2) {
+									if (val == 2) {
 										setIsTeacherSelect(true)
 									} else {
 										setIsTeacherSelect(false)

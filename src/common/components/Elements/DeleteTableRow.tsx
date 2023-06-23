@@ -1,45 +1,55 @@
-import { Spin, Tooltip } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import React, { useState } from 'react'
-import { Trash } from 'react-feather'
-import { IoMdTrash } from 'react-icons/io'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
 
-const DeleteTableRow = (props) => {
-	const { handleDelete, text, title, setShowPop } = props
+type TProps = {
+	handleDelete?: Function
+	text?: string
+	title?: string
+	setShowPop?: any
+	disable?: boolean
+}
+
+const DeleteTableRow = (props: TProps) => {
+	const { handleDelete, text, title, setShowPop, disable } = props
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 
 	const checkHandleDelete = () => {
 		if (!handleDelete) return
+
 		setIsLoading(true)
+
 		handleDelete()
 			.then((res) => {
 				if (res?.status == 200) {
 					setIsModalVisible(false)
 				}
 			})
-			.finally(() => {
-				setIsLoading(false)
-			})
+			.finally(() => setIsLoading(false))
+	}
+
+	function handleClickDelete() {
+		setIsModalVisible(true)
+		setShowPop && setShowPop('')
 	}
 
 	return (
 		<>
 			<IconButton
+				className={`${disable ? 'opacity-30 mt-[-8px]' : ''}`}
+				disabled={disable}
 				color="primary"
 				type="button"
 				icon="remove"
+				placementTooltip="left"
 				tooltip={title || 'Xóa'}
-				onClick={() => {
-					setIsModalVisible(true)
-					setShowPop && setShowPop('')
-				}}
+				onClick={handleClickDelete}
 			/>
 
 			<Modal
-				title={'Xác nhận xóa'}
+				title="Xác nhận xóa"
 				open={isModalVisible}
 				onCancel={() => setIsModalVisible(false)}
 				footer={
@@ -67,8 +77,8 @@ const DeleteTableRow = (props) => {
 					</div>
 				}
 			>
-				<p className="mb-4 text-base">
-					Bạn có chắc muốn xóa <span className="text-[#f25767]">{text}</span> ?
+				<p className="text-base text-center">
+					Bạn muốn xóa <span className="text-[#f25767]">{text}</span>?
 				</p>
 			</Modal>
 		</>

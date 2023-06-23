@@ -38,6 +38,6 @@ type IIconButton = {
 	className?: string
 	tooltip?: string
 	size?: number
-	placementTooltip?: any
+	placementTooltip?: 'top' | 'bottom' | 'left' | 'right'
 	titleTooltip?: string
 }

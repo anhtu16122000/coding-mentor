@@ -19,7 +19,7 @@ import IconButton from '../Primary/IconButton'
 import RestApi from '~/api/RestApi'
 
 const CustomerAdviseForm = React.memo((props: any) => {
-	const { source, learningNeed, purpose, branch, refPopover } = props
+	const { source, learningNeed, purpose, branch, refPopover, onRefresh } = props
 	const { customerStatus, rowData, listTodoApi, setTodoApi, isStudent, className } = props
 
 	const [isModalVisible, setIsModalVisible] = useState(false)
@@ -74,9 +74,8 @@ const CustomerAdviseForm = React.memo((props: any) => {
 		return parseSelectArray(area, 'Name', 'Id')
 	}, [area])
 
-	// -----  HANDLE ALL IN FORM -------------
-
 	const [form] = Form.useForm()
+
 	let schema = yup.object().shape({
 		FullName: yup.string().required('Bạn không được để trống'),
 		Mobile: yup.string().required('Bạn không được để trống'),
@@ -138,6 +137,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 				form.resetFields()
 				setIsModalVisible(false)
 				ShowNoti('success', res.data.message)
+				!!onRefresh && onRefresh()
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -207,7 +207,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	}
 
 	function removeContaining(arr) {
-		return arr.filter((person) => person?.value !== 2)
+		return arr?.filter((person) => person?.value !== 2)
 	}
 
 	function onClickCreate() {
@@ -230,8 +230,8 @@ const CustomerAdviseForm = React.memo((props: any) => {
 					<IconButton type="button" color="yellow" tooltip="Cập nhật" icon="edit" onClick={toggle} />
 				)
 			) : (
-				<PrimaryButton className={className} background="green" icon="add" type="button" onClick={onClickCreate}>
-					Thêm mới
+				<PrimaryButton className={className} background="green" iconClassName="m-0" icon="add" type="button" onClick={onClickCreate}>
+					<div className="ml-[8px]">Thêm</div>
 				</PrimaryButton>
 			)}
 

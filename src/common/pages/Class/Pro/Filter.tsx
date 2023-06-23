@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { classApi } from '~/api/class'
 import FilterBase from '~/common/components/Elements/FilterBase'
 import { RootState } from '~/store'
 
@@ -13,6 +14,7 @@ const ClassFilter = (props) => {
 			<div className="list-action-table">
 				<FilterBase dataFilter={dataFilter} handleFilter={onFilter} handleReset={onReset} />
 			</div>
+
 			<div className="class-status-button none-selection max-w-[40vw] scrollable-h none-scrollbar text-[14px]">
 				<div onClick={() => onChangeTab(null)} className={`item ${!filter?.status ? 'active' : ''}`}>
 					Tất cả ({statusData?.closing + statusData?.upcoming + statusData?.opening})

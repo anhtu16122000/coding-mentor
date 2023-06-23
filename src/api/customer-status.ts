@@ -8,14 +8,15 @@ export const customerStatusApi = {
 			params: Params
 		})
 	},
+	count() {
+		return instance.get<IApiResultData<IConsultationStatus[]>>(url + '/status-count', {})
+	},
 	add(data: IConsultationStatus) {
 		return instance.post(url, data)
 	},
-
 	update(data: IConsultationStatus) {
 		return instance.put(url, data, {})
 	},
-
 	delete(id) {
 		return instance.delete(`${url}/${id}`)
 	}
