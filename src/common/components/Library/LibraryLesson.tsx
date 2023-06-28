@@ -245,7 +245,7 @@ const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 					id={`id-draggable-${activatedUnit?.Id}`}
 					{...props}
 					openFileDialogOnClick={false}
-					className="scrollable min-h-[calc(100vh-400px)] w1250:max-h-[calc(100vh-400px)] mr-[-22px] pr-[12px] z-[999]"
+					className="scrollable min-h-[calc(100vh-400px)] w1250:max-h-[calc(100vh-400px)] mr-[-22px] pr-[12px]"
 				>
 					<>
 						{data.length !== 0 && (
