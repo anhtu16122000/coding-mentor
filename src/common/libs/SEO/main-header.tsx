@@ -5,11 +5,12 @@ import appConfigs from '~/appConfig'
 const viewport = 'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover'
 const siteTitle = 'Quản lý giáo dục hiệu quả với phần mềm chuyên nghiệp từ Mona LMS'
 const description =
-	'Tối ưu hóa hoạt động giáo dục với phần mềm quản lý giáo dục chuyên nghiệp từ công ty phần mềm. Hỗ trợ quản lý các thông tin về học viên, giáo viên, lớp học và thời khóa biểu, giúp cho việc quản lý trở nên dễ dàng và hiệu quả hơn.'
+	'Tối ưu hoá hoạt động quản lý giáo dục với phần mềm chuyên nghiệp từ Mona Software. Hỗ trợ quàn lý tất cả các thông tin về học viên, giáo viên, lớp học... giúp cho việc quản lý trở nên dễ dàng và hiệu quả hơn.'
 
 const MainHeader = () => {
 	return (
 		<Head>
+			<meta charSet="UTF-8" />
 			<link rel="icon" href="/white-logo.png" />
 			<title>{appConfigs.appName} - Phần mềm quản lý giáo dục chuyên nghiệp</title>
 
@@ -27,7 +28,6 @@ const MainHeader = () => {
 			<meta name="twitter:image:alt" content="mona-lms" />
 			<meta name="twitter:description" content={description} />
 			<meta name="twitter:url" content="https://mona.media/phan-mem-quan-ly-truong-hoc-giao-duc-lms" />
-			<meta name="twitter:site" content="@mona.media" />
 			<meta name="twitter:domain" content="mona.media" />
 			<meta name="twitter:label1" content="Written by" />
 			<meta name="twitter:data1" content="Nguyễn Phúc Bảo Châu" />
