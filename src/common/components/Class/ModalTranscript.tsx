@@ -1,7 +1,7 @@
 import { Form, Modal } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { transcriptApi } from '~/api/transcript'
+import { transcriptApi } from '~/api/learn/transcript'
 import { ShowNoti } from '~/common/utils'
 import InputTextField from '../FormControl/InputTextField'
 import PrimaryButton from '../Primary/Button'

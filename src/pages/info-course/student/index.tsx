@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
-import { registerApi } from '~/api/user'
+import { registerApi } from '~/api/user/user'
 import appConfigs from '~/appConfig'
 import MainLayout from '~/common/components/MainLayout'
 import Student from '~/common/pages/Info-Course/Student'

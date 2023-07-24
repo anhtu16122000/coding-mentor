@@ -1,7 +1,7 @@
 import { Form, Modal, Tooltip } from 'antd'
 import React, { useState } from 'react'
 import { Eye } from 'react-feather'
-import { generalNotificationApi } from '~/api/general-notification'
+import { generalNotificationApi } from '~/api/manage/general-notification'
 import { ShowNoti } from '~/common/utils'
 import { parseSelectArrayUser } from '~/common/utils/common'
 import SelectField from '../FormControl/SelectField'

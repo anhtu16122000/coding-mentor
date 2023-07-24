@@ -1,6 +1,6 @@
 import { Modal } from 'antd'
 import React, { useState } from 'react'
-import { classApi } from '~/api/class'
+import { classApi } from '~/api/learn/class'
 import { ShowNostis } from '~/common/utils'
 import ModalFooter from '../../ModalFooter'
 import { BiTrash } from 'react-icons/bi'

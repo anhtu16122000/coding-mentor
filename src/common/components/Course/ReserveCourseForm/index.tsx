@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Edit } from 'react-feather'
 import { useForm } from 'react-hook-form'
 import { MdSave } from 'react-icons/md'
-import { courseReserveApi } from '~/api/course-reserve'
+import { courseReserveApi } from '~/api/course/course-reserve'
 // import { useWrap } from '~/src/context/wrap'
 import { ShowNoti } from '~/common/utils'
 

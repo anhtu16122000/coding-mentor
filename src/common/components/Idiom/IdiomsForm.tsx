@@ -1,7 +1,7 @@
 import { Form, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import * as yup from 'yup'
-import { idiomApi } from '~/api/idiom'
+import { idiomApi } from '~/api/configs/idiom'
 import { ShowNoti } from '~/common/utils'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'

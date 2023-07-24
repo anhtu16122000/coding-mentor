@@ -1,7 +1,7 @@
 import { Form, Modal, Switch } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { notificationInClassApi } from '~/api/notification-in-class'
+import { notificationInClassApi } from '~/api/learn/notification-in-class'
 import { ShowNoti } from '~/common/utils'
 import InputTextField from '../FormControl/InputTextField'
 import TextBoxField from '../FormControl/TextBoxField'

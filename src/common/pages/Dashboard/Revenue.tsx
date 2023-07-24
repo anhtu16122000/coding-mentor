@@ -1,7 +1,7 @@
 import { Card, DatePicker, DatePickerProps, Tooltip as AndTip } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { staticsticalApi } from '~/api/statistic'
+import { staticsticalApi } from '~/api/manage/statistic'
 import { _format, log } from '~/common/utils'
 import { LineChart, Line, XAxis, CartesianGrid, Tooltip, LabelList, YAxis } from 'recharts'
 import { parseToMoney, wait } from '~/common/utils/common'

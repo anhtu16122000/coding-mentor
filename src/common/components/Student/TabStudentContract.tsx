@@ -1,6 +1,6 @@
 import { Form, Popover } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
-import { contractApi } from '~/api/contract'
+import { contractApi } from '~/api/configs/contract'
 import EditorField from '../FormControl/EditorField'
 import { useReactToPrint } from 'react-to-print'
 import PrimaryButton from '../Primary/Button'

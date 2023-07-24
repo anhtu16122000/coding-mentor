@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Modal, Form, Spin, Tooltip } from 'antd'
 import InputTextField from '~/common/components/FormControl/InputTextField'
-import { customerAdviseApi } from '~/api/customer'
+import { customerAdviseApi } from '~/api/user/customer'
 import { SendOutlined } from '@ant-design/icons'
 import { ShowNoti } from '~/common/utils'
 import EditorField from '../../FormControl/EditorField'

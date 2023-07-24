@@ -1,6 +1,6 @@
 import { Form, Modal, Switch } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { paymentMethodsApi } from '~/api/payment-method'
+import { paymentMethodsApi } from '~/api/business/payment-method'
 import { ShowNoti } from '~/common/utils'
 import EditorField from '../FormControl/EditorField'
 import SelectField from '../FormControl/SelectField'

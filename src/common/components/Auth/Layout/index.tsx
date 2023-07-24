@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { idiomApi } from '~/api/idiom'
+import { idiomApi } from '~/api/configs/idiom'
 import { ShowNoti } from '~/common/utils'
 import ReactHtmlParser from 'react-html-parser'
 import { MdPlace } from 'react-icons/md'
@@ -8,7 +8,7 @@ import { AiTwotoneMail } from 'react-icons/ai'
 import { BsFillFileEarmarkTextFill } from 'react-icons/bs'
 import { Modal, Spin } from 'antd'
 import PrimaryButton from '../../Primary/Button'
-import { configTemplateApi } from '~/api/config-example'
+import { configTemplateApi } from '~/api/configs/config-example'
 
 type IAuthLayout = {
 	children: React.ReactNode

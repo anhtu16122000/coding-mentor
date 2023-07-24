@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Modal, Form, Divider } from 'antd'
-import { customerStatusApi } from '~/api/customer-status'
+import { customerStatusApi } from '~/api/configs/customer-status'
 import { ShowNoti } from '~/common/utils'
 import * as yup from 'yup'
 import InputTextField from '~/common/components/FormControl/InputTextField'

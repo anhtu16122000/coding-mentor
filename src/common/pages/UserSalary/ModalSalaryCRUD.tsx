@@ -1,6 +1,6 @@
 import { Form, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { staffSalaryApi } from '~/api/staff-salary'
+import { staffSalaryApi } from '~/api/business/staff-salary'
 import InputNumberField from '~/common/components/FormControl/InputNumberField'
 import SelectField from '~/common/components/FormControl/SelectField'
 import TextBoxField from '~/common/components/FormControl/TextBoxField'

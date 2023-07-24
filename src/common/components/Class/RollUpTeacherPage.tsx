@@ -6,7 +6,7 @@ import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { RootState } from '~/store'
 import PrimaryTable from '../Primary/Table'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
-import { classApi } from '~/api/class'
+import { classApi } from '~/api/learn/class'
 import moment from 'moment'
 import { ShowNoti } from '~/common/utils'
 

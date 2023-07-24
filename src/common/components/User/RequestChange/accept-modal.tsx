@@ -1,6 +1,6 @@
 import { Modal, Card, Popconfirm } from 'antd'
 import React, { FC, useState } from 'react'
-import { requestApi } from '~/api/user'
+import { requestApi } from '~/api/user/user'
 import { ShowNoti } from '~/common/utils'
 
 import moment from 'moment'

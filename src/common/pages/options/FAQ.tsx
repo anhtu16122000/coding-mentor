@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { faqApi } from '~/api/faq'
+import { faqApi } from '~/api/configs/faq'
 import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import QuestionForm from '~/common/components/Faq/QuestionForm'

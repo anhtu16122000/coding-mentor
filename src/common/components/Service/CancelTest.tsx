@@ -1,6 +1,6 @@
 import { Modal } from 'antd'
 import { useState } from 'react'
-import { testAppointmentApi } from '~/api/test-appointment'
+import { testAppointmentApi } from '~/api/learn/test-appointment'
 import { ShowNoti } from '~/common/utils'
 import IconButton from '../Primary/IconButton'
 import PrimaryButton from '../Primary/Button'

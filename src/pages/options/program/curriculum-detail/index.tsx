@@ -1,7 +1,7 @@
 import { Card, Collapse, Form, Skeleton, Upload, UploadProps } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { curriculumDetailApi } from '~/api/curriculum-detail'
+import { curriculumDetailApi } from '~/api/learn/curriculum-detail'
 import CurriculumDetailList from '~/common/components/CurriculumDetail/CurriculumDetailList'
 import Lessons from '~/common/components/CurriculumDetail/Lessons'
 import ModalCurriculumDetailCRUD from '~/common/components/CurriculumDetail/ModalCurriculumDetailCRUD'

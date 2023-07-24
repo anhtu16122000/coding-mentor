@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
-import { configTemplateApi } from '~/api/config-example'
+import { configTemplateApi } from '~/api/configs/config-example'
 import { ShowNoti } from '~/common/utils'
 import { Form, Popover, Spin, Tooltip } from 'antd'
 import EditorField from '~/common/components/FormControl/EditorField'

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AuthLayout from '~/common/components/Auth/Layout'
-import { registerApi } from '~/api/user'
+import { registerApi } from '~/api/user/user'
 import { ShowNoti } from '~/common/utils'
 import { userApi } from '~/services/auth'
 import { useDispatch } from 'react-redux'

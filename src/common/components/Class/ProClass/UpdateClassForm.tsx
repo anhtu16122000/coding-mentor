@@ -1,6 +1,6 @@
 import { Form, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { classApi } from '~/api/class'
+import { classApi } from '~/api/learn/class'
 import { ShowNostis } from '~/common/utils'
 import { parseSelectArray } from '~/common/utils/common'
 import InputNumberField from '../../FormControl/InputNumberField'

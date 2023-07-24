@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { configTemplateApi } from '~/api/config-example'
+import { configTemplateApi } from '~/api/configs/config-example'
 import ReactHtmlParser from 'react-html-parser'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { ShowNoti } from '~/common/utils'

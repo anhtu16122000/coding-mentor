@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AiOutlineCalendar, AiOutlineWarning } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
-import { scheduleApi } from '~/api/schedule'
+import { scheduleApi } from '~/api/learn/schedule'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import {
@@ -23,7 +23,7 @@ import InputMoneyField from '~/common/components/FormControl/InputNumberField'
 import ModalRemoveScheduleTutoringEdit from './ModalRemoveScheduleTutoringEdit'
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
 import type { RangePickerProps } from 'antd/es/date-picker'
-import { curriculumApi } from '~/api/curriculum'
+import { curriculumApi } from '~/api/learn/curriculum'
 import SelectField from '../FormControl/SelectField'
 
 const ChangeScheduleClassTutoringEdit = (props) => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Tooltip, Modal } from 'antd'
 import { parseToMoney } from '~/common/utils/common'
-import { teacherSalaryApi } from '~/api/teacher-salary'
+import { teacherSalaryApi } from '~/api/business/teacher-salary'
 import PrimaryTable from '~/common/components/Primary/Table'
 // import { useWrap } from '~/src/context/wrap'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'

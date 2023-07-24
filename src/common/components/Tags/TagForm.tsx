@@ -1,7 +1,7 @@
 import { Form, Modal } from 'antd'
 import { useState } from 'react'
 import * as yup from 'yup'
-import { tagCategoryApi } from '~/api/tagCategory'
+import { tagCategoryApi } from '~/api/configs/tagCategory'
 import { ShowNoti } from '~/common/utils'
 import InputTextField from '../FormControl/InputTextField'
 import PrimaryButton from '../Primary/Button'

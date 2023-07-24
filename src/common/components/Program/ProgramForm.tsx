@@ -5,7 +5,7 @@ import InputTextField from '~/common/components/FormControl/InputTextField'
 import InputNumberField from '~/common/components/FormControl/InputNumberField'
 import SelectField from '~/common/components/FormControl/SelectField'
 import { ShowNoti } from '~/common/utils'
-import { programApi } from '~/api/program'
+import { programApi } from '~/api/learn/program'
 import IconButton from '../Primary/IconButton'
 import PrimaryButton from '../Primary/Button'
 

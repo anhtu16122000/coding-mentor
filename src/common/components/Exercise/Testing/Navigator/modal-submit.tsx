@@ -7,7 +7,7 @@ import Lottie from 'react-lottie-player'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { IoPaperPlaneOutline } from 'react-icons/io5'
 import { ShowNoti } from '~/common/utils'
-import { examResultApi } from '~/api/exam-result'
+import { examResultApi } from '~/api/learn/exam-result'
 import { useRouter } from 'next/router'
 
 import warning from '~/common/components/json/100468-warning.json'

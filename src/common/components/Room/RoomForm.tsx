@@ -7,7 +7,7 @@ import SelectField from '../FormControl/SelectField'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 import * as yup from 'yup'
 import { ShowNoti } from '~/common/utils'
-import { roomApi } from '~/api/room'
+import { roomApi } from '~/api/configs/room'
 import IconButton from '../Primary/IconButton'
 import PrimaryButton from '../Primary/Button'
 

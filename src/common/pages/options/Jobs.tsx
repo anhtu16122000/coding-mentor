@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PrimaryTable from '~/common/components/Primary/Table'
 import JobForm from '~/common/components/Jobs/JobForm'
-import { jobApi } from '~/api/job'
+import { jobApi } from '~/api/configs/job'
 import moment from 'moment'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'

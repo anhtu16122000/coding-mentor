@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Edit, RotateCcw, Trash, X } from 'react-feather'
 import { IoMdTrash } from 'react-icons/io'
 import { MdAddCircleOutline, MdSave } from 'react-icons/md'
-import { documentCategoryApi } from '~/api/document-category'
+import { documentCategoryApi } from '~/api/learn/document-category'
 import { ShowNoti } from '~/common/utils'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 

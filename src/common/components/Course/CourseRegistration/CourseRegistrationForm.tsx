@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { MdOutlineLogin } from 'react-icons/md'
 import { courseApi } from '~/api/course/course'
-import { courseRegistrationApi } from '~/api/course-registration'
+import { courseRegistrationApi } from '~/api/course/course-registration'
 // import { useWrap } from '~/src/context/wrap'
 import { ShowNoti } from '~/common/utils'
 

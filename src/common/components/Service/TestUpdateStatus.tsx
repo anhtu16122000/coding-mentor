@@ -1,7 +1,7 @@
 import { Modal, Form } from 'antd'
 import React, { useEffect, useState } from 'react'
 import SelectField from '~/common/components/FormControl/SelectField'
-import { testAppointmentApi } from '~/api/test-appointment'
+import { testAppointmentApi } from '~/api/learn/test-appointment'
 import { ShowNoti } from '~/common/utils'
 import PrimaryButton from '../Primary/Button'
 import PrimaryTooltip from '../PrimaryTooltip'

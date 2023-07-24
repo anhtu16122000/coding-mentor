@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx'
 import moment from 'moment'
-import { userInformationApi } from '~/api/user'
+import { userInformationApi } from '~/api/user/user'
 
 const getAllUsers = async () => {
 	let thisData = []

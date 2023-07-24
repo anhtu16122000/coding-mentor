@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { classApi } from '~/api/class'
+import { classApi } from '~/api/learn/class'
 import FilterBase from '~/common/components/Elements/FilterBase'
 import { RootState } from '~/store'
 

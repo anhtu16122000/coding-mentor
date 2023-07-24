@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import NestedTable from '~/common/components/NestedTable'
 // import { useWrap } from '~/src/context/wrap'
-import { setPackageResultApi } from '~/api/set-package-result'
+import { setPackageResultApi } from '~/api/learn/set-package-result'
 import moment from 'moment'
 import { Tooltip } from 'antd'
 import { EyeOutlined, FormOutlined } from '@ant-design/icons'

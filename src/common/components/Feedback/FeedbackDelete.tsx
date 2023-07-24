@@ -2,7 +2,7 @@ import { Tooltip } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import React, { useState } from 'react'
 import { AlertTriangle, Trash, X } from 'react-feather'
-import { feedbackApi } from '~/api/feedback'
+import { feedbackApi } from '~/api/manage/feedback'
 // import { useWrap } from '~/src/context/wrap'
 import { ShowNoti } from '~/common/utils'
 

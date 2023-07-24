@@ -8,7 +8,7 @@ import ModalFooter from '../../ModalFooter'
 import { formNoneRequired, formRequired } from '~/common/libs/others/form'
 import InputNumberField from '../../FormControl/InputNumberField'
 import moment from 'moment'
-import { paymentMethodsApi } from '~/api/payment-method'
+import { paymentMethodsApi } from '~/api/business/payment-method'
 
 interface IPayForm {
 	isEdit?: boolean

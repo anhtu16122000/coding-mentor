@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { testAppointmentApi } from '~/api/test-appointment'
+import { testAppointmentApi } from '~/api/learn/test-appointment'
 import PrimaryTable from '~/common/components/Primary/Table'
 import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'

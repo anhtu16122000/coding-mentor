@@ -1,7 +1,7 @@
 import { Form, Modal, Spin, Tooltip } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { tagApi } from '~/api/tag'
+import { tagApi } from '~/api/configs/tag'
 import { ShowNoti } from '~/common/utils'
 import DeleteTableRow from '../Elements/DeleteTableRow'
 import InputTextField from '../FormControl/InputTextField'

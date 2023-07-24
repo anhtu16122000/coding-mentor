@@ -1,7 +1,7 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { teacherOffApi } from '~/api/teacher-off'
+import { teacherOffApi } from '~/api/user/teacher-off'
 import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'
 import FilterColumn from '~/common/components/FilterTable/Filter/FilterColumn'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'

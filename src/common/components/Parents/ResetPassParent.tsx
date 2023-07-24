@@ -2,7 +2,7 @@ import { Modal, Tooltip } from 'antd'
 import React, { useState } from 'react'
 import { Repeat } from 'react-feather'
 import { MdOutlineSettingsBackupRestore } from 'react-icons/md'
-import { parentsApi } from '~/api/parents'
+import { parentsApi } from '~/api/user/parents'
 // import { useWrap } from '~/src/context/wrap'
 import { ShowNoti } from '~/common/utils'
 

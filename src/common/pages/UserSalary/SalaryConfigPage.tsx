@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { salaryConfigApi } from '~/api/salary'
+import { salaryConfigApi } from '~/api/configs/salary'
 import PrimaryTable from '~/common/components/Primary/Table'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import FilterTable from '~/common/utils/table-filter'

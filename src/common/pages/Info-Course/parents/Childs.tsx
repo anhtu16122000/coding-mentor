@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { useEffect, useMemo, useState } from 'react'
-import { branchApi } from '~/api/branch'
+import { branchApi } from '~/api/manage/branch'
 import { parseSelectArray } from '~/common/utils/common'
 import { ShowNostis, ShowNoti } from '~/common/utils'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'

@@ -1,7 +1,7 @@
 import { Form, Modal, Spin, Tooltip } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { studyTimeApi } from '~/api/study-time'
+import { studyTimeApi } from '~/api/configs/study-time'
 import { MdAddCircleOutline, MdSave } from 'react-icons/md'
 import { Edit } from 'react-feather'
 import { ShowNoti } from '~/common/utils'

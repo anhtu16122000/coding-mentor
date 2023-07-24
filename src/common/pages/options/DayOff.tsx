@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { dayOffApi } from '~/api/day-off'
+import { dayOffApi } from '~/api/learn/day-off'
 import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'
 import DayOffForm from '~/common/components/DayOff/DayOffForm'
 import PrimaryTable from '~/common/components/Primary/Table'

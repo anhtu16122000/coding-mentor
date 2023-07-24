@@ -10,7 +10,7 @@ import { MdOpenInNew } from 'react-icons/md'
 import { parseToMoney } from '~/common/utils/common'
 import moment from 'moment'
 import ButtonMoveTo from '../../TableButton/MOVETO'
-import { programApi } from '~/api/program'
+import { programApi } from '~/api/learn/program'
 
 interface IAddToClass {
 	isEdit?: boolean

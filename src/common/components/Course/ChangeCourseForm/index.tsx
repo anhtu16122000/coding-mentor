@@ -2,16 +2,13 @@
 import { DatePicker, Divider, Form, Input, InputNumber, Modal, Select, Spin, Tooltip } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { Move } from 'react-feather'
 import { useForm } from 'react-hook-form'
 import { MdOutlineLogin, MdSave } from 'react-icons/md'
-// import { branchApi, courseApi, studentChangeCourseApi } from '~/src/apiBase'
-import { branchApi } from '~/api/branch'
+import { branchApi } from '~/api/manage/branch'
 import { courseApi } from '~/api/course/course'
-import { studentChangeCourseApi } from '~/api/course-of-student-change'
-// import { useWrap } from '~/src/context/wrap'
 import { parseToMoney } from '~/common/utils/common'
 import { ShowNoti } from '~/common/utils'
+import { courseOfStudentApi } from '~/api/course/course-of-student'
 
 const ChangeCourseForm = React.memo((props: any) => {
 	const { Option } = Select
@@ -19,14 +16,10 @@ const ChangeCourseForm = React.memo((props: any) => {
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const { infoId, reloadData, infoDetail, currentPage } = props
 	const [form] = Form.useForm()
-	// const { showNoti } = useWrap()
 	const [loading, setLoading] = useState(false)
 	const { setValue } = useForm()
 	const [courseStudentPrice, setCourseStudentPrice] = useState(null)
-	const [isLoading, setIsLoading] = useState({
-		type: '',
-		status: false
-	})
+	const [isLoading, setIsLoading] = useState({ type: '', status: false })
 	const [isLoadingCourseDetail, setIsLoadingCourseDetail] = useState(false)
 
 	const [courseAfter, setCourseAfter] = useState<ICourse[]>()
@@ -34,12 +27,6 @@ const ChangeCourseForm = React.memo((props: any) => {
 	const [courseAfterDetail, setCourseAfterDetail] = useState<ICourseDetail>()
 	const [requestMoney, setRequestMoney] = useState()
 	const [branch, setBranch] = useState<IBranch[]>()
-
-	// console.log('=========================');
-	// console.log('=========================');
-	// console.log('=========================');
-	// console.log('=========================');
-	// console.log('infoDetail: ', infoDetail);
 
 	const PaymentMethod = [
 		{
@@ -57,17 +44,7 @@ const ChangeCourseForm = React.memo((props: any) => {
 	]
 
 	const fetchDataPrice = () => {
-		// setIsLoading(true);
-		// (async () => {
-		// 	try {
-		// 		const _courseStudentPrice = await courseStudentPriceApi.getDetail(infoDetail.CourseOfStudentPriceID);
-		// 		_courseStudentPrice.status == 200 && setCourseStudentPrice(_courseStudentPrice.data.data);
-		// 	} catch (err) {
-		// 		showNoti('danger', err.message);
-		// 	} finally {
 		setIsLoading({ ...isLoading, status: false })
-		// 	}
-		// })();
 	}
 
 	const fetchDataSelectList = () => {
@@ -125,7 +102,7 @@ const ChangeCourseForm = React.memo((props: any) => {
 			} else {
 				setLoading(true)
 				try {
-					let res = await studentChangeCourseApi.changeCourse({
+					let res = await courseOfStudentApi.changeCourse({
 						...data,
 						CourseOfStudentID: infoId,
 						AdditionalPayment: infoDetail?.Price - courseAfterDetail?.Price

@@ -10,7 +10,7 @@ import Lottie from 'react-lottie-player'
 import { ShowNoti } from '~/common/utils'
 import { getFileThumbnails } from '~/common/utils/main-function'
 
-import { documentLibraryApi } from '~/api/document-library'
+import { documentLibraryApi } from '~/api/learn/document-library'
 import loadingJson from '~/common/components/json/31696-file-upload.json'
 import PrimaryButton from '../Primary/Button'
 import LibraryContextItem from './LibraryContextItem'

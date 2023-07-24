@@ -6,8 +6,8 @@ import SelectField from '~/common/components/FormControl/SelectField'
 import PrimaryButton from '~/common/components/Primary/Button'
 import IconButton from '~/common/components/Primary/IconButton'
 import { ShowNoti } from '~/common/utils'
-import { salaryConfigApi } from '~/api/salary'
-import { tutoringFeeApi } from '~/api/tutoring-fee'
+import { salaryConfigApi } from '~/api/configs/salary'
+import { tutoringFeeApi } from '~/api/business/tutoring-fee'
 
 type IModalSalary = {
 	mode: 'add' | 'edit' | 'delete'

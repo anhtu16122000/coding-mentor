@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import PrimaryTable from '~/common/components/Primary/Table'
 import PurposeForm from '~/common/components/Purpose/PurposeForm'
-import { purposeApi } from '~/api/purpose'
+import { purposeApi } from '~/api/configs/purpose'
 import moment from 'moment'
 import { ShowNoti } from '~/common/utils'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'

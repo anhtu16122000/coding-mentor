@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import NestedTable from '~/common/components/Primary/Table/NestedTable'
 import { parseToMoney } from '~/common/utils/common'
-import { billApi } from '~/api/bill'
+import { billApi } from '~/api/business/bill'
 import { Tooltip } from 'antd'
 import { ShowNostis } from '~/common/utils'
 import { FiCopy } from 'react-icons/fi'

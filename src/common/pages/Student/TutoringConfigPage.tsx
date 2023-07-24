@@ -2,7 +2,7 @@ import { Card, List, Spin, Timeline } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { Clock } from 'react-feather'
 import { FcClock } from 'react-icons/fc'
-import { classApi } from '~/api/class'
+import { classApi } from '~/api/learn/class'
 import PrimaryTable from '~/common/components/Primary/Table'
 import { ModalTutoringConfig } from './ModalTutoringConfig'
 

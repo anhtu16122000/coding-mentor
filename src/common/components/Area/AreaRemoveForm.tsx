@@ -1,7 +1,7 @@
 import { Modal, Tooltip } from 'antd'
 import React, { useState } from 'react'
 import { Trash } from 'react-feather'
-import { areaApi } from '~/api/area'
+import { areaApi } from '~/api/area/area'
 import { ShowNoti } from '~/common/utils'
 
 const AreaRemoveForm = (props) => {

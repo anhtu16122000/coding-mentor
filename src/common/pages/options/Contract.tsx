@@ -1,7 +1,7 @@
 import { Card, Popover, Spin, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { MdSave } from 'react-icons/md'
-import { contractApi } from '~/api/contract'
+import { contractApi } from '~/api/configs/contract'
 import EditorField from '~/common/components/FormControl/EditorField'
 // import TitlePage from '~/src/components/TitlePage'
 // import { useWrap } from '~/src/context/wrap'

@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { tutoringFeeApi } from '~/api/tutoring-fee'
+import { tutoringFeeApi } from '~/api/business/tutoring-fee'
 import CCSearch from '~/common/components/CCSearch'
 import PrimaryTable from '~/common/components/Primary/Table'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'

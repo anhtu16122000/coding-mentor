@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { dashboardApi } from '~/api/dashboard'
+import { dashboardApi } from '~/api/manage/dashboard'
 import { Card, Col, Row } from 'antd'
 import { RiArrowDownSLine } from 'react-icons/ri'
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PrimaryTable from '~/common/components/Primary/Table'
 import StudyTimeForm from '~/common/components/StudyTime/StudyTimeForm'
-import { studyTimeApi } from '~/api/study-time'
+import { studyTimeApi } from '~/api/configs/study-time'
 import Router from 'next/router'
 import { RootState } from '~/store'
 import { useSelector } from 'react-redux'

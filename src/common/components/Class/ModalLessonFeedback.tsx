@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { ShowNoti } from '~/common/utils'
 import TextBoxField from '../FormControl/TextBoxField'
 import PrimaryButton from '../Primary/Button'
-import { timeLineApi } from '~/api/timeline'
+import { timeLineApi } from '~/api/learn/timeline'
 import { useRouter } from 'next/router'
 import IconButton from '../Primary/IconButton'
 

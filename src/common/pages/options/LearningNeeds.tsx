@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import LearningNeedsForm from '~/common/components/LearningNeeds/LearningNeedsForm'
 import PrimaryTable from '~/common/components/Primary/Table'
-import { learningNeedApi } from '~/api/learning-needs'
+import { learningNeedApi } from '~/api/configs/learning-needs'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'

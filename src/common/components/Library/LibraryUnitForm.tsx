@@ -1,7 +1,7 @@
 import { Form, Modal, Spin } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { FiEdit } from 'react-icons/fi'
-import { documentLibraryApi, documentLibraryDirectoryApi } from '~/api/document-library'
+import { documentLibraryApi, documentLibraryDirectoryApi } from '~/api/learn/document-library'
 import { formRequired } from '~/common/libs/others/form'
 import { ShowNoti } from '~/common/utils'
 import InputTextField from '../FormControl/InputTextField'

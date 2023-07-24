@@ -1,6 +1,6 @@
 import { Upload } from 'antd'
 import { useState } from 'react'
-import { userInformationApi } from '~/api/user'
+import { userInformationApi } from '~/api/user/user'
 import { ShowNoti } from '~/common/utils'
 import PrimaryButton from '../Primary/Button'
 

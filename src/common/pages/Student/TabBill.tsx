@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { billApi } from '~/api/bill'
+import { billApi } from '~/api/business/bill'
 import PrimaryTable from '~/common/components/Primary/Table'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'

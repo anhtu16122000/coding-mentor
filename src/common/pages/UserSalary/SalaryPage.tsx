@@ -1,7 +1,7 @@
 import { DatePicker, Popconfirm } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { staffSalaryApi } from '~/api/staff-salary'
+import { staffSalaryApi } from '~/api/business/staff-salary'
 import PrimaryTable from '~/common/components/Primary/Table'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'

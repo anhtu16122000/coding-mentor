@@ -1,6 +1,6 @@
 import { Card, Empty, Popover, Skeleton, Spin, Upload, UploadProps } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
-import { curriculumDetailApi } from '~/api/curriculum-detail'
+import { curriculumDetailApi } from '~/api/learn/curriculum-detail'
 import { ShowNoti } from '~/common/utils'
 import { FiMoreHorizontal } from 'react-icons/fi'
 import { CgCloseO } from 'react-icons/cg'

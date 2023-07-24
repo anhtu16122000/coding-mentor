@@ -1,7 +1,7 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import ReactHtmlParser from 'react-html-parser'
-import { idiomApi } from '~/api/idiom'
+import { idiomApi } from '~/api/configs/idiom'
 import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'
 import IdiomsForm from '~/common/components/Idiom/IdiomsForm'
 import PrimaryTable from '~/common/components/Primary/Table'

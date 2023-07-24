@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { ZoomRoomApi } from '~/api/zoom'
+import { ZoomRoomApi } from '~/api/configs/zoom/zoom'
 import { ShowNoti } from '~/common/utils'
 import PrimaryButton from '../../Primary/Button'
 

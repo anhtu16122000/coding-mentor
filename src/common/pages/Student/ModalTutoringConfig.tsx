@@ -1,6 +1,6 @@
 import { Form, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { classApi } from '~/api/class'
+import { classApi } from '~/api/learn/class'
 import PrimaryButton from '~/common/components/Primary/Button'
 import IconButton from '~/common/components/Primary/IconButton'
 import { ShowNoti } from '~/common/utils'

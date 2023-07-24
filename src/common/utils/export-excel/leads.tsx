@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx'
 import moment from 'moment'
-import { customerAdviseApi } from '~/api/customer'
+import { customerAdviseApi } from '~/api/user/customer'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { useState } from 'react'
 

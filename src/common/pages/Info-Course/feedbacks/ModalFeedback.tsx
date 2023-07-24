@@ -1,12 +1,12 @@
 import { Form, Modal, Switch } from 'antd'
 import React, { useState } from 'react'
 import { ShowNoti } from '~/common/utils'
-import { timeLineApi } from '~/api/timeline'
+import { timeLineApi } from '~/api/learn/timeline'
 import { useRouter } from 'next/router'
 import PrimaryButton from '~/common/components/Primary/Button'
 import IconButton from '~/common/components/Primary/IconButton'
 import TextBoxField from '~/common/components/FormControl/TextBoxField'
-import { feedbackStudentApi } from '~/api/feedbacks-student'
+import { feedbackStudentApi } from '~/api/manage/feedbacks-student'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 
 type IModalFeedback = {

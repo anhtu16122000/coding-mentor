@@ -1,7 +1,7 @@
 import { Card, DatePicker, DatePickerProps, Skeleton, Empty } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { staticsticalApi } from '~/api/statistic'
+import { staticsticalApi } from '~/api/manage/statistic'
 import { _format, log } from '~/common/utils'
 import { Chart } from 'react-google-charts'
 

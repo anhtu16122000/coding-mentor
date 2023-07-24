@@ -4,7 +4,7 @@ import { MdAddCircleOutline, MdSave } from 'react-icons/md'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import InputTextField from '~/common/components/FormControl/InputTextField'
-import { areaApi } from '~/api/area'
+import { areaApi } from '~/api/area/area'
 import { Edit } from 'react-feather'
 import { ShowNoti } from '~/common/utils'
 

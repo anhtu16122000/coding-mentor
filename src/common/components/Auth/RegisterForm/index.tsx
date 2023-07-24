@@ -1,6 +1,6 @@
 import { Form, Spin } from 'antd'
 import { useState } from 'react'
-import { registerApi } from '~/api/user'
+import { registerApi } from '~/api/user/user'
 import { parseJwt, ShowNoti } from '~/common/utils'
 import Router from 'next/router'
 import { userApi } from '~/services/auth'

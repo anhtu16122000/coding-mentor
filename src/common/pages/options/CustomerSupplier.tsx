@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PrimaryTable from '~/common/components/Primary/Table'
 import CustomerSupplierForm from '~/common/components/Customer/CustomerSupplierForm'
-import { sourceApi } from '~/api/source'
+import { sourceApi } from '~/api/configs/source'
 import moment from 'moment'
 import { ShowNoti } from '~/common/utils'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'

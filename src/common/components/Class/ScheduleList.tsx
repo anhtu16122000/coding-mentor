@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { scheduleApi } from '~/api/schedule'
+import { scheduleApi } from '~/api/learn/schedule'
 
 export const ScheduleList = () => {
 	const router = useRouter()

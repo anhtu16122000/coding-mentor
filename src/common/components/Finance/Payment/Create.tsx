@@ -4,12 +4,12 @@ import RestApi from '~/api/RestApi'
 import { ShowNostis, ShowNoti } from '~/common/utils'
 import ModalFooter from '../../ModalFooter'
 import { formNoneRequired, formRequired } from '~/common/libs/others/form'
-import { paymentMethodsApi } from '~/api/payment-method'
-import { branchApi } from '~/api/branch'
+import { paymentMethodsApi } from '~/api/business/payment-method'
+import { branchApi } from '~/api/manage/branch'
 import InputNumberField from '../../FormControl/InputNumberField'
 import { removeCommas } from '~/common/utils/super-functions'
 import PrimaryButton from '../../Primary/Button'
-import { userInformationApi } from '~/api/user'
+import { userInformationApi } from '~/api/user/user'
 
 interface IPaymentForm {
 	isEdit?: boolean

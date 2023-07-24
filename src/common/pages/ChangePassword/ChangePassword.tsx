@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { accountApi } from '~/api/user'
+import { accountApi } from '~/api/user/user'
 import { Card, Form, Input } from 'antd'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { requestApi } from '~/api/user'
+import { requestApi } from '~/api/user/user'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 

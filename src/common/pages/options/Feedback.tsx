@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { feedbackApi } from '~/api/feedback'
+import { feedbackApi } from '~/api/manage/feedback'
 import FeedbackDelete from '~/common/components/Feedback/FeedbackDelete'
 import FeedBackForm from '~/common/components/Feedback/FeedbackForm'
 import FilterFeedbackTable from '~/common/components/FilterTable/FilterFeedbackTable'

@@ -1,6 +1,6 @@
 import { Card, Form, Table } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
-import { permissionApi } from '~/api/permission'
+import { permissionApi } from '~/api/dev/permission'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 import PermissionEditForm from '~/common/components/Permission/PermissionEditForm'
 import PrimaryButton from '~/common/components/Primary/Button'

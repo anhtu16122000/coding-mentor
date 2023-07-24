@@ -1,13 +1,9 @@
 import { DatePicker, Form, Input, InputNumber, Modal, Select, Spin, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { Move } from 'react-feather'
 import { useForm } from 'react-hook-form'
 import { MdOutlineLogin, MdSave } from 'react-icons/md'
-// import { courseApi } from '~/src/apiBase'
 import { courseApi } from '~/api/course/course'
-import { courseReserveApi } from '~/api/course-reserve'
-import { courseStudentPriceApi } from '~/api/course-of-student-price'
-// import { useWrap } from '~/src/context/wrap'
+import { courseReserveApi } from '~/api/course/course-reserve'
 import { ShowNoti } from '~/common/utils'
 
 const PaymentMethod = [
@@ -31,13 +27,9 @@ const CourseReserveIntoCourse = React.memo((props: any) => {
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const { infoId, reloadData, infoDetail, currentPage } = props
 	const [form] = Form.useForm()
-	// const { showNoti } = useWrap()
 	const [loading, setLoading] = useState(false)
 	const { setValue } = useForm()
-	const [isLoading, setIsLoading] = useState<any>({
-		type: '',
-		status: false
-	})
+	const [isLoading, setIsLoading] = useState<any>({ type: '', status: false })
 	const [isLoadingCourseDetail, setIsLoadingCourseDetail] = useState(false)
 
 	const [courseAfter, setCourseAfter] = useState<ICourse[]>()
@@ -46,20 +38,6 @@ const CourseReserveIntoCourse = React.memo((props: any) => {
 
 	const [requestMoney, setRequestMoney] = useState<any>('')
 	const [courseStudentPrice, setCourseStudentPrice] = useState(null)
-
-	const fetchDataPrice = () => {
-		setIsLoading(true)
-		;(async () => {
-			try {
-				const _courseStudentPrice = await courseStudentPriceApi.getDetail(infoDetail.CourseOfStudentPriceID)
-				_courseStudentPrice.status == 200 && setCourseStudentPrice(_courseStudentPrice.data.data)
-			} catch (err) {
-				ShowNoti('error', err.message)
-			} finally {
-				setIsLoading(false)
-			}
-		})()
-	}
 
 	const fetchDataCourse = () => {
 		setIsLoading(true)

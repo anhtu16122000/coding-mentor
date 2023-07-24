@@ -1,7 +1,7 @@
 import { Upload } from 'antd'
 import { useState } from 'react'
-import { customerAdviseApi } from '~/api/customer'
-import { userInformationApi } from '~/api/user'
+import { customerAdviseApi } from '~/api/user/customer'
+import { userInformationApi } from '~/api/user/user'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { ShowNoti } from '~/common/utils'
 

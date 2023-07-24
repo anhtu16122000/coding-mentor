@@ -1,7 +1,7 @@
 import { Form, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { permissionApi } from '~/api/permission'
-import { userInformationApi } from '~/api/user'
+import { permissionApi } from '~/api/dev/permission'
+import { userInformationApi } from '~/api/user/user'
 import InputNumberField from '~/common/components/FormControl/InputNumberField'
 import TextBoxField from '~/common/components/FormControl/TextBoxField'
 import SelectField from '~/common/components/FormControl/SelectField'
@@ -10,7 +10,7 @@ import IconButton from '~/common/components/Primary/IconButton'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { parseSelectArray } from '~/common/utils/common'
-import { salaryConfigApi } from '~/api/salary'
+import { salaryConfigApi } from '~/api/configs/salary'
 
 type IModalSalary = {
 	mode: 'add' | 'edit' | 'delete'

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Card, Button, Spin } from 'antd'
 import EditorField from '~/common/components/FormControl/EditorField'
 // import TitlePage from '~/src/components/TitlePage'
-import { rulesApi } from '~/api/rules'
+import { rulesApi } from '~/api/manage/rules'
 import { MdSave } from 'react-icons/md'
 import { ShowNoti } from '~/common/utils'
 

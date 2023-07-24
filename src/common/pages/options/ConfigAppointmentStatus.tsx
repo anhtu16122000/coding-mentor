@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { configAppointmentStatusApi } from '~/api/config-appointment-status'
+import { configAppointmentStatusApi } from '~/api/configs/config-appointment-status'
 import ModalAppointmentStatus from '~/common/components/ConfigAppointmentStatus/ModalAppointmentStatus'
 import PrimaryTable from '~/common/components/Primary/Table'
 // import { useWrap } from '~/src/context/wrap'

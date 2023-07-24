@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { studentHistoriesApi } from '~/api/student-in-class'
+import { studentHistoriesApi } from '~/api/user/student-in-class'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import moment from 'moment'
 import { IoClose } from 'react-icons/io5'

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import AuthLayout from '~/common/components/Auth/Layout'
 import { ShowNoti } from '~/common/utils'
-import { accountApi } from '~/api/user'
+import { accountApi } from '~/api/user/user'
 import { Form, Input, Spin } from 'antd'
 
 function ForgotPasswordPage() {

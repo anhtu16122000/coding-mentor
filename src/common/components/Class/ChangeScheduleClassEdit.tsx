@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AiOutlineCalendar, AiOutlineWarning } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
-import { scheduleApi } from '~/api/schedule'
+import { scheduleApi } from '~/api/learn/schedule'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import {

@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Edit, X } from 'react-feather'
 import { IoMdTrash } from 'react-icons/io'
 import { MdAddCircleOutline, MdSave } from 'react-icons/md'
-import { documentListApi } from '~/api/document-list'
+import { documentListApi } from '~/api/learn/document-list'
 import { ShowNoti } from '~/common/utils'
 
 const DocumentListModal = ({ type, docInfo, onFetchDataForm, docID, docName }) => {

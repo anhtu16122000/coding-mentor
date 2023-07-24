@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { accountApi } from '~/api/account'
+import { accountApi } from '~/api/dev/account'
 import { Spin, Table, Form, Input } from 'antd'
 import { parseJwt } from '~/common/utils'
 import { useDispatch } from 'react-redux'

@@ -2,7 +2,7 @@ import { Form, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import IconButton from '../Primary/IconButton'
 import { ShowNoti } from '~/common/utils'
-import { permissionApi } from '~/api/permission'
+import { permissionApi } from '~/api/dev/permission'
 import SelectField from '../FormControl/SelectField'
 import PrimaryButton from '../Primary/Button'
 

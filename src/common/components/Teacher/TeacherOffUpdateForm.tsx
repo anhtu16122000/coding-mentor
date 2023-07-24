@@ -1,7 +1,7 @@
 import { Form, Modal, Spin, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { Edit } from 'react-feather'
-import { teacherOffApi } from '~/api/teacher-off'
+import { teacherOffApi } from '~/api/user/teacher-off'
 import { ShowNoti } from '~/common/utils'
 import SelectField from '../FormControl/SelectField'
 import TextBoxField from '../FormControl/TextBoxField'

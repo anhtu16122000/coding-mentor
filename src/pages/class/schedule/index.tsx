@@ -8,8 +8,8 @@ import MainLayout from '~/common/components/MainLayout'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import { ShowNoti } from '~/common/utils'
-import { scheduleApi } from '~/api/schedule'
-import { branchApi } from '~/api/branch'
+import { scheduleApi } from '~/api/learn/schedule'
+import { branchApi } from '~/api/manage/branch'
 import { useDispatch } from 'react-redux'
 import { setBranch } from '~/store/branchReducer'
 import moment from 'moment'
@@ -18,7 +18,7 @@ import PopoverSearch from '~/common/components/Schedule/PopoverSearch'
 import Lottie from 'react-lottie-player'
 
 import loadingJson from '~/common/components/json/loading-calendar.json'
-import { userInformationApi } from '~/api/user'
+import { userInformationApi } from '~/api/user/user'
 
 const Schedule = () => {
 	const thisCalendar = useRef(null)

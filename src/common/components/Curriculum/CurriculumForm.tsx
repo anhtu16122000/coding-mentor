@@ -1,6 +1,6 @@
 import { Form, Modal, Spin, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { curriculumApi } from '~/api/curriculum'
+import { curriculumApi } from '~/api/learn/curriculum'
 import { MdAddCircleOutline, MdSave } from 'react-icons/md'
 import { Edit } from 'react-feather'
 import InputTextField from '../FormControl/InputTextField'

@@ -2,7 +2,7 @@ import { Card, Form, Skeleton } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
-import { paymentSessionApi } from '~/api/payment-session'
+import { paymentSessionApi } from '~/api/business/payment-session'
 import { MainLayout } from '~/common'
 import EditorField from '~/common/components/FormControl/EditorField'
 import PrimaryButton from '~/common/components/Primary/Button'
@@ -51,7 +51,7 @@ export default function PrintPaymentSession(props: IPrintPaymentSessionProps) {
 			let res = await paymentSessionApi.update({ Id: router.query.paymentID, PrintContent: data.Content })
 			if (res.status == 200) {
 				ShowNoti('success', res.data.message)
-            getPaymentDetail()
+				getPaymentDetail()
 			}
 		} catch (error) {
 			ShowNoti('error', error.message)

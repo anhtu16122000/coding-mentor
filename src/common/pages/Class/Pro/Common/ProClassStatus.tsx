@@ -1,7 +1,7 @@
 import { Popover, Spin } from 'antd'
 import React, { useRef, useState } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
-import { classApi } from '~/api/class'
+import { classApi } from '~/api/learn/class'
 import { ShowNostis } from '~/common/utils'
 
 const defaultClass = 'h-[32px] px-[8px] flex items-center cursor-pointer rounded-[4px] font-[500] hover:bg-[#f0f0f0] none-selection '

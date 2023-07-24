@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { useEffect, useMemo, useState } from 'react'
-import { branchApi } from '~/api/branch'
+import { branchApi } from '~/api/manage/branch'
 import SortBox from '~/common/components/Elements/SortBox'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { parseSelectArray } from '~/common/utils/common'

@@ -1,6 +1,6 @@
 import { Input, List } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
-import { programApi } from '~/api/program'
+import { programApi } from '~/api/learn/program'
 import { ShowNoti } from '~/common/utils'
 import AvatarComponent from '../AvatarComponent'
 import IconButton from '../Primary/IconButton'

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 // import { teacherSalaryApi } from '~/src/apiBase/staff-manage/teacher-salary'
-import { teacherSalaryApi } from '~/api/teacher-salary'
+import { teacherSalaryApi } from '~/api/business/teacher-salary'
 import NestedTable from '~/common/components/Primary/Table/NestedTable'
 import { parseToMoney } from '~/common/utils/common'
 import SalaryOfTeacherDetail from '~/common/components/Teacher/SalaryOfTeacherDetail'

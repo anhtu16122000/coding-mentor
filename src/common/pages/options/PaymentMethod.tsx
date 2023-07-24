@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { paymentMethodsApi } from '~/api/payment-method'
+import { paymentMethodsApi } from '~/api/business/payment-method'
 import PaymentMethodForm from '~/common/components/PaymentMethod/PaymentMethodForm'
 import PrimaryTable from '~/common/components/Primary/Table'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'

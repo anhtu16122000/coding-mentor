@@ -11,7 +11,7 @@ import TextBoxField from '~/common/components/FormControl/TextBoxField'
 import SelectField from '~/common/components/FormControl/SelectField'
 import * as yup from 'yup'
 import { ShowNoti } from '~/common/utils'
-import { discountApi } from '~/api/discount'
+import { discountApi } from '~/api/business/discount'
 import IconButton from '../Primary/IconButton'
 import PrimaryButton from '../Primary/Button'
 

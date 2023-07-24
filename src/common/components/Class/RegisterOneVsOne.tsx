@@ -1,13 +1,13 @@
 import { Form, Select } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { programApi } from '~/api/program'
+import { programApi } from '~/api/learn/program'
 import { formRequired } from '~/common/libs/others/form'
 import { ShowNostis, ShowNoti, log } from '~/common/utils'
 import { RootState } from '~/store'
 import ModalAddProgram from './ModalAddProgram'
 import ListProgramReview from './ListProgramReview'
-import { curriculumApi } from '~/api/curriculum'
+import { curriculumApi } from '~/api/learn/curriculum'
 import Avatar from '../Avatar'
 
 type TRegisterOneVsOne = {

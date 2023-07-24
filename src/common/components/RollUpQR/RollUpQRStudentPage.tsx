@@ -1,7 +1,7 @@
 import { Button, Card, Input, Space } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { studentRollUpQrCodeApi } from '~/api/studentRollUpQrCode'
+import { studentRollUpQrCodeApi } from '~/api/learn/studentRollUpQrCode'
 import { ShowNoti } from '~/common/utils'
 import PrimaryButton from '../Primary/Button'
 import PrimaryTable from '../Primary/Table'

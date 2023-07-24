@@ -1,6 +1,6 @@
 import { Form, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { testAppointmentApi } from '~/api/test-appointment'
+import { testAppointmentApi } from '~/api/learn/test-appointment'
 import { ShowNoti } from '~/common/utils'
 import InputTextField from '../FormControl/InputTextField'
 import InputNumberField from '../FormControl/InputNumberField'

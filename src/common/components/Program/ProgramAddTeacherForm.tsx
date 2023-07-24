@@ -1,7 +1,7 @@
 import { Modal, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineCheckCircle, AiOutlineCloseCircle, AiOutlineUsergroupAdd } from 'react-icons/ai'
-import { programApi } from '~/api/program'
+import { programApi } from '~/api/learn/program'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import PrimaryButton from '../Primary/Button'

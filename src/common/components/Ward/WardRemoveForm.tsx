@@ -1,7 +1,7 @@
 import { Modal, Tooltip } from 'antd'
 import React, { useState } from 'react'
 import { Trash } from 'react-feather'
-import { wardApi } from '~/api/area'
+import { wardApi } from '~/api/area/area'
 import { ShowNoti } from '~/common/utils'
 
 const WardRemoveForm = (props) => {

@@ -1,7 +1,7 @@
 import { Form, Modal, Switch } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { studentInClassApi } from '~/api/student-in-class'
+import { studentInClassApi } from '~/api/user/student-in-class'
 import { ShowNoti } from '~/common/utils'
 import SelectField from '../FormControl/SelectField'
 import PrimaryButton from '../Primary/Button'

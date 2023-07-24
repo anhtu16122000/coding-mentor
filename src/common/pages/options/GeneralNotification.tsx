@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { generalNotificationApi } from '~/api/general-notification'
+import { generalNotificationApi } from '~/api/manage/general-notification'
 import GeneralNotificationUserReceiver from '~/common/components/GeneralNotification/GeneralNotificationUserReceiver'
 import GeneralNotificationForm from '~/common/components/GeneralNotification/GeneralNotificationForm'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
