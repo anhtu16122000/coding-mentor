@@ -5,12 +5,10 @@ import { ShowNoti } from '~/common/utils'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import PrimaryButton from '../Primary/Button'
-import { NumericFormat } from 'react-number-format'
-import { examApi } from '~/api/exam'
 import ButtonAdd from '../DirtyButton/Button-Add'
 import ButtonCancel from '../DirtyButton/Button-Cancel'
 import ButtonSave from '../DirtyButton/Button-Save'
-import UploadFile from '../UploadFile'
+import { ieltsExamApi } from '~/api/IeltsExam'
 
 const CreateExam: FC<ICreateExam> = (props) => {
 	const { onRefresh, isEdit, defaultData, className, onOpen } = props
@@ -28,8 +26,8 @@ const CreateExam: FC<ICreateExam> = (props) => {
 
 	async function postEditExam(param) {
 		try {
-			const response = await examApi.put(param)
-			if (response.status === 200) {
+			const response = await ieltsExamApi.put(param)
+			if (response.status == 200) {
 				ShowNoti('success', response.data.message)
 				if (!!onRefresh) {
 					onRefresh()
@@ -46,8 +44,8 @@ const CreateExam: FC<ICreateExam> = (props) => {
 
 	async function postNewExam(param) {
 		try {
-			const response = await examApi.post(param)
-			if (response.status === 200) {
+			const response = await ieltsExamApi.post(param)
+			if (response.status == 200) {
 				ShowNoti('success', response.data.message)
 				if (!!onRefresh) {
 					onRefresh()
@@ -62,16 +60,15 @@ const CreateExam: FC<ICreateExam> = (props) => {
 		}
 	}
 
-	const onFinish = (values) => {
-		const passPoint = !values.PassPoint ? 0 : values.PassPoint.toString().split(',').join('')
-		const time = !values.Time ? 0 : values.Time.toString().split(',').join('')
-
-		const DATA_SUBMIT = { ...values, Time: parseInt(time), PassPoint: parseInt(passPoint) }
+	const onFinish = async (values) => {
+		const DATA_SUBMIT = { ...values, Thumbnail: '' }
 
 		setLoading(true)
+
 		if (!isEdit) {
 			postNewExam(DATA_SUBMIT)
 		}
+
 		if (!!isEdit) {
 			postEditExam({ ...DATA_SUBMIT, ID: defaultData.Id })
 		}
@@ -81,8 +78,6 @@ const CreateExam: FC<ICreateExam> = (props) => {
 		form.setFieldsValue({ Code: defaultData?.Code })
 		form.setFieldsValue({ Description: defaultData?.Description })
 		form.setFieldsValue({ Name: defaultData?.Name })
-		form.setFieldsValue({ PassPoint: defaultData.PassPoint })
-		form.setFieldsValue({ Time: defaultData?.Time })
 		setIsModalVisible(true)
 	}
 
@@ -91,9 +86,11 @@ const CreateExam: FC<ICreateExam> = (props) => {
 	return (
 		<>
 			{user?.RoleId == 1 && !!!isEdit && (
-				<ButtonAdd icon="outline" onClick={() => setIsModalVisible(true)}>
-					Tạo mới
-				</ButtonAdd>
+				<div data-tut="reactour-create" className="flex-shrink-0">
+					<ButtonAdd icon="outline" onClick={() => setIsModalVisible(true)}>
+						Tạo mới
+					</ButtonAdd>
+				</div>
 			)}
 
 			{user?.RoleId == 1 && !!isEdit && (
@@ -105,7 +102,7 @@ const CreateExam: FC<ICreateExam> = (props) => {
 			<Modal
 				centered
 				title={isEdit ? 'Cập nhật đề' : 'Tạo đề mới'}
-				width={700}
+				width={600}
 				open={isModalVisible}
 				onCancel={() => !loading && setIsModalVisible(false)}
 				footer={
@@ -127,16 +124,7 @@ const CreateExam: FC<ICreateExam> = (props) => {
 						<Form.Item className="col-span-2" label="Tên đề" name="Name" rules={formRequired}>
 							<Input disabled={loading} className="primary-input" />
 						</Form.Item>
-						<Form.Item className="col-span-2" label="Thời gian làm bài" name="Time" rules={formRequired}>
-							<NumericFormat disabled={loading} className="primary-input w-full px-[10px]" thousandSeparator={true} />
-						</Form.Item>
-						<Form.Item className="col-span-2" label="Điểm sàn" name="PassPoint">
-							<NumericFormat disabled={loading} className="primary-input w-full px-[10px]" thousandSeparator={true} />
-						</Form.Item>
-						{/* <Form.Item className="col-span-2" label="File nghe" name="Audio">
-							<UploadFile />
-						</Form.Item> */}
-						<Form.Item className="col-span-4" label="Hướng dẫn làm bài" name="Description">
+						<Form.Item className="col-span-4" label="Mô tả" name="Description">
 							<Input.TextArea rows={5} disabled={loading} className="primary-input" />
 						</Form.Item>
 					</div>

@@ -237,6 +237,15 @@ button {
 	text-decoration: none;
 }
 
+.no-select {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-o-user-select: none;
+	text-decoration: none;
+}
+
 .desktop {
 	display: inline-flex !important;
 	@include max-media(999px) {
@@ -909,4 +918,26 @@ button {
 			fill: #fff;
 		}
 	}
+}
+
+.react-tur-mask {
+	color: #ffffff;
+	color: rgba(0, 0, 0, 0.3);
+}
+
+.helper {
+	--reactour-accent: #0a89ff;
+	line-height: 1.3;
+	color: #000000;
+	// opacity: 0.8;
+}
+
+.hLNHwh {
+	border-radius: 999px !important;
+	width: 30px !important;
+	height: 30px !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 600;
 }

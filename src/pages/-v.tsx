@@ -1,16 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import Lottie from 'react-lottie-player'
-
-import loadingJson from '~/common/components/json/36395-lonely-404.json'
+import React from 'react'
 import moment from 'moment'
 
-// const buildTimestamp = preval`module.exports = new Date().getTime();`
-
 const VersionPage = () => {
-	const [buildTime, setBuildTime] = useState('Loading...')
-
-	useEffect(() => {}, [])
-
 	return (
 		<div className="w-full h-[100vh] max-w-[1200px] mx-auto p-[16px]">
 			<h1 className="font-[600] uppercase text-[26px]">Thông tin hệ thống</h1>

@@ -1,5 +1,7 @@
 type IExerciseItem = {
-	data: IExamsResponse
+	data: any
+	index?: number
+	style?: number
 	onRefresh?: Function
 }
 

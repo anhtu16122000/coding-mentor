@@ -1,9 +1,10 @@
+import { ieltsExamApi } from '~/api/IeltsExam'
 import { examApi } from '~/api/exam'
 import { ShowNoti } from '~/common/utils'
 
 async function getExams(params, callback) {
 	try {
-		const response = await examApi.getAll(params)
+		const response = await ieltsExamApi.getAll(params)
 		if (response.status == 200) {
 			callback(response.data)
 		}
@@ -14,7 +15,7 @@ async function getExams(params, callback) {
 
 async function getMoreExams(params, callback) {
 	try {
-		const response = await examApi.getAll(params)
+		const response = await ieltsExamApi.getAll(params)
 		if (response.status == 200) {
 			callback(response.data)
 		}

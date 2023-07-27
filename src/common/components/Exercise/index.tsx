@@ -1,4 +1,4 @@
-import { Card, List, Skeleton } from 'antd'
+import { List, Segmented, Skeleton } from 'antd'
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import appConfigs from '~/appConfig'
@@ -7,9 +7,16 @@ import CreateExam from './exam-form'
 import ExamItem from './item'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { getExams, getMoreExams } from './util'
-import LoadingExercise from '../Loading/Exercise'
+import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
+import dynamic from 'next/dynamic'
+import { FaQuestionCircle } from 'react-icons/fa'
+import PrimaryTooltip from '../PrimaryTooltip'
+import { isDesktop } from 'react-device-detect'
 
-const initParameters = { search: '', pageIndex: 1, pageSize: 8 }
+const Tour = dynamic(() => import('reactour'), { ssr: false })
+
+const initParameters = { search: '', pageIndex: 1, pageSize: 22 }
 
 function ExamList() {
 	const [filters, setFilters] = useState(initParameters)
@@ -58,28 +65,106 @@ function ExamList() {
 	function onRefresh() {
 		setFilters({ ...filters, pageIndex: 1 })
 	}
+
+	// -----------------------------------------------------------------
+
+	const [isTourOpen, setIsTourOpen] = useState(false)
+
+	const accentColor = '#0a89ff'
+
+	const disableBody = (target) => disableBodyScroll(target)
+	const enableBody = (target) => enableBodyScroll(target)
+
+	const closeTour: any = () => {
+		setIsTourOpen(false)
+	}
+
+	const openTour = () => {
+		setIsTourOpen(true)
+	}
+
+	// You might need to adjust this part depending on your use case.
+	useEffect(() => {
+		if (isTourOpen) {
+			disableBody(document.querySelector('.helper'))
+		} else {
+			enableBody(document.querySelector('.helper'))
+		}
+	}, [isTourOpen])
+
+	const tourConfig = [
+		{
+			selector: '[data-tut="reactour-create"]',
+			content: `Tạo một đề mới thật dễ dàng bằng cách nhấn vào đây`
+		},
+		{
+			selector: '[data-tut="reactour-search"]',
+			content: `Tìm kiếm đề bằng cập nhập tên đề hoặc mã đề vào đây`
+		},
+		{
+			selector: '[data-tut="reactour-switch"]',
+			content: `Thay đổi phong cách hiển thị`
+		},
+		{
+			selector: '[data-tut="reactour-information"]',
+			content: `Bấm vào đây để xem và cập nhật thông tin đề`
+		}
+	]
+
+	const [style, setStyle] = useState(1)
+
 	return (
 		<>
 			<Head>
 				<title>{appConfigs.appName} - Quản lý đề</title>
 			</Head>
 
-			<Card
-				className="exercise-container"
-				title={
-					<div className="flex items-center w-full justify-between pr-[10px] w600:px-[16px]">
-						<div className="flex-1 max-w-[350px] mr-[16px]">
-							<CCSearch onSubmit={(value) => setFilters({ ...filters, search: value })} />
+			<Tour
+				// @ts-ignore
+				onRequestClose={closeTour}
+				steps={tourConfig}
+				isOpen={isTourOpen}
+				maskClassName="react-tur-mask"
+				className="helper"
+				rounded={5}
+				accentColor={accentColor}
+				onAfterOpen={() => disableBody(document.querySelector('.helper'))}
+				onBeforeClose={() => enableBody(document.querySelector('.helper'))}
+			/>
+
+			<div className="max-w-[2000px]">
+				<div className="cc-exam-header">
+					<div className="max-w-[350px] mr-[8px] flex items-center">
+						<PrimaryTooltip id="exam-x" content="Hướng dẫn sử dụng" place="right">
+							<div onClick={openTour} className="cc-exam-btn-tour">
+								<FaQuestionCircle size={20} color="#1b73e8" />
+							</div>
+						</PrimaryTooltip>
+
+						<div data-tut="reactour-switch">
+							{/* @ts-ignore */}
+							<Segmented
+								style={{ height: 36 }}
+								onChange={(e) => setStyle(e == 'Kanban' ? 1 : 2)}
+								options={[
+									{ value: 'Kanban', icon: <AppstoreOutlined /> },
+									{ value: 'List', icon: <BarsOutlined /> }
+								]}
+							/>
+						</div>
+					</div>
+
+					<div className="flex items-center">
+						<div data-tut="reactour-search" className="mr-[8px]">
+							<CCSearch data-tut="reactour-search" onSubmit={(value) => setFilters({ ...filters, search: value })} />
 						</div>
 						<CreateExam onRefresh={onRefresh} />
 					</div>
-				}
-			>
-				{loading && data.length == 0 && <LoadingExercise />}
+				</div>
 
 				{(!loading || data.length > 0) && (
 					<div>
-						<div id="class-view" className="px-[0px] w600:px-[16px] mx-[-8px] py-3 h-[calc(100vh-220px)] scrollable">
+						<div id="class-view" className="cc-exam-list-container" style={{ paddingRight: 8, marginRight: isDesktop ? -20 : -16 }}>
 							<InfiniteScroll
 								dataLength={data.length}
 								next={loadMoreData}
@@ -89,15 +174,17 @@ function ExamList() {
 								scrollableTarget="class-view"
 							>
 								<List
-									grid={{ gutter: 16, xs: 1, sm: 2, md: 2, lg: 2, xl: 3, xxl: 4 }}
+									grid={style == 1 ? { gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 3, xxl: 4 } : null}
 									dataSource={data}
-									renderItem={(item, index) => <ExamItem key={`ex-it-${index}`} data={item} onRefresh={onRefresh} />}
+									renderItem={(item, index) => (
+										<ExamItem style={style} key={`ex-it-${index}`} index={index} data={item} onRefresh={onRefresh} />
+									)}
 								/>
 							</InfiniteScroll>
 						</div>
 					</div>
 				)}
-			</Card>
+			</div>
 		</>
 	)
 }

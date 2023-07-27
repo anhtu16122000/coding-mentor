@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { wait } from './common'
 
 export const getFileThumbnails = (type, FileUrl) => {
@@ -168,4 +169,22 @@ export const domMastersContent = (section, group) => {
 	if (!section && !group) {
 		viewContent('', false, 'section')
 	}
+}
+
+/**
+ * Format ngày sang dạng DD/MM/YYYY
+ * @param {Date} date - Truyền ngày vào: js date hoặc 2023-07-24
+ * @returns ngày đã format dạng "DD/MM/YYYY".
+ */
+export function parseDate(date: Date): string {
+	return moment(new Date(date)).format('DD/MM/YYYY')
+}
+
+/**
+ * Format ngày sang dạng HH:mm DD/MM/YYYY
+ * @param date - Truyền ngày vào: js date hoặc 2023-07-24
+ * @returns ngày đã format dạng "HH:mm DD/MM/YYYY".
+ */
+export function parseDateTime(date: Date | string): string {
+	return moment(new Date(date)).format('HH:mm DD/MM/YYYY')
 }

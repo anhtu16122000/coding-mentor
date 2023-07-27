@@ -1,7 +1,7 @@
 import { Input } from 'antd'
 import React from 'react'
 
-function CCSearch({ onSubmit }) {
+function CCSearch({ onSubmit, className }: { onSubmit?: Function; className?: string }) {
 	function onChangeText(event) {
 		if (event.target.value == '') {
 			onSubmit('')
@@ -10,7 +10,7 @@ function CCSearch({ onSubmit }) {
 
 	return (
 		<Input.Search
-			className="style-input x-search ml-3 w-250px mr-2"
+			className={`style-input x-search w-250px ${!!className ? className : ''}`}
 			placeholder="Tìm kiếm"
 			allowClear
 			onChange={onChangeText}

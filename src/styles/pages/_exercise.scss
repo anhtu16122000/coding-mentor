@@ -22,11 +22,49 @@
 }
 
 .cc-exam-item {
-	@apply rounded-[6px] m-2 p-[20px] bg-[#f0f0f061] hover:bg-[#f0f0f0cc] duration-200;
+	@apply rounded-[6px] p-[16px] bg-[#fff] hover:bg-[#ffffff] duration-200;
+}
+
+.btn-exam-detail {
+	@apply flex items-center duration-200 mr-[-4px] cursor-pointer font-[500] pl-[8px] py-[4px] my-[-8px];
+	.btn-exam-icon {
+		@apply duration-200;
+		margin-left: 4px;
+	}
+	&:hover {
+		color: #1b73e8;
+		.btn-exam-icon {
+			@apply duration-200;
+			margin-left: 8px;
+			margin-right: -4px;
+		}
+	}
+}
+
+.btn-exam-info {
+	color: #1b73e8;
+	cursor: pointer;
+	.btn-exam-info-icon {
+		font-size: 24px;
+	}
+	&:hover {
+		color: #135ab6;
+		.btn-exam-info-icon {
+			font-size: 25px;
+		}
+	}
+}
+
+.cc-exam-info-item-icon {
+	@apply w-[30px] h-[30px] items-center justify-center flex rounded-full mr-[8px] bg-[#1b74e820] text-[#1b73e8];
+}
+
+.cc-xem-info-quest-container {
+	@apply col-span-1 flex items-center flex-col rounded-[6px] py-[8px] border-[#cbcbcb] border-[1px] border-solid;
 }
 
 .cc-exam-item-name {
-	@apply text-[18px] font-[700] in-1-line cursor-pointer;
+	@apply text-[18px] font-[600] cursor-pointer;
 }
 
 .cc-exam-item-code {
@@ -549,4 +587,17 @@
 	&.none-border {
 		border-width: 0px !important;
 	}
+}
+
+.cc-exam-list-container {
+	@apply px-[0px] mt-[16px] h-[calc(100vh-171px)] scrollable ml-[-8px];
+	margin-bottom: -30px !important;
+}
+
+.cc-exam-btn-tour {
+	@apply w-[36px] h-[36px] mr-[8px] bg-[#0000000a] hover:bg-[#00000010] flex items-center justify-center rounded-[6px];
+}
+
+.cc-exam-header {
+	@apply bg-[#fff] ant-card-bordered rounded-[6px] flex items-center w-full justify-between p-[8px];
 }

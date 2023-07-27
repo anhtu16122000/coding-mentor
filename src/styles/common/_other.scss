@@ -178,3 +178,29 @@ $strawberry: #01b446;
 		@apply w-full h-full object-contain rounded-lg;
 	}
 }
+
+.ant-segmented {
+	border-radius: 6px;
+	.ant-segmented-group {
+		cursor: pointer !important;
+		.ant-segmented-item-label {
+			min-height: 32px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.ant-segmented-item-selected {
+			border-radius: 6px;
+		}
+	}
+}
+
+.ant-row {
+	margin: 0px !important;
+}
+
+// .ant-list-grid {
+// 	.ant-row > div {
+// 		max-width: 23.9% !important;
+// 	}
+// }

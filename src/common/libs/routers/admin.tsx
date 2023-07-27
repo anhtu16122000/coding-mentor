@@ -252,8 +252,8 @@ export const AdminChildMenu = [
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/exercise/all',
-				Route: '/exercise/all',
+				Key: '/exam',
+				Route: '/exam',
 				Text: 'Quản lý đề thi',
 				Icon: ''
 			}
