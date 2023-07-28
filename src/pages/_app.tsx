@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 
 import type { AppProps } from 'next/app'
-import Head from 'next/head'
 import AuthProvider from '~/common/components/Auth/Provider'
 
 // ant

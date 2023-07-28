@@ -12,7 +12,8 @@ const initialState = {
 		group: null
 	},
 	currentSection: null,
-	currentGroup: null
+	currentGroup: null,
+	globalBreadcrumbs: []
 }
 
 const globalState = createSlice({
@@ -39,11 +40,22 @@ const globalState = createSlice({
 		},
 		setCurrentGroup: (state, { payload }: PayloadAction<any>) => {
 			state.currentGroup = payload
+		},
+		setGlobalBreadcrumbs: (state, { payload }: PayloadAction<any>) => {
+			state.globalBreadcrumbs = payload
 		}
 	}
 })
 
-export const { setDragItem, setCurrentPackage, setCurrentExerciseForm, setCurrentGroup, setCurrentSection, setTotalPoint, setBreadcrumb } =
-	globalState.actions
+export const {
+	setDragItem,
+	setCurrentPackage,
+	setCurrentExerciseForm,
+	setCurrentGroup,
+	setCurrentSection,
+	setTotalPoint,
+	setBreadcrumb,
+	setGlobalBreadcrumbs
+} = globalState.actions
 
 export default globalState.reducer

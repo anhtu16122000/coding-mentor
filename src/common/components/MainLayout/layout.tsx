@@ -25,6 +25,7 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 
 	const userInformation = useSelector((state: RootState) => state.user.information)
 	const breadcrumb = useSelector((state: RootState) => state.globalState.breadcrumb)
+	const globalBreadcrumb = useSelector((state: RootState) => state.globalState.globalBreadcrumbs)
 
 	const router = useRouter()
 	let path = router.pathname
@@ -171,6 +172,10 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 		)
 	}
 
+	useEffect(() => {
+		console.log('---- globalBreadcrumb: ', globalBreadcrumb)
+	}, [globalBreadcrumb])
+
 	return (
 		<div className={`app ${is.parent ? 'simple-menu-pro' : ''}`}>
 			<Header isOpenMenu={isOpenMenu} isOpen={isOpen} funcMenuMobile={funcMenuMobile} openMenuMobile={openMenuMobile} />
@@ -233,6 +238,18 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 									) : (
 										<></>
 									)}
+								</Breadcrumb>
+							)}
+
+							{breadcrumbs.length == 0 && globalBreadcrumb.length > 0 && (
+								<Breadcrumb>
+									{globalBreadcrumb?.map((item, index) => (
+										<Breadcrumb.Item key={`gb-${index}`}>
+											<a href={item?.link} className="font-medium">
+												{item?.title}
+											</a>
+										</Breadcrumb.Item>
+									))}
 								</Breadcrumb>
 							)}
 
