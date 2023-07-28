@@ -7,6 +7,10 @@ async function getExams(params, callback) {
 		const response = await ieltsExamApi.getAll(params)
 		if (response.status == 200) {
 			callback(response.data)
+		} else {
+			console.log(response.data)
+
+			callback({ ...response.data, data: [] })
 		}
 	} catch (error) {
 		ShowNoti('error', error?.message)

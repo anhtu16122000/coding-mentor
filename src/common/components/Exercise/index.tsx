@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic'
 import { FaQuestionCircle } from 'react-icons/fa'
 import PrimaryTooltip from '../PrimaryTooltip'
 import { isDesktop } from 'react-device-detect'
+import FilterExam from './FilterExam'
 
 const Tour = dynamic(() => import('reactour'), { ssr: false })
 
@@ -111,6 +112,10 @@ function ExamList() {
 		}
 	]
 
+	function handleReset() {
+		setFilters(initParameters)
+	}
+
 	const [style, setStyle] = useState(1)
 
 	return (
@@ -152,11 +157,13 @@ function ExamList() {
 								]}
 							/>
 						</div>
+
+						{/* <FilterExam className="ml-[8px]" onReset={handleReset} onSubmit={(event) => setFilters(event)} /> */}
 					</div>
 
 					<div className="flex items-center">
 						<div data-tut="reactour-search" className="mr-[8px]">
-							<CCSearch data-tut="reactour-search" onSubmit={(value) => setFilters({ ...filters, search: value })} />
+							<CCSearch data-tut="reactour-search" onSubmit={(value) => setFilters({ ...filters, pageIndex: 1, search: value })} />
 						</div>
 						<CreateExam onRefresh={onRefresh} />
 					</div>

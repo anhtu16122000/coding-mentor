@@ -592,6 +592,10 @@
 .cc-exam-list-container {
 	@apply px-[0px] mt-[16px] h-[calc(100vh-192px)] scrollable ml-[-8px];
 	margin-bottom: -30px !important;
+	.ant-list-empty-text {
+		background: #fff !important;
+		@apply shadow-sm rounded-[6px] mx-[8px] mr-[12px];
+	}
 }
 
 .cc-exam-btn-tour {

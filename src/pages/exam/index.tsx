@@ -6,7 +6,7 @@ import appConfigs from '~/appConfig'
 import ExamList from '~/common/components/Exercise'
 import MainLayout from '~/common/components/MainLayout'
 import { wait } from '~/common/utils'
-import { setBreadcrumb, setGlobalBreadcrumbs } from '~/store/globalState'
+import { setGlobalBreadcrumbs } from '~/store/globalState'
 
 function ExamListPage() {
 	const dispatch = useDispatch()
