@@ -16,7 +16,7 @@ function ExamListPage() {
 		dispatch(setGlobalBreadcrumbs([{ title: 'Quản lý đề', link: '/exam' }]))
 
 		const handleRouteChange = async (url) => {
-			await wait(300)
+			// await wait(300)
 			dispatch(setGlobalBreadcrumbs([]))
 		}
 

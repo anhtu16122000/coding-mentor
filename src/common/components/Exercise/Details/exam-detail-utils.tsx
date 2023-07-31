@@ -1,4 +1,5 @@
 import Router from 'next/router'
+import { ieltsExamApi } from '~/api/IeltsExam'
 import { examApi } from '~/api/exam'
 import { ShowNoti } from '~/common/utils'
 import { decode } from '~/common/utils/super-functions'
@@ -9,9 +10,9 @@ import { decode } from '~/common/utils/super-functions'
  */
 async function getExamDetails(canback) {
 	try {
-		const response = await examApi.getDetailByID(parseInt(decode(Router.query?.exam + '')))
+		const response: any = await ieltsExamApi.getByID(parseInt(decode(Router.query?.exam + '')))
 		if (response.status == 200) {
-			canback({ data: response.data.data, totalPoint: response.data.totalPoint })
+			canback({ data: response.data.data, totalPoint: response.data.Point })
 		} else {
 			canback(null)
 		}

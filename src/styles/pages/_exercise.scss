@@ -77,6 +77,38 @@
 
 .cc-exam-detail {
 	@apply exercise-container container none-margin-card-header shadow-sm;
+	// .ant-card-body {
+	// 	padding: 0;
+	// }
+	.ant-card-head {
+		padding: 0px !important;
+	}
+	.ant-collapse {
+		border-radius: 6px !important;
+	}
+	.ant-collapse-item {
+		border-radius: 6px !important;
+	}
+	.ant-collapse-content {
+		border-bottom-left-radius: 6px !important;
+		border-bottom-right-radius: 6px !important;
+	}
+	.ant-collapse-header {
+		align-items: center !important;
+		border-radius: 6px !important;
+		.ant-collapse-header-text {
+			font-weight: 600 !important;
+		}
+	}
+	.ant-collapse-expand-icon {
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+	}
+}
+
+.cc-exam-detail .ant-card-body {
+	padding: 16px !important;
 }
 
 .cc-text-16-700 {
@@ -93,6 +125,16 @@
 
 .ant-radio-disabled .ant-radio-inner::after {
 	background-color: rgb(65, 155, 246);
+}
+
+.cc-flex-upload {
+	.ant-upload {
+		width: auto !important;
+	}
+	span.ant-upload {
+		display: flex !important;
+		align-items: center !important;
+	}
 }
 
 .button-delete-choice {

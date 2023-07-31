@@ -171,7 +171,7 @@ function ExamList() {
 
 				{(!loading || data.length > 0) && (
 					<div>
-						<div id="class-view" className="cc-exam-list-container" style={{ paddingRight: 8, marginRight: isDesktop ? -20 : -16 }}>
+						<div id="class-view" className="cc-exam-list-container" style={{ paddingRight: 8, marginRight: isDesktop ? -23 : -16 }}>
 							<InfiniteScroll
 								dataLength={data.length}
 								next={loadMoreData}

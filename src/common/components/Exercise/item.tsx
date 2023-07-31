@@ -13,8 +13,8 @@ const ExamItem: FC<IExerciseItem> = (props) => {
 	const [visible, setVisible] = useState<boolean>(false)
 
 	function _viewDetail() {
-		const theQuery = { exam: encode(data?.Id), name: data?.Name }
-		Router.push({ pathname: `/exercise`, query: theQuery })
+		const theQuery = { exam: encode(data?.Id) }
+		Router.push({ pathname: `/exam/detail`, query: theQuery })
 	}
 
 	function toggle() {
@@ -70,7 +70,7 @@ const ExamItem: FC<IExerciseItem> = (props) => {
 										<IoInformationCircle className="btn-exam-info-icon" />
 									</div>
 								</PrimaryTooltip>
-								<div className="btn-exam-detail">
+								<div onClick={_viewDetail} className="btn-exam-detail">
 									<div>Chi tiết</div>
 									<RiArrowLeftSLine size={20} className="btn-exam-icon rotate-180" />
 								</div>
@@ -88,7 +88,7 @@ const ExamItem: FC<IExerciseItem> = (props) => {
 										</div>
 									</PrimaryTooltip>
 								)}
-								<div className="btn-exam-detail">
+								<div onClick={_viewDetail} className="btn-exam-detail">
 									<div>Chi tiết</div>
 									<RiArrowLeftSLine size={20} className="btn-exam-icon rotate-180" />
 								</div>
