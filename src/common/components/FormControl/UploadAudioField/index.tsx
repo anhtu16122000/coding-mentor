@@ -40,7 +40,7 @@ export default function UploadAudioField(props: IUploadFileField & { loading?: b
 					</PrimaryButton>
 
 					{!!audioPreview && (
-						<PrimaryButton loading={loading} background="red" icon="remove" type="button" className="ml-[8px]" onClick={removeFile}>
+						<PrimaryButton disable={loading} background="red" icon="remove" type="button" className="ml-[8px]" onClick={removeFile}>
 							Xoá file
 						</PrimaryButton>
 					)}
