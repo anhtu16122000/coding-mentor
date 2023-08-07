@@ -14,10 +14,10 @@ const PrimaryTooltip: FC<TPrimaryTooltip> = (props) => {
 
 	return (
 		<>
-			<div className={className + ' none-selection' || 'none-selection'} id={id + '' || ''}>
+			<div className={className || '' + 'none-selection'} data-tooltip-id={'cc-tip-' + id + '' || ''}>
 				{children}
 			</div>
-			<ReactTooltip anchorId={`${id}`} place={place} content={content || ''} />
+			<ReactTooltip id={`cc-tip-${id}`} place={place} content={content || ''} />
 		</>
 	)
 }
