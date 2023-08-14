@@ -14,6 +14,9 @@ import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
 import { decode } from '~/common/utils/common'
 import { UploadFileApi } from '~/api/common/upload-image'
 import { FiEdit } from 'react-icons/fi'
+import { BiPlus } from 'react-icons/bi'
+
+const activeClass = 'bg-[#4CAF50] hover:bg-[#449a48] focus:bg-[#38853b] text-[#fff]'
 
 const CreateExamSkill: FC<ICreateExam> = (props) => {
 	const { onRefresh, isEdit, defaultData, className, onOpen } = props
@@ -122,16 +125,16 @@ const CreateExamSkill: FC<ICreateExam> = (props) => {
 	return (
 		<>
 			{user?.RoleId == 1 && !!!isEdit && (
-				<div data-tut="reactour-create" className="flex-shrink-0 mr-[16px]">
-					<ButtonAdd icon="outline" onClick={toggle}>
-						Thêm kỹ năng
-					</ButtonAdd>
+				<div onClick={toggle} className={`cc-23-skill ${activeClass}`}>
+					<BiPlus size={18} />
+					<div className="ml-[4px]">Kỹ năng mới</div>
 				</div>
 			)}
 
 			{user?.RoleId == 1 && !!isEdit && (
-				<div onClick={clickEdit} className="btn-yellow-rounded all-center">
-					<FiEdit size={16} className="text-[#000]" />
+				<div onClick={clickEdit} className="cc-23-skill-menu-item">
+					<FiEdit size={16} className="text-[#9C27B0]" />
+					<div className="ml-[8px] font-[500]">Cập nhật</div>
 				</div>
 			)}
 

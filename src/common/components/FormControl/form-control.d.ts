@@ -79,6 +79,7 @@ type IEditorField = {
 	customFieldProps?: any
 	id?: any
 	height?: number
+	className?: string
 }
 
 type IUploadFileField = {

@@ -1,5 +1,5 @@
 .exercise-container {
-	@apply container none-margin-card-header shadow-sm;
+	@apply none-margin-card-header;
 	.ant-card-body {
 		padding: 0;
 	}
@@ -76,10 +76,7 @@
 }
 
 .cc-exam-detail {
-	@apply exercise-container container none-margin-card-header shadow-sm;
-	// .ant-card-body {
-	// 	padding: 0;
-	// }
+	@apply exercise-container none-margin-card-header;
 	.ant-card-head {
 		padding: 0px !important;
 	}
@@ -646,4 +643,48 @@
 
 .cc-exam-header {
 	@apply bg-[#fff] ant-card-bordered rounded-[6px] flex items-center w-full justify-between p-[8px];
+}
+
+.btn-yellow-rounded {
+	@apply ml-[8px] w-[28px] h-[28px] cursor-pointer bg-[#FFBA0A] hover:bg-[#e7ab11] focus:bg-[#d19b10] rounded-full;
+}
+
+.cc-23-skill {
+	@apply px-[8px] flex items-center none-selection font-[500] py-[4px] cursor-pointer mr-[8px] rounded-[4px];
+	.cc-23-skill-info {
+		@apply w-[18px] h-[18px] cursor-pointer rounded-full all-center;
+	}
+}
+
+.cc-23-skill-menu-item {
+	@apply flex items-center hover:bg-[#ededed] px-[8px] py-[4px] rounded-[4px];
+}
+
+.cc-23-btn-question {
+	@apply w-[28px] h-[28px] rounded-[6px] cursor-pointer hover:opacity-80 all-center mr-[8px] border-[1px];
+}
+
+.cc-23-btn-quests {
+	@apply duration-300 absolute left-[16px] bottom-[16px] cursor-pointer bg-[#ffffff] hover:bg-[#f3f3f3] border-[#d4d2d1] border-[1px] w-[36px] h-[36px] rounded-[6px];
+
+	div {
+		@apply text-[0px] duration-300;
+	}
+
+	&:hover {
+		div {
+			@apply text-[14px] font-[500] ml-[8px];
+		}
+
+		@apply w-[130px];
+	}
+}
+
+.exercise-settings {
+	.ant-switch {
+		background-color: #e7e7e7 !important;
+	}
+	.ant-switch-checked {
+		background-color: #2ab849 !important;
+	}
 }

@@ -433,3 +433,15 @@
 .wrapper-schedule-calender .ant-collapse-content-box {
 	padding: 2px 6px !important;
 }
+
+.cc-exam-detail {
+	.ant-collapse {
+		border: 1px solid #d9d9d9 !important;
+		&:hover {
+			border-color: #000000 !important;
+		}
+		.ant-collapse-item {
+			border-bottom: 0px !important;
+		}
+	}
+}

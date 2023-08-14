@@ -298,4 +298,9 @@
 	.ant-popover-arrow-content {
 		display: block !important;
 	}
+	&.exam-skill {
+		.ant-popover-inner {
+			margin-top: -14px !important;
+		}
+	}
 }

@@ -213,6 +213,10 @@ button {
 	}
 }
 
+.tox-fullscreen {
+	background-color: #fff !important;
+}
+
 .loading-primary {
 	line-height: 0;
 	transition: 0.3s;
@@ -940,4 +944,14 @@ button {
 	align-items: center;
 	justify-content: center;
 	font-weight: 600;
+}
+
+.no-padding-collapse {
+	.ant-collapse-header {
+		padding: 0 !important;
+		padding-right: 8px !important;
+		.ant-collapse-expand-icon {
+			display: none !important;
+		}
+	}
 }

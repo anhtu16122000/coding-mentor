@@ -6,8 +6,8 @@ export default function TextBoxField(props: ITextBoxField) {
 	return (
 		<Form.Item name={name} style={style} label={label} className={`${className}`} required={isRequired} rules={rules}>
 			<TextArea
-				className={`${className} h-auto`}
-				rows={rows || 4}
+				className={`${className}`}
+				rows={rows || 6}
 				allowClear={allowClear}
 				placeholder={placeholder}
 				disabled={disabled}

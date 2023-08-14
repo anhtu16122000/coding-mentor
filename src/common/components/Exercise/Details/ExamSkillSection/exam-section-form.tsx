@@ -7,16 +7,17 @@ import { RootState } from '~/store'
 import ButtonAdd from '../../../DirtyButton/Button-Add'
 import ButtonCancel from '../../../DirtyButton/Button-Cancel'
 import ButtonSave from '../../../DirtyButton/Button-Save'
-import Router from 'next/router'
-import InputNumberField from '../../../FormControl/InputNumberField'
 import UploadAudioField from '../../../FormControl/UploadAudioField'
-import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
-import { decode } from '~/common/utils/common'
 import { UploadFileApi } from '~/api/common/upload-image'
 import { FiEdit } from 'react-icons/fi'
+import { ieltsSectionApi } from '~/api/IeltsExam/ieltsSection'
+import PrimaryEditor from '~/common/components/Editor'
+import { BiPlus } from 'react-icons/bi'
 
-const CreateExamSkill: FC<ICreateExam> = (props) => {
-	const { onRefresh, isEdit, defaultData, className, onOpen } = props
+const activeClass = 'bg-[#4CAF50] hover:bg-[#449a48] focus:bg-[#38853b] text-[#fff]'
+
+const CreateExamSection: FC<ICreateExam & { skill?: any }> = (props) => {
+	const { onRefresh, isEdit, defaultData, onOpen, skill } = props
 
 	const [form] = Form.useForm()
 
@@ -29,9 +30,9 @@ const CreateExamSkill: FC<ICreateExam> = (props) => {
 		}
 	}, [visible])
 
-	async function putSkill(param) {
+	async function putSection(param) {
 		try {
-			const response = await ieltsSkillApi.put(param)
+			const response = await ieltsSectionApi.put(param)
 			if (response.status == 200) {
 				ShowNoti('success', response.data.message)
 				if (!!onRefresh) {
@@ -47,9 +48,9 @@ const CreateExamSkill: FC<ICreateExam> = (props) => {
 		}
 	}
 
-	async function postSkill(param) {
+	async function postSection(param) {
 		try {
-			const response = await ieltsSkillApi.post(param)
+			const response = await ieltsSectionApi.post(param)
 			if (response.status == 200) {
 				ShowNoti('success', response.data.message)
 				if (!!onRefresh) {
@@ -88,23 +89,21 @@ const CreateExamSkill: FC<ICreateExam> = (props) => {
 			audioUploaded = await handleUploadFile(values?.Audio)
 		}
 
-		const DATA_SUBMIT = { ...values, IeltsExamId: parseInt(decode(Router.query?.exam + '')), Audio: audioUploaded }
+		const DATA_SUBMIT = { ...values, IeltsSkillId: skill?.Id, Audio: audioUploaded, Explain: '' }
 
-		log.Yellow('DATA_SUBMIT', DATA_SUBMIT)
+		log.Yellow('Submit Section', DATA_SUBMIT)
 
 		if (!isEdit) {
-			postSkill(DATA_SUBMIT)
+			postSection(DATA_SUBMIT)
 		}
 
 		if (!!isEdit) {
-			putSkill({ ...DATA_SUBMIT, ID: defaultData.Id })
+			putSection({ ...DATA_SUBMIT, ID: defaultData.Id })
 		}
 	}
 
 	function openEdit() {
-		form.setFieldsValue({ Audio: defaultData?.Audio })
-		form.setFieldsValue({ Time: defaultData?.Time })
-		form.setFieldsValue({ Name: defaultData?.Name })
+		form.setFieldsValue({ ...defaultData })
 		setVisible(true)
 	}
 
@@ -122,23 +121,23 @@ const CreateExamSkill: FC<ICreateExam> = (props) => {
 	return (
 		<>
 			{user?.RoleId == 1 && !!!isEdit && (
-				<div data-tut="reactour-create" className="flex-shrink-0 mr-[16px]">
-					<ButtonAdd icon="outline" onClick={toggle}>
-						Thêm kỹ năng
-					</ButtonAdd>
+				<div onClick={toggle} className={`cc-23-skill ${activeClass}`}>
+					<BiPlus size={18} />
+					<div className="ml-[4px]">Phần mới</div>
 				</div>
 			)}
 
 			{user?.RoleId == 1 && !!isEdit && (
-				<div onClick={clickEdit} className="btn-yellow-rounded all-center">
-					<FiEdit size={16} className="text-[#000]" />
+				<div onClick={clickEdit} className="cc-23-skill-menu-item">
+					<FiEdit size={16} className="text-[#9C27B0]" />
+					<div className="ml-[8px] font-[500]">Cập nhật</div>
 				</div>
 			)}
 
 			<Modal
 				centered
 				title={isEdit ? 'Cập nhật kỹ năng' : 'Thêm kỹ năng mới'}
-				width={500}
+				width={700}
 				open={visible}
 				onCancel={() => !loading && setVisible(false)}
 				footer={
@@ -154,18 +153,18 @@ const CreateExamSkill: FC<ICreateExam> = (props) => {
 			>
 				<Form disabled={loading} form={form} layout="vertical" initialValues={{ remember: true }} onFinish={onFinish}>
 					<div className="grid grid-cols-4 gap-x-4">
-						<Form.Item className="col-span-4 w500:col-span-2" label="Tên kỹ năng" name="Name" rules={formRequired}>
+						<Form.Item className="col-span-4" label="Tên" name="Name" rules={formRequired}>
 							<Input disabled={loading} className="primary-input" />
 						</Form.Item>
 
-						<InputNumberField
-							placeholder="Nhập số phút"
-							className="col-span-4 w500:col-span-2"
-							label="Thời gian (phút)"
-							name="Time"
-							isRequired
-							rules={formRequired}
-						/>
+						<Form.Item className="col-span-4" label="Nội dung" name="ReadingPassage">
+							<PrimaryEditor
+								id={`read-${new Date().getTime()}`}
+								height={400}
+								initialValue={defaultData?.ReadingPassage || ''}
+								onChange={(event) => form.setFieldValue('ReadingPassage', event)}
+							/>
+						</Form.Item>
 
 						<UploadAudioField loading={loading} className="col-span-4" form={form} name="Audio" label="Âm thanh" rules={formNoneRequired} />
 					</div>
@@ -175,4 +174,4 @@ const CreateExamSkill: FC<ICreateExam> = (props) => {
 	)
 }
 
-export default CreateExamSkill
+export default CreateExamSection

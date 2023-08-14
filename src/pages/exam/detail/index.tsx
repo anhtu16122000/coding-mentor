@@ -16,5 +16,5 @@ const ExamDetailPage = () => {
 	)
 }
 
-ExamDetailPage.Layout = MainLayout
+// ExamDetailPage.Layout = MainLayout
 export default ExamDetailPage

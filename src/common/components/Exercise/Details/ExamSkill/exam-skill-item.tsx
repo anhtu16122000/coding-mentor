@@ -1,65 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Collapse, Divider, Modal, Popconfirm, Spin } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
-import { setCurrentPackage, setGlobalBreadcrumbs, setTotalPoint } from '~/store/globalState'
-import Router, { useRouter } from 'next/router'
-import { RootState } from '~/store'
-import { HiOutlineBookOpen } from 'react-icons/hi'
-import { ieltsExamApi } from '~/api/IeltsExam'
-import { decode, wait } from '~/common/utils/common'
-import { ShowNostis, ShowNoti } from '~/common/utils'
+import React, { useState } from 'react'
+import { Collapse, Divider, Modal, Popconfirm, Spin } from 'antd'
+import { ShowNoti } from '~/common/utils'
 import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
-import { FaHeadphones, FaInfo } from 'react-icons/fa'
+import { FaInfo } from 'react-icons/fa'
 import ExamSkillInfo from './exam-skill.info'
 import { IoCloseSharp } from 'react-icons/io5'
-import PrimaryButton from '~/common/components/Primary/Button'
 import PrimaryTooltip from '~/common/components/PrimaryTooltip'
 import { MdHeadphones } from 'react-icons/md'
 import CreateExamSkill from './exam-skill-form'
+import ExamSection from '../ExamSkillSection'
 
 const { Panel } = Collapse
 
 function ExamSkillItem(props) {
 	const { data, index, onClick, activeKey, onRefresh } = props
-
-	const { exam } = Router.query
-
-	const dispatch = useDispatch()
-	const totalPoint = useSelector((state: RootState) => state.globalState.packageTotalPoint)
-
-	const [examInfo, setExamInfo] = useState(null)
-
-	const [loading, setLoading] = useState(true)
-
-	const router = useRouter()
-
-	useEffect(() => {
-		if (!!exam) {
-			// getExanInfo()
-		}
-	}, [exam])
-
-	async function getExanInfo() {
-		try {
-			const res = await ieltsExamApi.getByID(parseInt(decode(exam + '')))
-			if (res.status == 200) {
-				setExamInfo(res.data.data)
-
-				dispatch(
-					setGlobalBreadcrumbs([
-						{ title: 'Quản lý đề', link: '/exam' },
-						{ title: res.data.data?.Name, link: '' }
-					])
-				)
-			}
-		} catch (error) {
-			ShowNostis.error(error?.message)
-		} finally {
-			setLoading(false)
-		}
-	}
-
-	const roleId = useSelector((state: RootState) => state.user.information.RoleId)
 
 	const [detailVis, setDetailVis] = useState(false)
 
@@ -161,7 +115,7 @@ function ExamSkillItem(props) {
 							</>
 						)}
 
-						<div>{0}</div>
+						<ExamSection data={data} activated={activeKey == data?.Id} />
 					</Panel>
 				</Collapse>
 			</div>
