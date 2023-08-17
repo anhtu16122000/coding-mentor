@@ -6,7 +6,7 @@ import { RootState } from '~/store'
 import { setActivating, setListAnswered, setTestingData } from '~/store/testingState'
 
 const Write = (props) => {
-	const { data, type, isFinal, dataSource, index } = props
+	const { data, type, isFinal, dataSource, index, IndexInExam } = props
 
 	const dispatch = useDispatch()
 
@@ -60,18 +60,15 @@ const Write = (props) => {
 		console.timeEnd('--- Select Answer')
 	}
 
-	const activating = useSelector((state: RootState) => state.testingState.activating)
-	const activeClass = activating == data.Id ? '!bg-[#2e8fce12] border-[#a4dbf2]' : 'border-[#fff]'
-
 	return (
 		<div
-			onClick={() => dispatch(setActivating(data.Id))}
+			// onClick={() => dispatch(setActivating(data.Id))}
 			key={'question-' + data.Id}
 			id={'question-' + data.Id}
-			className={`cc-choice-warpper border-[1px] ${activeClass}`}
+			className={`cc-choice-warpper border-[1px] border-[#e6e6e6]`}
 		>
 			<div className="exam-quest-wrapper none-selection">
-				<div className="cc-choice-number">Câu {data?.IndexInExam}</div>
+				<div className="cc-choice-number">Câu {IndexInExam}</div>
 				{ReactHTMLParser(data?.Content)}
 			</div>
 

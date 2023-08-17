@@ -3,9 +3,24 @@ import Choice from './Choice'
 import { QUESTION_TYPES } from '~/common/libs'
 import Write from './Write'
 import TrueFalseTesting from './TrueFalse'
+import { log } from '~/common/utils'
 
 const TestingQuestions = (props) => {
-	const { data, isFinal } = props
+	const { data, isFinal, questions, onRefresh, showEdit } = props
+
+	// log.Blue('TestingQuestions', data)
+
+	// log.Red('questions', questions)
+
+	function getQuestIndex(curQuest) {
+		const theIndex = questions.findIndex((question) => question?.IeltsQuestionId == curQuest?.Id)
+
+		if (theIndex !== -1) {
+			return questions[theIndex]
+		}
+
+		return ''
+	}
 
 	function isChoice() {
 		return data?.Type == QUESTION_TYPES.MultipleChoice
@@ -22,16 +37,31 @@ const TestingQuestions = (props) => {
 	return (
 		<>
 			{isChoice() &&
-				data?.Exercises.map((itemQestion, index) => (
-					<Choice key={index} isFinal={isFinal} data={itemQestion} index={index} dataSource={data} />
-				))}
+				data?.IeltsQuestions.map((itemQestion, index) => {
+					const thisItem = getQuestIndex(itemQestion)
+
+					return (
+						<Choice
+							key={index}
+							isFinal={isFinal}
+							data={itemQestion}
+							index={index}
+							onRefresh={onRefresh}
+							dataSource={data}
+							indexInExam={thisItem?.Index || ''}
+							showEdit={showEdit}
+						/>
+					)
+				})}
 
 			{isWriting() &&
-				data?.Exercises.map((itemQestion, index) => (
-					<Write key={index} isFinal={isFinal} data={itemQestion} index={index} dataSource={data} />
-				))}
+				data?.IeltsQuestions.map((itemQestion, index) => {
+					const thisItem = getQuestIndex(itemQestion)
 
-			{isTrueFalse() && (
+					return <Write key={index} isFinal={isFinal} data={itemQestion} index={index} IndexInExam={thisItem?.Index} dataSource={data} />
+				})}
+
+			{/* 	{isTrueFalse() && (
 				<div className="mb-[16px]">
 					<div className="w-full mb-[8px] hidden w500:flex">
 						<div className="flex-1"></div>
@@ -46,7 +76,7 @@ const TestingQuestions = (props) => {
 						<TrueFalseTesting key={index} data={itemQestion} />
 					))}
 				</div>
-			)}
+			)} */}
 		</>
 	)
 }

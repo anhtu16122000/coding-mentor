@@ -147,7 +147,8 @@
 }
 
 .cc-choice-warpper {
-	@apply hover:bg-[#f7f7f7] p-3 rounded-[6px] mb-[8px];
+	@apply bg-[#fff] hover:border-[#1b73e8] p-3 rounded-[6px] mb-[8px];
+	// @apply  mx-[8px];
 }
 
 .cc-choice-number {

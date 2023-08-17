@@ -18,6 +18,12 @@ import CreateExamSection from './ExamSkillSection/exam-section-form'
 import ButtonQuestion from './ButtonQuestion'
 import { MdArrowForwardIos, MdSettings } from 'react-icons/md'
 import { BsFillGrid3X2GapFill } from 'react-icons/bs'
+import htmlParser from '../../HtmlParser'
+import { ieltsGroupApi } from '~/api/IeltsExam/ieltsGroup'
+import TestingQuestions from '../Testing/Questions'
+import ChoiceInputForm from './QuestionsForm/MultipleChoiceForm/Form'
+import { setNewCurrentGroup } from '~/store/newExamReducer'
+import GroupForm from './Group/form-group'
 
 function ExamDetail() {
 	const router = useRouter()
@@ -29,7 +35,15 @@ function ExamDetail() {
 	const [loading, setLoading] = useState(true)
 	const [currentSkill, setCurrentSkill] = useState(null)
 
+	const [showSkills, setShowSkills] = useState<boolean>(true)
+	const [showSections, setShowSections] = useState<boolean>(true)
+
+	const [currentQuestion, setCurrentQuestion] = useState(null)
+	const [showQuestions, setShowQuestions] = useState<boolean>(true)
+
 	useEffect(() => {
+		getHeight()
+
 		dispatch(setGlobalBreadcrumbs([{ title: 'Quản lý đề', link: '/exam' }]))
 
 		const handleRouteChange = async (url) => {
@@ -83,7 +97,7 @@ function ExamDetail() {
 					setCurrentSkill(res.data.data[0])
 				} else {
 					const theIndex = res.data.data.findIndex((skill) => skill?.Id == currentSkill?.Id)
-					if (theIndex == -1) {
+					if (theIndex > -1) {
 						setCurrentSkill(res.data.data[0])
 					}
 				}
@@ -101,6 +115,8 @@ function ExamDetail() {
 	const [sections, setSections] = useState([])
 
 	const [currentSection, setCurrentSection] = useState(null)
+
+	// const [currentSection, setCurrentSection] = useState(null)
 
 	async function getSections() {
 		try {
@@ -130,6 +146,29 @@ function ExamDetail() {
 				setQuestionsInSection(res.data.data)
 			} else {
 				setQuestionsInSection([])
+				setCurGroup([])
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		} finally {
+			heightChange()
+			setLoading(false)
+		}
+	}
+
+	console.log('-------------------------------- questionsInSection: ', questionsInSection)
+
+	const [curGroup, setCurGroup] = useState<any>(null)
+
+	async function getQuestionsByGroup() {
+		try {
+			const res = await ieltsGroupApi.getByID(currentQuestion?.IeltsQuestionGroupId)
+			if (res.status == 200) {
+				dispatch(setNewCurrentGroup(res.data.data))
+				setCurGroup(res.data.data)
+			} else {
+				setCurGroup(null)
+				dispatch(setNewCurrentGroup(null))
 			}
 		} catch (error) {
 			ShowNostis.error(error?.message)
@@ -137,6 +176,14 @@ function ExamDetail() {
 			setLoading(false)
 		}
 	}
+
+	useEffect(() => {
+		// console.log('--- currentQuestion: ', currentQuestion)
+
+		if (!!currentQuestion?.IeltsQuestionGroupId) {
+			getQuestionsByGroup()
+		}
+	}, [currentQuestion?.IeltsQuestionGroupId])
 
 	useEffect(() => {
 		if (!!currentSkill?.Id) {
@@ -164,6 +211,8 @@ function ExamDetail() {
 		if (questionsInSection.length > 0) {
 			setCurrentQuestion(questionsInSection[0])
 		} else {
+			setCurGroup(null)
+			dispatch(setNewCurrentGroup(null))
 			setCurrentQuestion(null)
 		}
 	}, [questionsInSection])
@@ -180,43 +229,66 @@ function ExamDetail() {
 
 	const [visiblePreview, setVisiblePreview] = useState(false)
 
-	const [showSkills, setShowSkills] = useState<boolean>(true)
-	const [showSections, setShowSections] = useState<boolean>(true)
-
-	const [currentQuestion, setCurrentQuestion] = useState(null)
-	const [showQuestions, setShowQuestions] = useState<boolean>(true)
-
 	function toggleQuestions() {
 		setShowQuestions(!showQuestions)
 	}
 
 	const [showSettings, setShowSetings] = useState<boolean>(false)
 
+	const [mainHeight, setMainHeight] = useState(0)
+	const [showMain, setShowMain] = useState<boolean>(true)
+
+	async function heightChange() {
+		setMainHeight(300)
+		setShowMain(false)
+		await wait(50)
+		setShowMain(true)
+		await wait(50)
+		getHeight()
+	}
+
+	useEffect(() => {
+		heightChange()
+	}, [showSections, showSkills, showQuestions])
+
+	function getHeight() {
+		const theFica = document.getElementById('the-fica-block')
+		if (!!theFica) {
+			setMainHeight(theFica.offsetHeight)
+		}
+	}
+
+	log.Yellow('curGroup', curGroup)
+
 	return (
-		<div className="h-[100vh] w-[100%] relative flex flex-col">
-			<Card
-				className="cc-exam-detail !w-full"
-				title={
-					<div className="w-full flex items-center relative">
-						<div className="ml-[16px] flex-1 pr-2">
-							<div className="cc-text-16-700 in-1-line">{examInfo?.Name}</div>
-							<div className="cc-text-14-500-blue">Tổng điểm: {totalPoint}</div>
-						</div>
-						<div className="mr-[8px] flex-shrink-0">
-							{showTestButton() && (
-								<PrimaryButton onClick={() => setVisiblePreview(true)} background="blue" type="button">
-									<HiOutlineBookOpen size={20} />
-									<div className="ml-2 hidden w500:inline">Làm thử</div>
-								</PrimaryButton>
-							)}
-						</div>
-						<PrimaryButton onClick={() => setShowSetings(!showSettings)} className="mr-[16px]" type="button" background="yellow">
-							<MdSettings size={20} />
-						</PrimaryButton>
+		<div className="h-[100vh] w-[100%] relative flex flex-col bg-[#f3f3f3]">
+			<div className="cc-exam-detail !w-full bg-[#fff]">
+				<div className="py-[8px] w-full flex items-center relative">
+					<div className="ml-[16px] flex-1 pr-2">
+						<div className="cc-text-16-700 in-1-line">{examInfo?.Name}</div>
+						<div className="cc-text-14-500-blue">Tổng điểm: {totalPoint}</div>
 					</div>
-				}
-			>
-				<div className="flex items-center">
+
+					<div className="mr-[8px] flex-shrink-0">
+						{showTestButton() && (
+							<PrimaryButton onClick={() => setVisiblePreview(true)} background="blue" type="button">
+								<HiOutlineBookOpen size={20} />
+								<div className="ml-2 hidden w500:inline">Làm thử</div>
+							</PrimaryButton>
+						)}
+					</div>
+					<PrimaryButton onClick={() => setShowSetings(!showSettings)} className="mr-[16px]" type="button" background="yellow">
+						<MdSettings size={20} />
+					</PrimaryButton>
+				</div>
+
+				{(showSkills || showSections) && (
+					<div className="mt-[-16px]">
+						<Divider className="ant-divider-16" />
+					</div>
+				)}
+
+				<div className="flex items-center px-[16px]">
 					{loading && (
 						<div className="flex items-center">
 							<Skeleton active paragraph={false} style={{ width: '100px' }} />
@@ -226,7 +298,7 @@ function ExamDetail() {
 					)}
 
 					{showSkills && (
-						<div className="flex items-center">
+						<div className="flex items-center pb-[16px]">
 							<CreateExamSkill onRefresh={getExamSkill} />
 
 							{skills.map((sk, index) => {
@@ -236,9 +308,13 @@ function ExamDetail() {
 					)}
 				</div>
 
-				{showSkills && showSections && <Divider className="ant-divider-16" />}
+				{showSkills && showSections && (
+					<div className="mt-[-16px]">
+						<Divider className="ant-divider-16" />
+					</div>
+				)}
 
-				<div className="flex items-center">
+				<div className="flex items-center px-[16px] shadow-sm">
 					{loading && (
 						<div className="flex items-center">
 							<Skeleton active paragraph={false} style={{ width: '100px' }} />
@@ -248,8 +324,15 @@ function ExamDetail() {
 					)}
 
 					{showSections && (
-						<div className="flex items-center">
-							<CreateExamSection onRefresh={getExamSkill} />
+						<div className="flex items-center pb-[16px]">
+							<CreateExamSection
+								onRefresh={() => {
+									getExamSkill()
+									getQuestionsByGroup()
+									getQuestions()
+								}}
+								skill={currentSkill}
+							/>
 
 							{sections.map((item, index) => {
 								return (
@@ -259,6 +342,15 @@ function ExamDetail() {
 										currentSection={currentSection}
 										setCurrentSection={setCurrentSection}
 										onRefresh={getSections}
+										createGroupComponent={
+											<GroupForm
+												section={currentSection}
+												onRefresh={() => {
+													getQuestionsByGroup()
+													getQuestions()
+												}}
+											/>
+										}
 									/>
 								)
 							})}
@@ -267,9 +359,36 @@ function ExamDetail() {
 				</div>
 
 				{!loading && skills.length == 0 && <Empty />}
-			</Card>
+			</div>
 
-			<div className="flex-1"></div>
+			<div className="flex-1 flex">
+				<>
+					{showMain && <div id="the-fica-block" className="w-[0.5px] bg-transparent" />}
+
+					<div className="flex-1 p-[16px] scrollable" style={{ height: mainHeight }}>
+						{/* <div className="font-[600] mb-[8px]">Bài đọc</div> */}
+						{htmlParser(currentSection?.ReadingPassage || '')}
+					</div>
+
+					<div className="flex-1 p-[16px] scrollable" style={{ height: mainHeight }}>
+						{questionsInSection.length > 0 && (
+							<GroupForm
+								isEdit
+								section={currentSection}
+								defaultData={curGroup}
+								onRefresh={() => {
+									getQuestionsByGroup()
+									getQuestions()
+								}}
+							/>
+						)}
+
+						<div className="mb-[16px]">{htmlParser(curGroup?.Content)}</div>
+
+						<TestingQuestions data={curGroup} questions={questionsInSection} />
+					</div>
+				</>
+			</div>
 
 			{showQuestions && (
 				<div className="w-full bg-[#fff] py-[8px] flex px-[8px] min-h-[36px] border-t-[1px] border-t-[#ededed]">
@@ -282,7 +401,7 @@ function ExamDetail() {
 							<div className="font-[500]">Câu hỏi ({questionsInSection.length})</div>
 						</div>
 
-						<div className="flex items-center">
+						<div className="flex items-center no-select">
 							{questionsInSection.map((item, index) => {
 								const activated = currentQuestion?.IeltsQuestionId == item?.IeltsQuestionId
 								return (

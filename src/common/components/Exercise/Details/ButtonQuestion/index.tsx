@@ -15,8 +15,8 @@ const ButtonQuestion = (props) => {
 
 	if (isActivated) {
 		return (
-			<div onClick={onClick} className="cc-23-btn-question bg-[#e0f9ee] border-[#b1f0d6]">
-				<div className="text-[#3bc188] font-[500]">{data?.Index}</div>
+			<div onClick={onClick} className="cc-23-btn-question bg-[#3b87ea] border-[#275fa9]">
+				<div className="text-[#fff] font-[500]">{data?.Index}</div>
 			</div>
 		)
 	}

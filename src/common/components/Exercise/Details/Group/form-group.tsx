@@ -16,6 +16,8 @@ import { formatExerciseInGroup } from '../QuestionsForm/utils'
 import CreateWriting from '../QuestionsForm/WritingForm'
 import TrueFalseForm from '../QuestionsForm/TrueFalseForm'
 import MindMapForm from '../QuestionsForm/MindMap'
+import { ieltsGroupApi } from '~/api/IeltsExam/ieltsGroup'
+import { IoCloseSharp } from 'react-icons/io5'
 
 const GroupForm: FC<IGroupForm> = (props) => {
 	const { isEdit, defaultData, isChangeInfo, onOpen, section, onRefresh } = props
@@ -43,7 +45,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		const dataFormated = await formatExerciseInGroup(param, false, section)
 		console.log('-- putGroup: ', dataFormated)
 		try {
-			const response = await examGroupsApi.put(dataFormated)
+			const response = await ieltsGroupApi.put(dataFormated)
 			if (response.status == 200) reset()
 		} catch (error) {
 			ShowNoti('error', error.message)
@@ -55,9 +57,11 @@ const GroupForm: FC<IGroupForm> = (props) => {
 	// Call api create new section
 	async function postGroup(param) {
 		const dataFormated = await formatExerciseInGroup(param, true, section)
+
 		console.log('-- postGroup: ', dataFormated)
+
 		try {
-			const response = await examGroupsApi.post(dataFormated)
+			const response = await ieltsGroupApi.post(dataFormated)
 			if (response.status == 200) reset()
 		} catch (error) {
 			ShowNoti('error', error.message)
@@ -89,11 +93,13 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 		if (checkSubmit == '') {
 			setLoading(true)
+
 			if (!isEdit && !isChangeInfo) {
-				postGroup({ ...values, ExamSectionId: section.Id, ExerciseCreates: exercises })
+				postGroup({ ...values, IeltsSectionId: section.Id, IeltsQuestions: exercises })
 			}
+
 			if (!!isEdit || !!isChangeInfo) {
-				putGroup({ ...values, Id: defaultData.Id, ExerciseUpdates: exercises })
+				putGroup({ ...values, Id: defaultData.Id, IeltsQuestions: exercises })
 			}
 		} else {
 			setTextError(checkSubmit)
@@ -102,11 +108,13 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 	// Assign current data to this form
 	function openEdit() {
+		console.log('---- defaultData: ', defaultData)
+
 		if (!!onOpen) onOpen()
 		dispatch(setCurrentExerciseForm([]))
 		form.setFieldsValue({ ...defaultData })
 		setCurrentType(defaultData?.Type)
-		dispatch(setCurrentExerciseForm([...defaultData.Exercises]))
+		dispatch(setCurrentExerciseForm([...defaultData.IeltsQuestions]))
 		setIsModalVisible(true)
 	}
 
@@ -122,13 +130,12 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		}
 
 		return (
-			<div
-				onClick={openCreate}
-				className="p-2 w-full text-[#0074e4] hover:!text-[#0074e4] rounded-[4px] inline-flex items-center font-[600] hover:bg-[rgba(0,0,0,0.08)] cursor-pointer active:!bg-[rgba(0,0,0,0.1)]"
-			>
-				<PlusCircle size={18} className="mr-2 mt-[-2px]" />
-				Thêm nhóm mới
-			</div>
+			<>
+				<div onClick={openCreate} className="cc-23-skill-menu-item">
+					<PlusCircle size={17} className="text-[#4CAF50] ml-[-2px]" />
+					<div className="ml-[8px] font-[500]">Thêm câu hỏi</div>
+				</div>
+			</>
 		)
 	}
 
@@ -140,10 +147,10 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		return (
 			<div
 				onClick={openEdit}
-				className="inline-flex p-2 w-full text-[#000] rounded-[4px] items-center font-[600] hover:bg-[rgba(0,0,0,0.08)] cursor-pointer active:!bg-[rgba(0,0,0,0.1)]"
+				className="inline-flex mb-[16px] px-[8px] py-[4px] text-[#fff] rounded-[4px] items-center font-[600] cursor-pointer bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf]"
 			>
 				<FiEdit size={18} className="mr-2 mt-[-2px]" />
-				Cập nhật nhóm
+				Cập nhật
 			</div>
 		)
 	}

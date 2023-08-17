@@ -15,7 +15,7 @@ import CreateExamSection from '../ExamSkillSection/exam-section-form'
 const { Panel } = Collapse
 
 function ExamSectionItem(props) {
-	const { data, index, onRefresh, currentSection, setCurrentSection } = props
+	const { data, index, onRefresh, currentSection, setCurrentSection, createGroupComponent } = props
 
 	const popref = useRef(null)
 
@@ -45,6 +45,8 @@ function ExamSectionItem(props) {
 
 	const content = (
 		<div className="cursor-pointer">
+			<div onClick={closePopover}>{createGroupComponent}</div>
+
 			<CreateExamSection onOpen={closePopover} onRefresh={onRefresh} isEdit defaultData={data} />
 
 			<Popconfirm title="Xoá kỹ năng?" onConfirm={handleDeleteSkill} placement="left">

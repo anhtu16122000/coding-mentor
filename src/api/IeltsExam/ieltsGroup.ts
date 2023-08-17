@@ -1,6 +1,6 @@
 import { instance } from '../instance'
 
-const url = '/api/IeltsGroup'
+const url = '/api/IeltsQuestionGroup'
 
 // API for new examination feature
 export const ieltsGroupApi = {
