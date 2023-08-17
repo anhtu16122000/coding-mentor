@@ -10,6 +10,7 @@
 		"export": "next build && next export"
 	},
 	"dependencies": {
+		"@ant-design/icons": "4.8.0",
 		"@babel/preset-env": "^7.22.9",
 		"@fullcalendar/core": "^6.0.0",
 		"@fullcalendar/daygrid": "^6.0.0",
