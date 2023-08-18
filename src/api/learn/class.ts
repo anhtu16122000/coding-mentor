@@ -6,7 +6,9 @@ export const classApi = {
 		return instance.get<IApiResultData<IClass[]>>(url, { params: params })
 	},
 	getStatusRow(params) {
-		return instance.get<IApiResultData<IClass[]>>(url + '/total-row', { params: params })
+		return instance.get<IApiResultData<IClass[]>>(url + '/total-row', { params: params })},
+	GetAllGantt(params) {
+		return instance.get<IApiResultData<IClassGantt[]>>(`${url}/gantt`, { params: params })
 	},
 	getByID(id) {
 		return instance.get<IApiResultData<IClass>>(`${url}/${id}`)

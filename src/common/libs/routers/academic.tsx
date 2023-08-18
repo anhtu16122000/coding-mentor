@@ -72,6 +72,13 @@ export const AcademicChildMenu = [
 				Route: '/dashboard',
 				Icon: '',
 				Text: 'Thống kê'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/elsa-speak',
+				Route: '/elsa-speak',
+				Icon: '',
+				Text: 'Kiểm tra nói'
 			}
 		]
 	},
@@ -232,8 +239,15 @@ export const AcademicChildMenu = [
 			},
 			{
 				ItemType: 'single',
-				Key: '/class',
-				Route: '/class',
+				Key: '/class/class-timeline',
+				Route: '/class/class-timeline',
+				Text: 'Timeline',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/class/list-class',
+				Route: '/class/list-class',
 				Text: 'Danh sách lớp học',
 				Icon: ''
 			},
