@@ -72,6 +72,13 @@ export const ManagerChildMenu = [
 				Route: '/dashboard',
 				Icon: '',
 				Text: 'Thống kê'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/elsa-speak',
+				Route: '/elsa-speak',
+				Icon: '',
+				Text: 'Kiểm tra nói'
 			}
 		]
 	},
@@ -235,6 +242,13 @@ export const ManagerChildMenu = [
 				Key: '/class/create',
 				Route: '/class/create',
 				Text: 'Tạo lớp học',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/class/class-timeline',
+				Route: '/class/class-timeline',
+				Text: 'Timeline',
 				Icon: ''
 			},
 			{

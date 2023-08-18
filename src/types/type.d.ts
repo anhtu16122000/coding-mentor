@@ -90,6 +90,14 @@ type IClass = IBaseApi<{
 	Id: number
 }>
 
+type IClassGantt = IBaseApi<{
+	Name: string
+	Thumbnail: string
+	StartDay: string
+	EndDay: string
+	Id: number
+}>
+
 type IRollUpTeacher = IBaseApi<{
 	ScheduleId: number
 	ClassId: number

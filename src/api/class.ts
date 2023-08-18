@@ -5,6 +5,9 @@ export const classApi = {
 	getAll(params) {
 		return instance.get<IApiResultData<IClass[]>>(url, { params: params })
 	},
+	GetAllGantt(params) {
+		return instance.get<IApiResultData<IClassGantt[]>>(`${url}/gantt`, { params: params })
+	},
 	getByID(id) {
 		return instance.get<IApiResultData<IClass>>(`${url}/${id}`)
 	},
