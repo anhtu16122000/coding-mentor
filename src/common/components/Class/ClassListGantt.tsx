@@ -4,8 +4,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { classApi } from '~/api/class'
-import { userInformationApi } from '~/api/user'
 import { ShowNoti } from '~/common/utils'
 import { parseSelectArray, parseToMoney } from '~/common/utils/common'
 import { RootState } from '~/store'
@@ -13,11 +11,11 @@ import AvatarComponent from '../AvatarComponent'
 import DeleteTableRow from '../Elements/DeleteTableRow'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
-import UpdateClassForm from './UpdateClassForm'
 
 import dynamic from 'next/dynamic'
 import { content } from 'tailwind.config'
 import ExamItem from '../Exercise/item'
+import { userInformationApi } from '~/api/user/user'
 const Bar = dynamic(() => import('@ant-design/plots').then(({ Bar }) => Bar), { ssr: false })
 
 const ClassListGantt = (props) => {
@@ -28,7 +26,6 @@ const ClassListGantt = (props) => {
 	const [isModalOpen, setIsModalOpen] = useState({ id: null, open: null })
 	const [isLoadingDelete, setIsLoadingDelete] = useState(false)
 	const [academic, setAcademic] = useState([])
-
 	const getPagination = (page) => {
 		setTodoApi({ ...todoApi, pageIndex: page })
 	}
@@ -53,7 +50,7 @@ const ClassListGantt = (props) => {
 		}
 	}, [])
 
-	const formattedData = dataSource.map((item) => ({
+	const formattedData = dataSource?.map((item) => ({
 		...item,
 		Values: [new Date(item.Values[0]).getTime(), new Date(item.Values[1]).getTime()]
 	}))
@@ -65,7 +62,7 @@ const ClassListGantt = (props) => {
 	const config = {
 		tooltip: {
 			formatter: (datum) => {
-				const { Name, StatusName, Values } = datum
+				const { StatusName, Values } = datum
 				const startDate = moment(Values[0]).format('DD/MM/yyyy')
 				const endDate = moment(Values[1]).format('DD/MM/yyyy')
 				return { name: StatusName, value: `${startDate} - ${endDate}` }
@@ -76,7 +73,6 @@ const ClassListGantt = (props) => {
 	return (
 		<>
 			<Bar
-				{...config}
 				data={formattedData}
 				xField="Values"
 				yField="Name"
@@ -106,6 +102,7 @@ const ClassListGantt = (props) => {
 						}
 					}
 				}}
+				{...config}
 			/>
 
 			<Pagination
