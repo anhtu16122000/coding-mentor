@@ -140,19 +140,21 @@ function ExamDetail() {
 	const [questionsInSection, setQuestionsInSection] = useState([])
 
 	async function getQuestions() {
-		try {
-			const res = await ieltsExamApi.getQuestions({ ieltsSectionId: currentSection?.Id })
-			if (res.status == 200) {
-				setQuestionsInSection(res.data.data)
-			} else {
-				setQuestionsInSection([])
-				setCurGroup([])
+		if (currentSection?.Id) {
+			try {
+				const res = await ieltsExamApi.getQuestions({ ieltsSectionId: currentSection?.Id })
+				if (res.status == 200) {
+					setQuestionsInSection(res.data.data)
+				} else {
+					setQuestionsInSection([])
+					setCurGroup([])
+				}
+			} catch (error) {
+				ShowNostis.error(error?.message)
+			} finally {
+				heightChange()
+				setLoading(false)
 			}
-		} catch (error) {
-			ShowNostis.error(error?.message)
-		} finally {
-			heightChange()
-			setLoading(false)
 		}
 	}
 
@@ -161,19 +163,21 @@ function ExamDetail() {
 	const [curGroup, setCurGroup] = useState<any>(null)
 
 	async function getQuestionsByGroup() {
-		try {
-			const res = await ieltsGroupApi.getByID(currentQuestion?.IeltsQuestionGroupId)
-			if (res.status == 200) {
-				dispatch(setNewCurrentGroup(res.data.data))
-				setCurGroup(res.data.data)
-			} else {
-				setCurGroup(null)
-				dispatch(setNewCurrentGroup(null))
+		if (currentQuestion?.IeltsQuestionGroupId) {
+			try {
+				const res = await ieltsGroupApi.getByID(currentQuestion?.IeltsQuestionGroupId)
+				if (res.status == 200) {
+					dispatch(setNewCurrentGroup(res.data.data))
+					setCurGroup(res.data.data)
+				} else {
+					setCurGroup(null)
+					dispatch(setNewCurrentGroup(null))
+				}
+			} catch (error) {
+				ShowNostis.error(error?.message)
+			} finally {
+				setLoading(false)
 			}
-		} catch (error) {
-			ShowNostis.error(error?.message)
-		} finally {
-			setLoading(false)
 		}
 	}
 
@@ -277,6 +281,7 @@ function ExamDetail() {
 							</PrimaryButton>
 						)}
 					</div>
+
 					<PrimaryButton onClick={() => setShowSetings(!showSettings)} className="mr-[16px]" type="button" background="yellow">
 						<MdSettings size={20} />
 					</PrimaryButton>
@@ -323,7 +328,7 @@ function ExamDetail() {
 						</div>
 					)}
 
-					{showSections && (
+					{showSections && !!currentSkill && (
 						<div className="flex items-center pb-[16px]">
 							<CreateExamSection
 								onRefresh={() => {

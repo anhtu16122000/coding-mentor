@@ -2,15 +2,15 @@ import { Checkbox, Radio, Space } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import ReactHTMLParser from 'react-html-parser'
 
-const TrueFalseQuestion: FC<{ data: IExercise; type: 'edit' | 'doing' }> = (props) => {
+const TrueFalseQuestion: FC<{ data: any; type: 'edit' | 'doing' }> = (props) => {
 	const { data, type } = props
 
 	const [value, setValue] = useState(null)
 
 	useEffect(() => {
 		if (type == 'edit') {
-			data.Answers.forEach((element) => {
-				if (element?.IsTrue) {
+			data.IeltsAnswers.forEach((element) => {
+				if (element?.Correct) {
 					setValue(!!element.Id ? element.Id : element?.timestamp)
 				}
 			})
@@ -19,8 +19,8 @@ const TrueFalseQuestion: FC<{ data: IExercise; type: 'edit' | 'doing' }> = (prop
 
 	useEffect(() => {
 		if (type == 'edit') {
-			data.Answers.forEach((element) => {
-				if (element?.IsTrue) setValue(!!element.Id ? element.Id : element?.timestamp)
+			data.IeltsAnswers.forEach((element) => {
+				if (element?.Correct) setValue(!!element.Id ? element.Id : element?.timestamp)
 			})
 		}
 	}, [data])
@@ -28,7 +28,7 @@ const TrueFalseQuestion: FC<{ data: IExercise; type: 'edit' | 'doing' }> = (prop
 	function getType() {
 		let flag = 0
 		data.Answers.forEach((answer) => {
-			if (!!answer.IsTrue) {
+			if (!!answer.Correct) {
 				flag++
 			}
 		})
@@ -44,7 +44,7 @@ const TrueFalseQuestion: FC<{ data: IExercise; type: 'edit' | 'doing' }> = (prop
 		let checked = []
 		params.forEach((element) => {
 			if (element?.Enable !== false) {
-				temp.push({ value: !!element.Id ? element.Id : element.timestamp, label: element.AnswerContent })
+				temp.push({ value: !!element.Id ? element.Id : element.timestamp, label: element.Content })
 				if (element?.IsTrue == true) {
 					checked.push(!!element.Id ? element.Id : element.timestamp)
 				}
@@ -54,7 +54,7 @@ const TrueFalseQuestion: FC<{ data: IExercise; type: 'edit' | 'doing' }> = (prop
 	}
 
 	function checkChecked(index: number) {
-		if (data.Answers[index].IsTrue) {
+		if (data.IeltsAnswers[index].Correct) {
 			return true
 		}
 		return false
@@ -71,9 +71,9 @@ const TrueFalseQuestion: FC<{ data: IExercise; type: 'edit' | 'doing' }> = (prop
 				<div className="w-[50px] flex items-center justify-center">
 					<Checkbox checked={checkChecked(1)} />
 				</div>
-				<div className="w-[80px] flex items-center justify-center">
+				{/* <div className="w-[80px] flex items-center justify-center">
 					<Checkbox checked={checkChecked(2)} />
-				</div>
+				</div> */}
 			</div>
 		</div>
 	)

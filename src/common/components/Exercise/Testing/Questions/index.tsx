@@ -4,6 +4,7 @@ import { QUESTION_TYPES } from '~/common/libs'
 import Write from './Write'
 import TrueFalseTesting from './TrueFalse'
 import { log } from '~/common/utils'
+import TrueFalseQuestion from '../../Details/QuestionsForm/TrueFalseForm/Question'
 
 const TestingQuestions = (props) => {
 	const { data, isFinal, questions, onRefresh, showEdit } = props
@@ -61,22 +62,22 @@ const TestingQuestions = (props) => {
 					return <Write key={index} isFinal={isFinal} data={itemQestion} index={index} IndexInExam={thisItem?.Index} dataSource={data} />
 				})}
 
-			{/* 	{isTrueFalse() && (
-				<div className="mb-[16px]">
+			{isTrueFalse() && (
+				<div className="mb-[16px] bg-[#ffffff] p-[8px] !rounded-[6px]">
 					<div className="w-full mb-[8px] hidden w500:flex">
 						<div className="flex-1"></div>
 						<div className="h-[30px] flex items-center">
 							<div className="w-[50px]">True</div>
 							<div className="w-[50px]">False</div>
-							<div className="w-[74px]">Not given</div>
+							{/* <div className="w-[74px]">Not given</div> */}
 						</div>
 					</div>
 
-					{data?.Exercises.map((itemQestion, index) => (
-						<TrueFalseTesting key={index} data={itemQestion} />
+					{data?.IeltsQuestions.map((itemQestion, index) => (
+						<TrueFalseQuestion type="doing" key={index} data={itemQestion} />
 					))}
 				</div>
-			)} */}
+			)}
 		</>
 	)
 }
