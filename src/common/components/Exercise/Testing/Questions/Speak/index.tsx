@@ -2,16 +2,20 @@ import { Input } from 'antd'
 import React, { useEffect, useState } from 'react'
 import ReactHTMLParser from 'react-html-parser'
 import { useDispatch, useSelector } from 'react-redux'
+import AudioRecord from '~/common/components/AudioRecord/AudioRecord'
+import UploadAudioField from '~/common/components/FormControl/UploadAudioField'
 import { RootState } from '~/store'
 import { setActivating, setListAnswered, setTestingData } from '~/store/testingState'
 
-const Write = (props) => {
+const SpeakingQuestion = (props) => {
 	const { data, type, isFinal, dataSource, index, IndexInExam, disabled } = props
 
 	const dispatch = useDispatch()
 
 	const testingData = useSelector((state: RootState) => state.testingState.data)
 	const answered = useSelector((state: RootState) => state.testingState.answered)
+
+	const [loading, setLoading] = useState<boolean>(false)
 
 	const [answer, setAnswer] = useState('')
 
@@ -60,6 +64,20 @@ const Write = (props) => {
 		console.timeEnd('--- Select Answer')
 	}
 
+	function getLinkRecorded(questIndex) {
+		// const element = groupDetail.Exercises[questIndex]
+
+		// if (element?.AnswerValues.length > 0) {
+		// 	const answered = element?.AnswerValues[0]
+
+		// 	if (!!answered?.AnswerContent) {
+		// 		return answered?.AnswerContent
+		// 	}
+		// }
+
+		return ''
+	}
+
 	return (
 		<div
 			// onClick={() => dispatch(setActivating(data.Id))}
@@ -74,19 +92,31 @@ const Write = (props) => {
 
 			<div>
 				<div className="font-[600] mb-2 mt-3">Câu trả lời</div>
-				<Input.TextArea
-					key={'the-answer-' + data.id}
-					placeholder=""
-					disabled={disabled || false}
-					value={answer}
-					onChange={(e) => setAnswer(e.target.value)}
-					onBlur={(e) => !!e.target.value && onChange(e.target.value)}
-					className="cc-writing-testing"
-					rows={4}
-				/>
+				{!loading && (
+					<>
+						<AudioRecord
+							disabled={disabled}
+							// linkRecord={getLinkRecorded(exerIndex)}
+							// getLinkRecord={(linkRecord) => onChange(exercise.ExerciseTopicId, linkRecord)}
+							packageResult={[]}
+							// dataQuestion={group}
+							// exerciseID={exercise.ExerciseTopicId}
+							getActiveID={() => {}}
+						/>
+
+						<div className="mt-4" style={{ display: 'flex' }}>
+							{/* <UploadAudioField
+								isHideControl
+								getFile={(file: any) => onChange(exercise.ExerciseTopicId, file)}
+								link={getLinkRecorded(exerIndex)}
+							/>
+							<div style={{ marginTop: 5, marginLeft: 9 }}>(Phương thức dự phòng)</div> */}
+						</div>
+					</>
+				)}
 			</div>
 		</div>
 	)
 }
 
-export default Write
+export default SpeakingQuestion

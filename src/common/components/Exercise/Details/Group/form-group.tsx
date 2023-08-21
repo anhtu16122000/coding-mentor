@@ -18,6 +18,7 @@ import TrueFalseForm from '../QuestionsForm/TrueFalseForm'
 import MindMapForm from '../QuestionsForm/MindMap'
 import { ieltsGroupApi } from '~/api/IeltsExam/ieltsGroup'
 import { IoCloseSharp } from 'react-icons/io5'
+import CreateSpeaking from '../QuestionsForm/SpeakingForm'
 
 const GroupForm: FC<IGroupForm> = (props) => {
 	const { isEdit, defaultData, isChangeInfo, onOpen, section, onRefresh } = props
@@ -190,6 +191,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 									<Select.Option value={QUESTION_TYPES.Write}>Tự luận</Select.Option>
 									<Select.Option value={QUESTION_TYPES.TrueOrFalse}>True or false</Select.Option>
 									<Select.Option value={QUESTION_TYPES.Mindmap}>Mindmap</Select.Option>
+									<Select.Option value={QUESTION_TYPES.Speak}>Speaking</Select.Option>
 								</Select>
 							</Form.Item>
 
@@ -225,6 +227,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 							{currentType == QUESTION_TYPES.Write && <CreateWriting />}
 							{currentType == QUESTION_TYPES.TrueOrFalse && <TrueFalseForm />}
 							{currentType == QUESTION_TYPES.Mindmap && <MindMapForm />}
+							{currentType == QUESTION_TYPES.Speak && <CreateSpeaking />}
 						</div>
 					</div>
 				</Form>

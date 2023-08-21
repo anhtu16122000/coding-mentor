@@ -5,6 +5,7 @@ import Write from './Write'
 import TrueFalseTesting from './TrueFalse'
 import { log } from '~/common/utils'
 import TrueFalseQuestion from '../../Details/QuestionsForm/TrueFalseForm/Question'
+import SpeakingQuestion from './Speak'
 
 const TestingQuestions = (props) => {
 	const { data, isFinal, questions, onRefresh, showEdit } = props
@@ -23,6 +24,8 @@ const TestingQuestions = (props) => {
 		return ''
 	}
 
+	const theQuestions = data?.IeltsQuestions || []
+
 	function isChoice() {
 		return data?.Type == QUESTION_TYPES.MultipleChoice
 	}
@@ -35,17 +38,21 @@ const TestingQuestions = (props) => {
 		return data?.Type == QUESTION_TYPES.TrueOrFalse
 	}
 
+	function isSpeaking() {
+		return data?.Type == QUESTION_TYPES.Speak
+	}
+
 	return (
 		<>
 			{isChoice() &&
-				data?.IeltsQuestions.map((itemQestion, index) => {
-					const thisItem = getQuestIndex(itemQestion)
+				theQuestions.map((itemQuestion, index) => {
+					const thisItem = getQuestIndex(itemQuestion)
 
 					return (
 						<Choice
 							key={index}
 							isFinal={isFinal}
-							data={itemQestion}
+							data={itemQuestion}
 							index={index}
 							onRefresh={onRefresh}
 							dataSource={data}
@@ -56,10 +63,20 @@ const TestingQuestions = (props) => {
 				})}
 
 			{isWriting() &&
-				data?.IeltsQuestions.map((itemQestion, index) => {
-					const thisItem = getQuestIndex(itemQestion)
+				theQuestions.map((itemQuestion, index) => {
+					const thisItem = getQuestIndex(itemQuestion)
 
-					return <Write key={index} isFinal={isFinal} data={itemQestion} index={index} IndexInExam={thisItem?.Index} dataSource={data} />
+					return (
+						<Write
+							key={index}
+							isFinal={isFinal}
+							disabled={true}
+							data={itemQuestion}
+							index={index}
+							IndexInExam={thisItem?.Index}
+							dataSource={data}
+						/>
+					)
 				})}
 
 			{isTrueFalse() && (
@@ -73,11 +90,28 @@ const TestingQuestions = (props) => {
 						</div>
 					</div>
 
-					{data?.IeltsQuestions.map((itemQestion, index) => (
-						<TrueFalseQuestion type="doing" key={index} data={itemQestion} />
+					{theQuestions.map((itemQuestion, index) => (
+						<TrueFalseQuestion type="doing" key={index} data={itemQuestion} />
 					))}
 				</div>
 			)}
+
+			{isSpeaking() &&
+				theQuestions.map((itemQuestion, index) => {
+					const thisItem = getQuestIndex(itemQuestion)
+
+					return (
+						<SpeakingQuestion
+							key={index}
+							disabled={true}
+							isFinal={isFinal}
+							data={itemQuestion}
+							index={index}
+							IndexInExam={thisItem?.Index}
+							dataSource={data}
+						/>
+					)
+				})}
 		</>
 	)
 }

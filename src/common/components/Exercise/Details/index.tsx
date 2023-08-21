@@ -158,7 +158,7 @@ function ExamDetail() {
 		}
 	}
 
-	console.log('-------------------------------- questionsInSection: ', questionsInSection)
+	// console.log('-------------------------------- questionsInSection: ', questionsInSection)
 
 	const [curGroup, setCurGroup] = useState<any>(null)
 
@@ -262,7 +262,9 @@ function ExamDetail() {
 		}
 	}
 
-	log.Yellow('curGroup', curGroup)
+	useEffect(() => {
+		log.Yellow('curGroup', curGroup)
+	}, [curGroup])
 
 	return (
 		<div className="h-[100vh] w-[100%] relative flex flex-col bg-[#f3f3f3]">

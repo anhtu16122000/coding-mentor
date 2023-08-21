@@ -1,0 +1,51 @@
+.wrap-audio-record {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.btn-record {
+	border: none;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	svg {
+		width: 17px;
+		color: white;
+	}
+	&.start {
+		background: #1b73e8;
+	}
+	&.pause {
+		background: #1b73e8;
+	}
+	&.save {
+		background: #004aad;
+	}
+	&.ant-tooltip-disabled-compatible-wrapper {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		background-color: #accaf1 !important;
+	}
+}
+
+.btn-record-next {
+	border: none;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	svg {
+		width: 17px;
+		color: white;
+	}
+	&.start {
+		background: #004aad;
+	}
+	&.pause {
+		background: $primary-color;
+	}
+	&.save {
+		background: #004aad;
+	}
+}
