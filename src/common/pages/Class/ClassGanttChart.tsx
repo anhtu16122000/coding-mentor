@@ -217,46 +217,44 @@ const ClassGanttChart = () => {
 	}, [students])
 
 	return (
-		<div className="wrapper-class">
-			<div className="row">
-				<div className="col-12">
-					<div className="wrap-table">
-						<Card
-							title={
-								<div className="list-action-table">
-									<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />
-								</div>
-							}
-							extra={
-								userInformation?.RoleId === '8' ? (
-									<Form form={form}>
-										<Form.Item name="student">
-											<Select
-												allowClear
-												className="w-[200px]"
-												onChange={handleChangeStudent}
-												options={students}
-												placeholder="Chọn học viên"
-											/>
-										</Form.Item>
-									</Form>
-								) : (
-									''
-								)
-							}
-						>
-							<div className="course-list-content">
-								<ClassListGantt
-									totalRow={totalRow}
-									isLoading={isLoading}
-									dataSource={listClass}
-									setTodoApi={setTodoApi}
-									listTodoApi={listTodoApi}
-									todoApi={todoApi}
-								/>
+		<div className="row">
+			<div className="col-12">
+				<div className="wrap-table">
+					<Card
+						title={
+							<div className="list-action-table">
+								<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />
 							</div>
-						</Card>
-					</div>
+						}
+						extra={
+							userInformation?.RoleId === '8' ? (
+								<Form form={form}>
+									<Form.Item name="student">
+										<Select
+											allowClear
+											className="w-[200px]"
+											onChange={handleChangeStudent}
+											options={students}
+											placeholder="Chọn học viên"
+										/>
+									</Form.Item>
+								</Form>
+							) : (
+								''
+							)
+						}
+					>
+						<div className="course-list-content">
+							<ClassListGantt
+								totalRow={totalRow}
+								isLoading={isLoading}
+								dataSource={listClass}
+								setTodoApi={setTodoApi}
+								listTodoApi={listTodoApi}
+								todoApi={todoApi}
+							/>
+						</div>
+					</Card>
 				</div>
 			</div>
 		</div>
