@@ -1,5 +1,5 @@
 import { Modal, Form, Select, Input } from 'antd'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { ShowNoti } from '~/common/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import PrimaryButton from '~/common/components/Primary/Button'
@@ -19,6 +19,10 @@ import MindMapForm from '../QuestionsForm/MindMap'
 import { ieltsGroupApi } from '~/api/IeltsExam/ieltsGroup'
 import { IoCloseSharp } from 'react-icons/io5'
 import CreateSpeaking from '../QuestionsForm/SpeakingForm'
+import CreateTyping from '../QuestionsForm/FillInBlankForm'
+
+let fullEditor = false
+const quickMenu = 'bold italic underline strikethrough | fontfamily fontsize blocks | codesample | forecolor backcolor | customInsertButton'
 
 const GroupForm: FC<IGroupForm> = (props) => {
 	const { isEdit, defaultData, isChangeInfo, onOpen, section, onRefresh } = props
@@ -156,6 +160,30 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		)
 	}
 
+	const [fe, setFe] = useState<boolean>(false)
+
+	console.log('---- fullEditor: ', fullEditor)
+
+	useEffect(() => {
+		setFe(fullEditor)
+	}, [fullEditor])
+
+	console.log('---- fe: ', fe)
+
+	// GET NOW TIMESTAMP
+	function getTimeStamp() {
+		return new Date().getTime() // Example: 1653474514413
+	}
+
+	const editorRef = useRef(null)
+
+	function editorInit(evt, editor) {
+		console.log('---- editor: ', editor)
+
+		editorRef.current = editor
+		setLoading(false)
+	}
+
 	return (
 		<>
 			<ButtonCreate />
@@ -164,7 +192,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 			<Modal
 				centered
 				title={isEdit ? 'Cập nhật nhóm' : 'Thêm nhóm mới'}
-				width={1200}
+				width={currentType! == QUESTION_TYPES.FillInTheBlank ? 1200 : '98%'}
 				open={isModalVisible}
 				onCancel={() => !loading && setIsModalVisible(false)}
 				footer={
@@ -181,41 +209,98 @@ const GroupForm: FC<IGroupForm> = (props) => {
 				<Form disabled={loading} form={form} layout="vertical" initialValues={{ remember: true }} onFinish={onFinish}>
 					<div className="grid grid-cols-8 gap-x-4">
 						<div className="col-span-8 w800:col-span-4 grid grid-cols-4 gap-x-4">
-							<Form.Item className="col-span-2" label="Tên nhóm" name="Name" rules={formRequired}>
-								<Input className="primary-input" placeholder="" />
-							</Form.Item>
+							<div id="the-baby-form" className="col-span-4 grid grid-cols-4 gap-x-4">
+								<Form.Item className="col-span-2" label="Tên nhóm" name="Name" rules={formRequired}>
+									<Input className="primary-input" placeholder="" />
+								</Form.Item>
 
-							<Form.Item className="col-span-2" label="Loại" name="Type" rules={formRequired}>
-								<Select disabled={loading || isEdit} className="primary-input primary-select" onChange={(event) => setCurrentType(event)}>
-									<Select.Option value={QUESTION_TYPES.MultipleChoice}>Trắc nghiệm</Select.Option>
-									<Select.Option value={QUESTION_TYPES.Write}>Tự luận</Select.Option>
-									<Select.Option value={QUESTION_TYPES.TrueOrFalse}>True or false</Select.Option>
-									<Select.Option value={QUESTION_TYPES.Mindmap}>Mindmap</Select.Option>
-									<Select.Option value={QUESTION_TYPES.Speak}>Speaking</Select.Option>
-								</Select>
-							</Form.Item>
+								<Form.Item className="col-span-2" label="Loại" name="Type" rules={formRequired}>
+									<Select disabled={loading || isEdit} className="primary-input primary-select" onChange={(event) => setCurrentType(event)}>
+										<Select.Option value={QUESTION_TYPES.MultipleChoice}>Trắc nghiệm</Select.Option>
+										<Select.Option value={QUESTION_TYPES.Write}>Tự luận</Select.Option>
+										<Select.Option value={QUESTION_TYPES.TrueOrFalse}>True or false</Select.Option>
+										<Select.Option value={QUESTION_TYPES.Mindmap}>Mindmap</Select.Option>
+										<Select.Option value={QUESTION_TYPES.Speak}>Speaking</Select.Option>
+										<Select.Option value={QUESTION_TYPES.FillInTheBlank}>Fill In The Blank</Select.Option>
+									</Select>
+								</Form.Item>
 
-							<Form.Item className="col-span-2" label="Cấp độ" name="Level" rules={formRequired}>
-								<Select disabled={loading} className="primary-input primary-select">
-									<Select.Option value={1}>Dễ</Select.Option>
-									<Select.Option value={2}>Trung bình</Select.Option>
-									<Select.Option value={3}>Khó</Select.Option>
-									<Select.Option value={4}>Khó dữ lắm luôn</Select.Option>
-								</Select>
-							</Form.Item>
+								<Form.Item className="col-span-2" label="Cấp độ" name="Level" rules={formRequired}>
+									<Select disabled={loading} className="primary-input primary-select">
+										<Select.Option value={1}>Dễ</Select.Option>
+										<Select.Option value={2}>Trung bình</Select.Option>
+										<Select.Option value={3}>Khó</Select.Option>
+										<Select.Option value={4}>Khó dữ lắm luôn</Select.Option>
+									</Select>
+								</Form.Item>
 
-							<Form.Item className="col-span-2" label="Từ khóa" name="Tags" rules={formNoneRequired}>
-								<Select disabled={loading} className="primary-input primary-select">
-									<Select.Option value={QUESTION_TYPES.MultipleChoice}>Chưa gắn api lấy tag</Select.Option>
-								</Select>
-							</Form.Item>
+								<Form.Item className="col-span-2" label="Từ khóa" name="Tags" rules={formNoneRequired}>
+									<Select disabled={loading} className="primary-input primary-select">
+										<Select.Option value={QUESTION_TYPES.MultipleChoice}>Chưa gắn api lấy tag</Select.Option>
+									</Select>
+								</Form.Item>
+							</div>
 
 							<Form.Item className="col-span-4 mb-0" label="Nội dung" name="Content">
 								<PrimaryEditor
+									// onInit={editorInit}
 									id={`content-${new Date().getTime()}`}
-									height={210}
+									height={fullEditor ? '90%' : 210}
 									initialValue={defaultData?.Content || ''}
 									onChange={(event) => form.setFieldValue('Content', event)}
+									// onInit={(evt, editor) => (editorRef.current = editor)}
+									inline={false}
+									init={{
+										setup: function (editor) {
+											editor.ui.registry.addButton('customfullscreen', {
+												icon: 'fullscreen', // Sử dụng icon fullscreen có sẵn
+												tooltip: 'Full Screen', // Chú thích khi di chuột qua nút
+												onAction: function () {
+													const theBabyForm = document.getElementById('the-baby-form')
+													const thisEditor = document.getElementsByClassName('tox tox-tinymce')
+													const thisEditorFullscreen = document.getElementsByClassName('tox-tbtn')
+													if (theBabyForm.style.display == 'none') {
+														theBabyForm.style.display = 'grid'
+														if (thisEditor.length > 0) {
+															thisEditor[0].setAttribute('style', 'height: 210px')
+														}
+														if (thisEditorFullscreen.length > 0) {
+															thisEditorFullscreen[0].setAttribute('style', 'background: #fff')
+														}
+													} else {
+														theBabyForm.style.display = 'none'
+														if (thisEditor.length > 0) {
+															thisEditor[0].setAttribute('style', 'height:' + (window.innerHeight - 250) + 'px')
+														}
+														if (thisEditorFullscreen.length > 0) {
+															thisEditorFullscreen[0].setAttribute('style', 'background: #d7d7d7')
+														}
+													}
+												}
+											})
+											editor.ui.registry.addButton('customInsertButton', {
+												icon: 'comment-add',
+												tooltip: 'Thêm nhận xét',
+												onAction: () => {
+													console.log('--- editorRef: ', editorRef)
+
+													const nowTimeStamp: number = getTimeStamp() // Timestamp
+													const textSelected: string = editorRef.current.selection.getContent()
+
+													console.log('--- textSelected: ', textSelected)
+
+													// const textInsert: string = `<span class="highlight-editor" id="cmt-${nowTimeStamp}">${textSelected}</span>`
+
+													// editor.insertContent(textInsert) // Add textInsert to editor value
+
+													// _addHandle()
+													// createNewComment({ ID: nowTimeStamp, Text: textSelected })
+												}
+											})
+										},
+										inline: true, // Remove iframe tag
+										quickbars_selection_toolbar: quickMenu
+									}}
 								/>
 							</Form.Item>
 						</div>
@@ -228,6 +313,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 							{currentType == QUESTION_TYPES.TrueOrFalse && <TrueFalseForm />}
 							{currentType == QUESTION_TYPES.Mindmap && <MindMapForm />}
 							{currentType == QUESTION_TYPES.Speak && <CreateSpeaking />}
+							{currentType == QUESTION_TYPES.FillInTheBlank && <CreateTyping />}
 						</div>
 					</div>
 				</Form>
