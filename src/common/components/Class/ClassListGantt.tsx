@@ -17,11 +17,6 @@ import { content } from 'tailwind.config'
 import ExamItem from '../Exercise/item'
 import { userInformationApi } from '~/api/user/user'
 const Bar = dynamic(() => import('@ant-design/plots').then(({ Bar }) => Bar), { ssr: false })
-
-interface IPlotData {
-	type: string
-	values: any
-}
 const ClassListGantt = (props) => {
 	const { isLoading, dataSource, setTodoApi, listTodoApi, totalRow, todoApi } = props
 	const state = useSelector((state: RootState) => state)
@@ -30,10 +25,10 @@ const ClassListGantt = (props) => {
 	const [isModalOpen, setIsModalOpen] = useState({ id: null, open: null })
 	const [isLoadingDelete, setIsLoadingDelete] = useState(false)
 	const [academic, setAcademic] = useState([])
+
 	const getPagination = (page) => {
 		setTodoApi({ ...todoApi, pageIndex: page })
 	}
-	const [data, setData] = useState<IPlotData>(null)
 	const getAllAcademic = async () => {
 		try {
 			const res = await userInformationApi.getAll({ roleIds: '7' })
@@ -55,26 +50,33 @@ const ClassListGantt = (props) => {
 		}
 	}, [])
 
-	useEffect(() => {
-		if (dataSource)
-			setData(
-				dataSource?.map((item) => ({
-					type: item.Name,
-					values: [new Date(item.Values[0]).getTime(), new Date(item.Values[1]).getTime()]
-				}))
-			)
-	}, [dataSource])
+	const formattedData = dataSource.map((item) => ({
+		...item,
+		Values: [new Date(item.Values[0]).getTime(), new Date(item.Values[1]).getTime()]
+	}))
 
 	// Find the minimum and maximum timestamps in your data
-	const minTimestamp = Math.min(...data?.values?.map((item) => item[0] - 86400000))
-	const maxTimestamp = Math.max(...data?.values?.map((item) => item[0] + 86400000))
+	const minTimestamp = Math.min(...formattedData.map((item) => item.Values[0] - 86400000))
+	const maxTimestamp = Math.max(...formattedData.map((item) => item.Values[1] + 86400000))
+
+	const config = {
+		tooltip: {
+			formatter: (datum) => {
+				const { Name, StatusName, Values } = datum
+				const startDate = moment(Values[0]).format('DD/MM/yyyy')
+				const endDate = moment(Values[1]).format('DD/MM/yyyy')
+				return { name: StatusName, value: `${startDate} - ${endDate}` }
+			}
+		}
+	}
 
 	return (
 		<>
-			{/* <Bar
-				data={data}
-				xField="Name"
-				yField="Values"
+			<Bar
+				{...config}
+				data={formattedData}
+				xField="Values"
+				yField="Name"
 				isRange={true}
 				label={{
 					position: 'middle',
@@ -101,15 +103,7 @@ const ClassListGantt = (props) => {
 						}
 					}
 				}}
-				tooltip={{
-					formatter: (datum) => {
-						const { StatusName, Values } = datum
-						const startDate = moment(Values[0]).format('DD/MM/yyyy')
-						const endDate = moment(Values[1]).format('DD/MM/yyyy')
-						return { name: StatusName, value: `${startDate} - ${endDate}` }
-					}
-				}}
-			/> */}
+			/>
 
 			<Pagination
 				className="mt-4"
