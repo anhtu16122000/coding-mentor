@@ -8,6 +8,7 @@ type TPrimaryEditor = {
 	init?: any
 	menubar?: boolean
 	ref?: any
+	noFullscreen?: boolean
 
 	onInit?: Function
 	onChange?: Function

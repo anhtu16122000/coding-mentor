@@ -15,8 +15,7 @@ const plugins = [
 	'media',
 	'table',
 	'help',
-	'wordcount',
-	'quickbars'
+	'wordcount'
 ]
 
 export default plugins

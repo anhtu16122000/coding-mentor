@@ -5,8 +5,10 @@ import plugins from './plugins'
 import toolbar from './toolbar'
 import styles from './styles.module.scss'
 
+let curQuestion = 1
+
 const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
-	const { initialValue, height, id, inline, skin, menubar, apiKey, init, ref } = props
+	const { initialValue, height, id, inline, skin, menubar, apiKey, init, ref, noFullscreen } = props
 	const { onInit, onChange, onBlur } = props
 
 	let editorRef = useRef(null)
@@ -34,6 +36,7 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 	return (
 		<div className={styles.ccEditor}>
 			<LoadingEditor hidden={!loading} />
+
 			<Editor
 				id={id || 'the-cc-editor'}
 				apiKey={apiKey || 'lmr9ug3bh4iwjsrap9hgwgxqcngllssiraqluwto4slerrwg'}
@@ -49,19 +52,16 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 					height: height || 500,
 					menubar: menubar || false,
 					plugins: plugins,
-					toolbar: `${!init ? 'fullscreen' : 'customfullscreen |'} ${toolbar}`,
+					toolbar: `${!noFullscreen ? 'fullscreen' : 'customfullscreen |'} ${toolbar}`,
 					quickBar: false,
 					contextmenu: false,
 					content_style:
-						'input {border: 0px; background: #d3d3d3; max-width: 80px; width: auto; border-radius: 6px; font-size: 16px; padding: 2px 8px; outline: none !important; margin: 0px 4px !important;}',
-
-					// toolbar_sticky: true,
-					toolbar_sticky_offset: 100,
+						'input {border: 0px; background: #d3d3d3; max-width: 80px; width: auto; border-radius: 6px; font-size: 16px; padding: 2px 8px; outline: none !important; margin: 2px 4px !important;}',
 
 					setup: function (editor) {
 						editor.ui.registry.addButton('customInsertButton', {
 							icon: 'comment-add',
-							tooltip: 'Thêm nhận xét',
+							tooltip: 'Thêm câu hỏi',
 							onAction: () => {
 								console.log('--- editorRef: ', editorRef)
 
@@ -70,16 +70,58 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 
 								console.log('--- textSelected: ', textSelected)
 
-								const textInsert: string = `<input class="exam-blank-input" id="input-${nowTimeStamp}"></input>`
+								const textInsert: string = ` <span style="color: #fff;margin-left: 4px;width: 20px;height: 20px; display: inline-flex; align-items: center; justify-content: center; background: #1890ff; border-radius: 999px;">${curQuestion}</span><input class="exam-blank-input" id="input-${nowTimeStamp}"></input>`
 
 								editor.insertContent(textInsert) // Add textInsert to editor value
+
+								const thisText = editorRef.current.getContent()
+
+								console.log('--- thisText: ', thisText)
+
+								const theBlanks = thisText
+
+								// console.log('---- theBlanks: ', theBlanks)
+
+								// if (theBlanks.length > 0) {
+								// 	for (let i = 0; i < theBlanks.length; i++) {
+								// 		const blank = theBlanks[i]
+
+								// 		console.log('---- blank: ', blank)
+								// 	}
+								// }
 
 								// _addHandle()
 								// createNewComment({ ID: nowTimeStamp, Text: textSelected })
 							}
 						})
-					},
-					toolbar_sticky: true
+
+						editor.ui.registry.addButton('customfullscreen', {
+							icon: 'fullscreen', // Sử dụng icon fullscreen có sẵn
+							tooltip: 'Full Screen', // Chú thích khi di chuột qua nút
+							onAction: function () {
+								const theBabyForm = document.getElementById('the-baby-form')
+								const thisEditor = document.getElementsByClassName('tox tox-tinymce')
+								const thisEditorFullscreen = document.getElementsByClassName('tox-tbtn')
+								if (theBabyForm.style.display == 'none') {
+									theBabyForm.style.display = 'grid'
+									if (thisEditor.length > 0) {
+										thisEditor[0].setAttribute('style', 'height: 210px')
+									}
+									if (thisEditorFullscreen.length > 0) {
+										thisEditorFullscreen[0].setAttribute('style', 'background: #fff')
+									}
+								} else {
+									theBabyForm.style.display = 'none'
+									if (thisEditor.length > 0) {
+										thisEditor[0].setAttribute('style', 'height:' + (window.innerHeight - 250) + 'px')
+									}
+									if (thisEditorFullscreen.length > 0) {
+										thisEditorFullscreen[0].setAttribute('style', 'background: #d7d7d7')
+									}
+								}
+							}
+						})
+					}
 				}}
 			/>
 		</div>

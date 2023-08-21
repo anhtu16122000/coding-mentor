@@ -244,63 +244,11 @@ const GroupForm: FC<IGroupForm> = (props) => {
 							<Form.Item className="col-span-4 mb-0" label="Nội dung" name="Content">
 								<PrimaryEditor
 									// onInit={editorInit}
+									noFullscreen
 									id={`content-${new Date().getTime()}`}
 									height={fullEditor ? '90%' : 210}
 									initialValue={defaultData?.Content || ''}
 									onChange={(event) => form.setFieldValue('Content', event)}
-									// onInit={(evt, editor) => (editorRef.current = editor)}
-									inline={false}
-									init={{
-										setup: function (editor) {
-											editor.ui.registry.addButton('customfullscreen', {
-												icon: 'fullscreen', // Sử dụng icon fullscreen có sẵn
-												tooltip: 'Full Screen', // Chú thích khi di chuột qua nút
-												onAction: function () {
-													const theBabyForm = document.getElementById('the-baby-form')
-													const thisEditor = document.getElementsByClassName('tox tox-tinymce')
-													const thisEditorFullscreen = document.getElementsByClassName('tox-tbtn')
-													if (theBabyForm.style.display == 'none') {
-														theBabyForm.style.display = 'grid'
-														if (thisEditor.length > 0) {
-															thisEditor[0].setAttribute('style', 'height: 210px')
-														}
-														if (thisEditorFullscreen.length > 0) {
-															thisEditorFullscreen[0].setAttribute('style', 'background: #fff')
-														}
-													} else {
-														theBabyForm.style.display = 'none'
-														if (thisEditor.length > 0) {
-															thisEditor[0].setAttribute('style', 'height:' + (window.innerHeight - 250) + 'px')
-														}
-														if (thisEditorFullscreen.length > 0) {
-															thisEditorFullscreen[0].setAttribute('style', 'background: #d7d7d7')
-														}
-													}
-												}
-											})
-											editor.ui.registry.addButton('customInsertButton', {
-												icon: 'comment-add',
-												tooltip: 'Thêm nhận xét',
-												onAction: () => {
-													console.log('--- editorRef: ', editorRef)
-
-													const nowTimeStamp: number = getTimeStamp() // Timestamp
-													const textSelected: string = editorRef.current.selection.getContent()
-
-													console.log('--- textSelected: ', textSelected)
-
-													// const textInsert: string = `<span class="highlight-editor" id="cmt-${nowTimeStamp}">${textSelected}</span>`
-
-													// editor.insertContent(textInsert) // Add textInsert to editor value
-
-													// _addHandle()
-													// createNewComment({ ID: nowTimeStamp, Text: textSelected })
-												}
-											})
-										},
-										inline: true, // Remove iframe tag
-										quickbars_selection_toolbar: quickMenu
-									}}
 								/>
 							</Form.Item>
 						</div>
