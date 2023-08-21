@@ -21,9 +21,7 @@ const ElsaSpeak = () => {
 	const [recordedAudio, setRecordedAudio] = useState(null)
 	const state = useSelector((state: RootState) => state)
 	const [fileUrl, setFileUrl] = useState(null)
-	const [sentence, setSentence] = useState(
-		'It had been years since the car had been driven. It sat in the driveway, slowly being taken over by rust and weeds. The windows were boarded up and the tires were long gone. But to a young boy, it was the most beautiful car he had ever seen. He dreamed of fixing it up and taking it for a spin. One day, he gathered some scrap metal and started working on the car. It took months of hard work, but eventually, the car was roadworthy again. The young boy took it for a spin around the block, feeling like the luckiest kid in the world. Even though it was just an old rust-bucket, to him it was the most special car in the world.'
-	)
+	const [sentence, setSentence] = useState('It had been years since the car had been driven. ')
 	const [words, setWords] = useState(null)
 	const [data, setData] = useState(null)
 	const userInformation = useSelector((state: RootState) => state.user.information)
@@ -96,10 +94,11 @@ const ElsaSpeak = () => {
 					setData(item)
 					const words = item.words
 					setWords(words)
+					ShowNoti('success', 'Thành công!')
 				}
 			}
 		} catch (err) {
-			// ShowNoti('error', err.message)
+			ShowNoti('error', err.message)
 		}
 	}
 
@@ -110,12 +109,12 @@ const ElsaSpeak = () => {
 				setFileUrl(response.data.data)
 			}
 		} catch (err) {
-			// ShowNoti('error', err.message)
+			ShowNoti('error', err.message)
 		}
 	}
 
 	return (
-		<div className="wrapper-class">
+		<div>
 			<Card>
 				<div className="row">
 					<div className="col-4">
@@ -133,7 +132,7 @@ const ElsaSpeak = () => {
 								</button>
 							</div>
 
-							<div className="mt-2 flex justify-center w-1/3">
+							<div className="mt-2 flex justify-center ">
 								{audioBlob && (
 									<audio controls>
 										<source src={URL.createObjectURL(audioBlob)} type="audio/mpeg" />
