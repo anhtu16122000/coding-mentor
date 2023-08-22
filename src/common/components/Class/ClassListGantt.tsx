@@ -50,7 +50,7 @@ const ClassListGantt = (props) => {
 		}
 	}, [])
 
-	const formattedData = dataSource.map((item) => ({
+	const formattedData: any = dataSource.map((item) => ({
 		...item,
 		Values: [new Date(item.Values[0]).getTime(), new Date(item.Values[1]).getTime()]
 	}))
@@ -74,6 +74,7 @@ const ClassListGantt = (props) => {
 		<>
 			<Bar
 				{...config}
+				// @ts-ignore
 				data={formattedData}
 				xField="Values"
 				yField="Name"
