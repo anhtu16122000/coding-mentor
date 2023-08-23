@@ -9,6 +9,7 @@ type TPrimaryEditor = {
 	menubar?: boolean
 	ref?: any
 	noFullscreen?: boolean
+	isFillInBlank?: boolean
 
 	onInit?: Function
 	onChange?: Function

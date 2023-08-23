@@ -1,6 +1,6 @@
-import { Modal, Form, Select, Input } from 'antd'
+import { Modal, Form, Select, Input, Skeleton } from 'antd'
 import React, { FC, useEffect, useRef, useState } from 'react'
-import { ShowNoti } from '~/common/utils'
+import { ShowNoti, log, wait } from '~/common/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { setCurrentExerciseForm } from '~/store/globalState'
@@ -20,12 +20,16 @@ import { ieltsGroupApi } from '~/api/IeltsExam/ieltsGroup'
 import { IoCloseSharp } from 'react-icons/io5'
 import CreateSpeaking from '../QuestionsForm/SpeakingForm'
 import CreateTyping from '../QuestionsForm/FillInBlankForm'
+import { useExamContext } from '~/common/components/Auth/Provider/exam'
+import { setQuestions } from '~/store/createQuestion'
 
 let fullEditor = false
 const quickMenu = 'bold italic underline strikethrough | fontfamily fontsize blocks | codesample | forecolor backcolor | customInsertButton'
 
 const GroupForm: FC<IGroupForm> = (props) => {
 	const { isEdit, defaultData, isChangeInfo, onOpen, section, onRefresh } = props
+
+	const { questionWithAnswers, setQuestionWithAnswers } = useExamContext()
 
 	const dispatch = useDispatch()
 	const [form] = Form.useForm()
@@ -35,10 +39,25 @@ const GroupForm: FC<IGroupForm> = (props) => {
 	const [currentType, setCurrentType] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [isModalVisible, setIsModalVisible] = useState(false)
+	const [showEditor, setShowEditor] = useState<boolean>(true)
+
+	useEffect(() => {
+		changeType()
+	}, [currentType])
+
+	async function changeType() {
+		setShowEditor(false)
+		await wait(200)
+		setShowEditor(true)
+	}
 
 	function reset() {
 		!!onRefresh && onRefresh()
 		ShowNoti('success', 'Thành công')
+
+		setQuestionWithAnswers([])
+		dispatch(setQuestions([]))
+
 		dispatch(setCurrentExerciseForm([]))
 		setIsModalVisible(false)
 		form.resetFields()
@@ -79,11 +98,17 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 	function _checkSubmit() {
 		let flag = false
-		exercises.forEach((element) => {
+
+		const isTyping = currentType == QUESTION_TYPES.FillInTheBlank
+
+		const finalExercise = isTyping ? questionWithAnswers : exercises
+
+		finalExercise.forEach((element) => {
 			if (element.Enable !== false) {
 				flag = true
 			}
 		})
+
 		if (flag == false) {
 			return 'Vui lòng thêm câu hỏi'
 		}
@@ -92,19 +117,25 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 	// Handle submit form
 	const onFinish = (values) => {
+		log.Red('--------- FORM onFinish', '')
+
 		setTextError('')
 
 		const checkSubmit = _checkSubmit()
+
+		log.Yellow('checkSubmit', checkSubmit)
+
+		const isTyping = currentType == QUESTION_TYPES.FillInTheBlank
 
 		if (checkSubmit == '') {
 			setLoading(true)
 
 			if (!isEdit && !isChangeInfo) {
-				postGroup({ ...values, IeltsSectionId: section.Id, IeltsQuestions: exercises })
+				postGroup({ ...values, IeltsSectionId: section.Id, IeltsQuestions: isTyping ? questionWithAnswers : exercises })
 			}
 
 			if (!!isEdit || !!isChangeInfo) {
-				putGroup({ ...values, Id: defaultData.Id, IeltsQuestions: exercises })
+				putGroup({ ...values, Id: defaultData.Id, IeltsQuestions: isTyping ? questionWithAnswers : exercises })
 			}
 		} else {
 			setTextError(checkSubmit)
@@ -116,10 +147,12 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		console.log('---- defaultData: ', defaultData)
 
 		if (!!onOpen) onOpen()
+		setQuestionWithAnswers([...defaultData?.IeltsQuestions])
 		dispatch(setCurrentExerciseForm([]))
 		form.setFieldsValue({ ...defaultData })
 		setCurrentType(defaultData?.Type)
 		dispatch(setCurrentExerciseForm([...defaultData.IeltsQuestions]))
+
 		setIsModalVisible(true)
 	}
 
@@ -160,29 +193,12 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		)
 	}
 
-	const [fe, setFe] = useState<boolean>(false)
-
-	console.log('---- fullEditor: ', fullEditor)
-
-	useEffect(() => {
-		setFe(fullEditor)
-	}, [fullEditor])
-
-	console.log('---- fe: ', fe)
-
 	// GET NOW TIMESTAMP
 	function getTimeStamp() {
 		return new Date().getTime() // Example: 1653474514413
 	}
 
 	const editorRef = useRef(null)
-
-	function editorInit(evt, editor) {
-		console.log('---- editor: ', editor)
-
-		editorRef.current = editor
-		setLoading(false)
-	}
 
 	return (
 		<>
@@ -241,16 +257,24 @@ const GroupForm: FC<IGroupForm> = (props) => {
 								</Form.Item>
 							</div>
 
-							<Form.Item className="col-span-4 mb-0" label="Nội dung" name="Content">
-								<PrimaryEditor
-									// onInit={editorInit}
-									noFullscreen
-									id={`content-${new Date().getTime()}`}
-									height={fullEditor ? '90%' : 210}
-									initialValue={defaultData?.Content || ''}
-									onChange={(event) => form.setFieldValue('Content', event)}
-								/>
-							</Form.Item>
+							{showEditor && (
+								<Form.Item className="col-span-4 mb-0" label="Nội dung" name="Content">
+									<PrimaryEditor
+										// onInit={editorInit}
+										noFullscreen
+										isFillInBlank={currentType == QUESTION_TYPES.FillInTheBlank}
+										id={`content-${new Date().getTime()}`}
+										height={fullEditor ? '90%' : 210}
+										initialValue={defaultData?.Content || ''}
+										onChange={(event) => form.setFieldValue('Content', event)}
+									/>
+								</Form.Item>
+							)}
+							{!showEditor && (
+								<div className="h-[213px]">
+									<Skeleton active />
+								</div>
+							)}
 						</div>
 
 						<div className="cc-group-quest-list">
@@ -261,7 +285,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 							{currentType == QUESTION_TYPES.TrueOrFalse && <TrueFalseForm />}
 							{currentType == QUESTION_TYPES.Mindmap && <MindMapForm />}
 							{currentType == QUESTION_TYPES.Speak && <CreateSpeaking />}
-							{currentType == QUESTION_TYPES.FillInTheBlank && <CreateTyping />}
+							{currentType == QUESTION_TYPES.FillInTheBlank && <CreateTyping isEdit={isEdit} />}
 						</div>
 					</div>
 				</Form>

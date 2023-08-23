@@ -13,7 +13,7 @@ const LoadingEditor: FC<TLoadingEditor> = (props) => {
 	}
 
 	return (
-		<div className="editor-loading">
+		<div className="editor-loading absolute top-0 left-0">
 			<div className="editor-loading-header">
 				<div className="editor-loading-left-item">
 					<Skeleton active round paragraph={false} style={{ width: 30 }} />

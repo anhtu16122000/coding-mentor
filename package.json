@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"@ant-design/icons": "4.8.0",
+		"@ant-design/plots": "^1.2.1",
 		"@babel/preset-env": "^7.22.9",
 		"@fullcalendar/core": "^6.0.0",
 		"@fullcalendar/daygrid": "^6.0.0",
@@ -29,12 +30,14 @@
 		"body-scroll-lock": "^4.0.0-beta.0",
 		"bootstrap": "^5.2.0",
 		"canvas-confetti": "^1.5.1",
+		"crypto": "^1.0.1",
 		"feather-icons": "^4.29.0",
 		"fs-extra": "^10.1.0",
 		"fullcalendar": "^5.11.0",
 		"immutability-helper": "^3.1.1",
 		"js-file-download": "^0.4.12",
 		"lodash": "^4.17.21",
+		"mic-recorder-to-mp3": "^2.2.2",
 		"moment": "^2.29.4",
 		"next": "12.2.0",
 		"nextjs-google-analytics": "^2.3.3",
@@ -61,6 +64,7 @@
 		"react-infinite-scroll-component": "^6.1.0",
 		"react-lottie": "^1.2.3",
 		"react-lottie-player": "^1.4.3",
+		"react-mic": "^12.4.6",
 		"react-number-format": "^5.1.1",
 		"react-redux": "^8.0.2",
 		"react-show-more-text": "1.4.0",
@@ -77,10 +81,7 @@
 		"w3-css": "^4.1.0",
 		"webpack": "^5.88.2",
 		"xlsx": "^0.18.5",
-		"yup": "^0.32.11",
-		"@ant-design/plots": "^1.2.1",
-		"react-mic": "^12.4.6",
-		"mic-recorder-to-mp3": "^2.2.2"
+		"yup": "^0.32.11"
 	},
 	"devDependencies": {
 		"@types/node": "18.0.3",

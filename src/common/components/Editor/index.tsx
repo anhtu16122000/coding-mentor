@@ -4,14 +4,24 @@ import LoadingEditor from './loading'
 import plugins from './plugins'
 import toolbar from './toolbar'
 import styles from './styles.module.scss'
-
-let curQuestion = 1
+import crypto from 'crypto'
+import { useDispatch } from 'react-redux'
+import { setQuestions } from '~/store/createQuestion'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 	const { initialValue, height, id, inline, skin, menubar, apiKey, init, ref, noFullscreen } = props
-	const { onInit, onChange, onBlur } = props
+	const { onInit, onChange, onBlur, isFillInBlank } = props
 
 	let editorRef = useRef(null)
+
+	function generateShortHash(input) {
+		console.log('-- input: ', input)
+
+		const hash = crypto.createHash('md5').update(input.toString()).digest('hex')
+		return hash.substring(0, 6) // Lấy 6 ký tự đầu của giá trị hash
+	}
 
 	const [loading, setLoading] = useState(true)
 
@@ -20,8 +30,26 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 		setLoading(false)
 	}
 
+	const quest = useSelector((state: RootState) => state.createQuestion.Questions)
+
 	function _editorChange() {
 		!!onChange && onChange(editorRef.current.getContent())
+
+		const questionTags = editorRef.current?.dom.doc.getElementsByClassName('b-in')
+
+		if (questionTags.length == quest.length) {
+			return
+		}
+
+		if (questionTags && questionTags.length > 0) {
+			for (let i = 0; i < questionTags.length; i++) {
+				// @ts-ignore
+				questionTags[i].placeholder = `(${i + 1})`
+			}
+		}
+
+		const newQuestionTag: any = editorRef.current?.dom.doc.getElementsByClassName('b-in')
+		dispatch(setQuestions([...newQuestionTag]))
 	}
 
 	function _blur() {
@@ -32,6 +60,13 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 	function getTimeStamp() {
 		return new Date().getTime() // Example: 1653474514413
 	}
+
+	const customInputClass =
+		'.b-in {border: 0px; text-align: center; background: #d3d3d3; max-width: 80px; width: auto; border-radius: 6px; font-size: 16px; padding: 2px 8px; outline: none !important; margin: 2px 4px !important;}'
+	const indexBlockClass =
+		'.idx-b {color: #fff; margin-left: 4px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; background: #1890ff; border-radius: 999px;}'
+
+	const dispatch = useDispatch()
 
 	return (
 		<div className={styles.ccEditor}>
@@ -55,45 +90,19 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 					toolbar: `${!noFullscreen ? 'fullscreen' : 'customfullscreen |'} ${toolbar}`,
 					quickBar: false,
 					contextmenu: false,
-					content_style:
-						'input {border: 0px; background: #d3d3d3; max-width: 80px; width: auto; border-radius: 6px; font-size: 16px; padding: 2px 8px; outline: none !important; margin: 2px 4px !important;}',
+					content_style: `${customInputClass} ${indexBlockClass}`,
 
 					setup: function (editor) {
-						editor.ui.registry.addButton('customInsertButton', {
-							icon: 'comment-add',
-							tooltip: 'Thêm câu hỏi',
-							onAction: () => {
-								console.log('--- editorRef: ', editorRef)
-
-								const nowTimeStamp: number = getTimeStamp() // Timestamp
-								const textSelected: string = editorRef.current.selection.getContent()
-
-								console.log('--- textSelected: ', textSelected)
-
-								const textInsert: string = ` <span style="color: #fff;margin-left: 4px;width: 20px;height: 20px; display: inline-flex; align-items: center; justify-content: center; background: #1890ff; border-radius: 999px;">${curQuestion}</span><input class="exam-blank-input" id="input-${nowTimeStamp}"></input>`
-
-								editor.insertContent(textInsert) // Add textInsert to editor value
-
-								const thisText = editorRef.current.getContent()
-
-								console.log('--- thisText: ', thisText)
-
-								const theBlanks = thisText
-
-								// console.log('---- theBlanks: ', theBlanks)
-
-								// if (theBlanks.length > 0) {
-								// 	for (let i = 0; i < theBlanks.length; i++) {
-								// 		const blank = theBlanks[i]
-
-								// 		console.log('---- blank: ', blank)
-								// 	}
-								// }
-
-								// _addHandle()
-								// createNewComment({ ID: nowTimeStamp, Text: textSelected })
-							}
-						})
+						isFillInBlank &&
+							editor.ui.registry.addButton('customInsertButton', {
+								icon: 'comment-add',
+								tooltip: 'Thêm câu hỏi',
+								onAction: () => {
+									const nowTimeStamp: number = getTimeStamp() // Timestamp
+									const textInsert: string = ` <input class="b-in" disabled id="ip-${generateShortHash(nowTimeStamp)}"></input>`
+									editor.insertContent(textInsert) // Add textInsert to editor value
+								}
+							})
 
 						editor.ui.registry.addButton('customfullscreen', {
 							icon: 'fullscreen', // Sử dụng icon fullscreen có sẵn

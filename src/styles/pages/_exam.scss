@@ -62,3 +62,18 @@
 		margin: 0px 4px !important;
 	}
 }
+
+.b-in {
+	@apply shadow-sm;
+	border: 0px;
+	text-align: center;
+	background: #ebebeb !important;
+	color: #000 !important;
+	max-width: 80px;
+	width: auto;
+	border-radius: 6px;
+	font-size: 16px;
+	padding: 2px 8px;
+	outline: none !important;
+	margin: 2px 4px !important;
+}
