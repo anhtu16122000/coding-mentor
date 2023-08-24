@@ -22,6 +22,7 @@ import CreateSpeaking from '../QuestionsForm/SpeakingForm'
 import CreateTyping from '../QuestionsForm/FillInBlankForm'
 import { useExamContext } from '~/common/components/Auth/Provider/exam'
 import { setQuestions } from '~/store/createQuestion'
+import CreateDragAndDrop from '../QuestionsForm/DragAndDropForm'
 
 let fullEditor = false
 const quickMenu = 'bold italic underline strikethrough | fontfamily fontsize blocks | codesample | forecolor backcolor | customInsertButton'
@@ -100,8 +101,9 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		let flag = false
 
 		const isTyping = currentType == QUESTION_TYPES.FillInTheBlank
+		const isDrag = currentType == QUESTION_TYPES.DragDrop
 
-		const finalExercise = isTyping ? questionWithAnswers : exercises
+		const finalExercise = isTyping || isDrag ? questionWithAnswers : exercises
 
 		finalExercise.forEach((element) => {
 			if (element.Enable !== false) {
@@ -126,16 +128,17 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		log.Yellow('checkSubmit', checkSubmit)
 
 		const isTyping = currentType == QUESTION_TYPES.FillInTheBlank
+		const isDrag = currentType == QUESTION_TYPES.DragDrop
 
 		if (checkSubmit == '') {
 			setLoading(true)
 
 			if (!isEdit && !isChangeInfo) {
-				postGroup({ ...values, IeltsSectionId: section.Id, IeltsQuestions: isTyping ? questionWithAnswers : exercises })
+				postGroup({ ...values, IeltsSectionId: section.Id, IeltsQuestions: isTyping || isDrag ? questionWithAnswers : exercises })
 			}
 
 			if (!!isEdit || !!isChangeInfo) {
-				putGroup({ ...values, Id: defaultData.Id, IeltsQuestions: isTyping ? questionWithAnswers : exercises })
+				putGroup({ ...values, Id: defaultData.Id, IeltsQuestions: isTyping || isDrag ? questionWithAnswers : exercises })
 			}
 		} else {
 			setTextError(checkSubmit)
@@ -183,10 +186,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		}
 
 		return (
-			<div
-				onClick={openEdit}
-				className="inline-flex mb-[16px] px-[8px] py-[4px] text-[#fff] rounded-[4px] items-center font-[600] cursor-pointer bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf]"
-			>
+			<div onClick={openEdit} className="exam-23-btn-update-group">
 				<FiEdit size={18} className="mr-2 mt-[-2px]" />
 				Cập nhật
 			</div>
@@ -235,9 +235,10 @@ const GroupForm: FC<IGroupForm> = (props) => {
 										<Select.Option value={QUESTION_TYPES.MultipleChoice}>Trắc nghiệm</Select.Option>
 										<Select.Option value={QUESTION_TYPES.Write}>Tự luận</Select.Option>
 										<Select.Option value={QUESTION_TYPES.TrueOrFalse}>True or false</Select.Option>
-										<Select.Option value={QUESTION_TYPES.Mindmap}>Mindmap</Select.Option>
+										{/* <Select.Option value={QUESTION_TYPES.Mindmap}>Mindmap</Select.Option> */}
 										<Select.Option value={QUESTION_TYPES.Speak}>Speaking</Select.Option>
-										<Select.Option value={QUESTION_TYPES.FillInTheBlank}>Fill In The Blank</Select.Option>
+										<Select.Option value={QUESTION_TYPES.FillInTheBlank}>Điền vào ô trống</Select.Option>
+										<Select.Option value={QUESTION_TYPES.DragDrop}>Chọn đáp án đúng</Select.Option>
 									</Select>
 								</Form.Item>
 
@@ -262,7 +263,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 									<PrimaryEditor
 										// onInit={editorInit}
 										noFullscreen
-										isFillInBlank={currentType == QUESTION_TYPES.FillInTheBlank}
+										isFillInBlank={currentType == QUESTION_TYPES.FillInTheBlank || currentType == QUESTION_TYPES.DragDrop}
 										id={`content-${new Date().getTime()}`}
 										height={fullEditor ? '90%' : 210}
 										initialValue={defaultData?.Content || ''}
@@ -286,6 +287,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 							{currentType == QUESTION_TYPES.Mindmap && <MindMapForm />}
 							{currentType == QUESTION_TYPES.Speak && <CreateSpeaking />}
 							{currentType == QUESTION_TYPES.FillInTheBlank && <CreateTyping isEdit={isEdit} />}
+							{currentType == QUESTION_TYPES.DragDrop && <CreateDragAndDrop isEdit={isEdit} />}
 						</div>
 					</div>
 				</Form>

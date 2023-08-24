@@ -26,6 +26,9 @@ import { setNewCurrentGroup } from '~/store/newExamReducer'
 import GroupForm from './Group/form-group'
 import ExamProvider from '../../Auth/Provider/exam'
 import { QUESTION_TYPES } from '~/common/libs'
+import DragHeader from './Components/drag-header'
+import GroupContent from './Components/group-content'
+import { IoClose } from 'react-icons/io5'
 
 function ExamDetail() {
 	const router = useRouter()
@@ -288,26 +291,38 @@ function ExamDetail() {
 		return ''
 	}
 
+	const [dragAns, setDragAns] = useState([])
+
 	function formatInput() {
-		const newTag = document.createElement('div')
-
 		const inputs: any = document.getElementsByClassName('b-in')
-
 		const temp = [...inputs]
 
 		if (temp.length > 0) {
 			for (let i = 0; i < temp.length; i++) {
 				const element = temp[i]
-
-				// getQuestIndex
-
 				const id = element.getAttribute('id')
-				console.log('------ id: ', getRealID(id))
-
-				console.log('------ real index: ', getQuestIndex(getRealID(id)))
-
 				temp[i].setAttribute('placeholder', `(${getQuestIndex(getRealID(id)).Index})`)
 			}
+		}
+
+		if (is.drag) {
+			let tamp = []
+			let count = 1
+
+			for (let i = 0; i < curGroup?.IeltsQuestions.length; i++) {
+				const element = curGroup?.IeltsQuestions[i]
+				for (let j = 0; j < element?.IeltsAnswers.length; j++) {
+					const ans = element?.IeltsAnswers[j]
+					tamp.push({ ...ans, Question: { ...element } })
+					count++
+				}
+			}
+
+			setDragAns(tamp)
+		}
+
+		if (!is.drag) {
+			setDragAns([])
 		}
 	}
 
@@ -316,6 +331,11 @@ function ExamDetail() {
 	useEffect(() => {
 		formatInput()
 	}, [curGroup])
+
+	const is = {
+		typing: curGroup?.Type == QUESTION_TYPES.FillInTheBlank,
+		drag: curGroup?.Type == QUESTION_TYPES.DragDrop
+	}
 
 	return (
 		<ExamProvider>
@@ -425,31 +445,32 @@ function ExamDetail() {
 						{showMain && <div id="the-fica-block" className="w-[0.5px] bg-transparent" />}
 
 						<div className="flex-1 p-[16px] scrollable" style={{ height: mainHeight }}>
-							{/* <div className="font-[600] mb-[8px]">Bài đọc</div> */}
 							{htmlParser(currentSection?.ReadingPassage || '')}
 						</div>
 
+						{/* RIGHT OF SCREEN */}
 						<div className="flex-1 p-[16px] scrollable" style={{ height: mainHeight }}>
 							{questionsInSection.length > 0 && (
-								<GroupForm
-									isEdit
-									section={currentSection}
-									defaultData={curGroup}
-									onRefresh={() => {
-										getQuestionsByGroup()
-										getQuestions()
-									}}
-								/>
-							)}
+								<div className="flex items-center">
+									<GroupForm
+										isEdit
+										section={currentSection}
+										defaultData={curGroup}
+										onRefresh={() => {
+											getQuestionsByGroup()
+											getQuestions()
+										}}
+									/>
 
-							{curGroup?.Type != QUESTION_TYPES.FillInTheBlank && <div className="mb-[16px]">{htmlParser(curGroup?.Content)}</div>}
-
-							{curGroup?.Type == QUESTION_TYPES.FillInTheBlank && (
-								<div className="p-[8px] rounded-[6px] bg-[#fff]">
-									<div className="mb-[16px]">{htmlParser(curGroup?.Content)}</div>
+									<div className="exam-23-btn-del-group">
+										<IoClose size={20} className="mr-2" />
+										Xoá nhóm câu
+									</div>
 								</div>
 							)}
 
+							{is.drag && <DragHeader answers={dragAns} />}
+							<GroupContent is={is} curGroup={curGroup} />
 							<TestingQuestions data={curGroup} questions={questionsInSection} />
 						</div>
 					</>

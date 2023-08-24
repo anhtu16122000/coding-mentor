@@ -77,3 +77,24 @@
 	outline: none !important;
 	margin: 2px 4px !important;
 }
+
+.drag-23-suggest {
+	@apply p-[16px] rounded-[6px] bg-[#fff] mb-[16px] shadow-sm;
+}
+.drag-23-ans-item {
+	@apply flex items-center no-select col-span-1;
+}
+.drag-23-ans-number {
+	@apply text-[#fff] font-[500] w-[26px] h-[26px] rounded-full all-center mr-[8px];
+	@apply bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf];
+}
+.typing-drag-23-content {
+	@apply p-[8px] rounded-[6px] bg-[#fff] shadow-sm;
+}
+
+.exam-23-btn-del-group {
+	@apply ml-[8px] inline-flex mb-[16px] px-[8px] py-[4px] text-[#fff] rounded-[4px] items-center font-[600] cursor-pointer bg-[#C94A4F] hover:bg-[#b43f43] focus:bg-[#9f3136];
+}
+.exam-23-btn-update-group {
+	@apply inline-flex mb-[16px] px-[8px] py-[4px] text-[#fff] rounded-[4px] items-center font-[600] cursor-pointer bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf];
+}
