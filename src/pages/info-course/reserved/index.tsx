@@ -98,7 +98,7 @@ const ReservedPage = () => {
 	}
 
 	function isSaler() {
-		return theInformation.RoleId == 5
+		return theInformation?.RoleId == 5
 	}
 
 	function handleColumn(value, item) {

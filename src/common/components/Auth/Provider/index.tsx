@@ -1,12 +1,14 @@
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { classApi } from '~/api/learn/class'
+import { log } from '~/common/utils'
 import { logOut, playWithToken } from '~/common/utils/token-handle'
 import { userApi } from '~/services/auth'
 import { RootState } from '~/store'
-import { setAuthLoading, setRefreshToken } from '~/store/authReducer'
+import { setAuthData, setAuthLoading, setRefreshToken } from '~/store/authReducer'
 import { setListClass, setStatusData, setTotalClass } from '~/store/classReducer'
+import { setUser } from '~/store/userReducer'
 
 type IAuthLayout = {
 	children: React.ReactNode
@@ -14,7 +16,10 @@ type IAuthLayout = {
 
 function AuthProvider({ children }: IAuthLayout) {
 	const dispatch = useDispatch()
+
 	const { loading, data, refreshToken } = useSelector((state: RootState) => state.auth)
+
+	const listClassState = useSelector((state: RootState) => state.class.listClass)
 
 	const router = useRouter()
 
@@ -53,17 +58,20 @@ function AuthProvider({ children }: IAuthLayout) {
 	}
 
 	const getClass = async () => {
-		try {
-			const res = await classApi.getAll({ pageSize: 10, pageIndex: 1 })
-			if (res.status == 200) {
-				dispatch(setListClass([...res.data.data]))
-				dispatch(setTotalClass(res.data?.totalRow))
-				// dispatch(setStatusData({ ...res.data, data: [] }))
-			}
-		} catch (err) {}
+		// if (!!listClassState && listClassState.length == 0) {
+		// 	try {
+		// 		const res = await classApi.getAll({ pageSize: 10, pageIndex: 1 })
+		// 		if (res.status == 200) {
+		// 			dispatch(setListClass([...res.data.data]))
+		// 			dispatch(setTotalClass(res.data?.totalRow))
+		// 		}
+		// 	} catch (err) {}
+		// }
 	}
 
 	const _refreshToken = async (param) => {
+		log.Red('AuthProvider Refreshing Token', new Date().getTime())
+
 		if (!allowNoneLogin()) {
 			console.time('Gọi api RefreshToken hết')
 			try {
@@ -81,20 +89,48 @@ function AuthProvider({ children }: IAuthLayout) {
 		return date < new Date()
 	}
 
+	function checkTimestamp(timestamp) {
+		const currentTime = Date.now()
+		const eightHoursInMilliseconds = 8 * 60 * 60 * 1000
+
+		return currentTime - timestamp > eightHoursInMilliseconds
+	}
+
 	async function checkLogin() {
+		console.log('--------------------------------- checkLogin -------')
+
 		try {
 			const response = await JSON.parse(localStorage.getItem('userData'))
+
+			console.log('--- response: ', response)
 
 			if (!!response?.theRefresh) {
 				const theRefresh = response.theRefresh
 				dispatch(setRefreshToken(theRefresh))
+
 				if (theRefresh?.refreshTokenExpires) {
 					if (isPastDate(new Date(theRefresh?.refreshTokenExpires).getTime())) {
 						if (!allowNoneLogin()) {
 							logOut()
 						}
 					} else {
-						_refreshToken({ RefreshToken: theRefresh?.refreshToken, token: response?.token })
+						if (checkTimestamp(new Date(theRefresh?.refreshTokenExpires).getTime())) {
+							_refreshToken({ RefreshToken: theRefresh?.refreshToken, token: response?.token })
+						} else {
+							console.log('--------------------------------- ĐI QUA BAO NHIÊU THĂNG TRẦM -------')
+							console.log('---- userInformation: ', userInformation)
+
+							if (!userInformation) {
+								console.log('----------------- !userInformation ---------------')
+
+								dispatch(setUser(response?.user))
+								dispatch(setAuthData(response?.user))
+								dispatch(setRefreshToken(response?.theRefresh))
+								dispatch(setAuthLoading(false))
+							}
+
+							console.log('---- userInformation: ', userInformation)
+						}
 					}
 				}
 			} else {

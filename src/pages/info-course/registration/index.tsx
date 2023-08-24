@@ -92,7 +92,7 @@ const RegistrationPage = () => {
 	}
 
 	function isSaler() {
-		return theInformation.RoleId == 5
+		return theInformation?.RoleId == 5
 	}
 
 	function viewStudentDetails(params) {

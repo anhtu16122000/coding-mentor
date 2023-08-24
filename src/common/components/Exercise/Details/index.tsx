@@ -156,7 +156,7 @@ function ExamDetail() {
 		}
 	}
 
-	console.log('-------------------------------- questionsInSection: ', questionsInSection)
+	// console.log('-------------------------------- questionsInSection: ', questionsInSection)
 
 	const [curGroup, setCurGroup] = useState<any>(null)
 

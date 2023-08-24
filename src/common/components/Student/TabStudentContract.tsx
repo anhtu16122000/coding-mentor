@@ -131,7 +131,7 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 								)}
 							</>
 						)}
-						{modeEdit == 'edit' && userInformation.RoleId !== '3' && (
+						{modeEdit == 'edit' && userInformation?.RoleId !== '3' && (
 							<PrimaryButton
 								background="blue"
 								type="button"
@@ -189,7 +189,7 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 												)}
 											</>
 										)}
-										{modeEdit == 'edit' && userInformation.RoleId !== '3' && (
+										{modeEdit == 'edit' && userInformation?.RoleId !== '3' && (
 											<PrimaryButton
 												background="blue"
 												type="button"
@@ -214,9 +214,9 @@ export default function TabStudentContract(props: ITabStudentContractProps) {
 					)}
 				</div>
 
-				{userInformation.RoleId !== '3' && <InputTextField name="Name" label="Tên hợp đồng" placeholder="Nhập tên hộp đồng" />}
+				{userInformation?.RoleId !== '3' && <InputTextField name="Name" label="Tên hợp đồng" placeholder="Nhập tên hộp đồng" />}
 
-				{userInformation.RoleId !== '3' ? (
+				{userInformation?.RoleId !== '3' ? (
 					<EditorField name="Content" label="Nội dung hợp đồng" onChangeEditor={(value) => form.setFieldValue('Content', value)} />
 				) : (
 					<p className="form-print-import">{ReactHtmlParser(contract)}</p>

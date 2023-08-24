@@ -32,22 +32,29 @@ import Link from 'next/link'
 const initFilters = { PageSize: PAGE_SIZE, PageIndex: 1, Search: '' }
 
 const StudentInClassPage = () => {
+	console.log('------ ĐI TỚI PAGE ------')
+
+	// return <div>BÁHDGH</div>
+
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
 	const [data, setData] = React.useState([])
 	const [filters, setFilter] = React.useState(initFilters)
 
+	console.log('------ VỪA QUA INIT state ------')
+
 	useEffect(() => {
 		getData()
 	}, [filters])
 
+	console.log('------ INIT - GET DATA ------')
 	async function getData() {
 		setLoading(true)
 		try {
 			const res = await RestApi.get<any>('StudentInClass', filters)
-			if (res.status == 200) {
-				setData(res.data.data)
-				setTotalPage(res.data.totalRow)
+			if (res?.status == 200) {
+				setData(res?.data?.data)
+				setTotalPage(res?.data?.totalRow)
 			} else {
 				setData([])
 				setTotalPage(1)
@@ -58,6 +65,8 @@ const StudentInClassPage = () => {
 			setLoading(false)
 		}
 	}
+
+	console.log('------ VỪA QUA GET DATA ------')
 
 	function gotoClass(params) {
 		Router.push(`/class/list-class/detail/?class=${params.ClassId}`)
@@ -70,7 +79,7 @@ const StudentInClassPage = () => {
 		})
 	}
 
-	const theInformation = useSelector((state: RootState) => state.user.information)
+	const theInformation = useSelector((state: RootState) => state.user?.information)
 
 	function isAdmin() {
 		return theInformation?.RoleId == 1
@@ -89,7 +98,7 @@ const StudentInClassPage = () => {
 	}
 
 	function isSaler() {
-		return theInformation.RoleId == 5
+		return theInformation?.RoleId == 5
 	}
 
 	function handleColumn(value, item) {
@@ -110,6 +119,8 @@ const StudentInClassPage = () => {
 			</div>
 		)
 	}
+
+	console.log('------ VỪA QUA handleColumn ------')
 
 	const columns = [
 		userInfoColumn,
@@ -191,6 +202,8 @@ const StudentInClassPage = () => {
 		}
 	]
 
+	console.log('------ VỪA QUA INIT COLUMNS ------')
+
 	const expandedRowRender = (data) => {
 		return (
 			<div className="w-[1000px]">
@@ -199,6 +212,8 @@ const StudentInClassPage = () => {
 		)
 	}
 
+	console.log('------ ĐI TỚI KHÚC RETURN CỦA PAGE ------')
+
 	return (
 		<>
 			<Head>
@@ -206,11 +221,11 @@ const StudentInClassPage = () => {
 			</Head>
 
 			<ExpandTable
-				currentPage={filters.PageIndex}
+				currentPage={filters?.PageIndex}
 				totalPage={totalPage && totalPage}
 				getPagination={(page: number) => setFilter({ ...filters, PageIndex: page })}
 				loading={{ type: 'GET_ALL', status: loading }}
-				dataSource={data}
+				dataSource={data || []}
 				columns={columns}
 				TitleCard={
 					<div className="w-full flex items-center">

@@ -10,6 +10,7 @@ import locale from 'antd/lib/locale/vi_VN'
 // redux
 import { Provider as StoreProvider } from 'react-redux'
 import { store } from '~/store'
+import Script from 'next/script'
 
 // css
 import 'antd/dist/antd.css'
@@ -29,6 +30,7 @@ import { checkInternet } from '~/common/utils/main-function'
 import MainHeader from '~/common/libs/SEO/main-header'
 
 import { GoogleAnalytics } from 'nextjs-google-analytics'
+import { log } from '~/common/utils'
 
 const gaMeasurementId = 'G-HLZL768WH8' // G-KXHWW4100Q
 
@@ -36,12 +38,16 @@ function App({ Component, pageProps }: AppProps & IViewProps) {
 	const Layout = Component.Layout || ((props) => <>{props.children}</>)
 	const breadcrumb = Component.breadcrumb || ''
 
+	// log.Yellow('Đi qua App', new Date().getTime())
+
 	useEffect(() => {
 		checkInternet()
 	}, [])
 
 	return (
 		<>
+			<Script src="https://cdn.tiny.cloud/1/lmr9ug3bh4iwjsrap9hgwgxqcngllssiraqluwto4slerrwg/tinymce/6/tinymce.min.js" />
+
 			<GoogleAnalytics trackPageViews gaMeasurementId={gaMeasurementId} />
 
 			<MainHeader />
