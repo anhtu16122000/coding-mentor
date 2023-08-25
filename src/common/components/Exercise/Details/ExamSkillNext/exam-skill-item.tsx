@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Collapse, Divider, Modal, Popconfirm, Popover, Spin } from 'antd'
 import { ShowNoti, wait } from '~/common/utils'
 import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
-import { FaInfo, FaInfoCircle } from 'react-icons/fa'
+import { FaHeadphonesAlt, FaInfo, FaInfoCircle } from 'react-icons/fa'
 import ExamSkillInfo from './exam-skill.info'
 import { IoCloseSharp } from 'react-icons/io5'
 import PrimaryTooltip from '~/common/components/PrimaryTooltip'
@@ -14,7 +14,7 @@ import { FiMoreVertical } from 'react-icons/fi'
 const { Panel } = Collapse
 
 function ExamSkillItem(props) {
-	const { data, index, onRefresh, currentSkill, setCurrentSkill } = props
+	const { data, index, onRefresh, currentSkill, setCurrentSkill, onPlayAudio } = props
 
 	const activated = currentSkill?.Id == data.Id
 
@@ -91,6 +91,21 @@ function ExamSkillItem(props) {
 			<div onClick={() => setCurrentSkill(data)} className={`cc-23-skill ${classApply}`}>
 				<div className="mr-[8px]">{data?.Name}</div>
 
+				{data?.Audio && (
+					<div
+						onClick={(e) => {
+							e.stopPropagation()
+							onPlayAudio(data)
+						}}
+					>
+						<PrimaryTooltip place="left" id={`au-sk-${index}`} content="Phát âm thanh">
+							<div className={`cc-23-skill-info mr-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
+								<FaHeadphonesAlt size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
+							</div>
+						</PrimaryTooltip>
+					</div>
+				)}
+
 				<div onClick={(e) => e.stopPropagation()}>
 					<PrimaryTooltip place="left" id={`tip-${index}`} content="Menu">
 						<Popover
@@ -102,7 +117,7 @@ function ExamSkillItem(props) {
 							overlayClassName="show-arrow exam-skill"
 						>
 							<div className={`cc-23-skill-info ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
-								<FiMoreVertical size={12} className={activated ? 'text-[#0A89FF]' : 'text-[#fff]'} />
+								<FiMoreVertical size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
 							</div>
 						</Popover>
 					</PrimaryTooltip>

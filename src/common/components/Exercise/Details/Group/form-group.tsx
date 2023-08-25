@@ -223,8 +223,8 @@ const GroupForm: FC<IGroupForm> = (props) => {
 				}
 			>
 				<Form disabled={loading} form={form} layout="vertical" initialValues={{ remember: true }} onFinish={onFinish}>
-					<div className="grid grid-cols-8 gap-x-4">
-						<div className="col-span-8 w800:col-span-4 grid grid-cols-4 gap-x-4">
+					<div className="grid grid-cols-8 gap-x-1">
+						<div className="col-span-8 w800:col-span-4 pr-[16px] grid grid-cols-4 gap-x-4" style={{ borderRight: '1px solid #0000002b' }}>
 							<div id="the-baby-form" className="col-span-4 grid grid-cols-4 gap-x-4">
 								<Form.Item className="col-span-2" label="Tên nhóm" name="Name" rules={formRequired}>
 									<Input className="primary-input" placeholder="" />
@@ -279,7 +279,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 						</div>
 
 						<div className="cc-group-quest-list">
-							{textError && <div className="!ml-[25px] mb-2 text-danger">{textError}</div>}
+							{textError && <div className="mb-2 text-danger">{textError}</div>}
 
 							{currentType == QUESTION_TYPES.MultipleChoice && <MultipleChoiceForm />}
 							{currentType == QUESTION_TYPES.Write && <CreateWriting />}

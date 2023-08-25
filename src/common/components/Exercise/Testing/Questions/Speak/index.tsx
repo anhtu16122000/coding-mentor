@@ -104,14 +104,14 @@ const SpeakingQuestion = (props) => {
 							getActiveID={() => {}}
 						/>
 
-						<div className="mt-4" style={{ display: 'flex' }}>
-							{/* <UploadAudioField
+						{/* <div className="mt-4" style={{ display: 'flex' }}>
+							<UploadAudioField
 								isHideControl
 								getFile={(file: any) => onChange(exercise.ExerciseTopicId, file)}
 								link={getLinkRecorded(exerIndex)}
 							/>
-							<div style={{ marginTop: 5, marginLeft: 9 }}>(Phương thức dự phòng)</div> */}
-						</div>
+							<div style={{ marginTop: 5, marginLeft: 9 }}>(Phương thức dự phòng)</div>
+						</div> */}
 					</>
 				)}
 			</div>

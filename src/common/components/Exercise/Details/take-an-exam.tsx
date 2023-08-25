@@ -37,13 +37,13 @@ import { VscSettings } from 'react-icons/vsc'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 
-function ExamDetail() {
+function TakeAnExamDetail() {
 	const router = useRouter()
 	const dispatch = useDispatch()
 
 	// const totalPoint = useSelector((state: RootState) => state.globalState.packageTotalPoint)
 
-	const [examInfo, setExamInfo] = useState(null)
+	const [examInfo, setTestInfo] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const [currentSkill, setCurrentSkill] = useState(null)
 
@@ -56,7 +56,7 @@ function ExamDetail() {
 	useEffect(() => {
 		getHeight()
 
-		dispatch(setGlobalBreadcrumbs([{ title: 'Quản lý đề', link: '/exam' }]))
+		dispatch(setGlobalBreadcrumbs([{ title: 'Làm bài tập', link: '/exam' }]))
 
 		const handleRouteChange = async (url) => {
 			dispatch(setGlobalBreadcrumbs([]))
@@ -73,22 +73,17 @@ function ExamDetail() {
 
 	useEffect(() => {
 		if (!!router?.query?.exam) {
-			getExamInfo()
+			getTestInfo()
 			getExamSkill()
 		}
 	}, [router])
 
-	async function getExamInfo() {
+	// GET thông tin của cái bài này
+	async function getTestInfo() {
 		try {
-			const res = await ieltsExamApi.getByID(parseInt(decode(router?.query?.exam + '')))
+			const res = await doingTestApi.getByID(parseInt(router?.query?.exam + ''))
 			if (res.status == 200) {
-				setExamInfo(res.data.data)
-				dispatch(
-					setGlobalBreadcrumbs([
-						{ title: 'Quản lý đề', link: '/exam' },
-						{ title: res.data.data?.Name, link: '' }
-					])
-				)
+				setTestInfo(res.data.data)
 			}
 		} catch (error) {
 			ShowNostis.error(error?.message)
@@ -100,7 +95,7 @@ function ExamDetail() {
 	const [skills, setSkills] = useState([])
 	async function getExamSkill() {
 		try {
-			const res = await ieltsSkillApi.getAll({ pageSize: 99, pageIndex: 1, ieltsExamId: parseInt(decode(router?.query?.exam + '')) })
+			const res = await ieltsSkillApi.getAll({ pageSize: 99, pageIndex: 1, ieltsExamId: parseInt(router?.query?.exam + '') })
 			if (res.status == 200) {
 				setSkills(res.data.data)
 
@@ -292,7 +287,9 @@ function ExamDetail() {
 	}
 
 	useEffect(() => {
-		log.Yellow('curGroup', curGroup)
+		if (curGroup) {
+			log.Yellow('curGroup', curGroup)
+		}
 	}, [curGroup])
 
 	function getQuestIndex(Id) {
@@ -451,52 +448,54 @@ function ExamDetail() {
 						)}
 					</div>
 
-					{showSkills && showSections && (
-						<div className="mt-[-16px]">
-							<Divider className="ant-divider-16" />
-						</div>
-					)}
+					{skills.length != 0 && !!currentSkill?.Id && (
+						<>
+							{showSkills && showSections && (
+								<div className="mt-[-16px]">
+									<Divider className="ant-divider-16" />
+								</div>
+							)}
 
-					<div className="exam-23-sections">
-						{loading && (
-							<div className="flex items-center">
-								<Skeleton active paragraph={false} style={{ width: '100px' }} />
-								<Skeleton active paragraph={false} style={{ width: '50px', marginLeft: 8, marginRight: 8 }} />
-								<Skeleton active paragraph={false} style={{ width: '70px' }} />
-							</div>
-						)}
+							<div className="exam-23-sections">
+								{loading && (
+									<div className="flex items-center">
+										<Skeleton active paragraph={false} style={{ width: '100px' }} />
+										<Skeleton active paragraph={false} style={{ width: '50px', marginLeft: 8, marginRight: 8 }} />
+										<Skeleton active paragraph={false} style={{ width: '70px' }} />
+									</div>
+								)}
 
-						{showSections && !!currentSkill && (
-							<div className="flex items-center pb-[16px] scroll-h">
-								<CreateExamSection onRefresh={(e) => getSections(e || null)} skill={currentSkill} />
+								{showSections && !!currentSkill && (
+									<div className="flex items-center pb-[16px] scroll-h">
+										<CreateExamSection onRefresh={(e) => getSections(e || null)} skill={currentSkill} />
 
-								{sections.map((item, index) => {
-									return (
-										<ExamSectionItem
-											key={`sec-e${index}`}
-											index={index}
-											data={item}
-											currentSection={currentSection}
-											setCurrentSection={setCurrentSection}
-											onRefresh={getSections}
-											onPlayAudio={(e) => setCurAudio(e || '')}
-											createGroupComponent={
-												<GroupForm
-													section={currentSection}
-													onRefresh={() => {
-														getQuestionsByGroup()
-														getQuestions()
-													}}
+										{sections.map((item, index) => {
+											return (
+												<ExamSectionItem
+													key={`sec-e${index}`}
+													index={index}
+													data={item}
+													currentSection={currentSection}
+													setCurrentSection={setCurrentSection}
+													onRefresh={getSections}
+													onPlayAudio={(e) => setCurAudio(e || '')}
+													createGroupComponent={
+														<GroupForm
+															section={currentSection}
+															onRefresh={() => {
+																getQuestionsByGroup()
+																getQuestions()
+															}}
+														/>
+													}
 												/>
-											}
-										/>
-									)
-								})}
+											)
+										})}
+									</div>
+								)}
 							</div>
-						)}
-					</div>
-
-					{!loading && skills.length == 0 && <Empty />}
+						</>
+					)}
 				</div>
 
 				<div className="flex-1 flex relative">
@@ -638,4 +637,4 @@ function ExamDetail() {
 	)
 }
 
-export default ExamDetail
+export default TakeAnExamDetail

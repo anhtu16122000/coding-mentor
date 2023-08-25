@@ -86,20 +86,6 @@ const AudioRecord = (props) => {
 		Promise.resolve(navigator.mediaDevices.getUserMedia({ audio: true }))
 	}, [])
 
-	// const getAudio = useMemo(() => {
-	// 	const getPackageResultDetailInfoList = packageResult.SetPackageResultDetailInfoList.find(
-	// 		(item) => item.ExamTopicDetailID === dataQuestion.ExamTopicDetailID
-	// 	)
-	// 	const getPackageExerciseStudentInfoList = getPackageResultDetailInfoList.SetPackageExerciseStudentInfoList.find(
-	// 		(data) => data.ExerciseID === exerciseID
-	// 	)
-	// 	if (getPackageExerciseStudentInfoList.SetPackageExerciseAnswerStudentList.length !== 0) {
-	// 		return getPackageExerciseStudentInfoList.SetPackageExerciseAnswerStudentList[0].FileAudio
-	// 	} else {
-	// 		return ''
-	// 	}
-	// }, [packageResult])
-
 	return (
 		<div className="wrap-audio-record mt-2">
 			{loadingUpload ? (
@@ -122,11 +108,6 @@ const AudioRecord = (props) => {
 							<source src={linkRecord} type="audio/mpeg" />
 						</audio>
 					)}
-					{/* {!!getAudio ? (
-						<audio controls>
-							<source src={getAudio} type="audio/mpeg" />
-						</audio>
-					) : null} */}
 				</>
 			)}
 
@@ -140,12 +121,6 @@ const AudioRecord = (props) => {
 
 			{isRecord && (
 				<>
-					{/* <Tooltip title="Tạm dừng">
-						<button className="btn-record pause mr-2" onClick={pause}>
-							{!isPause ? <Pause /> : <Play />}
-						</button>
-					</Tooltip> */}
-
 					<Tooltip title="Lưu lại">
 						<button className="btn-record save" onClick={stop}>
 							<Square />

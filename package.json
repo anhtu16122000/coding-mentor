@@ -58,6 +58,7 @@
 		"react-dropzone": "^14.2.2",
 		"react-feather": "^2.0.10",
 		"react-google-charts": "^4.0.0",
+		"react-h5-audio-player": "^3.8.6",
 		"react-hook-form": "^7.33.1",
 		"react-html-parser": "^2.0.2",
 		"react-icons": "^4.4.0",
