@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import React from 'react'
 import appConfigs from '~/appConfig'
-import TakeAnExamDetail from '~/common/components/Exercise/Details/take-an-exam'
+import TakeAnExamDetail from '~/common/components/Exercise/Details/TakeAnExam/take-an-exam'
 
 const ExamDetailPage = () => {
 	return (

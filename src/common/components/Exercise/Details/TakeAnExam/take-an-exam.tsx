@@ -1,49 +1,59 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Divider, Drawer, Empty, Popconfirm, Skeleton, Switch } from 'antd'
+import { Card, Divider, Drawer, Empty, Modal, Popconfirm, Skeleton, Switch } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { setGlobalBreadcrumbs } from '~/store/globalState'
 import Router, { useRouter } from 'next/router'
 import { RootState } from '~/store'
-import PrimaryButton from '../../Primary/Button'
+import PrimaryButton from '../../../Primary/Button'
 import { HiOutlineBookOpen } from 'react-icons/hi'
 import { ieltsExamApi } from '~/api/IeltsExam'
 import { decode, wait } from '~/common/utils/common'
 import { ShowNostis, log } from '~/common/utils'
 import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
-import CreateExamSkill from './ExamSkillNext/exam-skill-form'
-import ExamSkillItem from './ExamSkillNext/exam-skill-item'
+import CreateExamSkill from '../ExamSkillNext/exam-skill-form'
+import ExamSkillItem from '../ExamSkillNext/exam-skill-item'
 import { ieltsSectionApi } from '~/api/IeltsExam/ieltsSection'
-import ExamSectionItem from './ExamSkillNext/exam-section-item'
-import CreateExamSection from './ExamSkillSection/exam-section-form'
-import ButtonQuestion from './ButtonQuestion'
+import ExamSectionItem from '../ExamSkillNext/exam-section-item'
+import CreateExamSection from '../ExamSkillSection/exam-section-form'
+import ButtonQuestion from '../ButtonQuestion'
 import { MdArrowForwardIos, MdSettings } from 'react-icons/md'
 import { BsFillGrid3X2GapFill } from 'react-icons/bs'
-import htmlParser from '../../HtmlParser'
+import htmlParser from '../../../HtmlParser'
 import { ieltsGroupApi } from '~/api/IeltsExam/ieltsGroup'
-import TestingQuestions from '../Testing/Questions'
-import ChoiceInputForm from './QuestionsForm/MultipleChoiceForm/Form'
+import TestingQuestions from '../../Testing/Questions'
+import ChoiceInputForm from '../QuestionsForm/MultipleChoiceForm/Form'
 import { setNewCurrentGroup } from '~/store/newExamReducer'
-import GroupForm from './Group/form-group'
-import ExamProvider from '../../Auth/Provider/exam'
+import GroupForm from '../Group/form-group'
+import ExamProvider from '../../../Auth/Provider/exam'
 import { QUESTION_TYPES } from '~/common/libs'
-import DragHeader from './Components/drag-header'
-import GroupContent from './Components/group-content'
+import DragHeader from '../Components/drag-header'
+import GroupContent from '../Components/group-content'
 import { IoClose, IoCloseSharp } from 'react-icons/io5'
-import CurrentGroupController from './Components/current-group-controller'
+import CurrentGroupController from '../Components/current-group-controller'
 
 import AudioPlayer from 'react-h5-audio-player'
 import { AiFillControl } from 'react-icons/ai'
 import { VscSettings } from 'react-icons/vsc'
-import PrimaryTooltip from '../../PrimaryTooltip'
+import PrimaryTooltip from '../../../PrimaryTooltip'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
+
+import Lottie from 'react-lottie-player'
+import lottieFile from '~/common/components/json/animation_lludr9cs.json'
+import timer from '~/common/components/json/131525-timer.json'
+import CountdownTimer from '../Countdown'
+import { setSuperOverview } from '~/store/take-an-exam'
+import TakeAnExamHeader from './Header'
+import TakeAnExamController from './Controller'
 
 function TakeAnExamDetail() {
 	const router = useRouter()
 	const dispatch = useDispatch()
 
+	const user = useSelector((state: RootState) => state.user.information)
+
 	// const totalPoint = useSelector((state: RootState) => state.globalState.packageTotalPoint)
 
-	const [examInfo, setTestInfo] = useState(null)
+	const [testInfo, setTestInfo] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const [currentSkill, setCurrentSkill] = useState(null)
 
@@ -52,6 +62,8 @@ function TakeAnExamDetail() {
 
 	const [currentQuestion, setCurrentQuestion] = useState(null)
 	const [showQuestions, setShowQuestions] = useState<boolean>(true)
+
+	const [blocked, setBlocked] = useState('')
 
 	useEffect(() => {
 		getHeight()
@@ -72,18 +84,41 @@ function TakeAnExamDetail() {
 	}, [])
 
 	useEffect(() => {
-		if (!!router?.query?.exam) {
-			getTestInfo()
-			getExamSkill()
+		if (!!router?.query?.exam && !!user) {
+			getInfo()
 		}
-	}, [router])
+	}, [router, user])
 
 	// GET thông tin của cái bài này
-	async function getTestInfo() {
+	async function getInfo() {
 		try {
 			const res = await doingTestApi.getByID(parseInt(router?.query?.exam + ''))
 			if (res.status == 200) {
-				setTestInfo(res.data.data)
+				if (res.data?.data?.StudentId != user?.UserInformationId) {
+					setBlocked('Không thể làm bài của người khác')
+				} else {
+					//  Mọi thứ phải bắt đầu từ khúc này. Nếu bị block thì không làm gì cả
+					setTestInfo(res.data.data)
+					// getExamInfo(res?.data?.data?.IeltsExamId)
+					// getExamSkill(res?.data?.data?.IeltsExamId)
+					getOverview(res?.data?.data?.IeltsExamId)
+				}
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const [examInfo, setExamInfo] = useState(null)
+
+	// Lấy thông tin của đề được gắn dô bài này
+	async function getExamInfo(id) {
+		try {
+			const res = await ieltsExamApi.getByID(id)
+			if (res.status == 200) {
+				setExamInfo(res.data.data)
 			}
 		} catch (error) {
 			ShowNostis.error(error?.message)
@@ -93,9 +128,9 @@ function TakeAnExamDetail() {
 	}
 
 	const [skills, setSkills] = useState([])
-	async function getExamSkill() {
+	async function getExamSkill(examId) {
 		try {
-			const res = await ieltsSkillApi.getAll({ pageSize: 99, pageIndex: 1, ieltsExamId: parseInt(router?.query?.exam + '') })
+			const res = await ieltsSkillApi.getAll({ pageSize: 999, pageIndex: 1, ieltsExamId: examId })
 			if (res.status == 200) {
 				setSkills(res.data.data)
 
@@ -387,115 +422,60 @@ function TakeAnExamDetail() {
 		}
 	}
 
+	// ---------------------------------------
+
+	const globalState = useSelector((state: RootState) => state.takeAnExam)
+
+	const [overview, setOverview] = useState(null)
+
+	async function getOverview(examId) {
+		console.time('- Get Overview')
+		try {
+			const response = await ieltsExamApi.getOverview(examId)
+			if (response.status == 200) {
+				setOverview(response.data.data)
+				setSkills(response.data.data?.IeltsSkills)
+				// getCurrentGroup(response.data.data?.Sections)
+
+				dispatch(setSuperOverview(response.data.data))
+			} else {
+				setOverview(null)
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		} finally {
+			console.timeEnd('- Get Overview')
+			console.timeEnd('- Get All Exam Data')
+			setLoading(false)
+		}
+	}
+
 	return (
 		<ExamProvider>
 			<div className="exam-23-container">
 				<div className="cc-exam-detail z-10 !w-full bg-[#fff]">
-					<div className="exam-23-header">
-						<div className="ml-[16px] flex-1 pr-2">
-							<div className="cc-text-16-700 in-1-line">{examInfo?.Name}</div>
-							<div className="cc-text-14-500-blue flex items-center mt-[2px]">
-								<div className="all-center inline-flex cc-choice-point !ml-0">{examInfo?.QuestionsAmount} câu</div>
-								<div className="cc-choice-correct-number">{examInfo?.Point} điểm</div>
-							</div>
-						</div>
+					<TakeAnExamHeader
+						loading={loading}
+						testInfo={testInfo}
+						overview={overview}
+						showSettings={showSettings}
+						setShowSetings={setShowSetings}
+					/>
 
-						<div className="mr-[8px] flex-shrink-0">
-							{showTestButton() && (
-								<PrimaryButton loading={creatingTest} onClick={createDoingTest} background="blue" type="button">
-									{!creatingTest && <HiOutlineBookOpen size={20} />}
-									<div className="ml-2 hidden w500:inline">Làm thử</div>
-								</PrimaryButton>
-							)}
-						</div>
-
-						<PrimaryButton onClick={() => setShowSetings(!showSettings)} className="mr-[16px]" type="button" background="yellow">
-							<MdSettings size={20} />
-						</PrimaryButton>
-					</div>
-
-					{(showSkills || showSections) && (
-						<div className="mt-[-16px]">
-							<Divider className="ant-divider-16" />
-						</div>
-					)}
-
-					<div className="exam-23-skills">
-						{loading && (
-							<div className="flex items-center">
-								<Skeleton active paragraph={false} style={{ width: '100px' }} />
-								<Skeleton active paragraph={false} style={{ width: '50px', marginLeft: 8, marginRight: 8 }} />
-								<Skeleton active paragraph={false} style={{ width: '70px' }} />
-							</div>
-						)}
-
-						{showSkills && (
-							<div className="flex items-center pb-[16px] scroll-h">
-								<CreateExamSkill onRefresh={getExamSkill} />
-
-								{skills.map((sk, index) => {
-									return (
-										<ExamSkillItem
-											onPlayAudio={(e) => setCurAudio(e || '')}
-											data={sk}
-											currentSkill={currentSkill}
-											setCurrentSkill={setCurrentSkill}
-											onRefresh={getExamSkill}
-										/>
-									)
-								})}
-							</div>
-						)}
-					</div>
-
-					{skills.length != 0 && !!currentSkill?.Id && (
-						<>
-							{showSkills && showSections && (
-								<div className="mt-[-16px]">
-									<Divider className="ant-divider-16" />
-								</div>
-							)}
-
-							<div className="exam-23-sections">
-								{loading && (
-									<div className="flex items-center">
-										<Skeleton active paragraph={false} style={{ width: '100px' }} />
-										<Skeleton active paragraph={false} style={{ width: '50px', marginLeft: 8, marginRight: 8 }} />
-										<Skeleton active paragraph={false} style={{ width: '70px' }} />
-									</div>
-								)}
-
-								{showSections && !!currentSkill && (
-									<div className="flex items-center pb-[16px] scroll-h">
-										<CreateExamSection onRefresh={(e) => getSections(e || null)} skill={currentSkill} />
-
-										{sections.map((item, index) => {
-											return (
-												<ExamSectionItem
-													key={`sec-e${index}`}
-													index={index}
-													data={item}
-													currentSection={currentSection}
-													setCurrentSection={setCurrentSection}
-													onRefresh={getSections}
-													onPlayAudio={(e) => setCurAudio(e || '')}
-													createGroupComponent={
-														<GroupForm
-															section={currentSection}
-															onRefresh={() => {
-																getQuestionsByGroup()
-																getQuestions()
-															}}
-														/>
-													}
-												/>
-											)
-										})}
-									</div>
-								)}
-							</div>
-						</>
-					)}
+					<TakeAnExamController
+						showSkills={showSkills}
+						showSections={showSections}
+						loading={loading}
+						skills={skills}
+						setCurAudio={setCurAudio}
+						currentSkill={currentSkill}
+						setCurrentSkill={setCurrentSkill}
+						onRefreshSkill={getExamSkill}
+						sections={sections}
+						currentSection={currentSection}
+						setCurrentSection={setCurrentSection}
+						getSections={getSections}
+					/>
 				</div>
 
 				<div className="flex-1 flex relative">
@@ -632,6 +612,13 @@ function TakeAnExamDetail() {
 						</div>
 					</Drawer>
 				)}
+
+				<Modal centered closable={false} width={400} open={!!blocked} footer={null}>
+					<div className="w-full flex flex-col items-center">
+						<Lottie loop animationData={lottieFile} play className="w-[220px]" />
+						<div className="text-[18px] font-[600] text-[red]">{blocked}</div>
+					</div>
+				</Modal>
 			</div>
 		</ExamProvider>
 	)

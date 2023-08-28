@@ -53,14 +53,16 @@ function AuthProvider({ children }: IAuthLayout) {
 	}
 
 	const getClass = async () => {
-		try {
-			const res = await classApi.getAll({ pageSize: 10, pageIndex: 1 })
-			if (res.status == 200) {
-				dispatch(setListClass([...res.data.data]))
-				dispatch(setTotalClass(res.data?.totalRow))
-				// dispatch(setStatusData({ ...res.data, data: [] }))
-			}
-		} catch (err) {}
+		if (!router?.asPath.includes('take-an-exam')) {
+			try {
+				const res = await classApi.getAll({ pageSize: 10, pageIndex: 1 })
+				if (res.status == 200) {
+					dispatch(setListClass([...res.data.data]))
+					dispatch(setTotalClass(res.data?.totalRow))
+					// dispatch(setStatusData({ ...res.data, data: [] }))
+				}
+			} catch (err) {}
+		}
 	}
 
 	const _refreshToken = async (param) => {

@@ -19,5 +19,4 @@ const newExamReducer = createSlice({
 })
 
 export const { setNewCurrentSection, setNewCurrentGroup } = newExamReducer.actions
-
 export default newExamReducer.reducer

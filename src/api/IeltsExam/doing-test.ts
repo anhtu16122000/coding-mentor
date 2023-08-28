@@ -7,7 +7,7 @@ export const doingTestApi = {
 		return instance.get<IApiResultData<TIeltsExam[]>>(url, { params })
 	},
 	getByID(ID: number) {
-		return instance.get<IApiResultData<TIeltsExam>>(`${url}/${ID}`)
+		return instance.get<IApiResultData<any>>(`${url}/${ID}`)
 	},
 	post(data) {
 		return instance.post(url, data)

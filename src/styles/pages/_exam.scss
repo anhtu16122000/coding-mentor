@@ -206,3 +206,34 @@
 .rhap_current-time {
 	margin-right: 4px !important;
 }
+
+.take-an-exam {
+	&__right {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #f0f0f0;
+		border-radius: 6px;
+		padding-left: 8px;
+		padding-right: 8px;
+		@media screen and (max-width: 600px) {
+			display: none;
+		}
+	}
+	&__countdown {
+		font-weight: 700;
+		font-size: 20px;
+		color: #333c45;
+		cursor: pointer;
+	}
+	&__icon-show {
+		&--show {
+			rotate: -90deg;
+			transition-duration: 300ms;
+		}
+		&--hidden {
+			rotate: 90deg;
+			transition-duration: 300ms;
+		}
+	}
+}
