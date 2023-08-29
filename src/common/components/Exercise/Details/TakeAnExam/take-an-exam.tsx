@@ -469,6 +469,8 @@ function TakeAnExamDetail() {
 						overview={overview}
 						showSettings={showSettings}
 						setShowSetings={setShowSetings}
+						skills={skills}
+						currentSkill={currentSkill}
 					/>
 
 					<TakeAnExamController

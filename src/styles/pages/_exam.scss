@@ -237,3 +237,18 @@
 		}
 	}
 }
+
+.ex-23-btn-play-audio {
+	@apply px-[8px] h-[24px] cursor-pointer flex-shrink-0 all-center shadow-sm rounded-full bg-[#0A89FF] hover:opacity-90;
+	.play-audio-text {
+		@apply text-[#fff] text-[12px] font-[600];
+	}
+}
+
+.ex-23-btn-change-skill {
+	@apply cc-23-skill text-[#fff] bg-[#1b73e8] hover:bg-[#1867cf] flex items-center;
+}
+
+.tae-skill-name {
+	@apply font-[600] text-[16px] text-[#1b73e8];
+}

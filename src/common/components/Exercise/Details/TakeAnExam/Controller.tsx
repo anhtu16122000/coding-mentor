@@ -6,6 +6,7 @@ import ExamSectionItem from '../ExamSkillNext/exam-section-item'
 import { MdArrowBackIos, MdOutlineArrowForwardIos } from 'react-icons/md'
 import { FaHeadphonesAlt } from 'react-icons/fa'
 import PrimaryTooltip from '~/common/components/PrimaryTooltip'
+import { log } from '~/common/utils'
 
 function SkillLoading({ loading }) {
 	if (loading) {
@@ -27,6 +28,16 @@ const TakeAnExamController = (props) => {
 
 	const indexOfSkill = skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
 
+	function handleChangeSkill(param) {
+		if (param == 'up') {
+			setCurrentSkill(skills[indexOfSkill + 1])
+		}
+		if (param == 'down') {
+			setCurrentSkill(skills[indexOfSkill - 1])
+		}
+		setCurAudio('')
+	}
+
 	return (
 		<>
 			{(showSkills || showSections) && (
@@ -40,51 +51,30 @@ const TakeAnExamController = (props) => {
 
 				{showSkills && (
 					<div className="flex items-center pb-[16px] scroll-h w-full">
-						<div className="flex-1 flex justify-start">
+						<div className="flex-1 flex flex-col">
+							<div>
+								<div className="tae-skill-name">Kỹ năng: {skills[indexOfSkill]?.Name}</div>
+								<div className="mt-[4px] flex items-center">
+									{skills[indexOfSkill]?.Audio && (
+										<div onClick={(e) => setCurAudio(skills[indexOfSkill])} className="ex-23-btn-play-audio">
+											<FaHeadphonesAlt size={14} className="text-[#fff] mr-[4px]" />
+											<div className="play-audio-t">Phát âm thanh</div>
+										</div>
+									)}
+								</div>
+							</div>
+						</div>
+
+						<div className="flex-1 flex justify-end">
 							{!!skills[indexOfSkill - 1] && (
-								<div
-									onClick={() => {
-										setCurrentSkill(skills[indexOfSkill - 1])
-										setCurAudio('')
-									}}
-									className="cc-23-skill text-[#fff] bg-[#1b73e8] hover:bg-[#1867cf] flex items-center"
-								>
+								<div onClick={() => handleChangeSkill('down')} className="ex-23-btn-change-skill">
 									<MdArrowBackIos size={18} />
 									<div className="ml-[4px]">{skills[indexOfSkill - 1]?.Name}</div>
 								</div>
 							)}
-						</div>
 
-						<div className="flex-1 all-center font-[600] text-[18px]">
-							<div>Kỹ năng: {skills[indexOfSkill]?.Name}</div>
-
-							{skills[indexOfSkill]?.Audio && (
-								<div
-									onClick={(e) => {
-										e.stopPropagation()
-										setCurAudio(skills[indexOfSkill])
-									}}
-								>
-									<PrimaryTooltip place="right" id={`au-sk-${indexOfSkill}`} content="Phát âm thanh">
-										<div
-											className={`w-[24px] h-[24px] cursor-pointer flex-shrink-0 all-center shadow-sm rounded-full ml-[8px] bg-[#0A89FF]`}
-										>
-											<FaHeadphonesAlt size={14} className="text-[#fff]" />
-										</div>
-									</PrimaryTooltip>
-								</div>
-							)}
-						</div>
-
-						<div className="flex-1 flex justify-end">
 							{!!skills[indexOfSkill + 1] && (
-								<div
-									onClick={() => {
-										setCurrentSkill(skills[indexOfSkill + 1])
-										setCurAudio('')
-									}}
-									className="cc-23-skill text-[#fff] bg-[#1b73e8] hover:bg-[#1867cf] flex items-center"
-								>
+								<div onClick={() => handleChangeSkill('up')} className="ex-23-btn-change-skill">
 									<div className="mr-[4px]">{skills[indexOfSkill + 1]?.Name}</div>
 									<MdOutlineArrowForwardIos size={18} />
 								</div>

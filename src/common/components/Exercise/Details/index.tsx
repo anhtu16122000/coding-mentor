@@ -31,7 +31,7 @@ import GroupContent from './Components/group-content'
 import { IoClose, IoCloseSharp } from 'react-icons/io5'
 import CurrentGroupController from './Components/current-group-controller'
 
-import AudioPlayer from 'react-h5-audio-player'
+// import AudioPlayer from 'react-h5-audio-player'
 import { AiFillControl } from 'react-icons/ai'
 import { VscSettings } from 'react-icons/vsc'
 import PrimaryTooltip from '../../PrimaryTooltip'

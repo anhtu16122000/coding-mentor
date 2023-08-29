@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 
 const TakeAnExamHeader = (props) => {
-	const { testInfo, overview, loading, setShowSetings, showSettings } = props
+	const { testInfo, overview, loading, setShowSetings, showSettings, skills, currentSkill } = props
 
 	const globalState = useSelector((state: RootState) => state.takeAnExam)
 
@@ -54,6 +54,8 @@ const TakeAnExamHeader = (props) => {
 		}
 	}
 
+	const indexOfSkill = skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
+
 	return (
 		<div className="exam-23-header">
 			<div className="ml-[16px] flex-1 pr-2">
@@ -61,6 +63,9 @@ const TakeAnExamHeader = (props) => {
 				<div className="cc-text-14-500-blue flex items-center mt-[2px]">
 					<div className="all-center inline-flex cc-choice-point !ml-0">{overview?.QuestionsAmount} câu</div>
 					<div className="cc-choice-correct-number">{overview?.Point} điểm</div>
+					<div className="cc-choice-orange">
+						Kỹ năng: {indexOfSkill + 1}/{skills.length}
+					</div>
 				</div>
 			</div>
 
