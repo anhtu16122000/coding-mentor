@@ -166,6 +166,13 @@ export const AdminChildMenu = [
 			},
 			{
 				ItemType: 'single',
+				Key: '/info-course/nearingCompletion',
+				Route: '/info-course/nearingCompletion',
+				Text: 'Học viên sắp học xong',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
 				Key: '/info-course/registration',
 				Route: '/info-course/registration',
 				Text: 'Hẹn đăng ký',

@@ -1,4 +1,4 @@
-import { Form, Popover, Select, Tree } from 'antd'
+import { Form, Input, InputNumber, Popover, Select, Tree } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import { ShowNostis } from '~/common/utils'
 import PrimaryTooltip from '../../PrimaryTooltip'
@@ -12,6 +12,7 @@ import { setFilterBranchs, setFilterClass, setFilterPrograms } from '~/store/fil
 import { programApi } from '~/api/learn/program'
 import FooterFilters from '../../Footer/Filters'
 import RestApi from '~/api/RestApi'
+import NumericInput from '~/pages/info-course/nearingCompletion/NumberInput'
 
 interface IFilters {
 	filters?: any
@@ -22,12 +23,13 @@ interface IFilters {
 	showWarning?: boolean
 	showClass?: boolean
 	showSort?: boolean
+	showLessonRemaining?: boolean
 	isVideos?: boolean
 	statusList?: Array<{ value: any; title: string }>
 }
 
 const Filters: FC<IFilters> = (props) => {
-	const { filters, onSubmit, onReset, showBranch, showProgram, statusList, showWarning } = props
+	const { filters, onSubmit, onReset, showBranch, showProgram, statusList, showWarning, showLessonRemaining } = props
 	const { showClass, showSort, isVideos } = props
 
 	const [form] = Form.useForm()
@@ -35,6 +37,7 @@ const Filters: FC<IFilters> = (props) => {
 	const dispatch = useDispatch()
 
 	const [visible, setVisible] = useState(false)
+	const [numberValue, setNumberValue] = useState<string>('1')
 
 	const branches = useSelector((state: RootState) => state.filter.Branchs)
 	const programs = useSelector((state: RootState) => state.filter.Programs)
@@ -158,6 +161,7 @@ const Filters: FC<IFilters> = (props) => {
 	}
 
 	function onFinish(params) {
+		console.log('params: ', params)
 		const DATA_SUBMIT = {
 			...filters,
 			...params,
@@ -289,6 +293,17 @@ const Filters: FC<IFilters> = (props) => {
 								Tên Z-A
 							</Select.Option>
 						</Select>
+					</Form.Item>
+				)}
+				{!!showLessonRemaining && (
+					<Form.Item className="col-span-2" name="request.lessonRemaining" label="Buổi còn lại" rules={formNoneRequired}>
+						<NumericInput
+							value={numberValue}
+							onChange={(value) => {
+								setNumberValue(value)
+								form.setFieldValue('request.lessonRemaining', value)
+							}}
+						/>
 					</Form.Item>
 				)}
 
