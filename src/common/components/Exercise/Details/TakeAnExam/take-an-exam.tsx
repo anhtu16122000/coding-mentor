@@ -31,7 +31,6 @@ import GroupContent from '../Components/group-content'
 import { IoClose, IoCloseSharp } from 'react-icons/io5'
 import CurrentGroupController from '../Components/current-group-controller'
 
-import AudioPlayer from 'react-h5-audio-player'
 import { AiFillControl } from 'react-icons/ai'
 import { VscSettings } from 'react-icons/vsc'
 import PrimaryTooltip from '../../../PrimaryTooltip'
@@ -44,6 +43,8 @@ import CountdownTimer from '../Countdown'
 import { setSuperOverview } from '~/store/take-an-exam'
 import TakeAnExamHeader from './Header'
 import TakeAnExamController from './Controller'
+import AudioPlayer from '../AudioPlayer'
+import MainAudioPlayer from '../AudioPlayer'
 
 function TakeAnExamDetail() {
 	const router = useRouter()
@@ -431,13 +432,16 @@ function TakeAnExamDetail() {
 	async function getOverview(examId) {
 		console.time('- Get Overview')
 		try {
-			const response = await ieltsExamApi.getOverview(examId)
+			const response: any = await ieltsExamApi.getOverview(examId)
 			if (response.status == 200) {
 				setOverview(response.data.data)
 				setSkills(response.data.data?.IeltsSkills)
-				// getCurrentGroup(response.data.data?.Sections)
 
 				dispatch(setSuperOverview(response.data.data))
+
+				if (response.data.data?.IeltsSkills?.length > 0) {
+					setCurrentSkill(response.data.data?.IeltsSkills[0])
+				}
 			} else {
 				setOverview(null)
 			}
@@ -448,6 +452,11 @@ function TakeAnExamDetail() {
 			console.timeEnd('- Get All Exam Data')
 			setLoading(false)
 		}
+	}
+
+	function handleChangeSkill(params) {
+		setCurrentSection(null)
+		setCurrentSkill(params)
 	}
 
 	return (
@@ -469,7 +478,7 @@ function TakeAnExamDetail() {
 						skills={skills}
 						setCurAudio={setCurAudio}
 						currentSkill={currentSkill}
-						setCurrentSkill={setCurrentSkill}
+						setCurrentSkill={handleChangeSkill}
 						onRefreshSkill={getExamSkill}
 						sections={sections}
 						currentSection={currentSection}
@@ -479,41 +488,13 @@ function TakeAnExamDetail() {
 				</div>
 
 				<div className="flex-1 flex relative">
-					{!!curAudio?.Audio && (
-						<div className={`right-[16px] duration-200 bottom-[16px] absolute ${showAudioControl ? 'ex-au-show' : 'ex-au-hidden'}`}>
-							<AudioPlayer
-								className="h-[94px] duration-200 !w-[calc(100vw-32px)] w400:!w-[350px] hide-loop"
-								src={curAudio?.Audio}
-								onPlay={(e) => console.log('onPlay')}
-								showSkipControls={false}
-								showDownloadProgress={false}
-								showJumpControls={false}
-								loop={false}
-								autoPlay
-								layout="horizontal-reverse"
-								header={
-									<div className="flex items-center">
-										<PrimaryTooltip
-											content={showAudioControl ? 'Thu nhỏ' : 'Mở rộng'}
-											place="left"
-											id={`x-${currentSection?.Id}-${currentSkill?.Id}`}
-										>
-											<div
-												onClick={() => setShowAudioControl(!showAudioControl)}
-												className={`all-center rounded-full w-[24px] h-[24px] cursor-pointer ${
-													showAudioControl ? 'bg-[red]' : 'bg-[#0A89FF]'
-												}`}
-											>
-												{showAudioControl && <IoCloseSharp size={18} color="#fff" />}
-												{!showAudioControl && <VscSettings size={16} color="#fff" />}
-											</div>
-										</PrimaryTooltip>
-										<div className="ml-[8px] font-[600] in-1-line">{curAudio?.Name}</div>
-									</div>
-								}
-							/>
-						</div>
-					)}
+					<MainAudioPlayer
+						curAudio={curAudio}
+						showAudioControl={showAudioControl}
+						setShowAudioControl={setShowAudioControl}
+						curSection={currentSection}
+						curSkill={currentSkill}
+					/>
 
 					<>
 						{showMain && <div id="the-fica-block" className="w-[0.5px] bg-transparent" />}

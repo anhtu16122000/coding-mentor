@@ -1,29 +1,20 @@
-import React, { useRef, useState } from 'react'
-import { Collapse, Divider, Modal, Popconfirm, Popover, Spin } from 'antd'
+import React, { useRef } from 'react'
+import { Popconfirm, Popover } from 'antd'
 import { ShowNoti, log } from '~/common/utils'
-import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
-import { FaHeadphonesAlt, FaInfo, FaInfoCircle } from 'react-icons/fa'
-import ExamSkillInfo from './exam-skill.info'
+import { FaHeadphonesAlt } from 'react-icons/fa'
 import { IoCloseSharp } from 'react-icons/io5'
 import PrimaryTooltip from '~/common/components/PrimaryTooltip'
-import { MdHeadphones } from 'react-icons/md'
-import CreateExamSkill from './exam-skill-form'
 import { FiMoreVertical } from 'react-icons/fi'
 import { ieltsSectionApi } from '~/api/IeltsExam/ieltsSection'
 import CreateExamSection from '../ExamSkillSection/exam-section-form'
 
-const { Panel } = Collapse
-
 function ExamSectionItem(props) {
-	const { data, index, onRefresh, currentSection, setCurrentSection, createGroupComponent, onPlayAudio } = props
+	const { data, index, onRefresh, currentSection, setCurrentSection, createGroupComponent, onPlayAudio, hideController } = props
 
 	const popref = useRef(null)
 
-	const [deleting, setDeleting] = useState(false)
-
 	async function handleDelete(event) {
 		event?.stopPropagation()
-		setDeleting(true)
 		try {
 			const response = await ieltsSectionApi.delete(data?.Id)
 			if (response.status == 200) {
@@ -32,8 +23,6 @@ function ExamSectionItem(props) {
 			}
 		} catch (error) {
 			ShowNoti('error', error?.message)
-		} finally {
-			setDeleting(false)
 		}
 	}
 
@@ -68,7 +57,7 @@ function ExamSectionItem(props) {
 	return (
 		<>
 			<div onClick={() => setCurrentSection(data)} className={`cc-23-skill flex-shrink-0 ${classApply}`}>
-				<div className="mr-[8px]">{data?.Name}</div>
+				<div>{data?.Name}</div>
 
 				{data?.Audio && (
 					<div
@@ -78,29 +67,31 @@ function ExamSectionItem(props) {
 						}}
 					>
 						<PrimaryTooltip place="left" id={`au-sk-${index}`} content="Phát âm thanh">
-							<div className={`cc-23-skill-info mr-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
+							<div className={`cc-23-skill-info ml-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
 								<FaHeadphonesAlt size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
 							</div>
 						</PrimaryTooltip>
 					</div>
 				)}
 
-				<div onClick={(e) => e.stopPropagation()}>
-					<PrimaryTooltip place="left" id={`tip-${index}`} content="Menu">
-						<Popover
-							ref={popref}
-							placement="rightTop"
-							title="Menu"
-							content={content}
-							trigger="click"
-							overlayClassName="show-arrow exam-skill"
-						>
-							<div className={`cc-23-skill-info ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
-								<FiMoreVertical size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
-							</div>
-						</Popover>
-					</PrimaryTooltip>
-				</div>
+				{!hideController && (
+					<div onClick={(e) => e.stopPropagation()}>
+						<PrimaryTooltip place="left" id={`tip-${index}`} content="Menu">
+							<Popover
+								ref={popref}
+								placement="rightTop"
+								title="Menu"
+								content={content}
+								trigger="click"
+								overlayClassName="show-arrow exam-skill"
+							>
+								<div className={`cc-23-skill-info ml-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
+									<FiMoreVertical size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
+								</div>
+							</Popover>
+						</PrimaryTooltip>
+					</div>
+				)}
 			</div>
 		</>
 	)
