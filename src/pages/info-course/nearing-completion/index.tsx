@@ -14,7 +14,7 @@ import { userInfoColumn } from '~/common/libs/columns/user-info'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNostis } from '~/common/utils'
 import { RootState } from '~/store'
-import { DataType } from './type'
+import { DataType } from '../../../common/pages/nearing-completion/type'
 
 const initFilters = { PageSize: PAGE_SIZE, PageIndex: 1, Search: '' }
 
