@@ -19,10 +19,10 @@ import { DataType } from './type'
 const initFilters = { PageSize: PAGE_SIZE, PageIndex: 1, Search: '' }
 
 const StudentInNearingCompletion = () => {
-	const [loading, setLoading] = useState(true)
-	const [totalPage, setTotalPage] = useState(1)
+	const [loading, setLoading] = useState<boolean>(true)
+	const [totalPage, setTotalPage] = useState<number>(1)
 	const [data, setData] = useState<DataType[]>([])
-	const [filters, setFilter] = useState(initFilters)
+	const [filters, setFilter] = useState<any>(initFilters)
 
 	useEffect(() => {
 		getData()
@@ -32,7 +32,7 @@ const StudentInNearingCompletion = () => {
 		setLoading(true)
 		try {
 			const res = await RestApi.get<any>('/StudentInClass/student-inregis', filters)
-			if (res?.status == 200) {
+			if (res?.status === 200) {
 				setData(res?.data?.data)
 				setTotalPage(res?.data?.totalRow)
 			} else {
@@ -55,17 +55,13 @@ const StudentInNearingCompletion = () => {
 
 	const theInformation = useSelector((state: RootState) => state.user?.information)
 
-	function isSaler() {
-		return theInformation?.RoleId == 5
-	}
-
 	function handleColumn(value, item) {
-		if (isSaler()) return ''
+		if (theInformation?.RoleId === 5) return ''
 
 		return (
 			<div className="flex item-center">
 				<PrimaryTooltip content="Thông tin học viên" place="left" id={`view-st-${item?.Id}`}>
-					<ButtonEye onClick={() => viewStudentDetails(item)} className="" />
+					<ButtonEye onClick={() => viewStudentDetails(item)} />
 				</PrimaryTooltip>
 			</div>
 		)
@@ -74,7 +70,7 @@ const StudentInNearingCompletion = () => {
 	const columns = [
 		userInfoColumn,
 		{
-			width: 300,
+			width: 400,
 			title: 'Liên hệ',
 			dataIndex: 'Mobile',
 			render: (a, item) => (
@@ -94,10 +90,10 @@ const StudentInNearingCompletion = () => {
 			dataIndex: 'Gender',
 			render: (value, record) => (
 				<>
-					{value == 0 && <span className="tag yellow">Khác</span>}
-					{value == 1 && <span className="tag blue">Nam</span>}
-					{value == 2 && <span className="tag green">Nữ</span>}
-					{value == 3 && <span className="tag yellow">Khác</span>}
+					{value === 0 && <span className="tag yellow">Khác</span>}
+					{value === 1 && <span className="tag blue">Nam</span>}
+					{value === 2 && <span className="tag green">Nữ</span>}
+					{value === 3 && <span className="tag yellow">Khác</span>}
 				</>
 			)
 		},
@@ -151,7 +147,7 @@ const StudentInNearingCompletion = () => {
 						<Input.Search
 							className="primary-search max-w-[250px] ml-[8px]"
 							onChange={(event) => {
-								if (event.target.value == '') {
+								if (event.target.value === '') {
 									setFilter({ ...filters, PageIndex: 1, Search: '' })
 								}
 							}}

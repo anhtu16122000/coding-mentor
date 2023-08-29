@@ -1,6 +1,7 @@
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { Input } from 'antd'
 import React from 'react'
+import { ContainerInput, ContainerMinusIcon, ContainerPlusIcon } from './index.style'
 
 interface NumericInputProps {
 	value: string
@@ -8,6 +9,7 @@ interface NumericInputProps {
 }
 
 const NumericInput = (props: NumericInputProps) => {
+	
 	const { value, onChange } = props
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,18 +44,10 @@ const NumericInput = (props: NumericInputProps) => {
 	}
 
 	return (
-		<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-			<div
-				style={{
-					border: '1px solid #DFDFDF',
-					borderBottomLeftRadius: 5,
-					borderTopLeftRadius: 5,
-					height: 30,
-					padding: '0 4px',
-				}}
-			>
+		<ContainerInput>
+			<ContainerMinusIcon>
 				<MinusOutlined onClick={handleClickMinus} />
-			</div>
+			</ContainerMinusIcon>
 
 			<Input
 				{...props}
@@ -66,18 +60,10 @@ const NumericInput = (props: NumericInputProps) => {
 					margin: '0 3px'
 				}}
 			/>
-			<div
-				style={{
-					border: '1px solid #DFDFDF',
-					borderBottomRightRadius: 5,
-					borderTopRightRadius: 5,
-					height: 30,
-					padding: '0 4px'
-				}}
-			>
+			<ContainerPlusIcon>
 				<PlusOutlined onClick={handleClickPlus} />
-			</div>
-		</div>
+			</ContainerPlusIcon>
+		</ContainerInput>
 	)
 }
 
