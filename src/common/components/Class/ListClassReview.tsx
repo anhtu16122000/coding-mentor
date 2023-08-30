@@ -19,7 +19,7 @@ const ListClassReview = (props) => {
 			renderItem={(item: IClass) => (
 				<List.Item extra={<IconButton icon="remove" color="red" type="button" tooltip="Xóa" onClick={() => handleRemoveClass(item)} />}>
 					<div className="wrapper-item-class">
-						<AvatarComponent className="img-class" url={item?.Thumbnail} type="class" />
+						<AvatarComponent className="img-class" url={item?.Thumbnail} type="class"/>
 						<div className="wrapper-info-class">
 							<p>
 								<span className="title">Lớp:</span>
@@ -28,6 +28,10 @@ const ListClassReview = (props) => {
 							<p>
 								<span className="title">Giá:</span>
 								<span className="font-normal ml-1">{Intl.NumberFormat('ja-JP').format(item?.Price)}</span>
+							</p>
+							<p>
+								<span className="title">Buổi đã học:</span>
+								<span className="font-normal ml-1">{Intl.NumberFormat('ja-JP').format(item?.CompletedLesson)}</span>
 							</p>
 							<p>
 								<span className="title">Số lượng:</span>

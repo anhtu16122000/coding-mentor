@@ -2,7 +2,7 @@ import { Card, Divider, Form } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
-import { discountApi } from '~/api/business/discount'
+import { discountApi, voucherApi } from '~/api/business/discount'
 import { paymentMethodsApi } from '~/api/business/payment-method'
 import FormRegisterClass from '~/common/components/Class/FormRegisterClass'
 import RegisterOneVsOne from '~/common/components/Class/RegisterOneVsOne'
@@ -31,7 +31,7 @@ const tabs = [
 ]
 
 const CardBody = (props) => {
-	const { programsSelected, setProgramsSelected, form, setCurriculum, setLeftPrice, discountPrice, type } = props
+	const { programsSelected, setProgramsSelected, form, setCurriculum, setLeftPrice, discountPrice, type, handleListTimeFrames } = props
 	const { setClasses, classes, classesSelected, setClassesSelected, curriculum } = props
 
 	return (
@@ -48,6 +48,7 @@ const CardBody = (props) => {
 					setTotalPrice={() => {}}
 					setLeftPrice={setLeftPrice}
 					discountPrice={discountPrice}
+					handleListTimeFrames={handleListTimeFrames}
 				/>
 			)}
 
@@ -73,12 +74,13 @@ const RegisterClass = () => {
 	const [programsSelected, setProgramsSelected] = useState([])
 	const [detailDiscount, setDetailDiscount] = useState<IDiscount>()
 	const [totalPrice, setTotalPrice] = useState(0)
+	const [voucher, setVoucher] = useState(0)
 	const [discountPrice, setDiscountPrice] = useState(0)
 	const [leftPrice, setLeftPrice] = useState(0)
 	const [activeTab, setActiveTab] = useState({ Type: 1, label: 'Đăng ký học' })
 	const [isLoading, setIsLoading] = useState(false)
 	const [curriculum, setCurriculum] = useState(null)
-
+	const [listTimeFrames, setListTimeFrames] = useState([{ Id: 1, ExectedDay: null, StudyTimeId: null, Note: '' }])
 	const [activeMethod, setActiveMethod] = useState<IPaymentMethod>()
 
 	const [form] = Form.useForm()
@@ -105,6 +107,27 @@ const RegisterClass = () => {
 		await wait(500)
 		setIsReset(false)
 	}
+
+	const handleSetClass = async () => {
+		const body = classesSelected.map((_item) => _item.Id)
+		try {
+			const res = await voucherApi.getVoucher(body)
+			if (res.status === 200) {
+				setVoucher(res.data.data)
+			}
+			if (res.status === 204) {
+				setVoucher(0)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
+
+	useEffect(() => {
+		if (classesSelected.length > 0) {
+			handleSetClass()
+		}
+	}, [classesSelected])
 
 	function getPercentDiscountValue(total, percent, max) {
 		// Tính số tiền khuyến mãi dựa trên phần trăm khuyến mãi
@@ -140,9 +163,10 @@ const RegisterClass = () => {
 	useEffect(() => {
 		const discountValue = getDiscountValue()
 		setDiscountPrice(discountValue)
-		const newLeftPrice = totalPrice - discountValue - parseStringToNumber(!!form.getFieldValue('Paid') ? form.getFieldValue('Paid') : 0)
+		const newLeftPrice =
+			totalPrice - discountValue - voucher - parseStringToNumber(!!form.getFieldValue('Paid') ? form.getFieldValue('Paid') : 0)
 		setLeftPrice(newLeftPrice)
-	}, [totalPrice, detailDiscount])
+	}, [totalPrice, detailDiscount, voucher])
 
 	useEffect(() => {
 		setDetailDiscount(null)
@@ -214,6 +238,10 @@ const RegisterClass = () => {
 	}
 
 	const onSubmit = async (data) => {
+		const Expectations = listTimeFrames.map((_item) => {
+			return { ExectedDay: _item.ExectedDay, StudyTimeId: _item.StudyTimeId, Note: _item.Note }
+		})
+
 		if (!data?.StudentId) {
 			ShowNoti('error', 'Vui lòng chọn học viên')
 			return false
@@ -231,10 +259,11 @@ const RegisterClass = () => {
 				Note: data.Note,
 				Type: activeTab.Type,
 				Paid: !!data.Paid ? parseStringToNumber(data.Paid) : 0,
-				Details: getDetailSubmit(activeTab.Type)
+				Details: getDetailSubmit(activeTab.Type),
+				Expectations
 			}
 
-			console.log('-- DATA_SUBMIT: ', DATA_SUBMIT)
+			console.log('DATA_SUBMIT: ', DATA_SUBMIT)
 			console.time('-- Gọi Api Bill hết')
 			try {
 				const res = await billApi.add(DATA_SUBMIT)
@@ -289,6 +318,21 @@ const RegisterClass = () => {
 		setTotalPrice(totalPrice)
 	}
 
+	const handleSetDiscount = (_value) => {
+		if (!!_value) {
+			const checkDiscount = leftPrice - _value.Value
+
+			if (checkDiscount > 0) {
+				setDetailDiscount(_value)
+				ShowNoti('success', 'Áp dụng thành công')
+			} else {
+				ShowNoti('error', 'Khuyến mãi không phù hợp! Vui lòng chọn lại!')
+			}
+		} else {
+			setDetailDiscount(null)
+		}
+	}
+
 	return (
 		<div className="wrapper-register-class">
 			<Form onFinish={onSubmit} layout="vertical" form={form}>
@@ -335,6 +379,7 @@ const RegisterClass = () => {
 												discountPrice={discountPrice}
 												setCurriculum={setCurriculum}
 												curriculum={curriculum}
+												handleListTimeFrames={setListTimeFrames}
 											/>
 										</div>
 									</div>
@@ -376,6 +421,10 @@ const RegisterClass = () => {
 										<span className="title">Tổng tiền</span>
 										<span className="title text-tw-orange">{Intl.NumberFormat('ja-JP').format(totalPrice)}</span>
 									</div>
+									<div className="flex items-center justify-between mb-3">
+										<span className="title">Giảm giá</span>
+										<span className="title text-tw-orange">{Intl.NumberFormat('ja-JP').format(voucher)}</span>
+									</div>
 
 									<div className="flex items-center justify-between mb-3">
 										<div className="flex items-center gap-1">
@@ -384,7 +433,7 @@ const RegisterClass = () => {
 												classesSelected={classesSelected}
 												programsSelected={programsSelected}
 												form={form}
-												setDetailDiscount={setDetailDiscount}
+												setDetailDiscount={handleSetDiscount}
 												detailDiscount={detailDiscount}
 											/>
 										</div>
