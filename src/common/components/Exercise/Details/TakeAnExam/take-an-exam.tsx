@@ -112,6 +112,25 @@ function TakeAnExamDetail() {
 		}
 	}
 
+	async function getDoingQuestionGroup() {
+		try {
+			const res = await doingTestApi.getQuestionGroup({
+				ieltsQuestionGroupId: currentQuestion?.IeltsQuestionGroupId,
+				doingTestId: parseInt(router?.query?.exam + '')
+			})
+			log.Yellow('Question Group', res.data.data)
+			if (res.status == 200) {
+				setCurGroup(res.data.data)
+			} else {
+				setCurGroup(null)
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		} finally {
+			setLoading(false)
+		}
+	}
+
 	const [examInfo, setExamInfo] = useState(null)
 
 	// Lấy thông tin của đề được gắn dô bài này
@@ -244,7 +263,7 @@ function TakeAnExamDetail() {
 		// console.log('--- currentQuestion: ', currentQuestion)
 
 		if (!!currentQuestion?.IeltsQuestionGroupId) {
-			getQuestionsByGroup()
+			getDoingQuestionGroup()
 		}
 	}, [currentQuestion?.IeltsQuestionGroupId])
 
@@ -516,7 +535,7 @@ function TakeAnExamDetail() {
 									curGroup={curGroup}
 									getQuestions={getQuestions}
 									onRefresh={() => {
-										getQuestionsByGroup()
+										// getQuestionsByGroup()
 										getQuestions()
 									}}
 								/>
@@ -526,7 +545,7 @@ function TakeAnExamDetail() {
 
 							<GroupContent is={is} curGroup={curGroup} questionsInSection={questionsInSection} />
 
-							<TestingQuestions data={curGroup} questions={questionsInSection} />
+							<TestingQuestions data={curGroup} questions={questionsInSection} getDoingQuestionGroup={getDoingQuestionGroup} />
 
 							{curAudio?.Audio && <div className="h-[200px]" />}
 						</div>

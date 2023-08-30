@@ -4,6 +4,7 @@ import { QUESTION_TYPES } from '~/common/libs'
 import Write from './Write'
 import TrueFalseQuestion from '../../Details/QuestionsForm/TrueFalseForm/Question'
 import SpeakingQuestion from './Speak'
+import Router from 'next/router'
 
 function getQuestIndex(questions, curQuest) {
 	const theIndex = questions.findIndex((question) => question?.IeltsQuestionId == curQuest?.Id)
@@ -14,7 +15,7 @@ function getQuestIndex(questions, curQuest) {
 }
 
 const TestingQuestions = (props) => {
-	const { data, isFinal, questions, onRefresh, showEdit } = props
+	const { data, isFinal, questions, onRefresh, showEdit, getDoingQuestionGroup } = props
 
 	const theQuestions = data?.IeltsQuestions || []
 
@@ -41,6 +42,7 @@ const TestingQuestions = (props) => {
 							dataSource={data}
 							indexInExam={thisItem?.Index || ''}
 							showEdit={showEdit}
+							isDoing={Router.asPath.includes('take-an-exam')}
 						/>
 					)
 				})}
@@ -58,6 +60,7 @@ const TestingQuestions = (props) => {
 							index={index}
 							IndexInExam={thisItem?.Index}
 							dataSource={data}
+							isDoing={Router.asPath.includes('take-an-exam')}
 						/>
 					)
 				})}
@@ -74,7 +77,13 @@ const TestingQuestions = (props) => {
 					</div>
 
 					{theQuestions.map((quest, index) => (
-						<TrueFalseQuestion type="doing" key={index} data={quest} />
+						<TrueFalseQuestion
+							type="doing"
+							key={index}
+							data={quest}
+							isDoing={Router.asPath.includes('take-an-exam')}
+							getDoingQuestionGroup={getDoingQuestionGroup}
+						/>
 					))}
 				</div>
 			)}

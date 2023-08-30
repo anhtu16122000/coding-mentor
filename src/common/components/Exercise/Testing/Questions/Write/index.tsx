@@ -1,12 +1,14 @@
 import { Input } from 'antd'
+import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import ReactHTMLParser from 'react-html-parser'
 import { useDispatch, useSelector } from 'react-redux'
+import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import { RootState } from '~/store'
 import { setActivating, setListAnswered, setTestingData } from '~/store/testingState'
 
 const Write = (props) => {
-	const { data, type, isFinal, dataSource, index, IndexInExam, disabled } = props
+	const { data, type, isFinal, dataSource, index, IndexInExam, disabled, isDoing } = props
 
 	const dispatch = useDispatch()
 
@@ -60,6 +62,39 @@ const Write = (props) => {
 		console.timeEnd('--- Select Answer')
 	}
 
+	// ----------------------------------------------------------------
+	// Doing test
+
+	async function insertDetails(answer) {
+		let items = []
+
+		if (!!data?.DoingTestDetails) {
+			items.push({ ...data?.DoingTestDetails[0], Enable: false })
+		}
+		items.push({ Id: 0, IeltsAnswerId: 0, IeltsAnswerContent: answer?.Content, Type: 0, Index: 0, Enable: true })
+
+		if (!!Router?.query?.exam) {
+			console.log('-------- PUT items: ', items)
+
+			try {
+				const res = await doingTestApi.insertDetail({
+					DoingTestId: parseInt(Router?.query?.exam + ''),
+					IeltsQuestionId: data.Id,
+					Items: [...items]
+				})
+			} catch (error) {}
+		}
+	}
+
+	function getAnswered() {
+		if (!!isDoing) {
+			if (!!data?.DoingTestDetails) {
+				return !!data?.DoingTestDetails[0]?.IeltsAnswerContent ? data?.DoingTestDetails[0]?.IeltsAnswerContent : ''
+			}
+		}
+		return ''
+	}
+
 	return (
 		<div
 			// onClick={() => dispatch(setActivating(data.Id))}
@@ -76,11 +111,11 @@ const Write = (props) => {
 				<div className="font-[600] mb-2 mt-3">Câu trả lời</div>
 				<Input.TextArea
 					key={'the-answer-' + data.id}
-					placeholder=""
-					disabled={disabled || false}
-					value={answer}
-					onChange={(e) => setAnswer(e.target.value)}
-					onBlur={(e) => !!e.target.value && onChange(e.target.value)}
+					placeholder={isDoing ? 'Nhập câu trả lời' : ''}
+					disabled={!isDoing || false}
+					defaultValue={getAnswered()}
+					// onChange={(e) => setAnswer(e.target.value)}
+					onBlur={(e) => !!e.target.value && insertDetails({ Content: e.target.value })}
 					className="cc-writing-testing"
 					rows={4}
 				/>

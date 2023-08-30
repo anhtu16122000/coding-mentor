@@ -58,7 +58,7 @@ const TakeAnExamController = (props) => {
 									{skills[indexOfSkill]?.Audio && (
 										<div onClick={(e) => setCurAudio(skills[indexOfSkill])} className="ex-23-btn-play-audio">
 											<FaHeadphonesAlt size={14} className="text-[#fff] mr-[4px]" />
-											<div className="play-audio-t">Phát âm thanh</div>
+											<div className="play-audio-text">Phát âm thanh</div>
 										</div>
 									)}
 								</div>

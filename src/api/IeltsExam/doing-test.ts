@@ -9,8 +9,14 @@ export const doingTestApi = {
 	getByID(ID: number) {
 		return instance.get<IApiResultData<any>>(`${url}/${ID}`)
 	},
+	getQuestionGroup(params) {
+		return instance.get<IApiResultData<any>>(`${url}/ielts-question-group`, { params })
+	},
 	post(data) {
 		return instance.post(url, data)
+	},
+	insertDetail(data) {
+		return instance.post(url + '/insert-or-update-details', data)
 	},
 	put(data) {
 		return instance.put(url, data)
