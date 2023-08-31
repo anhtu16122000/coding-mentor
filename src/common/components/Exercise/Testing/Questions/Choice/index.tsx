@@ -1,27 +1,21 @@
 import { Checkbox, Radio, Space } from 'antd'
 import React from 'react'
-import ReactHTMLParser from 'react-html-parser'
 import { AiOutlineFileDone } from 'react-icons/ai'
 import { TbFileCertificate } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '~/store'
-import { setActivating, setListAnswered, setTestingData } from '~/store/testingState'
 import ChoiceInputForm from '../../../Details/QuestionsForm/MultipleChoiceForm/Form'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import Router from 'next/router'
+import htmlParser from '~/common/components/HtmlParser'
 
 const Choice = (props) => {
 	const { data, type, isFinal, dataSource, index, indexInExam, onRefresh, showEdit, isDoing } = props
 
 	const dispatch = useDispatch()
 
-	const testingData = useSelector((state: RootState) => state.testingState.data)
-	const answered = useSelector((state: RootState) => state.testingState.answered)
-
 	const onChange = (event, type: 'single' | 'multiple') => {
 		console.time('--- Select Answer')
-
-		console.log('------ event: ', event)
 
 		if (type == 'single') {
 			//
@@ -43,18 +37,9 @@ const Choice = (props) => {
 		if (!isDoing) {
 			return true
 		}
-
-		// if (type == 'edit') {
-		// 	return true
-		// } else {
-		// 	return false
-		// }
 	}
 
 	function getType() {
-		// console.log('------- dataSource: ', dataSource)
-		// console.log('------- data: ', data?.CorrectAmount)
-
 		if (!!data?.CorrectAmount) {
 			if (data?.CorrectAmount > 1) {
 				return 'multiple'
@@ -94,21 +79,17 @@ const Choice = (props) => {
 			}
 		})
 
-		if (!!isDoing) {
+		if (!!isDoing && !!data?.DoingTestDetails) {
 			for (let i = 0; i < data?.DoingTestDetails.length; i++) {
 				const element = data?.DoingTestDetails[i]
 				checked.push(element?.IeltsAnswerId)
 			}
 		}
 
-		console.log('----- checked: ', checked)
-
 		return { option: temp, checked: checked }
 	}
 
 	function getChecked() {
-		let temp = null
-
 		if (!isDoing) {
 			for (let i = 0; i < data.IeltsAnswers.length; i++) {
 				const element = data.IeltsAnswers[i]
@@ -119,8 +100,6 @@ const Choice = (props) => {
 		}
 
 		if (!!isDoing) {
-			console.log('-----  data?.DoingTestDetails: ', data?.DoingTestDetails)
-
 			if (!!data?.DoingTestDetails) {
 				return data?.DoingTestDetails[0]?.IeltsAnswerId
 			}
@@ -175,7 +154,7 @@ const Choice = (props) => {
 			console.log('-------- PUT items: ', items)
 
 			try {
-				const res = await doingTestApi.insertDetail({
+				await doingTestApi.insertDetail({
 					DoingTestId: parseInt(Router?.query?.exam + ''),
 					IeltsQuestionId: data.Id,
 					Items: [...items]
@@ -186,7 +165,6 @@ const Choice = (props) => {
 
 	return (
 		<div
-			// onClick={() => dispatch(setActivating(data.Id))}
 			key={'question-' + data.Id}
 			id={'question-' + data.Id}
 			className={`cc-choice-warpper shadow-sm border-[1px] border-[#fff]`}
@@ -212,7 +190,7 @@ const Choice = (props) => {
 					)}
 				</div>
 
-				<div>{ReactHTMLParser(data?.Content)}</div>
+				<div>{htmlParser(data?.Content)}</div>
 			</div>
 
 			{getType() == 'single' && (
@@ -237,12 +215,8 @@ const Choice = (props) => {
 					<Checkbox.Group
 						className="none-selection"
 						options={getDataCheckbox(data.IeltsAnswers).option}
-						// onChange={(event) => onChange(event, 'multiple')}
 						defaultValue={getDataCheckbox(data.IeltsAnswers, 1).checked}
-						onChange={(e) => {
-							console.log(e)
-							insertDetails(e)
-						}}
+						onChange={(e) => insertDetails(e)}
 					/>
 				</div>
 			)}

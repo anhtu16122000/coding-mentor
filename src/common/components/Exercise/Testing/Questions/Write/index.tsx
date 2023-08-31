@@ -5,7 +5,6 @@ import ReactHTMLParser from 'react-html-parser'
 import { useDispatch, useSelector } from 'react-redux'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import { RootState } from '~/store'
-import { setActivating, setListAnswered, setTestingData } from '~/store/testingState'
 
 const Write = (props) => {
 	const { data, type, isFinal, dataSource, index, IndexInExam, disabled, isDoing } = props
@@ -13,7 +12,6 @@ const Write = (props) => {
 	const dispatch = useDispatch()
 
 	const testingData = useSelector((state: RootState) => state.testingState.data)
-	const answered = useSelector((state: RootState) => state.testingState.answered)
 
 	const [answer, setAnswer] = useState('')
 
@@ -33,35 +31,6 @@ const Write = (props) => {
 		setAnswer(text)
 	}
 
-	const onChange = (event) => {
-		console.time('--- Select Answer')
-		const cloneData = []
-		if (!!event) {
-			testingData.forEach((element) => {
-				if (data.Id == element?.ExerciseId) {
-					cloneData.push({ ExerciseId: element?.ExerciseId, Answers: [{ AnswerId: '', AnswerContent: event }] })
-				} else {
-					cloneData.push({ ...element })
-				}
-			})
-		}
-		dispatch(setTestingData(cloneData))
-		// Lấy danh sách câu hỏi đã trả lời
-		const cloneAnswered = []
-		let flag = true
-		answered.forEach((element) => {
-			cloneAnswered.push(element)
-			if (data?.Id == element) {
-				flag = false
-			}
-		})
-		if (flag == true) {
-			cloneAnswered.push(data?.Id)
-		}
-		dispatch(setListAnswered(cloneAnswered))
-		console.timeEnd('--- Select Answer')
-	}
-
 	// ----------------------------------------------------------------
 	// Doing test
 
@@ -77,7 +46,7 @@ const Write = (props) => {
 			console.log('-------- PUT items: ', items)
 
 			try {
-				const res = await doingTestApi.insertDetail({
+				await doingTestApi.insertDetail({
 					DoingTestId: parseInt(Router?.query?.exam + ''),
 					IeltsQuestionId: data.Id,
 					Items: [...items]
@@ -96,12 +65,7 @@ const Write = (props) => {
 	}
 
 	return (
-		<div
-			// onClick={() => dispatch(setActivating(data.Id))}
-			key={'question-' + data.Id}
-			id={'question-' + data.Id}
-			className={`cc-choice-warpper border-[1px] border-[#e6e6e6]`}
-		>
+		<div key={'question-' + data.Id} id={'question-' + data.Id} className={`cc-choice-warpper border-[1px] border-[#e6e6e6]`}>
 			<div className="exam-quest-wrapper none-selection">
 				<div className="cc-choice-number">Câu {IndexInExam}</div>
 				{ReactHTMLParser(data?.Content)}
@@ -114,7 +78,6 @@ const Write = (props) => {
 					placeholder={isDoing ? 'Nhập câu trả lời' : ''}
 					disabled={!isDoing || false}
 					defaultValue={getAnswered()}
-					// onChange={(e) => setAnswer(e.target.value)}
 					onBlur={(e) => !!e.target.value && insertDetails({ Content: e.target.value })}
 					className="cc-writing-testing"
 					rows={4}
