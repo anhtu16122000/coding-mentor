@@ -14,7 +14,7 @@ export const studentInClassApi = {
 	},
 
 	add(data: IStudentInClass) {
-		return instance.post(url, data, {})
+		return instance.post(`${url}/appends`, data, {})
 	},
 
 	update(data: any) {
@@ -25,9 +25,12 @@ export const studentInClassApi = {
 		return instance.delete(`${url}/${ID}`)
 	},
 
-	getStudentAvailable(ID) {
-		return instance.get(`${url}/student-available/${ID}`)
-	}
+	getStudentAvailable(ID, classId) {
+		return instance.get(`${url}/student-available?request.classId=${ID}&request.classFilterId=${classId}`)
+	},
+	getAllClass() {
+		return instance.get<IApiResultData<any[]>>('api/Class')
+	},
 }
 
 export const studentHistoriesApi = {

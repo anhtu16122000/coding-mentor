@@ -2,7 +2,21 @@ import { Form, Select } from 'antd'
 import React from 'react'
 
 const SelectField = (props: IFormSelectField) => {
-	const { style, label, onChangeSelect, optionList, isRequired, className, placeholder, disabled, name, rules, mode, isLoading } = props
+	const {
+		style,
+		label,
+		onChangeSelect,
+		optionList,
+		isRequired,
+		className,
+		placeholder,
+		disabled,
+		name,
+		rules,
+		mode,
+		isLoading,
+		maxTagCount
+	} = props
 	const { Option } = Select
 
 	const checkOnChangeSelect = (value) => {
@@ -17,6 +31,7 @@ const SelectField = (props: IFormSelectField) => {
 				className={`primary-input ${className}`}
 				showSearch
 				allowClear
+				maxTagCount={maxTagCount}
 				loading={isLoading}
 				style={style}
 				placeholder={placeholder}

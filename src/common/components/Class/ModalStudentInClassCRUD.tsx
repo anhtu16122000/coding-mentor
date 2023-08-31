@@ -1,6 +1,7 @@
-import { Form, Modal, Switch } from 'antd'
+import { Button, Form, Modal, Select, Switch, Table } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import type { ColumnsType } from 'antd/es/table'
 import { studentInClassApi } from '~/api/user/student-in-class'
 import { ShowNoti } from '~/common/utils'
 import SelectField from '../FormControl/SelectField'
@@ -8,12 +9,21 @@ import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 import TextBoxField from '../FormControl/TextBoxField'
+import styled from 'styled-components'
+
+const SelcectClass = styled(Select)`
+	width: 632px;
+	@media (max-width: 700px) {
+		width: 86.5vw;
+	}
+`
 
 type IModalStudentInClass = {
 	mode: 'add' | 'edit' | 'delete'
 	dataRow?: any
 	onRefresh?: Function
 }
+
 export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRow, onRefresh, mode }) => {
 	const [visible, setVisible] = useState(false)
 	const router = useRouter()
@@ -21,6 +31,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 	const [loadingStudent, setLoadingStudent] = useState(false)
 	const [form] = Form.useForm()
 	const [student, setStudent] = useState<{ title: string; value: string }[]>([])
+	const [classList, setClassList] = useState<any>([])
 	const [checkedWarning, setCheckWarning] = useState(false)
 
 	const onClose = () => {
@@ -28,7 +39,8 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 	}
 	const onOpen = () => {
 		if (mode === 'add') {
-			getStudent()
+			getClass()
+			getStudent(null)
 		}
 		setVisible(true)
 	}
@@ -37,10 +49,10 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 		setCheckWarning(val)
 	}
 
-	const getStudent = async () => {
+	const getStudent = async (classId?: number) => {
 		try {
 			setLoadingStudent(true)
-			const res = await studentInClassApi.getStudentAvailable(router?.query?.class)
+			const res = await studentInClassApi.getStudentAvailable(router?.query?.class, classId)
 			if (res.status === 200) {
 				let temp = []
 				res?.data?.data?.forEach((item) => {
@@ -57,6 +69,24 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 			setLoadingStudent(true)
 		} finally {
 			setLoadingStudent(false)
+		}
+	}
+
+	const getClass = async () => {
+		try {
+			const res = await studentInClassApi.getAllClass()
+			if (res.status === 200) {
+				let temp = []
+				res?.data?.data?.forEach((item) => {
+					temp.push({ label: item?.Name, value: item?.Id })
+				})
+				setClassList(temp)
+			}
+			if (res.status == 204) {
+				setClassList([])
+			}
+		} catch (error) {
+			console.log(error)
 		}
 	}
 
@@ -131,6 +161,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 				ClassId: Number(router?.query?.class),
 				...data
 			}
+
 			handleCreate(dataSubmit)
 		}
 
@@ -145,6 +176,11 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 			setCheckWarning(dataRow?.Warning)
 		}
 	}, [dataRow])
+
+	const handleSelectedClass = (value) => {
+		form.setFieldValue('StudentIds', [])
+		getStudent(value)
+	}
 
 	return (
 		<>
@@ -204,7 +240,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 						/>
 					</>
 				}
-				width={mode != 'delete' ? 500 : 400}
+				width={mode != 'delete' ? (mode === 'add' ? 700 : 500) : 400}
 			>
 				<div className="container-fluid">
 					<Form form={form} layout="vertical" onFinish={_onSubmit}>
@@ -219,16 +255,48 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 								<>
 									{mode === 'add' && (
 										<>
-											<div className="col-span-2">
+											<div
+												style={{
+													marginBottom: 15
+												}}
+											>
+												<div style={{ marginBottom: 10, fontWeight: '600' }}>Lớp học</div>
+												<SelcectClass allowClear placeholder="Chọn lớp học" onChange={handleSelectedClass} options={classList} />
+											</div>
+											<div
+												className="col-span-2"
+												style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+											>
 												<SelectField
+													mode="multiple"
 													label="Học viên"
-													name="StudentId"
+													name="StudentIds"
+													maxTagCount={2}
 													isLoading={loadingStudent}
 													optionList={student}
 													placeholder="Chọn học viên"
 													isRequired
+													style={{
+														width: '100%',
+														marginRight: 10,
+														maxWidth: 515
+													}}
 													rules={[{ required: true, message: 'Bạn không được để trống' }]}
 												/>
+												<Button
+													disabled={student.length < 1}
+													onClick={() => {
+														const ids = student.map((_item) => _item.value)
+														form.setFieldValue('StudentIds', ids)
+													}}
+													style={{
+														height: 35,
+														marginBottom: -5
+													}}
+													type="primary"
+												>
+													Chọn tất cả
+												</Button>
 											</div>
 
 											<div className="col-span-2">
@@ -254,7 +322,6 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 											</Form.Item>
 										</>
 									)}
-
 									<div className="col-span-2">
 										<TextBoxField name="Note" label="Ghi chú" />
 									</div>
