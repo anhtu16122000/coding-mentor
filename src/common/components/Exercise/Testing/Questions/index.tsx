@@ -15,7 +15,7 @@ function getQuestIndex(questions, curQuest) {
 }
 
 const TestingQuestions = (props) => {
-	const { data, isFinal, questions, onRefresh, showEdit, getDoingQuestionGroup } = props
+	const { data, isFinal, questions, onRefresh, showEdit, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav } = props
 
 	const theQuestions = data?.IeltsQuestions || []
 
@@ -35,14 +35,14 @@ const TestingQuestions = (props) => {
 					return (
 						<Choice
 							key={index}
-							isFinal={isFinal}
 							data={quest}
 							index={index}
 							onRefresh={onRefresh}
-							dataSource={data}
 							indexInExam={thisItem?.Index || ''}
 							showEdit={showEdit}
 							isDoing={Router.asPath.includes('take-an-exam')}
+							setCurrentQuestion={setCurrentQuestion}
+							onRefreshNav={onRefreshNav}
 						/>
 					)
 				})}
@@ -54,13 +54,11 @@ const TestingQuestions = (props) => {
 					return (
 						<Write
 							key={index}
-							isFinal={isFinal}
-							disabled={true}
 							data={quest}
-							index={index}
 							IndexInExam={thisItem?.Index}
-							dataSource={data}
 							isDoing={Router.asPath.includes('take-an-exam')}
+							setCurrentQuestion={setCurrentQuestion}
+							onRefreshNav={onRefreshNav}
 						/>
 					)
 				})}
@@ -72,7 +70,6 @@ const TestingQuestions = (props) => {
 						<div className="h-[30px] flex items-center">
 							<div className="w-[50px]">True</div>
 							<div className="w-[50px]">False</div>
-							{/* <div className="w-[74px]">Not given</div> */}
 						</div>
 					</div>
 
@@ -83,6 +80,8 @@ const TestingQuestions = (props) => {
 							data={quest}
 							isDoing={Router.asPath.includes('take-an-exam')}
 							getDoingQuestionGroup={getDoingQuestionGroup}
+							setCurrentQuestion={setCurrentQuestion}
+							onRefreshNav={onRefreshNav}
 						/>
 					))}
 				</div>
@@ -101,6 +100,8 @@ const TestingQuestions = (props) => {
 							index={index}
 							IndexInExam={thisItem?.Index}
 							dataSource={data}
+							setCurrentQuestion={setCurrentQuestion}
+							onRefreshNav={onRefreshNav}
 						/>
 					)
 				})}

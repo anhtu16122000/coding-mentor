@@ -7,7 +7,7 @@ import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import { RootState } from '~/store'
 
 const Write = (props) => {
-	const { data, type, isFinal, dataSource, index, IndexInExam, disabled, isDoing } = props
+	const { data, IndexInExam, isDoing, setCurrentQuestion, onRefreshNav } = props
 
 	const dispatch = useDispatch()
 
@@ -51,7 +51,10 @@ const Write = (props) => {
 					IeltsQuestionId: data.Id,
 					Items: [...items]
 				})
-			} catch (error) {}
+			} catch (error) {
+			} finally {
+				onRefreshNav()
+			}
 		}
 	}
 
@@ -65,7 +68,12 @@ const Write = (props) => {
 	}
 
 	return (
-		<div key={'question-' + data.Id} id={'question-' + data.Id} className={`cc-choice-warpper border-[1px] border-[#e6e6e6]`}>
+		<div
+			onClick={() => setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id })}
+			key={'question-' + data.Id}
+			id={'question-' + data.Id}
+			className={`cc-choice-warpper border-[1px] border-[#e6e6e6]`}
+		>
 			<div className="exam-quest-wrapper none-selection">
 				<div className="cc-choice-number">Câu {IndexInExam}</div>
 				{ReactHTMLParser(data?.Content)}

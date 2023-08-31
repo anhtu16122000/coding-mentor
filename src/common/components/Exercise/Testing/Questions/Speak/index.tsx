@@ -8,7 +8,7 @@ import { RootState } from '~/store'
 import { setActivating, setListAnswered, setTestingData } from '~/store/testingState'
 
 const SpeakingQuestion = (props) => {
-	const { data, type, isFinal, dataSource, index, IndexInExam, disabled } = props
+	const { data, type, isFinal, dataSource, index, IndexInExam, disabled, onRefreshNav } = props
 
 	const dispatch = useDispatch()
 

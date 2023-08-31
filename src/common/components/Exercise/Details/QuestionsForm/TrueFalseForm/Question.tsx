@@ -1,11 +1,13 @@
 import { Checkbox } from 'antd'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import htmlParser from '~/common/components/HtmlParser'
+import { RootState } from '~/store'
 
 const TrueFalseQuestion = (props) => {
-	const { data, isDoing, getDoingQuestionGroup } = props
+	const { data, isDoing, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav } = props
 
 	const [loading, setLoading] = useState<boolean>(true)
 
@@ -53,13 +55,19 @@ const TrueFalseQuestion = (props) => {
 				})
 			} catch (error) {
 			} finally {
+				onRefreshNav()
 				getDoingQuestionGroup()
 			}
 		}
 	}
 
+	const curGroup = useSelector((state: RootState) => state.takeAnExam?.curGroup)
+
 	return (
-		<div className="flex items-start">
+		<div
+			onClick={() => setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionGroupId: curGroup?.Id })}
+			className="flex items-start"
+		>
 			<div className="flex-1 mt-1">{htmlParser(data?.Content)}</div>
 
 			<div className="flex items-center mr-[2px] true-false-checkbox">

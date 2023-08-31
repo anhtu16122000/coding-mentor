@@ -9,6 +9,7 @@ export interface PostedState {
 	submited: boolean
 	timeout: boolean
 	overview?: any
+	curGroup?: any
 }
 
 const initialState: PostedState = {
@@ -18,7 +19,8 @@ const initialState: PostedState = {
 	submitVisible: false,
 	submited: false,
 	timeout: false,
-	overview: {}
+	overview: {},
+	curGroup: null
 }
 
 export const takeAnExamSlice = createSlice({
@@ -48,12 +50,24 @@ export const takeAnExamSlice = createSlice({
 		},
 		setSuperOverview: (state, action: PayloadAction<any>) => {
 			state.overview = action.payload
+		},
+		setGlobalCurGroup: (state, action: PayloadAction<any>) => {
+			state.curGroup = action.payload
 		}
 	}
 })
 
 // Action creators are generated for each case reducer function
-export const { setNavLoading, setSuperOverview, setNavigations, setActiveNav, closeSubmitModal, openSubmitModal, setSubmited, setTimeOut } =
-	takeAnExamSlice.actions
+export const {
+	setNavLoading,
+	setGlobalCurGroup,
+	setSuperOverview,
+	setNavigations,
+	setActiveNav,
+	closeSubmitModal,
+	openSubmitModal,
+	setSubmited,
+	setTimeOut
+} = takeAnExamSlice.actions
 
 export default takeAnExamSlice.reducer

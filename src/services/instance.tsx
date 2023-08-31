@@ -20,11 +20,11 @@ export const instance = axios.create({
 instance.interceptors.request.use(
 	async (config: AxiosRequestConfig) => {
 		const url: any = getUrl(config)
-		console.log(`%c ${config.method.toUpperCase()} - ${url}:`, 'color: #0086b3; font-weight: bold', config)
+		// console.log(`%c ${config.method.toUpperCase()} - ${url}:`, 'color: #0086b3; font-weight: bold', config)
 		return config
 	},
 	(error: any) => {
-		console.log(`%c ${error.response.status}  :`, 'color: red; font-weight: bold', error.response.data)
+		// console.log(`%c ${error.response.status}  :`, 'color: red; font-weight: bold', error.response.data)
 		return Promise.reject(error)
 	}
 )

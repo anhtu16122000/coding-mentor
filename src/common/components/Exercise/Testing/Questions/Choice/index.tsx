@@ -10,7 +10,7 @@ import Router from 'next/router'
 import htmlParser from '~/common/components/HtmlParser'
 
 const Choice = (props) => {
-	const { data, type, isFinal, dataSource, index, indexInExam, onRefresh, showEdit, isDoing } = props
+	const { data, index, indexInExam, onRefresh, showEdit, isDoing, setCurrentQuestion, onRefreshNav } = props
 
 	const dispatch = useDispatch()
 
@@ -147,6 +147,16 @@ const Choice = (props) => {
 						items.push({ Id: 0, IeltsAnswerId: answer[j], IeltsAnswerContent: '', Type: 0, Index: 0, Enable: true })
 					}
 				}
+			} else {
+				for (let j = 0; j < answer.length; j++) {
+					const indexInMyHeart = items.findIndex((item) => item?.IeltsAnswerId == answer[j])
+
+					if (indexInMyHeart == -1) {
+						items.push({ Id: 0, IeltsAnswerId: answer[j], IeltsAnswerContent: '', Type: 0, Index: 0, Enable: true })
+					}
+				}
+
+				// items.push({ Id: 0, IeltsAnswerId: answer?.Id, IeltsAnswerContent: answer?.Content, Type: 0, Index: 0, Enable: true })
 			}
 		}
 
@@ -159,12 +169,16 @@ const Choice = (props) => {
 					IeltsQuestionId: data.Id,
 					Items: [...items]
 				})
-			} catch (error) {}
+			} catch (error) {
+			} finally {
+				onRefreshNav()
+			}
 		}
 	}
 
 	return (
 		<div
+			onClick={() => setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id })}
 			key={'question-' + data.Id}
 			id={'question-' + data.Id}
 			className={`cc-choice-warpper shadow-sm border-[1px] border-[#fff]`}

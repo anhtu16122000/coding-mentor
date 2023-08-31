@@ -42,7 +42,7 @@ const TakeAnExamHeader = (props) => {
 		// Tính số phút còn lại bằng cách lấy thời gian kết thúc trừ đi thời gian bắt đầu, chia cho 60000 (mili giây) và làm tròn xuống
 		const remainingMinutes = Math.floor((end.getTime() - nowTime.getTime()) / 60000)
 
-		console.log('--- THỜI GIAN LÀM BÀI CÒN LẠI: ', remainingMinutes > -1 ? remainingMinutes : 0)
+		// console.log('--- THỜI GIAN LÀM BÀI CÒN LẠI: ', remainingMinutes > -1 ? remainingMinutes : 0)
 
 		const tobeContinue = isEndTimeGreaterThanStartTime(start, end)
 

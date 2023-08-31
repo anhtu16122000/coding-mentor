@@ -40,7 +40,7 @@ import Lottie from 'react-lottie-player'
 import lottieFile from '~/common/components/json/animation_lludr9cs.json'
 import timer from '~/common/components/json/131525-timer.json'
 import CountdownTimer from '../Countdown'
-import { setSuperOverview } from '~/store/take-an-exam'
+import { setGlobalCurGroup, setSuperOverview } from '~/store/take-an-exam'
 import TakeAnExamHeader from './Header'
 import TakeAnExamController from './Controller'
 import AudioPlayer from '../AudioPlayer'
@@ -218,9 +218,10 @@ function TakeAnExamDetail() {
 	const [questionsInSection, setQuestionsInSection] = useState([])
 
 	async function getQuestions() {
+		// GET questions in navigation
 		if (currentSection?.Id) {
 			try {
-				const res = await ieltsExamApi.getQuestions({ ieltsSectionId: currentSection?.Id })
+				const res = await ieltsExamApi.getQuestions({ ieltsSectionId: currentSection?.Id, doingTestId: parseInt(router?.query?.exam + '') })
 				if (res.status == 200) {
 					setQuestionsInSection(res.data.data)
 				} else {
@@ -232,7 +233,8 @@ function TakeAnExamDetail() {
 				setQuestionsInSection([])
 				setCurGroup([])
 			} finally {
-				heightChange()
+				// console.log('--- notSetCurrentQuest: ', notSetCurrentQuest)
+
 				setLoading(false)
 			}
 		}
@@ -290,14 +292,25 @@ function TakeAnExamDetail() {
 		}
 	}, [sections])
 
-	useEffect(() => {
-		if (questionsInSection.length > 0) {
-			setCurrentQuestion(questionsInSection[0])
-		} else {
-			setCurGroup(null)
-			dispatch(setNewCurrentGroup(null))
-			setCurrentQuestion(null)
+	const [notSetCurrentQuest, setNotSetCurrentQuest] = useState<boolean>(false)
+
+	async function makeSomeNoise() {
+		if (!notSetCurrentQuest) {
+			if (questionsInSection.length > 0) {
+				setCurrentQuestion(questionsInSection[0])
+			} else {
+				setCurGroup(null)
+				dispatch(setNewCurrentGroup(null))
+				setCurrentQuestion(null)
+			}
+			heightChange()
 		}
+
+		setNotSetCurrentQuest(false)
+	}
+
+	useEffect(() => {
+		makeSomeNoise()
 	}, [questionsInSection])
 
 	const roleId = useSelector((state: RootState) => state.user.information?.RoleId)
@@ -343,6 +356,7 @@ function TakeAnExamDetail() {
 
 	useEffect(() => {
 		if (curGroup) {
+			dispatch(setGlobalCurGroup(curGroup))
 			log.Yellow('curGroup', curGroup)
 		}
 	}, [curGroup])
@@ -367,6 +381,44 @@ function TakeAnExamDetail() {
 		return ''
 	}
 
+	async function insertDetails(data, answer) {
+		let items = []
+
+		if (!!data?.DoingTestDetails) {
+			items.push({ ...data?.DoingTestDetails[0], Enable: false })
+		}
+
+		items.push({ Id: 0, IeltsAnswerId: 0, IeltsAnswerContent: answer, Type: 0, Index: 0, Enable: true })
+
+		if (!!Router?.query?.exam) {
+			console.log('-------- PUT items: ', items)
+
+			try {
+				await doingTestApi.insertDetail({
+					DoingTestId: parseInt(Router?.query?.exam + ''),
+					IeltsQuestionId: data.Id,
+					Items: [...items]
+				})
+			} catch (error) {
+			} finally {
+				setNotSetCurrentQuest(true)
+				getQuestions()
+			}
+		}
+	}
+
+	function handleAnswerTyping(id, text) {
+		if (!!id) {
+			console.log('Got answer typing: ', { id: id, text: text })
+
+			const indexInGroup = curGroup?.IeltsQuestions.findIndex((quest) => quest?.Id == id)
+
+			if (indexInGroup > -1) {
+				insertDetails(curGroup?.IeltsQuestions[indexInGroup], text)
+			}
+		}
+	}
+
 	const [dragAns, setDragAns] = useState([])
 
 	function formatInput() {
@@ -377,7 +429,75 @@ function TakeAnExamDetail() {
 			for (let i = 0; i < temp.length; i++) {
 				const element = temp[i]
 				const id = element.getAttribute('id')
-				temp[i].setAttribute('placeholder', `(${getQuestIndex(getRealID(id)).Index})`)
+
+				const realId = getRealID(id) || ''
+				const indexInGroup = curGroup?.IeltsQuestions.findIndex((quest) => quest?.Id == realId)
+
+				if (!!curGroup?.IeltsQuestions[indexInGroup]?.DoingTestDetails) {
+					const contentAnswerd = curGroup?.IeltsQuestions[indexInGroup]?.DoingTestDetails[0]?.IeltsAnswerContent
+
+					temp[i].value = contentAnswerd || null
+
+					if (contentAnswerd.length > 4) {
+						temp[i].style.maxWidth = 'unset'
+						temp[i].style.width = contentAnswerd.length + 2 + 'ch'
+					} else {
+						temp[i].style.maxWidth = '80px'
+						temp[i].style.width = '80px'
+					}
+				}
+
+				temp[i].setAttribute('placeholder', `(${getQuestIndex(realId).Index})`)
+				temp[i].disabled = false
+				temp[i].style.border = '1px solid #ebebeb'
+
+				temp[i].addEventListener('keydown', (event) => {
+					if (event.target.value.length > 4) {
+						temp[i].style.maxWidth = 'unset'
+						temp[i].style.width = event.target.value.length + 2 + 'ch'
+					} else {
+						temp[i].style.maxWidth = '80px'
+						temp[i].style.width = '80px'
+					}
+
+					if (
+						(event.key == 'Delete' || event.key == 'Backspace') &&
+						temp[i].selectionStart == 0 &&
+						temp[i].selectionEnd == temp[i].value.length
+					) {
+						temp[i].style.maxWidth = '80px'
+						temp[i].style.width = '80px'
+					}
+				})
+
+				temp[i].addEventListener('paste', function (event) {
+					const pastedText = event.clipboardData.getData('text')
+					if (pastedText.length > 4) {
+						temp[i].style.maxWidth = 'unset'
+						temp[i].style.width = pastedText.length + 2 + 'ch'
+					} else {
+						temp[i].style.maxWidth = '80px'
+						temp[i].style.width = '80px'
+					}
+				})
+
+				temp[i].addEventListener('focus', (event) => {
+					event.target.style.border = '1px solid #1b73e8'
+
+					// setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id })
+					setCurrentQuestion({ ...currentQuestion, IeltsQuestionId: realId })
+				})
+
+				temp[i].addEventListener('blur', (event) => {
+					event.target.style.border = '1px solid #ebebeb'
+					console.log('---- Fuck: ', event.target.value)
+
+					handleAnswerTyping(realId, event.target.value)
+
+					// -------------------------------------
+					// getRealID(id)
+					// setCurrentQuestion({ ...currentQuestion, IeltsQuestionId: realId })
+				})
 			}
 		}
 
@@ -420,44 +540,17 @@ function TakeAnExamDetail() {
 		}
 	}, [curAudio])
 
-	const [creatingTest, setCreatingTest] = useState<boolean>(false)
-	function gotoTest(params) {
-		if (params?.Id) {
-			window.open(`/take-an-exam/?exam=${params?.Id}`, '_blank')
-		}
-	}
-	async function createDoingTest() {
-		setCreatingTest(true)
-		try {
-			const res = await doingTestApi.post({ IeltsExamId: parseInt(decode(router?.query?.exam + '')), ValueId: 0, Type: 1 })
-
-			if (res?.status == 200) {
-				log.Green('Created test', res.data?.data)
-				gotoTest(res.data?.data)
-				// Make some noise...
-			}
-		} catch (error) {
-		} finally {
-			setCreatingTest(false)
-		}
-	}
-
 	// ---------------------------------------
-
-	const globalState = useSelector((state: RootState) => state.takeAnExam)
 
 	const [overview, setOverview] = useState(null)
 
 	async function getOverview(examId) {
-		console.time('- Get Overview')
 		try {
 			const response: any = await ieltsExamApi.getOverview(examId)
 			if (response.status == 200) {
 				setOverview(response.data.data)
 				setSkills(response.data.data?.IeltsSkills)
-
 				dispatch(setSuperOverview(response.data.data))
-
 				if (response.data.data?.IeltsSkills?.length > 0) {
 					setCurrentSkill(response.data.data?.IeltsSkills[0])
 				}
@@ -467,8 +560,6 @@ function TakeAnExamDetail() {
 		} catch (error) {
 			ShowNostis.error(error?.message)
 		} finally {
-			console.timeEnd('- Get Overview')
-			console.timeEnd('- Get All Exam Data')
 			setLoading(false)
 		}
 	}
@@ -528,24 +619,20 @@ function TakeAnExamDetail() {
 
 						{/* RIGHT OF SCREEN */}
 						<div className="flex-1 p-[16px] scrollable max-w-[1200px] mx-auto" style={{ height: mainHeight }}>
-							{questionsInSection.length > 0 && (
-								<CurrentGroupController
-									key={`gr-ctr-${curGroup?.Id}`}
-									currentSection={currentSection}
-									curGroup={curGroup}
-									getQuestions={getQuestions}
-									onRefresh={() => {
-										// getQuestionsByGroup()
-										getQuestions()
-									}}
-								/>
-							)}
-
 							{is.drag && <DragHeader answers={dragAns} />}
 
 							<GroupContent is={is} curGroup={curGroup} questionsInSection={questionsInSection} />
 
-							<TestingQuestions data={curGroup} questions={questionsInSection} getDoingQuestionGroup={getDoingQuestionGroup} />
+							<TestingQuestions
+								data={curGroup}
+								questions={questionsInSection}
+								setCurrentQuestion={setCurrentQuestion}
+								getDoingQuestionGroup={getDoingQuestionGroup}
+								onRefreshNav={() => {
+									setNotSetCurrentQuest(true)
+									getQuestions()
+								}}
+							/>
 
 							{curAudio?.Audio && <div className="h-[200px]" />}
 						</div>
