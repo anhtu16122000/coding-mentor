@@ -75,9 +75,11 @@ const Write = (props) => {
 			className={`cc-choice-warpper border-[1px] border-[#e6e6e6]`}
 		>
 			<div className="exam-quest-wrapper none-selection">
-				<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
-					Câu {IndexInExam}
-				</div>
+				{!Router.asPath.includes('questions') && (
+					<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
+						Câu {IndexInExam}
+					</div>
+				)}
 				{ReactHTMLParser(data?.Content)}
 			</div>
 

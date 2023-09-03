@@ -7,8 +7,10 @@ const DragHeader = (props) => {
 	const [visible, setVisible] = useState<boolean>(false)
 
 	useEffect(() => {
-		setVisible(defaultVisible || true)
+		setVisible(defaultVisible)
 	}, [])
+
+	console.log('--- visible: ', visible)
 
 	return (
 		<div className={'drag-23-suggest' + ' ' + className}>

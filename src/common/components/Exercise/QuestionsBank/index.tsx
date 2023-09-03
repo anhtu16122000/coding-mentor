@@ -3,10 +3,11 @@ import { getMoreQuestionsBank, getQuestionsBank } from './util'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { List, Select, Skeleton } from 'antd'
+import { BackTop, List, Select, Skeleton } from 'antd'
 import { QUESTION_TYPES } from '~/common/libs'
 import QuestionBankRenderItem from './RenderItem'
 import Router, { useRouter } from 'next/router'
+import { BiSolidArrowToTop } from 'react-icons/bi'
 
 const initParameters = {
 	search: '',
@@ -86,6 +87,8 @@ const QuestionsBank = () => {
 		}
 	}, [router])
 
+	const [showBackTop, setShotBackTop] = useState<boolean>(false)
+
 	return (
 		<>
 			<Head>
@@ -129,7 +132,15 @@ const QuestionsBank = () => {
 
 				{(!loading || data.length > 0) && (
 					<div>
-						<div id="class-view" className="cc-exam-list-container !h-[calc(100vh-168px)] !mr-[-14px]" style={{ paddingRight: 8 }}>
+						<div
+							id="class-view"
+							onScroll={(e) => {
+								if (filters.pageIndex > 1) setShotBackTop(true)
+							}}
+							className="cc-exam-list-container !h-[calc(100vh-168px)] !mr-[-14px]"
+							style={{ paddingRight: 8 }}
+						>
+							<div id="top-of-scroll" />
 							<InfiniteScroll
 								dataLength={data.length}
 								next={loadMoreData}
@@ -171,6 +182,18 @@ const QuestionsBank = () => {
 						<Skeleton active />
 					</>
 				)}
+			</div>
+
+			<div
+				onClick={() => {
+					const classIndex = document.getElementById(`top-of-scroll`)
+					if (!!classIndex) {
+						classIndex.scrollIntoView({ behavior: 'smooth', block: 'center' })
+					}
+				}}
+				className="fixed rounded-full cursor-pointer z-50 bottom-[16px] right-[16px] p-[8px] bg-[#e6e6e6] hover:bg-[#dbdbdb]"
+			>
+				<BiSolidArrowToTop size={22} color="#000" />
 			</div>
 		</>
 	)

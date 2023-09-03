@@ -12,13 +12,10 @@ import htmlParser from '~/common/components/HtmlParser'
 const Choice = (props) => {
 	const { data, index, indexInExam, onRefresh, showEdit, isDoing, setCurrentQuestion, onRefreshNav } = props
 
-	const dispatch = useDispatch()
-
 	const onChange = (event, type: 'single' | 'multiple') => {
 		console.time('--- Select Answer')
 
 		if (type == 'single') {
-			//
 			insertDetails({ Id: event.target?.value })
 		}
 
@@ -186,8 +183,8 @@ const Choice = (props) => {
 		>
 			<div className="exam-quest-wrapper none-selection">
 				<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
-					Câu {indexInExam}
-					<div className="cc-choice-point">
+					{!Router.asPath.includes('questions') && <div className="mr-[8px]">Câu {indexInExam}</div>}
+					<div className="cc-choice-point !ml-0">
 						<TbFileCertificate size={12} className="mr-1" />
 						<div className="mt-[1px]">{data?.Point} điểm</div>
 					</div>

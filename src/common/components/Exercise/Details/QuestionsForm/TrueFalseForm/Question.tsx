@@ -69,7 +69,7 @@ const TrueFalseQuestion = (props) => {
 			className="flex items-start"
 		>
 			<div id={`cauhoi-${data.Id}`} className="flex flex-1 mt-1">
-				<span className="flex-shrink-0 inline font-[600] mr-[8px]">Câu {indexInExam}:</span>
+				{!Router.asPath.includes('questions') && <span className="flex-shrink-0 inline font-[600] mr-[8px]">Câu {indexInExam}:</span>}
 				{htmlParser(data?.Content)}
 			</div>
 

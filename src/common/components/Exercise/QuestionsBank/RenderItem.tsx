@@ -9,6 +9,7 @@ import { QUESTION_TYPES } from '~/common/libs'
 import DragHeader from '../Details/Components/drag-header'
 import GroupContent from '../Details/Components/group-content'
 import TestingQuestions from '../Testing/Questions'
+import { TbListDetails } from 'react-icons/tb'
 
 const QuestionBankRenderItem = ({ item, index, is, dragAns }) => {
 	return (
@@ -32,7 +33,9 @@ const QuestionBankRenderItem = ({ item, index, is, dragAns }) => {
 				</div>
 
 				<div className="bg-[#5cc07e] px-[8px] py-[2px] rounded-full ml-[8px]">
-					<div className="text-[#fff] font-[600]">Số câu: {item?.QuestionsAmount}</div>
+					<div className="text-[#fff] font-[600] flex items-center">
+						<div>Số câu: {item?.QuestionsAmount}</div>
+					</div>
 				</div>
 
 				{!!item?.LevelName && (
