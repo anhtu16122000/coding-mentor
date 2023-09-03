@@ -84,7 +84,7 @@ const CreateMindmap: FC<IGroupForm> = (props) => {
 	// Assign current data to this form
 	async function openEdit() {
 		form.setFieldsValue({ ...defaultData })
-		setAnswers(defaultData?.Answers)
+		setAnswers(defaultData?.IeltsAnswers)
 		setVisible(true)
 	}
 
@@ -101,7 +101,7 @@ const CreateMindmap: FC<IGroupForm> = (props) => {
 	}
 
 	async function _submit(param) {
-		console.log('-- submit param: ', { ...param, AnswerCreates: [] })
+		console.log('-- submit param: ', { ...param, IeltsAnswers: [] })
 
 		setLoading(true)
 		setTextError('')
@@ -113,9 +113,9 @@ const CreateMindmap: FC<IGroupForm> = (props) => {
 			return null
 		}
 
-		const DATA_SUBMIT = { ...param, Answers: answers }
+		const DATA_SUBMIT = { ...param, IeltsAnswers: answers }
 		if (!!defaultData) {
-			postEditQuestion({ ...defaultData, ...DATA_SUBMIT, AnswerUpdates: answers })
+			postEditQuestion({ ...defaultData, ...DATA_SUBMIT, IeltsAnswers: answers })
 		} else {
 			postCreateQuestion({ ...DATA_SUBMIT, Id: 0, timestamp: new Date().getTime() })
 		}
@@ -131,22 +131,21 @@ const CreateMindmap: FC<IGroupForm> = (props) => {
 
 	function createAnswer() {
 		setTextError('')
-		const answerType = 'Text'
-		const mewAnswer = { Id: 0, AnswerContent: '', IsTrue: false, isAdd: true, Type: answerType, timestamp: new Date().getTime() }
+		const mewAnswer = { Id: 0, Content: '', Correct: false, isAdd: true, Type: 1, timestamp: new Date().getTime() }
 		answers.push(mewAnswer)
 		setAnswers([...answers])
 	}
 
 	function onChangeAnswer(params, fIndex) {
 		const newAnswers = answers.map((answer, index) => {
-			return fIndex == index ? { ...answer, AnswerContent: params } : answer
+			return fIndex == index ? { ...answer, Content: params } : answer
 		})
 		setAnswers(newAnswers)
 	}
 
 	function onChangeAnswerCheck(params, fIndex) {
 		const newAnswers = answers.map((answer, index) => {
-			return fIndex == index ? { ...answer, IsTrue: params } : { ...answer, IsTrue: false }
+			return fIndex == index ? { ...answer, Correct: params } : { ...answer, Correct: false }
 		})
 		setAnswers(newAnswers)
 	}
@@ -214,14 +213,14 @@ const CreateMindmap: FC<IGroupForm> = (props) => {
 							{answer?.Enable != false && (
 								<div className="w800:col-span-2 col-span-4 mt-4 inline-flex items-center">
 									<Checkbox
-										checked={answer?.IsTrue}
+										checked={answer?.Correct}
 										onChange={(event) => onChangeAnswerCheck(event.target.checked, index)}
 										className="mr-3 h-[36px] custom-checkbox"
 									/>
 
 									<Input
 										onChange={(event) => onChangeAnswer(event.target.value, index)}
-										value={answer?.AnswerContent}
+										value={answer?.Content}
 										disabled={loading}
 										className="primary-input"
 									/>

@@ -119,7 +119,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 	// Handle submit form
 	const onFinish = (values) => {
-		log.Red('--------- FORM onFinish', '')
+		log.Red('--------- FORM onFinish', exercises)
 
 		setTextError('')
 
@@ -132,11 +132,9 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 		if (checkSubmit == '') {
 			setLoading(true)
-
 			if (!isEdit && !isChangeInfo) {
 				postGroup({ ...values, IeltsSectionId: section.Id, IeltsQuestions: isTyping || isDrag ? questionWithAnswers : exercises })
 			}
-
 			if (!!isEdit || !!isChangeInfo) {
 				putGroup({ ...values, Id: defaultData.Id, IeltsQuestions: isTyping || isDrag ? questionWithAnswers : exercises })
 			}
@@ -235,7 +233,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 										<Select.Option value={QUESTION_TYPES.MultipleChoice}>Trắc nghiệm</Select.Option>
 										<Select.Option value={QUESTION_TYPES.Write}>Tự luận</Select.Option>
 										<Select.Option value={QUESTION_TYPES.TrueOrFalse}>True or false</Select.Option>
-										{/* <Select.Option value={QUESTION_TYPES.Mindmap}>Mindmap</Select.Option> */}
+										<Select.Option value={QUESTION_TYPES.Mindmap}>Mindmap</Select.Option>
 										<Select.Option value={QUESTION_TYPES.Speak}>Speaking</Select.Option>
 										<Select.Option value={QUESTION_TYPES.FillInTheBlank}>Điền vào ô trống</Select.Option>
 										<Select.Option value={QUESTION_TYPES.DragDrop}>Chọn đáp án đúng</Select.Option>

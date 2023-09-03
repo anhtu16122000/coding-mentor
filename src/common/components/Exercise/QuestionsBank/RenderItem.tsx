@@ -67,7 +67,7 @@ const QuestionBankRenderItem = ({ item, index, is, dragAns }) => {
 
 			<Divider className="ant-divider-16 mx-[16px] !w-auto !min-w-fit" />
 
-			{is.drag && <DragHeader defaultVisible={false} className="shadow-none py-0" answers={dragAns} />}
+			{is.drag && <DragHeader className="shadow-none py-0" answers={dragAns} />}
 
 			<GroupContent className="shadow-none rounded-none" is={is} curGroup={item} />
 

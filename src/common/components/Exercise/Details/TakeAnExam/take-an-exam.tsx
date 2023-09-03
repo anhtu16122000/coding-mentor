@@ -63,6 +63,7 @@ function TakeAnExamDetail() {
 
 	const [testInfo, setTestInfo] = useState(null)
 	const [loading, setLoading] = useState(true)
+	const [loadingGroup, setLoadingGroup] = useState(true)
 	const [currentSkill, setCurrentSkill] = useState(null)
 
 	const [showSkills, setShowSkills] = useState<boolean>(true)
@@ -118,6 +119,7 @@ function TakeAnExamDetail() {
 	}
 
 	async function getDoingQuestionGroup() {
+		setLoadingGroup(true)
 		try {
 			const res = await doingTestApi.getQuestionGroup({
 				ieltsQuestionGroupId: currentQuestion?.IeltsQuestionGroupId,
@@ -131,6 +133,7 @@ function TakeAnExamDetail() {
 		} catch (error) {
 			ShowNostis.error(error?.message)
 		} finally {
+			setLoadingGroup(false)
 			setLoading(false)
 		}
 	}
@@ -714,7 +717,7 @@ function TakeAnExamDetail() {
 
 	return (
 		<ExamProvider>
-			<div className="exam-23-container">
+			<div className="exam-23-container relative">
 				<div className="cc-exam-detail z-10 !w-full bg-[#fff]">
 					<TakeAnExamHeader
 						loading={loading}
@@ -865,6 +868,12 @@ function TakeAnExamDetail() {
 						<div className="text-[18px] font-[600] text-[red]">{blocked}</div>
 					</div>
 				</Modal>
+
+				{loadingGroup && (
+					<div className="bg-[rgba(0,0,0,0.1)] all-center rounded-[6px] absolute top-0 left-0 w-full h-full">
+						<div className="text-[#000] font-[500]">Đang xử lý...</div>
+					</div>
+				)}
 			</div>
 		</ExamProvider>
 	)

@@ -5,6 +5,7 @@ import Write from './Write'
 import TrueFalseQuestion from '../../Details/QuestionsForm/TrueFalseForm/Question'
 import SpeakingQuestion from './Speak'
 import Router from 'next/router'
+import MindMap from './MindMap'
 
 function getQuestIndex(questions, curQuest) {
 	if (Router.asPath.includes('questions')) {
@@ -27,7 +28,8 @@ const TestingQuestions = (props) => {
 		choice: data?.Type == QUESTION_TYPES.MultipleChoice,
 		writing: data?.Type == QUESTION_TYPES.Write,
 		trueOrFalse: data?.Type == QUESTION_TYPES.TrueOrFalse,
-		speak: data?.Type == QUESTION_TYPES.Speak
+		speak: data?.Type == QUESTION_TYPES.Speak,
+		mind: data?.Type == QUESTION_TYPES.Mindmap
 	}
 
 	return (
@@ -114,6 +116,17 @@ const TestingQuestions = (props) => {
 						/>
 					)
 				})}
+
+			{is.mind && (
+				<MindMap
+					disabled={true}
+					isFinal={isFinal}
+					dataSource={data}
+					getDoingQuestionGroup={getDoingQuestionGroup}
+					setCurrentQuestion={setCurrentQuestion}
+					onRefreshNav={onRefreshNav}
+				/>
+			)}
 		</>
 	)
 }
