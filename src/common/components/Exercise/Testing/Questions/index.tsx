@@ -7,6 +7,10 @@ import SpeakingQuestion from './Speak'
 import Router from 'next/router'
 
 function getQuestIndex(questions, curQuest) {
+	if (Router.asPath.includes('questions')) {
+		return null
+	}
+
 	const theIndex = questions.findIndex((question) => question?.IeltsQuestionId == curQuest?.Id)
 	if (theIndex !== -1) {
 		return questions[theIndex]
@@ -73,17 +77,22 @@ const TestingQuestions = (props) => {
 						</div>
 					</div>
 
-					{theQuestions.map((quest, index) => (
-						<TrueFalseQuestion
-							type="doing"
-							key={index}
-							data={quest}
-							isDoing={Router.asPath.includes('take-an-exam')}
-							getDoingQuestionGroup={getDoingQuestionGroup}
-							setCurrentQuestion={setCurrentQuestion}
-							onRefreshNav={onRefreshNav}
-						/>
-					))}
+					{theQuestions.map((quest, index) => {
+						const thisItem = getQuestIndex(questions, quest)
+
+						return (
+							<TrueFalseQuestion
+								type="doing"
+								key={index}
+								data={quest}
+								indexInExam={thisItem?.Index || ''}
+								isDoing={Router.asPath.includes('take-an-exam')}
+								getDoingQuestionGroup={getDoingQuestionGroup}
+								setCurrentQuestion={setCurrentQuestion}
+								onRefreshNav={onRefreshNav}
+							/>
+						)
+					})}
 				</div>
 			)}
 

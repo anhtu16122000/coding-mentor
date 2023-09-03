@@ -185,7 +185,7 @@ const Choice = (props) => {
 			style={{ marginTop: index == 0 ? 8 : 0 }}
 		>
 			<div className="exam-quest-wrapper none-selection">
-				<div className="cc-choice-number">
+				<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
 					Câu {indexInExam}
 					<div className="cc-choice-point">
 						<TbFileCertificate size={12} className="mr-1" />

@@ -46,9 +46,16 @@ import TakeAnExamController from './Controller'
 import AudioPlayer from '../AudioPlayer'
 import MainAudioPlayer from '../AudioPlayer'
 
+let curDragAnswers = []
+let dragSelectedAnswers = []
+
+let dragSelected = []
+
 function TakeAnExamDetail() {
 	const router = useRouter()
 	const dispatch = useDispatch()
+
+	// console.log('----------------------- curDragAnswers: ', curDragAnswers)
 
 	const user = useSelector((state: RootState) => state.user.information)
 
@@ -100,8 +107,6 @@ function TakeAnExamDetail() {
 				} else {
 					//  Mọi thứ phải bắt đầu từ khúc này. Nếu bị block thì không làm gì cả
 					setTestInfo(res.data.data)
-					// getExamInfo(res?.data?.data?.IeltsExamId)
-					// getExamSkill(res?.data?.data?.IeltsExamId)
 					getOverview(res?.data?.data?.IeltsExamId)
 				}
 			}
@@ -118,7 +123,6 @@ function TakeAnExamDetail() {
 				ieltsQuestionGroupId: currentQuestion?.IeltsQuestionGroupId,
 				doingTestId: parseInt(router?.query?.exam + '')
 			})
-			log.Yellow('Question Group', res.data.data)
 			if (res.status == 200) {
 				setCurGroup(res.data.data)
 			} else {
@@ -241,25 +245,6 @@ function TakeAnExamDetail() {
 	}
 
 	const [curGroup, setCurGroup] = useState<any>(null)
-
-	async function getQuestionsByGroup() {
-		if (currentQuestion?.IeltsQuestionGroupId) {
-			try {
-				const res = await ieltsGroupApi.getByID(currentQuestion?.IeltsQuestionGroupId)
-				if (res.status == 200) {
-					dispatch(setNewCurrentGroup(res.data.data))
-					setCurGroup(res.data.data)
-				} else {
-					setCurGroup(null)
-					dispatch(setNewCurrentGroup(null))
-				}
-			} catch (error) {
-				ShowNostis.error(error?.message)
-			} finally {
-				setLoading(false)
-			}
-		}
-	}
 
 	useEffect(() => {
 		// console.log('--- currentQuestion: ', currentQuestion)
@@ -391,7 +376,7 @@ function TakeAnExamDetail() {
 		items.push({ Id: 0, IeltsAnswerId: 0, IeltsAnswerContent: answer, Type: 0, Index: 0, Enable: true })
 
 		if (!!Router?.query?.exam) {
-			console.log('-------- PUT items: ', items)
+			console.log('-------- insertDetails PUT items: ', items)
 
 			try {
 				await doingTestApi.insertDetail({
@@ -420,8 +405,13 @@ function TakeAnExamDetail() {
 	}
 
 	const [dragAns, setDragAns] = useState([])
+	const [timeStamp, setTimeStamp] = useState(0)
 
-	function formatInput() {
+	useEffect(() => {
+		// console.log('--- dragAns: ', dragAns)
+	}, [dragAns])
+
+	async function formatInput() {
 		const inputs: any = document.getElementsByClassName('b-in')
 		const temp = [...inputs]
 
@@ -433,71 +423,66 @@ function TakeAnExamDetail() {
 				const realId = getRealID(id) || ''
 				const indexInGroup = curGroup?.IeltsQuestions.findIndex((quest) => quest?.Id == realId)
 
-				if (!!curGroup?.IeltsQuestions[indexInGroup]?.DoingTestDetails) {
-					const contentAnswerd = curGroup?.IeltsQuestions[indexInGroup]?.DoingTestDetails[0]?.IeltsAnswerContent
+				if (!is.drag) {
+					if (!!curGroup?.IeltsQuestions[indexInGroup]?.DoingTestDetails) {
+						const contentAnswerd = curGroup?.IeltsQuestions[indexInGroup]?.DoingTestDetails[0]?.IeltsAnswerContent
 
-					temp[i].value = contentAnswerd || null
+						temp[i].value = contentAnswerd || null
 
-					if (contentAnswerd.length > 4) {
-						temp[i].style.maxWidth = 'unset'
-						temp[i].style.width = contentAnswerd.length + 2 + 'ch'
-					} else {
-						temp[i].style.maxWidth = '80px'
-						temp[i].style.width = '80px'
+						if (contentAnswerd.length > 4) {
+							temp[i].style.maxWidth = 'unset'
+							temp[i].style.width = contentAnswerd.length + 2 + 'ch'
+						} else {
+							temp[i].style.maxWidth = '80px'
+							temp[i].style.width = '80px'
+						}
 					}
+
+					temp[i].setAttribute('placeholder', `(${getQuestIndex(realId).Index})`)
+					temp[i].disabled = false
+					temp[i].classList.add(`cauhoi-${realId}`)
+					temp[i].style.border = '1px solid #ebebeb'
+
+					temp[i].addEventListener('keydown', (event) => {
+						if (event.target.value.length > 4) {
+							temp[i].style.maxWidth = 'unset'
+							temp[i].style.width = event.target.value.length + 2 + 'ch'
+						} else {
+							temp[i].style.maxWidth = '80px'
+							temp[i].style.width = '80px'
+						}
+
+						if (
+							(event.key == 'Delete' || event.key == 'Backspace') &&
+							temp[i].selectionStart == 0 &&
+							temp[i].selectionEnd == temp[i].value.length
+						) {
+							temp[i].style.maxWidth = '80px'
+							temp[i].style.width = '80px'
+						}
+					})
+
+					temp[i].addEventListener('paste', function (event) {
+						const pastedText = event.clipboardData.getData('text')
+						if (pastedText.length > 4) {
+							temp[i].style.maxWidth = 'unset'
+							temp[i].style.width = pastedText.length + 2 + 'ch'
+						} else {
+							temp[i].style.maxWidth = '80px'
+							temp[i].style.width = '80px'
+						}
+					})
+
+					temp[i].addEventListener('focus', (event) => {
+						event.target.style.border = '1px solid #1b73e8'
+						setCurrentQuestion({ ...currentQuestion, IeltsQuestionId: realId })
+					})
+
+					temp[i].addEventListener('blur', (event) => {
+						event.target.style.border = '1px solid #ebebeb'
+						handleAnswerTyping(realId, event.target.value)
+					})
 				}
-
-				temp[i].setAttribute('placeholder', `(${getQuestIndex(realId).Index})`)
-				temp[i].disabled = false
-				temp[i].style.border = '1px solid #ebebeb'
-
-				temp[i].addEventListener('keydown', (event) => {
-					if (event.target.value.length > 4) {
-						temp[i].style.maxWidth = 'unset'
-						temp[i].style.width = event.target.value.length + 2 + 'ch'
-					} else {
-						temp[i].style.maxWidth = '80px'
-						temp[i].style.width = '80px'
-					}
-
-					if (
-						(event.key == 'Delete' || event.key == 'Backspace') &&
-						temp[i].selectionStart == 0 &&
-						temp[i].selectionEnd == temp[i].value.length
-					) {
-						temp[i].style.maxWidth = '80px'
-						temp[i].style.width = '80px'
-					}
-				})
-
-				temp[i].addEventListener('paste', function (event) {
-					const pastedText = event.clipboardData.getData('text')
-					if (pastedText.length > 4) {
-						temp[i].style.maxWidth = 'unset'
-						temp[i].style.width = pastedText.length + 2 + 'ch'
-					} else {
-						temp[i].style.maxWidth = '80px'
-						temp[i].style.width = '80px'
-					}
-				})
-
-				temp[i].addEventListener('focus', (event) => {
-					event.target.style.border = '1px solid #1b73e8'
-
-					// setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id })
-					setCurrentQuestion({ ...currentQuestion, IeltsQuestionId: realId })
-				})
-
-				temp[i].addEventListener('blur', (event) => {
-					event.target.style.border = '1px solid #ebebeb'
-					console.log('---- Fuck: ', event.target.value)
-
-					handleAnswerTyping(realId, event.target.value)
-
-					// -------------------------------------
-					// getRealID(id)
-					// setCurrentQuestion({ ...currentQuestion, IeltsQuestionId: realId })
-				})
 			}
 		}
 
@@ -514,7 +499,137 @@ function TakeAnExamDetail() {
 				}
 			}
 
+			curDragAnswers = tamp
+
 			setDragAns(tamp)
+
+			// -----------------------------------------------------
+
+			for (let i = 0; i < temp.length; i++) {
+				const element = temp[i]
+
+				const id = element.getAttribute('id')
+				const createSelect = document.createElement('select')
+
+				const realId = getRealID(id) || ''
+				const indexInGroup = curGroup?.IeltsQuestions.findIndex((quest) => quest?.Id == realId)
+
+				createSelect.classList.add('b-in')
+
+				createSelect.setAttribute('id', id)
+				createSelect.classList.add(`cauhoi-${realId}`)
+
+				const createOptionDefault = document.createElement('option')
+				createOptionDefault.setAttribute('value', '0')
+				createOptionDefault.textContent = 'Chọn đáp án'
+				createSelect.appendChild(createOptionDefault)
+
+				createSelect.style.maxWidth = 'unset'
+
+				createSelect.addEventListener('click', (event) => {
+					setCurrentQuestion({ ...currentQuestion, IeltsQuestionId: realId })
+				})
+
+				createSelect.addEventListener('change', async (e: any) => {
+					const targetValue = e.target?.value as any
+
+					let items = []
+
+					const indexInGroup = curGroup?.IeltsQuestions.findIndex((x) => x.Id == realId)
+
+					if (!!curGroup?.IeltsQuestions[indexInGroup]?.DoingTestDetails) {
+						items.push({ ...curGroup?.IeltsQuestions[indexInGroup]?.DoingTestDetails[0], Enable: false })
+					}
+
+					if (!!targetValue) {
+						items.push({
+							Id: 0,
+							IeltsAnswerId: targetValue,
+							IeltsAnswerContent: '',
+							Type: 0,
+							Index: 0,
+							Enable: true
+						})
+					}
+
+					function checkAnswerId(item) {
+						return item.IeltsAnswerId > 0
+					}
+
+					const checkResult = items.every(checkAnswerId)
+
+					if (!!Router?.query?.exam && !!checkResult) {
+						console.log('-------- Changed PUT items: ', items)
+
+						try {
+							await doingTestApi.insertDetail({
+								DoingTestId: parseInt(Router?.query?.exam + ''),
+								IeltsQuestionId: curGroup?.IeltsQuestions[indexInGroup]?.Id,
+								Items: [...items]
+							})
+						} catch (error) {
+						} finally {
+							getDoingQuestionGroup()
+						}
+					}
+
+					const indexSelected = curDragAnswers.findIndex((a) => a.Id == e.target?.value)
+					curDragAnswers[indexSelected] = { ...curDragAnswers[indexSelected], disabled: true }
+
+					const thisOptions = document.getElementsByClassName(targetValue)
+					for (let t = 0; t < thisOptions.length; t++) {
+						thisOptions[t].setAttribute('disabled', 'true')
+					}
+
+					const theShitIndex = dragSelected.findIndex((a) => a.quest == realId)
+
+					if (theShitIndex == -1) {
+						dragSelected.push({ timeStamp: new Date(), quest: realId, ans: targetValue })
+					} else {
+						const oldSelected = document.getElementsByClassName(dragSelected[theShitIndex]?.ans)
+
+						for (let t = 0; t < oldSelected.length; t++) {
+							oldSelected[t].removeAttribute('disabled')
+						}
+
+						// ------------------------
+						dragSelected[theShitIndex] = { ...dragSelected[theShitIndex], ans: targetValue }
+					}
+
+					setDragAns([...curDragAnswers])
+					setTimeStamp(new Date().getTime())
+
+					setNotSetCurrentQuest(true)
+					getQuestions()
+				})
+
+				// Tìm câu này trong danh sách câu đã chọn đáp án (có thể là lấy từ api)
+				const findSelectedId = dragSelected.findIndex((thisAns) => thisAns?.quest == realId)
+				const thisFuckingAns = findSelectedId > -1 ? dragSelected[findSelectedId]?.ans : undefined
+
+				for (let p = 0; p < curDragAnswers.length; p++) {
+					const element = curDragAnswers[p]
+
+					const findAnsId = dragSelected.findIndex((thisAns) => thisAns?.ans == element?.Id)
+
+					const createOptionDefault = document.createElement('option')
+					createOptionDefault.setAttribute('value', element?.Id)
+					createOptionDefault.setAttribute('class', element?.Id)
+
+					if (element?.Id == thisFuckingAns) {
+						createOptionDefault.setAttribute('selected', 'true')
+					}
+
+					if (element?.disabled == true || findAnsId > -1) {
+						createOptionDefault.setAttribute('disabled', 'true')
+					}
+
+					createOptionDefault.textContent = element?.Content
+					createSelect.appendChild(createOptionDefault)
+				}
+
+				if (!!inputs[i]) inputs[i].replaceWith(createSelect)
+			}
 		}
 
 		if (!is.drag) {
@@ -523,8 +638,36 @@ function TakeAnExamDetail() {
 	}
 
 	useEffect(() => {
+		dragSelected = []
+
+		if (curGroup?.Type == QUESTION_TYPES.DragDrop && curGroup?.IeltsQuestions.length > 0) {
+			for (let i = 0; i < curGroup?.IeltsQuestions.length; i++) {
+				const element = curGroup?.IeltsQuestions[i]
+
+				if (!!element?.DoingTestDetails) {
+					for (let p = 0; p < element?.DoingTestDetails.length; p++) {
+						if (!!element?.DoingTestDetails[p]?.IeltsAnswerId) {
+							dragSelected.push({
+								timeStamp: new Date(),
+								quest: element?.Id,
+								ans: element?.DoingTestDetails[p]?.IeltsAnswerId
+							})
+						}
+					}
+				}
+			}
+		}
+
+		// ----
 		formatInput()
 	}, [curGroup])
+
+	useEffect(() => {
+		const theIndex = document.getElementById(`cauhoi-0`)
+		if (!!theIndex) {
+			theIndex.scrollIntoView({ behavior: 'smooth', block: 'center' })
+		}
+	}, [curGroup?.Id])
 
 	const is = {
 		typing: curGroup?.Type == QUESTION_TYPES.FillInTheBlank,
@@ -619,6 +762,8 @@ function TakeAnExamDetail() {
 
 						{/* RIGHT OF SCREEN */}
 						<div className="flex-1 p-[16px] scrollable max-w-[1200px] mx-auto" style={{ height: mainHeight }}>
+							<div id={`cauhoi-0`} />
+
 							{is.drag && <DragHeader answers={dragAns} />}
 
 							<GroupContent is={is} curGroup={curGroup} questionsInSection={questionsInSection} />
@@ -650,12 +795,24 @@ function TakeAnExamDetail() {
 							<div className="flex items-center no-select">
 								{questionsInSection.map((item, index) => {
 									const activated = currentQuestion?.IeltsQuestionId == item?.IeltsQuestionId
+
 									return (
 										<ButtonQuestion
 											key={`quest-num-${index}`}
 											isActivated={activated}
 											data={item}
-											onClick={() => setCurrentQuestion(item)}
+											onClick={() => {
+												const theIndex = document.getElementById(`cauhoi-${item?.IeltsQuestionId}`)
+												const classIndex = document.getElementsByClassName(`cauhoi-${item?.IeltsQuestionId}`)
+
+												if (!!theIndex) {
+													theIndex.scrollIntoView({ behavior: 'smooth', block: 'center' })
+												} else if (classIndex.length > 0) {
+													classIndex[0].scrollIntoView({ behavior: 'smooth', block: 'center' })
+												}
+
+												setCurrentQuestion(item)
+											}}
 										/>
 									)
 								})}

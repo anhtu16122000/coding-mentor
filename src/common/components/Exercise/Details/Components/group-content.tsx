@@ -1,15 +1,17 @@
 import { Empty } from 'antd'
+import Router from 'next/router'
 import React, { FC } from 'react'
 import htmlParser from '~/common/components/HtmlParser'
 
 type TGroupContent = {
 	is: any
 	curGroup: any
-	questionsInSection: any
+	questionsInSection?: any
+	className?: string
 }
 
 const GroupContent: FC<TGroupContent> = (props) => {
-	const { is, curGroup, questionsInSection } = props
+	const { is, curGroup, questionsInSection, className } = props
 
 	if (!curGroup?.Content) {
 		return (
@@ -20,6 +22,10 @@ const GroupContent: FC<TGroupContent> = (props) => {
 	}
 
 	function getQuestIndex(Id) {
+		if (Router.asPath.includes('questions')) {
+			return
+		}
+
 		const theIndex = questionsInSection.findIndex((question) => question?.IeltsQuestionId == Id)
 
 		if (theIndex !== -1) {
@@ -43,15 +49,15 @@ const GroupContent: FC<TGroupContent> = (props) => {
 	return (
 		<>
 			{!is.typing && !is.drag && (
-				<div className="mb-[16px] typing-drag-23-content">
-					<RealQuestIndex />
+				<div className={'mb-[16px] typing-drag-23-content' + ` ${className}`}>
+					{!Router.asPath.includes('questions') && <RealQuestIndex />}
 					{htmlParser(curGroup?.Content)}
 				</div>
 			)}
 
 			{(is.drag || is.typing) && (
-				<div className="typing-drag-23-content">
-					<RealQuestIndex />
+				<div className={'typing-drag-23-content' + ` ${className}`}>
+					{!Router.asPath.includes('questions') && <RealQuestIndex />}
 					<div className="mb-[16px]">{htmlParser(curGroup?.Content)}</div>
 				</div>
 			)}

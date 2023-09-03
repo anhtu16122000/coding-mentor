@@ -257,6 +257,14 @@ export const AdminChildMenu = [
 		MenuKey: '/exercise',
 		Parent: 'library',
 		MenuItem: [
+			,
+			{
+				ItemType: 'single',
+				Key: '/questions',
+				Route: '/questions',
+				Text: 'Ngân hàng câu hỏi',
+				Icon: ''
+			},
 			{
 				ItemType: 'single',
 				Key: '/exam',

@@ -1,92 +1,70 @@
-import { Input } from 'antd'
+import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import ReactHTMLParser from 'react-html-parser'
 import { useDispatch, useSelector } from 'react-redux'
+import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import AudioRecord from '~/common/components/AudioRecord/AudioRecord'
-import UploadAudioField from '~/common/components/FormControl/UploadAudioField'
 import { RootState } from '~/store'
-import { setActivating, setListAnswered, setTestingData } from '~/store/testingState'
 
 const SpeakingQuestion = (props) => {
-	const { data, type, isFinal, dataSource, index, IndexInExam, disabled, onRefreshNav } = props
-
-	const dispatch = useDispatch()
-
-	const testingData = useSelector((state: RootState) => state.testingState.data)
-	const answered = useSelector((state: RootState) => state.testingState.answered)
+	const { data, type, isFinal, dataSource, index, IndexInExam, disabled, onRefreshNav, setCurrentQuestion } = props
 
 	const [loading, setLoading] = useState<boolean>(false)
 
-	const [answer, setAnswer] = useState('')
+	const [curLink, setCurLink] = useState('')
 
-	useEffect(() => {
-		getVaklue()
-	}, [testingData])
-
-	function getVaklue() {
-		let text = ''
-		testingData.forEach((element) => {
-			if (element?.ExerciseId == data.Id) {
-				if (element?.Answers.length > 0) {
-					text = element.Answers[0]?.AnswerContent
-				}
-			}
-		})
-		setAnswer(text)
-	}
-
-	const onChange = (event) => {
+	const onChange = async (questId, link) => {
 		console.time('--- Select Answer')
-		const cloneData = []
-		if (!!event) {
-			testingData.forEach((element) => {
-				if (data.Id == element?.ExerciseId) {
-					cloneData.push({ ExerciseId: element?.ExerciseId, Answers: [{ AnswerId: '', AnswerContent: event }] })
-				} else {
-					cloneData.push({ ...element })
-				}
-			})
+		setCurLink(link)
+
+		let items = []
+
+		if (!!data?.DoingTestDetails) {
+			items.push({ ...data?.DoingTestDetails[0], Enable: false })
 		}
-		dispatch(setTestingData(cloneData))
-		// Lấy danh sách câu hỏi đã trả lời
-		const cloneAnswered = []
-		let flag = true
-		answered.forEach((element) => {
-			cloneAnswered.push(element)
-			if (data?.Id == element) {
-				flag = false
+		items.push({ Id: 0, IeltsAnswerId: 0, IeltsAnswerContent: link, Type: 0, Index: 0, Enable: true })
+
+		if (!!Router?.query?.exam) {
+			console.log('-------- PUT items: ', items)
+
+			try {
+				await doingTestApi.insertDetail({
+					DoingTestId: parseInt(Router?.query?.exam + ''),
+					IeltsQuestionId: data.Id,
+					Items: [...items]
+				})
+			} catch (error) {
+			} finally {
+				onRefreshNav()
 			}
-		})
-		if (flag == true) {
-			cloneAnswered.push(data?.Id)
 		}
-		dispatch(setListAnswered(cloneAnswered))
+
 		console.timeEnd('--- Select Answer')
 	}
 
-	function getLinkRecorded(questIndex) {
-		// const element = groupDetail.Exercises[questIndex]
+	function getLinkRecorded() {
+		if (!!curLink) {
+			return curLink
+		}
 
-		// if (element?.AnswerValues.length > 0) {
-		// 	const answered = element?.AnswerValues[0]
-
-		// 	if (!!answered?.AnswerContent) {
-		// 		return answered?.AnswerContent
-		// 	}
-		// }
+		if (!!data?.DoingTestDetails) {
+			return data?.DoingTestDetails[0]?.IeltsAnswerContent || ''
+		}
 
 		return ''
 	}
 
 	return (
 		<div
-			// onClick={() => dispatch(setActivating(data.Id))}
+			onClick={() => setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id })}
 			key={'question-' + data.Id}
 			id={'question-' + data.Id}
 			className={`cc-choice-warpper border-[1px] border-[#e6e6e6]`}
 		>
 			<div className="exam-quest-wrapper none-selection">
-				<div className="cc-choice-number">Câu {IndexInExam}</div>
+				<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
+					Câu {IndexInExam}
+				</div>
 				{ReactHTMLParser(data?.Content)}
 			</div>
 
@@ -95,12 +73,12 @@ const SpeakingQuestion = (props) => {
 				{!loading && (
 					<>
 						<AudioRecord
-							disabled={disabled}
-							// linkRecord={getLinkRecorded(exerIndex)}
-							// getLinkRecord={(linkRecord) => onChange(exercise.ExerciseTopicId, linkRecord)}
+							disabled={Router.asPath.includes('take-an-exam') ? false : disabled}
+							linkRecord={getLinkRecorded()}
+							getLinkRecord={(linkRecord) => onChange(data.Id, linkRecord)}
 							packageResult={[]}
 							// dataQuestion={group}
-							// exerciseID={exercise.ExerciseTopicId}
+							exerciseID={data.Id}
 							getActiveID={() => {}}
 						/>
 

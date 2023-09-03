@@ -4,6 +4,8 @@ import { Spin, Tooltip } from 'antd'
 import Recorder from '~/common/utils/audio'
 // import { useWrap } from '~/context/wrap'
 import { toHHMMSS } from '~/common/utils/main-function'
+import { UploadFileApi } from '~/api/common/upload-image'
+import { ShowNostis } from '~/common/utils'
 // import { exerciseGroupApi } from '~/apiBase'
 
 // import Recorder from 'react-cc-audio-recorder'
@@ -69,17 +71,19 @@ const AudioRecord = (props) => {
 		setLoadingUpload(true)
 		setIsRecord(false)
 
-		// try {
-		// 	let res = await exerciseGroupApi.UploadAudio(file)
-		// 	if (res.status == 200) {
-		// 		getLinkRecord(res.data.data)
-		// 		showNoti('success', 'Ghi âm thành công')
-		// 	}
-		// } catch (error) {
-		// 	showNoti('danger', error.message)
-		// } finally {
-		// 	setLoadingUpload(false)
-		// }
+		try {
+			let res = await UploadFileApi.uploadImage(file)
+			if (res.status == 200) {
+				getLinkRecord(res.data.data)
+				ShowNostis.success('Ghi âm thành công')
+			}
+		} catch (error) {
+			ShowNostis.error(error.message)
+
+			getLinkRecord('http://monalms.monamedia.net/Upload/Images/08ea8174-b869-41e0-bf0b-1e987a0f665a.mp3')
+		} finally {
+			setLoadingUpload(false)
+		}
 	}
 
 	useEffect(() => {
@@ -91,19 +95,11 @@ const AudioRecord = (props) => {
 			{loadingUpload ? (
 				<div className="d-flex align-items-center mt-2 mb-2">
 					<Spin />
-					<span
-						style={{
-							marginLeft: '5px',
-							fontStyle: 'italic',
-							fontSize: '13px'
-						}}
-					>
-						Loading audio...
-					</span>
+					<span style={{ marginLeft: '5px', fontStyle: 'italic', fontSize: '13px' }}>Loading audio...</span>
 				</div>
 			) : (
 				<>
-					{linkRecord && (
+					{!isRecord && linkRecord && (
 						<audio controls>
 							<source src={linkRecord} type="audio/mpeg" />
 						</audio>

@@ -7,7 +7,7 @@ import htmlParser from '~/common/components/HtmlParser'
 import { RootState } from '~/store'
 
 const TrueFalseQuestion = (props) => {
-	const { data, isDoing, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav } = props
+	const { data, isDoing, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav, indexInExam } = props
 
 	const [loading, setLoading] = useState<boolean>(true)
 
@@ -68,7 +68,10 @@ const TrueFalseQuestion = (props) => {
 			onClick={() => setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionGroupId: curGroup?.Id })}
 			className="flex items-start"
 		>
-			<div className="flex-1 mt-1">{htmlParser(data?.Content)}</div>
+			<div id={`cauhoi-${data.Id}`} className="flex flex-1 mt-1">
+				<span className="flex-shrink-0 inline font-[600] mr-[8px]">Câu {indexInExam}:</span>
+				{htmlParser(data?.Content)}
+			</div>
 
 			<div className="flex items-center mr-[2px] true-false-checkbox">
 				<div className="w-[50px] flex items-center justify-center">
