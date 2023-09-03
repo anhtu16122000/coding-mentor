@@ -8,9 +8,10 @@ import { IoCloseSharp } from 'react-icons/io5'
 import PrimaryTooltip from '~/common/components/PrimaryTooltip'
 import CreateExamSkill from './exam-skill-form'
 import { FiMoreVertical } from 'react-icons/fi'
+import { TiArrowSortedDown } from 'react-icons/ti'
 
 function ExamSkillItem(props) {
-	const { data, index, onRefresh, currentSkill, setCurrentSkill, onPlayAudio, hideController } = props
+	const { data, index, allSkills, onRefresh, onUp, onDown, showSort, currentSkill, setCurrentSkill, onPlayAudio, hideController } = props
 
 	const activated = currentSkill?.Id == data.Id
 
@@ -79,41 +80,63 @@ function ExamSkillItem(props) {
 
 	return (
 		<>
-			<div onClick={() => setCurrentSkill(data)} className={`cc-23-skill ${classApply}`}>
-				<div>{data?.Name}</div>
-
-				{data?.Audio && (
+			<div onClick={() => !showSort && setCurrentSkill(data)} className={`cc-23-skill ${!!showSort ? noneActiveClass : classApply}`}>
+				{index > 0 && !!showSort && (
 					<div
-						onClick={(e) => {
-							e.stopPropagation()
-							onPlayAudio(data)
-						}}
+						onClick={onUp}
+						className="ml-[-2px] mr-[8px] w-[18px] h-[18px] bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff] all-center cursor-pointer rounded-full"
 					>
-						<PrimaryTooltip place="left" id={`au-sk-${index}`} content="Phát âm thanh">
-							<div className={`cc-23-skill-info ml-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
-								<FaHeadphonesAlt size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
-							</div>
-						</PrimaryTooltip>
+						<TiArrowSortedDown size={16} className="rotate-90 ml-[-2px]" />
 					</div>
 				)}
 
-				{!hideController && (
-					<div onClick={(e) => e.stopPropagation()}>
-						<PrimaryTooltip place="left" id={`tip-${index}`} content="Menu">
-							<Popover
-								ref={popref}
-								placement="rightTop"
-								title="Menu"
-								content={content}
-								trigger="click"
-								overlayClassName="show-arrow exam-skill"
-							>
-								<div className={`cc-23-skill-info ml-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
-									<FiMoreVertical size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
-								</div>
-							</Popover>
-						</PrimaryTooltip>
+				<div>{data?.Name}</div>
+
+				{index < allSkills.length - 1 && !!showSort && (
+					<div
+						onClick={onDown}
+						className="mr-[-2px] ml-[8px] w-[18px] h-[18px] bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff] all-center cursor-pointer rounded-full"
+					>
+						<TiArrowSortedDown size={16} className="-rotate-90 mr-[-2px]" />
 					</div>
+				)}
+
+				{!showSort && (
+					<>
+						{data?.Audio && (
+							<div
+								onClick={(e) => {
+									e.stopPropagation()
+									onPlayAudio(data)
+								}}
+							>
+								<PrimaryTooltip place="left" id={`au-sk-${index}`} content="Phát âm thanh">
+									<div className={`cc-23-skill-info ml-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
+										<FaHeadphonesAlt size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
+									</div>
+								</PrimaryTooltip>
+							</div>
+						)}
+
+						{!hideController && (
+							<div onClick={(e) => e.stopPropagation()}>
+								<PrimaryTooltip place="left" id={`tip-${index}`} content="Menu">
+									<Popover
+										ref={popref}
+										placement="rightTop"
+										title="Menu"
+										content={content}
+										trigger="click"
+										overlayClassName="show-arrow exam-skill"
+									>
+										<div className={`cc-23-skill-info ml-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
+											<FiMoreVertical size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
+										</div>
+									</Popover>
+								</PrimaryTooltip>
+							</div>
+						)}
+					</>
 				)}
 			</div>
 

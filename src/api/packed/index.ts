@@ -1,23 +1,23 @@
 import { instance } from '../instance'
 
-const url = '/api/IeltsSkill'
+const url = '/api/packed'
 
 // API for new examination feature
-export const ieltsSkillApi = {
-	getAll(params) {
+export const packedApi = {
+	getAll(params: IGetExam) {
 		return instance.get<IApiResultData<TIeltsExam[]>>(url, { params })
 	},
 	getByID(ID: number) {
 		return instance.get<IApiResultData<TIeltsExam>>(`${url}/${ID}`)
 	},
-	post(data) {
+	getQuestions(params) {
+		return instance.get<IApiResultData<any>>(`${url}/ielts-question-in-section`, { params })
+	},
+	post(data: TInputIeltsExam) {
 		return instance.post(url, data)
 	},
-	put(data) {
+	put(data: TInputIeltsExam & { ID: number | string }) {
 		return instance.put(url, data)
-	},
-	saveIndex(data) {
-		return instance.put(url + '/change-index', data)
 	},
 	delete(examID: number) {
 		return instance.delete(url + '/' + examID)

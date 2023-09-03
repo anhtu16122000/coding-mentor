@@ -38,6 +38,26 @@ import PrimaryTooltip from '../../PrimaryTooltip'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import MainAudioPlayer from './AudioPlayer'
 
+// @ts-ignore
+import { sortableContainer, sortableElement } from 'react-sortable-hoc'
+import { BiPlus } from 'react-icons/bi'
+import { FaSort } from 'react-icons/fa'
+import { RiSave2Fill, RiSave2Line } from 'react-icons/ri'
+
+const SortableItem = sortableElement(({ onPlayAudio, data, currentSkill, setCurrentSkill, getExamSkill }) => (
+	<ExamSkillItem
+		onPlayAudio={onPlayAudio}
+		data={data}
+		currentSkill={currentSkill}
+		setCurrentSkill={setCurrentSkill}
+		onRefresh={getExamSkill}
+	/>
+))
+
+const SortableContainer = sortableContainer(({ children }) => {
+	return <ul>{children}</ul>
+})
+
 function ExamDetail() {
 	const router = useRouter()
 	const dispatch = useDispatch()
@@ -391,6 +411,49 @@ function ExamDetail() {
 		}
 	}
 
+	const [sortSkill, setSortSkill] = useState<boolean>(false)
+
+	function moveItemUpOnePosition(arr, item) {
+		const index = arr.indexOf(item)
+
+		if (index !== -1 && index !== 0) {
+			// Sử dụng destructuring để hoán đổi phần tử và phần tử trước nó
+			;[arr[index - 1], arr[index]] = [arr[index], arr[index - 1]]
+		}
+
+		setSkills([...arr])
+	}
+
+	function moveItemDownOnePosition(arr, item) {
+		const index = arr.indexOf(item)
+
+		if (index !== -1 && index !== arr.length - 1) {
+			// Sử dụng destructuring để hoán đổi phần tử và phần tử trước nó
+			;[arr[index + 1], arr[index]] = [arr[index], arr[index + 1]]
+		}
+
+		setSkills([...arr])
+	}
+
+	async function saveNewSkillsPosition() {
+		console.log('----- SKILLS: ', skills)
+
+		// CÁI SAVE NÀY API CHƯA LƯU --> GET LẠI NÓ RA CÁI CŨ
+
+		let temp = []
+
+		for (let i = 0; i < skills.length; i++) {
+			temp.push({ Id: skills[i]?.Id, Index: i + 1 })
+		}
+
+		try {
+			const res = await ieltsSkillApi.saveIndex({ Items: temp })
+		} catch (error) {
+		} finally {
+			// getExamSkill()
+		}
+	}
+
 	return (
 		<ExamProvider>
 			<div className="exam-23-container">
@@ -437,11 +500,39 @@ function ExamDetail() {
 							<div className="flex items-center pb-[16px] scroll-h">
 								<CreateExamSkill onRefresh={getExamSkill} />
 
+								{!sortSkill && (
+									<div
+										onClick={() => setSortSkill(true)}
+										className={`cc-23-skill bg-[#FFBA0A] hover:bg-[#e7ab11] focus:bg-[#d19b10] text-[#000]`}
+									>
+										<FaSort size={16} className="ml-[-2px]" />
+										<div className="ml-[4px]">Sắp xếp</div>
+									</div>
+								)}
+
+								{sortSkill && (
+									<div
+										onClick={() => {
+											saveNewSkillsPosition()
+											setSortSkill(false)
+										}}
+										className={`cc-23-skill bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff]`}
+									>
+										<RiSave2Fill size={16} className="ml-[-2px]" />
+										<div className="ml-[4px]">Lưu</div>
+									</div>
+								)}
+
 								{skills.map((sk, index) => {
 									return (
 										<ExamSkillItem
+											index={index}
+											allSkills={skills}
+											onUp={() => moveItemUpOnePosition(skills, sk)}
+											onDown={() => moveItemDownOnePosition(skills, sk)}
 											onPlayAudio={(e) => setCurAudio(e || '')}
 											data={sk}
+											showSort={sortSkill}
 											currentSkill={currentSkill}
 											setCurrentSkill={setCurrentSkill}
 											onRefresh={getExamSkill}
