@@ -61,7 +61,11 @@ const CardGrid = (props) => {
 						{`${item.TotalStudent || 0} / ${item.MaxQuantity || 0}`}
 					</div>
 
-					{!!item?.Price && <div className="class-price">{parseToMoney(item?.Price)} VNĐ</div>}
+					{!!item?.Price && (
+						<div className="class-price">
+							{parseToMoney(item?.Price)} VNĐ {item?.IsMonthly && '/ Tháng'}
+						</div>
+					)}
 					{!item?.Price && <div className="free">Miễn phí</div>}
 				</div>
 			</div>

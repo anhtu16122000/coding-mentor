@@ -166,6 +166,13 @@ export const AdminChildMenu = [
 			},
 			{
 				ItemType: 'single',
+				Key: '/info-course/nearing-completion',
+				Route: '/info-course/nearing-completion',
+				Text: 'Học viên sắp học xong',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
 				Key: '/info-course/registration',
 				Route: '/info-course/registration',
 				Text: 'Hẹn đăng ký',
@@ -302,8 +309,8 @@ export const AdminChildMenu = [
 			},
 			{
 				ItemType: 'single',
-				Key: '/class/list-class',
-				Route: '/class/list-class',
+				Key: '/class',
+				Route: '/class',
 				Text: 'Danh sách lớp học',
 				Icon: ''
 			},

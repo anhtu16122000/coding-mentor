@@ -59,6 +59,7 @@ type IFormSelectField = {
 	onScroll?: function
 	optionList: ISelectOptionList[]
 	title?: string[] | string
+	maxTagCount?: number
 }
 
 type ISelectOptionList = {

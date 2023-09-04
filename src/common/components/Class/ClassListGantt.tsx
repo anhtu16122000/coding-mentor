@@ -17,7 +17,6 @@ import { content } from 'tailwind.config'
 import ExamItem from '../Exercise/item'
 import { userInformationApi } from '~/api/user/user'
 const Bar = dynamic(() => import('@ant-design/plots').then(({ Bar }) => Bar), { ssr: false })
-
 const ClassListGantt = (props) => {
 	const { isLoading, dataSource, setTodoApi, listTodoApi, totalRow, todoApi } = props
 	const state = useSelector((state: RootState) => state)
@@ -26,6 +25,7 @@ const ClassListGantt = (props) => {
 	const [isModalOpen, setIsModalOpen] = useState({ id: null, open: null })
 	const [isLoadingDelete, setIsLoadingDelete] = useState(false)
 	const [academic, setAcademic] = useState([])
+
 	const getPagination = (page) => {
 		setTodoApi({ ...todoApi, pageIndex: page })
 	}
@@ -50,7 +50,7 @@ const ClassListGantt = (props) => {
 		}
 	}, [])
 
-	const formattedData = dataSource?.map((item) => ({
+	const formattedData: any = dataSource.map((item) => ({
 		...item,
 		Values: [new Date(item.Values[0]).getTime(), new Date(item.Values[1]).getTime()]
 	}))
@@ -62,7 +62,7 @@ const ClassListGantt = (props) => {
 	const config = {
 		tooltip: {
 			formatter: (datum) => {
-				const { StatusName, Values } = datum
+				const { Name, StatusName, Values } = datum
 				const startDate = moment(Values[0]).format('DD/MM/yyyy')
 				const endDate = moment(Values[1]).format('DD/MM/yyyy')
 				return { name: StatusName, value: `${startDate} - ${endDate}` }
@@ -73,6 +73,8 @@ const ClassListGantt = (props) => {
 	return (
 		<>
 			<Bar
+				{...config}
+				// @ts-ignore
 				data={formattedData}
 				xField="Values"
 				yField="Name"
@@ -102,7 +104,6 @@ const ClassListGantt = (props) => {
 						}
 					}
 				}}
-				{...config}
 			/>
 
 			<Pagination

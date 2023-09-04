@@ -60,7 +60,7 @@ const DonateVideo: FC<IDonateVideo> = ({ video, onRefresh }) => {
 				pageSize: 9999999,
 				pageIndex: 1,
 				RoleIds: '3',
-				branchIds: userInformation.RoleId == '1' ? null : userInformation?.BranchIds
+				branchIds: userInformation?.RoleId == '1' ? null : userInformation?.BranchIds
 			})
 			if (res.status == 200) {
 				setStudents(res.data.data)

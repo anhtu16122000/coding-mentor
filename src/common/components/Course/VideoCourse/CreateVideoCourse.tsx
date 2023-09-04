@@ -75,7 +75,7 @@ const CreateVideoCourse = (props: TProps) => {
 			result.push(tagsByCategory[categoryId])
 		}
 
-		if (!!isEdit) form.setFieldValue('Tags', convertToArray(defaultData?.Tags))
+		if (!!isEdit) form.setFieldValue('Tags', defaultData?.Tags ? defaultData?.Tags?.split(',') : [])
 
 		setTags(result)
 	}

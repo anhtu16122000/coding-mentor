@@ -26,7 +26,7 @@ const FormUserRegister = (props) => {
 			const ROLE_STUDENT = 3
 			const res = await userInformationApi.getAll({
 				roleIds: ROLE_STUDENT,
-				branchIds: userInformation.RoleId == '1' ? null : userInformation.BranchIds
+				branchIds: userInformation?.RoleId == '1' ? null : userInformation.BranchIds
 			})
 			if (res.status == 200) {
 				setStudents(res.data.data)

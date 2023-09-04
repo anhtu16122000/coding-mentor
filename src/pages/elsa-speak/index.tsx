@@ -1,6 +1,6 @@
 import React from 'react'
 import MainLayout from '~/common/components/MainLayout'
-import ElsaSpeak from '~/common/pages/ElsaSpeak/ClassGanttChart'
+import ElsaSpeak from '~/common/pages/ElsaSpeak'
 
 const ElsaSpeakTest = () => {
 	return <ElsaSpeak />

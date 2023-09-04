@@ -1,25 +1,138 @@
-import { Form, Select } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { Form, Input, Select } from 'antd'
+import { useEffect, useState } from 'react'
+import { AiFillMinusCircle, AiFillPlusCircle } from 'react-icons/ai'
+import { useDispatch, useSelector } from 'react-redux'
 import { billApi } from '~/api/business/bill'
+import { studyTimeApi } from '~/api/configs/study-time'
 import { programApi } from '~/api/learn/program'
 import { formRequired } from '~/common/libs/others/form'
 import { ShowNoti } from '~/common/utils'
+import { parseSelectArray } from '~/common/utils/common'
 import { RootState } from '~/store'
+import SelectField from '../FormControl/SelectField'
 import ListClassReview from './ListClassReview'
 import ListProgramReview from './ListProgramReview'
 import ModalAddClass from './ModalAddClass'
 import ModalAddProgram from './ModalAddProgram'
 
+const dayOfWeek = [
+	{
+		title: 'Thứ 2',
+		value: 1
+	},
+	{
+		title: 'Thứ 3',
+		value: 2
+	},
+	{
+		title: 'Thứ 4',
+		value: 3
+	},
+	{
+		title: 'Thứ 5',
+		value: 4
+	},
+	{
+		title: 'Thứ 6',
+		value: 5
+	},
+	{
+		title: 'Thứ 7',
+		value: 6
+	},
+	{
+		title: 'Chủ nhật',
+		value: 0
+	}
+]
+const { Option } = Select
+
+type StudyTime = {
+	title: string
+	value: number
+}
+
 const FormRegisterClass = (props) => {
-	const { form, setClasses, classes, classesSelected, setClassesSelected, programsSelected, setProgramsSelected } = props
-
+	const dispatch = useDispatch()
+	const { form, setClasses, classes, classesSelected, setClassesSelected, programsSelected, setProgramsSelected, handleListTimeFrames } =
+		props
+	const state = useSelector((state: RootState) => state)
 	const branch = useSelector((state: RootState) => state.branch.Branch)
-
+	const [curriculum, setCurriculum] = useState([])
+	const [studyTime, setStudyTime] = useState<StudyTime[]>([])
 	const [programs, setPrograms] = useState([])
+	const [listTimeFrames, setListTimeFrames] = useState([{ Id: 1, ExectedDay: null, StudyTimeId: null, Note: '' }])
+	const [listDisabledTimeFrames, setListDisabledTimeFrames] = useState([])
+	const [isLoading, setIsLoading] = useState(false)
+
+	const handleChangeTimeFrame = (Id, name, value) => {
+		const getIndexTimeFrame = listTimeFrames.findIndex((timeFrame) => timeFrame.Id === Id)
+		listTimeFrames[getIndexTimeFrame] = { ...listTimeFrames[getIndexTimeFrame], [name]: value }
+		setListTimeFrames([...listTimeFrames])
+		handleListTimeFrames([...listTimeFrames])
+		// let newArr = listTimeFrames.map((item) => {
+		// 	if (item.Id === Id) {
+		// 		return { ...item, [name]: value }
+		// 	} else {
+		// 		return item
+		// 	}
+		// })
+		// setListTimeFrames(newArr)
+	}
+
+	const handleAddListTimeFrame = () => {
+		setListTimeFrames((prev) => [...listTimeFrames, { Id: prev[prev.length - 1].Id + 1, ExectedDay: null, StudyTimeId: null, Note: '' }])
+		setListDisabledTimeFrames((prev) => [
+			...listDisabledTimeFrames,
+			{ Id: prev[prev.length - 1]?.Id + 1, ExectedDay: null, StudyTimeId: null }
+		])
+	}
+
+	const handleRemoveListTimeFrame = (Id) => {
+		if (listTimeFrames.length !== 1) {
+			form.setFieldValue(`ExectedDay-${Id}`, undefined)
+			form.setFieldValue(`StudyTimeId-${Id}`, undefined)
+			const filterListTimeFrames = listTimeFrames.filter((timeFrame) => {
+				return timeFrame.Id !== Id
+			})
+			setListTimeFrames(filterListTimeFrames)
+			const filterListDisabledTimeFrames = listDisabledTimeFrames.filter((disabledTimeFrame) => {
+				return disabledTimeFrame.Id !== Id
+			})
+			setListDisabledTimeFrames(filterListDisabledTimeFrames)
+		} else {
+			ShowNoti('error', 'Vui lòng chọn ít nhất 1 khung thời gian')
+		}
+	}
+
+	const handleDisableSelect = (data, value) => {
+		const checkExist = listDisabledTimeFrames.find((item) => {
+			if (item.ExectedDay === null) {
+				return item.StudyTimeId === value
+			} else {
+				return item.ExectedDay === data.ExectedDay && item.StudyTimeId === value
+			}
+		})
+		return !!checkExist
+	}
+
+	const getAllStudyTime = async () => {
+		try {
+			const res = await studyTimeApi.getAll({ pageSize: 9999 })
+			if (res.status === 200) {
+				setStudyTime(parseSelectArray(res.data.data, 'Name', 'Id'))
+			}
+			if (res.status === 204) {
+				setStudyTime([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
 
 	useEffect(() => {
 		getPrograms()
+		getAllStudyTime()
 	}, [])
 
 	const getPrograms = async () => {
@@ -42,7 +155,7 @@ const FormRegisterClass = (props) => {
 			try {
 				// Tham số 1: branchId
 				// Tham số 2: studentId
-				console.log("form.getFieldValue('StudentId'): ", form.getFieldValue('StudentId'))
+
 				const res = await billApi.getClassAvailable({ studentId: form.getFieldValue('StudentId'), branchId: data })
 				if (res.status === 200) {
 					setClasses(res.data.data)
@@ -55,6 +168,7 @@ const FormRegisterClass = (props) => {
 			}
 		}
 	}
+
 	return (
 		<>
 			<div className="col-span-2">
@@ -98,6 +212,71 @@ const FormRegisterClass = (props) => {
 						/>
 					</div>
 					<ListProgramReview programsSelected={programsSelected} setProgramsSelected={setProgramsSelected} setPrograms={setPrograms} />
+				</div>
+			</div>
+			<div className="col-span-2">
+				<div className="relative">
+					<button className="absolute top-0 right-0 z-10 -translate-x-2/4" type="button" onClick={handleAddListTimeFrame}>
+						<AiFillPlusCircle size={22} />
+					</button>
+					<Form.Item label="Khung thời gian" className="mb-0">
+						{!!listTimeFrames &&
+							listTimeFrames.map((timeFrame) => {
+								return (
+									<div className="relative" key={timeFrame.Id}>
+										<button type="button" className="absolute top-0 right-0 z-10" onClick={() => handleRemoveListTimeFrame(timeFrame.Id)}>
+											<AiFillMinusCircle size={22} />
+										</button>
+										<div className="row">
+											<div className="col-md-6 col-12">
+												<SelectField
+													placeholder="Chọn thứ"
+													optionList={dayOfWeek}
+													name={`ExectedDay-${timeFrame.Id}`}
+													label="Thứ"
+													onChangeSelect={(value) => handleChangeTimeFrame(timeFrame.Id, 'ExectedDay', value)}
+													isRequired
+													rules={formRequired}
+												/>
+											</div>
+											<div className="col-md-6 col-12">
+												<Form.Item name={`StudyTimeId-${timeFrame.Id}`} label={'Ca'} required={true} rules={formRequired}>
+													<Select
+														className={`primary-input`}
+														showSearch
+														allowClear
+														loading={isLoading}
+														placeholder={'Chọn ca học'}
+														optionFilterProp="children"
+														onChange={(value) => {
+															handleChangeTimeFrame(timeFrame.Id, 'StudyTimeId', value)
+														}}
+													>
+														{studyTime &&
+															studyTime.map((o, idx) => {
+																return (
+																	<Option disabled={handleDisableSelect(timeFrame, o.value)} key={idx} value={o.value}>
+																		{o.title}
+																	</Option>
+																)
+															})}
+													</Select>
+												</Form.Item>
+											</div>
+										</div>
+										<div style={{ marginTop: -10 }}>
+											<Form.Item name={`Note-${timeFrame.Id}`} label={'Ghi chú'}>
+												<Input
+													style={{ borderRadius: 5 }}
+													placeholder="Nhập ghi chú"
+													onChange={(v) => handleChangeTimeFrame(timeFrame.Id, 'Note', v.target.value)}
+												/>
+											</Form.Item>
+										</div>
+									</div>
+								)
+							})}
+					</Form.Item>
 				</div>
 			</div>
 		</>

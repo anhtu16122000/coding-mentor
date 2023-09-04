@@ -89,6 +89,7 @@ type IClass = IBaseApi<{
 	LessonComple: number
 	Time?: number
 	Id: number
+	CompletedLesson: number
 }>
 
 type IClassGantt = IBaseApi<{

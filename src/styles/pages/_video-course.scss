@@ -86,6 +86,11 @@
 
 .video-name {
 	@apply text-[18px] font-[600] mb-2 line-clamp-1;
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
 }
 
 .video-detail {

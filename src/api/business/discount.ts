@@ -15,3 +15,8 @@ export const discountApi = {
 		return instance.delete(`${url}/${id}`)
 	}
 }
+export const voucherApi = {
+	getVoucher(data: number[]) {
+		return instance.post('api/Discount/lesson-over', data, {})
+	},
+}

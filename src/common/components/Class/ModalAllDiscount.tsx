@@ -62,7 +62,6 @@ const ModalAllDiscount = (props) => {
 		setDetailDiscount(data)
 		form.setFieldsValue({ DiscountId: data.Id })
 		setIsModalOpen(false)
-		ShowNoti('success', 'Áp dụng thành công')
 	}
 	return (
 		<div>

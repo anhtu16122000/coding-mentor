@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { AiFillMinusCircle, AiFillPlusCircle } from 'react-icons/ai'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
+import styled from 'styled-components'
 import { branchApi } from '~/api/manage/branch'
 import { classApi } from '~/api/learn/class'
 import { curriculumApi } from '~/api/learn/curriculum'
@@ -27,6 +28,29 @@ import * as yup from 'yup'
 import { formRequired } from '~/common/libs/others/form'
 import { setRoom } from '~/store/classReducer'
 import { removeCommas } from '~/common/utils/super-functions'
+
+
+const ContainerTime = styled.div`
+	display: flex;
+	flex-direction: row;
+	alignitems: center;
+	margin-top: -15px;
+	margin-bottom: 20px;
+	padding: 0px 5px;
+`
+
+type Curriculum = {
+	ProgramId: number
+	Name: string
+	Lesson: number
+	Time: number
+	Id: number
+	Enable: boolean
+	CreatedOn: string
+	CreatedBy: string
+	ModifiedOn: string
+	ModifiedBy: string
+}
 
 const dayOfWeek = [
 	{
@@ -67,6 +91,8 @@ const CreateClassForm = (props) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [program, setProgram] = useState([])
 	const [curriculum, setCurriculum] = useState([])
+	const [curriculumList, setCurriculumList] = useState<Curriculum[]>([])
+	const [curriculumSelected, setCurriculumSelected] = useState<Curriculum>()
 	const [noneConvertCurriculum, setNoneConvertCurriculum] = useState([])
 	const [teacher, setTeacher] = useState([])
 	const [academic, setAcademic] = useState([])
@@ -216,6 +242,7 @@ const CreateClassForm = (props) => {
 				setNoneConvertCurriculum(res.data.data)
 				const convertData = parseSelectArray(res.data.data, 'Name', 'Id')
 				setCurriculum(convertData)
+				setCurriculumList(res.data.data)
 			} else {
 				setCurriculum([])
 			}
@@ -498,8 +525,22 @@ const CreateClassForm = (props) => {
 								label="Giáo trình"
 								name="CurriculumId"
 								optionList={curriculum}
-								onChangeSelect={(value) => handleSelectChange('CurriculumId', value)}
+								onChangeSelect={(value) => {
+									const team: Curriculum = curriculumList.find((_item) => _item.Id === value)
+									setCurriculumSelected(team)
+									handleSelectChange('CurriculumId', value)
+								}}
 							/>
+							{form.getFieldValue('CurriculumId') && (
+								<ContainerTime>
+									<div style={{ fontWeight: '600', marginRight: 15, borderRight: '1px solid #DFDFDF', paddingRight: 15 }}>
+										Số buổi: <span style={{ fontWeight: '400' }}>{curriculumSelected?.Lesson}</span>
+									</div>
+									<div style={{ fontWeight: '600' }}>
+										Thời gian: <span style={{ fontWeight: '400' }}>{curriculumSelected?.Time} phút / buổi</span>
+									</div>
+								</ContainerTime>
+							)}
 						</div>
 						<div className="relative">
 							<button className="absolute top-0 right-0 z-10 -translate-x-2/4" type="button" onClick={handleAddListTimeFrame}>

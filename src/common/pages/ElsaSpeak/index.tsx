@@ -11,8 +11,13 @@ import { ShowNoti } from '~/common/utils'
 import { elsaSpeakApi } from '~/api/elseSpeak'
 import TextArea from 'antd/lib/input/TextArea'
 import ColoredSentence from '~/common/components/ElsaSpeak/ColoredSentence '
+import dynamic from 'next/dynamic'
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 })
+
+const AudioRecoderApp: any = dynamic(() => import('./AudioRecoder/AudioRecoderApp'), {
+	ssr: false
+})
 
 const ElsaSpeak = () => {
 	const [form] = Form.useForm()
@@ -21,12 +26,32 @@ const ElsaSpeak = () => {
 	const [recordedAudio, setRecordedAudio] = useState(null)
 	const state = useSelector((state: RootState) => state)
 	const [fileUrl, setFileUrl] = useState(null)
-	const [sentence, setSentence] = useState(
-		'It had been years since the car had been driven. It sat in the driveway, slowly being taken over by rust and weeds. The windows were boarded up and the tires were long gone. But to a young boy, it was the most beautiful car he had ever seen. He dreamed of fixing it up and taking it for a spin. One day, he gathered some scrap metal and started working on the car. It took months of hard work, but eventually, the car was roadworthy again. The young boy took it for a spin around the block, feeling like the luckiest kid in the world. Even though it was just an old rust-bucket, to him it was the most special car in the world.'
-	)
+	const [sentence, setSentence] = useState('It had been years since the car had been driven. ')
 	const [words, setWords] = useState(null)
 	const [data, setData] = useState(null)
 	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	const [recording, setRecording] = useState<boolean>(false)
+	const [playing, setPlaying] = useState<boolean>(false)
+
+	const [visible, setVisible] = useState<boolean>(false)
+	const [linkAudio, setLinkAudio] = useState('')
+
+	useEffect(() => {
+		if (typeof window != 'undefined') setVisible(true)
+
+		// GET PERMISSION
+		function getRecordPermission() {
+			navigator.mediaDevices
+				.getUserMedia({ audio: true })
+				.then((stream) => {})
+				.catch(function (error) {
+					console.log('Không thể lấy được quyền ghi âm: ' + error)
+				})
+		}
+
+		getRecordPermission()
+	}, [])
 
 	function isAdmin() {
 		return userInformation?.RoleId == 1
@@ -86,7 +111,7 @@ const ElsaSpeak = () => {
 	async function onSubmit() {
 		try {
 			const request = {
-				filePath: fileUrl,
+				filePath: linkAudio,
 				sentence: sentence
 			}
 			const response = await elsaSpeakApi.scripted(request)
@@ -96,10 +121,11 @@ const ElsaSpeak = () => {
 					setData(item)
 					const words = item.words
 					setWords(words)
+					ShowNoti('success', 'Thành công!')
 				}
 			}
 		} catch (err) {
-			// ShowNoti('error', err.message)
+			ShowNoti('error', err.message)
 		}
 	}
 
@@ -110,18 +136,18 @@ const ElsaSpeak = () => {
 				setFileUrl(response.data.data)
 			}
 		} catch (err) {
-			// ShowNoti('error', err.message)
+			ShowNoti('error', err.message)
 		}
 	}
 
 	return (
-		<div className="wrapper-class">
+		<div>
 			<Card>
 				<div className="row">
 					<div className="col-4">
 						<div className="wrap-table">
-							<div className="flex justify-center">
-								<button className="mx-auto" onClick={handleRecord}>
+							<div className="flex justify-center flex-col items-center">
+								{/* <button className="mx-auto" onClick={handleRecord}>
 									{isRecording ? (
 										<>
 											<FaMicrophone className="mt-2" size={60} />
@@ -130,23 +156,39 @@ const ElsaSpeak = () => {
 									) : (
 										<FaMicrophoneSlash size={72} />
 									)}
-								</button>
+								</button> */}
+
+								<AudioRecoderApp
+									id={new Date().getTime()}
+									isHideBar={true}
+									linkRecord={linkAudio}
+									setLinkRecord={(linkAudio: string) => setLinkAudio(linkAudio)}
+									isRecord={recording}
+									setIsRecord={setRecording}
+									disabled={false}
+									playing={playing}
+									setPlaying={setPlaying}
+								/>
+
+								{!recording && !linkAudio && <div className="mt-3">Ghi âm thanh</div>}
 							</div>
 
-							<div className="mt-2 flex justify-center w-1/3">
+							{/* <div className="mt-2 flex justify-center ">
 								{audioBlob && (
 									<audio controls>
 										<source src={URL.createObjectURL(audioBlob)} type="audio/mpeg" />
 										Your browser does not support the audio element.
 									</audio>
 								)}
-							</div>
+							</div> */}
 
-							<div className="mt-2 flex justify-center">
-								<PrimaryButton type="button" icon="check" background="green" onClick={onSubmit}>
-									Nộp chấm điểm
-								</PrimaryButton>
-							</div>
+							{!!linkAudio && (
+								<div className="mt-2 flex justify-center">
+									<PrimaryButton type="button" icon="check" background="green" onClick={onSubmit}>
+										Nộp chấm điểm
+									</PrimaryButton>
+								</div>
+							)}
 						</div>
 					</div>
 					<div className="col-8">

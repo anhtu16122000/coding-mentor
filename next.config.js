@@ -20,4 +20,12 @@ const webpackConfig = {
 	}
 }
 
-module.exports = { ...nextConfig, ...webpackConfig }
+const withTM = require('next-transpile-modules')([
+	// '@fullcalendar/common',
+	'@babel/preset-react',
+	'@fullcalendar/daygrid',
+	'@fullcalendar/timegrid',
+	'@fullcalendar/interaction'
+])
+
+module.exports = withTM({ ...nextConfig, ...webpackConfig })
