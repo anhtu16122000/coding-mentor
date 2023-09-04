@@ -38,25 +38,9 @@ import PrimaryTooltip from '../../PrimaryTooltip'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import MainAudioPlayer from './AudioPlayer'
 
-// @ts-ignore
-import { sortableContainer, sortableElement } from 'react-sortable-hoc'
 import { BiPlus } from 'react-icons/bi'
 import { FaSort } from 'react-icons/fa'
 import { RiSave2Fill, RiSave2Line } from 'react-icons/ri'
-
-const SortableItem = sortableElement(({ onPlayAudio, data, currentSkill, setCurrentSkill, getExamSkill }) => (
-	<ExamSkillItem
-		onPlayAudio={onPlayAudio}
-		data={data}
-		currentSkill={currentSkill}
-		setCurrentSkill={setCurrentSkill}
-		onRefresh={getExamSkill}
-	/>
-))
-
-const SortableContainer = sortableContainer(({ children }) => {
-	return <ul>{children}</ul>
-})
 
 function ExamDetail() {
 	const router = useRouter()

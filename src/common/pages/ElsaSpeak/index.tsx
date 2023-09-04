@@ -4,7 +4,6 @@ import { FaMicrophone, FaMicrophoneSlash } from 'react-icons/fa'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { parseSelectArray } from '~/common/utils/common'
-import MicRecorder from 'mic-recorder-to-mp3'
 import { RootState } from '~/store'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { ShowNoti } from '~/common/utils'
@@ -12,8 +11,6 @@ import { elsaSpeakApi } from '~/api/elseSpeak'
 import TextArea from 'antd/lib/input/TextArea'
 import ColoredSentence from '~/common/components/ElsaSpeak/ColoredSentence '
 import dynamic from 'next/dynamic'
-
-const Mp3Recorder = new MicRecorder({ bitRate: 128 })
 
 const AudioRecoderApp: any = dynamic(() => import('./AudioRecoder/AudioRecoderApp'), {
 	ssr: false
@@ -70,42 +67,6 @@ const ElsaSpeak = () => {
 		if (selectedFile) {
 			setAudioBlob(selectedFile)
 		}
-	}
-	const handleRecord = () => {
-		if (isRecording) {
-			Mp3Recorder.stop()
-				.getMp3()
-				.then(([buffer, blob]) => {
-					setIsRecording(false)
-					setAudioBlob(blob)
-					setRecordedAudio(buffer)
-					saveAudioLocally(blob)
-				})
-				.catch((e) => {
-					console.error(e)
-				})
-		} else {
-			Mp3Recorder.start()
-				.then(() => {
-					setIsRecording(true)
-					setRecordedAudio(null)
-					setAudioBlob(null)
-				})
-				.catch((e) => {
-					console.error(e)
-				})
-		}
-	}
-	const saveAudioLocally = async (blob) => {
-		const filename = generateUniqueFileName()
-		const formData = new FormData()
-		formData.append('file', blob, filename)
-		await uploadFile(formData)
-	}
-	const generateUniqueFileName = () => {
-		const timestamp = Date.now()
-		const randomString = Math.random().toString(36).substring(2, 8)
-		return `recording_${timestamp}_${randomString}.mp3`
 	}
 
 	async function onSubmit() {
