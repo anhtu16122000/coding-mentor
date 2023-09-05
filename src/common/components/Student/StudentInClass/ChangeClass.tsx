@@ -317,6 +317,7 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 							})}
 						</Select>
 					</Form.Item>
+					
 					<Form.Item className="col-span-2" required={true} rules={formRequired} label="Trung tâm" name="BranchId">
 						<StyleContainerDropdown>
 							<Select bordered={false} showSearch allowClear placeholder="Chọn trung tâm" onChange={(value)=>{

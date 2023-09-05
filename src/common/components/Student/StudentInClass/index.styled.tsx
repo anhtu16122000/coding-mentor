@@ -35,5 +35,5 @@ export const StyleContainerDropdown = styled.div`
 	border: 1px solid #dfdfdf;
 	cursor: pointer;
 	alignItems: center;
-	border-radius: 6px
+	border-radius: 6px;
 `
