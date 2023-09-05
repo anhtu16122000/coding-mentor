@@ -80,7 +80,7 @@ const AudioRecord = (props) => {
 		} catch (error) {
 			ShowNostis.error(error.message)
 
-			getLinkRecord('http://monalms.monamedia.net/Upload/Images/08ea8174-b869-41e0-bf0b-1e987a0f665a.mp3')
+			// getLinkRecord('http://monalms.monamedia.net/Upload/Images/08ea8174-b869-41e0-bf0b-1e987a0f665a.mp3')
 		} finally {
 			setLoadingUpload(false)
 		}

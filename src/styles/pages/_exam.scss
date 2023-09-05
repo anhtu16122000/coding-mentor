@@ -297,3 +297,31 @@
 		background-color: #004aad;
 	}
 }
+
+.tae-submit-modal {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	.animation-submit {
+		width: 500px;
+		height: 400px;
+		margin-top: -40px;
+	}
+	div {
+		font-weight: 600;
+		font-size: 20px;
+		color: #004aad;
+		margin-top: -40px;
+	}
+}
+
+.tae-submit-footer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.tae-submit-title {
+		margin-left: 8px;
+	}
+}
