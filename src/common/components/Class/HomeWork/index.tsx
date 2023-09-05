@@ -8,7 +8,7 @@ import PrimaryTable from '../../Primary/Table'
 import moment from 'moment'
 import PrimaryTag from '../../Primary/Tag'
 import PrimaryTooltip from '../../PrimaryTooltip'
-import { FaEdit, FaFilePrescription } from 'react-icons/fa'
+import { FaEdit, FaFilePrescription, FaUserClock } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { TbWritingSign } from 'react-icons/tb'
 import { useSelector } from 'react-redux'
@@ -18,6 +18,8 @@ import { log } from '~/common/utils'
 
 import Lottie from 'react-lottie-player'
 import warning from '~/common/components/json/100468-warning.json'
+import { studentHomeWorkApi } from '~/api/home-work/student'
+import { examResultApi } from '~/api/exam/result'
 
 const listTodoApi = {
 	pageSize: PAGE_SIZE,
@@ -31,6 +33,7 @@ const HomeWork = () => {
 	//
 
 	const [data, setData] = useState([])
+	const [studentHomeWork, setStudentHomeWork] = useState([])
 	const [filters, setFilters] = useState(listTodoApi)
 	const [loading, setLoading] = useState<boolean>(true)
 	const [totalPage, setTotalPage] = useState(null)
@@ -57,6 +60,28 @@ const HomeWork = () => {
 		} catch (error) {
 		} finally {
 			setLoading(false)
+		}
+	}
+
+	const [loadingResult, setLoadingResult] = useState<boolean>(true)
+	async function getStudentHomeWork(HWId) {
+		setLoadingResult(true)
+		const ClassId = router.query?.class || null
+
+		let SId = userInfo?.RoleId == '3' ? userInfo?.UserInformationId : null
+
+		try {
+			const res = await examResultApi.getAll({ valueId: HWId, studentId: SId || null })
+			if (res.status == 200) {
+				setStudentHomeWork(res.data?.data)
+				// setTotalPage(res.data.totalRow)
+			} else {
+				setStudentHomeWork([])
+				// setTotalPage(1)
+			}
+		} catch (error) {
+		} finally {
+			setLoadingResult(false)
 		}
 	}
 
@@ -105,21 +130,31 @@ const HomeWork = () => {
 			dataIndex: 'IeltsExamName',
 			render: (value, item, index) => <div className="font-[600] in-1-line min-w-[80px] max-w-[220px]">{value}</div>
 		},
-		{
-			title: 'Trạng thái',
-			dataIndex: 'MyStatusName',
-			render: (value, item, index) => {
-				if (item?.MyStatus == 1) {
-					return <PrimaryTag children={value || ''} color="yellow" />
-				}
+		userInfo.RoleId == 3
+			? {
+					title: 'Trạng thái',
+					dataIndex: 'MyStatusName',
+					render: (value, item, index) => {
+						if (item?.MyStatus == 1) {
+							return <PrimaryTag children={value || ''} color="yellow" />
+						}
 
-				if (item?.MyStatus == 2) {
-					return <PrimaryTag children={value || ''} color="green" />
-				}
+						if (item?.MyStatus == 2) {
+							return <PrimaryTag children={value || ''} color="blue" />
+						}
 
-				return <PrimaryTag children={value || ''} color="red" />
-			}
-		},
+						if (item?.MyStatus == 3) {
+							return <PrimaryTag children={value || ''} color="green" />
+						}
+
+						return <PrimaryTag children={value || ''} color="red" />
+					}
+			  }
+			: {
+					title: 'Người tạo',
+					dataIndex: 'CreatedBy'
+			  },
+
 		{
 			title: 'Ghi chú',
 			width: 150,
@@ -156,8 +191,74 @@ const HomeWork = () => {
 								<TbWritingSign size={22} />
 							</div>
 						</PrimaryTooltip>
+
+						<PrimaryTooltip place="left" id={`hw-his-${item?.Id}`} content="Lịch sử làm bài">
+							<div
+								onClick={() => {
+									setHistories({ HWId: item?.Id, Name: item?.Name })
+									getStudentHomeWork(item?.Id)
+								}}
+								className="ml-[8px] w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+							>
+								<FaUserClock size={20} />
+							</div>
+						</PrimaryTooltip>
 					</div>
 				)
+			}
+		}
+	]
+
+	// -------
+	const resultColumns = [
+		{
+			title: 'Mã học viên',
+			dataIndex: 'StudentCode',
+			render: (value, item, index) => <div className="font-[600] text-[#000] min-w-[100px] max-w-[250px]">{value}</div>
+		},
+		{
+			title: 'Tên học viên',
+			dataIndex: 'StudentName',
+			render: (value, item, index) => <div className="font-[600] text-[#1b73e8] min-w-[100px] max-w-[250px]">{value}</div>
+		},
+		{
+			title: 'Thời gian làm',
+			width: 120,
+			dataIndex: 'TimeSpent',
+			render: (value, item, index) => <>{value < 1 ? 1 : value} phút</>
+		},
+		{
+			title: 'Tổng điểm',
+			width: 120,
+			dataIndex: 'MyPoint',
+			render: (value, item, index) => (
+				<div className="font-[600]">
+					{value} / {item?.Point}
+				</div>
+			)
+		},
+		{
+			title: 'Điểm trung bình',
+			width: 140,
+			dataIndex: 'AveragePoint'
+		},
+		{
+			title: 'Trạng thái',
+			dataIndex: 'StatusName',
+			render: (value, item, index) => {
+				if (item?.Status == 1) {
+					return <PrimaryTag children={value || ''} color="yellow" />
+				}
+
+				if (item?.Status == 2) {
+					return <PrimaryTag children={value || ''} color="blue" />
+				}
+
+				if (item?.Status == 3) {
+					return <PrimaryTag children={value || ''} color="green" />
+				}
+
+				return <PrimaryTag children={value || ''} color="red" />
 			}
 		}
 	]
@@ -208,6 +309,8 @@ const HomeWork = () => {
 		}
 	}
 
+	const [histories, setHistories] = useState<any>(null)
+
 	return (
 		<>
 			<Card
@@ -249,6 +352,26 @@ const HomeWork = () => {
 						</div>
 					</div>
 				</div>
+			</Modal>
+
+			<Modal
+				title={
+					<div>
+						Học viên làm bài: <div className="inline text-[#1b73e8]">{histories?.Name}</div>
+					</div>
+				}
+				width={1000}
+				footer={null}
+				open={!!histories}
+				onCancel={() => setHistories(null)}
+			>
+				<PrimaryTable
+					loading={loadingResult}
+					// total={totalPage && totalPage}
+					data={studentHomeWork}
+					columns={resultColumns}
+					// onChangePage={(event: number) => setFilters({ ...filters, pageIndex: event })}
+				/>
 			</Modal>
 		</>
 	)
