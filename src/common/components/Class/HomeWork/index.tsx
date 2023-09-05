@@ -11,6 +11,8 @@ import PrimaryTooltip from '../../PrimaryTooltip'
 import { FaEdit, FaFilePrescription } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { TbWritingSign } from 'react-icons/tb'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const listTodoApi = {
 	pageSize: PAGE_SIZE,
@@ -29,16 +31,23 @@ const HomeWork = () => {
 	const [totalPage, setTotalPage] = useState(null)
 
 	useEffect(() => {
-		getData()
-	}, [filters])
+		if (!!router.query?.class) {
+			getData()
+		}
+	}, [filters, router])
 
 	async function getData() {
+		const ClassId = router.query?.class || null
+
 		setLoading(true)
 		try {
-			const res = await homeWorkApi.getAll({ ...filters })
+			const res = await homeWorkApi.getAll({ ...filters, classId: ClassId })
 			if (res.status == 200) {
 				setData(res.data?.data)
 				setTotalPage(res.data.totalRow)
+			} else {
+				setData([])
+				setTotalPage(1)
 			}
 		} catch (error) {
 		} finally {
@@ -58,6 +67,14 @@ const HomeWork = () => {
 		} catch (error) {
 			setLoading(false)
 		}
+	}
+
+	const userInfo = useSelector((state: RootState) => state.user.information)
+
+	const is = {
+		parent: userInfo?.RoleId == '8',
+		admin: userInfo?.RoleId == '1',
+		teacher: userInfo?.RoleId == '2'
 	}
 
 	const columns = [
@@ -114,18 +131,20 @@ const HomeWork = () => {
 			render: (value, item, index) => {
 				return (
 					<div className="flex items-center">
-						<ModalCreateHomeWork isEdit defaultData={item} onRefresh={getData} />
+						{(is.admin || is.teacher) && <ModalCreateHomeWork isEdit defaultData={item} onRefresh={getData} />}
 
-						<PrimaryTooltip place="left" id={`hw-del-${item?.Id}`} content="Làm bài">
-							<Popconfirm placement="left" title={`Xoá bài tập: ${item?.Name}?`} onConfirm={() => delThis(item?.Id)}>
-								<div className="w-[28px] text-[#C94A4F] h-[30px] all-center hover:opacity-70 cursor-pointer ml-[8px]">
-									<IoClose size={26} className="mb-[-2px]" />
-								</div>
-							</Popconfirm>
-						</PrimaryTooltip>
+						{(is.admin || is.teacher) && (
+							<PrimaryTooltip place="left" id={`hw-del-${item?.Id}`} content="Làm bài">
+								<Popconfirm placement="left" title={`Xoá bài tập: ${item?.Name}?`} onConfirm={() => delThis(item?.Id)}>
+									<div className="mr-[8px] w-[28px] text-[#C94A4F] h-[30px] all-center hover:opacity-70 cursor-pointer ml-[8px]">
+										<IoClose size={26} className="mb-[-2px]" />
+									</div>
+								</Popconfirm>
+							</PrimaryTooltip>
+						)}
 
 						<PrimaryTooltip place="left" id={`hw-take-${item?.Id}`} content="Làm bài">
-							<div className="ml-[8px] w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer">
+							<div className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer">
 								<TbWritingSign size={22} />
 							</div>
 						</PrimaryTooltip>
@@ -141,7 +160,7 @@ const HomeWork = () => {
 			title={
 				<div className="w-full flex items-center justify-between">
 					<div>Bài tập</div>
-					<ModalCreateHomeWork onRefresh={getData} />
+					{(is.admin || is.teacher) && <ModalCreateHomeWork onRefresh={getData} />}
 				</div>
 			}
 		>

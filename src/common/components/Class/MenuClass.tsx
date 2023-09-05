@@ -159,6 +159,8 @@ const MenuClass = () => {
 				return <TranscriptPage />
 			case 4:
 				return <RollUpStudent />
+			case 5:
+				return <HomeWork />
 			default:
 				return <CalendarClassEdit />
 		}
@@ -196,10 +198,16 @@ const MenuClass = () => {
 						<AiOutlineQrcode className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
+			// case 5:
+			// 	return (
+			// 		<div className="label-tab">
+			// 			<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
+			// 		</div>
+			// 	)
 			case 5:
 				return (
 					<div className="label-tab">
-						<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
+						<RiFileList2Line className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 3:
