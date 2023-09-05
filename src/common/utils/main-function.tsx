@@ -188,3 +188,23 @@ export function parseDate(date: Date): string {
 export function parseDateTime(date: Date | string): string {
 	return moment(new Date(date)).format('HH:mm DD/MM/YYYY')
 }
+
+export function toHHMMSS(param) {
+	var seconds = parseInt(param, 10).toString()
+	var hours = Math.floor(parseInt(seconds) / 3600).toString()
+	var minutes = Math.floor((parseInt(seconds) - parseInt(hours) * 3600) / 60).toString()
+	seconds = (parseInt(seconds) - parseInt(hours) * 3600 - parseInt(minutes) * 60).toString()
+
+	if (parseInt(hours) < 10) {
+		hours = '0' + hours
+	}
+	if (parseInt(minutes) < 10) {
+		minutes = '0' + minutes
+	}
+	if (parseInt(seconds) < 10) {
+		seconds = '0' + seconds
+	}
+
+	var time = hours + ':' + minutes + ':' + seconds
+	return time
+}

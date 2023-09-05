@@ -1,5 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import appConfigs from '~/appConfig'
+import { ShowNostis } from '~/common/utils'
+import { logOut } from '~/common/utils/token-handle'
 
 const SHOW_LOG = false
 const NODE_STATUS: any = process.env.NODE_ENV
@@ -18,11 +20,11 @@ export const instance = axios.create({
 instance.interceptors.request.use(
 	async (config: AxiosRequestConfig) => {
 		const url: any = getUrl(config)
-		console.log(`%c ${config.method.toUpperCase()} - ${url}:`, 'color: #0086b3; font-weight: bold', config)
+		// console.log(`%c ${config.method.toUpperCase()} - ${url}:`, 'color: #0086b3; font-weight: bold', config)
 		return config
 	},
 	(error: any) => {
-		console.log(`%c ${error.response.status}  :`, 'color: red; font-weight: bold', error.response.data)
+		// console.log(`%c ${error.response.status}  :`, 'color: red; font-weight: bold', error.response.data)
 		return Promise.reject(error)
 	}
 )
@@ -32,6 +34,10 @@ instance.interceptors.response.use(
 		return response
 	},
 	function (error: any) {
+		if (error?.response?.status == 401) {
+			ShowNostis.success('Phiên đăng nhập đã hết hạn')
+			logOut()
+		}
 		if (!!error?.response) {
 			console.log(`%c ${error?.response?.status}  :`, 'color: red; font-weight: bold', error?.response?.data)
 			return !!error?.response?.data ? Promise.reject(error.response.data) : Promise.reject(error)

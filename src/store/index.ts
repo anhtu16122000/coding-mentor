@@ -20,6 +20,16 @@ import paymentMethodReducer from './paymentMethodReducer'
 import filterReducer from './filterReducer'
 import cartReducer from './cartReducer'
 import newExamReducer from './newExamReducer'
+import createQuestionSlice from './createQuestion'
+import takeAnExamSlice, {
+	setNavLoading,
+	setNavigations,
+	setActiveNav,
+	closeSubmitModal,
+	openSubmitModal,
+	setSubmited,
+	setTimeOut
+} from './take-an-exam'
 
 export const store = configureStore({
 	reducer: {
@@ -43,9 +53,13 @@ export const store = configureStore({
 		studyTime: studyTimeReducer,
 		filter: filterReducer,
 		cart: cartReducer,
-		newExam: newExamReducer
+		newExam: newExamReducer,
+		createQuestion: createQuestionSlice,
+		takeAnExam: takeAnExamSlice
 	}
 })
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
+
+export { takeAnExamSlice, setNavLoading, setNavigations, setActiveNav, closeSubmitModal, openSubmitModal, setSubmited }

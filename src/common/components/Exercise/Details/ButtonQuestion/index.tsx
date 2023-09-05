@@ -3,20 +3,22 @@ import React from 'react'
 const ButtonQuestion = (props) => {
 	const { data, onClick, isActivated } = props
 
-	const isError = false
+	// console.log('--- data: ', data)
 
-	if (data?.IsDone) {
-		return (
-			<div onClick={onClick} className="cc-23-btn-question bg-[#e0e4f9] border-[#b0baef]">
-				<div className="text-[#2F4AD7] font-[500]">{data?.Index}</div>
-			</div>
-		)
-	}
+	const isError = false
 
 	if (isActivated) {
 		return (
 			<div onClick={onClick} className="cc-23-btn-question bg-[#3b87ea] border-[#275fa9]">
 				<div className="text-[#fff] font-[500]">{data?.Index}</div>
+			</div>
+		)
+	}
+
+	if (data?.IsDone) {
+		return (
+			<div onClick={onClick} className="cc-23-btn-question bg-[#e4f9e0] border-[#87dc70]">
+				<div className="text-[#469131] font-[500]">{data?.Index}</div>
 			</div>
 		)
 	}

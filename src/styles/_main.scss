@@ -486,6 +486,26 @@ button {
 	}
 }
 
+.mindmap-scroll {
+	overflow-y: hidden;
+	overflow-x: auto;
+	&::-webkit-scrollbar-track {
+		border-radius: 10px;
+		background-color: white;
+	}
+
+	&::-webkit-scrollbar {
+		border: none;
+		background-color: white;
+		height: 4px !important;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: 4px;
+		background-color: #a5a5a5;
+	}
+}
+
 .w800-scrollable {
 	overflow-y: auto;
 	overflow-x: hidden;

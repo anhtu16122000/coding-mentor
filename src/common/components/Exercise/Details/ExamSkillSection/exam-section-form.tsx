@@ -36,7 +36,7 @@ const CreateExamSection: FC<ICreateExam & { skill?: any }> = (props) => {
 			if (response.status == 200) {
 				ShowNoti('success', response.data.message)
 				if (!!onRefresh) {
-					onRefresh()
+					onRefresh(response?.data?.data)
 					form.resetFields()
 					setVisible(false)
 				}
@@ -54,7 +54,7 @@ const CreateExamSection: FC<ICreateExam & { skill?: any }> = (props) => {
 			if (response.status == 200) {
 				ShowNoti('success', response.data.message)
 				if (!!onRefresh) {
-					onRefresh()
+					onRefresh(response?.data?.data)
 					form.resetFields()
 					setVisible(false)
 				}
@@ -121,7 +121,7 @@ const CreateExamSection: FC<ICreateExam & { skill?: any }> = (props) => {
 	return (
 		<>
 			{user?.RoleId == 1 && !!!isEdit && (
-				<div onClick={toggle} className={`cc-23-skill ${activeClass}`}>
+				<div onClick={toggle} className={`cc-23-skill flex-shrink-0 ${activeClass}`}>
 					<BiPlus size={18} />
 					<div className="ml-[4px]">Phần mới</div>
 				</div>
@@ -136,7 +136,7 @@ const CreateExamSection: FC<ICreateExam & { skill?: any }> = (props) => {
 
 			<Modal
 				centered
-				title={isEdit ? 'Cập nhật kỹ năng' : 'Thêm kỹ năng mới'}
+				title={isEdit ? 'Cập phần năng' : 'Thêm phần mới'}
 				width={700}
 				open={visible}
 				onCancel={() => !loading && setVisible(false)}
@@ -160,7 +160,7 @@ const CreateExamSection: FC<ICreateExam & { skill?: any }> = (props) => {
 						<Form.Item className="col-span-4" label="Nội dung" name="ReadingPassage">
 							<PrimaryEditor
 								id={`read-${new Date().getTime()}`}
-								height={400}
+								height={300}
 								initialValue={defaultData?.ReadingPassage || ''}
 								onChange={(event) => form.setFieldValue('ReadingPassage', event)}
 							/>

@@ -1,4 +1,6 @@
 .ccEditor {
+	position: relative;
+	min-height: 210px;
 	:global {
 		.tox-edit-area {
 			padding: 0 10px !important;

@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Script from 'next/script'
 import React from 'react'
 import appConfigs from '~/appConfig'
 
@@ -10,12 +11,9 @@ const description =
 const MainHeader = () => {
 	return (
 		<Head>
-			<meta charSet="UTF-8" />
-			<link rel="icon" href="/white-logo.png" />
 			<title>{appConfigs.appName} - Phần mềm quản lý giáo dục chuyên nghiệp</title>
 
 			<meta property="og:locale" content="vi_VN" />
-			<link rel="canonical" href="https://mona.media/phan-mem-quan-ly-truong-hoc-giao-duc-lms" />
 			<meta content={viewport} name="viewport" />
 			<meta name="description" content={description} />
 
@@ -23,18 +21,14 @@ const MainHeader = () => {
 			<meta property="og:site_name" content="Hệ thống quản lý giáo dục chuyên nghiệp" />
 			<meta property="og:description" content={description} />
 
-			<meta name="twitter:card" content="summary_large_image" />
-			<meta name="twitter:title" content="Mona LMS - Phần mềm quản lý giáo dục chuyên nghiệp" />
-			<meta name="twitter:image:alt" content="mona-lms" />
-			<meta name="twitter:description" content={description} />
-			<meta name="twitter:url" content="https://mona.media/phan-mem-quan-ly-truong-hoc-giao-duc-lms" />
-			<meta name="twitter:domain" content="mona.media" />
-			<meta name="twitter:label1" content="Written by" />
-			<meta name="twitter:data1" content="Nguyễn Phúc Bảo Châu" />
-
 			<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 			<meta http-equiv="Pragma" content="no-cache" />
 			<meta http-equiv="Expires" content="0" />
+
+			<link rel="icon" href="/white-logo.png" />
+			<link rel="canonical" href="https://mona.media/phan-mem-quan-ly-truong-hoc-giao-duc-lms" />
+
+			<Script src="https://cdn.tiny.cloud/1/lmr9ug3bh4iwjsrap9hgwgxqcngllssiraqluwto4slerrwg/tinymce/6/tinymce.min.js" />
 		</Head>
 	)
 }

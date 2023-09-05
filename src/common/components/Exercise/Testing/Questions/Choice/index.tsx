@@ -1,116 +1,49 @@
 import { Checkbox, Radio, Space } from 'antd'
 import React from 'react'
-import ReactHTMLParser from 'react-html-parser'
 import { AiOutlineFileDone } from 'react-icons/ai'
 import { TbFileCertificate } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '~/store'
-import { setActivating, setListAnswered, setTestingData } from '~/store/testingState'
 import ChoiceInputForm from '../../../Details/QuestionsForm/MultipleChoiceForm/Form'
+import { doingTestApi } from '~/api/IeltsExam/doing-test'
+import Router from 'next/router'
+import htmlParser from '~/common/components/HtmlParser'
 
 const Choice = (props) => {
-	const { data, type, isFinal, dataSource, index, indexInExam, onRefresh, showEdit } = props
-
-	const dispatch = useDispatch()
-
-	const testingData = useSelector((state: RootState) => state.testingState.data)
-	const answered = useSelector((state: RootState) => state.testingState.answered)
+	const { data, index, indexInExam, onRefresh, showEdit, isDoing, setCurrentQuestion, onRefreshNav } = props
 
 	const onChange = (event, type: 'single' | 'multiple') => {
 		console.time('--- Select Answer')
-		const cloneData = []
-
-		testingData.forEach((element) => {
-			// Tìm đúng câu đang chọn
-			if (data.Id == element?.ExerciseId) {
-				// Câu chọn 1 đáp án
-				if (type == 'single') {
-					const currentAnswer = { AnswerId: event.target.value, AnswerContent: null }
-					if (event.target.checked) {
-						// Chọn câu đó
-						cloneData.push({ ExerciseId: element?.ExerciseId, Answers: [currentAnswer] })
-					} else {
-						// Bỏ chọn câu đó
-						cloneData.push({ ExerciseId: element?.ExerciseId, Answers: [] })
-					}
-				}
-
-				// Câu chọn nhiều đáp án
-				if (type == 'multiple') {
-					// Câu hiện tại chưa có đáp án nào
-
-					let answers = []
-					event.forEach((eventItem: number) => {
-						// Gán từng đáp án dô danh sách đáp án
-						answers.push({ AnswerId: eventItem, AnswerContent: null })
-					})
-
-					// Gán đáp án dô danh sách câu trả lời
-					cloneData.push({ ExerciseId: element?.ExerciseId, Answers: answers })
-				}
-			} else {
-				cloneData.push({ ...element })
-			}
-		})
-
-		dispatch(setTestingData(cloneData))
-
-		// Lấy danh sách câu hỏi đã trả lời
-		const cloneAnswered = []
 
 		if (type == 'single') {
-			let flag = true
-			answered.forEach((element) => {
-				cloneAnswered.push(element)
-				if (data?.Id == element) {
-					flag = false
-				}
-			})
-			if (flag == true) {
-				cloneAnswered.push(data?.Id)
-			}
+			insertDetails({ Id: event.target?.value })
 		}
 
 		if (type == 'multiple') {
-			if (event.length == 0) {
-				answered.forEach((element) => {
-					if (data?.Id !== element) {
-						cloneAnswered.push(element)
-					}
-				})
-			} else {
-				let flag = true
-				answered.forEach((element) => {
-					cloneAnswered.push(element)
-					if (data?.Id == element) {
-						flag = false
-					}
-				})
-				if (flag == true) {
-					cloneAnswered.push(data?.Id)
-				}
-			}
+			//
 		}
-
-		dispatch(setListAnswered(cloneAnswered))
 
 		console.timeEnd('--- Select Answer')
 	}
 
 	function isDisabled() {
-		if (type == 'edit') {
-			return true
-		} else {
+		if (!!isDoing) {
 			return false
+		}
+
+		if (!isDoing) {
+			return true
 		}
 	}
 
 	function getType() {
-		// if (data?.Correct > 1) {
-		// 	return 'multiple'
-		// } else {
-		// 	return 'single'
-		// }
+		if (!!data?.CorrectAmount) {
+			if (data?.CorrectAmount > 1) {
+				return 'multiple'
+			} else {
+				return 'single'
+			}
+		}
 
 		let flag = 0
 		data.IeltsAnswers.forEach((answer) => {
@@ -125,29 +58,47 @@ const Choice = (props) => {
 		}
 	}
 
-	function getDataCheckbox(params) {
+	function getDataCheckbox(params, type?: any) {
 		let temp = []
 		let checked = []
 
 		params.forEach((element) => {
 			if (element?.Enable !== false) {
-				temp.push({ value: !!element.Id ? element.Id : element.ficaID, label: element.Content })
-				if (element?.Correct == true) {
-					checked.push(!!element.Id ? element.Id : element.ficaID)
+				temp.push({
+					value: !!element.Id ? element.Id : element.ficaID,
+					label: element.Content
+				})
+				if (!isDoing) {
+					if (element?.Correct == true) {
+						checked.push(!!element.Id ? element.Id : element.ficaID)
+					}
 				}
 			}
 		})
+
+		if (!!isDoing && !!data?.DoingTestDetails) {
+			for (let i = 0; i < data?.DoingTestDetails.length; i++) {
+				const element = data?.DoingTestDetails[i]
+				checked.push(element?.IeltsAnswerId)
+			}
+		}
 
 		return { option: temp, checked: checked }
 	}
 
 	function getChecked() {
-		let temp = null
-		for (let i = 0; i < data.IeltsAnswers.length; i++) {
-			const element = data.IeltsAnswers[i]
+		if (!isDoing) {
+			for (let i = 0; i < data.IeltsAnswers.length; i++) {
+				const element = data.IeltsAnswers[i]
+				if (element?.Correct) {
+					return element?.Id
+				}
+			}
+		}
 
-			if (element?.Correct) {
-				return element?.Id
+		if (!!isDoing) {
+			if (!!data?.DoingTestDetails) {
+				return data?.DoingTestDetails[0]?.IeltsAnswerId
 			}
 		}
 		return ''
@@ -155,18 +106,85 @@ const Choice = (props) => {
 
 	const curGroup = useSelector((state: RootState) => state.newExam.currentGroup)
 
+	// ----------------------------------------------------------------
+	// Doing test
+
+	async function insertDetails(answer) {
+		let items = []
+
+		if (getType() == 'single') {
+			if (!!data?.DoingTestDetails) {
+				items.push({ ...data?.DoingTestDetails[0], Enable: false })
+			}
+			items.push({ Id: 0, IeltsAnswerId: answer?.Id, IeltsAnswerContent: answer?.Content, Type: 0, Index: 0, Enable: true })
+		} else {
+			// ----------------------------------
+			if (!!data?.DoingTestDetails) {
+				let flag = false
+
+				for (let i = 0; i < data?.DoingTestDetails.length; i++) {
+					flag = false
+
+					for (let j = 0; j < answer.length; j++) {
+						if (data?.DoingTestDetails[i]?.IeltsAnswerId == answer[j]) {
+							flag = true
+						}
+					}
+
+					if (!flag) {
+						items.push({ ...data?.DoingTestDetails[i], Enable: false })
+					} else {
+						items.push({ ...data?.DoingTestDetails[i] })
+					}
+				}
+
+				for (let j = 0; j < answer.length; j++) {
+					const indexInMyHeart = items.findIndex((item) => item?.IeltsAnswerId == answer[j])
+					if (indexInMyHeart == -1) {
+						items.push({ Id: 0, IeltsAnswerId: answer[j], IeltsAnswerContent: '', Type: 0, Index: 0, Enable: true })
+					}
+				}
+			} else {
+				for (let j = 0; j < answer.length; j++) {
+					const indexInMyHeart = items.findIndex((item) => item?.IeltsAnswerId == answer[j])
+
+					if (indexInMyHeart == -1) {
+						items.push({ Id: 0, IeltsAnswerId: answer[j], IeltsAnswerContent: '', Type: 0, Index: 0, Enable: true })
+					}
+				}
+
+				// items.push({ Id: 0, IeltsAnswerId: answer?.Id, IeltsAnswerContent: answer?.Content, Type: 0, Index: 0, Enable: true })
+			}
+		}
+
+		if (!!Router?.query?.exam) {
+			console.log('-------- PUT items: ', items)
+
+			try {
+				await doingTestApi.insertDetail({
+					DoingTestId: parseInt(Router?.query?.exam + ''),
+					IeltsQuestionId: data.Id,
+					Items: [...items]
+				})
+			} catch (error) {
+			} finally {
+				onRefreshNav()
+			}
+		}
+	}
+
 	return (
 		<div
-			// onClick={() => dispatch(setActivating(data.Id))}
+			onClick={() => setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id })}
 			key={'question-' + data.Id}
 			id={'question-' + data.Id}
 			className={`cc-choice-warpper shadow-sm border-[1px] border-[#fff]`}
 			style={{ marginTop: index == 0 ? 8 : 0 }}
 		>
 			<div className="exam-quest-wrapper none-selection">
-				<div className="cc-choice-number">
-					Câu {indexInExam}
-					<div className="cc-choice-point">
+				<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
+					{!Router.asPath.includes('questions') && <div className="mr-[8px]">Câu {indexInExam}</div>}
+					<div className="cc-choice-point !ml-0">
 						<TbFileCertificate size={12} className="mr-1" />
 						<div className="mt-[1px]">{data?.Point} điểm</div>
 					</div>
@@ -183,11 +201,11 @@ const Choice = (props) => {
 					)}
 				</div>
 
-				<div>{ReactHTMLParser(data?.Content)}</div>
+				<div>{htmlParser(data?.Content)}</div>
 			</div>
 
 			{getType() == 'single' && (
-				<Radio.Group disabled={isDisabled()} className="mt-2" value={getChecked()} onChange={(event) => onChange(event, 'single')}>
+				<Radio.Group disabled={isDisabled()} className="mt-2" defaultValue={getChecked()} onChange={(event) => onChange(event, 'single')}>
 					<Space direction="vertical">
 						{data.IeltsAnswers.map((answer) => (
 							<Radio
@@ -208,9 +226,8 @@ const Choice = (props) => {
 					<Checkbox.Group
 						className="none-selection"
 						options={getDataCheckbox(data.IeltsAnswers).option}
-						// onChange={(event) => onChange(event, 'multiple')}
-						value={getDataCheckbox(data.IeltsAnswers).checked}
-						onChange={() => {}}
+						defaultValue={getDataCheckbox(data.IeltsAnswers, 1).checked}
+						onChange={(e) => insertDetails(e)}
 					/>
 				</div>
 			)}

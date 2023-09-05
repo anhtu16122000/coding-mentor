@@ -2,81 +2,131 @@ import React from 'react'
 import Choice from './Choice'
 import { QUESTION_TYPES } from '~/common/libs'
 import Write from './Write'
-import TrueFalseTesting from './TrueFalse'
-import { log } from '~/common/utils'
+import TrueFalseQuestion from '../../Details/QuestionsForm/TrueFalseForm/Question'
+import SpeakingQuestion from './Speak'
+import Router from 'next/router'
+import MindMap from './MindMap'
+
+function getQuestIndex(questions, curQuest) {
+	if (Router.asPath.includes('questions')) {
+		return null
+	}
+
+	const theIndex = questions.findIndex((question) => question?.IeltsQuestionId == curQuest?.Id)
+	if (theIndex !== -1) {
+		return questions[theIndex]
+	}
+	return ''
+}
 
 const TestingQuestions = (props) => {
-	const { data, isFinal, questions, onRefresh, showEdit } = props
+	const { data, isFinal, questions, onRefresh, showEdit, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav } = props
 
-	// log.Blue('TestingQuestions', data)
+	const theQuestions = data?.IeltsQuestions || []
 
-	// log.Red('questions', questions)
-
-	function getQuestIndex(curQuest) {
-		const theIndex = questions.findIndex((question) => question?.IeltsQuestionId == curQuest?.Id)
-
-		if (theIndex !== -1) {
-			return questions[theIndex]
-		}
-
-		return ''
-	}
-
-	function isChoice() {
-		return data?.Type == QUESTION_TYPES.MultipleChoice
-	}
-
-	function isWriting() {
-		return data?.Type == QUESTION_TYPES.Write
-	}
-
-	function isTrueFalse() {
-		return data?.Type == QUESTION_TYPES.TrueOrFalse
+	const is = {
+		choice: data?.Type == QUESTION_TYPES.MultipleChoice,
+		writing: data?.Type == QUESTION_TYPES.Write,
+		trueOrFalse: data?.Type == QUESTION_TYPES.TrueOrFalse,
+		speak: data?.Type == QUESTION_TYPES.Speak,
+		mind: data?.Type == QUESTION_TYPES.Mindmap
 	}
 
 	return (
 		<>
-			{isChoice() &&
-				data?.IeltsQuestions.map((itemQestion, index) => {
-					const thisItem = getQuestIndex(itemQestion)
+			{is.choice &&
+				theQuestions.map((quest, index) => {
+					const thisItem = getQuestIndex(questions, quest)
 
 					return (
 						<Choice
 							key={index}
-							isFinal={isFinal}
-							data={itemQestion}
+							data={quest}
 							index={index}
 							onRefresh={onRefresh}
-							dataSource={data}
 							indexInExam={thisItem?.Index || ''}
 							showEdit={showEdit}
+							isDoing={Router.asPath.includes('take-an-exam')}
+							setCurrentQuestion={setCurrentQuestion}
+							onRefreshNav={onRefreshNav}
 						/>
 					)
 				})}
 
-			{isWriting() &&
-				data?.IeltsQuestions.map((itemQestion, index) => {
-					const thisItem = getQuestIndex(itemQestion)
+			{is.writing &&
+				theQuestions.map((quest, index) => {
+					const thisItem = getQuestIndex(questions, quest)
 
-					return <Write key={index} isFinal={isFinal} data={itemQestion} index={index} IndexInExam={thisItem?.Index} dataSource={data} />
+					return (
+						<Write
+							key={index}
+							data={quest}
+							IndexInExam={thisItem?.Index}
+							isDoing={Router.asPath.includes('take-an-exam')}
+							setCurrentQuestion={setCurrentQuestion}
+							onRefreshNav={onRefreshNav}
+						/>
+					)
 				})}
 
-			{/* 	{isTrueFalse() && (
-				<div className="mb-[16px]">
+			{is.trueOrFalse && (
+				<div className="mb-[16px] bg-[#ffffff] p-[8px] !rounded-[6px]">
 					<div className="w-full mb-[8px] hidden w500:flex">
 						<div className="flex-1"></div>
 						<div className="h-[30px] flex items-center">
 							<div className="w-[50px]">True</div>
 							<div className="w-[50px]">False</div>
-							<div className="w-[74px]">Not given</div>
 						</div>
 					</div>
 
-					{data?.Exercises.map((itemQestion, index) => (
-						<TrueFalseTesting key={index} data={itemQestion} />
-					))}
+					{theQuestions.map((quest, index) => {
+						const thisItem = getQuestIndex(questions, quest)
+
+						return (
+							<TrueFalseQuestion
+								type="doing"
+								key={index}
+								data={quest}
+								indexInExam={thisItem?.Index || ''}
+								isDoing={Router.asPath.includes('take-an-exam')}
+								getDoingQuestionGroup={getDoingQuestionGroup}
+								setCurrentQuestion={setCurrentQuestion}
+								onRefreshNav={onRefreshNav}
+							/>
+						)
+					})}
 				</div>
-			)} */}
+			)}
+
+			{is.speak &&
+				theQuestions.map((quest, index) => {
+					const thisItem = getQuestIndex(questions, quest)
+
+					return (
+						<SpeakingQuestion
+							key={index}
+							disabled={true}
+							isFinal={isFinal}
+							data={quest}
+							index={index}
+							IndexInExam={thisItem?.Index}
+							dataSource={data}
+							setCurrentQuestion={setCurrentQuestion}
+							onRefreshNav={onRefreshNav}
+						/>
+					)
+				})}
+
+			{is.mind && (
+				<MindMap
+					disabled={true}
+					isFinal={isFinal}
+					dataSource={data}
+					getDoingQuestionGroup={getDoingQuestionGroup}
+					setCurrentQuestion={setCurrentQuestion}
+					onRefreshNav={onRefreshNav}
+				/>
+			)}
 		</>
 	)
 }

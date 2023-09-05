@@ -1,0 +1,262 @@
+.wrap-audio-record {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.btn-record {
+	border: none;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	svg {
+		width: 17px;
+		color: white;
+	}
+	&.start {
+		background: #1b73e8;
+	}
+	&.pause {
+		background: #1b73e8;
+	}
+	&.save {
+		background: #004aad;
+	}
+	&.ant-tooltip-disabled-compatible-wrapper {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		background-color: #accaf1 !important;
+	}
+}
+
+.btn-record-next {
+	border: none;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	svg {
+		width: 17px;
+		color: white;
+	}
+	&.start {
+		background: #004aad;
+	}
+	&.pause {
+		background: $primary-color;
+	}
+	&.save {
+		background: #004aad;
+	}
+}
+
+.cc-main-editor {
+	.exam-blank-input {
+		background: #c3c3c3;
+		min-width: 80px;
+		width: auto;
+		border-radius: 6px;
+		font-size: 16px;
+		padding: 2px 8px;
+		outline: none !important;
+		margin: 0px 4px !important;
+	}
+}
+
+.b-in {
+	@apply shadow-sm;
+	border: 0px;
+	text-align: center;
+	background: #ebebeb !important;
+	color: #000 !important;
+	max-width: 80px;
+	width: auto;
+	border-radius: 6px;
+	font-size: 16px;
+	padding: 2px 8px;
+	outline: none !important;
+	margin: 2px 4px !important;
+}
+
+.drag-23-suggest {
+	@apply p-[16px] rounded-[6px] bg-[#fff] mb-[16px] shadow-sm;
+}
+.drag-23-ans-item {
+	@apply flex items-center no-select col-span-1;
+}
+.drag-23-ans-number {
+	@apply text-[#fff] font-[500] w-[26px] h-[26px] rounded-full all-center mr-[8px];
+	@apply bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf];
+}
+.typing-drag-23-content {
+	@apply p-[16px] rounded-[6px] bg-[#fff] shadow-sm;
+}
+
+.exam-23-btn-del-group {
+	@apply ml-[8px] inline-flex mb-[16px] px-[8px] py-[4px] text-[#fff] rounded-[4px] items-center font-[600] cursor-pointer bg-[#C94A4F] hover:bg-[#b43f43] focus:bg-[#9f3136];
+}
+.exam-23-btn-update-group {
+	@apply no-select inline-flex mb-[16px] px-[8px] py-[4px] text-[#fff] rounded-[4px] items-center font-[600] cursor-pointer bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf];
+}
+
+.scroll-h {
+	overflow-y: hidden;
+	overflow-x: auto;
+
+	&::-webkit-scrollbar-track {
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		background-color: #f5f5f5;
+		border-radius: 5px;
+	}
+
+	&::-webkit-scrollbar {
+		width: 5px;
+		height: 6px;
+		background-color: #f5f5f5;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: 5px;
+		background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.44, #dcdcdc));
+	}
+}
+
+.exam-23-container {
+	@apply h-[100vh] w-[100%] relative flex flex-col bg-[#f3f3f3];
+}
+
+.exam-23-header {
+	@apply py-[8px] w-full flex items-center relative shadow-sm;
+}
+
+.exam-23-skills {
+	@apply flex items-center px-[16px] shadow-sm;
+}
+
+.exam-23-sections {
+	@apply flex items-center px-[16px] shadow-sm;
+}
+
+.exam-23-footer {
+	@apply w-full bg-[#fff] py-[8px] flex px-[8px] min-h-[36px] border-t-[1px] border-t-[#ededed];
+}
+
+.ex-23-f-button {
+	@apply flex items-center mb-[8px] hover:bg-[#F0EEED] px-[4px] rounded-[4px] cursor-pointer no-select;
+}
+
+.hide-loop {
+	border-radius: 6px !important;
+	.rhap_additional-controls {
+		display: none !important;
+	}
+	.rhap_progress-indicator {
+		background: #1b73e8 !important;
+	}
+	.rhap_progress-filled {
+		background: #1b73e8 !important;
+	}
+	.rhap_controls-section {
+		margin-top: 0px !important;
+	}
+	.rhap_volume-container {
+		margin-right: 8px !important;
+	}
+}
+
+.rhap_play-status--playing {
+	.rhap_play-pause-button {
+		color: #ff5722 !important;
+	}
+}
+
+.rhap_play-status--paused {
+	.rhap_play-pause-button {
+		color: #1b73e8 !important;
+	}
+}
+
+.rhap_main-controls {
+	margin-left: -8px !important;
+}
+
+// 'ex-au-show' : 'ex-au-hidden
+
+.ex-au-hidden {
+	.rhap_volume-controls {
+		display: none !important;
+	}
+	.rhap_controls-section {
+		display: none !important;
+	}
+	.hide-loop {
+		width: 190px !important;
+		height: 70px !important;
+		.rhap_time {
+			font-size: 14px !important;
+		}
+		.rhap_progress-indicator {
+			width: 14px !important;
+			height: 14px !important;
+			margin-top: 3px !important;
+		}
+	}
+}
+
+.rhap_current-time {
+	margin-right: 4px !important;
+}
+
+.take-an-exam {
+	&__right {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #f0f0f0;
+		border-radius: 6px;
+		padding-left: 8px;
+		padding-right: 8px;
+		@media screen and (max-width: 600px) {
+			display: none;
+		}
+	}
+	&__countdown {
+		font-weight: 700;
+		font-size: 20px;
+		color: #333c45;
+		cursor: pointer;
+	}
+	&__icon-show {
+		&--show {
+			rotate: -90deg;
+			transition-duration: 300ms;
+		}
+		&--hidden {
+			rotate: 90deg;
+			transition-duration: 300ms;
+		}
+	}
+}
+
+.ex-23-btn-play-audio {
+	@apply px-[8px] h-[24px] cursor-pointer flex-shrink-0 all-center shadow-sm rounded-full bg-[#0A89FF] hover:opacity-90;
+	.play-audio-text {
+		@apply text-[#fff] text-[12px] font-[600];
+	}
+}
+
+.ex-23-btn-change-skill {
+	@apply cc-23-skill text-[#fff] bg-[#1b73e8] hover:bg-[#1867cf] flex items-center;
+}
+
+.tae-skill-name {
+	@apply font-[600] text-[16px] text-[#1b73e8];
+}
+
+.ant-select:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-item {
+	height: 30px !important;
+}
+
+.ant-select-selection-overflow {
+	padding-left: 2px !important;
+}

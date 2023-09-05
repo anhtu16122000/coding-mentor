@@ -11,9 +11,9 @@ import PrimaryEditor from '~/common/components/Editor'
 import { getTimeStamp } from '~/common/utils/super-functions'
 
 const INIT_ANSWER = [
-	{ AnswerContent: 'True', Id: 0, IsTrue: false, Type: 'Text', Enable: true, isAdd: true, timestamp: getTimeStamp() },
-	{ AnswerContent: 'False', Id: 0, IsTrue: false, Type: 'Text', Enable: true, isAdd: true, timestamp: getTimeStamp() },
-	{ AnswerContent: 'Not given', Id: 0, IsTrue: false, Type: 'Text', Enable: true, isAdd: true, timestamp: getTimeStamp() }
+	{ Content: 'True', Id: 0, IsTrue: false, Type: 1, Enable: true, isAdd: true, timestamp: getTimeStamp() },
+	{ Content: 'False', Id: 0, IsTrue: false, Type: 1, Enable: true, isAdd: true, timestamp: getTimeStamp() }
+	// { Content: 'Not given', Id: 0, IsTrue: false, Type: 1, Enable: true, isAdd: true, timestamp: getTimeStamp() }
 ]
 
 const InputTrueFalse: FC<IGroupForm> = (props) => {
@@ -85,7 +85,7 @@ const InputTrueFalse: FC<IGroupForm> = (props) => {
 	// Assign current data to this form
 	async function openEdit() {
 		form.setFieldsValue({ ...defaultData })
-		setAnswers(defaultData?.Answers)
+		setAnswers(defaultData?.IeltsAnswers)
 		setVisible(true)
 	}
 
@@ -98,9 +98,9 @@ const InputTrueFalse: FC<IGroupForm> = (props) => {
 			let temp = []
 			answers.forEach((answer, index) => {
 				if (fIndex == index) {
-					temp.push({ ...answer, IsTrue: params })
+					temp.push({ ...answer, Correct: params })
 				} else {
-					temp.push({ ...answer, IsTrue: !params })
+					temp.push({ ...answer, Correct: !params })
 				}
 			})
 			setAnswers(temp)
@@ -117,7 +117,7 @@ const InputTrueFalse: FC<IGroupForm> = (props) => {
 		}
 		let flag = false
 		answers.forEach((element) => {
-			if (!!element.IsTrue && element.Enable !== false) {
+			if (!!element.Correct && element.Enable !== false) {
 				flag = true
 			}
 		})
@@ -132,9 +132,9 @@ const InputTrueFalse: FC<IGroupForm> = (props) => {
 		setTextError('')
 		const checkSubmit = await _checkSubmit()
 		if (!checkSubmit) {
-			const DATA_SUBMIT = { ...param, Answers: answers }
+			const DATA_SUBMIT = { ...param, IeltsAnswers: answers }
 			if (!!defaultData) {
-				postEditQuestion({ ...defaultData, ...DATA_SUBMIT, AnswerUpdates: answers })
+				postEditQuestion({ ...defaultData, ...DATA_SUBMIT, IeltsAnswer: answers })
 			} else {
 				postCreateQuestion({ ...DATA_SUBMIT, Id: 0, timestamp: new Date().getTime() })
 			}
@@ -212,13 +212,13 @@ const InputTrueFalse: FC<IGroupForm> = (props) => {
 								{answer?.Enable != false && (
 									<div className="col-span-12 w800:col-span-4 mt-3 inline-flex items-center">
 										<Checkbox
-											checked={answer?.IsTrue}
+											checked={answer?.Correct}
 											onChange={(event) => onChangeAnswerCheck(event.target.checked, index)}
 											className="mr-3 h-[36px] custom-checkbox"
 										/>
 
 										<div className="h-[34px] flex-1 border-[1px] border-[#bebebe] rounded-[6px] px-[8px] flex items-center">
-											{answer?.AnswerContent}
+											{answer?.Content}
 										</div>
 									</div>
 								)}

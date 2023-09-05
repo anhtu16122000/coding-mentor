@@ -16,6 +16,9 @@ export const ieltsSkillApi = {
 	put(data) {
 		return instance.put(url, data)
 	},
+	saveIndex(data) {
+		return instance.put(url + '/change-index', data)
+	},
 	delete(examID: number) {
 		return instance.delete(url + '/' + examID)
 	},

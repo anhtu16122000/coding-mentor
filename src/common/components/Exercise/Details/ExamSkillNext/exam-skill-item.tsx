@@ -1,20 +1,17 @@
 import React, { useRef, useState } from 'react'
-import { Collapse, Divider, Modal, Popconfirm, Popover, Spin } from 'antd'
+import { Modal, Popconfirm, Popover } from 'antd'
 import { ShowNoti, wait } from '~/common/utils'
 import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
-import { FaInfo, FaInfoCircle } from 'react-icons/fa'
+import { FaHeadphonesAlt, FaInfoCircle } from 'react-icons/fa'
 import ExamSkillInfo from './exam-skill.info'
 import { IoCloseSharp } from 'react-icons/io5'
 import PrimaryTooltip from '~/common/components/PrimaryTooltip'
-import { MdHeadphones } from 'react-icons/md'
 import CreateExamSkill from './exam-skill-form'
-import ExamSection from '../ExamSkillSection'
 import { FiMoreVertical } from 'react-icons/fi'
-
-const { Panel } = Collapse
+import { TiArrowSortedDown } from 'react-icons/ti'
 
 function ExamSkillItem(props) {
-	const { data, index, onRefresh, currentSkill, setCurrentSkill } = props
+	const { data, index, allSkills, onRefresh, onUp, onDown, showSort, currentSkill, setCurrentSkill, onPlayAudio, hideController } = props
 
 	const activated = currentSkill?.Id == data.Id
 
@@ -26,11 +23,8 @@ function ExamSkillItem(props) {
 		setDetailVis(!detailVis)
 	}
 
-	const [deleting, setSeleting] = useState(false)
-
 	async function handleDeleteSkill(event) {
 		event?.stopPropagation()
-		setSeleting(true)
 
 		if (activated) {
 			setCurrentSkill(null)
@@ -45,8 +39,6 @@ function ExamSkillItem(props) {
 			}
 		} catch (error) {
 			ShowNoti('error', error?.message)
-		} finally {
-			setSeleting(false)
 		}
 	}
 
@@ -88,25 +80,64 @@ function ExamSkillItem(props) {
 
 	return (
 		<>
-			<div onClick={() => setCurrentSkill(data)} className={`cc-23-skill ${classApply}`}>
-				<div className="mr-[8px]">{data?.Name}</div>
+			<div onClick={() => !showSort && setCurrentSkill(data)} className={`cc-23-skill ${!!showSort ? noneActiveClass : classApply}`}>
+				{index > 0 && !!showSort && (
+					<div
+						onClick={onUp}
+						className="ml-[-2px] mr-[8px] w-[18px] h-[18px] bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff] all-center cursor-pointer rounded-full"
+					>
+						<TiArrowSortedDown size={16} className="rotate-90 ml-[-2px]" />
+					</div>
+				)}
 
-				<div onClick={(e) => e.stopPropagation()}>
-					<PrimaryTooltip place="left" id={`tip-${index}`} content="Menu">
-						<Popover
-							ref={popref}
-							placement="rightTop"
-							title="Menu"
-							content={content}
-							trigger="click"
-							overlayClassName="show-arrow exam-skill"
-						>
-							<div className={`cc-23-skill-info ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
-								<FiMoreVertical size={12} className={activated ? 'text-[#0A89FF]' : 'text-[#fff]'} />
+				<div>{data?.Name}</div>
+
+				{index < allSkills.length - 1 && !!showSort && (
+					<div
+						onClick={onDown}
+						className="mr-[-2px] ml-[8px] w-[18px] h-[18px] bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff] all-center cursor-pointer rounded-full"
+					>
+						<TiArrowSortedDown size={16} className="-rotate-90 mr-[-2px]" />
+					</div>
+				)}
+
+				{!showSort && (
+					<>
+						{data?.Audio && (
+							<div
+								onClick={(e) => {
+									e.stopPropagation()
+									onPlayAudio(data)
+								}}
+							>
+								<PrimaryTooltip place="left" id={`au-sk-${index}`} content="Phát âm thanh">
+									<div className={`cc-23-skill-info ml-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
+										<FaHeadphonesAlt size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
+									</div>
+								</PrimaryTooltip>
 							</div>
-						</Popover>
-					</PrimaryTooltip>
-				</div>
+						)}
+
+						{!hideController && (
+							<div onClick={(e) => e.stopPropagation()}>
+								<PrimaryTooltip place="left" id={`tip-${index}`} content="Menu">
+									<Popover
+										ref={popref}
+										placement="rightTop"
+										title="Menu"
+										content={content}
+										trigger="click"
+										overlayClassName="show-arrow exam-skill"
+									>
+										<div className={`cc-23-skill-info ml-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
+											<FiMoreVertical size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
+										</div>
+									</Popover>
+								</PrimaryTooltip>
+							</div>
+						)}
+					</>
+				)}
 			</div>
 
 			<Modal width={500} open={detailVis} title={`Thông tin kỹ năng`} footer={null} onCancel={toggle}>

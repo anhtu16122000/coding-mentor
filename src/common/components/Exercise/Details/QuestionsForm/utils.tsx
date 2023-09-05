@@ -25,14 +25,14 @@ export function removeChoiceAnswer(answers, ans, callback) {
 export function formatExerciseInGroup(params, isAdd, section) {
 	const dataUpdate = []
 	if (!!params.IeltsQuestions) {
-		params?.IeltsQuestions.forEach((element) => {
+		params?.IeltsQuestions.forEach((element, index) => {
 			let answerUpdates = element.IeltsAnswers || element.Answers
-			dataUpdate.push({ ...element, IeltsAnswers: answerUpdates })
+			dataUpdate.push({ ...element, Index: index + 1, IeltsAnswers: answerUpdates })
 		})
 	} else {
-		params.IeltsQuestions.forEach((element) => {
+		params.IeltsQuestions.forEach((element, index) => {
 			const temp = { ...element }
-			dataUpdate.push({ ...temp, IeltsAnswers: element.Answers })
+			dataUpdate.push({ ...temp, Index: index + 1, IeltsAnswers: element.Answers })
 		})
 	}
 	return isAdd ? { ...params, IeltsQuestions: dataUpdate, ExamSectionId: section?.Id } : { ...params, IeltsQuestions: dataUpdate }

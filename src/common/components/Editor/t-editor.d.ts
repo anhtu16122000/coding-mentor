@@ -1,11 +1,15 @@
 type TPrimaryEditor = {
 	id?: string
 	initialValue?: string
-	height?: number
+	height?: number | string
 	inline?: boolean
 	skin?: string
 	apiKey?: string
+	init?: any
 	menubar?: boolean
+	ref?: any
+	noFullscreen?: boolean
+	isFillInBlank?: boolean
 
 	onInit?: Function
 	onChange?: Function

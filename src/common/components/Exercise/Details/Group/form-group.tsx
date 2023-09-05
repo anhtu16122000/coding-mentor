@@ -1,6 +1,6 @@
-import { Modal, Form, Select, Input } from 'antd'
-import React, { FC, useState } from 'react'
-import { ShowNoti } from '~/common/utils'
+import { Modal, Form, Select, Input, Skeleton } from 'antd'
+import React, { FC, useEffect, useRef, useState } from 'react'
+import { ShowNoti, log, wait } from '~/common/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { setCurrentExerciseForm } from '~/store/globalState'
@@ -18,9 +18,19 @@ import TrueFalseForm from '../QuestionsForm/TrueFalseForm'
 import MindMapForm from '../QuestionsForm/MindMap'
 import { ieltsGroupApi } from '~/api/IeltsExam/ieltsGroup'
 import { IoCloseSharp } from 'react-icons/io5'
+import CreateSpeaking from '../QuestionsForm/SpeakingForm'
+import CreateTyping from '../QuestionsForm/FillInBlankForm'
+import { useExamContext } from '~/common/components/Auth/Provider/exam'
+import { setQuestions } from '~/store/createQuestion'
+import CreateDragAndDrop from '../QuestionsForm/DragAndDropForm'
+
+let fullEditor = false
+const quickMenu = 'bold italic underline strikethrough | fontfamily fontsize blocks | codesample | forecolor backcolor | customInsertButton'
 
 const GroupForm: FC<IGroupForm> = (props) => {
 	const { isEdit, defaultData, isChangeInfo, onOpen, section, onRefresh } = props
+
+	const { questionWithAnswers, setQuestionWithAnswers } = useExamContext()
 
 	const dispatch = useDispatch()
 	const [form] = Form.useForm()
@@ -30,10 +40,25 @@ const GroupForm: FC<IGroupForm> = (props) => {
 	const [currentType, setCurrentType] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [isModalVisible, setIsModalVisible] = useState(false)
+	const [showEditor, setShowEditor] = useState<boolean>(true)
+
+	useEffect(() => {
+		changeType()
+	}, [currentType])
+
+	async function changeType() {
+		setShowEditor(false)
+		await wait(200)
+		setShowEditor(true)
+	}
 
 	function reset() {
 		!!onRefresh && onRefresh()
 		ShowNoti('success', 'Thành công')
+
+		setQuestionWithAnswers([])
+		dispatch(setQuestions([]))
+
 		dispatch(setCurrentExerciseForm([]))
 		setIsModalVisible(false)
 		form.resetFields()
@@ -74,11 +99,18 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 	function _checkSubmit() {
 		let flag = false
-		exercises.forEach((element) => {
+
+		const isTyping = currentType == QUESTION_TYPES.FillInTheBlank
+		const isDrag = currentType == QUESTION_TYPES.DragDrop
+
+		const finalExercise = isTyping || isDrag ? questionWithAnswers : exercises
+
+		finalExercise.forEach((element) => {
 			if (element.Enable !== false) {
 				flag = true
 			}
 		})
+
 		if (flag == false) {
 			return 'Vui lòng thêm câu hỏi'
 		}
@@ -87,19 +119,24 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 	// Handle submit form
 	const onFinish = (values) => {
+		log.Red('--------- FORM onFinish', exercises)
+
 		setTextError('')
 
 		const checkSubmit = _checkSubmit()
 
+		log.Yellow('checkSubmit', checkSubmit)
+
+		const isTyping = currentType == QUESTION_TYPES.FillInTheBlank
+		const isDrag = currentType == QUESTION_TYPES.DragDrop
+
 		if (checkSubmit == '') {
 			setLoading(true)
-
 			if (!isEdit && !isChangeInfo) {
-				postGroup({ ...values, IeltsSectionId: section.Id, IeltsQuestions: exercises })
+				postGroup({ ...values, IeltsSectionId: section.Id, IeltsQuestions: isTyping || isDrag ? questionWithAnswers : exercises })
 			}
-
 			if (!!isEdit || !!isChangeInfo) {
-				putGroup({ ...values, Id: defaultData.Id, IeltsQuestions: exercises })
+				putGroup({ ...values, Id: defaultData.Id, IeltsQuestions: isTyping || isDrag ? questionWithAnswers : exercises })
 			}
 		} else {
 			setTextError(checkSubmit)
@@ -111,10 +148,12 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		console.log('---- defaultData: ', defaultData)
 
 		if (!!onOpen) onOpen()
+		setQuestionWithAnswers([...defaultData?.IeltsQuestions])
 		dispatch(setCurrentExerciseForm([]))
 		form.setFieldsValue({ ...defaultData })
 		setCurrentType(defaultData?.Type)
 		dispatch(setCurrentExerciseForm([...defaultData.IeltsQuestions]))
+
 		setIsModalVisible(true)
 	}
 
@@ -145,15 +184,19 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		}
 
 		return (
-			<div
-				onClick={openEdit}
-				className="inline-flex mb-[16px] px-[8px] py-[4px] text-[#fff] rounded-[4px] items-center font-[600] cursor-pointer bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf]"
-			>
+			<div onClick={openEdit} className="exam-23-btn-update-group">
 				<FiEdit size={18} className="mr-2 mt-[-2px]" />
 				Cập nhật
 			</div>
 		)
 	}
+
+	// GET NOW TIMESTAMP
+	function getTimeStamp() {
+		return new Date().getTime() // Example: 1653474514413
+	}
+
+	const editorRef = useRef(null)
 
 	return (
 		<>
@@ -163,7 +206,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 			<Modal
 				centered
 				title={isEdit ? 'Cập nhật nhóm' : 'Thêm nhóm mới'}
-				width={1200}
+				width={currentType! == QUESTION_TYPES.FillInTheBlank ? 1200 : '98%'}
 				open={isModalVisible}
 				onCancel={() => !loading && setIsModalVisible(false)}
 				footer={
@@ -178,53 +221,71 @@ const GroupForm: FC<IGroupForm> = (props) => {
 				}
 			>
 				<Form disabled={loading} form={form} layout="vertical" initialValues={{ remember: true }} onFinish={onFinish}>
-					<div className="grid grid-cols-8 gap-x-4">
-						<div className="col-span-8 w800:col-span-4 grid grid-cols-4 gap-x-4">
-							<Form.Item className="col-span-2" label="Tên nhóm" name="Name" rules={formRequired}>
-								<Input className="primary-input" placeholder="" />
-							</Form.Item>
+					<div className="grid grid-cols-8 gap-x-1">
+						<div className="col-span-8 w800:col-span-4 pr-[16px] grid grid-cols-4 gap-x-4" style={{ borderRight: '1px solid #0000002b' }}>
+							<div id="the-baby-form" className="col-span-4 grid grid-cols-4 gap-x-4">
+								<Form.Item className="col-span-2" label="Tên nhóm" name="Name" rules={formRequired}>
+									<Input className="primary-input" placeholder="" />
+								</Form.Item>
 
-							<Form.Item className="col-span-2" label="Loại" name="Type" rules={formRequired}>
-								<Select disabled={loading || isEdit} className="primary-input primary-select" onChange={(event) => setCurrentType(event)}>
-									<Select.Option value={QUESTION_TYPES.MultipleChoice}>Trắc nghiệm</Select.Option>
-									<Select.Option value={QUESTION_TYPES.Write}>Tự luận</Select.Option>
-									<Select.Option value={QUESTION_TYPES.TrueOrFalse}>True or false</Select.Option>
-									<Select.Option value={QUESTION_TYPES.Mindmap}>Mindmap</Select.Option>
-								</Select>
-							</Form.Item>
+								<Form.Item className="col-span-2" label="Loại" name="Type" rules={formRequired}>
+									<Select disabled={loading || isEdit} className="primary-input primary-select" onChange={(event) => setCurrentType(event)}>
+										<Select.Option value={QUESTION_TYPES.MultipleChoice}>Trắc nghiệm</Select.Option>
+										<Select.Option value={QUESTION_TYPES.Write}>Tự luận</Select.Option>
+										<Select.Option value={QUESTION_TYPES.TrueOrFalse}>True or false</Select.Option>
+										<Select.Option value={QUESTION_TYPES.Mindmap}>Mindmap</Select.Option>
+										<Select.Option value={QUESTION_TYPES.Speak}>Speaking</Select.Option>
+										<Select.Option value={QUESTION_TYPES.FillInTheBlank}>Điền vào ô trống</Select.Option>
+										<Select.Option value={QUESTION_TYPES.DragDrop}>Chọn đáp án đúng</Select.Option>
+									</Select>
+								</Form.Item>
 
-							<Form.Item className="col-span-2" label="Cấp độ" name="Level" rules={formRequired}>
-								<Select disabled={loading} className="primary-input primary-select">
-									<Select.Option value={1}>Dễ</Select.Option>
-									<Select.Option value={2}>Trung bình</Select.Option>
-									<Select.Option value={3}>Khó</Select.Option>
-									<Select.Option value={4}>Khó dữ lắm luôn</Select.Option>
-								</Select>
-							</Form.Item>
+								<Form.Item className="col-span-2" label="Cấp độ" name="Level" rules={formRequired}>
+									<Select disabled={loading} className="primary-input primary-select">
+										<Select.Option value={1}>Dễ</Select.Option>
+										<Select.Option value={2}>Trung bình</Select.Option>
+										<Select.Option value={3}>Khó</Select.Option>
+										<Select.Option value={4}>Khó dữ lắm luôn</Select.Option>
+									</Select>
+								</Form.Item>
 
-							<Form.Item className="col-span-2" label="Từ khóa" name="Tags" rules={formNoneRequired}>
-								<Select disabled={loading} className="primary-input primary-select">
-									<Select.Option value={QUESTION_TYPES.MultipleChoice}>Chưa gắn api lấy tag</Select.Option>
-								</Select>
-							</Form.Item>
+								<Form.Item className="col-span-2" label="Từ khóa" name="Tags" rules={formNoneRequired}>
+									<Select disabled={loading} className="primary-input primary-select">
+										<Select.Option value={QUESTION_TYPES.MultipleChoice}>Chưa gắn api lấy tag</Select.Option>
+									</Select>
+								</Form.Item>
+							</div>
 
-							<Form.Item className="col-span-4 mb-0" label="Nội dung" name="Content">
-								<PrimaryEditor
-									id={`content-${new Date().getTime()}`}
-									height={210}
-									initialValue={defaultData?.Content || ''}
-									onChange={(event) => form.setFieldValue('Content', event)}
-								/>
-							</Form.Item>
+							{showEditor && (
+								<Form.Item className="col-span-4 mb-0" label="Nội dung" name="Content">
+									<PrimaryEditor
+										// onInit={editorInit}
+										noFullscreen
+										isFillInBlank={currentType == QUESTION_TYPES.FillInTheBlank || currentType == QUESTION_TYPES.DragDrop}
+										id={`content-${new Date().getTime()}`}
+										height={fullEditor ? '90%' : 210}
+										initialValue={defaultData?.Content || ''}
+										onChange={(event) => form.setFieldValue('Content', event)}
+									/>
+								</Form.Item>
+							)}
+							{!showEditor && (
+								<div className="h-[213px]">
+									<Skeleton active />
+								</div>
+							)}
 						</div>
 
 						<div className="cc-group-quest-list">
-							{textError && <div className="!ml-[25px] mb-2 text-danger">{textError}</div>}
+							{textError && <div className="mb-2 text-danger">{textError}</div>}
 
 							{currentType == QUESTION_TYPES.MultipleChoice && <MultipleChoiceForm />}
 							{currentType == QUESTION_TYPES.Write && <CreateWriting />}
 							{currentType == QUESTION_TYPES.TrueOrFalse && <TrueFalseForm />}
 							{currentType == QUESTION_TYPES.Mindmap && <MindMapForm />}
+							{currentType == QUESTION_TYPES.Speak && <CreateSpeaking />}
+							{currentType == QUESTION_TYPES.FillInTheBlank && <CreateTyping isEdit={isEdit} />}
+							{currentType == QUESTION_TYPES.DragDrop && <CreateDragAndDrop isEdit={isEdit} />}
 						</div>
 					</div>
 				</Form>
