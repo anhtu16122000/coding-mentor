@@ -214,71 +214,73 @@ const FormRegisterClass = (props) => {
 					<ListProgramReview programsSelected={programsSelected} setProgramsSelected={setProgramsSelected} setPrograms={setPrograms} />
 				</div>
 			</div>
-			<div className="col-span-2">
-				<div className="relative">
-					<button className="absolute top-0 right-0 z-10 -translate-x-2/4" type="button" onClick={handleAddListTimeFrame}>
-						<AiFillPlusCircle size={22} />
-					</button>
-					<Form.Item label="Khung thời gian" className="mb-0">
-						{!!listTimeFrames &&
-							listTimeFrames.map((timeFrame) => {
-								return (
-									<div className="relative" key={timeFrame.Id}>
-										<button type="button" className="absolute top-0 right-0 z-10" onClick={() => handleRemoveListTimeFrame(timeFrame.Id)}>
-											<AiFillMinusCircle size={22} />
-										</button>
-										<div className="row">
-											<div className="col-md-6 col-12">
-												<SelectField
-													placeholder="Chọn thứ"
-													optionList={dayOfWeek}
-													name={`ExectedDay-${timeFrame.Id}`}
-													label="Thứ"
-													onChangeSelect={(value) => handleChangeTimeFrame(timeFrame.Id, 'ExectedDay', value)}
-													isRequired
-													rules={formRequired}
-												/>
+			{programsSelected?.length > 0 && (
+				<div className="col-span-2">
+					<div className="relative">
+						<button className="absolute top-0 right-0 z-10 -translate-x-2/4" type="button" onClick={handleAddListTimeFrame}>
+							<AiFillPlusCircle size={22} />
+						</button>
+						<Form.Item label="Khung thời gian" className="mb-0">
+							{!!listTimeFrames &&
+								listTimeFrames.map((timeFrame) => {
+									return (
+										<div className="relative" key={timeFrame.Id}>
+											<button type="button" className="absolute top-0 right-0 z-10" onClick={() => handleRemoveListTimeFrame(timeFrame.Id)}>
+												<AiFillMinusCircle size={22} />
+											</button>
+											<div className="row">
+												<div className="col-md-6 col-12">
+													<SelectField
+														placeholder="Chọn thứ"
+														optionList={dayOfWeek}
+														name={`ExectedDay-${timeFrame.Id}`}
+														label="Thứ"
+														onChangeSelect={(value) => handleChangeTimeFrame(timeFrame.Id, 'ExectedDay', value)}
+														isRequired
+														rules={formRequired}
+													/>
+												</div>
+												<div className="col-md-6 col-12">
+													<Form.Item name={`StudyTimeId-${timeFrame.Id}`} label={'Ca'} required={true} rules={formRequired}>
+														<Select
+															className={`primary-input`}
+															showSearch
+															allowClear
+															loading={isLoading}
+															placeholder={'Chọn ca học'}
+															optionFilterProp="children"
+															onChange={(value) => {
+																handleChangeTimeFrame(timeFrame.Id, 'StudyTimeId', value)
+															}}
+														>
+															{studyTime &&
+																studyTime.map((o, idx) => {
+																	return (
+																		<Option disabled={handleDisableSelect(timeFrame, o.value)} key={idx} value={o.value}>
+																			{o.title}
+																		</Option>
+																	)
+																})}
+														</Select>
+													</Form.Item>
+												</div>
 											</div>
-											<div className="col-md-6 col-12">
-												<Form.Item name={`StudyTimeId-${timeFrame.Id}`} label={'Ca'} required={true} rules={formRequired}>
-													<Select
-														className={`primary-input`}
-														showSearch
-														allowClear
-														loading={isLoading}
-														placeholder={'Chọn ca học'}
-														optionFilterProp="children"
-														onChange={(value) => {
-															handleChangeTimeFrame(timeFrame.Id, 'StudyTimeId', value)
-														}}
-													>
-														{studyTime &&
-															studyTime.map((o, idx) => {
-																return (
-																	<Option disabled={handleDisableSelect(timeFrame, o.value)} key={idx} value={o.value}>
-																		{o.title}
-																	</Option>
-																)
-															})}
-													</Select>
+											<div style={{ marginTop: -10 }}>
+												<Form.Item name={`Note-${timeFrame.Id}`} label={'Ghi chú'}>
+													<Input
+														style={{ borderRadius: 5 }}
+														placeholder="Nhập ghi chú"
+														onChange={(v) => handleChangeTimeFrame(timeFrame.Id, 'Note', v.target.value)}
+													/>
 												</Form.Item>
 											</div>
 										</div>
-										<div style={{ marginTop: -10 }}>
-											<Form.Item name={`Note-${timeFrame.Id}`} label={'Ghi chú'}>
-												<Input
-													style={{ borderRadius: 5 }}
-													placeholder="Nhập ghi chú"
-													onChange={(v) => handleChangeTimeFrame(timeFrame.Id, 'Note', v.target.value)}
-												/>
-											</Form.Item>
-										</div>
-									</div>
-								)
-							})}
-					</Form.Item>
+									)
+								})}
+						</Form.Item>
+					</div>
 				</div>
-			</div>
+			)}
 		</>
 	)
 }

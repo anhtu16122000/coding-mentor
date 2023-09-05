@@ -1,4 +1,3 @@
-import { Select } from 'antd'
 import styled from 'styled-components'
 
 export const StylePaymentMethods = styled.div`
@@ -34,6 +33,6 @@ export const StyleContainerDropdown = styled.div`
 	height: 40px;
 	border: 1px solid #dfdfdf;
 	cursor: pointer;
-	alignItems: center;
+	alignitems: center;
 	border-radius: 6px;
 `

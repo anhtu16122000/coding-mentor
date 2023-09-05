@@ -263,7 +263,14 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 							}}
 						>
 							<div style={{ fontWeight: '600' }}>{item?.ClassName}</div>
-							{currentClass && <div className="text-[12px]">Giá: {parseToMoney(currentClass?.Price)}</div>}
+							{currentClass && (
+								<>
+									<div className="text-[12px]">Giá: {parseToMoney(currentClass?.Price)}</div>
+									<div className="text-[12px]">
+										Đã học: {currentClass?.CompletedLesson}/{currentClass?.TotalLesson}
+									</div>
+								</>
+							)}
 						</div>
 						<PrimaryTooltip
 							className="top-[-4px] right-[-4px] absolute w-[28px] h-[18px]"
@@ -295,9 +302,9 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 								const selectedClass = classes?.find((_item) => _item.Id === value)
 								const monney = selectedClass?.Price - currentClass?.TotalPrice
 								if (monney > 0) {
-									form.setFieldValue('Paid', monney)
+									form.setFieldValue('Price', monney)
 								} else {
-									form.setFieldValue('Paid', 0)
+									form.setFieldValue('Price', 0)
 								}
 							}}
 						>
@@ -317,12 +324,18 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 							})}
 						</Select>
 					</Form.Item>
-					
+
 					<Form.Item className="col-span-2" required={true} rules={formRequired} label="Trung tâm" name="BranchId">
 						<StyleContainerDropdown>
-							<Select bordered={false} showSearch allowClear placeholder="Chọn trung tâm" onChange={(value)=>{
-								form.setFieldValue('BranchId', value)
-							}}>
+							<Select
+								bordered={false}
+								showSearch
+								allowClear
+								placeholder="Chọn trung tâm"
+								onChange={(value) => {
+									form.setFieldValue('BranchId', value)
+								}}
+							>
 								{branch.map((item) => {
 									return (
 										<Select.Option key={item.Id} value={item.Id}>
@@ -334,9 +347,29 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 						</StyleContainerDropdown>
 					</Form.Item>
 
-					<Form.Item className="col-span-2" label="Đóng thêm" name="Paid" rules={formNoneRequired}>
+					<Form.Item className="col-span-2" label="Đóng thêm" name="Price" rules={formNoneRequired}>
 						<InputNumber
 							placeholder="Số tiền phải đóng thêm"
+							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
+						/>
+					</Form.Item>
+					<Form.Item
+						className="col-span-2"
+						label="Thanh toán"
+						name="Paid"
+						rules={[
+							{
+								validator: async (_, names) => {
+									const team = Number(form.getFieldValue('Price'))
+									if (Number(names) >= team) {
+										return Promise.reject(new Error('Tiền thanh toán không hợp lệ'))
+									}
+								}
+							}
+						]}
+					>
+						<InputNumber
+							placeholder="Số tiền phải thanh toán"
 							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
 						/>
 					</Form.Item>
