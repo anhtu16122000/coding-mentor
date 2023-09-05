@@ -12,7 +12,7 @@ import { BiSolidArrowToTop } from 'react-icons/bi'
 const initParameters = {
 	search: '',
 	pageIndex: 1,
-	pageSize: 30,
+	pageSize: 10,
 	SourceId: 1,
 	types: '',
 	levels: ''
