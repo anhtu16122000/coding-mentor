@@ -1,7 +1,8 @@
-import { Card, Form, Input, Modal, Select } from 'antd'
+import { Card, Form, Input, InputNumber, Modal, Select, Avatar as AvatarAntd, DatePicker } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import RestApi from '~/api/RestApi'
-import { ShowNostis } from '~/common/utils'
+import { ShowNostis, ShowNoti } from '~/common/utils'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import ModalFooter from '../../ModalFooter'
 import { formNoneRequired, formRequired } from '~/common/libs/others/form'
@@ -9,6 +10,42 @@ import { ButtonChange } from '../../TableButton'
 import Avatar from '../../Avatar'
 import { MdOpenInNew } from 'react-icons/md'
 import { parseToMoney } from '~/common/utils/common'
+import { paymentMethodsApi } from '~/api/business/payment-method'
+import AvatarComponent from '../../AvatarComponent'
+import ModalShowInfoPaymentMethod from '../../Class/ModalShowInfoPaymentMethod'
+import {
+	StyleContainerDropdown,
+	StylePaymentMethods,
+	StylePaymentMethodsAvatar,
+	StylePaymentMethodsItems,
+	StylePaymentMethodsLable
+} from './index.styled'
+import DatePickerField from '../../FormControl/DatePickerField'
+import { branchApi } from '~/api/manage/branch'
+
+// type CurrentClass = {
+// 	BillId?: number
+// 	StudentId: number
+// 	ClassId: number
+// 	ProgramId?: number
+// 	CurriculumId?: number
+// 	CartId?: number
+// 	ProductId?: number
+// 	Quantity?: number
+// 	Price: number
+// 	TotalPrice: number
+// 	MonthAvailable?: string
+// 	ClassName?: string
+// 	ProgramName?: string
+// 	ProductName?: string
+// 	CurriculumName?: string
+// 	Id: number
+// 	Enable?: boolean
+// 	CreatedOn?: string
+// 	CreatedBy?: string
+// 	ModifiedOn?: string
+// 	ModifiedBy?: string
+// }
 
 interface IChangeClass {
 	isEdit?: boolean
@@ -21,16 +58,69 @@ const url = 'ClassChange'
 
 const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 	const [form] = Form.useForm()
-
+	const [methods, setMethods] = useState<any>([])
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(false)
 	const [classes, setClasses] = useState<any>([])
+	const [branch, setBranch] = useState<any>([])
+	const [currentClass, setCurrentClass] = useState<any>()
+	const [activeMethod, setActiveMethod] = useState<IPaymentMethod>()
 
 	useEffect(() => {
 		if (visible) {
 			getClass()
+			getCurrentClass()
+			getPaymentMethods()
+			getBranchs()
 		}
 	}, [visible])
+
+	const getBranchs = async () => {
+		try {
+			const res = await branchApi.getAll()
+			if (res.status == 200) {
+				setBranch(res.data.data)
+			}
+			if (res.status == 204) {
+				setBranch([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
+
+	const getPaymentMethods = async () => {
+		try {
+			const res = await paymentMethodsApi.getAll()
+			if (res.status == 200) {
+				setMethods(res.data.data)
+			}
+			if (res.status == 204) {
+				setMethods([])
+			}
+		} catch (err) {
+			ShowNostis.error(err?.message)
+		} finally {
+		}
+	}
+
+	const getCurrentClass = async () => {
+		try {
+			const response = await RestApi.get('Class/old-class', {
+				'request.studentId': item?.StudentId,
+				'request.classId': item?.ClassId
+			})
+			if (response.status == 200) {
+				setCurrentClass(response.data.data)
+			} else {
+				setCurrentClass(null)
+			}
+		} catch (err) {
+			ShowNostis.error(err?.message)
+		} finally {
+			setLoading(false)
+		}
+	}
 
 	async function getClass() {
 		try {
@@ -119,6 +209,11 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 		window.open(uri, '_blank')
 	}
 
+	const handleChangeMethod = (data) => {
+		setActiveMethod(data)
+		form.setFieldValue('PaymentMethodId', data.Id)
+	}
+
 	return (
 		<>
 			<PrimaryTooltip id={`change-${item?.Id}`} place="left" content="Chuyển lớp">
@@ -161,8 +256,15 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 				<div className="font-[500] mb-[4px]">Lớp hiện tại</div>
 				<Card className="mb-[16px] card-min-padding">
 					<div className="relative">
-						<div>{item?.ClassName}</div>
-
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'column'
+							}}
+						>
+							<div style={{ fontWeight: '600' }}>{item?.ClassName}</div>
+							{currentClass && <div className="text-[12px]">Giá: {parseToMoney(currentClass?.Price)}</div>}
+						</div>
 						<PrimaryTooltip
 							className="top-[-4px] right-[-4px] absolute w-[28px] h-[18px]"
 							id={`class-in-new-${item?.Id}`}
@@ -184,8 +286,21 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 					onFinish={onFinish}
 					autoComplete="on"
 				>
-					<Form.Item className="col-span-2 ant-select-class-selected" name="NewClassId" label="Lớp chuyển đến">
-						<Select disabled={loading} placeholder="Chọn lớp" className="ant-select-item-option-selected-blue">
+					<Form.Item className="col-span-2 ant-select-class-selected" required={true} name="NewClassId" label="Lớp chuyển đến">
+						<Select
+							disabled={loading}
+							placeholder="Chọn lớp"
+							className="ant-select-item-option-selected-blue"
+							onChange={(value) => {
+								const selectedClass = classes?.find((_item) => _item.Id === value)
+								const monney = selectedClass?.Price - currentClass?.TotalPrice
+								if (monney > 0) {
+									form.setFieldValue('Paid', monney)
+								} else {
+									form.setFieldValue('Paid', 0)
+								}
+							}}
+						>
 							{classes.map((thisClass) => {
 								return (
 									<Select.Option disabled={!thisClass?.Fit} key={thisClass.Id} value={thisClass.Id}>
@@ -201,6 +316,69 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 								)
 							})}
 						</Select>
+					</Form.Item>
+					<Form.Item className="col-span-2" required={true} rules={formRequired} label="Trung tâm" name="BranchId">
+						<StyleContainerDropdown>
+							<Select bordered={false} showSearch allowClear placeholder="Chọn trung tâm" onChange={(value)=>{
+								form.setFieldValue('BranchId', value)
+							}}>
+								{branch.map((item) => {
+									return (
+										<Select.Option key={item.Id} value={item.Id}>
+											{item.Name}
+										</Select.Option>
+									)
+								})}
+							</Select>
+						</StyleContainerDropdown>
+					</Form.Item>
+
+					<Form.Item className="col-span-2" label="Đóng thêm" name="Paid" rules={formNoneRequired}>
+						<InputNumber
+							placeholder="Số tiền phải đóng thêm"
+							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
+						/>
+					</Form.Item>
+					<Form.Item required={true} className="col-span-2" label="Phương thức thanh toán" name="PaymentMethodId" rules={formNoneRequired}>
+						<StylePaymentMethods>
+							{methods?.map((method) => {
+								return (
+									<StylePaymentMethodsItems key={method.Id}>
+										<StylePaymentMethodsAvatar
+											src={method.Thumbnail || '/images/cash-payment.png'}
+											alt="avatar"
+											isChecked={activeMethod?.Id === method.Id}
+											onClick={() => handleChangeMethod(method)}
+										/>
+										{/* <img 
+											src={method.Thumbnail || '/images/cash-payment.png'}
+											alt="avatar"
+											style={{
+												height: 100,
+												borderRadius: 10
+											}}  /> */}
+										{/* <AvatarAntd shape="square" src={<img src={method.Thumbnail || '/images/cash-payment.png'} alt="avatar" />} /> */}
+										{/* <AvatarComponent url={method.Thumbnail} type="cash" className="payment-methods- student-change-class-avatar" /> */}
+
+										<StylePaymentMethodsLable isColumn={method?.Name?.length > 10}>
+											<p>{method.Name}</p>
+											<ModalShowInfoPaymentMethod method={method} />
+										</StylePaymentMethodsLable>
+									</StylePaymentMethodsItems>
+								)
+							})}
+						</StylePaymentMethods>
+					</Form.Item>
+
+					{/* <div className="flex row items-center justify-between mb-3">
+						<span className="title">Ngày hẹn trả</span>
+						<DatePickerField className="mb-0 w-100%" mode="single" name="PaymentAppointmentDate" label="" />
+					</div> */}
+					<Form.Item className="col-span-2" label="Ngày hẹn trả" name="PaymentAppointmentDate" rules={formNoneRequired}>
+						<DatePicker
+							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
+							placeholder="Ngày hẹn trả"
+						/>
 					</Form.Item>
 
 					<Form.Item className="col-span-2" label="Ghi chú" name="Note" rules={formNoneRequired}>
