@@ -134,7 +134,14 @@ const ModalCreateHomeWork = (props) => {
 						<InputTextField isRequired name="Name" label="Tên bài tập" rules={formRequired} />
 
 						<Form.Item name="IeltsExamId" label="Đề" rules={formRequired}>
-							<Select className="primary-input" loading={loading} disabled={loading} placeholder="Chọn đề">
+							<Select
+								showSearch
+								optionFilterProp="children"
+								className="primary-input"
+								loading={loading}
+								disabled={loading}
+								placeholder="Chọn đề"
+							>
 								{exams.map((item) => {
 									return (
 										<Select.Option key={item.Id} value={item.Id}>

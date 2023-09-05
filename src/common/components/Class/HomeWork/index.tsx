@@ -1,4 +1,4 @@
-import { Card, Popconfirm } from 'antd'
+import { Card, Modal, Popconfirm } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import ModalCreateHomeWork from './ModalCreate'
@@ -13,6 +13,11 @@ import { IoClose } from 'react-icons/io5'
 import { TbWritingSign } from 'react-icons/tb'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
+import { doingTestApi } from '~/api/IeltsExam/doing-test'
+import { log } from '~/common/utils'
+
+import Lottie from 'react-lottie-player'
+import warning from '~/common/components/json/100468-warning.json'
 
 const listTodoApi = {
 	pageSize: PAGE_SIZE,
@@ -144,7 +149,10 @@ const HomeWork = () => {
 						)}
 
 						<PrimaryTooltip place="left" id={`hw-take-${item?.Id}`} content="Làm bài">
-							<div className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer">
+							<div
+								onClick={() => getDraft(item?.IeltsExamId, item?.Id)}
+								className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+							>
 								<TbWritingSign size={22} />
 							</div>
 						</PrimaryTooltip>
@@ -154,24 +162,95 @@ const HomeWork = () => {
 		}
 	]
 
-	return (
-		<Card
-			className="shadow-sm"
-			title={
-				<div className="w-full flex items-center justify-between">
-					<div>Bài tập</div>
-					{(is.admin || is.teacher) && <ModalCreateHomeWork onRefresh={getData} />}
-				</div>
+	const [getingDraft, getGetingDraft] = useState<boolean>(false)
+
+	// -------- Take an exam
+	async function getDraft(ExamId, HWId) {
+		getGetingDraft(true)
+		try {
+			// 1 - Làm bài thử 2 - Làm bài hẹn test 3 - Bài tập về nhà 4 - Bộ đề
+			const res = await doingTestApi.getDraft({ valueId: HWId, type: 3 })
+			if (res.status == 200) {
+				setCurrentData({ ExamId: ExamId, HWId: HWId, draft: res.data?.data })
+				setExamWarning(true)
+			} else {
+				createDoingTest(ExamId, HWId)
 			}
-		>
-			<PrimaryTable
-				loading={loading}
-				total={totalPage && totalPage}
-				data={data}
-				columns={columns}
-				onChangePage={(event: number) => setFilters({ ...filters, pageIndex: event })}
-			/>
-		</Card>
+		} catch (error) {
+		} finally {
+			getGetingDraft(false)
+		}
+	}
+
+	const [examWarning, setExamWarning] = useState<boolean>(false)
+	const [currentData, setCurrentData] = useState<any>(null)
+
+	const [creatingTest, setCreatingTest] = useState<boolean>(false)
+
+	function gotoTest(params) {
+		if (params?.Id) {
+			window.open(`/take-an-exam/?exam=${params?.Id}`, '_blank')
+		}
+	}
+	async function createDoingTest(ExamId, HWId) {
+		setCreatingTest(true)
+		try {
+			const res = await doingTestApi.post({ IeltsExamId: ExamId, ValueId: HWId, Type: 3 })
+
+			if (res?.status == 200) {
+				log.Green('Created test', res.data?.data)
+				gotoTest(res.data?.data)
+				// Make some noise...
+			}
+		} catch (error) {
+		} finally {
+			setCreatingTest(false)
+		}
+	}
+
+	return (
+		<>
+			<Card
+				className="shadow-sm"
+				title={
+					<div className="w-full flex items-center justify-between">
+						<div>Bài tập</div>
+						{(is.admin || is.teacher) && <ModalCreateHomeWork onRefresh={getData} />}
+					</div>
+				}
+			>
+				<PrimaryTable
+					loading={loading}
+					total={totalPage && totalPage}
+					data={data}
+					columns={columns}
+					onChangePage={(event: number) => setFilters({ ...filters, pageIndex: event })}
+				/>
+			</Card>
+
+			<Modal width={400} open={examWarning} onCancel={() => setExamWarning(false)} footer={null}>
+				<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+					<Lottie loop animationData={warning} play style={{ width: 160, height: 160, marginBottom: 8 }} />
+					<div style={{ fontSize: 18 }}>Bạn có muốn tiếp tục làm bản trước đó?</div>
+
+					<div className="none-selection" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
+						<div onClick={() => createDoingTest(currentData?.ExamId, currentData?.HWId)} className="exercise-btn-cancel">
+							<div>Làm bài mới</div>
+						</div>
+
+						<div
+							onClick={() => {
+								gotoTest(currentData?.draft)
+								setExamWarning(false)
+							}}
+							className="exercise-btn-continue"
+						>
+							<div>Làm tiếp</div>
+						</div>
+					</div>
+				</div>
+			</Modal>
+		</>
 	)
 }
 

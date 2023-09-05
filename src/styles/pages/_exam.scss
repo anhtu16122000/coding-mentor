@@ -260,3 +260,40 @@
 .ant-select-selection-overflow {
 	padding-left: 2px !important;
 }
+
+.exercise-btn-cancel {
+	background-color: #1fd97c;
+	height: 34px;
+	display: flex;
+	justify-content: center;
+	color: #fff;
+	align-items: center;
+	border-radius: 6px;
+	padding: 0px 16px;
+	cursor: pointer;
+	&:hover {
+		background-color: #1dc571;
+	}
+	&:active {
+		background-color: #1fd97c;
+	}
+}
+
+.exercise-btn-continue {
+	background-color: #004aad;
+	height: 34px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 6px;
+	color: #fff;
+	padding: 0px 16px;
+	margin-left: 8px;
+	cursor: pointer;
+	&:hover {
+		background-color: #053f8b;
+	}
+	&:active {
+		background-color: #004aad;
+	}
+}
