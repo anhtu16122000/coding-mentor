@@ -20,6 +20,7 @@ import Lottie from 'react-lottie-player'
 import warning from '~/common/components/json/100468-warning.json'
 import { studentHomeWorkApi } from '~/api/home-work/student'
 import { examResultApi } from '~/api/exam/result'
+import { FiEye } from 'react-icons/fi'
 
 const listTodoApi = {
 	pageSize: PAGE_SIZE,
@@ -198,7 +199,7 @@ const HomeWork = () => {
 									setHistories({ HWId: item?.Id, Name: item?.Name })
 									getStudentHomeWork(item?.Id)
 								}}
-								className="ml-[8px] w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+								className="ml-[8px] w-[28px] text-[#279d37] h-[30px] all-center hover:opacity-70 cursor-pointer"
 							>
 								<FaUserClock size={20} />
 							</div>
@@ -259,6 +260,23 @@ const HomeWork = () => {
 				}
 
 				return <PrimaryTag children={value || ''} color="red" />
+			}
+		},
+		{
+			fixed: 'right',
+			render: (value, item, index) => {
+				return (
+					<div className="flex items-center">
+						<PrimaryTooltip place="left" id={`hw-res-${item?.Id}`} content="Xem kết quả">
+							<div
+								onClick={() => window.open(`/exam-result/?test=${item?.Id}`, '_blank')}
+								className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+							>
+								<FiEye size={22} />
+							</div>
+						</PrimaryTooltip>
+					</div>
+				)
 			}
 		}
 	]

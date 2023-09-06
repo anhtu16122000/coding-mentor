@@ -12,6 +12,9 @@ export const examResultApi = {
 	getDetailByID(examID: number) {
 		return instance.get<{ totalPoint: string } & IApiResultData<any>>(`${url}/Detail/${examID}`)
 	},
+	getOverView(params) {
+		return instance.get<{ totalPoint: string } & IApiResultData<any>>(`${url}/ielts-exam-result-overview`, { params })
+	},
 	post(data) {
 		return instance.post(url, data)
 	},
@@ -23,8 +26,5 @@ export const examResultApi = {
 	},
 	delete(examID: number) {
 		return instance.delete(url + '/' + examID)
-	},
-	addRandom(data) {
-		return instance.post(`${url}/${data?.sectionId}/addRandom/${data?.amount}/type/${data?.type}`, data)
 	}
 }
