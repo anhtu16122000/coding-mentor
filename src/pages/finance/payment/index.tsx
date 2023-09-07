@@ -1,5 +1,5 @@
 import { Input } from 'antd'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
 import { MainLayout } from '~/common'
 import PayForm from '~/common/components/Finance/Payment/pay'
@@ -15,14 +15,18 @@ import RefundForm from './Refund'
 import PaymentForm from '~/common/components/Finance/Payment/Create'
 import FilterBase from '~/common/components/Elements/FilterBase'
 import PaymentDetail from './PaymentDetail'
+import { TabCompData } from '~/common/custom/TabComp/type'
+import TabComp from '~/common/custom/TabComp'
 
-const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '', fromDate: null, toDate: null }
+const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '', fromDate: null, toDate: null, type: 0 }
 const PaymentManagementPage = () => {
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
 	const [data, setData] = React.useState([])
 	const [sumPrice, setSumPrice] = React.useState({})
 	const [filters, setFilter] = React.useState(initParamters)
+	const [billStatus, setBillStatus] = useState<TabCompData[]>()
+	const [statusSelected, setStatusSelected] = useState<number>(0)
 
 	const [dataFilter, setDataFilter] = React.useState([
 		{
@@ -62,11 +66,48 @@ const PaymentManagementPage = () => {
 	async function getData() {
 		setLoading(true)
 		try {
-			const res = await RestApi.get<any>('Bill', filters)
+			const res = await RestApi.get('Bill', filters)
 			if (res.status == 200) {
 				setData(res.data.data)
 				setTotalPage(res.data.totalRow)
 				setSumPrice(res.data)
+				setBillStatus([
+					{
+						id: 0,
+						title: 'Tất cả',
+						value: res?.data?.typeAll
+					},
+					{
+						id: 1,
+						title: 'Đăng ký học',
+						value: res?.data?.typeRegis
+					},
+					{
+						id: 2,
+						title: 'Mua dịch vụ',
+						value: res?.data?.typeService
+					},
+					{
+						id: 3,
+						title: 'Đăng ký lớp dạy kèm',
+						value: res?.data?.typeTutorial
+					},
+					{
+						id: 4,
+						title: 'Tạo thủ công',
+						value: res?.data?.typeManual
+					},
+					{
+						id: 5,
+						title: 'Học phí hàng tháng',
+						value: res?.data?.typeMonthly
+					},
+					{
+						id: 6,
+						title: 'Phí chuyển lớp',
+						value: res?.data?.typeClassChange
+					}
+				])
 			} else {
 				setData([])
 				setTotalPage(1)
@@ -180,6 +221,20 @@ const PaymentManagementPage = () => {
 		}
 	]
 
+	const handleSelecStatus = (status: number) => {
+		if (statusSelected !== status) {
+			setStatusSelected(status)
+			setFilter({ ...filters, type: status })
+		}
+	}
+
+	const scrollContainer = document.getElementById('tabcomp-custom-container-scroll-horizontal')
+
+	scrollContainer?.addEventListener('wheel', (evt) => {
+		evt.preventDefault()
+		scrollContainer.scrollLeft += evt.deltaY
+	})
+
 	return (
 		<>
 			<Head>
@@ -198,7 +253,7 @@ const PaymentManagementPage = () => {
 					<div className="w-full flex items-center justify-between">
 						<div className="flex items-center">
 							<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />
-							<Input.Search
+							{/* <Input.Search
 								className="primary-search max-w-[300px]"
 								onChange={(event) => {
 									if (event.target.value == '') {
@@ -207,7 +262,10 @@ const PaymentManagementPage = () => {
 								}}
 								onSearch={(event) => setFilter({ ...filters, pageIndex: 1, search: event })}
 								placeholder="Tìm kiếm"
-							/>
+							/> */}
+							<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container">
+								<TabComp data={billStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
+							</div>
 						</div>
 
 						<PaymentForm onRefresh={getData} />

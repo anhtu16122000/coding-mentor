@@ -16,6 +16,8 @@ import ModalRefundCRUD from './ModalRefundCRUD'
 import appConfigs from '~/appConfig'
 import Head from 'next/head'
 import { parseToMoney } from '~/common/utils/common'
+import { TabCompData } from '~/common/custom/TabComp/type'
+import TabComp from '~/common/custom/TabComp'
 
 export interface IRefundPageProps {}
 
@@ -75,6 +77,8 @@ export default function RefundPage(props: IRefundPageProps) {
 	const [optionStudent, setStudentOption] = useState<{ title: string; value: any }[]>([])
 	const [filterList, setFilterList] = useState([])
 	const [totalMoney, setTotalMoney] = useState()
+	const [resfundStatus, setResfundStatus] = useState<TabCompData[]>()
+	const [statusSelected, setStatusSelected] = useState<number>(0)
 
 	const theInformation = useSelector((state: RootState) => state.user.information)
 
@@ -111,12 +115,32 @@ export default function RefundPage(props: IRefundPageProps) {
 		try {
 			let res = await refundApi.getAll(todoApi)
 			if (res.status == 200) {
-				console.log(res.data)
-
-				const { totalPrice }: any = res.data
+				const { totalPrice, AllState, Opened, Approved, Canceled }: any = res.data
 				setDataSource(res.data.data)
 				setTotalMoney(totalPrice)
 				setTotalRow(res.data.totalRow)
+				setResfundStatus([
+					{
+						id: 0,
+						title: 'Tất cả',
+						value: AllState
+					},
+					{
+						id: 1,
+						title: 'Chờ duyệt',
+						value: Opened
+					},
+					{
+						id: 2,
+						title: 'Đã duyệt',
+						value: Approved
+					},
+					{
+						id: 3,
+						title: 'Không duyệt',
+						value: Canceled
+					}
+				])
 			}
 			if (res.status == 204) {
 				setDataSource([])
@@ -390,6 +414,16 @@ export default function RefundPage(props: IRefundPageProps) {
 	// if (isLoading.type == 'GET_ALL' && isLoading.status) {
 	// 	return <Skeleton active />
 	// }
+	const handleSelecStatus = (_value: number) => {
+		if (statusSelected !== _value) {
+			setStatusSelected(_value)
+			if (_value !== 0) {
+				setTodoApi({ ...todoApi, Status: `${_value}` })
+			} else {
+				setTodoApi({ ...todoApi, Status: '' })
+			}
+		}
+	}
 
 	return (
 		<>
@@ -403,7 +437,7 @@ export default function RefundPage(props: IRefundPageProps) {
 				TitleCard={
 					<div className="flex justify-start items-center">
 						<FilterBaseVer2 handleFilter={handleFilter} dataFilter={filterList} handleReset={() => setTodoApi({ ...initialParams })} />
-						<Input.Search
+						{/* <Input.Search
 							className="primary-search max-w-[300px]"
 							onChange={(event) => {
 								if (event.target.value == '') {
@@ -412,7 +446,8 @@ export default function RefundPage(props: IRefundPageProps) {
 							}}
 							onSearch={(event) => setTodoApi({ ...todoApi, pageIndex: 1, search: event })}
 							placeholder="Tìm kiếm"
-						/>
+						/> */}
+						<TabComp data={resfundStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
 					</div>
 				}
 				data={dataSource}

@@ -2,7 +2,7 @@ import { instance } from '../instance'
 
 const RestApi = {
 	get<T>(url: string, params: Object) {
-		return instance.get<TRestApiResult<T>>(`/api/${url}`, {
+		return instance.get<any>(`/api/${url}`, {
 			params
 		})
 	},

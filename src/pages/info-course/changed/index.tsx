@@ -122,6 +122,18 @@ const ChangedPage = () => {
 			)
 		},
 		{
+			title: 'Tiền đã thu',
+			dataIndex: 'Paid',
+			className: 'font-[600]',
+			width: 150
+		},
+		{
+			title: 'Ghi chú',
+			dataIndex: 'Note',
+			className: 'font-[600]',
+			width: 220
+		},
+		{
 			title: 'Trung tâm',
 			dataIndex: 'BranchName',
 			className: 'font-[600]',

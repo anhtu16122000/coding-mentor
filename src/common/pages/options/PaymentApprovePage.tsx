@@ -1,29 +1,33 @@
-import { Form, Input, Modal, Select, Tooltip } from 'antd'
+import { Form, Modal, Select, Tooltip } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { GiPayMoney } from 'react-icons/gi'
 import { useSelector } from 'react-redux'
 import * as yup from 'yup'
-import { branchApi } from '~/api/manage/branch'
-import { paymentMethodsApi } from '~/api/business/payment-method'
 import RestApi from '~/api/RestApi'
+import { paymentMethodsApi } from '~/api/business/payment-method'
+import { branchApi } from '~/api/manage/branch'
 import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'
+import FilterBase from '~/common/components/Elements/FilterBase'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 import PrimaryButton from '~/common/components/Primary/Button'
 import IconButton from '~/common/components/Primary/IconButton'
 import PrimaryTable from '~/common/components/Primary/Table'
 import { ButtonRefund } from '~/common/components/TableButton'
+import TabComp from '~/common/custom/TabComp'
+import { TabCompData } from '~/common/custom/TabComp/type'
 import { ShowNostis, ShowNoti } from '~/common/utils'
+import { parseToMoney } from '~/common/utils/common'
 import { _format } from '~/common/utils/format'
 import { RootState } from '~/store'
-import { parseToMoney } from '~/common/utils/common'
-import FilterBase from '~/common/components/Elements/FilterBase'
 
 const PAGE_SIZE = 10
 
+
 const PaymentApprovePage = () => {
-	const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '' }
+	const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '', 'baseSearch.status': 0 }
 	const [dataPaymentApprove, setDataPaymentApprove] = useState<any>()
+	const [paymentStatus, setPaymentStatus] = useState<TabCompData[]>()
+	const [statusSelected, setStatusSelected] = useState<number>(0)
 	const [isLoading, setIsLoading] = useState(false)
 	const [totalRow, setTotalRow] = useState(1)
 	const [totalMoney, setTotalMoney] = useState()
@@ -43,10 +47,32 @@ const PaymentApprovePage = () => {
 			setIsLoading(true)
 			const response = await RestApi.get<any>('/PaymentApprove', todoApi)
 			if (response.status == 200) {
-				const { data, totalRow, totalMoney }: any = response.data
+				const { data, totalRow, totalMoney, AllState, Opened, Approved, Canceled }: any = response.data
 				setDataPaymentApprove(data)
 				setTotalMoney(totalMoney)
 				setTotalRow(totalRow)
+				setPaymentStatus([
+					{
+						id: 0,
+						title: 'Tất cả',
+						value: AllState
+					},
+					{
+						id: 1,
+						title: 'Chờ duyệt',
+						value: Opened
+					},
+					{
+						id: 2,
+						title: 'Đã duyệt',
+						value: Approved
+					},
+					{
+						id: 3,
+						title: 'Không duyệt',
+						value: Canceled
+					}
+				])
 			} else {
 				setDataPaymentApprove([])
 			}
@@ -185,6 +211,13 @@ const PaymentApprovePage = () => {
 		setTodoApi({ ...initParamters })
 	}
 
+	const handleSelecStatus = (status: number) => {
+		if (statusSelected !== status) {
+			setStatusSelected(status)
+			setTodoApi({ ...todoApi, 'baseSearch.status': status })
+		}
+	}
+
 	return (
 		<PrimaryTable
 			loading={isLoading}
@@ -196,7 +229,7 @@ const PaymentApprovePage = () => {
 				<div className="flex items-center justify-between w-full">
 					<div className="flex items-center">
 						<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />
-						<Input.Search
+						{/* <Input.Search
 							className="primary-search max-w-[300px]"
 							onChange={(event) => {
 								if (event.target.value == '') {
@@ -205,7 +238,8 @@ const PaymentApprovePage = () => {
 							}}
 							onSearch={(event) => setTodoApi({ ...todoApi, pageIndex: 1, search: event })}
 							placeholder="Tìm kiếm"
-						/>
+						/> */}
+						<TabComp data={paymentStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
 					</div>
 
 					<div
