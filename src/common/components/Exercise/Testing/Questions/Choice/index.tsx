@@ -2,28 +2,24 @@ import { Checkbox, Radio, Space } from 'antd'
 import React from 'react'
 import { AiOutlineFileDone } from 'react-icons/ai'
 import { TbFileCertificate } from 'react-icons/tb'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '~/store'
 import ChoiceInputForm from '../../../Details/QuestionsForm/MultipleChoiceForm/Form'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import Router from 'next/router'
 import htmlParser from '~/common/components/HtmlParser'
+import { CgSelectO } from 'react-icons/cg'
+
+const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']
 
 const Choice = (props) => {
-	const { data, index, indexInExam, onRefresh, showEdit, isDoing, setCurrentQuestion, onRefreshNav } = props
+	const { data, index, indexInExam, onRefresh, showEdit, isDoing, setCurrentQuestion, onRefreshNav, isResult } = props
 
 	const onChange = (event, type: 'single' | 'multiple') => {
-		console.time('--- Select Answer')
-
+		if (!isDoing) {
+			return
+		}
 		if (type == 'single') {
 			insertDetails({ Id: event.target?.value })
 		}
-
-		if (type == 'multiple') {
-			//
-		}
-
-		console.timeEnd('--- Select Answer')
 	}
 
 	function isDisabled() {
@@ -46,11 +42,23 @@ const Choice = (props) => {
 		}
 
 		let flag = 0
-		data.IeltsAnswers.forEach((answer) => {
-			if (!!answer.Correct) {
-				flag++
-			}
-		})
+
+		if (!isResult) {
+			data.IeltsAnswers.forEach((answer) => {
+				if (!!answer.Correct) {
+					flag++
+				}
+			})
+		}
+
+		if (!!isResult) {
+			data.IeltsAnswerResults.forEach((answer) => {
+				if (!!answer.Correct) {
+					flag++
+				}
+			})
+		}
+
 		if (flag > 1) {
 			return 'multiple'
 		} else {
@@ -62,19 +70,34 @@ const Choice = (props) => {
 		let temp = []
 		let checked = []
 
-		params.forEach((element) => {
-			if (element?.Enable !== false) {
-				temp.push({
-					value: !!element.Id ? element.Id : element.ficaID,
-					label: element.Content
-				})
-				if (!isDoing) {
-					if (element?.Correct == true) {
-						checked.push(!!element.Id ? element.Id : element.ficaID)
+		if (!isResult) {
+			params.forEach((element) => {
+				if (element?.Enable !== false) {
+					temp.push({
+						value: !!element.Id ? element.Id : element.ficaID,
+						label: element.Content
+					})
+					if (!isDoing) {
+						if (element?.Correct == true) {
+							checked.push(!!element.Id ? element.Id : element.ficaID)
+						}
 					}
 				}
-			}
-		})
+			})
+		}
+
+		if (!!isResult) {
+			params.forEach((element) => {
+				temp.push({
+					value: !!element.Id ? element.Id : element.ficaID,
+					label: element.IeltsAnswerContent
+				})
+
+				if (element?.MyChoice == true) {
+					checked.push(!!element.Id ? element.Id : element.ficaID)
+				}
+			})
+		}
 
 		if (!!isDoing && !!data?.DoingTestDetails) {
 			for (let i = 0; i < data?.DoingTestDetails.length; i++) {
@@ -87,10 +110,19 @@ const Choice = (props) => {
 	}
 
 	function getChecked() {
-		if (!isDoing) {
+		if (!isDoing && !isResult) {
 			for (let i = 0; i < data.IeltsAnswers.length; i++) {
 				const element = data.IeltsAnswers[i]
 				if (element?.Correct) {
+					return element?.Id
+				}
+			}
+		}
+
+		if (!isDoing && !!isResult) {
+			for (let i = 0; i < data.IeltsAnswerResults.length; i++) {
+				const element = data.IeltsAnswerResults[i]
+				if (element?.MyChoice) {
 					return element?.Id
 				}
 			}
@@ -104,12 +136,29 @@ const Choice = (props) => {
 		return ''
 	}
 
-	const curGroup = useSelector((state: RootState) => state.newExam.currentGroup)
+	function getCorrect() {
+		let cor = []
+
+		if (!!isResult) {
+			for (let i = 0; i < data.IeltsAnswerResults.length; i++) {
+				const element = data.IeltsAnswerResults[i]
+				if (element?.MyChoice) {
+					cor.push(alphabet[i])
+				}
+			}
+		}
+
+		return cor.length > 0 ? cor.join(', ') : ''
+	}
 
 	// ----------------------------------------------------------------
 	// Doing test
 
 	async function insertDetails(answer) {
+		if (!isDoing) {
+			return
+		}
+
 		let items = []
 
 		if (getType() == 'single') {
@@ -152,8 +201,6 @@ const Choice = (props) => {
 						items.push({ Id: 0, IeltsAnswerId: answer[j], IeltsAnswerContent: '', Type: 0, Index: 0, Enable: true })
 					}
 				}
-
-				// items.push({ Id: 0, IeltsAnswerId: answer?.Id, IeltsAnswerContent: answer?.Content, Type: 0, Index: 0, Enable: true })
 			}
 		}
 
@@ -175,7 +222,7 @@ const Choice = (props) => {
 
 	return (
 		<div
-			onClick={() => setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id })}
+			onClick={() => setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionResultId: data?.Id })}
 			key={'question-' + data.Id}
 			id={'question-' + data.Id}
 			className={`cc-choice-warpper shadow-sm border-[1px] border-[#fff]`}
@@ -184,39 +231,60 @@ const Choice = (props) => {
 			<div className="exam-quest-wrapper none-selection">
 				<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
 					{!Router.asPath.includes('questions') && <div className="mr-[8px]">Câu {indexInExam}</div>}
+
 					<div className="cc-choice-point !ml-0">
 						<TbFileCertificate size={12} className="mr-1" />
 						<div className="mt-[1px]">{data?.Point} điểm</div>
 					</div>
+
 					{!!showEdit && (
 						<div className="mx-[8px]">
 							<ChoiceInputForm isEdit defaultData={data} onRefresh={onRefresh} />
 						</div>
 					)}
-					{data?.Correct > 1 && (
+
+					{!!isResult && (
 						<div className="cc-choice-correct-number">
 							<AiOutlineFileDone size={12} className="mr-1" />
-							<div className="mt-[1px]">{data?.Correct} câu đúng</div>
+							<div className="mt-[1px]">Câu đúng: {getCorrect()}</div>
 						</div>
 					)}
+
+					<div className="cc-choice-orange">
+						<CgSelectO size={12} className="mr-1" />
+						<div className="mt-[1px]">Đã chọn: {getCorrect()}</div>
+					</div>
 				</div>
 
-				<div>{htmlParser(data?.Content)}</div>
+				<div>{htmlParser(!isResult ? data?.Content : '')}</div>
 			</div>
 
 			{getType() == 'single' && (
 				<Radio.Group disabled={isDisabled()} className="mt-2" defaultValue={getChecked()} onChange={(event) => onChange(event, 'single')}>
 					<Space direction="vertical">
-						{data.IeltsAnswers.map((answer) => (
-							<Radio
-								checked={answer?.Correct}
-								key={'choice-' + index + '-' + answer.Id}
-								className="none-selection"
-								value={parseInt(answer.Id + '')}
-							>
-								{answer.Content}
-							</Radio>
-						))}
+						{!isResult &&
+							data.IeltsAnswers.map((answer) => (
+								<Radio
+									checked={answer?.Correct}
+									key={'choice-' + index + '-' + answer.Id}
+									className="none-selection"
+									value={parseInt(answer.Id + '')}
+								>
+									{answer.Content}
+								</Radio>
+							))}
+
+						{!!isResult &&
+							data.IeltsAnswerResults.map((answer) => (
+								<Radio
+									checked={answer?.MyChoice}
+									key={'choice-' + index + '-' + answer.Id}
+									className="none-selection"
+									value={parseInt(answer.Id + '')}
+								>
+									{answer.IeltsAnswerContent}
+								</Radio>
+							))}
 					</Space>
 				</Radio.Group>
 			)}
@@ -225,8 +293,8 @@ const Choice = (props) => {
 				<div className="custom-check-group">
 					<Checkbox.Group
 						className="none-selection"
-						options={getDataCheckbox(data.IeltsAnswers).option}
-						defaultValue={getDataCheckbox(data.IeltsAnswers, 1).checked}
+						options={getDataCheckbox(!isResult ? data.IeltsAnswers : data.IeltsAnswerResults).option}
+						defaultValue={getDataCheckbox(!isResult ? data.IeltsAnswers : data.IeltsAnswerResults, 1).checked}
 						onChange={(e) => insertDetails(e)}
 					/>
 				</div>
