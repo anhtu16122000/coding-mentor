@@ -5,7 +5,7 @@ import Router from 'next/router'
 import htmlParser from '~/common/components/HtmlParser'
 
 const MindMap = (props) => {
-	const { dataSource, getDoingQuestionGroup, onRefreshNav } = props
+	const { dataSource, getDoingQuestionGroup, onRefreshNav, isResult } = props
 
 	const [isFirst, setIsFirst] = useState<boolean>(true)
 	const [answerFormated, setAnswerFormated] = useState([])
@@ -25,11 +25,26 @@ const MindMap = (props) => {
 
 	function getALLAnswer() {
 		let temp = []
-		for (let i = 0; i < dataSource?.IeltsQuestions.length; i++) {
-			const question = dataSource?.IeltsQuestions[i]
-			for (let j = 0; j < question?.IeltsAnswers.length; j++) {
-				const answer = question?.IeltsAnswers[j]
-				temp.push({ ...answer, question: question })
+		if (!isResult) {
+			for (let i = 0; i < dataSource?.IeltsQuestions.length; i++) {
+				const question = dataSource?.IeltsQuestions[i]
+				for (let j = 0; j < question?.IeltsAnswers.length; j++) {
+					const answer = question?.IeltsAnswers[j]
+					temp.push({ ...answer, question: question })
+				}
+			}
+		}
+
+		if (!!isResult) {
+			for (let i = 0; i < dataSource?.IeltsQuestionResults.length; i++) {
+				const question = dataSource?.IeltsQuestionResults[i]
+
+				console.log('---- question?.IeltsAnswersResults: ', question)
+
+				for (let j = 0; j < question?.IeltsAnswerResults.length; j++) {
+					const answer = question?.IeltsAnswerResults[j]
+					temp.push({ ...answer, question: question })
+				}
 			}
 		}
 		setAnswerFormated(shuffleArray(temp))
@@ -38,7 +53,14 @@ const MindMap = (props) => {
 	// ----------------------------------------------------------------
 
 	function getSelectedAns(params, curAns) {
+		console.log('---- getSelectedAns: ', params)
+		console.log('---- getSelectedAns curAns: ', curAns)
+
 		if (!!params?.DoingTestDetails && params.DoingTestDetails[0]?.IeltsAnswerId == curAns) {
+			return true
+		}
+
+		if (isResult && params.IeltsAnswerResults[0]?.Id == curAns) {
 			return true
 		}
 
@@ -87,6 +109,10 @@ const MindMap = (props) => {
 		return temp
 	}
 
+	// isResult
+
+	console.log('---- dataSource: ', dataSource)
+
 	return (
 		<div className={`cc-choice-warpper relative shadow-sm border-[1px] border-[#fff]`}>
 			<div className="exam-quest-wrapper none-selection">
@@ -94,7 +120,7 @@ const MindMap = (props) => {
 					<div className="flex flex-row">
 						<div className="flex flex-col flex-shrink-0 border-r-[1px] border-[#ffffff]">
 							<div className="h-[46px]" />
-							{formatData(dataSource?.IeltsQuestions).map((exercise, exIndex) => {
+							{formatData(!isResult ? dataSource?.IeltsQuestions : dataSource?.IeltsQuestionResults).map((exercise, exIndex) => {
 								return (
 									<div className={`border-t-[1px] px-[8px] border-[#ffffff] h-[46px] flex all-center bg-[#f2f2f2] min-w-[110px]`}>
 										<div>{htmlParser(exercise?.Content)}</div>
@@ -112,13 +138,13 @@ const MindMap = (props) => {
 												ansIndex !== 0 ? 'border-l-[1px] border-[#ffffff]' : ''
 											}`}
 										>
-											<div className="text-[14px] text-[#fff]">{htmlParser(answer?.Content)}</div>
+											<div className="text-[14px] text-[#fff]">{htmlParser(answer?.Content || answer?.IeltsAnswerContent)}</div>
 										</div>
 									)
 								})}
 							</div>
 
-							{formatData(dataSource?.IeltsQuestions).map((exercise) => {
+							{formatData(!isResult ? dataSource?.IeltsQuestions : dataSource?.IeltsQuestionResults).map((exercise) => {
 								return (
 									<div className="flex items-center mt-[0.5px]">
 										<div className="inline-flex">
@@ -130,7 +156,7 @@ const MindMap = (props) => {
 														} h-[46px] bg-[#f2f2f2] flex all-center flex-shrink-0 w-[110px]`}
 													>
 														<Checkbox
-															onClick={() => insertDetails(exercise, answer?.Id)}
+															onClick={() => !isResult && insertDetails(exercise, answer?.Id)}
 															checked={getSelectedAns(exercise, answer?.Id)}
 															disabled={Router.asPath.includes('exam/detail')}
 															id={`mind-${exercise?.Id}-${answer?.Id}`}

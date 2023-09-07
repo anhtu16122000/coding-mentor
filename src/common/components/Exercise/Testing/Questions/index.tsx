@@ -137,6 +137,7 @@ const TestingQuestions = (props) => {
 					getDoingQuestionGroup={getDoingQuestionGroup}
 					setCurrentQuestion={setCurrentQuestion}
 					onRefreshNav={onRefreshNav}
+					isResult={isResult}
 				/>
 			)}
 		</>

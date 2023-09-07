@@ -14,11 +14,7 @@ const GroupContent: FC<TGroupContent> = (props) => {
 	const { is, curGroup, questionsInSection, className } = props
 
 	if (!curGroup?.Content) {
-		return (
-			<div className="all-center mt-[24px]">
-				<Empty description="Chưa có câu hỏi" />
-			</div>
-		)
+		return <></>
 	}
 
 	function getQuestIndex(Id) {

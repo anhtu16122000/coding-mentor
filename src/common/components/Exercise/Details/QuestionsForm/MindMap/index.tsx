@@ -125,7 +125,7 @@ const MindMapForm = () => {
 				</div>
 
 				<div className="mb-[32px] mindmap-scroll w-[calc(100vw/2-64px)] max-w-[calc(600px-64px)]">
-					<div className="flex items-center bg-[#5695ea] min-h-[46px]">
+					<div className="flex items-center min-h-[46px]">
 						{answerFormated.map((answer, ansIndex) => {
 							return (
 								<div
