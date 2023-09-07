@@ -8,17 +8,15 @@ import PrimaryTable from '../../Primary/Table'
 import moment from 'moment'
 import PrimaryTag from '../../Primary/Tag'
 import PrimaryTooltip from '../../PrimaryTooltip'
-import { FaEdit, FaFilePrescription, FaUserClock } from 'react-icons/fa'
+import { FaUserClock } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { TbWritingSign } from 'react-icons/tb'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import { log } from '~/common/utils'
-
 import Lottie from 'react-lottie-player'
 import warning from '~/common/components/json/100468-warning.json'
-import { studentHomeWorkApi } from '~/api/home-work/student'
 import { examResultApi } from '~/api/exam/result'
 import { FiEye } from 'react-icons/fi'
 
@@ -31,7 +29,6 @@ const listTodoApi = {
 
 const HomeWork = () => {
 	const router = useRouter()
-	//
 
 	const [data, setData] = useState([])
 	const [studentHomeWork, setStudentHomeWork] = useState([])
@@ -67,18 +64,15 @@ const HomeWork = () => {
 	const [loadingResult, setLoadingResult] = useState<boolean>(true)
 	async function getStudentHomeWork(HWId) {
 		setLoadingResult(true)
-		const ClassId = router.query?.class || null
 
 		let SId = userInfo?.RoleId == '3' ? userInfo?.UserInformationId : null
 
 		try {
-			const res = await examResultApi.getAll({ valueId: HWId, studentId: SId || null })
+			const res = await examResultApi.getAll({ valueId: HWId, studentId: SId || null, pageIndex: 1, pageSize: 9999 })
 			if (res.status == 200) {
 				setStudentHomeWork(res.data?.data)
-				// setTotalPage(res.data.totalRow)
 			} else {
 				setStudentHomeWork([])
-				// setTotalPage(1)
 			}
 		} catch (error) {
 		} finally {
@@ -244,6 +238,11 @@ const HomeWork = () => {
 			dataIndex: 'AveragePoint'
 		},
 		{
+			title: 'Ngày',
+			dataIndex: 'CreatedOn',
+			render: (value, item, index) => <>{moment(new Date(value)).format('HH:mm DD/MM/YYYY')}</>
+		},
+		{
 			title: 'Trạng thái',
 			dataIndex: 'StatusName',
 			render: (value, item, index) => {
@@ -281,11 +280,8 @@ const HomeWork = () => {
 		}
 	]
 
-	const [getingDraft, getGetingDraft] = useState<boolean>(false)
-
 	// -------- Take an exam
 	async function getDraft(ExamId, HWId) {
-		getGetingDraft(true)
 		try {
 			// 1 - Làm bài thử 2 - Làm bài hẹn test 3 - Bài tập về nhà 4 - Bộ đề
 			const res = await doingTestApi.getDraft({ valueId: HWId, type: 3 })
@@ -297,14 +293,11 @@ const HomeWork = () => {
 			}
 		} catch (error) {
 		} finally {
-			getGetingDraft(false)
 		}
 	}
 
 	const [examWarning, setExamWarning] = useState<boolean>(false)
 	const [currentData, setCurrentData] = useState<any>(null)
-
-	const [creatingTest, setCreatingTest] = useState<boolean>(false)
 
 	function gotoTest(params) {
 		if (params?.Id) {
@@ -312,18 +305,15 @@ const HomeWork = () => {
 		}
 	}
 	async function createDoingTest(ExamId, HWId) {
-		setCreatingTest(true)
 		try {
 			const res = await doingTestApi.post({ IeltsExamId: ExamId, ValueId: HWId, Type: 3 })
 
 			if (res?.status == 200) {
 				log.Green('Created test', res.data?.data)
 				gotoTest(res.data?.data)
-				// Make some noise...
 			}
 		} catch (error) {
 		} finally {
-			setCreatingTest(false)
 		}
 	}
 
@@ -378,18 +368,12 @@ const HomeWork = () => {
 						Học viên làm bài: <div className="inline text-[#1b73e8]">{histories?.Name}</div>
 					</div>
 				}
-				width={1000}
+				width={1200}
 				footer={null}
 				open={!!histories}
 				onCancel={() => setHistories(null)}
 			>
-				<PrimaryTable
-					loading={loadingResult}
-					// total={totalPage && totalPage}
-					data={studentHomeWork}
-					columns={resultColumns}
-					// onChangePage={(event: number) => setFilters({ ...filters, pageIndex: event })}
-				/>
+				<PrimaryTable loading={loadingResult} data={studentHomeWork} columns={resultColumns} />
 			</Modal>
 		</>
 	)

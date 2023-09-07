@@ -1,10 +1,15 @@
 import React from 'react'
 import { MdSettings } from 'react-icons/md'
-import { PrimaryTooltip } from '~/common/components'
 import PrimaryButton from '~/common/components/Primary/Button'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
+import PrimaryTooltip from '~/common/components/PrimaryTooltip'
 
-const ResultHeader = (props) => {
-	const { overview, setShowSetings, showSettings } = props
+const ResultDetailHeader = (props) => {
+	const { overview, loading, setShowSetings, showSettings, skills, currentSkill } = props
+
+	const globalState = useSelector((state: RootState) => state.takeAnExam)
+	const indexOfSkill = skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
 
 	return (
 		<div className="exam-23-header">
@@ -24,8 +29,24 @@ const ResultHeader = (props) => {
 				<div className="cc-text-14-500-blue flex items-center mt-[2px]">
 					<div className="all-center inline-flex cc-choice-point !ml-0">{overview?.QuestionsAmount} câu</div>
 					<div className="cc-choice-correct-number">{overview?.Point} điểm</div>
+					<div className="cc-choice-orange">
+						Kỹ năng: {indexOfSkill + 1}/{skills.length}
+					</div>
 				</div>
 			</div>
+
+			{!globalState?.submited && (
+				<div className="take-an-exam__right">
+					<div className="take-an-exam__countdown">
+						{loading && <>-- : -- : --</>}
+						{!loading && (
+							<>
+								Thời gian: {overview?.TimeSpent > 1 ? overview?.TimeSpent : 1} / {overview?.Time} phút
+							</>
+						)}
+					</div>
+				</div>
+			)}
 
 			<PrimaryButton onClick={() => setShowSetings(!showSettings)} className="mx-[16px]" type="button" background="yellow">
 				<MdSettings size={20} />
@@ -34,4 +55,4 @@ const ResultHeader = (props) => {
 	)
 }
 
-export default ResultHeader
+export default ResultDetailHeader

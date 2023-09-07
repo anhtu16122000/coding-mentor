@@ -542,3 +542,39 @@
 		z-index: 99;
 	}
 }
+
+.ex23-result-input {
+	padding: 2px 2px !important;
+	font-weight: 500 !important;
+	&.ex23-incorrect {
+		border-color: rgb(224, 3, 3) !important;
+		color: rgb(224, 3, 3) !important;
+	}
+	&.ex23-correct {
+		border-color: rgb(5, 118, 5) !important;
+		color: rgb(5, 118, 5) !important;
+	}
+}
+
+.ex23-num-quest-container {
+	display: inline-flex;
+	width: 28px;
+	height: 28px;
+	margin-bottom: 4px;
+	border-radius: 999px;
+	font-weight: 500;
+	background-color: #d5d5d5 !important;
+	color: #000;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.active-num {
+	background-color: #1b73e8 !important;
+	color: #fff;
+}
+.none-active-num {
+	background-color: #d5d5d5 !important;
+	color: #000;
+}

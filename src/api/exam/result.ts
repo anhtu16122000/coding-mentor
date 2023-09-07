@@ -6,6 +6,9 @@ export const examResultApi = {
 	getAll(params) {
 		return instance.get<IApiResultData<any[]>>(url, { params })
 	},
+	getQuestions(params) {
+		return instance.get<IApiResultData<any>>(`${url}/ielts-question-in-section-result`, { params })
+	},
 	getByID(ID: number) {
 		return instance.get<IApiResultData<any>>(`${url}/${ID}`)
 	},

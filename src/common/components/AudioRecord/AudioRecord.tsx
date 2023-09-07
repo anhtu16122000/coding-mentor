@@ -1,12 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Mic, Square } from 'react-feather'
 import { Spin, Tooltip } from 'antd'
 import Recorder from '~/common/utils/audio'
-// import { useWrap } from '~/context/wrap'
 import { toHHMMSS } from '~/common/utils/main-function'
 import { UploadFileApi } from '~/api/common/upload-image'
 import { ShowNostis } from '~/common/utils'
-// import { exerciseGroupApi } from '~/apiBase'
 
 // import Recorder from 'react-cc-audio-recorder'
 
@@ -17,7 +15,6 @@ const RecorderX = Recorder
 
 const AudioRecord = (props) => {
 	const { getLinkRecord, linkRecord, packageResult, dataQuestion, exerciseID, getActiveID, disabled } = props
-	// const { showNoti } = useWra()
 	const [loadingUpload, setLoadingUpload] = useState(false)
 	const [isRecord, setIsRecord] = useState(false)
 	const [isPause, setIsPause] = useState(false)
@@ -79,16 +76,14 @@ const AudioRecord = (props) => {
 			}
 		} catch (error) {
 			ShowNostis.error(error.message)
-
-			// getLinkRecord('http://monalms.monamedia.net/Upload/Images/08ea8174-b869-41e0-bf0b-1e987a0f665a.mp3')
 		} finally {
 			setLoadingUpload(false)
 		}
 	}
 
 	useEffect(() => {
-		Promise.resolve(navigator.mediaDevices.getUserMedia({ audio: true }))
-	}, [])
+		Promise.resolve(navigator.mediaDevices.getUserMedia({ audio: !disabled || true }))
+	}, [disabled])
 
 	return (
 		<div className="wrap-audio-record mt-2">
