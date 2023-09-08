@@ -245,7 +245,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 										<Select.Option value={1}>Dễ</Select.Option>
 										<Select.Option value={2}>Trung bình</Select.Option>
 										<Select.Option value={3}>Khó</Select.Option>
-										<Select.Option value={4}>Khó dữ lắm luôn</Select.Option>
+										{/* <Select.Option value={4}>Khó dữ lắm luôn</Select.Option> */}
 									</Select>
 								</Form.Item>
 
