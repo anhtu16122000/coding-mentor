@@ -45,33 +45,22 @@ function TagForm(props) {
 
 	return (
 		<>
-			<PrimaryButton
-				onClick={() => {
-					setIsModalVisible(true)
-				}}
-				type="button"
-				icon="add"
-				background="green"
-			>
+			<PrimaryButton onClick={() => setIsModalVisible(true)} type="button" icon="add" background="green">
 				Thêm mới
 			</PrimaryButton>
-			<Modal title={<>Thêm mới</>} open={isModalVisible} onCancel={() => setIsModalVisible(false)} footer={null}>
-				<div className="container-fluid">
-					<Form form={form} layout="vertical" onFinish={onSubmit}>
-						<div className="row">
-							<div className="col-12">
-								<InputTextField placeholder="Tên danh mục " name="Name" label="Tên Danh mục" isRequired rules={[yupSync]} />
-							</div>
+
+			<Modal width={400} title={<>Thêm mới</>} open={isModalVisible} onCancel={() => setIsModalVisible(false)} footer={null}>
+				<Form form={form} layout="vertical" onFinish={onSubmit}>
+					<InputTextField placeholder="Tên danh mục " name="Name" label="Tên danh mục" isRequired rules={[yupSync]} />
+
+					<div className="row">
+						<div className="col-12">
+							<PrimaryButton className="w-full" icon="save" background="blue" type="submit" disable={isLoading} loading={isLoading}>
+								Lưu
+							</PrimaryButton>
 						</div>
-						<div className="row">
-							<div className="col-12">
-								<PrimaryButton className="w-full" icon="save" background="blue" type="submit" disable={isLoading} loading={isLoading}>
-									Lưu
-								</PrimaryButton>
-							</div>
-						</div>
-					</Form>
-				</div>
+					</div>
+				</Form>
 			</Modal>
 		</>
 	)
