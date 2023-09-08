@@ -578,3 +578,126 @@
 	background-color: #d5d5d5 !important;
 	color: #000;
 }
+
+.the-fucking-mind {
+	p {
+		display: unset !important;
+	}
+}
+
+.mind-correct {
+	.ant-checkbox-checked .ant-checkbox-inner::after {
+		border: 4px solid #0baa0e !important;
+		border-top: 0px !important;
+		border-left: 0px !important;
+	}
+	.ant-checkbox-inner::after {
+		width: 8.71428571px;
+		height: 16.14285714px;
+		left: 26.5%;
+	}
+	.ant-checkbox-inner {
+		background-color: #0baa0e00;
+		border-color: #0baa0e00;
+		width: 30px;
+		height: 30px;
+	}
+}
+
+.mind-incorrect {
+	.ant-checkbox-checked .ant-checkbox-inner::after {
+		border: 4px solid #e00e0e !important;
+		border-top: 0px !important;
+		border-left: 0px !important;
+	}
+	.ant-checkbox-inner::after {
+		width: 8.71428571px;
+		height: 16.14285714px;
+		left: 26.5%;
+	}
+	.ant-checkbox-inner {
+		background-color: #e00e0e00;
+		border-color: #e00e0e00;
+		width: 30px;
+		height: 30px;
+	}
+}
+
+.mind-corr-ans {
+	.ant-checkbox-checked .ant-checkbox-inner::after {
+		border: 4px solid #1890ff !important;
+		border-top: 0px !important;
+		border-left: 0px !important;
+	}
+	.ant-checkbox-inner::after {
+		width: 8.71428571px;
+		height: 16.14285714px;
+		left: 26.5%;
+	}
+	.ant-checkbox-inner {
+		background-color: #188fff00;
+		border-color: #188fff00;
+		width: 30px;
+		height: 30px;
+	}
+}
+
+.mindmap-scroll {
+	.ant-checkbox-wrapper {
+		width: 100% !important;
+		height: 98%;
+		padding-bottom: 1% !important;
+		margin-top: -2px !important;
+		.ant-checkbox {
+			width: 100% !important;
+			height: 100%;
+			.ant-checkbox-inner {
+				background: #efefef;
+				border: none !important;
+				width: 100%;
+				height: 100%;
+			}
+		}
+		.ant-checkbox-inner::after {
+			left: 48% !important;
+			top: 48% !important;
+		}
+	}
+	.ant-checkbox-wrapper .ant-checkbox-inner::after {
+		border: 4px solid #1890ff;
+		border-top: 0px !important;
+		border-left: 0px !important;
+		width: 8.71428571px;
+		height: 16.14285714px;
+	}
+}
+
+.ex-mind-checkbox {
+	@apply flex items-center mt-[0.5px];
+	.antd-mind-check-border {
+		@apply border-l-[1px] border-[#ffffff];
+	}
+	.antd-mind-check {
+		@apply h-[46px] bg-[#f2f2f2] flex all-center flex-shrink-0 w-[110px];
+	}
+}
+
+.ex-mind-ans {
+	@apply min-h-[46px] w-[110px] bg-[#86ce86] all-center flex-shrink-0;
+}
+
+.ex-mind-ans-border {
+	@apply border-l-[1px] border-[#ffffff];
+}
+
+.ex-mind-ans-content {
+	@apply text-[14px] text-[#fff];
+}
+
+.ex23-mind {
+	@apply relative shadow-sm border-[1px] border-[#fff];
+}
+
+.ex23-mind-quest-wrapper {
+	@apply flex flex-col flex-shrink-0 border-r-[1px] border-[#ffffff];
+}

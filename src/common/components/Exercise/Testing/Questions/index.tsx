@@ -138,6 +138,7 @@ const TestingQuestions = (props) => {
 					setCurrentQuestion={setCurrentQuestion}
 					onRefreshNav={onRefreshNav}
 					isResult={isResult}
+					allQuestions={questions}
 				/>
 			)}
 		</>
