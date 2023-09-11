@@ -55,7 +55,7 @@ const TakeAnExamHeader = (props) => {
 		}
 	}
 
-	const indexOfSkill = skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
+	const indexOfSkill = !skills ? 0 : skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
 
 	return (
 		<div className="exam-23-header">
@@ -75,7 +75,7 @@ const TakeAnExamHeader = (props) => {
 					<div className="all-center inline-flex cc-choice-point !ml-0">{overview?.QuestionsAmount} câu</div>
 					<div className="cc-choice-correct-number">{overview?.Point} điểm</div>
 					<div className="cc-choice-orange">
-						Kỹ năng: {indexOfSkill + 1}/{skills.length}
+						Kỹ năng: {indexOfSkill + 1}/{!skills ? 0 : skills.length}
 					</div>
 				</div>
 			</div>

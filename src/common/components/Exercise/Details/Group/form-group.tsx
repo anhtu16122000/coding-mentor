@@ -1,6 +1,6 @@
 import { Modal, Form, Select, Input, Skeleton } from 'antd'
 import React, { FC, useEffect, useRef, useState } from 'react'
-import { ShowNoti, log, wait } from '~/common/utils'
+import { ShowNostis, ShowNoti, log, wait } from '~/common/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { setCurrentExerciseForm } from '~/store/globalState'
@@ -23,6 +23,8 @@ import CreateTyping from '../QuestionsForm/FillInBlankForm'
 import { useExamContext } from '~/common/components/Auth/Provider/exam'
 import { setQuestions } from '~/store/createQuestion'
 import CreateDragAndDrop from '../QuestionsForm/DragAndDropForm'
+import { tagCategoryApi } from '~/api/configs/tagCategory'
+import { tagApi } from '~/api/configs/tag'
 
 let fullEditor = false
 const quickMenu = 'bold italic underline strikethrough | fontfamily fontsize blocks | codesample | forecolor backcolor | customInsertButton'
@@ -41,6 +43,26 @@ const GroupForm: FC<IGroupForm> = (props) => {
 	const [loading, setLoading] = useState(false)
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [showEditor, setShowEditor] = useState<boolean>(true)
+
+	const [tags, setTags] = useState([])
+
+	const getAllTags = async () => {
+		try {
+			const response = await tagApi.getAllTagByTagCeteId({ pageIndex: 1, pageSize: 99999, type: 2 })
+			if (response.status == 200) {
+				const { data, totalRow } = response.data
+				setTags(data)
+			} else {
+				setTags([])
+			}
+		} catch (error) {
+			ShowNostis.error(error.message)
+		}
+	}
+
+	useEffect(() => {
+		getAllTags()
+	}, [])
 
 	useEffect(() => {
 		changeType()
@@ -130,13 +152,27 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		const isTyping = currentType == QUESTION_TYPES.FillInTheBlank
 		const isDrag = currentType == QUESTION_TYPES.DragDrop
 
+		// TagIds
+
+		const xTags = !values?.TagIds ? '' : values?.TagIds.join(',')
+
 		if (checkSubmit == '') {
 			setLoading(true)
 			if (!isEdit && !isChangeInfo) {
-				postGroup({ ...values, IeltsSectionId: section.Id, IeltsQuestions: isTyping || isDrag ? questionWithAnswers : exercises })
+				postGroup({
+					...values,
+					TagIds: xTags,
+					IeltsSectionId: section.Id,
+					IeltsQuestions: isTyping || isDrag ? questionWithAnswers : exercises
+				})
 			}
 			if (!!isEdit || !!isChangeInfo) {
-				putGroup({ ...values, Id: defaultData.Id, IeltsQuestions: isTyping || isDrag ? questionWithAnswers : exercises })
+				putGroup({
+					...values,
+					TagIds: xTags,
+					Id: defaultData.Id,
+					IeltsQuestions: isTyping || isDrag ? questionWithAnswers : exercises
+				})
 			}
 		} else {
 			setTextError(checkSubmit)
@@ -150,7 +186,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		if (!!onOpen) onOpen()
 		setQuestionWithAnswers([...defaultData?.IeltsQuestions])
 		dispatch(setCurrentExerciseForm([]))
-		form.setFieldsValue({ ...defaultData })
+		form.setFieldsValue({ ...defaultData, TagIds: defaultData?.TagIds.split(',') })
 		setCurrentType(defaultData?.Type)
 		dispatch(setCurrentExerciseForm([...defaultData.IeltsQuestions]))
 
@@ -206,7 +242,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 			<Modal
 				centered
 				title={isEdit ? 'Cập nhật nhóm' : 'Thêm nhóm mới'}
-				width={currentType! == QUESTION_TYPES.FillInTheBlank ? 1200 : '98%'}
+				width={currentType! == QUESTION_TYPES.FillInTheBlank ? '98%' : '98%'}
 				open={isModalVisible}
 				onCancel={() => !loading && setIsModalVisible(false)}
 				footer={
@@ -245,13 +281,16 @@ const GroupForm: FC<IGroupForm> = (props) => {
 										<Select.Option value={1}>Dễ</Select.Option>
 										<Select.Option value={2}>Trung bình</Select.Option>
 										<Select.Option value={3}>Khó</Select.Option>
-										{/* <Select.Option value={4}>Khó dữ lắm luôn</Select.Option> */}
 									</Select>
 								</Form.Item>
 
-								<Form.Item className="col-span-2" label="Từ khóa" name="Tags" rules={formNoneRequired}>
-									<Select disabled={loading} className="primary-input primary-select">
-										<Select.Option value={QUESTION_TYPES.MultipleChoice}>Chưa gắn api lấy tag</Select.Option>
+								<Form.Item className="col-span-2" label="Từ khóa" name="TagIds" rules={formNoneRequired}>
+									<Select mode="tags" disabled={loading} className="primary-input primary-select">
+										{tags.map((tag, index) => (
+											<Select.Option key={`te-${tag?.Id}`} id={`i-te-${tag?.Id}`} value={tag?.Id + ''}>
+												{tag?.Name}
+											</Select.Option>
+										))}
 									</Select>
 								</Form.Item>
 							</div>
@@ -259,7 +298,6 @@ const GroupForm: FC<IGroupForm> = (props) => {
 							{showEditor && (
 								<Form.Item className="col-span-4 mb-0" label="Nội dung" name="Content">
 									<PrimaryEditor
-										// onInit={editorInit}
 										noFullscreen
 										isFillInBlank={currentType == QUESTION_TYPES.FillInTheBlank || currentType == QUESTION_TYPES.DragDrop}
 										id={`content-${new Date().getTime()}`}

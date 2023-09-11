@@ -26,7 +26,7 @@ const TakeAnExamController = (props) => {
 
 	const { currentSection, setCurrentSection, getSections } = props
 
-	const indexOfSkill = skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
+	const indexOfSkill = !skills ? 0 : skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
 
 	function handleChangeSkill(param) {
 		if (param == 'up') {
@@ -49,11 +49,11 @@ const TakeAnExamController = (props) => {
 			<div className="exam-23-skills">
 				<SkillLoading loading={loading} />
 
-				{showSkills && (
+				{!!skills && showSkills && (
 					<div className="flex items-center pb-[16px] scroll-h w-full">
 						<div className="flex-1 flex flex-col">
 							<div>
-								<div className="tae-skill-name">Kỹ năng: {skills[indexOfSkill]?.Name}</div>
+								<div className="tae-skill-name">Kỹ năng: {!skills ? '' : skills[indexOfSkill]?.Name}</div>
 								<div className="mt-[4px] flex items-center">
 									{skills[indexOfSkill]?.Audio && (
 										<div onClick={(e) => setCurAudio(skills[indexOfSkill])} className="ex-23-btn-play-audio">
@@ -84,7 +84,7 @@ const TakeAnExamController = (props) => {
 				)}
 			</div>
 
-			{skills.length != 0 && !!currentSkill?.Id && (
+			{!!skills && skills.length != 0 && !!currentSkill?.Id && (
 				<>
 					{showSkills && showSections && (
 						<div className="mt-[-16px]">

@@ -711,9 +711,15 @@ function TakeAnExamDetail() {
 			if (response.status == 200) {
 				setOverview(response.data.data)
 				setSkills(response.data.data?.IeltsSkills)
+
 				dispatch(setSuperOverview(response.data.data))
 				if (response.data.data?.IeltsSkills?.length > 0) {
 					setCurrentSkill(response.data.data?.IeltsSkills[0])
+				}
+
+				if (!response.data.data?.IeltsSkills && Router.asPath.includes('take-an-exam')) {
+					ShowNostis.error('Đề không có nội dung')
+					setBlocked('Đề không có nội dung')
 				}
 			} else {
 				setOverview(null)

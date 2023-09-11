@@ -282,7 +282,7 @@ export const AdminChildMenu = [
 				ItemType: 'single',
 				Key: '/exam',
 				Route: '/exam',
-				Text: 'Quản lý đề thi',
+				Text: 'Ngân hàng đề',
 				Icon: ''
 			}
 		]
