@@ -5,6 +5,7 @@ import Recorder from '~/common/utils/audio'
 import { toHHMMSS } from '~/common/utils/main-function'
 import { UploadFileApi } from '~/api/common/upload-image'
 import { ShowNostis } from '~/common/utils'
+import Router from 'next/router'
 
 // import Recorder from 'react-cc-audio-recorder'
 
@@ -82,7 +83,9 @@ const AudioRecord = (props) => {
 	}
 
 	useEffect(() => {
-		Promise.resolve(navigator.mediaDevices.getUserMedia({ audio: !disabled || true }))
+		if (Router.asPath.includes('/take-an-exam')) {
+			Promise.resolve(navigator.mediaDevices.getUserMedia({ audio: !disabled || true }))
+		}
 	}, [disabled])
 
 	return (
