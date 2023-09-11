@@ -30,3 +30,5 @@ export const examApi = {
 		return instance.post(`${url}/${data?.sectionId}/addRandom/${data?.amount}/type/${data?.type}`, data)
 	}
 }
+
+// IeltsExamResult

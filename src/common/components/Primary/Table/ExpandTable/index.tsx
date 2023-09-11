@@ -5,14 +5,6 @@ import EmptyData from '~/common/components/EmptyData'
 import { _format } from '~/common/utils'
 
 const ExpandTable = (props) => {
-	console.log('---- CHẠY DÔ TABLE: ', props)
-
-	if (!props || !props?.dataSource) {
-		return <></>
-	}
-
-	console.log('------ CHẠY QUA CÁI LOG')
-
 	const [state, setState] = useState({ selectedRowKeys: [] })
 	const [dataSource, setDataSource] = useState([])
 	const [rowKeys, setRowKeys] = useState([{ currentPage: 1, listKeys: [] }])
@@ -75,6 +67,8 @@ const ExpandTable = (props) => {
 				item.key = index.toString()
 			})
 			setDataSource(dataClone)
+		} else {
+			setDataSource([])
 		}
 	}, [props?.dataSource])
 
@@ -159,8 +153,8 @@ const ExpandTable = (props) => {
 								pageSize: 30,
 								pageSizeOptions: ['30'],
 								onShowSizeChange: onShowSizeChange,
-								total: props?.totalPage && props?.totalPage,
-								showTotal: () => <div className="font-weight-black">Tổng cộng: {props?.totalPage}</div>,
+								total: !!props?.totalPage ? props?.totalPage : 1,
+								showTotal: () => <div className="font-weight-black">Tổng cộng: {props?.totalPage || 1}</div>,
 								onChange: (pageNumber, pageSize) => changePagination(pageNumber, pageSize),
 								current: props?.currentPage && props?.currentPage
 							}}

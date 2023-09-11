@@ -28,7 +28,7 @@ import ExamProvider from '../../../Auth/Provider/exam'
 import { QUESTION_TYPES } from '~/common/libs'
 import DragHeader from '../Components/drag-header'
 import GroupContent from '../Components/group-content'
-import { IoClose, IoCloseSharp } from 'react-icons/io5'
+import { IoClose, IoCloseSharp, IoPaperPlaneOutline } from 'react-icons/io5'
 import CurrentGroupController from '../Components/current-group-controller'
 
 import { AiFillControl } from 'react-icons/ai'
@@ -40,11 +40,19 @@ import Lottie from 'react-lottie-player'
 import lottieFile from '~/common/components/json/animation_lludr9cs.json'
 import timer from '~/common/components/json/131525-timer.json'
 import CountdownTimer from '../Countdown'
-import { setGlobalCurGroup, setSuperOverview } from '~/store/take-an-exam'
+import { closeSubmitModal, openSubmitModal, setGlobalCurGroup, setSubmited, setSuperOverview, setTimeOut } from '~/store/take-an-exam'
 import TakeAnExamHeader from './Header'
 import TakeAnExamController from './Controller'
 import AudioPlayer from '../AudioPlayer'
 import MainAudioPlayer from '../AudioPlayer'
+import { FaTelegramPlane } from 'react-icons/fa'
+
+import submitAni from '~/common/components/json/110944-plane.json'
+import successAni from '~/common/components/json/134369-sucess.json'
+import timeupAni from '~/common/components/json/6640-times-up.json'
+import { examResultApi } from '~/api/exam/result'
+import { IoMdClose } from 'react-icons/io'
+import { EyeOutlined } from '@ant-design/icons'
 
 let curDragAnswers = []
 let dragSelectedAnswers = []
@@ -411,7 +419,7 @@ function TakeAnExamDetail() {
 	const [timeStamp, setTimeStamp] = useState(0)
 
 	useEffect(() => {
-		// console.log('--- dragAns: ', dragAns)
+		console.log('--- dragAns: ', dragAns)
 	}, [dragAns])
 
 	async function formatInput() {
@@ -491,16 +499,23 @@ function TakeAnExamDetail() {
 
 		if (is.drag) {
 			let tamp = []
-			let count = 1
 
-			for (let i = 0; i < curGroup?.IeltsQuestions.length; i++) {
-				const element = curGroup?.IeltsQuestions[i]
-				for (let j = 0; j < element?.IeltsAnswers.length; j++) {
-					const ans = element?.IeltsAnswers[j]
-					tamp.push({ ...ans, Question: { ...element } })
-					count++
-				}
+			for (let iQuest = 0; iQuest < curGroup?.IeltsQuestions.length; iQuest++) {
+				const element = curGroup?.IeltsQuestions[iQuest]
+
+				// for (let jAns = 0; jAns < element?.IeltsAnswers.length; jAns++) {
+				// 	const newFuckingAns = { ...element?.IeltsAnswers[jAns], Question: { ...element } }
+
+				// 	tamp.push({ aNum: jAns, ...newFuckingAns })
+				// }
+
+				// element?.IeltsAnswers.forEarch
+				element?.IeltsAnswers.forEach((i, j) => {
+					tamp.push({ aNum: j, ...{ ...element?.IeltsAnswers[j], Question: { ...element } } })
+				})
 			}
+
+			console.log('---- tamp: ', tamp)
 
 			curDragAnswers = tamp
 
@@ -696,9 +711,15 @@ function TakeAnExamDetail() {
 			if (response.status == 200) {
 				setOverview(response.data.data)
 				setSkills(response.data.data?.IeltsSkills)
+
 				dispatch(setSuperOverview(response.data.data))
 				if (response.data.data?.IeltsSkills?.length > 0) {
 					setCurrentSkill(response.data.data?.IeltsSkills[0])
+				}
+
+				if (!response.data.data?.IeltsSkills && Router.asPath.includes('take-an-exam')) {
+					ShowNostis.error('Đề không có nội dung')
+					setBlocked('Đề không có nội dung')
 				}
 			} else {
 				setOverview(null)
@@ -713,6 +734,35 @@ function TakeAnExamDetail() {
 	function handleChangeSkill(params) {
 		setCurrentSection(null)
 		setCurrentSkill(params)
+	}
+
+	const globalState = useSelector((state: RootState) => state.takeAnExam)
+
+	const [submiting, setSubmiting] = useState<boolean>(false)
+	const [submitData, setSubmitData] = useState<any>(null)
+	const [successModal, setSuccessModal] = useState<boolean>(false)
+
+	async function submitAll() {
+		if (!submiting) {
+			console.time('Gọi api nộp bài hết')
+			setSubmiting(true)
+			try {
+				const res = await examResultApi.post({ DoingTestId: parseInt(router.query?.exam + '') })
+				if (res.status == 200) {
+					setSubmitData(res.data?.data)
+					dispatch(closeSubmitModal())
+					dispatch(setSubmited(true))
+					dispatch(setTimeOut(false))
+					setSuccessModal(true)
+				}
+			} catch (error) {
+				const thisErr = error?.message || error || 'Lỗi không xác định'
+				ShowNostis.error(thisErr)
+			} finally {
+				setSubmiting(false)
+				console.timeEnd('Gọi api nộp bài hết')
+			}
+		}
 	}
 
 	return (
@@ -789,7 +839,7 @@ function TakeAnExamDetail() {
 
 				{showQuestions && (
 					<div className="exam-23-footer">
-						<div className="flex flex-col items-start">
+						<div className="flex flex-col flex-1 items-start">
 							<div onClick={toggleQuestions} className="ex-23-f-button">
 								<MdArrowForwardIos className="rotate-90 mr-[8px]" />
 								<div className="font-[500]">Câu hỏi ({questionsInSection.length})</div>
@@ -823,6 +873,16 @@ function TakeAnExamDetail() {
 								{questionsInSection.length == 0 && <div className="text-[red]">Chưa có câu hỏi</div>}
 							</div>
 						</div>
+
+						{router?.asPath.includes('take-an-exam') && (
+							<div
+								onClick={() => dispatch(openSubmitModal())}
+								className="h-[34px] cursor-pointer no-select px-[8px] rounded-[6px] all-center text-[#fff] bg-[#1b73e8] hover:bg-[#1867cf]"
+							>
+								<IoPaperPlaneOutline color="#fff" size={20} />
+								<div className="ml-[4px]">Nộp bài</div>
+							</div>
+						)}
 					</div>
 				)}
 
@@ -874,6 +934,58 @@ function TakeAnExamDetail() {
 						<div className="text-[#000] font-[500]">Đang xử lý...</div>
 					</div>
 				)}
+
+				<Modal
+					width={500}
+					closable={false}
+					open={globalState.submitVisible}
+					footer={
+						<div className="tae-submit-footer">
+							<PrimaryButton onClick={() => !submiting && dispatch(closeSubmitModal())} background="red" icon="cancel" type="button">
+								Huỷ
+							</PrimaryButton>
+
+							<PrimaryButton className="ml-[8px]" onClick={submitAll} background="blue" icon="none" type="button">
+								<FaTelegramPlane size={20} />
+								<div className="tae-submit-title">{submiting ? 'Đang nộp bài..' : 'Nộp ngay'}</div>
+							</PrimaryButton>
+						</div>
+					}
+				>
+					<div className="tae-submit-modal">
+						<Lottie loop animationData={submitAni} play className="animation-submit" />
+						<div>Bạn muốn nộp bài ngay?</div>
+					</div>
+				</Modal>
+
+				<Modal
+					width={500}
+					closable={false}
+					open={successModal}
+					footer={
+						<div className="tae-submit-footer">
+							<PrimaryButton onClick={() => window.close()} background="red" icon="cancel" type="button">
+								Thoát ngay
+							</PrimaryButton>
+
+							<PrimaryButton
+								className="ml-[8px]"
+								onClick={() => Router.replace(`/result/${submitData?.ID}`)}
+								background="blue"
+								icon="eye"
+								type="button"
+							>
+								Xem kết quả
+							</PrimaryButton>
+						</div>
+					}
+				>
+					<div className="tae-submit-modal">
+						<Lottie loop animationData={successAni} play style={{ width: 300, height: 300, marginTop: 0 }} />
+						{!!globalState.timeout && <div style={{ marginTop: 0 }}>Đã hết giờ, hệ thống đã tự nộp bài</div>}
+						{!globalState.timeout && <div style={{ marginTop: 0 }}>Nộp bài thành công</div>}
+					</div>
+				</Modal>
 			</div>
 		</ExamProvider>
 	)

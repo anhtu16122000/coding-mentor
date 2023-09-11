@@ -7,6 +7,9 @@ export const ieltsExamApi = {
 	getAll(params: IGetExam) {
 		return instance.get<IApiResultData<TIeltsExam[]>>(url, { params })
 	},
+	getOptions() {
+		return instance.get<IApiResultData<TIeltsExam[]>>(url + '/option')
+	},
 	getByID(ID: number) {
 		return instance.get<IApiResultData<TIeltsExam>>(`${url}/${ID}`)
 	},

@@ -59,12 +59,12 @@ const ListClassPro = () => {
 	const [loading, setLoading] = useState(false)
 	const dispatch = useDispatch()
 
-	const userInfo = useSelector((state: RootState) => state.user.information)
 	const state = useSelector((state: RootState) => state)
 
 	const listClassState = useSelector((state: RootState) => state.class.listClass)
 	const totalClassState = useSelector((state: RootState) => state.class.totalClass)
 
+	const userInfo = useSelector((state: RootState) => state.user.information)
 	const is = {
 		parent: userInfo?.RoleId === '8',
 		admin: userInfo?.RoleId === '1'

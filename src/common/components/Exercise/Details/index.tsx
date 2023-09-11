@@ -443,6 +443,17 @@ function ExamDetail() {
 			<div className="exam-23-container">
 				<div className="cc-exam-detail z-10 !w-full bg-[#fff]">
 					<div className="exam-23-header">
+						<PrimaryTooltip id="fucking-home" content="Trang chủ" place="right">
+							<a href="/">
+								<div className="pl-[16px] hidden w600:block">
+									<img src="/shot-logo.png" className="w-auto h-[46px]" />
+								</div>
+								<div className="pl-[16px] block w600:hidden">
+									<img src="/mini-logo.png" className="w-auto h-[36px]" />
+								</div>
+							</a>
+						</PrimaryTooltip>
+
 						<div className="ml-[16px] flex-1 pr-2">
 							<div className="cc-text-16-700 in-1-line">{examInfo?.Name}</div>
 							<div className="cc-text-14-500-blue flex items-center mt-[2px]">

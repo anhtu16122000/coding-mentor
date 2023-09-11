@@ -28,7 +28,7 @@ const OptionsList = [
 const PAGE_SIZE = 20
 
 function TagsPage() {
-	const [dataTags, setdataTags] = useState<any>()
+	const [dataTags, setdataTags] = useState<any>([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [activeTab, setActiveTab] = useState(1)
 	const [totalRow, setTotalRow] = useState(1)
@@ -37,7 +37,7 @@ function TagsPage() {
 	const handleDelete = async (tagId) => {
 		try {
 			const res = await tagCategoryApi.delete(tagId)
-			if (res.status === 200) {
+			if (res.status == 200) {
 				getAllTags()
 				ShowNoti('success', res.data.message)
 				return res
@@ -54,28 +54,18 @@ function TagsPage() {
 			render: (text) => <p className="font-weight-black">{text}</p>
 		},
 		{
-			title: 'Dạng',
-			dataIndex: 'TypeName',
-			render: (text) => <p className="font-weight-black">{text}</p>
-		},
-		{
 			title: 'Người tạo',
 			dataIndex: 'ModifiedBy'
 		},
 		{
 			title: 'Ngày tạo',
 			dataIndex: 'ModifiedOn',
-			render: (date) => moment(date).format('DD/MM/YYYY')
+			render: (date) => moment(date).format('HH:mm DD/MM/YYYY')
 		},
-
 		{
 			title: 'Chức năng',
 			render: (data) => {
-				return (
-					<>
-						<DeleteTableRow text={data.Name} handleDelete={() => handleDelete(data.Id)} />
-					</>
-				)
+				return <DeleteTableRow text={data.Name} handleDelete={() => handleDelete(data.Id)} />
 			}
 		}
 	]
@@ -108,31 +98,33 @@ function TagsPage() {
 				<title>{appConfigs.appName} | Cấu hình từ khoá</title>
 			</Head>
 
-			<ExpandTable
-				loading={isLoading}
-				total={totalRow}
-				onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
-				Extra={<TagForm OptionsList={OptionsList} onAddTag={() => getAllTags()} activeTab={activeTab} />}
-				dataSource={dataTags}
-				columns={columns}
-				pageSize={PAGE_SIZE}
-				TitleCard={
-					<div className="w-[300px] mb-[-20px]">
-						<Tabs
-							defaultActiveKey="1"
-							type="card"
-							items={OptionsList.map((item, i) => {
-								return { label: item.title, key: item.value + '' }
-							})}
-							onChange={(tabIndx) => {
-								setActiveTab(+tabIndx)
-								setTodoApi((pre) => ({ ...pre, type: +tabIndx }))
-							}}
-						/>
-					</div>
-				}
-				expandable={(data) => <TagList tagCategoryId={data.Id} />}
-			/>
+			<div className="max-w-[1200px] w-full">
+				<ExpandTable
+					loading={isLoading}
+					total={totalRow}
+					onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
+					Extra={<TagForm OptionsList={OptionsList} onAddTag={() => getAllTags()} activeTab={activeTab} />}
+					dataSource={dataTags}
+					columns={columns}
+					pageSize={PAGE_SIZE}
+					TitleCard={
+						<div className="w-[300px] mb-[-20px]">
+							<Tabs
+								defaultActiveKey="1"
+								type="card"
+								items={OptionsList.map((item, i) => {
+									return { label: item.title, key: item.value + '' }
+								})}
+								onChange={(tabIndx) => {
+									setActiveTab(+tabIndx)
+									setTodoApi((pre) => ({ ...pre, type: +tabIndx }))
+								}}
+							/>
+						</div>
+					}
+					expandable={(data) => <TagList tagCategoryId={data.Id} />}
+				/>
+			</div>
 		</>
 	)
 }

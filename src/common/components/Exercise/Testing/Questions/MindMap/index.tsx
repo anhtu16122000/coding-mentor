@@ -1,11 +1,40 @@
-import { Checkbox } from 'antd'
+import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import Router from 'next/router'
-import htmlParser from '~/common/components/HtmlParser'
+import { AiOutlineFullscreen } from 'react-icons/ai'
+import MindMapAnnotate from './Annotate'
+import MindMapFullLoading from './FullLoading'
+import QuestionContent from './QuestionContent'
+import MindMapCheckBox from './CustomCheckbox'
+import MindMapAnswer from './Answer'
+
+function getQuestIndex(questions, curQuest) {
+	if (Router.asPath.includes('questions')) {
+		return null
+	}
+
+	const theIndex = questions.findIndex((question) => question?.IeltsQuestionId == curQuest?.Id)
+	if (theIndex !== -1) {
+		return questions[theIndex]
+	}
+	return ''
+}
+
+function getResultQuestIndex(questions, curQuest) {
+	if (Router.asPath.includes('questions')) {
+		return null
+	}
+
+	const theIndex = questions.findIndex((question) => question?.IeltsQuestionResultId == curQuest?.Id)
+	if (theIndex !== -1) {
+		return questions[theIndex]
+	}
+	return ''
+}
 
 const MindMap = (props) => {
-	const { dataSource, getDoingQuestionGroup, onRefreshNav } = props
+	const { dataSource, getDoingQuestionGroup, onRefreshNav, isResult, allQuestions } = props
 
 	const [isFirst, setIsFirst] = useState<boolean>(true)
 	const [answerFormated, setAnswerFormated] = useState([])
@@ -25,24 +54,53 @@ const MindMap = (props) => {
 
 	function getALLAnswer() {
 		let temp = []
-		for (let i = 0; i < dataSource?.IeltsQuestions.length; i++) {
-			const question = dataSource?.IeltsQuestions[i]
-			for (let j = 0; j < question?.IeltsAnswers.length; j++) {
-				const answer = question?.IeltsAnswers[j]
-				temp.push({ ...answer, question: question })
+		if (!isResult) {
+			for (let i = 0; i < dataSource?.IeltsQuestions.length; i++) {
+				const question = dataSource?.IeltsQuestions[i]
+				for (let j = 0; j < question?.IeltsAnswers.length; j++) {
+					const answer = question?.IeltsAnswers[j]
+					temp.push({ ...answer, question: question })
+				}
+			}
+		}
+
+		if (!!isResult) {
+			for (let i = 0; i < dataSource?.IeltsQuestionResults.length; i++) {
+				const question = dataSource?.IeltsQuestionResults[i]
+
+				for (let j = 0; j < question?.IeltsAnswerResults.length; j++) {
+					const answer = question?.IeltsAnswerResults[j]
+					temp.push({ ...answer, question: question })
+				}
 			}
 		}
 		setAnswerFormated(shuffleArray(temp))
 	}
 
-	// ----------------------------------------------------------------
-
 	function getSelectedAns(params, curAns) {
 		if (!!params?.DoingTestDetails && params.DoingTestDetails[0]?.IeltsAnswerId == curAns) {
-			return true
+			return { checked: true }
 		}
 
-		return false
+		if (isResult && params.IeltsAnswerResults) {
+			let temp = null
+
+			for (let p = 0; p < params.IeltsAnswerResults.length; p++) {
+				const element = params.IeltsAnswerResults[p]
+
+				if (element?.Correct) {
+					temp = element
+				}
+			}
+
+			if (params?.AnswerOfMindmap == curAns) {
+				return { correct: temp, checked: true }
+			} else {
+				return { correct: temp, checked: false }
+			}
+		}
+
+		return { checked: false }
 	}
 
 	const [loading, setLoading] = useState<boolean>(false)
@@ -60,11 +118,7 @@ const MindMap = (props) => {
 			console.log('-------- PUT Mindmap items: ', items)
 
 			try {
-				await doingTestApi.insertDetail({
-					DoingTestId: parseInt(Router?.query?.exam + ''),
-					IeltsQuestionId: quest.Id,
-					Items: [...items]
-				})
+				await doingTestApi.insertDetail({ DoingTestId: parseInt(Router?.query?.exam + ''), IeltsQuestionId: quest.Id, Items: [...items] })
 			} catch (error) {
 			} finally {
 				getDoingQuestionGroup()
@@ -75,84 +129,144 @@ const MindMap = (props) => {
 		setLoading(false)
 	}
 
+	const [dataFormated, setDataFormated] = useState([])
+
 	function formatData(param) {
 		let temp = []
 		let count = 1 // Renew Index
 		param.forEach((item) => {
-			if (item.Enable !== false) {
+			if (item.Enable != false) {
 				temp.push({ ...item, Index: count })
 			}
 			count++
 		})
+		setDataFormated(temp)
 		return temp
 	}
 
-	return (
-		<div className={`cc-choice-warpper relative shadow-sm border-[1px] border-[#fff]`}>
-			<div className="exam-quest-wrapper none-selection">
-				<div className="flex flex-col ">
-					<div className="flex flex-row">
-						<div className="flex flex-col flex-shrink-0 border-r-[1px] border-[#ffffff]">
-							<div className="h-[46px]" />
-							{formatData(dataSource?.IeltsQuestions).map((exercise, exIndex) => {
-								return (
-									<div className={`border-t-[1px] px-[8px] border-[#ffffff] h-[46px] flex all-center bg-[#f2f2f2] min-w-[110px]`}>
-										<div>{htmlParser(exercise?.Content)}</div>
-									</div>
-								)
-							})}
-						</div>
+	const [visible, setVisible] = useState<boolean>(false)
 
-						<div className="mindmap-scroll w-full">
-							<div className="flex items-center min-h-[46px]">
-								{answerFormated.map((answer, ansIndex) => {
-									return (
-										<div
-											className={`min-h-[46px] w-[110px] bg-[#86ce86] all-center flex-shrink-0 ${
-												ansIndex !== 0 ? 'border-l-[1px] border-[#ffffff]' : ''
-											}`}
-										>
-											<div className="text-[14px] text-[#fff]">{htmlParser(answer?.Content)}</div>
-										</div>
-									)
+	const mapQuestions = !isResult ? dataSource?.IeltsQuestions : dataSource?.IeltsQuestionResults
+
+	function getStartedIndex() {
+		// Lấy index của câu đầu tiên trong nhóm
+		if (isResult) {
+			// Coi kết quả
+			return getResultQuestIndex(allQuestions, mapQuestions[0])?.Index
+		}
+		return getQuestIndex(allQuestions, mapQuestions[0])?.Index
+	}
+
+	function getFinalIndex() {
+		// Lấy index của câu cuối cùng trong nhóm
+		const mapLength = mapQuestions.length
+		if (isResult) {
+			// Coi kết quả
+			return getResultQuestIndex(allQuestions, mapQuestions[mapLength - 1])?.Index
+		}
+		return getQuestIndex(allQuestions, mapQuestions[mapLength - 1])?.Index
+	}
+
+	useEffect(() => {
+		formatData(!isResult ? dataSource?.IeltsQuestions : dataSource?.IeltsQuestionResults)
+	}, [dataSource])
+
+	return (
+		<>
+			<div className={`cc-choice-warpper ex23-mind`}>
+				<div className="flex w-full items-center justify-end">
+					<div onClick={() => setVisible(true)} className="ex-23-btn-change-skill !mr-0 mb-[8px]">
+						<AiOutlineFullscreen size={20} />
+						<div className="ml-[4px] font-[600]">Toàn màn hình</div>
+					</div>
+				</div>
+
+				<div className="exam-quest-wrapper no-select">
+					<div className="flex flex-col">
+						<div className="mindmap-scroll flex flex-row">
+							<div className="ex23-mind-quest-wrapper">
+								<div className="h-[46px]" />
+								{dataFormated.map((exercise, exIndex) => {
+									const thisItem = isResult ? getResultQuestIndex(allQuestions, exercise) : getQuestIndex(allQuestions, exercise)
+
+									return <QuestionContent Index={thisItem?.Index} Content={exercise?.Content} />
 								})}
 							</div>
 
-							{formatData(dataSource?.IeltsQuestions).map((exercise) => {
-								return (
-									<div className="flex items-center mt-[0.5px]">
-										<div className="inline-flex">
-											{answerFormated.map((answer, ansIndex) => {
-												return (
-													<div
-														className={`${
-															ansIndex !== 0 ? 'border-l-[1px] border-[#ffffff]' : ''
-														} h-[46px] bg-[#f2f2f2] flex all-center flex-shrink-0 w-[110px]`}
-													>
-														<Checkbox
-															onClick={() => insertDetails(exercise, answer?.Id)}
-															checked={getSelectedAns(exercise, answer?.Id)}
-															disabled={Router.asPath.includes('exam/detail')}
-															id={`mind-${exercise?.Id}-${answer?.Id}`}
-														/>
-													</div>
-												)
-											})}
-										</div>
-									</div>
-								)
-							})}
+							<div className="w-full">
+								<div className="flex items-center min-h-[46px]">
+									{answerFormated.map((answer, ansIndex) => {
+										return <MindMapAnswer answer={answer} index={ansIndex} />
+									})}
+								</div>
+
+								{dataFormated.map((exercise) => {
+									return (
+										<MindMapCheckBox
+											answers={answerFormated}
+											exercise={exercise}
+											isResult={isResult}
+											onClick={insertDetails}
+											getSelectedAns={getSelectedAns}
+										/>
+									)
+								})}
+							</div>
 						</div>
 					</div>
 				</div>
+
+				{isResult && <MindMapAnnotate />}
+				{loading && <MindMapFullLoading />}
 			</div>
 
-			{loading && (
-				<div className="bg-[rgba(0,0,0,0.1)] all-center rounded-[6px] absolute top-0 left-0 w-full h-full">
-					<div className="text-[#000] font-[500]">Đang xử lý...</div>
+			<Modal
+				width="90%"
+				footer={null}
+				title={`Câu: ${getStartedIndex()} - ${getFinalIndex()}`}
+				open={visible}
+				onCancel={() => setVisible(false)}
+			>
+				<div className={`cc-choice-warpper ex23-mind`}>
+					<div className="exam-quest-wrapper no-select">
+						<div className="flex flex-col">
+							<div className="mindmap-scroll flex flex-row">
+								<div className="ex23-mind-quest-wrapper">
+									<div className="h-[46px]" />
+									{dataFormated.map((exercise, exIndex) => {
+										const thisItem = isResult ? getResultQuestIndex(allQuestions, exercise) : getQuestIndex(allQuestions, exercise)
+										return <QuestionContent Index={thisItem?.Index} Content={exercise?.Content} />
+									})}
+								</div>
+
+								<div className="w-full">
+									<div className="flex items-center min-h-[46px]">
+										{answerFormated.map((answer, ansIndex) => {
+											return <MindMapAnswer answer={answer} index={ansIndex} />
+										})}
+									</div>
+
+									{dataFormated.map((exercise) => {
+										return (
+											<MindMapCheckBox
+												answers={answerFormated}
+												exercise={exercise}
+												isResult={isResult}
+												onClick={insertDetails}
+												getSelectedAns={getSelectedAns}
+											/>
+										)
+									})}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					{isResult && <MindMapAnnotate />}
+					{loading && <MindMapFullLoading />}
 				</div>
-			)}
-		</div>
+			</Modal>
+		</>
 	)
 }
 

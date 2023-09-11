@@ -497,12 +497,12 @@ button {
 	&::-webkit-scrollbar {
 		border: none;
 		background-color: white;
-		height: 4px !important;
+		height: 8px !important;
 	}
 
 	&::-webkit-scrollbar-thumb {
 		border-radius: 4px;
-		background-color: #a5a5a5;
+		background-color: #dedede;
 	}
 }
 

@@ -19,10 +19,22 @@ function getQuestIndex(questions, curQuest) {
 	return ''
 }
 
-const TestingQuestions = (props) => {
-	const { data, isFinal, questions, onRefresh, showEdit, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav } = props
+function getResultQuestIndex(questions, curQuest) {
+	if (Router.asPath.includes('questions')) {
+		return null
+	}
 
-	const theQuestions = data?.IeltsQuestions || []
+	const theIndex = questions.findIndex((question) => question?.IeltsQuestionResultId == curQuest?.Id)
+	if (theIndex !== -1) {
+		return questions[theIndex]
+	}
+	return ''
+}
+
+const TestingQuestions = (props) => {
+	const { data, isFinal, questions, onRefresh, showEdit, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav, isResult } = props
+
+	const theQuestions = !isResult ? data?.IeltsQuestions : data?.IeltsQuestionResults || []
 
 	const is = {
 		choice: data?.Type == QUESTION_TYPES.MultipleChoice,
@@ -36,7 +48,7 @@ const TestingQuestions = (props) => {
 		<>
 			{is.choice &&
 				theQuestions.map((quest, index) => {
-					const thisItem = getQuestIndex(questions, quest)
+					const thisItem = isResult ? getResultQuestIndex(questions, quest) : getQuestIndex(questions, quest)
 
 					return (
 						<Choice
@@ -49,13 +61,14 @@ const TestingQuestions = (props) => {
 							isDoing={Router.asPath.includes('take-an-exam')}
 							setCurrentQuestion={setCurrentQuestion}
 							onRefreshNav={onRefreshNav}
+							isResult={isResult}
 						/>
 					)
 				})}
 
 			{is.writing &&
 				theQuestions.map((quest, index) => {
-					const thisItem = getQuestIndex(questions, quest)
+					const thisItem = isResult ? getResultQuestIndex(questions, quest) : getQuestIndex(questions, quest)
 
 					return (
 						<Write
@@ -65,6 +78,7 @@ const TestingQuestions = (props) => {
 							isDoing={Router.asPath.includes('take-an-exam')}
 							setCurrentQuestion={setCurrentQuestion}
 							onRefreshNav={onRefreshNav}
+							isResult={isResult}
 						/>
 					)
 				})}
@@ -80,7 +94,7 @@ const TestingQuestions = (props) => {
 					</div>
 
 					{theQuestions.map((quest, index) => {
-						const thisItem = getQuestIndex(questions, quest)
+						const thisItem = isResult ? getResultQuestIndex(questions, quest) : getQuestIndex(questions, quest)
 
 						return (
 							<TrueFalseQuestion
@@ -100,19 +114,17 @@ const TestingQuestions = (props) => {
 
 			{is.speak &&
 				theQuestions.map((quest, index) => {
-					const thisItem = getQuestIndex(questions, quest)
+					const thisItem = isResult ? getResultQuestIndex(questions, quest) : getQuestIndex(questions, quest)
 
 					return (
 						<SpeakingQuestion
 							key={index}
 							disabled={true}
-							isFinal={isFinal}
 							data={quest}
-							index={index}
 							IndexInExam={thisItem?.Index}
-							dataSource={data}
 							setCurrentQuestion={setCurrentQuestion}
 							onRefreshNav={onRefreshNav}
+							isResult={isResult}
 						/>
 					)
 				})}
@@ -125,6 +137,8 @@ const TestingQuestions = (props) => {
 					getDoingQuestionGroup={getDoingQuestionGroup}
 					setCurrentQuestion={setCurrentQuestion}
 					onRefreshNav={onRefreshNav}
+					isResult={isResult}
+					allQuestions={questions}
 				/>
 			)}
 		</>

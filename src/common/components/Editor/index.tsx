@@ -14,11 +14,11 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 	const { initialValue, height, id, inline, skin, menubar, apiKey, init, ref, noFullscreen } = props
 	const { onInit, onChange, onBlur, isFillInBlank } = props
 
+	console.log('---- PrimaryEditor: ', props)
+
 	let editorRef = useRef(null)
 
 	function generateShortHash(input) {
-		console.log('-- input: ', input)
-
 		const hash = crypto.createHash('md5').update(input.toString()).digest('hex')
 		return hash.substring(0, 6) // Lấy 6 ký tự đầu của giá trị hash
 	}
@@ -87,7 +87,7 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 					height: height || 500,
 					menubar: menubar || false,
 					plugins: plugins,
-					toolbar: `${!noFullscreen ? 'fullscreen' : 'customfullscreen |'} ${toolbar}`,
+					toolbar: `fullscreen ${toolbar}`,
 					quickBar: false,
 					contextmenu: false,
 					content_style: `${customInputClass} ${indexBlockClass}`,
@@ -104,32 +104,38 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 								}
 							})
 
-						editor.ui.registry.addButton('customfullscreen', {
-							icon: 'fullscreen', // Sử dụng icon fullscreen có sẵn
-							tooltip: 'Full Screen', // Chú thích khi di chuột qua nút
-							onAction: function () {
-								const theBabyForm = document.getElementById('the-baby-form')
-								const thisEditor = document.getElementsByClassName('tox tox-tinymce')
-								const thisEditorFullscreen = document.getElementsByClassName('tox-tbtn')
-								if (theBabyForm.style.display == 'none') {
-									theBabyForm.style.display = 'grid'
-									if (thisEditor.length > 0) {
-										thisEditor[0].setAttribute('style', 'height: 210px')
-									}
-									if (thisEditorFullscreen.length > 0) {
-										thisEditorFullscreen[0].setAttribute('style', 'background: #fff')
-									}
-								} else {
-									theBabyForm.style.display = 'none'
-									if (thisEditor.length > 0) {
-										thisEditor[0].setAttribute('style', 'height:' + (window.innerHeight - 250) + 'px')
-									}
-									if (thisEditorFullscreen.length > 0) {
-										thisEditorFullscreen[0].setAttribute('style', 'background: #d7d7d7')
-									}
-								}
-							}
-						})
+						// editor.ui.registry.addButton('customfullscreen', {
+						// 	icon: 'fullscreen', // Sử dụng icon fullscreen có sẵn
+						// 	tooltip: 'Full Screen', // Chú thích khi di chuột qua nút
+						// 	onAction: function () {
+						// 		const theBabyForm = document.getElementById('the-baby-form')
+						// 		// console.log('------- theBabyForm: ', theBabyForm)
+
+						// 		const thisEditor = document.getElementsByClassName('tox tox-tinymce')
+						// 		// console.log('------- thisEditor: ', thisEditor)
+
+						// 		const thisEditorFullscreen = document.getElementsByClassName('tox-tbtn')
+						// 		// console.log('------- thisEditorFullscreen: ', thisEditorFullscreen)
+
+						// 		if (theBabyForm.style.display == 'none') {
+						// 			theBabyForm.style.display = 'grid'
+						// 			if (thisEditor.length > 0) {
+						// 				thisEditor[0].setAttribute('style', 'height: 210px')
+						// 			}
+						// 			if (thisEditorFullscreen.length > 0) {
+						// 				thisEditorFullscreen[0].setAttribute('style', 'background: #fff')
+						// 			}
+						// 		} else {
+						// 			theBabyForm.style.display = 'none'
+						// 			if (thisEditor.length > 0) {
+						// 				thisEditor[0].setAttribute('style', 'height:' + (window.innerHeight - 250) + 'px')
+						// 			}
+						// 			if (thisEditorFullscreen.length > 0) {
+						// 				thisEditorFullscreen[0].setAttribute('style', 'background: #d7d7d7')
+						// 			}
+						// 		}
+						// 	}
+						// })
 					}
 				}}
 			/>

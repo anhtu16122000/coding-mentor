@@ -29,7 +29,6 @@ import { formRequired } from '~/common/libs/others/form'
 import { setRoom } from '~/store/classReducer'
 import { removeCommas } from '~/common/utils/super-functions'
 
-
 const ContainerTime = styled.div`
 	display: flex;
 	flex-direction: row;

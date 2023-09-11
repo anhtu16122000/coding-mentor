@@ -25,4 +25,16 @@ async function getMoreQuestionsBank(params, callback) {
 	}
 }
 
-export { getQuestionsBank, getMoreQuestionsBank }
+async function deleteQuestionsBank(params, callback) {
+	try {
+		const response = await ieltsQuestionGroupApi.delete(params)
+		if (response.status == 200) {
+			ShowNoti('success', 'Thành công')
+			callback(response.data)
+		}
+	} catch (error) {
+		ShowNoti('error', error?.message)
+	}
+}
+
+export { getQuestionsBank, getMoreQuestionsBank, deleteQuestionsBank }

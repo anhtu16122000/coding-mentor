@@ -1,15 +1,11 @@
 import Router from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ReactHTMLParser from 'react-html-parser'
-import { useDispatch, useSelector } from 'react-redux'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import AudioRecord from '~/common/components/AudioRecord/AudioRecord'
-import { RootState } from '~/store'
 
 const SpeakingQuestion = (props) => {
-	const { data, type, isFinal, dataSource, index, IndexInExam, disabled, onRefreshNav, setCurrentQuestion } = props
-
-	const [loading, setLoading] = useState<boolean>(false)
+	const { data, IndexInExam, disabled, onRefreshNav, setCurrentQuestion, isResult } = props
 
 	const [curLink, setCurLink] = useState('')
 
@@ -51,12 +47,20 @@ const SpeakingQuestion = (props) => {
 			return data?.DoingTestDetails[0]?.IeltsAnswerContent || ''
 		}
 
+		if (!!isResult && data?.IeltsAnswerResults.length > 0) {
+			if (data?.IeltsAnswerResults[0]?.MyIeltsAnswerContent) {
+				return data?.IeltsAnswerResults[0]?.MyIeltsAnswerContent || ''
+			}
+		}
+
 		return ''
 	}
 
 	return (
 		<div
-			onClick={() => setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id })}
+			onClick={() =>
+				!Router.asPath.includes('/questions') && setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionResultId: data?.Id })
+			}
 			key={'question-' + data.Id}
 			id={'question-' + data.Id}
 			className={`cc-choice-warpper border-[1px] border-[#e6e6e6]`}
@@ -72,8 +76,9 @@ const SpeakingQuestion = (props) => {
 
 			<div>
 				<div className="font-[600] mb-2 mt-3">Câu trả lời</div>
-				{!loading && (
-					<>
+
+				<>
+					{!isResult && (
 						<AudioRecord
 							disabled={Router.asPath.includes('take-an-exam') ? false : disabled}
 							linkRecord={getLinkRecorded()}
@@ -83,8 +88,17 @@ const SpeakingQuestion = (props) => {
 							exerciseID={data.Id}
 							getActiveID={() => {}}
 						/>
+					)}
 
-						{/* <div className="mt-4" style={{ display: 'flex' }}>
+					{!!isResult && getLinkRecorded() && (
+						<audio controls>
+							<source src={getLinkRecorded()} type="audio/mpeg" />
+						</audio>
+					)}
+
+					{!!isResult && !getLinkRecorded() && <div className="text-[red]">Không trả lời</div>}
+
+					{/* <div className="mt-4" style={{ display: 'flex' }}>
 							<UploadAudioField
 								isHideControl
 								getFile={(file: any) => onChange(exercise.ExerciseTopicId, file)}
@@ -92,8 +106,7 @@ const SpeakingQuestion = (props) => {
 							/>
 							<div style={{ marginTop: 5, marginLeft: 9 }}>(Phương thức dự phòng)</div>
 						</div> */}
-					</>
-				)}
+				</>
 			</div>
 		</div>
 	)
