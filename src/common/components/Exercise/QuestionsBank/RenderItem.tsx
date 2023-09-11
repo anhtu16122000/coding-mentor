@@ -1,6 +1,6 @@
 import { Divider, Popconfirm, Popover } from 'antd'
 import moment from 'moment'
-import React from 'react'
+import React, { useRef } from 'react'
 import { BiCheckboxSquare, BiTrash } from 'react-icons/bi'
 import { FaMicrophone, FaPen } from 'react-icons/fa'
 import { HiPencilAlt, HiSelector } from 'react-icons/hi'
@@ -12,6 +12,7 @@ import TestingQuestions from '../Testing/Questions'
 import { TbListDetails } from 'react-icons/tb'
 import { TiArrowSortedDown } from 'react-icons/ti'
 import { deleteQuestionsBank } from './util'
+import GroupForm from '../Details/Group/form-group'
 
 const QuestionBankRenderItem = ({ item, index, is, dragAns, onRefresh }) => {
 	async function handleDeleteGroup() {
@@ -19,6 +20,8 @@ const QuestionBankRenderItem = ({ item, index, is, dragAns, onRefresh }) => {
 			onRefresh()
 		})
 	}
+
+	const popref = useRef(null)
 
 	return (
 		<div className="ml-[8px] mb-[16px] pb-[8px] bg-[#fff] rounded-[8px] shadow-sm border-[rgba(0,0,0,0)] hover:border-[#1b73e8] border-[1px] border-solid">
@@ -78,16 +81,19 @@ const QuestionBankRenderItem = ({ item, index, is, dragAns, onRefresh }) => {
 
 				<div className="h-full p-[16px]">
 					<Popover
+						ref={popref}
 						overlayClassName="show-arrow"
 						content={
-							<>
+							<div className="flex flex-col items-start">
+								<GroupForm onOpen={() => popref?.current?.close()} isEdit section={null} defaultData={item} onRefresh={onRefresh} />
+
 								<Popconfirm onConfirm={handleDeleteGroup} title={'Xoá nhóm: ' + item?.Name + '?'}>
-									<div className="flex items-center rounded-[4px] cursor-pointer px-[9px] py-[2px] hover:bg-[#f0f0f0]">
-										<BiTrash size={20} color="#E53935" className="ml-[-4px]" />
-										<div className="ml-[8px] font-[500] text-[16px]">Xoá</div>
+									<div className="exam-23-btn-del-group !ml-0 !mb-0 !mt-[-4px]">
+										<BiTrash size={18} color="#fff" className="ml-[-4px]" />
+										<div className="ml-[8px] font-[500] text-[#fff]">Xoá</div>
 									</div>
 								</Popconfirm>
-							</>
+							</div>
 						}
 						placement="bottomLeft"
 						trigger="click"

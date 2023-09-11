@@ -184,9 +184,10 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		console.log('---- defaultData: ', defaultData)
 
 		if (!!onOpen) onOpen()
+
 		setQuestionWithAnswers([...defaultData?.IeltsQuestions])
 		dispatch(setCurrentExerciseForm([]))
-		form.setFieldsValue({ ...defaultData, TagIds: defaultData?.TagIds.split(',') })
+		form.setFieldsValue({ ...defaultData, TagIds: !defaultData?.TagIds ? [] : defaultData?.TagIds.split(',') })
 		setCurrentType(defaultData?.Type)
 		dispatch(setCurrentExerciseForm([...defaultData.IeltsQuestions]))
 
@@ -301,7 +302,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 										noFullscreen
 										isFillInBlank={currentType == QUESTION_TYPES.FillInTheBlank || currentType == QUESTION_TYPES.DragDrop}
 										id={`content-${new Date().getTime()}`}
-										height={fullEditor ? '90%' : 210}
+										height={350}
 										initialValue={defaultData?.Content || ''}
 										onChange={(event) => form.setFieldValue('Content', event)}
 									/>
