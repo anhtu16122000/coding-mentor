@@ -252,10 +252,12 @@ const Choice = (props) => {
 						</div>
 					)}
 
-					<div className="cc-choice-orange">
-						<CgSelectO size={12} className="mr-1" />
-						<div className="mt-[1px]">Đã chọn: {getCorrect()}</div>
-					</div>
+					{!!isResult && (
+						<div className="cc-choice-orange">
+							<CgSelectO size={12} className="mr-1" />
+							<div className="mt-[1px]">Đã chọn: {getCorrect()}</div>
+						</div>
+					)}
 				</div>
 
 				<div>{htmlParser(!isResult ? data?.Content : '')}</div>

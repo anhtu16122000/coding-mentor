@@ -168,7 +168,14 @@ const QuestionsBank = () => {
 										}
 
 										return (
-											<QuestionBankRenderItem key={`the-fucking-quest-${item?.Id}`} dragAns={dragAns} index={index} item={item} is={is} />
+											<QuestionBankRenderItem
+												key={`the-fucking-quest-${item?.Id}`}
+												onRefresh={getExercises}
+												dragAns={dragAns}
+												index={index}
+												item={item}
+												is={is}
+											/>
 										)
 									}}
 								/>
