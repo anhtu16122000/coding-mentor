@@ -222,7 +222,9 @@ const Choice = (props) => {
 
 	return (
 		<div
-			onClick={() => setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionResultId: data?.Id })}
+			onClick={() =>
+				!Router.asPath.includes('/questions') && setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionResultId: data?.Id })
+			}
 			key={'question-' + data.Id}
 			id={'question-' + data.Id}
 			className={`cc-choice-warpper shadow-sm border-[1px] border-[#fff]`}
