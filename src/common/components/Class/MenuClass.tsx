@@ -7,13 +7,11 @@ import { FiUserCheck } from 'react-icons/fi'
 import { GiBlackBook } from 'react-icons/gi'
 import { IoNotificationsOutline } from 'react-icons/io5'
 import { MdAppRegistration } from 'react-icons/md'
-import { RiContactsBook2Line, RiQuillPenLine } from 'react-icons/ri'
+import { RiContactsBook2Line, RiFileList2Line, RiQuillPenLine } from 'react-icons/ri'
 import { VscFeedback, VscFolderLibrary } from 'react-icons/vsc'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import CalendarClassEdit from './CalendarClassEdit'
-import CalenderClassStudent from './CalendarClassStudent'
-import CalenderClassTeacher from './CalendarClassTeacher'
 import DocumentsPageInClass from './DocumentsPage'
 import { LessonFeedbackPage } from './LessonFeedbackPage'
 import { ListStudentInClass } from './ListStudentInClass'
@@ -23,6 +21,7 @@ import { RollUpStudent } from './RollUpStudent'
 import { RollUpTeacherPage } from './RollUpTeacherPage'
 import { ScheduleList } from './ScheduleList'
 import { TranscriptPage } from './TranscriptPage'
+import HomeWork from './HomeWork'
 
 const itemsAdmin = [
 	'Lịch học',
@@ -33,10 +32,11 @@ const itemsAdmin = [
 	'Bảng điểm',
 	'Điểm danh giáo viên',
 	'Phản hồi buổi học',
-	'Thông báo'
+	'Thông báo',
+	'Bài tập'
 ]
 
-const itemsStudent = ['Lịch học', 'Các buổi học', 'Tài liệu', 'Bảng điểm', 'Điểm danh bằng QR']
+const itemsStudent = ['Lịch học', 'Các buổi học', 'Tài liệu', 'Bảng điểm', 'Điểm danh bằng QR', 'Bài tập']
 const itemsTeacher = [
 	'Lịch học',
 	'Học viên',
@@ -73,6 +73,8 @@ const MenuClass = () => {
 				return <LessonFeedbackPage />
 			case 8:
 				return <NotificationInClassPage />
+			case 9:
+				return <HomeWork />
 			default:
 				return <CalendarClassEdit />
 		}
@@ -134,6 +136,12 @@ const MenuClass = () => {
 						<IoNotificationsOutline className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
+			case 9:
+				return (
+					<div className="label-tab">
+						<RiFileList2Line className="mr-3" size={20} /> <span>{item}</span>
+					</div>
+				)
 			default:
 				return 'Lịch học'
 		}
@@ -151,6 +159,8 @@ const MenuClass = () => {
 				return <TranscriptPage />
 			case 4:
 				return <RollUpStudent />
+			case 5:
+				return <HomeWork />
 			default:
 				return <CalendarClassEdit />
 		}
@@ -188,10 +198,16 @@ const MenuClass = () => {
 						<AiOutlineQrcode className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
+			// case 5:
+			// 	return (
+			// 		<div className="label-tab">
+			// 			<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
+			// 		</div>
+			// 	)
 			case 5:
 				return (
 					<div className="label-tab">
-						<VscFeedback className="mr-3" size={20} /> <span>{item}</span>
+						<RiFileList2Line className="mr-3" size={20} /> <span>{item}</span>
 					</div>
 				)
 			case 3:
@@ -337,6 +353,7 @@ const MenuClass = () => {
 				return 'Lịch học'
 		}
 	}
+
 	return (
 		<>
 			{user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 5 || user?.RoleId == 6 || user?.RoleId == 7 ? (

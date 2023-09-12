@@ -65,7 +65,10 @@ const TrueFalseQuestion = (props) => {
 
 	return (
 		<div
-			onClick={() => setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionGroupId: curGroup?.Id })}
+			onClick={() =>
+				!Router.asPath.includes('/questions') &&
+				setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionGroupId: curGroup?.Id })
+			}
 			className="flex items-start"
 		>
 			<div id={`cauhoi-${data.Id}`} className="flex flex-1 mt-1">

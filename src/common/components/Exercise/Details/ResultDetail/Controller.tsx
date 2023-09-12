@@ -1,12 +1,8 @@
 import { Divider, Skeleton } from 'antd'
-import React from 'react'
-import CreateExamSkill from '../ExamSkillNext/exam-skill-form'
-import ExamSkillItem from '../ExamSkillNext/exam-skill-item'
+import React, { useEffect } from 'react'
 import ExamSectionItem from '../ExamSkillNext/exam-section-item'
 import { MdArrowBackIos, MdOutlineArrowForwardIos } from 'react-icons/md'
 import { FaHeadphonesAlt } from 'react-icons/fa'
-import PrimaryTooltip from '~/common/components/PrimaryTooltip'
-import { log } from '~/common/utils'
 
 function SkillLoading({ loading }) {
 	if (loading) {
@@ -21,12 +17,12 @@ function SkillLoading({ loading }) {
 	return <></>
 }
 
-const TakeAnExamController = (props) => {
+const ResultDetailController = (props) => {
 	const { showSkills, showSections, loading, skills, setCurAudio, currentSkill, setCurrentSkill, onRefreshSkill, sections } = props
 
-	const { currentSection, setCurrentSection, getSections } = props
+	const { currentSection, setCurrentSection, getSections, setSections } = props
 
-	const indexOfSkill = !skills ? 0 : skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
+	const indexOfSkill = skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
 
 	function handleChangeSkill(param) {
 		if (param == 'up') {
@@ -38,6 +34,15 @@ const TakeAnExamController = (props) => {
 		setCurAudio('')
 	}
 
+	useEffect(() => {
+		if (!!skills && skills.length > 0) {
+			if (!!skills[indexOfSkill]?.IeltsSectionResultOverviews && skills[indexOfSkill]?.IeltsSectionResultOverviews.length > 0) {
+				setSections(skills[indexOfSkill]?.IeltsSectionResultOverviews)
+				setCurrentSection(skills[indexOfSkill]?.IeltsSectionResultOverviews[0])
+			}
+		}
+	}, [currentSkill])
+
 	return (
 		<>
 			{(showSkills || showSections) && (
@@ -47,13 +52,11 @@ const TakeAnExamController = (props) => {
 			)}
 
 			<div className="exam-23-skills">
-				<SkillLoading loading={loading} />
-
-				{!!skills && showSkills && (
+				{showSkills && (
 					<div className="flex items-center pb-[16px] scroll-h w-full">
 						<div className="flex-1 flex flex-col">
 							<div>
-								<div className="tae-skill-name">Kỹ năng: {!skills ? '' : skills[indexOfSkill]?.Name}</div>
+								<div className="tae-skill-name">Kỹ năng: {skills[indexOfSkill]?.Name}</div>
 								<div className="mt-[4px] flex items-center">
 									{skills[indexOfSkill]?.Audio && (
 										<div onClick={(e) => setCurAudio(skills[indexOfSkill])} className="ex-23-btn-play-audio">
@@ -84,7 +87,7 @@ const TakeAnExamController = (props) => {
 				)}
 			</div>
 
-			{!!skills && skills.length != 0 && !!currentSkill?.Id && (
+			{skills.length != 0 && !!currentSkill?.Id && (
 				<>
 					{showSkills && showSections && (
 						<div className="mt-[-16px]">
@@ -97,7 +100,7 @@ const TakeAnExamController = (props) => {
 
 						{showSections && !!currentSkill && (
 							<div className="flex items-center pb-[16px] scroll-h">
-								{sections.map((item, index) => {
+								{skills[indexOfSkill]?.IeltsSectionResultOverviews.map((item, index) => {
 									return (
 										<ExamSectionItem
 											key={`sec-e${index}`}
@@ -121,4 +124,4 @@ const TakeAnExamController = (props) => {
 	)
 }
 
-export default TakeAnExamController
+export default ResultDetailController

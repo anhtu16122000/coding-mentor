@@ -1,18 +1,15 @@
 import { instance } from '../instance'
 
-const url = '/api/Exam'
+const url = '/api/Homework'
 
-export const examApi = {
-	getAll(params: IGetExam) {
-		return instance.get<IApiResultData<IExamsResponse[]>>(url, {
+export const homeWorkApi = {
+	getAll(params) {
+		return instance.get<IApiResultData<any[]>>(url, {
 			params
 		})
 	},
 	getByID(ID: number) {
 		return instance.get<IApiResultData<any>>(`${url}/${ID}`)
-	},
-	getDetailByID(examID: number) {
-		return instance.get<{ totalPoint: string } & IApiResultData<any>>(`${url}/Detail/${examID}`)
 	},
 	post(data: IPostExam) {
 		return instance.post(url, data)
@@ -25,10 +22,5 @@ export const examApi = {
 	},
 	delete(examID: number) {
 		return instance.delete(url + '/' + examID)
-	},
-	addRandom(data) {
-		return instance.post(`${url}/${data?.sectionId}/addRandom/${data?.amount}/type/${data?.type}`, data)
 	}
 }
-
-// IeltsExamResult

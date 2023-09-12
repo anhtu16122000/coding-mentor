@@ -8,12 +8,13 @@ import { QUESTION_TYPES } from '~/common/libs'
 import QuestionBankRenderItem from './RenderItem'
 import Router, { useRouter } from 'next/router'
 import { BiSolidArrowToTop } from 'react-icons/bi'
+import ExamProvider from '../../Auth/Provider/exam'
 
 const initParameters = {
 	search: '',
 	pageIndex: 1,
-	pageSize: 30,
-	SourceId: 1,
+	pageSize: 10,
+	isSource: true,
 	types: '',
 	levels: ''
 }
@@ -95,106 +96,115 @@ const QuestionsBank = () => {
 				<title>{appConfigs.appName} - Ngân hàng câu hỏi</title>
 			</Head>
 
-			<div className="max-w-[2000px]">
-				<div className="cc-exam-header">
-					<div className="flex items-center">
-						<Select
-							placeholder="Loại"
-							mode="multiple"
-							className="primary-input w-[200px]"
-							allowClear
-							// @ts-ignore
-							value={!Router?.query?.types ? [] : Router?.query?.types.split(',').map(Number)}
-							onChange={(event) => {
-								const types = !event.join(',') ? null : event.join(',')
-								Router.push({ query: { ...router?.query, types: types } })
-							}}
-						>
-							<Select.Option value={QUESTION_TYPES.MultipleChoice}>Trắc nghiệm</Select.Option>
-							<Select.Option value={QUESTION_TYPES.FillInTheBlank}>Điền từ</Select.Option>
-							<Select.Option value={QUESTION_TYPES.Write}>Viết</Select.Option>
-							<Select.Option value={QUESTION_TYPES.TrueOrFalse}>True or False</Select.Option>
-							<Select.Option value={QUESTION_TYPES.Speak}>Nói</Select.Option>
-						</Select>
-
-						<Select
-							placeholder="Cấp độ"
-							onChange={(event) => Router.push({ query: { ...router?.query, levels: event } })}
-							className="primary-input w-[120px] ml-[8px]"
-						>
-							<Select.Option value={null}>Tất cả</Select.Option>
-							<Select.Option value={1}>Dễ</Select.Option>
-							<Select.Option value={2}>Trung bình</Select.Option>
-							<Select.Option value={3}>Khó</Select.Option>
-						</Select>
-					</div>
-				</div>
-
-				{(!loading || data.length > 0) && (
-					<div>
-						<div
-							id="class-view"
-							onScroll={(e) => {
-								if (filters.pageIndex > 1) setShotBackTop(true)
-							}}
-							className="cc-exam-list-container !h-[calc(100vh-168px)] !mr-[-14px]"
-							style={{ paddingRight: 8 }}
-						>
-							<div id="top-of-scroll" />
-							<InfiniteScroll
-								dataLength={data.length}
-								next={loadMoreData}
-								hasMore={data.length < totalItem}
-								loader={<Skeleton className="ml-[8px]" />}
-								endMessage=""
-								scrollableTarget="class-view"
+			<ExamProvider>
+				<div className="max-w-[2000px]">
+					<div className="cc-exam-header">
+						<div className="flex items-center">
+							<Select
+								placeholder="Loại"
+								mode="multiple"
+								className="primary-input w-[200px]"
+								allowClear
+								// @ts-ignore
+								value={!Router?.query?.types ? [] : Router?.query?.types.split(',').map(Number)}
+								onChange={(event) => {
+									const types = !event.join(',') ? null : event.join(',')
+									Router.push({ query: { ...router?.query, types: types } })
+								}}
 							>
-								<List
-									dataSource={data}
-									renderItem={(item, index) => {
-										const is = {
-											typing: item?.Type == QUESTION_TYPES.FillInTheBlank,
-											drag: item?.Type == QUESTION_TYPES.DragDrop
-										}
+								<Select.Option value={QUESTION_TYPES.MultipleChoice}>Trắc nghiệm</Select.Option>
+								<Select.Option value={QUESTION_TYPES.FillInTheBlank}>Điền từ</Select.Option>
+								<Select.Option value={QUESTION_TYPES.Write}>Viết</Select.Option>
+								<Select.Option value={QUESTION_TYPES.TrueOrFalse}>True or False</Select.Option>
+								<Select.Option value={QUESTION_TYPES.Speak}>Nói</Select.Option>
+							</Select>
 
-										let dragAns = []
-
-										for (let i = 0; i < item?.IeltsQuestions.length; i++) {
-											const element = item?.IeltsQuestions[i]
-											for (let j = 0; j < element?.IeltsAnswers.length; j++) {
-												const ans = element?.IeltsAnswers[j]
-												dragAns.push({ ...ans, Question: { ...element } })
-											}
-										}
-
-										return (
-											<QuestionBankRenderItem key={`the-fucking-quest-${item?.Id}`} dragAns={dragAns} index={index} item={item} is={is} />
-										)
-									}}
-								/>
-							</InfiniteScroll>
+							<Select
+								placeholder="Cấp độ"
+								onChange={(event) => Router.push({ query: { ...router?.query, levels: event } })}
+								className="primary-input w-[120px] ml-[8px]"
+							>
+								<Select.Option value={null}>Tất cả</Select.Option>
+								<Select.Option value={1}>Dễ</Select.Option>
+								<Select.Option value={2}>Trung bình</Select.Option>
+								<Select.Option value={3}>Khó</Select.Option>
+							</Select>
 						</div>
 					</div>
-				)}
 
-				{(!!loading || data.length == 0) && (
-					<>
-						<Skeleton active />
-					</>
-				)}
-			</div>
+					{(!loading || data.length > 0) && (
+						<div>
+							<div
+								id="class-view"
+								onScroll={(e) => {
+									if (filters.pageIndex > 1) setShotBackTop(true)
+								}}
+								className="cc-exam-list-container !h-[calc(100vh-168px)] !mr-[-14px]"
+								style={{ paddingRight: 8 }}
+							>
+								<div id="top-of-scroll" />
+								<InfiniteScroll
+									dataLength={data.length}
+									next={loadMoreData}
+									hasMore={data.length < totalItem}
+									loader={<Skeleton className="ml-[8px]" />}
+									endMessage=""
+									scrollableTarget="class-view"
+								>
+									<List
+										dataSource={data}
+										renderItem={(item, index) => {
+											const is = {
+												typing: item?.Type == QUESTION_TYPES.FillInTheBlank,
+												drag: item?.Type == QUESTION_TYPES.DragDrop
+											}
 
-			<div
-				onClick={() => {
-					const classIndex = document.getElementById(`top-of-scroll`)
-					if (!!classIndex) {
-						classIndex.scrollIntoView({ behavior: 'smooth', block: 'center' })
-					}
-				}}
-				className="fixed rounded-full cursor-pointer z-50 bottom-[16px] right-[16px] p-[8px] bg-[#e6e6e6] hover:bg-[#dbdbdb]"
-			>
-				<BiSolidArrowToTop size={22} color="#000" />
-			</div>
+											let dragAns = []
+
+											for (let i = 0; i < item?.IeltsQuestions.length; i++) {
+												const element = item?.IeltsQuestions[i]
+												for (let j = 0; j < element?.IeltsAnswers.length; j++) {
+													const ans = element?.IeltsAnswers[j]
+													dragAns.push({ ...ans, Question: { ...element } })
+												}
+											}
+
+											return (
+												<QuestionBankRenderItem
+													key={`the-fucking-quest-${item?.Id}`}
+													onRefresh={getExercises}
+													dragAns={dragAns}
+													index={index}
+													item={item}
+													is={is}
+												/>
+											)
+										}}
+									/>
+								</InfiniteScroll>
+							</div>
+						</div>
+					)}
+
+					{(!!loading || data.length == 0) && (
+						<>
+							<Skeleton active />
+						</>
+					)}
+				</div>
+
+				<div
+					onClick={() => {
+						const classIndex = document.getElementById(`top-of-scroll`)
+						if (!!classIndex) {
+							classIndex.scrollIntoView({ behavior: 'smooth', block: 'center' })
+						}
+					}}
+					className="fixed rounded-full cursor-pointer z-50 bottom-[16px] right-[16px] p-[8px] bg-[#e6e6e6] hover:bg-[#dbdbdb]"
+				>
+					<BiSolidArrowToTop size={22} color="#000" />
+				</div>
+			</ExamProvider>
 		</>
 	)
 }

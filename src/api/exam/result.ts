@@ -1,12 +1,13 @@
 import { instance } from '../instance'
 
-const url = '/api/Exam'
+const url = '/api/IeltsExamResult'
 
-export const examApi = {
-	getAll(params: IGetExam) {
-		return instance.get<IApiResultData<IExamsResponse[]>>(url, {
-			params
-		})
+export const examResultApi = {
+	getAll(params) {
+		return instance.get<IApiResultData<any[]>>(url, { params })
+	},
+	getQuestions(params) {
+		return instance.get<IApiResultData<any>>(`${url}/ielts-question-in-section-result`, { params })
 	},
 	getByID(ID: number) {
 		return instance.get<IApiResultData<any>>(`${url}/${ID}`)
@@ -14,21 +15,19 @@ export const examApi = {
 	getDetailByID(examID: number) {
 		return instance.get<{ totalPoint: string } & IApiResultData<any>>(`${url}/Detail/${examID}`)
 	},
-	post(data: IPostExam) {
+	getOverView(params) {
+		return instance.get<{ totalPoint: string } & IApiResultData<any>>(`${url}/ielts-exam-result-overview`, { params })
+	},
+	post(data) {
 		return instance.post(url, data)
 	},
 	addGroup(data) {
 		return instance.post(url + 'AddExerciseGroup', data)
 	},
-	put(data: IPostExam) {
+	put(data) {
 		return instance.put(url, data)
 	},
 	delete(examID: number) {
 		return instance.delete(url + '/' + examID)
-	},
-	addRandom(data) {
-		return instance.post(`${url}/${data?.sectionId}/addRandom/${data?.amount}/type/${data?.type}`, data)
 	}
 }
-
-// IeltsExamResult

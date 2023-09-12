@@ -92,7 +92,6 @@ function TagList(props) {
 				setDataSource(res.data.data)
 				setTotalRow(res.data.totalRow)
 			}
-			console.log('🚀 ~ file: TagList.tsx:94 ~ getAllTagByTagCateId ~ res.data', res.data)
 			if (res.status === 204) {
 				setDataSource([])
 			}

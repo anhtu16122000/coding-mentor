@@ -10,7 +10,7 @@ type TGroupContent = {
 	className?: string
 }
 
-const GroupContent: FC<TGroupContent> = (props) => {
+const ResultGroupContent: FC<TGroupContent> = (props) => {
 	const { is, curGroup, questionsInSection, className } = props
 
 	if (!curGroup?.Content) {
@@ -18,11 +18,7 @@ const GroupContent: FC<TGroupContent> = (props) => {
 	}
 
 	function getQuestIndex(Id) {
-		if (Router.asPath.includes('questions')) {
-			return
-		}
-
-		const theIndex = questionsInSection.findIndex((question) => question?.IeltsQuestionId == Id)
+		const theIndex = questionsInSection.findIndex((question) => question?.IeltsQuestionResultId == Id)
 
 		if (theIndex !== -1) {
 			return questionsInSection[theIndex]?.Index
@@ -35,8 +31,8 @@ const GroupContent: FC<TGroupContent> = (props) => {
 		return (
 			<div className="pb-[16px]">
 				<em className="font-[600] text-[18px] text-[#0A89FF]">
-					Question: {getQuestIndex(curGroup?.IeltsQuestions[0]?.Id)} -{' '}
-					{getQuestIndex(curGroup?.IeltsQuestions[curGroup?.IeltsQuestions.length - 1]?.Id)}
+					Question: {getQuestIndex(curGroup?.IeltsQuestionResults[0]?.Id)} -{' '}
+					{getQuestIndex(curGroup?.IeltsQuestionResults[curGroup?.IeltsQuestionResults.length - 1]?.Id)}
 				</em>
 			</div>
 		)
@@ -61,4 +57,4 @@ const GroupContent: FC<TGroupContent> = (props) => {
 	)
 }
 
-export default GroupContent
+export default ResultGroupContent
