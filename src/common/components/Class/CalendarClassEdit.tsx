@@ -32,15 +32,20 @@ import Lottie from 'react-lottie-player'
 import loadingJson from '~/common/components/json/loading-calendar.json'
 import { setBreadcrumb } from '~/store/globalState'
 
-const CalenderClassEdit = () => {
+const CalendarClassEdit = () => {
 	const router = useRouter()
+	const { class: slug } = router.query
+
 	const user = useSelector((state: RootState) => state.user.information)
+
+	// console.log('---- CalendarClassEdit user: ', user)
+
 	const listCalendar = useSelector((state: RootState) => state.class.listCalendarEdit)
 	const isEditSchedule = useSelector((state: RootState) => state.class.isEditSchedule)
 	const paramsSchedule = useSelector((state: RootState) => state.class.paramsSchedule)
 	const loadingCalendar = useSelector((state: RootState) => state.class.loadingCalendar)
 	const infoClass = useSelector((state: RootState) => state.class.infoClass)
-	const { class: slug } = router.query
+
 	const [timeStamp, setTimeStamp] = useState(0)
 	const thisCalendar = useRef(null)
 	const dispatch = useDispatch()
@@ -265,23 +270,19 @@ const CalenderClassEdit = () => {
 			<Card
 				className="card-calendar"
 				extra={
-					<>
-						{user?.RoleId == 3 || user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
-							<>
-								<PrimaryButton background="yellow" type="button" icon="edit" onClick={() => dispatch(setIsEditSchedule(!isEditSchedule))}>
-									{isEditSchedule ? 'Hủy' : 'Chỉnh sửa'}
-								</PrimaryButton>
-								<ModalAddScheduleEdit
-									checkTeacherAvailable={checkTeacherAvailable}
-									checkRoomAvailable={checkRoomAvailable}
-									getListSchedule={getListSchedule}
-									paramsSchedule={paramsSchedule}
-								/>
-							</>
-						) : (
-							''
-						)}
-					</>
+					user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 7 ? (
+						<>
+							<PrimaryButton background="yellow" type="button" icon="edit" onClick={() => dispatch(setIsEditSchedule(!isEditSchedule))}>
+								{isEditSchedule ? 'Hủy' : 'Chỉnh sửa'}
+							</PrimaryButton>
+							<ModalAddScheduleEdit
+								checkTeacherAvailable={checkTeacherAvailable}
+								checkRoomAvailable={checkRoomAvailable}
+								getListSchedule={getListSchedule}
+								paramsSchedule={paramsSchedule}
+							/>
+						</>
+					) : null
 				}
 			>
 				{!!slug ? (
@@ -352,4 +353,4 @@ const CalenderClassEdit = () => {
 	)
 }
 
-export default CalenderClassEdit
+export default CalendarClassEdit
