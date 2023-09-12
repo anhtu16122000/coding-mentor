@@ -29,7 +29,6 @@ import { formRequired } from '~/common/libs/others/form'
 import { setRoom } from '~/store/classReducer'
 import { removeCommas } from '~/common/utils/super-functions'
 
-
 const ContainerTime = styled.div`
 	display: flex;
 	flex-direction: row;
@@ -318,6 +317,8 @@ const CreateClassForm = (props) => {
 
 	const handleSelectChange = async (name, value) => {
 		if (name === 'GradeId') {
+			
+			setCurriculum([])
 			getAllProgramByGrade(value)
 			if (form.getFieldValue('ProgramId')) {
 				form.setFieldValue('ProgramId', null)
@@ -328,6 +329,8 @@ const CreateClassForm = (props) => {
 		}
 
 		if (name === 'ProgramId') {
+			form.setFieldValue('CurriculumId', null)
+			setCurriculumSelected(null)
 			const findProgramByID = programs.find((item) => {
 				return item.Id == value
 			})
@@ -345,7 +348,7 @@ const CreateClassForm = (props) => {
 
 		if (name === 'CurriculumId') {
 			const getData = noneConvertCurriculum.find((item) => item.Id === value)
-			const filterDisabledStudyTime = state.studyTime.StudyTime.filter((item) => item.Time !== getData.Time).map((data) => data.Id)
+			const filterDisabledStudyTime = state.studyTime.StudyTime.filter((item) => item.Time !== getData?.Time).map((data) => data.Id)
 			const data = filterDisabledStudyTime.map((item) => {
 				return { Id: null, DayOfWeek: null, StudyTimeId: item }
 			})
