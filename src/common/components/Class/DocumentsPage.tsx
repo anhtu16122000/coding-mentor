@@ -1,4 +1,4 @@
-import { Card } from 'antd'
+import { Card, Empty } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
@@ -148,7 +148,7 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 	return (
 		<div className="curriculum-content-container">
 			<Card
-				title="Danh sách chủ đề"
+				title="Danh sách tài liệu"
 				extra={
 					<>
 						{(isAdmin() || isManager() || isTeacher() || isAcademic()) && (
@@ -157,6 +157,8 @@ export default function DocumentsPageInClass(props: IDocumentsPageInClassProps) 
 					</>
 				}
 			>
+				{dataSource.list.length == 0 && <Empty />}
+
 				<DragDropContext onDragEnd={handleDragEnd}>
 					<Droppable droppableId={`CurriculumID-${router.query.name}`}>
 						{(provided) => {

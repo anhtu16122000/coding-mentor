@@ -128,7 +128,7 @@ const HomeWork = () => {
 		{
 			title: 'GV chấm bài',
 			dataIndex: 'TeacherName',
-			render: (value, item, index) => <>{value}</>
+			render: (value, item, index) => <div className="min-w-[100px]">{value}</div>
 		},
 		userInfo.RoleId == 3
 			? {
