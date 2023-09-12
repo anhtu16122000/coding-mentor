@@ -11,6 +11,8 @@ import { ieltsExamApi } from '~/api/IeltsExam'
 import { homeWorkApi } from '~/api/home-work'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import { FaEdit } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const ModalCreateHomeWork = (props) => {
 	const { onRefresh, isEdit, defaultData } = props
@@ -19,6 +21,16 @@ const ModalCreateHomeWork = (props) => {
 
 	const [visible, setVisible] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(false)
+
+	const user = useSelector((state: RootState) => state.user.information)
+
+	function isAdmin() {
+		return user?.RoleId == 1
+	}
+
+	function isTeacher() {
+		return user?.RoleId == 2
+	}
 
 	async function postCreate(params) {
 		try {
@@ -71,7 +83,8 @@ const ModalCreateHomeWork = (props) => {
 			...defaultData,
 			...data,
 			FromDate: new Date(data?.FromDate).toISOString(),
-			ToDate: new Date(data?.ToDate).toISOString()
+			ToDate: new Date(data?.ToDate).toISOString(),
+			TeacherId: isTeacher() ? user?.UserInformationId : data?.TeacherId || null
 		}
 
 		await (!isEdit ? postCreate(dataSubmit) : putUpdate(dataSubmit))
@@ -166,24 +179,26 @@ const ModalCreateHomeWork = (props) => {
 							</Select>
 						</Form.Item>
 
-						<Form.Item name="TeacherId" label="GV chấm bài" rules={formRequired}>
-							<Select
-								showSearch
-								optionFilterProp="children"
-								className="primary-input"
-								loading={loading}
-								disabled={loading}
-								placeholder="Chọn đề"
-							>
-								{teachers.map((item) => {
-									return (
-										<Select.Option key={item.Id} value={item.Id}>
-											[{item?.TeacherCode}] - {item?.TeacherName}
-										</Select.Option>
-									)
-								})}
-							</Select>
-						</Form.Item>
+						{!isTeacher() && (
+							<Form.Item name="TeacherId" label="GV chấm bài" rules={formRequired}>
+								<Select
+									showSearch
+									optionFilterProp="children"
+									className="primary-input"
+									loading={loading}
+									disabled={loading}
+									placeholder="Chọn đề"
+								>
+									{teachers.map((item) => {
+										return (
+											<Select.Option key={item.Id} value={item.Id}>
+												[{item?.TeacherCode}] - {item?.TeacherName}
+											</Select.Option>
+										)
+									})}
+								</Select>
+							</Form.Item>
+						)}
 
 						<div className="grid grid-cols-2 gap-x-4">
 							<Form.Item valuePropName={'date'} className="col-span-1" name="FromDate" label="Bắt đầu" rules={formRequired}>
