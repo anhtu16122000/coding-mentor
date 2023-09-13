@@ -118,7 +118,7 @@ const MarkingExam = (props: IMarkingExam) => {
 					Comment: '',
 					CreatedBy: userInformation.FullName,
 					CreatedOn: '',
-					ID: 0,
+					// ID: 0,
 					Code: `cmt-${getTimeStamp()}`,
 					LinkAudio: '',
 					RoleName: userInformation?.role,
@@ -182,7 +182,7 @@ const MarkingExam = (props: IMarkingExam) => {
 			comments.forEach((comment, index) => {
 				formatedComments.push({
 					...comment,
-					Id: 0,
+					// Id: 0,
 					Content: comment.Comment,
 					Audio: comment?.LinkAudio || '',
 					Enable: true,
@@ -325,7 +325,7 @@ const MarkingExam = (props: IMarkingExam) => {
 					</div>
 				)}
 
-				{!isWritting && !dataMarking.IsDone && (
+				{!isWritting && (userInformation?.RoleId == 1 || userInformation?.RoleId == 2) && (
 					<button disabled={!!isLoading} onClick={handleSubmit} type="button" className="btn btn-primary w-100">
 						Lưu {!!isLoading && <Spin className="loading-base" />}
 					</button>

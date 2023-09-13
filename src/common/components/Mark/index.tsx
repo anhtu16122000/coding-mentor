@@ -226,7 +226,7 @@ const Mark = (props: any) => {
 	// CREATE NEW COMMENT
 	async function createNewComment(param: IFunCreate) {
 		comments.push({
-			ID: 0,
+			// ID: 0,
 			Code: `cmt-${param.ID}`,
 			Comment: '',
 			LinkAudio: '',
@@ -509,32 +509,41 @@ const Mark = (props: any) => {
 				open={markingWritting}
 				onCancel={() => setMarkingWritting(false)}
 				footer={
-					<div className="w-100" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-						<>
-							<PrimaryButton background="red" icon="cancel" onClick={() => setMarkingWritting(false)} type="button">
-								Đóng
-							</PrimaryButton>
+					isStudent() ? null : (
+						<div className="w-100" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+							<>
+								<PrimaryButton background="red" icon="cancel" onClick={() => setMarkingWritting(false)} type="button">
+									Đóng
+								</PrimaryButton>
 
-							{isTeacher() && !dataMarking?.IsDone && (
+								{isTeacher() && !dataMarking?.IsDone && (
+									<PrimaryButton
+										className="ml-[8px]"
+										loading={submitLoading}
+										background="blue"
+										icon="save"
+										onClick={_submitData}
+										type="button"
+									>
+										Hoàn thành chấm bài
+									</PrimaryButton>
+								)}
+
+								{/* {isStudent() && (
 								<PrimaryButton
+									onClick={_requestFix}
 									className="ml-[8px]"
 									loading={submitLoading}
 									background="blue"
 									icon="save"
-									onClick={_submitData}
 									type="button"
 								>
 									Hoàn thành chấm bài
 								</PrimaryButton>
-							)}
-
-							{isStudent() && (
-								<button type="button" onClick={_requestFix} className="btn btn-primary">
-									Yêu cầu chấm lại {submitLoading && <Spin className="ml-3" />}
-								</button>
-							)}
-						</>
-					</div>
+							)} */}
+							</>
+						</div>
+					)
 				}
 			>
 				<div className="wrap-writting-marking !h-[calc(100vh-200px)]">

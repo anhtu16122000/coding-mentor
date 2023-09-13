@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import { Spin } from 'antd'
+import { Input, Modal, Spin } from 'antd'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { RootState } from '~/store'
 import { ShowNostis, log } from '~/common/utils'
 import { AiFillClockCircle, AiOutlineEye } from 'react-icons/ai'
-import { FaFileMedicalAlt, FaFileSignature, FaUserGraduate } from 'react-icons/fa'
+import { FaCheck, FaFileMedicalAlt, FaFileSignature, FaTelegramPlane, FaUserGraduate } from 'react-icons/fa'
 import { examResultApi } from '~/api/exam/result'
 import ExamProvider from '~/common/components/Auth/Provider/exam'
 import htmlParser from '~/common/components/HtmlParser'
 import Skill from './Skill'
 import ResultHeader from './Header'
+import { IoClose } from 'react-icons/io5'
+import PrimaryButton from '~/common/components/Primary/Button'
 
 function ExamResult() {
 	const router = useRouter()
 	const user = useSelector((state: RootState) => state.user.information)
 
 	const [loading, setLoading] = useState(true)
+	const [submitVisible, setSubmitVisible] = useState<boolean>(false)
+	const [submiting, setSubmiting] = useState<boolean>(false)
+
+	const [inputNote, setInputNote] = useState<any>('')
 
 	useEffect(() => {
 		if (!!router?.query?.test && !!user) {
@@ -54,6 +60,47 @@ function ExamResult() {
 			ShowNostis.error(error?.message)
 		} finally {
 			setLoading(false)
+		}
+	}
+
+	async function submitAll() {
+		// 	{
+		// "Id": 0,
+		// "Note": "string",
+		// "Items": [
+		//   {
+		//     "IeltsSkillResultId": 0,
+		//     "Note": "string"
+		//   }
+		// ]
+		// 	}
+
+		const SUBMIT_DATA = {
+			Id: parseInt(router?.query?.test + ''),
+			Note: inputNote,
+			Items: []
+		}
+
+		if (!submiting) {
+			console.time('Gọi api nộp bài hết')
+
+			setSubmiting(true)
+			try {
+				const res = await examResultApi.review({ ...SUBMIT_DATA })
+				if (res.status == 200) {
+					ShowNostis.success('Hoàn tất chấm bài')
+					setInputNote('')
+					setSubmitVisible(false)
+
+					getInfo()
+					getOverview()
+				}
+			} catch (error) {
+			} finally {
+				getOverview()
+				setSubmiting(false)
+				console.timeEnd('Gọi api nộp bài hết')
+			}
 		}
 	}
 
@@ -138,9 +185,41 @@ function ExamResult() {
 								{!loading ? <AiOutlineEye size={20} /> : <Spin className="loading-base" style={{ marginBottom: -2, marginLeft: 0 }} />}
 								<div className="ml-[4px]">Xem chi tiết</div>
 							</div>
+
+							{overview?.Status != 2 && (
+								<div onClick={() => setSubmitVisible(true)} className="ml-[8px] btn btn-success mb-[16px] btn-view-detail">
+									{!loading ? (
+										<FaCheck size={16} className="mr-[4px]" />
+									) : (
+										<Spin className="loading-base" style={{ marginBottom: -2, marginLeft: 0 }} />
+									)}
+									<div className="ml-[4px]">Hoàn thành chấm bài</div>
+								</div>
+							)}
 						</div>
 					</div>
 				</div>
+
+				<Modal
+					width={500}
+					closable={false}
+					open={submitVisible}
+					footer={
+						<div className="tae-submit-footer">
+							<PrimaryButton background="red" icon="cancel" type="button" onClick={() => setSubmitVisible(false)}>
+								Đóng
+							</PrimaryButton>
+							<PrimaryButton loading={submiting} className="ml-[8px]" background="blue" icon="cancel" type="button" onClick={submitAll}>
+								{submiting ? 'Đang lưu..' : 'Hoàn thành'}
+							</PrimaryButton>
+						</div>
+					}
+				>
+					<div className="">
+						<div style={{ fontWeight: 500, fontSize: 16, marginBottom: 8 }}>Nhận xét</div>
+						<Input.TextArea rows={5} placeholder="Nhận xét" defaultValue={inputNote} onChange={(e) => setInputNote(e.target?.value)} />
+					</div>
+				</Modal>
 			</div>
 		</ExamProvider>
 	)

@@ -63,7 +63,6 @@ function ResultDetail() {
 			if (res.status == 200) {
 				//  Mọi thứ phải bắt đầu từ khúc này. Nếu bị block thì không làm gì cả
 				setTestInfo(res.data.data)
-
 				getOverview()
 			}
 		} catch (error) {
