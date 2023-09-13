@@ -42,6 +42,8 @@ function ResultDetail() {
 	const [currentQuestion, setCurrentQuestion] = useState(null)
 	const [showQuestions, setShowQuestions] = useState<boolean>(true)
 
+	const [loadingGroup, setLoadingGroup] = useState<boolean>(false)
+
 	const [blocked, setBlocked] = useState('')
 
 	useEffect(() => {
@@ -71,11 +73,18 @@ function ResultDetail() {
 		}
 	}
 
-	async function getResultQuestionGroup() {
+	// log.Yellow('---- XX currentQuestion: ', currentQuestion)
+
+	async function getResultQuestionGroup(runAnyway?: any) {
 		log.Yellow('----------------------------------------------------------------', '')
 
+		if (!runAnyway && !currentQuestion?.IeltsQuestionGroupResultId) {
+			return
+		}
+
+		setLoadingGroup(true)
 		try {
-			const res = await ieltsGroupResultApi.getByID(currentQuestion?.IeltsQuestionGroupResultId)
+			const res = await ieltsGroupResultApi.getByID(!runAnyway ? currentQuestion?.IeltsQuestionGroupResultId : runAnyway)
 			if (res.status == 200) {
 				setCurGroup(res.data.data)
 			} else {
@@ -85,6 +94,7 @@ function ResultDetail() {
 			ShowNostis.error(error?.message)
 		} finally {
 			setLoading(false)
+			setLoadingGroup(false)
 		}
 	}
 
@@ -327,7 +337,7 @@ function ResultDetail() {
 			}
 		}
 
-		console.log('---- dragSelected: ', dragSelected)
+		// console.log('---- dragSelected: ', dragSelected)
 
 		// ----
 		formatInput()
@@ -400,7 +410,10 @@ function ResultDetail() {
 						skills={skills}
 						setCurAudio={setCurAudio}
 						currentSkill={currentSkill}
-						setCurrentSkill={handleChangeSkill}
+						setCurrentSkill={(event) => {
+							setLoadingGroup(true)
+							setCurrentSkill(event)
+						}}
 						onRefreshSkill={getExamSkill}
 						sections={sections}
 						currentSection={currentSection}
@@ -438,6 +451,7 @@ function ResultDetail() {
 								setCurrentQuestion={setCurrentQuestion}
 								getDoingQuestionGroup={getResultQuestionGroup}
 								isResult={true}
+								onRefresh={(e) => getResultQuestionGroup(e)}
 								onRefreshNav={() => {
 									setNotSetCurrentQuest(true)
 									getQuestions()
@@ -542,6 +556,15 @@ function ResultDetail() {
 						<div className="text-[18px] font-[600] text-[red]">{blocked}</div>
 					</div>
 				</Modal>
+
+				{loadingGroup && (
+					<div
+						className="bg-[rgba(0,0,0,0.1)] no-select all-center rounded-[6px] fixed top-0 left-0 w-full h-full"
+						style={{ zIndex: 9999999 }}
+					>
+						<div className="text-[#000] font-[500] text-[16px]">Đang xử lý...</div>
+					</div>
+				)}
 			</div>
 		</ExamProvider>
 	)

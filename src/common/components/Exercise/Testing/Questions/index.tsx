@@ -79,6 +79,8 @@ const TestingQuestions = (props) => {
 							setCurrentQuestion={setCurrentQuestion}
 							onRefreshNav={onRefreshNav}
 							isResult={isResult}
+							curGroup={data}
+							onRefresh={onRefresh}
 						/>
 					)
 				})}
@@ -125,6 +127,8 @@ const TestingQuestions = (props) => {
 							setCurrentQuestion={setCurrentQuestion}
 							onRefreshNav={onRefreshNav}
 							isResult={isResult}
+							curGroup={data}
+							onRefresh={onRefresh}
 						/>
 					)
 				})}

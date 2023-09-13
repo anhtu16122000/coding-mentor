@@ -122,19 +122,21 @@ function ExamResult() {
 
 							<h1 className="result-h1-title">Tổng quan kết quả</h1>
 
-							<div
-								onClick={() => window.open('/exam-result/detail/?test=' + router.query?.test, '_blank')}
-								className="btn btn-primary mt-[16px] btn-view-detail"
-							>
-								{!loading ? <AiOutlineEye size={20} /> : <Spin className="loading-base" style={{ marginBottom: -2, marginLeft: 0 }} />}
-								<div className="ml-[4px]">Xem chi tiết</div>
-							</div>
-
 							<div className="new-sections">
 								{!!overview?.IeltsSkillResultOverviews &&
 									overview?.IeltsSkillResultOverviews.map((section: any, index) => {
 										return <Skill key={`sec-${index}`} index={index} data={section} />
 									})}
+							</div>
+						</div>
+
+						<div className="flex items-center justify-center">
+							<div
+								onClick={() => window.open('/exam-result/detail/?test=' + router.query?.test, '_blank')}
+								className="btn btn-primary mb-[16px] btn-view-detail"
+							>
+								{!loading ? <AiOutlineEye size={20} /> : <Spin className="loading-base" style={{ marginBottom: -2, marginLeft: 0 }} />}
+								<div className="ml-[4px]">Xem chi tiết</div>
 							</div>
 						</div>
 					</div>
