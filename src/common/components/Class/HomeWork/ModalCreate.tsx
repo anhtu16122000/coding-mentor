@@ -187,7 +187,7 @@ const ModalCreateHomeWork = (props) => {
 									className="primary-input"
 									loading={loading}
 									disabled={loading}
-									placeholder="Chọn đề"
+									placeholder="Chọn GV"
 								>
 									{teachers.map((item) => {
 										return (

@@ -340,6 +340,12 @@ export const AdminChildMenu = [
 				Key: '/class/zoom-rooms',
 				Route: '/class/zoom-rooms',
 				Text: 'Danh sách phòng Zoom'
+			},
+			{
+				TypeItem: 'single',
+				Key: '/practice',
+				Route: '/practice',
+				Text: 'Luyện tập'
 			}
 		]
 	},
