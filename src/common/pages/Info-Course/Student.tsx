@@ -435,6 +435,17 @@ const Student: FC<IPersonnel> = (props) => {
 						{isAdmin() && (
 							<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.UserInformationId)} />
 						)}
+
+						{isAdmin() && (
+							<IconButton
+								onClick={() => router.push({ pathname: '/training-student', query: { StudentID: item?.UserInformationId } })}
+								type="button"
+								background="transparent"
+								color="blue"
+								icon="tutoring"
+								tooltip="Luyện tập"
+							/>
+						)}
 					</div>
 				)
 			}

@@ -42,11 +42,9 @@ const Practice = () => {
 	}, [userInfo])
 
 	async function getData() {
-		const ClassId = router.query?.class || null
-
 		setLoading(true)
 		try {
-			const res = await trainingRouteApi.getAll({ ...filters, classId: ClassId })
+			const res = await trainingRouteApi.getAll({ ...filters })
 			if (res.status == 200) {
 				setData(res.data?.data)
 				setTotalPage(res.data.totalRow)

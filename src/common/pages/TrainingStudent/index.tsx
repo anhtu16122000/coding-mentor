@@ -16,12 +16,10 @@ import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { RootState } from '~/store'
 import ModalCreatePractice from './ModalCreate'
+import { studentInTrainingApi } from '~/api/practice/StudentInTraining'
 import { useDispatch } from 'react-redux'
 import { setGlobalBreadcrumbs } from '~/store/globalState'
-import { trainingRouteFormApi } from '~/api/practice/TrainingRouteForm'
-import ModalCreateTrainingRouteForm from './ModalCreate'
-import TrainingRouteDetail from './Detail'
-import RenderItem from './RenderItem'
+import ModalCreateTrainingStudent from './ModalCreate'
 
 const listTodoApi = {
 	pageSize: PAGE_SIZE,
@@ -30,10 +28,8 @@ const listTodoApi = {
 	Name: null
 }
 
-const TrainingRouteForm = () => {
+const TrainingStudent = () => {
 	const router = useRouter()
-
-	const dispatch = useDispatch()
 
 	const userInfo = useSelector((state: RootState) => state.user.information)
 
@@ -43,42 +39,28 @@ const TrainingRouteForm = () => {
 	const [loading, setLoading] = useState<boolean>(true)
 	const [totalPage, setTotalPage] = useState(null)
 
-	const [detail, setDetail] = useState(null)
-
 	useEffect(() => {
-		if (!!router?.query?.practice) {
+		if (!!router.query?.StudentID || userInfo?.RoleId == 3) {
 			getData()
 		}
-	}, [router])
+	}, [router, userInfo])
+
+	const dispatch = useDispatch()
 
 	async function getData() {
+		const studentId = userInfo?.RoleId == 3 ? userInfo?.UserInformationId : router.query?.StudentID || null
+
 		setLoading(true)
 		try {
-			const res = await trainingRouteApi.getByID(parseInt(router?.query?.practice + ''))
+			const res = await studentInTrainingApi.getAll({ ...filters, studentId: parseInt(studentId + '') })
 			if (res.status == 200) {
 				dispatch(
 					setGlobalBreadcrumbs([
 						{ title: 'Luyện tập', link: '/practice' },
-						{ title: res.data?.data?.Name, link: '' }
+						{ title: res.data?.data[0]?.StudentFullName, link: '' }
 					])
 				)
-				getTrainingRouteForm(res.data?.data?.Id)
-				setDetail(res.data?.data)
-			} else {
-				setData([])
-				setTotalPage(1)
-			}
-		} catch (error) {
-		} finally {
-			setLoading(false)
-		}
-	}
 
-	async function getTrainingRouteForm(trainingRouteId: any) {
-		setLoading(true)
-		try {
-			const res = await trainingRouteFormApi.getAll({ ...filters, trainingRouteId: trainingRouteId })
-			if (res.status == 200) {
 				setData(res.data?.data)
 				setTotalPage(res.data.totalRow)
 			} else {
@@ -113,7 +95,7 @@ const TrainingRouteForm = () => {
 	async function delThis(Id) {
 		setLoading(true)
 		try {
-			const res = await trainingRouteFormApi.delete(Id)
+			const res = await studentInTrainingApi.delete(Id)
 			if (res.status == 200) {
 				getData()
 			} else {
@@ -132,10 +114,26 @@ const TrainingRouteForm = () => {
 
 	const columns = [
 		{
+			title: 'Học viên',
+			dataIndex: 'StudentFullName',
+			render: (value, item, index) => <div className="font-[600] text-[#000000] min-w-[100px] max-w-[250px]">{value}</div>
+		},
+		{
 			title: 'Tên bài',
-			dataIndex: 'Name',
+			dataIndex: 'TrainingRouteName',
 			render: (value, item, index) => <div className="font-[600] text-[#1b73e8] min-w-[100px] max-w-[250px]">{value}</div>
 		},
+		// {
+		// 	title: 'Tổng số bài',
+		// 	dataIndex: 'TotalExam',
+		// 	render: (value, item, index) => <div className="min-w-[80px]">{value || 0}</div>
+		// },
+		// {
+		// 	title: 'Bài đã hoàn thành',
+		// 	width: 100,
+		// 	dataIndex: 'CompletedExam',
+		// 	render: (value, item, index) => <div className="min-w-[120px]">{value || 0}</div>
+		// },
 		{
 			title: 'Người tạo',
 			dataIndex: 'CreatedBy',
@@ -151,18 +149,11 @@ const TrainingRouteForm = () => {
 			render: (value, item, index) => {
 				return (
 					<div className="flex items-center">
-						{(is.admin || is.teacher) && (
-							<ModalCreateTrainingRouteForm
-								isEdit
-								defaultData={item}
-								onRefresh={getData}
-								TrainingRouteId={parseInt(router?.query?.practice + '')}
-							/>
-						)}
+						{(is.admin || is.teacher) && <ModalCreatePractice isEdit defaultData={item} onRefresh={getData} />}
 
 						{(is.admin || is.teacher) && (
 							<PrimaryTooltip place="left" id={`hw-del-${item?.Id}`} content="Làm bài">
-								<Popconfirm placement="left" title={`Xoá bài tập: ${item?.Name}?`} onConfirm={() => delThis(item?.Id)}>
+								<Popconfirm placement="left" title={`Xoá?`} onConfirm={() => delThis(item?.Id)}>
 									<div className="w-[28px] text-[#C94A4F] h-[30px] all-center hover:opacity-70 cursor-pointer ml-[8px]">
 										<IoClose size={26} className="mb-[-2px]" />
 									</div>
@@ -171,7 +162,12 @@ const TrainingRouteForm = () => {
 						)}
 
 						<PrimaryTooltip place="left" id={`hw-res-${item?.Id}`} content="Xem chi tiết">
-							<TrainingRouteDetail parent={item} />
+							<div
+								onClick={() => router.push(`/practice/detail/?practice=${userInfo?.RoleId == 3 ? item?.TrainingRouteId : item?.Id}`)}
+								className="w-[28px] ml-[8px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+							>
+								<FiEye size={20} />
+							</div>
 						</PrimaryTooltip>
 					</div>
 				)
@@ -185,33 +181,21 @@ const TrainingRouteForm = () => {
 				className="shadow-sm"
 				title={
 					<div className="w-full flex items-center justify-between">
-						<div>{detail?.Name || 'Luyện tập'}</div>
-						{(is.admin || is.teacher) && (
-							<ModalCreateTrainingRouteForm onRefresh={getData} TrainingRouteId={parseInt(router?.query?.practice + '')} />
-						)}
+						<div>Luyện tập</div>
+						{(is.admin || is.teacher) && <ModalCreateTrainingStudent onRefresh={getData} />}
 					</div>
 				}
 			>
-				{userInfo?.RoleId == 3 && (
-					<div className="grid grid-cols-1 w600:grid-cols-2 w1000:grid-cols-3 w1200:grid-cols-4 gap-4">
-						{data.map((item, index) => {
-							return <RenderItem key={`iko-${index}-${item?.Id}`} item={item} />
-						})}
-					</div>
-				)}
-
-				{userInfo?.RoleId != 3 && (
-					<PrimaryTable
-						loading={loading}
-						total={totalPage && totalPage}
-						data={data}
-						columns={columns}
-						onChangePage={(event: number) => setFilters({ ...filters, pageIndex: event })}
-					/>
-				)}
+				<PrimaryTable
+					loading={loading}
+					total={totalPage && totalPage}
+					data={data}
+					columns={columns}
+					onChangePage={(event: number) => setFilters({ ...filters, pageIndex: event })}
+				/>
 			</Card>
 		</>
 	)
 }
 
-export default TrainingRouteForm
+export default TrainingStudent
