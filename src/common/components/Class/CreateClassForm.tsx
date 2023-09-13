@@ -94,12 +94,13 @@ const CreateClassForm = (props) => {
 	const [curriculumSelected, setCurriculumSelected] = useState<Curriculum>()
 	const [noneConvertCurriculum, setNoneConvertCurriculum] = useState([])
 	const [teacher, setTeacher] = useState([])
+	const [tutors, setTutors] = useState<any>([])
 	const [academic, setAcademic] = useState([])
 	const [selectedBranch, setSelectedBranch] = useState(null)
 
 	// Program lúc chưa parse
 	const [programs, setPrograms] = useState([])
-	const [listTimeFrames, setListTimeFrames] = useState([{ Id: 1, DayOfWeek: null, StudyTimeId: null }])
+	const [listTimeFrames, setListTimeFrames] = useState([{ Id: 1, DayOfWeek: null, StudyTimeId: null, TeacherId: null, TutorIds: null }])
 	const [listDisabledTimeFrames, setListDisabledTimeFrames] = useState([])
 	const state = useSelector((state: RootState) => state)
 	const room = useSelector((state: RootState) => state.class.room)
@@ -116,7 +117,7 @@ const CreateClassForm = (props) => {
 		Name: yup.string().required('Bạn không được để trống'),
 		GradeId: yup.string().required('Bạn không được để trống'),
 		ProgramId: yup.string().required('Bạn không được để trống'),
-		AcademicId: yup.string().required('Bạn không được để trống'),
+
 		TeacherId: yup.string().required('Bạn không được để trống'),
 		CurriculumId: yup.string().required('Bạn không được để trống'),
 		StartDay: yup.string().required('Bạn không được để trống'),
@@ -265,9 +266,23 @@ const CreateClassForm = (props) => {
 		}
 	}
 
+	const getTutors = async (branchId: number, curriculumId: number) => {
+		try {
+			const res = await classApi.getAllTutor({ branchId, curriculumId })
+			if (res.status === 200) {
+				const convertData = parseSelectArrayUser(res.data.data, 'TutorName', 'TutorCode', 'TutorId')
+				setTutors(convertData)
+			} else {
+				setTutors([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
+
 	const handleAddListTimeFrame = () => {
 		setListTimeFrames((prev) => {
-			return [...listTimeFrames, { Id: prev[prev.length - 1].Id + 1, DayOfWeek: null, StudyTimeId: null }]
+			return [...listTimeFrames, { Id: prev[prev.length - 1].Id + 1, DayOfWeek: null, StudyTimeId: null, TeacherId: null, TutorIds: null }]
 		})
 		setListDisabledTimeFrames((prev) => [
 			...listDisabledTimeFrames,
@@ -295,7 +310,7 @@ const CreateClassForm = (props) => {
 	const handleChangeTimeFrame = (data, name, value) => {
 		const getIndexDisableTimeFrame = listDisabledTimeFrames.findIndex((timeFrame) => timeFrame.Id === data.Id)
 		const getIndexTimeFrame = listTimeFrames.findIndex((timeFrame) => timeFrame.Id === data.Id)
-		if (name === 'DayOfWeek') {
+		if (name === 'DayOfWeek' || name === 'TutorIds' || name === 'TeacherId') {
 			listDisabledTimeFrames[getIndexDisableTimeFrame] = { ...listDisabledTimeFrames[getIndexDisableTimeFrame], [name]: value }
 			listTimeFrames[getIndexTimeFrame] = { ...listTimeFrames[getIndexTimeFrame], [name]: value }
 			setListDisabledTimeFrames([...listDisabledTimeFrames])
@@ -317,7 +332,6 @@ const CreateClassForm = (props) => {
 
 	const handleSelectChange = async (name, value) => {
 		if (name === 'GradeId') {
-			
 			setCurriculum([])
 			getAllProgramByGrade(value)
 			if (form.getFieldValue('ProgramId')) {
@@ -369,7 +383,12 @@ const CreateClassForm = (props) => {
 
 	const handleSubmit = async (data) => {
 		const convertListTimeFrame = listTimeFrames.map((timeFrame) => {
-			return { DayOfWeek: timeFrame.DayOfWeek, StudyTimeId: timeFrame.StudyTimeId }
+			return {
+				DayOfWeek: timeFrame.DayOfWeek,
+				StudyTimeId: timeFrame.StudyTimeId,
+				TeacherId: timeFrame.TeacherId,
+				TutorIds: timeFrame.TutorIds
+			}
 		})
 
 		const getBranchNameById = branch.find((item) => item.value === data.BranchId)
@@ -408,7 +427,7 @@ const CreateClassForm = (props) => {
 			const res = await onSubmit(DATA_LESSON_WHEN_CREATE)
 			if (res.status == 200) {
 				setIsModalOpen(false)
-				setListTimeFrames([{ Id: 1, DayOfWeek: null, StudyTimeId: null }])
+				setListTimeFrames([{ Id: 1, DayOfWeek: null, StudyTimeId: null, TeacherId: null, TutorIds: null }])
 			}
 		} catch (err) {
 		} finally {
@@ -437,6 +456,18 @@ const CreateClassForm = (props) => {
 			getTeachers(form.getFieldValue('BranchId'), form.getFieldValue('ProgramId'))
 		}
 	}, [form.getFieldValue('BranchId'), form.getFieldValue('ProgramId')])
+
+	useEffect(() => {
+		const branchId = form.getFieldValue('BranchId')
+		const curriculumId = form.getFieldValue('CurriculumId')
+		form.setFieldValue('TutorIds', [])
+
+		if (branchId && curriculumId) {
+			getTutors(branchId, curriculumId)
+		} else {
+			setTutors([])
+		}
+	}, [form.getFieldValue('BranchId'), form.getFieldValue('CurriculumId')])
 
 	return (
 		<>
@@ -599,6 +630,32 @@ const CreateClassForm = (props) => {
 														</Form.Item>
 													</div>
 												</div>
+												<div className="row">
+													<div className="col-md-6 col-12">
+														<SelectField
+															isRequired
+															mode="multiple"
+															rules={[{ required: true, message: 'Không được để trống' }]}
+															placeholder="Chọn trợ giảng"
+															label="Trợ giảng"
+															name="TutorIds"
+															onChangeSelect={(value) => handleChangeTimeFrame(timeFrame, 'TutorIds', value)}
+															optionList={tutors}
+															maxTagCount={1}
+														/>
+													</div>
+													<div className="col-md-6 col-12">
+														<SelectField
+															isRequired
+															rules={[yupSync]}
+															placeholder="Chọn giáo viên"
+															onChangeSelect={(value) => handleChangeTimeFrame(timeFrame, 'TeacherId', value)}
+															label="Giáo viên"
+															name="TeacherId"
+															optionList={teacher}
+														/>
+													</div>
+												</div>
 											</div>
 										)
 									})}
@@ -639,15 +696,16 @@ const CreateClassForm = (props) => {
 							<div className="col-md-6 col-12">
 								<SelectField
 									isRequired
-									rules={[yupSync]}
+									rules={[{ required: true, message: 'Không được để trống' }]}
 									placeholder="Chọn học vụ"
 									label="Học vụ"
 									name="AcademicId"
 									optionList={academic}
+									maxTagCount={2}
 								/>
 							</div>
 						)}
-						<div className="col-md-6 col-12">
+						{/* <div className="col-md-6 col-12">
 							<SelectField
 								isRequired
 								rules={[yupSync]}
@@ -656,7 +714,7 @@ const CreateClassForm = (props) => {
 								name="TeacherId"
 								optionList={teacher}
 							/>
-						</div>
+						</div> */}
 					</div>
 				</Form>
 			</Modal>
