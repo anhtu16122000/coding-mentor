@@ -119,7 +119,7 @@ const LibraryLessons = ({ curriculumId, activatedUnit, setActivatedUnit }) => {
 	async function addFile(data) {
 		if (!!activatedUnit?.Id) {
 			try {
-				const response = await documentLibraryApi.add({ DirectoryId: activatedUnit.Id, FileUrl: data })
+				const response = await documentLibraryApi.add({ DirectoryId: activatedUnit.Id, ...data })
 				if (response.status == 200) {
 					getData()
 				}

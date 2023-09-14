@@ -1021,3 +1021,32 @@ button {
 		// }
 	}
 }
+
+.schedule-new-item {
+	display: flex;
+	background: #fff;
+	border-radius: 6px;
+	padding: 5px 8px;
+	width: 100%;
+	transform: scale(1);
+	align-items: center;
+	justify-content: space-between;
+	transition: all 0.2 ease;
+	margin-bottom: 5px;
+	&:hover {
+		box-shadow: 0 3px 10px 0 #1b73e8;
+		transform: translateY(-2px);
+	}
+}
+
+.schedule-list-container {
+	padding: 10px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background-color: #f0f2f4;
+	border-radius: 5px;
+	&::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+	}
+}
