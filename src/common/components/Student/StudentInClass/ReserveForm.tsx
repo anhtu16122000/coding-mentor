@@ -1,4 +1,4 @@
-import { Card, DatePicker, Form, Input, Modal, Select } from 'antd'
+import { Card, DatePicker, Form, Input, InputNumber, Modal, Select } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
 import { ShowNostis } from '~/common/utils'
@@ -22,9 +22,16 @@ const url = 'ClassReserve'
 
 const ReserveForm: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 	const [form] = Form.useForm()
+	const [currentClass, setCurrentClass] = useState<any>()
+	const [loading, setLoading] = useState<boolean>(false)
+	const [visible, setVisible] = useState<boolean>(false)
 
-	const [loading, setLoading] = useState(false)
-	const [visible, setVisible] = useState(false)
+	useEffect(() => {
+		if (visible) {
+			getCurrentClass()
+			gePaid()
+		}
+	}, [visible])
 
 	function toggle() {
 		setVisible(!visible)
@@ -46,6 +53,41 @@ const ReserveForm: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 
 		!isEdit && post(DATA_SUBMIT)
 		isEdit && edit(DATA_SUBMIT)
+	}
+
+	const getCurrentClass = async () => {
+		try {
+			const response = await RestApi.get('Class/old-class', {
+				'request.studentId': item?.StudentId,
+				'request.classId': item?.ClassId
+			})
+			if (response.status == 200) {
+				setCurrentClass(response.data.data)
+			} else {
+				setCurrentClass(null)
+			}
+		} catch (err) {
+			ShowNostis.error(err?.message)
+		} finally {
+			setLoading(false)
+		}
+	}
+	const gePaid = async () => {
+		try {
+			const response = await RestApi.get('ClassReserve/paid', {
+				studentId: item?.StudentId,
+				classId: item?.ClassId
+			})
+			if (response.status == 200) {
+				form.setFieldValue('Price', response.data.data.Paid)
+			} else {
+				
+			}
+		} catch (err) {
+			ShowNostis.error(err?.message)
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	async function post(params) {
@@ -136,8 +178,23 @@ const ReserveForm: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 				<div className="font-[500] mb-[4px]">Lớp hiện tại</div>
 				<Card className="mb-[16px] card-min-padding">
 					<div className="relative">
-						<div>{item?.ClassName}</div>
-
+						{/* <div>{item?.ClassName}</div> */}
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'column'
+							}}
+						>
+							<div style={{ fontWeight: '600' }}>{item?.ClassName}</div>
+							{currentClass && (
+								<>
+									<div className="text-[12px]">Giá: {parseToMoney(currentClass?.Price)}</div>
+									<div className="text-[12px]">
+										Đã học: {currentClass?.CompletedLesson}/{currentClass?.TotalLesson}
+									</div>
+								</>
+							)}
+						</div>
 						<PrimaryTooltip
 							className="top-[-4px] right-[-4px] absolute w-[28px] h-[18px]"
 							id={`class-in-new-${item?.Id}`}
@@ -159,6 +216,12 @@ const ReserveForm: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 					onFinish={onFinish}
 					autoComplete="on"
 				>
+					<Form.Item className="col-span-2" label="Tạm tính" name="Price" rules={formNoneRequired}>
+						<InputNumber
+							placeholder="Số tiền Tạm tín"
+							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
+						/>
+					</Form.Item>
 					<Form.Item className="col-span-2 ant-select-class-selected" name="Expires" label="Thời hạn bảo lưu">
 						<DatePicker
 							disabled={loading}

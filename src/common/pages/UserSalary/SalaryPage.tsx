@@ -152,6 +152,7 @@ export const SalaryPage = () => {
 					getSalary(apiParameters)
 					// onRefresh()
 					setLoading(false)
+					setStatusUpdate(null)
 					setItemsChecked([])
 					ShowNoti('success', res.data.message)
 				}

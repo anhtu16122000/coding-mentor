@@ -26,11 +26,29 @@ const url = 'Refund'
 
 const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 	const [form] = Form.useForm()
-
+	const [currentClass, setCurrentClass] = useState<any>()
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(false)
 	const [methods, setMethods] = useState<any>([])
 	const [branch, setBranch] = useState<IBranch[]>(null)
+
+	const getCurrentClass = async () => {
+		try {
+			const response = await RestApi.get('Class/old-class', {
+				'request.studentId': item?.StudentId,
+				'request.classId': item?.ClassId
+			})
+			if (response.status == 200) {
+				setCurrentClass(response.data.data)
+			} else {
+				setCurrentClass(null)
+			}
+		} catch (err) {
+			ShowNostis.error(err?.message)
+		} finally {
+			setLoading(false)
+		}
+	}
 
 	function toggle() {
 		setVisible(!visible)
@@ -42,8 +60,9 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 
 	useEffect(() => {
 		if (visible) {
+			form.setFieldValue('Price', item.Price)
 			getPaymentMethods()
-
+			getCurrentClass()
 			getBranchs()
 		}
 	}, [visible])
@@ -188,6 +207,45 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 						</PrimaryTooltip>
 					</div>
 				</Card>
+
+				<div className="font-[500] mb-[4px]">Lớp hiện tại</div>
+				<Card className="mb-[16px] card-min-padding">
+					<div className="relative">
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'column'
+							}}
+						>
+							<div style={{ fontWeight: '600' }}>{item?.ClassName}</div>
+							{currentClass && (
+								<>
+									<div className="text-[12px]">Giá: {parseToMoney(currentClass?.Price)}</div>
+									<div className="text-[12px]">
+										Đã học: {currentClass?.CompletedLesson}/{currentClass?.TotalLesson}
+									</div>
+								</>
+							)}
+						</div>
+						<PrimaryTooltip
+							className="top-[-4px] right-[-4px] absolute w-[28px] h-[18px]"
+							id={`class-in-new-${item?.Id}`}
+							place="right"
+							content="Xem lớp"
+						>
+							<div onClick={() => viewClassDetails(item)} className="btn-open-in-new-tab text-[#43A047]">
+								<MdOpenInNew size={16} />
+							</div>
+						</PrimaryTooltip>
+					</div>
+				</Card>
+
+				{/* <div className="font-[500] mb-[4px]">Tạm tính</div>
+				<Input value={item.Paid===null ? 0 : item.Paid} style={{
+					marginBottom: 10,
+					height: 38,
+					borderRadius: 6
+				}}/> */}
 
 				<Form
 					form={form}

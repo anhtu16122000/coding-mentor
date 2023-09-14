@@ -353,6 +353,7 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
 						/>
 					</Form.Item>
+					
 					<Form.Item
 						className="col-span-2"
 						label="Thanh toán"
