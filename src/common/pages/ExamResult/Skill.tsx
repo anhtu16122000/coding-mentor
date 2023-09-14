@@ -12,7 +12,7 @@ const Skill = (props) => {
 				<div className="vir-h"></div>
 
 				<div className="text-[#000]">
-					Số câu tự luận: {data?.QuestionEssayAmount} {data?.QuestionEssayAmount > 0 && <>- Đã chấm: {data?.QuestionEssayGraded || ''}</>}
+					Số câu tự luận: {data?.QuestionEssayAmount} {data?.QuestionEssayAmount > 0 && <>- Đã chấm: {data?.QuestionEssayGraded || 0}</>}
 				</div>
 				<div className="text-[#000]">Số câu trắc nghiệm: {data?.QuestionMultipleChoiceAmount}</div>
 
