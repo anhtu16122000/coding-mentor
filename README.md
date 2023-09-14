@@ -1,15 +1,21 @@
-## MONA LMS v2.2 🐶 🐹 🐰
+## MONA EDUTECH v2.2 🐶 🐹 🐰
 
 <img src="https://img.shields.io/badge/mona--lms-v2.0-4CAF50"/> <img src="https://img.shields.io/badge/react-18.2.0-%23EC407A"/> <img src="https://img.shields.io/badge/next-12.2.2-orange"/> <img src="https://img.shields.io/badge/antd-4.21.6-42A5F5"/>
 
+Link demo (tự build nhánh "dev"): https://mona-lms.vercel.app
+
+Link production (tự build khi kiu Minh hoặc Chao): https://monalms.monamedia.net
+
 ### Người mới vui lòng đọc hết và xem kĩ các lưu ý 🐥
+
+Nhánh chứa code mới nhất luôn là nhánh "dev" hoặc "development"
 
 ## Cài đặt nè ⚙️
 
 Clone source:
 
 ```sh
-git clone https://github.com/hoanglong151/lms-v.2.2.git
+git clone https://github.com/chaudev/Mona-LMS-2023.git
 ```
 
 Cài thư viện:

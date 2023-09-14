@@ -701,3 +701,33 @@
 .ex23-mind-quest-wrapper {
 	@apply flex flex-col flex-shrink-0 border-r-[1px] border-[#ffffff];
 }
+
+.check-false {
+	.ant-checkbox {
+		&.ant-checkbox-checked {
+			.ant-checkbox-inner {
+				background-color: #e00e0e;
+			}
+		}
+	}
+}
+
+.check-true {
+	.ant-checkbox {
+		&.ant-checkbox-checked {
+			.ant-checkbox-inner {
+				background-color: #1890ff;
+			}
+		}
+	}
+}
+
+.check-true-true {
+	.ant-checkbox {
+		&.ant-checkbox-checked {
+			.ant-checkbox-inner {
+				background-color: #0baa0e;
+			}
+		}
+	}
+}

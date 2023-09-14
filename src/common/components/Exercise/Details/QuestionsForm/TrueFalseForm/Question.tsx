@@ -7,7 +7,7 @@ import htmlParser from '~/common/components/HtmlParser'
 import { RootState } from '~/store'
 
 const TrueFalseQuestion = (props) => {
-	const { data, isDoing, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav, indexInExam } = props
+	const { data, isDoing, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav, indexInExam, isResult } = props
 
 	const [loading, setLoading] = useState<boolean>(true)
 
@@ -15,9 +15,21 @@ const TrueFalseQuestion = (props) => {
 		setLoading(false)
 	}, [data])
 
-	function checkChecked(index: number) {
-		if (!isDoing && data.IeltsAnswers[index].Correct) {
+	function getTrueAns(index: number) {
+		if (!isDoing && data.IeltsAnswerResults[index].Correct) {
 			return true
+		}
+
+		return false
+	}
+
+	function checkChecked(index: number) {
+		if (!isDoing && !isResult && data.IeltsAnswers[index].Correct) {
+			return true
+		}
+
+		if (!!isResult) {
+			return data?.IeltsAnswerResults[index].MyChoice
 		}
 
 		if (!!isDoing) {
@@ -63,6 +75,22 @@ const TrueFalseQuestion = (props) => {
 
 	const curGroup = useSelector((state: RootState) => state.takeAnExam?.curGroup)
 
+	function getClass(index) {
+		if (checkChecked(index) && getTrueAns(index)) {
+			return 'check-true-true'
+		}
+
+		if (checkChecked(index) && !getTrueAns(index)) {
+			return 'check-false'
+		}
+
+		if (!checkChecked(index) && getTrueAns(index)) {
+			return 'check-true'
+		}
+
+		return ''
+	}
+
 	return (
 		<div
 			onClick={() =>
@@ -76,25 +104,51 @@ const TrueFalseQuestion = (props) => {
 				{htmlParser(data?.Content)}
 			</div>
 
-			<div className="flex items-center mr-[2px] true-false-checkbox">
-				<div className="w-[50px] flex items-center justify-center">
-					<Checkbox
-						disabled={loading || !isDoing}
-						id={`check-box-${data.IeltsAnswers[0]?.Id}`}
-						defaultChecked={checkChecked(0)}
-						onClick={(e: any) => e.target?.checked && insertDetails(data.IeltsAnswers[0])}
-					/>
-				</div>
+			{!isResult && (
+				<div className="flex items-center mr-[2px] true-false-checkbox">
+					<div className="w-[50px] flex items-center justify-center">
+						<Checkbox
+							disabled={loading || !isDoing || isResult}
+							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
+							defaultChecked={checkChecked(0)}
+							onClick={(e: any) => !isResult && e.target?.checked && insertDetails(data.IeltsAnswers[0])}
+						/>
+					</div>
 
-				<div className="w-[50px] flex items-center justify-center">
-					<Checkbox
-						disabled={loading || !isDoing}
-						id={`check-box-${data.IeltsAnswers[1]?.Id}`}
-						defaultChecked={checkChecked(1)}
-						onClick={(e: any) => e.target?.checked && insertDetails(data.IeltsAnswers[1])}
-					/>
+					<div className="w-[50px] flex items-center justify-center">
+						<Checkbox
+							disabled={loading || !isDoing || isResult}
+							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
+							defaultChecked={checkChecked(1)}
+							onClick={(e: any) => !isResult && e.target?.checked && insertDetails(data.IeltsAnswers[1])}
+						/>
+					</div>
 				</div>
-			</div>
+			)}
+
+			{!!isResult && (
+				<div className="flex items-center mr-[2px] true-false-checkbox">
+					<div className="w-[50px] flex items-center justify-center">
+						<Checkbox
+							disabled={loading || !isDoing || isResult}
+							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
+							defaultChecked={checkChecked(0) || getTrueAns(0)}
+							className={`${getClass(0)}`}
+							onClick={(e: any) => !isResult && e.target?.checked && insertDetails(data.IeltsAnswers[0])}
+						/>
+					</div>
+
+					<div className="w-[50px] flex items-center justify-center">
+						<Checkbox
+							disabled={loading || !isDoing || isResult}
+							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
+							defaultChecked={checkChecked(1) || getTrueAns(1)}
+							className={`${getClass(1)}`}
+							onClick={(e: any) => !isResult && e.target?.checked && insertDetails(data.IeltsAnswers[1])}
+						/>
+					</div>
+				</div>
+			)}
 		</div>
 	)
 }

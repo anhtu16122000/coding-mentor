@@ -26,14 +26,14 @@ function AuthLayout({ children }: IAuthLayout) {
 		setVisible(false)
 	}
 	const getIdiom = async () => {
-		try {
-			const res = await idiomApi.getRandom()
-			if (res.status === 200) {
-				setContentIdiom(res.data.data)
-			}
-		} catch (err) {
-			ShowNoti('error', err.message)
-		}
+		// try {
+		// 	const res = await idiomApi.getRandom()
+		// 	if (res.status === 200) {
+		// 		setContentIdiom(res.data.data)
+		// 	}
+		// } catch (err) {
+		// 	ShowNoti('error', err.message)
+		// }
 	}
 
 	const createDateObject = (dateState, locale) => {
@@ -104,7 +104,7 @@ function AuthLayout({ children }: IAuthLayout) {
 								</p>
 							</>
 						)}
-						<h1 className="content-idiom">{ReactHtmlParser(contentIdiom?.Content)}</h1>
+						{/* <h1 className="content-idiom">{ReactHtmlParser(contentIdiom?.Content)}</h1> */}
 					</div>
 				</div>
 				<div className="col-md-4 col-12 m-0 right-login">{children}</div>

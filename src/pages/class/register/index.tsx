@@ -79,7 +79,7 @@ const RegisterClass = () => {
 	const [voucher, setVoucher] = useState(0)
 	const [discountPrice, setDiscountPrice] = useState(0)
 	const [leftPrice, setLeftPrice] = useState(0)
-	const [activeTab, setActiveTab] = useState({ Type: 1, label: 'Đăng ký học' })
+	const [activeTab] = useState(tabs[0])
 	const [isLoading, setIsLoading] = useState(false)
 	const [curriculum, setCurriculum] = useState(null)
 	const [listTimeFrames, setListTimeFrames] = useState([{ Id: 1, ExectedDay: null, StudyTimeId: null, Note: '' }])
@@ -173,10 +173,6 @@ const RegisterClass = () => {
 	useEffect(() => {
 		setDetailDiscount(null)
 	}, [classesSelected, programsSelected])
-
-	const handleChangeTab = (tab) => {
-		setActiveTab(tab)
-	}
 
 	const getAllDiscounts = async () => {
 		try {
@@ -349,24 +345,7 @@ const RegisterClass = () => {
 					<div className="col-span-2">
 						<div className="grid grid-cols-2 gap-x-4 responsive-mobile">
 							<div className="col-span-1">
-								<Card
-									title={activeTab.label}
-									extra={
-										<div className="flex items-center justify-center gap-3">
-											{tabs.map((tab, index) => {
-												return (
-													<button
-														type="button"
-														onClick={() => handleChangeTab(tab)}
-														className={`mx-[8px] tab-item ${activeTab.Type == tab.Type ? 'active' : ''}`}
-													>
-														{tab.label}
-													</button>
-												)
-											})}
-										</div>
-									}
-								>
+								<Card title={activeTab.label}>
 									<div className="form-register-class">
 										<div className="col-span-2">
 											<CardBody

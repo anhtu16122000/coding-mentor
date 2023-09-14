@@ -2,10 +2,17 @@ import { Input } from 'antd'
 import Router from 'next/router'
 import React from 'react'
 import ReactHTMLParser from 'react-html-parser'
+import { FaCheck } from 'react-icons/fa'
+import { TbLoader } from 'react-icons/tb'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
+import MarkingExam from '~/common/components/Mark/MarkingExam/MarkingExam'
+import PrimaryTag from '~/common/components/Primary/Tag'
+import { log } from '~/common/utils'
 
 const Write = (props) => {
-	const { data, IndexInExam, isDoing, setCurrentQuestion, onRefreshNav, isResult } = props
+	const { data, IndexInExam, isDoing, setCurrentQuestion, onRefreshNav, isResult, curGroup, onRefresh } = props
+
+	log.Yellow('Write props', props)
 
 	async function insertDetails(answer) {
 		let items = []
@@ -13,6 +20,7 @@ const Write = (props) => {
 		if (!!data?.DoingTestDetails) {
 			items.push({ ...data?.DoingTestDetails[0], Enable: false })
 		}
+
 		items.push({ Id: 0, IeltsAnswerId: 0, IeltsAnswerContent: answer?.Content, Type: 0, Index: 0, Enable: true })
 
 		if (!!Router?.query?.exam) {
@@ -78,6 +86,40 @@ const Write = (props) => {
 				)}
 
 				{!!isResult && <div className="whitespace-pre-wrap">{getAnswered()}</div>}
+
+				{!!isResult && (
+					<div className="flex flex-col items-start mt-[16px]">
+						{!data?.Point && (
+							<PrimaryTag color="yellow" className="!px-[8px]">
+								<TbLoader size={18} className="mr-[4px] animate-spin custom-spin" /> Chưa chấm
+							</PrimaryTag>
+						)}
+
+						{!!data?.Point && (
+							<PrimaryTag color="green" className="!px-[8px]">
+								<FaCheck size={14} className="mr-[4px]" /> Đã chấm
+							</PrimaryTag>
+						)}
+
+						{!!data?.Point && (
+							<div className="title-exercise-content" style={{ marginTop: 16, fontSize: 16, fontWeight: 600 }}>
+								Điểm: {data?.Point}
+							</div>
+						)}
+
+						<div className="mt-[16px]">
+							<MarkingExam
+								onRefresh={onRefresh}
+								isWritting={true}
+								onGetPoint={(point) => {}}
+								dataRow={data}
+								dataMarking={data}
+								info={data}
+								curGroup={curGroup}
+							/>
+						</div>
+					</div>
+				)}
 			</div>
 		</div>
 	)

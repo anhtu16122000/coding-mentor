@@ -11,7 +11,9 @@ const Skill = (props) => {
 				<div className="title">{data?.Name}</div>
 				<div className="vir-h"></div>
 
-				<div className="text-[#000]">Số câu tự luận: {data?.QuestionEssayAmount}</div>
+				<div className="text-[#000]">
+					Số câu tự luận: {data?.QuestionEssayAmount} {data?.QuestionEssayAmount > 0 && <>- Đã chấm: {data?.QuestionEssayGraded || 0}</>}
+				</div>
 				<div className="text-[#000]">Số câu trắc nghiệm: {data?.QuestionMultipleChoiceAmount}</div>
 
 				<div className="mt-3" style={{ fontWeight: 500, color: '#004aad' }}>

@@ -123,7 +123,12 @@ const HomeWork = () => {
 		{
 			title: 'Đề',
 			dataIndex: 'IeltsExamName',
-			render: (value, item, index) => <div className="font-[600] in-1-line min-w-[80px] max-w-[220px]">{value}</div>
+			render: (value, item, index) => <div className="font-[600] in-1-line text-[#E91E63] min-w-[80px] max-w-[220px]">{value}</div>
+		},
+		{
+			title: 'GV chấm bài',
+			dataIndex: 'TeacherName',
+			render: (value, item, index) => <div className="min-w-[100px]">{value}</div>
 		},
 		userInfo.RoleId == 3
 			? {

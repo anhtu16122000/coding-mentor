@@ -76,6 +76,12 @@ export const StudentChildMenu = [
 				Route: '/class',
 				Text: 'Danh sách lớp học',
 				Icon: ''
+			},
+			{
+				TypeItem: 'single',
+				Key: '/training-student',
+				Route: '/training-student',
+				Text: 'Luyện tập'
 			}
 		]
 	},

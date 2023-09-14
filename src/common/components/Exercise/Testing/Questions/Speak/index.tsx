@@ -1,11 +1,15 @@
 import Router from 'next/router'
 import React, { useState } from 'react'
 import ReactHTMLParser from 'react-html-parser'
+import { FaCheck } from 'react-icons/fa'
+import { TbLoader } from 'react-icons/tb'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import AudioRecord from '~/common/components/AudioRecord/AudioRecord'
+import MarkingExam from '~/common/components/Mark/MarkingExam/MarkingExam'
+import PrimaryTag from '~/common/components/Primary/Tag'
 
 const SpeakingQuestion = (props) => {
-	const { data, IndexInExam, disabled, onRefreshNav, setCurrentQuestion, isResult } = props
+	const { data, IndexInExam, disabled, onRefreshNav, setCurrentQuestion, isResult, curGroup, onRefresh } = props
 
 	const [curLink, setCurLink] = useState('')
 
@@ -59,7 +63,12 @@ const SpeakingQuestion = (props) => {
 	return (
 		<div
 			onClick={() =>
-				!Router.asPath.includes('/questions') && setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionResultId: data?.Id })
+				!Router.asPath.includes('/questions') &&
+				setCurrentQuestion({
+					...data,
+					IeltsQuestionId: data?.Id,
+					IeltsQuestionResultId: data?.Id
+				})
 			}
 			key={'question-' + data.Id}
 			id={'question-' + data.Id}
@@ -106,6 +115,40 @@ const SpeakingQuestion = (props) => {
 							/>
 							<div style={{ marginTop: 5, marginLeft: 9 }}>(Phương thức dự phòng)</div>
 						</div> */}
+
+					{!!isResult && (
+						<div className="flex flex-col items-start mt-[16px]">
+							{!data?.Point && (
+								<PrimaryTag color="yellow" className="!px-[8px]">
+									<TbLoader size={18} className="mr-[4px] animate-spin custom-spin" /> Chưa chấm
+								</PrimaryTag>
+							)}
+
+							{!!data?.Point && (
+								<PrimaryTag color="green" className="!px-[8px]">
+									<FaCheck size={14} className="mr-[4px]" /> Đã chấm
+								</PrimaryTag>
+							)}
+
+							{!!data?.Point && (
+								<div className="title-exercise-content" style={{ marginTop: 16, fontSize: 16, fontWeight: 600 }}>
+									Điểm: {data?.Point}
+								</div>
+							)}
+
+							<div className="mt-[16px]">
+								<MarkingExam
+									onRefresh={onRefresh}
+									isSpeaking={true}
+									onGetPoint={(point) => {}}
+									dataRow={data}
+									dataMarking={data}
+									info={data}
+									curGroup={curGroup}
+								/>
+							</div>
+						</div>
+					)}
 				</>
 			</div>
 		</div>

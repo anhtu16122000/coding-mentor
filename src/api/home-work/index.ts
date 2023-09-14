@@ -4,9 +4,10 @@ const url = '/api/Homework'
 
 export const homeWorkApi = {
 	getAll(params) {
-		return instance.get<IApiResultData<any[]>>(url, {
-			params
-		})
+		return instance.get<IApiResultData<any[]>>(url, { params })
+	},
+	getTeacher() {
+		return instance.get<IApiResultData<any[]>>(url + '/teacher-available', {})
 	},
 	getByID(ID: number) {
 		return instance.get<IApiResultData<any>>(`${url}/${ID}`)

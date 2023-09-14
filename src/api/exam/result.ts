@@ -27,6 +27,9 @@ export const examResultApi = {
 	put(data) {
 		return instance.put(url, data)
 	},
+	review(data) {
+		return instance.put(url + '/review', data)
+	},
 	delete(examID: number) {
 		return instance.delete(url + '/' + examID)
 	}

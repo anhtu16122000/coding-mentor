@@ -6,6 +6,7 @@ import TrueFalseQuestion from '../../Details/QuestionsForm/TrueFalseForm/Questio
 import SpeakingQuestion from './Speak'
 import Router from 'next/router'
 import MindMap from './MindMap'
+import MindMapAnnotate from './MindMap/Annotate'
 
 function getQuestIndex(questions, curQuest) {
 	if (Router.asPath.includes('questions')) {
@@ -79,6 +80,8 @@ const TestingQuestions = (props) => {
 							setCurrentQuestion={setCurrentQuestion}
 							onRefreshNav={onRefreshNav}
 							isResult={isResult}
+							curGroup={data}
+							onRefresh={onRefresh}
 						/>
 					)
 				})}
@@ -106,9 +109,16 @@ const TestingQuestions = (props) => {
 								getDoingQuestionGroup={getDoingQuestionGroup}
 								setCurrentQuestion={setCurrentQuestion}
 								onRefreshNav={onRefreshNav}
+								isResult={isResult}
 							/>
 						)
 					})}
+
+					{isResult && (
+						<div className="mt-[4px] mb-[4px]">
+							<MindMapAnnotate />
+						</div>
+					)}
 				</div>
 			)}
 
@@ -125,6 +135,8 @@ const TestingQuestions = (props) => {
 							setCurrentQuestion={setCurrentQuestion}
 							onRefreshNav={onRefreshNav}
 							isResult={isResult}
+							curGroup={data}
+							onRefresh={onRefresh}
 						/>
 					)
 				})}

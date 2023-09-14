@@ -8,6 +8,7 @@ import { setCurrentExerciseForm } from '~/store/globalState'
 import QestDragMenu from '../QuestDragMenu'
 import InputTrueFalse from './Form'
 import { QUESTION_TYPES } from '~/common/libs'
+import MindMapAnnotate from '../../../Testing/Questions/MindMap/Annotate'
 
 class GroupItem extends React.Component<PlanetProps, PlanetState> {
 	state = { value: 0 }
