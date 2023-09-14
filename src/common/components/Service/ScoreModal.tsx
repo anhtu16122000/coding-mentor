@@ -9,7 +9,7 @@ import IconButton from '../Primary/IconButton'
 import PrimaryButton from '../Primary/Button'
 
 const ScoreModal = (props) => {
-	const { rowData, listTodoApi, setTodoApi } = props
+	const { currentUserIdUpdated, rowData, listTodoApi, setTodoApi } = props
 	const [isVisible, setVisible] = useState(false)
 	const [form] = Form.useForm()
 	const [isLoading, setIsLoading] = useState(false)
@@ -23,6 +23,7 @@ const ScoreModal = (props) => {
 				setVisible(false)
 				setTodoApi(listTodoApi)
 				form.resetFields()
+				currentUserIdUpdated.current = rowData?.StudentId
 				ShowNoti('success', res.data.message)
 			}
 		} catch (err) {
