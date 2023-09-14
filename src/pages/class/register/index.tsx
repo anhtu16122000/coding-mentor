@@ -24,6 +24,8 @@ import { billApi } from '~/api/business/bill'
 import ModalShowInfoPaymentMethod from '~/common/components/Class/ModalShowInfoPaymentMethod'
 import { branchApi } from '~/api/manage/branch'
 import { setBranch } from '~/store/branchReducer'
+import { useRouter } from 'next/router'
+import { PATH_FINANCE } from '~/Router/path'
 
 const tabs = [
 	{ Type: 1, label: 'Đăng ký học' },
@@ -68,7 +70,7 @@ const CardBody = (props) => {
 const RegisterClass = () => {
 	const discount = useSelector((state: RootState) => state.discount.Discount)
 	const paymentMethod = useSelector((state: any) => state.paymentMethod.PaymentMethod)
-
+	const { push } = useRouter()
 	const [classes, setClasses] = useState([])
 	const [classesSelected, setClassesSelected] = useState([])
 	const [programsSelected, setProgramsSelected] = useState([])
@@ -270,6 +272,7 @@ const RegisterClass = () => {
 				if (res.status == 200) {
 					ShowNoti('success', res.data.message)
 					resetThis()
+					push(PATH_FINANCE.payment)
 				}
 			} catch (err) {
 				ShowNoti('error', err.message)

@@ -1,4 +1,4 @@
-import { DatePicker, Popconfirm } from 'antd'
+import { Button, Checkbox, DatePicker, Popconfirm, Popover, Select, Tooltip } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { staffSalaryApi } from '~/api/business/staff-salary'
@@ -11,15 +11,22 @@ import { ModalSalaryCRUD } from './ModalSalaryCRUD'
 import { ModalTeachingDetail } from './ModalTeachingDetail'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
+import TabComp from '~/common/custom/TabComp'
+import { TabCompData } from '~/common/custom/TabComp/type'
+import { EditOutlined } from '@ant-design/icons'
 
 export const SalaryPage = () => {
 	const [valueDate, setValueDate] = useState(moment().subtract(1, 'months'))
-	const initParameters = { fullName: '', userCode: '', year: null, month: null, pageIndex: 1, pageSize: PAGE_SIZE }
+	const initParameters = { fullName: '', userCode: '', year: null, month: null, pageIndex: 1, pageSize: PAGE_SIZE, status: 0 }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [totalRow, setTotalRow] = useState(1)
 	const [dataTable, setDataTable] = useState([])
 	const [loading, setLoading] = useState(false)
 	const [time, setTime] = useState(null)
+	const [salaryStatus, setSalaryStatus] = useState<TabCompData[]>()
+	const [statusSelected, setStatusSelected] = useState<number>(0)
+	const [itemsChecked, setItemsChecked] = useState<any[]>([])
+	const [statusUpdate, setStatusUpdate] = useState<number>(null)
 
 	useEffect(() => {
 		if (valueDate) {
@@ -99,6 +106,28 @@ export const SalaryPage = () => {
 			if (res.status == 200) {
 				setDataTable(res.data.data)
 				setTotalRow(res.data.totalRow)
+				setSalaryStatus([
+					{
+						id: 0,
+						title: 'Tất cả',
+						value: res?.data?.AllState
+					},
+					{
+						id: 1,
+						title: 'Chưa chốt',
+						value: res?.data?.Unfinished
+					},
+					{
+						id: 2,
+						title: 'Đã chốt',
+						value: res?.data?.Finished
+					},
+					{
+						id: 3,
+						title: 'Đã thanh toán',
+						value: res?.data?.Paid
+					}
+				])
 			} else {
 				setDataTable([])
 			}
@@ -109,7 +138,59 @@ export const SalaryPage = () => {
 		}
 	}
 
+	const handleUpdate = async () => {
+		try {
+			setLoading(true)
+			if (statusUpdate !== null) {
+				const data = {
+					Ids: itemsChecked,
+					Status: statusUpdate
+				}
+				const res = await staffSalaryApi.updateStatus(data)
+				if (res.status === 200) {
+					// onClose()
+					getSalary(apiParameters)
+					// onRefresh()
+					setLoading(false)
+					setStatusUpdate(null)
+					setItemsChecked([])
+					ShowNoti('success', res.data.message)
+				}
+			} else {
+				ShowNoti('error', 'Vui lòng chọn trạng thái!')
+			}
+		} catch (error) {
+			setLoading(true)
+			ShowNoti('error', error.message)
+		} finally {
+			setLoading(false)
+		}
+	}
+
 	const columns = [
+		{
+			title: '',
+			dataIndex: 'Id',
+			render: (text, item) => {
+				if (isSaler() || isAcademic() || isTeacher()) return ''
+				return (
+					<div className="flex items-center">
+						<Checkbox
+							defaultChecked={false}
+							checked={itemsChecked.includes(text)}
+							disabled={item.Status === 3}
+							onChange={(e) => {
+								if (itemsChecked.includes(text)) {
+									setItemsChecked(itemsChecked.filter((e) => e !== text))
+								} else {
+									setItemsChecked((prev) => [...prev, text])
+								}
+							}}
+						/>
+					</div>
+				)
+			}
+		},
 		{
 			...FilterTable({
 				type: 'search',
@@ -194,6 +275,36 @@ export const SalaryPage = () => {
 		}
 	]
 
+	const handleSelecStatus = (status: number) => {
+		if (statusSelected !== status) {
+			setApiParameters({ ...apiParameters, status })
+			setStatusSelected(status)
+		}
+	}
+
+	const text = `Cập nhật trạng thái của ${itemsChecked.length} nhân viên!`
+	const content = (
+		<div style={{ display: 'flex', flexDirection: 'column', width: 300 }}>
+			<Select
+				style={{ width: '100%' }}
+				options={[
+					{ label: 'Chưa chốt', value: 1 },
+					{ label: 'Đã chốt', value: 2 },
+					{ label: 'Đã thanh toán', value: 3 }
+				]}
+				placeholder="Chọn trạng thái"
+				onChange={(v) => {
+					setStatusUpdate(v)
+				}}
+			/>
+			<div style={{ marginTop: 10, marginLeft: 'auto' }}>
+				<Button onClick={handleUpdate} type="primary">
+					Lưu
+				</Button>
+			</div>
+		</div>
+	)
+
 	return (
 		<div className="salary-page-list">
 			<PrimaryTable
@@ -202,8 +313,11 @@ export const SalaryPage = () => {
 				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
 				TitleCard={
 					<div className="extra-table">
-						<div className="flex-1 max-w-[350px] mr-[16px]">
+						<div className="flex-1 max-w-[350px] mr-[16px] min-w-[150px]">
 							<DatePicker onChange={handleFilterMonth} picker="month" placeholder="Chọn tháng" value={valueDate} />
+						</div>
+						<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container" style={{ marginTop: -1 }}>
+							<TabComp data={salaryStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
 						</div>
 					</div>
 				}
@@ -211,9 +325,28 @@ export const SalaryPage = () => {
 				columns={columns}
 				Extra={
 					<>
+						{(isAdmin() || isAccountant()) && itemsChecked.length > 0 && (
+							<div
+								style={{
+									color: '#fff',
+									backgroundColor: '#07BC0C',
+									borderRadius: 8,
+									marginRight: 6,
+									padding: 12,
+									fontWeight: '600'
+								}}
+							>
+								<Popover placement="left" title={text} content={content} trigger="click">
+									<Tooltip title="Cập nhật trạng thái" style={{ borderRadius: 4 }}>
+										<EditOutlined />
+									</Tooltip>
+								</Popover>
+							</div>
+						)}
 						<div className="mr-2">
 							<ModalSalaryCRUD time={time} mode="salary" onRefresh={() => getSalary(apiParameters)} />
 						</div>
+
 						{(isAdmin() || isAccountant()) && (
 							<Popconfirm
 								title={`Xác nhận tính lương từ ${moment().subtract(1, 'months').startOf('month').format('DD-MM-YYYY')} đến ${moment()

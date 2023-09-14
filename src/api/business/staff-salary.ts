@@ -3,7 +3,7 @@ const url = '/api/Salary'
 export const staffSalaryApi = {
 	// Lấy tất cả data
 	getAll(todoApi: object) {
-		return instance.get<IApiResultData<IStaffSalary[]>>(url, {
+		return instance.get<any>(url, {
 			params: todoApi
 		})
 	},
@@ -16,7 +16,10 @@ export const staffSalaryApi = {
 	// Cập nhật data
 	update(data: any) {
 		return instance.put(url, data, {})
-	}, 
+	},
+	updateStatus(data: any) {
+		return instance.put(`${url}/multiple`, data, {})
+	},
 	getTeachingDetail(params) {
 		return instance.get<IApiResultData<IStaffSalaryTeachingDetail[]>>(`${url}/teaching-detail`, { params })
 	},

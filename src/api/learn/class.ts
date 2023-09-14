@@ -16,6 +16,9 @@ export const classApi = {
 	getAllTeachers(params) {
 		return instance.get<IApiResultData<ICurriculum[]>>(`${url}/teacher-when-create`, { params: params })
 	},
+	getAllTutor(params) {
+		return instance.get<IApiResultData<any[]>>(`${url}/tutor-available`, { params: params })
+	},
 	checkTeacherAvailable(params) {
 		return instance.get<IApiResultData<any[]>>(`${url}/teacher-available`, { params: params })
 	},
