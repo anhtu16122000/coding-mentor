@@ -1,10 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import appConfigs from '~/appConfig'
-import { ShowNostis } from '~/common/utils'
 import { logOut } from '~/common/utils/token-handle'
-
-const SHOW_LOG = false
-const NODE_STATUS: any = process.env.NODE_ENV
 
 function getUrl(config: any) {
 	return !!config.baseURL ? config.url.replace(config.baseURL, '').split('?')[0] : config.url
@@ -35,7 +31,6 @@ instance.interceptors.response.use(
 	},
 	function (error: any) {
 		if (error?.response?.status == 401) {
-			ShowNostis.success('Phiên đăng nhập đã hết hạn')
 			logOut()
 		}
 		if (!!error?.response) {

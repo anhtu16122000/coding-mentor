@@ -1,19 +1,20 @@
 .login-container {
 	width: 100%;
-	// height: 100vh;
 	background-color: #fff;
 	display: flex;
 	background-repeat: no-repeat;
 	background-position: 0;
 	align-items: stretch;
 	flex-wrap: wrap !important;
+
 	.left-login {
-		background: url('https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80')
-			no-repeat center center;
+		background: url('/images/mona-edutech-background.png') no-repeat center center;
+
 		background-size: cover;
 		flex: 1 1;
 		display: flex;
 		height: 100vh;
+
 		.mask-background {
 			position: absolute;
 			top: 0;
@@ -22,8 +23,9 @@
 			width: 100%;
 			background-color: #000;
 			z-index: 99;
-			opacity: 0.3;
+			opacity: 0.2;
 		}
+
 		.mask-content {
 			position: absolute;
 			top: 0;
