@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { branchApi } from '~/api/manage/branch'
 import { testAppointmentApi } from '~/api/learn/test-appointment'
 import FilterBase from '~/common/components/Elements/FilterBase'
@@ -27,6 +27,7 @@ import { Form, Select } from 'antd'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
 import { StudentNote } from '~/common/components'
+import { customerAdviseApi } from '~/api/user/customer'
 
 const appointmenInitFilter = [
 	{
@@ -111,6 +112,7 @@ let listFieldFilter = {
 
 export default function ServiceAppointmentTest(props) {
 	const state = useSelector((state: RootState) => state)
+	const currentUserIdUpdated = useRef(0)
 	const [form] = Form.useForm()
 	const router = useRouter()
 	const dispatch = useDispatch()
@@ -374,7 +376,7 @@ export default function ServiceAppointmentTest(props) {
 	const expandedRowRender = (record) => {
 		return (
 			<div className="w-[1000px]">
-				<StudentNote studentId={record?.StudentId} />
+				<StudentNote currentUserIdUpdated={currentUserIdUpdated} studentId={record?.StudentId} />
 			</div>
 		)
 	}
@@ -469,7 +471,7 @@ export default function ServiceAppointmentTest(props) {
 							<CancelTest onUpdateData={onUpdateData} dataRow={data} />
 						)}
 						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Type === 1 && (
-							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
+							<ScoreModal currentUserIdUpdated={currentUserIdUpdated} rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						)}
 						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Status == 2 && (
 							<IconButton
@@ -508,7 +510,7 @@ export default function ServiceAppointmentTest(props) {
 							<CancelTest onUpdateData={onUpdateData} dataRow={data} />
 						)}
 						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Type === 1 && (
-							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
+							<ScoreModal currentUserIdUpdated={currentUserIdUpdated} rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						)}
 					</div>
 				)
