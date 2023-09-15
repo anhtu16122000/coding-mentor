@@ -633,9 +633,7 @@ const CreateClassForm = (props) => {
 												<div className="row">
 													<div className="col-md-6 col-12">
 														<SelectField
-															isRequired
 															mode="multiple"
-															rules={[{ required: true, message: 'Không được để trống' }]}
 															placeholder="Chọn trợ giảng"
 															label="Trợ giảng"
 															name="TutorIds"
