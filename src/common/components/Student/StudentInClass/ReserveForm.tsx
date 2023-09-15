@@ -10,6 +10,7 @@ import Avatar from '../../Avatar'
 import { MdOpenInNew } from 'react-icons/md'
 import { parseToMoney } from '~/common/utils/common'
 import moment from 'moment'
+import InputNumberField from '../../FormControl/InputNumberField'
 
 interface IChangeClass {
 	isEdit?: boolean
@@ -213,13 +214,16 @@ const ReserveForm: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 					onFinish={onFinish}
 					autoComplete="on"
 				>
-					<Form.Item className="col-span-2" label="Tạm tính" name="Price" rules={formNoneRequired}>
+					{/* <Form.Item className="col-span-2" label="Tạm tính" name="Price" rules={formNoneRequired}>
 						<InputNumber
 							placeholder="Số tiền tạm tính"
 							style={{ borderRadius: 6, width: '100%', height: 35, alignItems: 'center', display: 'flex' }}
 						/>
-					</Form.Item>
-					<Form.Item className="col-span-2 ant-select-class-selected" name="Expires" label="Thời hạn bảo lưu">
+					</Form.Item> */}
+					<InputNumberField className="col-span-2" label="Tạm tính" name="Price" rules={formNoneRequired}/>
+					<Form.Item className="col-span-2 ant-select-class-selected" name="Expires" label="Thời hạn bảo lưu" required rules={[{
+						required: true, message: 'Không được để trống'
+					}]}>
 						<DatePicker
 							disabled={loading}
 							className="primary-input"

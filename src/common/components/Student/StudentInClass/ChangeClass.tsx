@@ -293,14 +293,19 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 					onFinish={onFinish}
 					autoComplete="on"
 				>
-					<Form.Item className="col-span-2 ant-select-class-selected ant-quis-custom" required={true} name="NewClassId" label="Lớp chuyển đến">
+					<Form.Item
+						className="col-span-2 ant-select-class-selected ant-quis-custom"
+						required={true}
+						name="NewClassId"
+						label="Lớp chuyển đến"
+					>
 						<Select
 							disabled={loading}
 							placeholder="Chọn lớp"
 							className="ant-select-item-option-selected-blue"
 							onChange={(value) => {
 								const selectedClass = classes?.find((_item) => _item.Id === value)
-								console.log("Data: ",currentClass, selectedClass)
+								console.log('Data: ', currentClass, selectedClass)
 								const monney = selectedClass?.Price - currentClass?.Price
 								if (monney > 0) {
 									form.setFieldValue('Price', monney)
@@ -313,9 +318,7 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 								return (
 									<Select.Option disabled={!thisClass?.Fit} key={thisClass.Id} value={thisClass.Id}>
 										<div className="flex items-center justify-between w-full ant-select-class-option">
-											<div className="ant-select-item-option-name">
-												{thisClass?.Name} 
-											</div>
+											<div className="ant-select-item-option-name">{thisClass?.Name}</div>
 											{!thisClass?.Fit && <div className="text-[#e011116c]">{thisClass?.Note}</div>}
 										</div>
 										<div className="hiddens ant-select-dropdown-by-chau">
@@ -356,9 +359,9 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
 						/>
 					</Form.Item> */}
-					<InputNumberField className="col-span-2" label="Đóng thêm" name="Price" rules={formNoneRequired}/>
+					<InputNumberField placeholder="Số tiền phải đóng thêm" className="col-span-2" label="Đóng thêm" name="Price" rules={formNoneRequired} />
 
-					<Form.Item
+					{/* <Form.Item
 						className="col-span-2"
 						label="Thanh toán"
 						name="Paid"
@@ -377,7 +380,9 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 							placeholder="Số tiền phải thanh toán"
 							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
 						/>
-					</Form.Item>
+					</Form.Item> */}
+					<InputNumberField placeholder='Số tiền phải thanh toán' className="col-span-2" label="Thanh toán" name="Paid" rules={formNoneRequired} />
+
 					<Form.Item required={true} className="col-span-2" label="Phương thức thanh toán" name="PaymentMethodId" rules={formNoneRequired}>
 						<StylePaymentMethods>
 							{methods?.map((method) => {
