@@ -1,14 +1,15 @@
-import React from 'react'
-import { toast } from 'react-toastify'
-
-function Noti({ message }) {
-	return <span style={{ fontWeight: 500 }}>{message}</span>
-}
+import ShowNoti from './ShowNoti'
 
 class Notify {
-	success = (message: string) => toast.success(<Noti message={message} />)
-	error = (message: string) => toast.error(<Noti message={message} />)
-	warning = (message: string) => toast.warning(<Noti message={message} />)
+	success = (message: string) => {
+		ShowNoti('success', message)
+	}
+	error = (message: string) => {
+		ShowNoti('error', message)
+	}
+	warning = (message: string) => {
+		ShowNoti('warning', message)
+	}
 }
 
 const ShowNostis = new Notify()
