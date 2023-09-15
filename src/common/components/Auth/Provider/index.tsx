@@ -34,7 +34,8 @@ function AuthProvider({ children }: IAuthLayout) {
 			router.pathname.search('login') < 1 &&
 			router.pathname.search('fogot-password') < 1 &&
 			router.pathname.search('reset-password') < 1 &&
-			router.pathname.search('register') < 1
+			router.pathname.search('register') < 1&&
+			router.pathname.search('verify') < 1
 		) {
 			return false
 		} else {

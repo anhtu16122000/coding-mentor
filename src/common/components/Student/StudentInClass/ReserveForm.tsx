@@ -58,8 +58,7 @@ const ReserveForm: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 	const getCurrentClass = async () => {
 		try {
 			const response = await RestApi.get('Class/old-class', {
-				'request.studentId': item?.StudentId,
-				'request.classId': item?.ClassId
+				studentInClassId: item?.Id,
 			})
 			if (response.status == 200) {
 				setCurrentClass(response.data.data)
@@ -75,13 +74,11 @@ const ReserveForm: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 	const gePaid = async () => {
 		try {
 			const response = await RestApi.get('ClassReserve/paid', {
-				studentId: item?.StudentId,
-				classId: item?.ClassId
+				studentInClassId: item?.Id,
 			})
 			if (response.status == 200) {
 				form.setFieldValue('Price', response.data.data.Paid)
 			} else {
-				
 			}
 		} catch (err) {
 			ShowNostis.error(err?.message)
@@ -218,8 +215,8 @@ const ReserveForm: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 				>
 					<Form.Item className="col-span-2" label="Tạm tính" name="Price" rules={formNoneRequired}>
 						<InputNumber
-							placeholder="Số tiền Tạm tín"
-							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
+							placeholder="Số tiền tạm tính"
+							style={{ borderRadius: 6, width: '100%', height: 35, alignItems: 'center', display: 'flex' }}
 						/>
 					</Form.Item>
 					<Form.Item className="col-span-2 ant-select-class-selected" name="Expires" label="Thời hạn bảo lưu">
@@ -233,6 +230,7 @@ const ReserveForm: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 								return moment().add(-1, 'days') >= current
 							}}
 							showToday={false}
+							
 						/>
 					</Form.Item>
 

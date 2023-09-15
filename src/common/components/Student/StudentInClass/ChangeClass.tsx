@@ -22,6 +22,7 @@ import {
 } from './index.styled'
 import DatePickerField from '../../FormControl/DatePickerField'
 import { branchApi } from '~/api/manage/branch'
+import InputNumberField from '../../FormControl/InputNumberField'
 
 // type CurrentClass = {
 // 	BillId?: number
@@ -107,8 +108,7 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 	const getCurrentClass = async () => {
 		try {
 			const response = await RestApi.get('Class/old-class', {
-				'request.studentId': item?.StudentId,
-				'request.classId': item?.ClassId
+				studentInClassId: item?.Id
 			})
 			if (response.status == 200) {
 				setCurrentClass(response.data.data)
@@ -293,14 +293,15 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 					onFinish={onFinish}
 					autoComplete="on"
 				>
-					<Form.Item className="col-span-2 ant-select-class-selected" required={true} name="NewClassId" label="Lớp chuyển đến">
+					<Form.Item className="col-span-2 ant-select-class-selected ant-quis-custom" required={true} name="NewClassId" label="Lớp chuyển đến">
 						<Select
 							disabled={loading}
 							placeholder="Chọn lớp"
 							className="ant-select-item-option-selected-blue"
 							onChange={(value) => {
 								const selectedClass = classes?.find((_item) => _item.Id === value)
-								const monney = selectedClass?.Price - currentClass?.TotalPrice
+								console.log("Data: ",currentClass, selectedClass)
+								const monney = selectedClass?.Price - currentClass?.Price
 								if (monney > 0) {
 									form.setFieldValue('Price', monney)
 								} else {
@@ -312,7 +313,9 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 								return (
 									<Select.Option disabled={!thisClass?.Fit} key={thisClass.Id} value={thisClass.Id}>
 										<div className="flex items-center justify-between w-full ant-select-class-option">
-											<div className="ant-select-item-option-name">{thisClass?.Name}</div>
+											<div className="ant-select-item-option-name">
+												{thisClass?.Name} 
+											</div>
 											{!thisClass?.Fit && <div className="text-[#e011116c]">{thisClass?.Note}</div>}
 										</div>
 										<div className="hiddens ant-select-dropdown-by-chau">
@@ -347,13 +350,14 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 						</StyleContainerDropdown>
 					</Form.Item>
 
-					<Form.Item className="col-span-2" label="Đóng thêm" name="Price" rules={formNoneRequired}>
+					{/* <Form.Item className="col-span-2" label="Đóng thêm" name="Price" rules={formNoneRequired}>
 						<InputNumber
 							placeholder="Số tiền phải đóng thêm"
 							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
 						/>
-					</Form.Item>
-					
+					</Form.Item> */}
+					<InputNumberField className="col-span-2" label="Đóng thêm" name="Price" rules={formNoneRequired}/>
+
 					<Form.Item
 						className="col-span-2"
 						label="Thanh toán"

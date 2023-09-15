@@ -95,6 +95,7 @@ const CalenderClass = () => {
 				thisCalendar.current.calendar.gotoDate(moment(res.data.data[0].StartTime).format())
 
 				if (res.data.data.length > 0) {
+					
 					const newListCalendar = res.data.data.map((item, index) => {
 						return {
 							...item,

@@ -18,12 +18,9 @@ const ChangeScheduleClass = (props) => {
 	const { dataRow, checkTeacherAvailable, handleChangeInfo, checkRoomAvailable } = props
 	const [form] = Form.useForm()
 	const dispatch = useDispatch()
-
 	const refPopover = useRef(null)
-
 	const [isModalOpen, setIsModalOpen] = useState({ open: false, id: null })
 	const [isDisableButton, setIsDisableButton] = useState(false)
-
 	const dataChangeSchedule = useSelector((state: RootState) => state.class.dataChangeSchedule)
 	const listCalendar = useSelector((state: RootState) => state.class.listCalendar)
 	const teacher = useSelector((state: RootState) => state.class.teacher)
@@ -68,7 +65,6 @@ const ChangeScheduleClass = (props) => {
 					EndTime: moment(data.EndTime).format(),
 					end: moment(data.EndTime).format(),
 					start: moment(data.StartTime).format(),
-
 					// That shit should
 					title: `${moment(data.StartTime).format('HH:mm')} - ${moment(data.EndTime).format('HH:mm')}`
 				}
@@ -190,6 +186,7 @@ const ChangeScheduleClass = (props) => {
 		handleOpen()
 		refPopover.current.close()
 	}
+
 
 	return (
 		<>
