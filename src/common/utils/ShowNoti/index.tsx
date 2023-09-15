@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import { toast } from 'react-toastify'
 
 const ShowNoti = (type: 'success' | 'warning' | 'error', content: string) => {
@@ -15,7 +15,12 @@ const ShowNoti = (type: 'success' | 'warning' | 'error', content: string) => {
 			toast.success(nodeNoti)
 			break
 		case 'error':
-			toast.error(nodeNoti)
+			if (!toast.isActive(content)) {
+				// avoid duplicate toast error
+				toast.error(nodeNoti, {
+					toastId: content
+				})
+			}
 			break
 		case 'warning':
 			toast.warning(nodeNoti)
