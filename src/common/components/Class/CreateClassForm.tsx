@@ -636,7 +636,7 @@ const CreateClassForm = (props) => {
 															mode="multiple"
 															placeholder="Chọn trợ giảng"
 															label="Trợ giảng"
-															name="TutorIds"
+															name={`TutorIds-${timeFrame.Id}`}
 															onChangeSelect={(value) => handleChangeTimeFrame(timeFrame, 'TutorIds', value)}
 															optionList={tutors}
 															maxTagCount={1}
@@ -645,11 +645,11 @@ const CreateClassForm = (props) => {
 													<div className="col-md-6 col-12">
 														<SelectField
 															isRequired
-															rules={[yupSync]}
+															rules={[{required: true, message: 'Không được để trống'}]}
 															placeholder="Chọn giáo viên"
 															onChangeSelect={(value) => handleChangeTimeFrame(timeFrame, 'TeacherId', value)}
 															label="Giáo viên"
-															name="TeacherId"
+															name={`TeacherId-${timeFrame.Id}`}
 															optionList={teacher}
 														/>
 													</div>
