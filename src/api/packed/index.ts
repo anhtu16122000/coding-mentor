@@ -1,28 +1,22 @@
 import { instance } from '../instance'
 
-const url = '/api/packed'
+const url = '/api/Product'
 
-// API for new examination feature
 export const packedApi = {
 	getAll(params: IGetExam) {
-		return instance.get<IApiResultData<TIeltsExam[]>>(url, { params })
+		// Type 2 là gói bài tập
+		return instance.get<IApiResultData<TIeltsExam[]>>(url, { params: { ...params, type: 2 } })
 	},
 	getByID(ID: number) {
 		return instance.get<IApiResultData<TIeltsExam>>(`${url}/${ID}`)
 	},
-	getQuestions(params) {
-		return instance.get<IApiResultData<any>>(`${url}/ielts-question-in-section`, { params })
+	post(data: any) {
+		return instance.post(url, { ...data, type: 2 })
 	},
-	post(data: TInputIeltsExam) {
-		return instance.post(url, data)
-	},
-	put(data: TInputIeltsExam & { ID: number | string }) {
+	put(data: any) {
 		return instance.put(url, data)
 	},
-	delete(examID: number) {
-		return instance.delete(url + '/' + examID)
-	},
-	getOverview(examID: number) {
-		return instance.get<IApiResultData<TIeltsExamOverview>>(`${url}/overview`, { params: { ieltsExamId: examID } })
+	delete(Id: number) {
+		return instance.delete(url + '/' + Id)
 	}
 }

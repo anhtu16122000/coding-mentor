@@ -1,0 +1,66 @@
+.pe-i-default {
+	@apply bg-[#fff] rounded-[8px] mb-[16px] border-[1px];
+	@apply border-[#d5d5d5] hover:border-[#1b73e8] ml-[8px] relative;
+}
+
+.pe-i-d-thumb {
+	@apply w-full h-auto rounded-t-[6px];
+}
+
+.pe-i-d-menu {
+	@apply h-[28px] w-[28px] bg-[#fff] hover:bg-[#e5e5e5] border-[1px] border-[#d5d5d5] rounded-[6px];
+	@apply no-select cursor-pointer absolute top-[8px] right-[8px] all-center;
+}
+
+.pe-i-d-name {
+	@apply text-[20px] font-[700] text-[#284664];
+}
+
+.pe-i-d-user {
+	@apply flex items-center my-[4px] text-[#535353];
+}
+
+.pe-i-d-u-label {
+	@apply ml-[8px] text-[12px] font-[500];
+}
+
+.pe-i-d-price {
+	@apply text-[16px] font-[700] text-[#327846];
+}
+
+.pe-i-d-controller {
+	@apply mt-[8px] flex items-center no-select cursor-pointer;
+}
+
+.pe-i-d-cart {
+	@apply flex-1 bg-[#327846] hover:bg-[#2b683c] active:bg-[#327846];
+	@apply text-[#fff] h-[32px] flex items-center justify-center rounded-[4px];
+}
+
+.pe-i-d-c-title {
+	@apply ml-[8px] font-[500];
+}
+
+.pe-i-d-gift {
+	@apply ml-[8px] px-[16px] bg-[#faaa5a] hover:bg-[#e19850] active:bg-[#faaa5a];
+	@apply text-[#000] h-[32px] flex items-center justify-center rounded-[4px];
+}
+
+.pe-i-d-g-title {
+	@apply ml-[8px] font-[500];
+}
+
+.pe-menu-item {
+	@apply h-[30px] no-select cursor-pointer px-[8px] rounded-[4px] hover:bg-[#e1e1e1] flex items-center;
+}
+
+// ----------------
+.ant-select-dropdown {
+	.ant-select-dropdown-by-chau {
+		display: flex !important;
+		flex-direction: column;
+	}
+	.ant-select-item {
+		border-bottom: 1px #eaeaea solid;
+	}
+}
