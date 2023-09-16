@@ -147,6 +147,7 @@ function PackageExam() {
 				}
 			}
 		}
+		setData([...temp])
 	}
 
 	// Gọi api xoá item
