@@ -1,4 +1,4 @@
-import { Empty, Popconfirm, Popover } from 'antd'
+import { Empty, Modal, Popconfirm, Popover, Spin } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import { BiTrash } from 'react-icons/bi'
 import { useSelector } from 'react-redux'
@@ -8,6 +8,13 @@ import FormPackageSection from './FormModal'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { packageSkillApi } from '~/api/packed/packages-skill'
 import { ShowNostis } from '~/common/utils'
+import FormPackageSkill from './FormModalSkill'
+import { FaPlus } from 'react-icons/fa'
+import { IoClose } from 'react-icons/io5'
+import { doingTestApi } from '~/api/IeltsExam/doing-test'
+import { decode } from 'punycode'
+import Lottie from 'react-lottie-player'
+import warning from '~/common/components/json/100468-warning.json'
 
 const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, onRefresh }) => {
 	const userInfo = useSelector((state: RootState) => state.user.information)
@@ -35,6 +42,78 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 			setLoading(false)
 		}
 	}
+
+	async function delPackageSkill(item) {
+		try {
+			const res = await packageSkillApi.delete(item?.Id)
+			if (res.status == 200) {
+				getPackageSkill()
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		}
+	}
+
+	const [creatingTest, setCreatingTest] = useState<any>(false)
+	function gotoTest(params) {
+		if (params?.Id) {
+			window.open(`/take-an-exam/?exam=${params?.Id}`, '_blank')
+		}
+	}
+
+	function makeTest(exam, skillItem) {
+		setCreatingTest(skillItem)
+
+		if (is(userInfo).admin) {
+			createAdminTest(exam)
+		}
+
+		if (is(userInfo).student) {
+			getDraft(exam, skillItem)
+		}
+	}
+
+	async function getDraft(ExamId, HWId) {
+		try {
+			// 1 - Làm bài thử 2 - Làm bài hẹn test 3 - Bài tập về nhà 4 - Bộ đề
+			const res = await doingTestApi.getDraft({ valueId: HWId, type: 4 })
+			if (res.status == 200) {
+				setCurrentData({ ExamId: ExamId, HWId: HWId, draft: res.data?.data })
+				setExamWarning(true)
+			} else {
+				createDoingTest(ExamId, HWId)
+			}
+		} catch (error) {
+		} finally {
+			setCreatingTest(null)
+		}
+	}
+
+	async function createAdminTest(exam) {
+		try {
+			const res = await doingTestApi.post({ IeltsExamId: exam, ValueId: 0, Type: 1 })
+			if (res?.status == 200) {
+				gotoTest(res.data?.data)
+			}
+		} catch (error) {
+		} finally {
+			setCreatingTest(false)
+			setCreatingTest(null)
+		}
+	}
+
+	async function createDoingTest(ExamId, HWId) {
+		try {
+			const res = await doingTestApi.post({ IeltsExamId: ExamId, ValueId: HWId?.Id, Type: 4 })
+
+			if (res?.status == 200) {
+				gotoTest(res.data?.data)
+			}
+		} catch (error) {}
+	}
+
+	const [examWarning, setExamWarning] = useState<boolean>(false)
+	const [currentData, setCurrentData] = useState<any>(null)
 
 	return (
 		<div key={thisId} id={thisId} className="pe-d-default">
@@ -70,10 +149,68 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 			)}
 
 			<div className="p-[8px]">
-				<div>{item?.Name}</div>
+				<div className="text-[18px] font-[600]">{item?.Name}</div>
 			</div>
 
-			<div className="pb-[16px]">{!loading && skills.length == 0 && <Empty />}</div>
+			{is(userInfo).admin && (
+				<div className="flex flex-col w-full items-start pl-[8px]">
+					<FormPackageSkill packageSectionId={item?.Id} onRefresh={getPackageSkill} />
+				</div>
+			)}
+
+			<div className="pb-[16px]">
+				{!loading && skills.length == 0 && <Empty />}
+				{!loading && skills.length > 0 && (
+					<div className="p-[8px] mt-[8px] grid grid-cols-1 w600:grid-cols-2 gap-[8px] no-select">
+						{skills.map((itemSkill, iSkill) => {
+							return (
+								<div key={`ski-${iSkill}`} className="col-span-1 flex items-center bg-[#e4e1e1] hover:bg-[#d9d9d9] p-[8px] rounded-[6px]">
+									<div className="font-[600] flex-1">{itemSkill?.Name}</div>
+									<div className="flex items-center h-[26px]">
+										<div onClick={() => makeTest(itemSkill?.IeltsExamId, itemSkill)} className="pe-i-d-cart !px-[8px] !h-[26px]">
+											<div className="pe-i-d-c-title !ml-0">
+												{creatingTest?.Id == itemSkill?.Id && <Spin className="!ml-[0px] mr-[8px] loading-base" />}
+												{is(userInfo).student ? 'Làm bài' : 'Làm thử'}
+											</div>
+										</div>
+
+										{is(userInfo).admin && (
+											<Popconfirm onConfirm={() => delPackageSkill(itemSkill)} title={`Xoá: ${itemSkill?.Name}`} placement="left">
+												<div onClick={null} className="pe-i-d-red !px-[8px] !h-[26px] ml-[8px]">
+													<div className="pe-i-d-c-title !ml-0">Xoá</div>
+												</div>
+											</Popconfirm>
+										)}
+									</div>
+								</div>
+							)
+						})}
+					</div>
+				)}
+			</div>
+
+			<Modal width={400} open={examWarning} onCancel={() => setExamWarning(false)} footer={null}>
+				<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+					<Lottie loop animationData={warning} play style={{ width: 160, height: 160, marginBottom: 8 }} />
+					<div style={{ fontSize: 18 }}>Bạn có muốn tiếp tục làm bản trước đó?</div>
+
+					<div className="none-selection" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
+						<div onClick={() => createDoingTest(currentData?.ExamId, currentData?.HWId)} className="exercise-btn-cancel">
+							<div>Làm bài mới</div>
+						</div>
+
+						<div
+							onClick={() => {
+								gotoTest(currentData?.draft)
+								setExamWarning(false)
+							}}
+							className="exercise-btn-continue"
+						>
+							<div>Làm tiếp</div>
+						</div>
+					</div>
+				</div>
+			</Modal>
 		</div>
 	)
 }

@@ -45,7 +45,12 @@
 }
 
 .pe-i-d-cart {
-	@apply flex-1 bg-[#1b73e8] hover:bg-[#1666d1] active:bg-[#1b73e8];
+	@apply flex-1 bg-[#1b73e8] cursor-pointer hover:bg-[#1666d1] active:bg-[#1b73e8];
+	@apply text-[#fff] h-[30px] flex items-center justify-center rounded-[4px];
+}
+
+.pe-i-d-red {
+	@apply bg-[#E53935] cursor-pointer hover:bg-[#D32F2F] active:bg-[#E53935];
 	@apply text-[#fff] h-[32px] flex items-center justify-center rounded-[4px];
 }
 

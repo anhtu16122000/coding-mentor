@@ -174,7 +174,7 @@ const HomeWork = () => {
 						{(is.admin || is.teacher) && <ModalCreateHomeWork isEdit defaultData={item} onRefresh={getData} />}
 
 						{(is.admin || is.teacher) && (
-							<PrimaryTooltip place="left" id={`hw-del-${item?.Id}`} content="Làm bài">
+							<PrimaryTooltip place="left" id={`hw-del-${item?.Id}`} content="Xoá">
 								<Popconfirm placement="left" title={`Xoá bài tập: ${item?.Name}?`} onConfirm={() => delThis(item?.Id)}>
 									<div className="mr-[8px] w-[28px] text-[#C94A4F] h-[30px] all-center hover:opacity-70 cursor-pointer ml-[8px]">
 										<IoClose size={26} className="mb-[-2px]" />
