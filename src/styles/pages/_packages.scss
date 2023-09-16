@@ -93,3 +93,9 @@
 		}
 	}
 }
+
+.pe-d-default {
+	@apply bg-[#fff] rounded-[8px] mb-[16px] border-[1px];
+	@apply border-[#d5d5d5] hover:border-[#1b73e8] ml-[8px] relative;
+	@apply h-full flex flex-col;
+}

@@ -9,7 +9,6 @@ import { FaCartPlus, FaEdit, FaGift, FaQuestionCircle } from 'react-icons/fa'
 import { isDesktop } from 'react-device-detect'
 import { PrimaryTooltip } from '~/common/components'
 import CCSearch from '~/common/components/CCSearch'
-import { getMorePacked, getPacked } from './util'
 import { is, parseToMoney } from '~/common/utils/common'
 import { IoMdCart } from 'react-icons/io'
 import { useSelector } from 'react-redux'
@@ -17,21 +16,27 @@ import { RootState } from '~/store'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { BiDetail, BiSolidDetail, BiTrash } from 'react-icons/bi'
 import { packedApi } from '~/api/packed'
-import { ShowNostis } from '~/common/utils'
-import CreatePackage from './CreatePackage'
-import ReadMoreText from './ReadMoreText'
-import DonatePackage from './donate'
+import { ShowNostis, ShowNoti } from '~/common/utils'
 import RestApi from '~/api/RestApi'
 import { useDispatch } from 'react-redux'
 import { setCartData } from '~/store/cartReducer'
-import Router from 'next/router'
+import { getMoregetPackageSection, getPackageSection } from './util'
+import { useRouter } from 'next/router'
+import CreatePackage from '../CreatePackage'
+import FormPackageSection from './FormModal'
+import PackageDetailItem from './RenderItem'
+import { packageSectionApi } from '~/api/packed/packages-section'
 
 const Tour = dynamic(() => import('reactour'), { ssr: false })
 
 const initParameters = { search: '', pageIndex: 1, pageSize: 22 }
 
-function PackageExam() {
+function PackageExamDetail() {
 	const [filters, setFilters] = useState(initParameters)
+
+	const router = useRouter()
+
+	const [currentPackage, setCurrentPackage] = useState(null)
 
 	const [data, setData] = useState([])
 	const [totalItem, setTotalItem] = useState(0)
@@ -39,22 +44,47 @@ function PackageExam() {
 	const [loading, setLoading] = useState(true)
 	const [loadingMore, setLoadingMore] = useState(true)
 
+	const [packageDetail, setPackageDetail] = useState<any>(null)
+
 	const userInfo = useSelector((state: RootState) => state.user.information)
 
 	console.log('---- Packages: ', data)
 
 	useEffect(() => {
-		if (filters.pageIndex == 1) {
-			getPackages()
-		} else {
-			getMoreData()
+		if (!!router?.query?.package) {
+			setCurrentPackage(parseInt(router?.query?.package + ''))
 		}
-	}, [filters])
+	}, [router])
+
+	useEffect(() => {
+		if (!!currentPackage) {
+			getPackageDetail()
+
+			if (filters.pageIndex == 1) {
+				getPackages()
+			} else {
+				getMoreData()
+			}
+		}
+	}, [filters, currentPackage])
+
+	async function getPackageDetail() {
+		try {
+			const response = await packedApi.getByID(currentPackage)
+			if (response.status == 200) {
+				setPackageDetail(response.data?.data)
+			} else {
+				setPackageDetail(null)
+			}
+		} catch (error) {
+			ShowNoti('error', error?.message)
+		}
+	}
 
 	async function getPackages() {
 		console.log('----- getPackages')
 
-		await getPacked(filters, (response) => {
+		await getPackageSection({ ...filters, packageId: currentPackage }, (response) => {
 			setData(response.data)
 			setTotalItem(response.totalRow)
 		}).finally(() => {
@@ -64,7 +94,7 @@ function PackageExam() {
 	}
 
 	async function getMoreData() {
-		await getMorePacked(filters, (response) => {
+		await getMoregetPackageSection({ ...filters, packageId: currentPackage }, (response) => {
 			setData([...data, ...response.data])
 			setTotalItem(response.totalRow)
 		}).finally(() => {
@@ -133,7 +163,7 @@ function PackageExam() {
 		setFilters(initParameters)
 	}
 
-	const [style, setStyle] = useState(1)
+	const [style, setStyle] = useState(2) // Mốt update thêm loại hiển thị
 
 	const [deleting, setDeleting] = useState<boolean>(false)
 
@@ -155,7 +185,7 @@ function PackageExam() {
 	async function delThis(params) {
 		setDeleting(true)
 		try {
-			const response = await packedApi.delete(params)
+			const response = await packageSectionApi.delete(params)
 			if (response.status == 200) {
 				ShowNostis.success('Thành công')
 				removeItem(params)
@@ -206,33 +236,13 @@ function PackageExam() {
 			<div className="max-w-[2000px]">
 				<div className="cc-exam-header">
 					<div className="max-w-[350px] mr-[8px] flex items-center">
-						{/* <PrimaryTooltip id="exam-x" content="Hướng dẫn sử dụng" place="right">
-							<div onClick={openTour} className="cc-exam-btn-tour">
-								<FaQuestionCircle size={20} color="#1b73e8" />
-							</div>
-						</PrimaryTooltip> */}
-
 						<div data-tut="reactour-switch">
-							{/* @ts-ignore */}
-							<Segmented
-								style={{ height: 36 }}
-								onChange={(e) => setStyle(e == 'Kanban' ? 1 : 2)}
-								options={[
-									{ value: 'Kanban', icon: <AppstoreOutlined /> },
-									{ value: 'List', icon: <BarsOutlined /> }
-								]}
-							/>
+							<div className="font-[600]">{packageDetail?.Name || 'Chi tiết bộ đề'}</div>
 						</div>
-
-						{/* <FilterExam className="ml-[8px]" onReset={handleReset} onSubmit={(event) => setFilters(event)} /> */}
 					</div>
 
 					<div className="flex items-center">
-						<div data-tut="reactour-search" className="mr-[8px]">
-							<CCSearch data-tut="reactour-search" onSubmit={(value) => setFilters({ ...filters, pageIndex: 1, search: value })} />
-						</div>
-
-						<CreatePackage onRefresh={onRefresh} />
+						<FormPackageSection packageId={currentPackage} onRefresh={onRefresh} />
 					</div>
 				</div>
 
@@ -266,92 +276,19 @@ function PackageExam() {
 											: null
 									}
 									dataSource={data}
-									className="pr-[8px]"
+									className="pr-[16px]"
 									renderItem={(item, index) => {
 										const thisId = `pac-${index}-${item.Id}`
 
 										return (
-											<div key={thisId} id={thisId} className="pe-i-default">
-												<img src={item?.Thumbnail || '/images/package-thumbnail.png'} className="pe-i-d-thumb" />
-
-												{is(userInfo).admin && (
-													<Popover
-														ref={popRef}
-														overlayClassName="show-arrow"
-														content={
-															<div>
-																<Popconfirm
-																	disabled={deleting}
-																	onConfirm={() => delThis(item?.Id)}
-																	title={`Xoá: ${item?.Name}`}
-																	placement="left"
-																>
-																	<div className="pe-menu-item">
-																		<BiTrash size={18} color="#E53935" className="ml-[-3px]" />
-																		<div className="ml-[8px]">Xoá</div>
-																	</div>
-																</Popconfirm>
-
-																<CreatePackage onOpen={() => popRef?.current?.close()} onRefresh={onRefresh} defaultData={item} isEdit />
-															</div>
-														}
-														placement="leftTop"
-														trigger="click"
-													>
-														<div className="pe-i-d-menu">
-															<BsThreeDotsVertical size={16} color="#000" />
-														</div>
-													</Popover>
-												)}
-
-												<div className="p-[8px] pb-0 flex-1">
-													<div className="pe-i-d-name">{item?.Name}</div>
-
-													<div className="pe-i-d-user">
-														<IoMdCart size={14} />
-														<div className="pe-i-d-u-label">{parseToMoney(item?.TotalStudent || 0)} lượt mua</div>
-													</div>
-
-													<div className="flex items-center my-[4px] text-[#4a4a4a]">
-														<div className="text-[14px] font-[500]">
-															<ReadMoreText title="Mô tả đầy đủ" text={item?.Description} />
-														</div>
-													</div>
-
-													<div className="pe-i-d-price mb-[-8px]">{parseToMoney(item?.Price || 0)}VNĐ</div>
-												</div>
-
-												<div className="pe-i-d-controller">
-													{is(userInfo).student && item?.Status != 2 && (
-														<div onClick={() => _addToCart(item)} className="pe-i-d-cart">
-															<FaCartPlus size={14} />
-															<div className="pe-i-d-c-title">Mua ngay</div>
-														</div>
-													)}
-
-													{is(userInfo).admin && (
-														<div
-															className="pe-i-d-detail"
-															onClick={() => Router.push({ pathname: '/package-exam/detail', query: { package: item?.Id } })}
-														>
-															<BiSolidDetail size={16} />
-															<div className="pe-i-d-c-title">Chi tiết</div>
-														</div>
-													)}
-
-													{is(userInfo).student && item?.Status == 2 && (
-														<div
-															className="pe-i-d-detail"
-															onClick={() => Router.push({ pathname: '/package-exam/detail', query: { package: item?.Id } })}
-														>
-															<BiSolidDetail size={16} />
-															<div className="pe-i-d-c-title">Chi tiết</div>
-														</div>
-													)}
-
-													{is(userInfo).admin && <DonatePackage onRefresh={onRefresh} item={item} />}
-												</div>
-											</div>
+											<PackageDetailItem
+												thisId={thisId}
+												item={item}
+												currentPackage={currentPackage}
+												onRefresh={onRefresh}
+												onDelete={() => delThis(item?.Id)}
+												deleting={deleting}
+											/>
 										)
 									}}
 								/>
@@ -364,4 +301,4 @@ function PackageExam() {
 	)
 }
 
-export default PackageExam
+export default PackageExamDetail
