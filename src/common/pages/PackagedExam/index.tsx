@@ -1,6 +1,6 @@
 import { List, Popconfirm, Popover, Segmented, Skeleton } from 'antd'
 import Head from 'next/head'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
@@ -162,6 +162,8 @@ function PackageExam() {
 		}
 	}
 
+	const popRef = useRef(null)
+
 	return (
 		<>
 			<div className="max-w-[2000px]">
@@ -237,6 +239,7 @@ function PackageExam() {
 
 												{is(userInfo).admin && (
 													<Popover
+														ref={popRef}
 														overlayClassName="show-arrow"
 														content={
 															<div>
@@ -252,10 +255,7 @@ function PackageExam() {
 																	</div>
 																</Popconfirm>
 
-																<div className="pe-menu-item mt-[8px]">
-																	<FaEdit size={16} color="#1b73e8" />
-																	<div className="ml-[8px]">Chỉnh sửa</div>
-																</div>
+																<CreatePackage onOpen={() => popRef?.current?.close()} onRefresh={onRefresh} defaultData={item} isEdit />
 															</div>
 														}
 														placement="leftTop"
@@ -299,10 +299,7 @@ function PackageExam() {
 														</div>
 													)}
 
-													{is(userInfo).admin && (
-														<DonatePackage onRefresh={onRefresh} item={item} />
-														
-													)}
+													{is(userInfo).admin && <DonatePackage onRefresh={onRefresh} item={item} />}
 												</div>
 											</div>
 										)

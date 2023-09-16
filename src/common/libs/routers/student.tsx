@@ -54,6 +54,13 @@ export const StudentChildMenu = [
 				Route: '/dashboard',
 				Icon: '',
 				Text: 'Thống kê'
+			},
+			{
+				ItemType: 'single',
+				Key: '/package-exam',
+				Route: '/package-exam',
+				Text: 'Bộ đề',
+				Icon: ''
 			}
 		]
 	},

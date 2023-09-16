@@ -1,42 +1,16 @@
 import { Modal, Form, Input } from 'antd'
-import React, { FC, useEffect, useRef, useState } from 'react'
-import { formRequired } from '~/common/libs/others/form'
+import React, { FC, useEffect, useState } from 'react'
+import { formNoneRequired, formRequired } from '~/common/libs/others/form'
 import { ShowNoti } from '~/common/utils'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import ButtonAdd from '~/common/components/DirtyButton/Button-Add'
-import PrimaryButton from '~/common/components/Primary/Button'
-import ButtonCancel from '~/common/components/DirtyButton/Button-Cancel'
-import ButtonSave from '~/common/components/DirtyButton/Button-Save'
 import ModalFooter from '~/common/components/ModalFooter'
 import { packedApi } from '~/api/packed'
-
-// import ReactCrop from 'react-image-crop'
-import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop, convertToPixelCrop } from 'react-image-crop'
-import { useDebounceEffect } from './useDebounceEffect'
-import { canvasPreview } from './canvasPreview'
-import UploadImageField from '~/common/components/FormControl/UploadImageField'
-import { UploadFileApi } from '~/api/common/upload-image'
 import MiniImageCrop from './MiniImageCrop'
 import InputNumberField from '~/common/components/FormControl/InputNumberField'
-
-// This is to demonstate how to make and center a % aspect crop
-// which is a bit trickier so we use some helper functions.
-function centerAspectCrop(mediaWidth: number, mediaHeight: number, aspect: number) {
-	return centerCrop(
-		makeAspectCrop(
-			{
-				unit: '%',
-				width: 90
-			},
-			aspect,
-			mediaWidth,
-			mediaHeight
-		),
-		mediaWidth,
-		mediaHeight
-	)
-}
+import { FaEdit } from 'react-icons/fa'
+import { is } from '~/common/utils/common'
 
 const CreatePackage: FC<ICreateExam> = (props) => {
 	const { onRefresh, isEdit, defaultData, className, onOpen } = props
@@ -89,7 +63,7 @@ const CreatePackage: FC<ICreateExam> = (props) => {
 	}
 
 	const onFinish = async (values) => {
-		const DATA_SUBMIT = { ...values }
+		const DATA_SUBMIT = { ...values, Active: true }
 
 		setLoading(true)
 
@@ -98,49 +72,20 @@ const CreatePackage: FC<ICreateExam> = (props) => {
 		}
 
 		if (!!isEdit) {
-			putPackage({ ...DATA_SUBMIT, ID: defaultData.Id })
+			putPackage({ ...DATA_SUBMIT, Id: defaultData.Id })
 		}
 	}
 
 	function openEdit() {
-		form.setFieldsValue({ Code: defaultData?.Code })
-		form.setFieldsValue({ Description: defaultData?.Description })
-		form.setFieldsValue({ Name: defaultData?.Name })
+		form.setFieldsValue({ ...defaultData })
 		setVisible(true)
 	}
 
 	const user = useSelector((state: RootState) => state.user.information)
 
-	// ----------------------------------------------------------------
-
-	const [src, setSrc] = useState(null)
-	// const [crop, setCrop] = useState({ aspect: 3 / 4 }) // Đặt tỷ lệ 3:4 ở đây
-
-	// const onSelectFile = (e) => {
-	// 	if (e.target.files && e.target.files.length > 0) {
-	// 		const reader = new FileReader()
-	// 		reader.addEventListener('load', () => setSrc(reader.result))
-	// 		reader.readAsDataURL(e.target.files[0])
-	// 	}
-	// }
-
-	const onImageLoaded = (image) => {
-		// You can do something when the image is loaded, if needed.
-	}
-
-	const onCropComplete = (crop) => {
-		// You can do something when the crop is completed, if needed.
-	}
-
-	// const onCropChange = (newCrop) => {
-	// 	setCrop(newCrop)
-	// }
-
-	// ----================================
-
 	return (
 		<>
-			{user?.RoleId == 1 && !!!isEdit && (
+			{is(user).admin && !isEdit && (
 				<div data-tut="reactour-create" className="flex-shrink-0">
 					<ButtonAdd icon="outline" onClick={() => setVisible(true)}>
 						Tạo mới
@@ -148,10 +93,11 @@ const CreatePackage: FC<ICreateExam> = (props) => {
 				</div>
 			)}
 
-			{user?.RoleId == 1 && !!isEdit && (
-				<PrimaryButton className={className} onClick={openEdit} type="button" background="yellow" icon="edit">
-					Cập nhật
-				</PrimaryButton>
+			{is(user).admin && !!isEdit && (
+				<div onClick={openEdit} className="pe-menu-item mt-[8px]">
+					<FaEdit size={16} color="#1b73e8" />
+					<div className="ml-[8px]">Chỉnh sửa</div>
+				</div>
 			)}
 
 			<Modal
@@ -163,15 +109,12 @@ const CreatePackage: FC<ICreateExam> = (props) => {
 				footer={<ModalFooter loading={loading} onOK={() => form.submit()} onCancel={() => setVisible(false)} />}
 			>
 				<Form disabled={loading} form={form} layout="vertical" initialValues={{ remember: true }} onFinish={onFinish}>
-					{/* <UploadImageField form={form} /> */}
-
 					<div className="grid grid-cols-4 gap-x-4">
-						<Form.Item className="col-span-4" label="Hình thu nhỏ" name="Thumbnail" rules={formRequired}>
+						<Form.Item className="col-span-4" label="Hình thu nhỏ" name="Thumbnail" rules={formNoneRequired}>
 							<MiniImageCrop
 								className=""
+								defaultValue={defaultData?.Thumbnail}
 								onChange={(event) => {
-									console.log('--- event: ', event)
-
 									form.setFieldValue('Thumbnail', event?.uri)
 								}}
 							/>

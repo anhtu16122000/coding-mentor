@@ -1,5 +1,5 @@
 import { Modal } from 'antd'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import ModalFooter from '~/common/components/ModalFooter'
 import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop } from 'react-image-crop'
@@ -32,7 +32,7 @@ function centerAspectCrop(mediaWidth: number, mediaHeight: number, aspect: numbe
 const aspect = 3 / 2
 
 const MiniImageCrop = (props) => {
-	const { className, onChange } = props
+	const { className, onChange, defaultValue } = props
 
 	const [visible, setVisible] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(false)
@@ -44,6 +44,10 @@ const MiniImageCrop = (props) => {
 	const [crop, setCrop] = useState<Crop>()
 	const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
 	const [imgSelected, setImgSelected] = useState(null)
+
+	useEffect(() => {
+		setcurrentImage({ uri: defaultValue || '', createdBy: 'Chaos', timeStamp: new Date().getTime() })
+	}, [])
 
 	function onSelectFile(e: any) {
 		if (e.target.files && e.target.files.length > 0) {
