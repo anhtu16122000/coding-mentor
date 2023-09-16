@@ -21,6 +21,9 @@ import { ShowNostis } from '~/common/utils'
 import CreatePackage from './CreatePackage'
 import ReadMoreText from './ReadMoreText'
 import DonatePackage from './donate'
+import RestApi from '~/api/RestApi'
+import { useDispatch } from 'react-redux'
+import { setCartData } from '~/store/cartReducer'
 
 const Tour = dynamic(() => import('reactour'), { ssr: false })
 
@@ -164,6 +167,38 @@ function PackageExam() {
 
 	const popRef = useRef(null)
 
+	const dispatch = useDispatch()
+
+	const [adding, setAdding] = useState<boolean>(true)
+
+	async function getCartData() {
+		try {
+			const response = await RestApi.get<any>('Cart/my-cart', { pageSize: 99999, pageIndex: 1 })
+			if (response.status == 200) {
+				dispatch(setCartData(response.data.data))
+			} else {
+				dispatch(setCartData([]))
+			}
+		} catch (error) {
+		} finally {
+			setAdding(false)
+		}
+	}
+
+	const _addToCart = async (item) => {
+		setAdding(true)
+		try {
+			let res = await RestApi.post('Cart', { ProductId: item.Id, Quantity: 1 })
+			if (res.status == 200) {
+				getCartData()
+				ShowNostis.success('Thành công')
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+			setAdding(false)
+		}
+	}
+
 	return (
 		<>
 			<div className="max-w-[2000px]">
@@ -285,15 +320,22 @@ function PackageExam() {
 												</div>
 
 												<div className="pe-i-d-controller">
-													{is(userInfo).student && (
-														<div className="pe-i-d-cart">
+													{is(userInfo).student && item?.Status != 2 && (
+														<div onClick={() => _addToCart(item)} className="pe-i-d-cart">
 															<FaCartPlus size={14} />
 															<div className="pe-i-d-c-title">Mua ngay</div>
 														</div>
 													)}
 
 													{is(userInfo).admin && (
-														<div className="pe-i-d-cart">
+														<div className="pe-i-d-detail">
+															<BiSolidDetail size={16} />
+															<div className="pe-i-d-c-title">Chi tiết</div>
+														</div>
+													)}
+
+													{is(userInfo).student && item?.Status == 2 && (
+														<div className="pe-i-d-detail">
 															<BiSolidDetail size={16} />
 															<div className="pe-i-d-c-title">Chi tiết</div>
 														</div>

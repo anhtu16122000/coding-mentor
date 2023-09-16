@@ -39,8 +39,13 @@
 	@apply px-[8px] pb-[8px] gap-x-[8px]  flex items-center no-select cursor-pointer;
 }
 
-.pe-i-d-cart {
+.pe-i-d-detail {
 	@apply flex-1 bg-[#327846] hover:bg-[#2b683c] active:bg-[#327846];
+	@apply text-[#fff] h-[32px] flex items-center justify-center rounded-[4px];
+}
+
+.pe-i-d-cart {
+	@apply flex-1 bg-[#1b73e8] hover:bg-[#1666d1] active:bg-[#1b73e8];
 	@apply text-[#fff] h-[32px] flex items-center justify-center rounded-[4px];
 }
 
