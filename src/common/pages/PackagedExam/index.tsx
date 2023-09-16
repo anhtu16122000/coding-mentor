@@ -15,10 +15,12 @@ import { IoMdCart } from 'react-icons/io'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import { BiTrash } from 'react-icons/bi'
+import { BiDetail, BiSolidDetail, BiTrash } from 'react-icons/bi'
 import { packedApi } from '~/api/packed'
 import { ShowNostis } from '~/common/utils'
 import CreatePackage from './CreatePackage'
+import ReadMoreText from './ReadMoreText'
+import DonatePackage from './donate'
 
 const Tour = dynamic(() => import('reactour'), { ssr: false })
 
@@ -197,7 +199,11 @@ function PackageExam() {
 
 				{(!loading || data.length > 0) && (
 					<div>
-						<div id="class-view" className="cc-exam-list-container" style={{ paddingRight: 8, marginRight: isDesktop ? -23 : -16 }}>
+						<div
+							id="class-view"
+							className="cc-exam-list-container ant-row-gap-y-8"
+							style={{ paddingRight: 8, marginRight: isDesktop ? -23 : -16 }}
+						>
 							<InfiniteScroll
 								dataLength={data.length}
 								next={loadMoreData}
@@ -261,7 +267,7 @@ function PackageExam() {
 													</Popover>
 												)}
 
-												<div className="p-[8px]">
+												<div className="p-[8px] pb-0 flex-1">
 													<div className="pe-i-d-name">{item?.Name}</div>
 
 													<div className="pe-i-d-user">
@@ -270,24 +276,33 @@ function PackageExam() {
 													</div>
 
 													<div className="flex items-center my-[4px] text-[#4a4a4a]">
-														<div className="text-[14px] font-[500]">{item?.Description}</div>
+														<div className="text-[14px] font-[500]">
+															<ReadMoreText title="Mô tả đầy đủ" text={item?.Description} />
+														</div>
 													</div>
 
-													<div className="pe-i-d-price">{parseToMoney(item?.Price || 0)}VNĐ</div>
+													<div className="pe-i-d-price mb-[-8px]">{parseToMoney(item?.Price || 0)}VNĐ</div>
+												</div>
 
-													<div className="pe-i-d-controller">
+												<div className="pe-i-d-controller">
+													{is(userInfo).student && (
 														<div className="pe-i-d-cart">
 															<FaCartPlus size={14} />
 															<div className="pe-i-d-c-title">Mua ngay</div>
 														</div>
+													)}
 
-														{is(userInfo).admin && (
-															<div className="pe-i-d-gift">
-																<FaGift size={14} />
-																<div className="pe-i-d-g-title">Tặng</div>
-															</div>
-														)}
-													</div>
+													{is(userInfo).admin && (
+														<div className="pe-i-d-cart">
+															<BiSolidDetail size={16} />
+															<div className="pe-i-d-c-title">Chi tiết</div>
+														</div>
+													)}
+
+													{is(userInfo).admin && (
+														<DonatePackage onRefresh={onRefresh} item={item} />
+														
+													)}
 												</div>
 											</div>
 										)

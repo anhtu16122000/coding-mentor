@@ -1,6 +1,13 @@
 .pe-i-default {
 	@apply bg-[#fff] rounded-[8px] mb-[16px] border-[1px];
 	@apply border-[#d5d5d5] hover:border-[#1b73e8] ml-[8px] relative;
+	@apply h-full flex flex-col;
+}
+
+.ant-row-gap-y-8 {
+	.ant-row {
+		row-gap: 8px !important;
+	}
 }
 
 .pe-i-d-thumb {
@@ -29,7 +36,7 @@
 }
 
 .pe-i-d-controller {
-	@apply mt-[8px] flex items-center no-select cursor-pointer;
+	@apply px-[8px] pb-[8px] gap-x-[8px]  flex items-center no-select cursor-pointer;
 }
 
 .pe-i-d-cart {
@@ -42,7 +49,7 @@
 }
 
 .pe-i-d-gift {
-	@apply ml-[8px] px-[16px] bg-[#faaa5a] hover:bg-[#e19850] active:bg-[#faaa5a];
+	@apply px-[16px] bg-[#faaa5a] hover:bg-[#e19850] active:bg-[#faaa5a];
 	@apply text-[#000] h-[32px] flex items-center justify-center rounded-[4px];
 }
 
@@ -62,5 +69,22 @@
 	}
 	.ant-select-item {
 		border-bottom: 1px #eaeaea solid;
+	}
+}
+
+.ant-chaos-custom {
+	.ant-select-dropdown-by-chau {
+		overflow: visible;
+	}
+	.ant-select-selection-item {
+		overflow: visible;
+	}
+	.ant-select-status-success {
+		&.ant-select-item-option-selected-blue {
+			height: 100px;
+		}
+		.ant-select-arrow {
+			top: 40% !important;
+		}
 	}
 }
