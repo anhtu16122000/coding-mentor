@@ -54,6 +54,11 @@
 	@apply text-[#fff] h-[32px] flex items-center justify-center rounded-[4px];
 }
 
+.pe-i-d-green {
+	@apply bg-[#43A047] cursor-pointer hover:bg-[#388E3C] active:bg-[#43A047];
+	@apply text-[#fff] h-[32px] flex items-center justify-center rounded-[4px];
+}
+
 .pe-i-d-c-title {
 	@apply ml-[8px] font-[500];
 }

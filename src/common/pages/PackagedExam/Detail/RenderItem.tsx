@@ -9,12 +9,11 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import { packageSkillApi } from '~/api/packed/packages-skill'
 import { ShowNostis } from '~/common/utils'
 import FormPackageSkill from './FormModalSkill'
-import { FaPlus } from 'react-icons/fa'
-import { IoClose } from 'react-icons/io5'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
-import { decode } from 'punycode'
 import Lottie from 'react-lottie-player'
 import warning from '~/common/components/json/100468-warning.json'
+import { PrimaryTooltip } from '~/common/components'
+import PackageHistories from './Histories'
 
 const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, onRefresh }) => {
 	const userInfo = useSelector((state: RootState) => state.user.information)
@@ -173,6 +172,10 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 												{is(userInfo).student ? 'Làm bài' : 'Làm thử'}
 											</div>
 										</div>
+
+										<PrimaryTooltip place="left" id={`hw-his-${item?.Id}`} content="Lịch sử làm bài">
+											<PackageHistories item={itemSkill} />
+										</PrimaryTooltip>
 
 										{is(userInfo).admin && (
 											<Popconfirm onConfirm={() => delPackageSkill(itemSkill)} title={`Xoá: ${itemSkill?.Name}`} placement="left">

@@ -1,13 +1,8 @@
-import { List, Popconfirm, Popover, Segmented, Skeleton } from 'antd'
-import Head from 'next/head'
+import { List, Popconfirm, Popover, Skeleton } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons'
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
-import dynamic from 'next/dynamic'
-import { FaCartPlus, FaEdit, FaGift, FaQuestionCircle } from 'react-icons/fa'
+import { FaCartPlus } from 'react-icons/fa'
 import { isDesktop } from 'react-device-detect'
-import { PrimaryTooltip } from '~/common/components'
 import CCSearch from '~/common/components/CCSearch'
 import { getMorePacked, getPacked } from './util'
 import { is, parseToMoney } from '~/common/utils/common'
@@ -15,7 +10,7 @@ import { IoMdCart } from 'react-icons/io'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import { BiDetail, BiSolidDetail, BiTrash } from 'react-icons/bi'
+import { BiSolidDetail, BiTrash } from 'react-icons/bi'
 import { packedApi } from '~/api/packed'
 import { ShowNostis } from '~/common/utils'
 import CreatePackage from './CreatePackage'
@@ -25,8 +20,6 @@ import RestApi from '~/api/RestApi'
 import { useDispatch } from 'react-redux'
 import { setCartData } from '~/store/cartReducer'
 import Router from 'next/router'
-
-const Tour = dynamic(() => import('reactour'), { ssr: false })
 
 const initParameters = { search: '', pageIndex: 1, pageSize: 22 }
 
@@ -41,8 +34,6 @@ function PackageExam() {
 
 	const userInfo = useSelector((state: RootState) => state.user.information)
 
-	console.log('---- Packages: ', data)
-
 	useEffect(() => {
 		if (filters.pageIndex == 1) {
 			getPackages()
@@ -52,8 +43,6 @@ function PackageExam() {
 	}, [filters])
 
 	async function getPackages() {
-		console.log('----- getPackages')
-
 		await getPacked(filters, (response) => {
 			setData(response.data)
 			setTotalItem(response.totalRow)
@@ -83,51 +72,6 @@ function PackageExam() {
 	function onRefresh() {
 		setFilters({ ...filters, pageIndex: 1 })
 	}
-
-	// -----------------------------------------------------------------
-
-	const [isTourOpen, setIsTourOpen] = useState(false)
-
-	const accentColor = '#0a89ff'
-
-	const disableBody = (target) => disableBodyScroll(target)
-	const enableBody = (target) => enableBodyScroll(target)
-
-	const closeTour: any = () => {
-		setIsTourOpen(false)
-	}
-
-	const openTour = () => {
-		setIsTourOpen(true)
-	}
-
-	// You might need to adjust this part depending on your use case.
-	useEffect(() => {
-		if (isTourOpen) {
-			disableBody(document.querySelector('.helper'))
-		} else {
-			enableBody(document.querySelector('.helper'))
-		}
-	}, [isTourOpen])
-
-	const tourConfig = [
-		{
-			selector: '[data-tut="reactour-create"]',
-			content: `Tạo một đề mới thật dễ dàng bằng cách nhấn vào đây`
-		},
-		{
-			selector: '[data-tut="reactour-search"]',
-			content: `Tìm kiếm đề bằng cập nhập tên đề hoặc mã đề vào đây`
-		},
-		{
-			selector: '[data-tut="reactour-switch"]',
-			content: `Thay đổi phong cách hiển thị`
-		},
-		{
-			selector: '[data-tut="reactour-information"]',
-			content: `Bấm vào đây để xem và cập nhật thông tin đề`
-		}
-	]
 
 	function handleReset() {
 		setFilters(initParameters)
@@ -214,17 +158,15 @@ function PackageExam() {
 
 						<div data-tut="reactour-switch">
 							{/* @ts-ignore */}
-							<Segmented
+							{/* <Segmented
 								style={{ height: 36 }}
 								onChange={(e) => setStyle(e == 'Kanban' ? 1 : 2)}
 								options={[
 									{ value: 'Kanban', icon: <AppstoreOutlined /> },
 									{ value: 'List', icon: <BarsOutlined /> }
 								]}
-							/>
+							/> */}
 						</div>
-
-						{/* <FilterExam className="ml-[8px]" onReset={handleReset} onSubmit={(event) => setFilters(event)} /> */}
 					</div>
 
 					<div className="flex items-center">
