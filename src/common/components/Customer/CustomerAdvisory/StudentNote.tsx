@@ -9,6 +9,7 @@ import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import DeleteTableRow from '../../Elements/DeleteTableRow'
 import TextBoxField from '../../FormControl/TextBoxField'
 import ModalFooter from '../../ModalFooter'
+import Router from 'next/router'
 
 const sharedOnCell = (_, index) => {
 	if (index === 1) {
@@ -18,6 +19,7 @@ const sharedOnCell = (_, index) => {
 	}
 	return {}
 }
+
 const _columnGrades = [
 	{
 		title: 'Listening',
@@ -99,11 +101,11 @@ const StudentNote = (props) => {
 	}, [])
 
 	useEffect(() => {
-		const isMatchUserId = currentUserIdUpdated.current === studentId
+		const isMatchUserId = currentUserIdUpdated?.current == studentId
 		if (isMatchUserId) {
 			handleGetGrades(studentId)
 		}
-	}, [currentUserIdUpdated.current])
+	}, [currentUserIdUpdated?.current])
 
 	const handleDelete = async (id) => {
 		try {
@@ -199,10 +201,14 @@ const StudentNote = (props) => {
 					<TextBoxField className="primary-input !h-auto !mb-0" rows={8} name="Note" label="" />
 				</Form>
 			</Modal>
-			<div className="mt-3">
-				<Table pagination={false} size="small" columns={columnGrades} dataSource={grades} />
-			</div>
-			<Tooltip className="mt-4" title="Thêm ghi chú">
+
+			{Router.asPath.includes('/student') && (
+				<div className="mx-3">
+					<Table pagination={false} size="small" columns={columnGrades} dataSource={grades} />
+				</div>
+			)}
+
+			<Tooltip className="" title="Thêm ghi chú">
 				<button className="btn btn-warning" onClick={showModal}>
 					Thêm ghi chú
 				</button>

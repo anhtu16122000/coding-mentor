@@ -14,6 +14,10 @@ import { RootState } from '~/store'
 import TabComp from '~/common/custom/TabComp'
 import { TabCompData } from '~/common/custom/TabComp/type'
 import { EditOutlined } from '@ant-design/icons'
+import IconButton from '~/common/components/Primary/IconButton'
+import { RiBankCard2Line } from 'react-icons/ri'
+import { PrimaryTooltip } from '~/common/components'
+import ModalBankInformation from './ModalBankInformation'
 
 export const SalaryPage = () => {
 	const [valueDate, setValueDate] = useState(moment().subtract(1, 'months'))
@@ -268,6 +272,8 @@ export const SalaryPage = () => {
 				if (isSaler() || isAcademic() || isTeacher()) return ''
 				return (
 					<div className="flex items-center">
+						<ModalBankInformation item={item} />
+
 						<ModalSalaryCRUD mode="edit" onRefresh={() => getSalary(apiParameters)} dataRow={item} />
 					</div>
 				)

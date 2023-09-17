@@ -191,14 +191,21 @@ const PaymentManagementPage = () => {
 			title: 'Loại',
 			dataIndex: 'Type',
 			width: 180,
-			render: (value, item) => (
-				<p className="font-[600] text-[#E53935]">
-					{value == 1 && <span className="tag blue">{item?.TypeName}</span>}
-					{value == 2 && <span className="tag green">{item?.TypeName}</span>}
-					{value == 3 && <span className="tag yellow">{item?.TypeName}</span>}
-					{value == 4 && <span className="tag gray">{item?.TypeName}</span>}
-				</p>
-			)
+			render: (value, item) => {
+				if (value == 1) {
+					return <span className="tag blue">{item?.TypeName}</span>
+				}
+
+				if (value == 2) {
+					return <span className="tag green">{item?.TypeName}</span>
+				}
+
+				if (value == 3) {
+					return <span className="tag yellow">{item?.TypeName}</span>
+				}
+
+				return <span className="tag gray">{item?.TypeName}</span>
+			}
 		},
 		{
 			title: 'Kỳ tiếp theo',

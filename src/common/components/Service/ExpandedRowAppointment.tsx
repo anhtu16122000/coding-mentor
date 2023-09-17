@@ -32,6 +32,8 @@ const ExpandedRowAppointment = (props) => {
 		return userInformation?.RoleId == 7
 	}
 
+	console.log(rowData)
+
 	return (
 		<div className="wrapper-expanded-table-appointment">
 			<h2 className="result-appointment-title">Kết quả</h2>
