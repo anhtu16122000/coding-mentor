@@ -1,10 +1,9 @@
 import { instance } from '../instance'
 
-const url = '/api/Product'
+const url = '/api/PackageSection'
 
-export const packedApi = {
-	getAll(params: IGetExam) {
-		// Type 2 là gói bài tập
+export const packageSectionApi = {
+	getAll(params: any) {
 		return instance.get<IApiResultData<TIeltsExam[]>>(url, { params: { ...params, type: 2 } })
 	},
 	getByID(ID: number) {
