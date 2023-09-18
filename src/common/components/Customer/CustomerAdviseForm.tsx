@@ -39,10 +39,9 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	const area = useSelector((state: RootState) => state.area.Area)
 
 	const getSaler = async (branchIds) => {
-		form.setFieldValue('SaleId', null)
-
 		if (!branchIds) {
 			setSalers([])
+			form.setFieldValue('SaleId', null)
 			return
 		}
 
@@ -189,7 +188,9 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	useEffect(() => {
 		if (isModalVisible) {
 			form.setFieldsValue({ Type: 1 })
+
 			getJobs()
+
 			if (rowData?.BranchId) {
 				getTeachers(rowData?.BranchId)
 			}
@@ -199,6 +200,12 @@ const CustomerAdviseForm = React.memo((props: any) => {
 					form.setFieldsValue({ Password: '123456' })
 					form.setFieldsValue({ BranchIds: !!rowData.BranchId ? parseInt(rowData.BranchId) : null })
 				}
+
+				form.setFieldsValue({ ...rowData })
+				form.setFieldsValue({ CustomerStatusId: !!rowData.CustomerStatusId ? parseInt(rowData.CustomerStatusId) : null })
+
+				getSaler(rowData?.BranchId)
+
 				!!rowData.AreaId && getDistrictByArea(rowData.AreaId)
 				!!rowData.DistrictId && getWardByDistrict(rowData.DistrictId)
 				form.setFieldsValue(rowData)
@@ -252,7 +259,9 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	}
 
 	function removeContaining(arr) {
-		return arr?.filter((person) => person?.value !== 2)
+		// return arr?.filter((person) => person?.value !== 2)
+
+		return arr
 	}
 
 	function onClickCreate() {
@@ -454,12 +463,14 @@ const CustomerAdviseForm = React.memo((props: any) => {
 							<div className="col-md-6 col-12">
 								<SelectField name="SourceId" label="Nguồn" placeholder="Chọn nguồn" optionList={source} />
 							</div>
+
 							{!isSaler() && (
 								<div className="col-md-6 col-12">
 									<SelectField name="SaleId" label="Tư vấn viên" placeholder="Chọn tư vấn viên" optionList={salers} />
 								</div>
 							)}
 						</div>
+
 						{rowData && isStudent && (
 							<>
 								<Divider className="col-span-4" orientation="center">

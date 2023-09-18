@@ -113,7 +113,7 @@ const CustomerAdvisory = () => {
 		}
 	}
 
-	log.Yellow('todoApi', todoApi)
+	// log.Yellow('todoApi', todoApi)
 
 	const getAllCustomer = async () => {
 		setIsLoading(true)
