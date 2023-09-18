@@ -173,8 +173,6 @@ const CustomerAdviseForm = React.memo((props: any) => {
 				setTodoApi(listTodoApi)
 				form.resetFields()
 
-				console.log('------ onRefresh: ', onRefresh)
-
 				!!onRefresh && onRefresh()
 
 				setIsModalVisible(false)
