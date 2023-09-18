@@ -113,8 +113,6 @@ const CustomerAdvisory = () => {
 		}
 	}
 
-	// log.Yellow('todoApi', todoApi)
-
 	const getAllCustomer = async () => {
 		setIsLoading(true)
 		try {
@@ -219,9 +217,15 @@ const CustomerAdvisory = () => {
 	const handleDelete = async (id) => {
 		try {
 			const res = await customerAdviseApi.delete(id)
-			if (res.status === 200) {
-				setTodoApi(listTodoApi)
+			if (res.status == 200) {
 				ShowNoti('success', res.data.message)
+
+				if (todoApi?.pageIndex == 1) {
+					getAllCustomer()
+				} else {
+					setTodoApi(listTodoApi)
+				}
+
 				return res
 			}
 		} catch (err) {
@@ -303,6 +307,16 @@ const CustomerAdvisory = () => {
 			const temp = [...dataCustomer]
 			temp[thisIndex] = { ...temp[thisIndex], ...params }
 			putUpdateStatus({ ...temp[thisIndex], ...params }, temp)
+		}
+	}
+
+	function handleRefresh() {
+		console.log('---- handleRefresh: ', todoApi)
+
+		if (todoApi?.pageIndex == 1) {
+			getAllCustomer()
+		} else {
+			setTodoApi(listTodoApi)
 		}
 	}
 
@@ -404,7 +418,9 @@ const CustomerAdvisory = () => {
 				return (
 					<div className="d-flex align-items-center">
 						<DeleteTableRow text={`khách hàng ${data.FullName}`} handleDelete={() => handleDelete(data.Id)} />
+
 						<CustomerAdviseForm
+							onRefresh={handleRefresh}
 							source={source}
 							learningNeed={learningNeed}
 							purpose={purpose}
@@ -415,9 +431,12 @@ const CustomerAdvisory = () => {
 							listTodoApi={listTodoApi}
 							setTodoApi={setTodoApi}
 						/>
+
 						<CustomerAdvisoryMail dataRow={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
+
 						{data.CustomerStatusId !== 2 && (
 							<CustomerAdviseForm
+								onRefresh={handleRefresh}
 								isStudent={true}
 								source={source}
 								learningNeed={learningNeed}
@@ -443,6 +462,7 @@ const CustomerAdvisory = () => {
 				return (
 					<div className="d-flex align-items-center">
 						<DeleteTableRow text={`khách hàng ${data.FullName}`} handleDelete={() => handleDelete(data.Id)} />
+
 						<CustomerAdviseForm
 							source={source}
 							learningNeed={learningNeed}
@@ -453,22 +473,25 @@ const CustomerAdvisory = () => {
 							rowData={data}
 							listTodoApi={listTodoApi}
 							setTodoApi={setTodoApi}
+							onRefresh={handleRefresh}
 						/>
+
 						<CustomerAdvisoryMail dataRow={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
-						{data.CustomerStatusId !== 2 && (
-							<CustomerAdviseForm
-								isStudent={true}
-								source={source}
-								learningNeed={learningNeed}
-								purpose={purpose}
-								sale={sale}
-								branch={convertBranchSelect}
-								customerStatus={customerStatus}
-								rowData={data}
-								listTodoApi={listTodoApi}
-								setTodoApi={setTodoApi}
-							/>
-						)}
+
+						<CustomerAdviseForm
+							isStudent={true}
+							isEntry={true}
+							source={source}
+							learningNeed={learningNeed}
+							purpose={purpose}
+							sale={sale}
+							branch={convertBranchSelect}
+							customerStatus={customerStatus}
+							rowData={data}
+							listTodoApi={listTodoApi}
+							setTodoApi={setTodoApi}
+							onRefresh={handleRefresh}
+						/>
 					</div>
 				)
 			}

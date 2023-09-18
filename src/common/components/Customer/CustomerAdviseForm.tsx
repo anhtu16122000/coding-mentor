@@ -22,7 +22,7 @@ import moment from 'moment'
 import { ieltsExamApi } from '~/api/IeltsExam'
 
 const CustomerAdviseForm = React.memo((props: any) => {
-	const { source, learningNeed, purpose, branch, refPopover, onRefresh } = props
+	const { source, learningNeed, purpose, branch, refPopover, onRefresh, isEntry } = props
 	const { customerStatus, rowData, listTodoApi, setTodoApi, isStudent, className } = props
 
 	const router = useRouter()
@@ -168,15 +168,21 @@ const CustomerAdviseForm = React.memo((props: any) => {
 					  })
 					: customerAdviseApi.update(DATA_SUBMIT)
 				: customerAdviseApi.add(DATA_SUBMIT))
-			if (res.status === 200) {
+
+			if (res.status == 200) {
 				setTodoApi(listTodoApi)
 				form.resetFields()
+
+				console.log('------ onRefresh: ', onRefresh)
+
+				!!onRefresh && onRefresh()
+
 				setIsModalVisible(false)
 				ShowNoti('success', res.data.message)
-				!!onRefresh && onRefresh()
-				router.push({
-					pathname: '/entry-test'
-				})
+
+				if (isEntry) {
+					router.push({ pathname: '/entry-test' })
+				}
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -485,6 +491,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 										<SelectField
 											name="Type"
 											label="Địa điểm làm bài"
+											onChangeSelect={(e) => setTestType(e)}
 											placeholder="Chọn địa điểm làm bài"
 											optionList={[
 												{ title: 'Tại trung tâm', value: 1 },
@@ -504,7 +511,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 										/>
 									</div>
 
-									{form.getFieldValue('Type') === 2 && (
+									{form.getFieldValue('Type') == 2 && (
 										<Form.Item className="col-md-6 col-12" name="IeltsExamId" label="Đề" rules={formRequired}>
 											<Select
 												showSearch
