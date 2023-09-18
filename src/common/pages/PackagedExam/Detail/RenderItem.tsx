@@ -1,4 +1,4 @@
-import { Empty, Modal, Popconfirm, Popover, Spin } from 'antd'
+import { Empty, Modal, Popconfirm, Popover, Skeleton, Spin } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import { BiTrash } from 'react-icons/bi'
 import { useSelector } from 'react-redux'
@@ -14,6 +14,8 @@ import Lottie from 'react-lottie-player'
 import warning from '~/common/components/json/100468-warning.json'
 import { PrimaryTooltip } from '~/common/components'
 import PackageHistories from './Histories'
+import Avatar from '~/common/components/Avatar'
+import PrimaryButton from '~/common/components/Primary/Button'
 
 const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, onRefresh }) => {
 	const userInfo = useSelector((state: RootState) => state.user.information)
@@ -62,6 +64,7 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 
 	function makeTest(exam, skillItem) {
 		setCreatingTest(skillItem)
+		setPreview(false)
 
 		if (is(userInfo).admin) {
 			createAdminTest(exam)
@@ -120,17 +123,18 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 
 	const [previewLoading, setPreviewLoading] = useState<boolean>(false)
 
+	const [ranks, setRanks] = useState([])
+	const [curSkill, setCurSkill] = useState(null)
+
 	async function getPreview(skillId) {
 		setPreview(true)
 		setPreviewLoading(true)
 		try {
-			const res = await packageSkillApi.getRank(skillId)
-
+			const res: any = await packageSkillApi.getRank(skillId)
 			if (res.status == 200) {
-				// setCurrentData({ ExamId: ExamId, HWId: HWId, draft: res.data?.data })
-				// setExamWarning(true)
+				setRanks(res.data?.data?.Items)
 			} else {
-				// createDoingTest(ExamId, HWId)
+				setRanks([])
 			}
 		} catch (error) {
 			ShowNostis.error(error?.message)
@@ -188,12 +192,14 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 					<div className="p-[8px] mt-[8px] grid grid-cols-1 w600:grid-cols-2 gap-[8px] no-select">
 						{skills.map((itemSkill, iSkill) => {
 							return (
-								<div key={`ski-${iSkill}`} className="col-span-1 flex items-center bg-[#e4e1e1] hover:bg-[#d9d9d9] p-[8px] rounded-[6px]">
+								<div key={`ski-${iSkill}`} className="col-span-1 flex items-center bg-[#f2f2f2] hover:bg-[#e8e8e8] p-[8px] rounded-[6px]">
 									<div className="font-[600] flex-1">{itemSkill?.Name}</div>
 									<div className="flex items-center h-[26px]">
 										<div
-											// onClick={() => makeTest(itemSkill?.IeltsExamId, itemSkill)}
-											onClick={() => getPreview(itemSkill?.Id)}
+											onClick={() => {
+												setCurSkill(itemSkill)
+												getPreview(itemSkill?.Id)
+											}}
 											className="pe-i-d-cart !px-[8px] !h-[26px]"
 										>
 											<div className="pe-i-d-c-title !ml-0">
@@ -244,25 +250,68 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 				</div>
 			</Modal>
 
-			<Modal width={400} open={examWarning} onCancel={() => setExamWarning(false)} footer={null}>
-				<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-					<Lottie loop animationData={warning} play style={{ width: 160, height: 160, marginBottom: 8 }} />
-					<div style={{ fontSize: 18 }}>Bạn có muốn tiếp tục làm bản trước đó?</div>
-
-					<div className="none-selection" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
-						<div onClick={() => createDoingTest(currentData?.ExamId, currentData?.HWId)} className="exercise-btn-cancel">
-							<div>Làm bài mới</div>
-						</div>
-
-						<div
+			<Modal
+				title="Tổng quan"
+				width={400}
+				open={preview}
+				onCancel={() => setPreview(false)}
+				footer={
+					<div>
+						<PrimaryButton
+							background="red"
+							icon="cancel"
+							type="button"
 							onClick={() => {
-								gotoTest(currentData?.draft)
-								setExamWarning(false)
+								setCurSkill(null)
+								setPreview(false)
 							}}
-							className="exercise-btn-continue"
 						>
-							<div>Làm tiếp</div>
-						</div>
+							Đóng
+						</PrimaryButton>
+						<PrimaryButton
+							className="ml-[8px]"
+							background="blue"
+							icon="edit"
+							type="button"
+							onClick={() => makeTest(curSkill?.IeltsExamId, curSkill)}
+						>
+							Làm bài
+						</PrimaryButton>
+					</div>
+				}
+			>
+				<div style={{ display: 'flex', flexDirection: 'column' }}>
+					<div className="border-[1px] border-[#dfdfdf] p-[8px] rounded-[6px]">
+						<div className="font-[600] text-[16px] mb-[8px]">Bảng xếp hạng</div>
+
+						{previewLoading && <Skeleton active />}
+						{!previewLoading && ranks.length == 0 && (
+							<div className="">
+								<Empty />
+							</div>
+						)}
+
+						{!previewLoading && ranks.length > 0 && (
+							<div className="gap-[8px]">
+								{ranks.map((rank, index) => {
+									return (
+										<div key={`exam-rank-${index}-${rank?.Id}`} className="bg-[#f2f2f2] p-[8px] rounded-[6px] flex">
+											<div className="flex flex-col items-start">
+												<div className="flex">
+													<Avatar className="w-[50px] h-[50px] rounded-full" uri={rank?.StudentThumbnail} />
+													<div className="ml-[8px]">
+														<div className="font-[600] text-[18px]">{rank?.StudentName}</div>
+														<div className="font-[500]">
+															Điểm: {rank?.MyPoint} - Top: {rank?.Rank}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									)
+								})}
+							</div>
+						)}
 					</div>
 				</div>
 			</Modal>

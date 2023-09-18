@@ -6,6 +6,9 @@ export const packageSkillApi = {
 	getAll(params: any) {
 		return instance.get<IApiResultData<TIeltsExam[]>>(url, { params: { ...params, type: 2 } })
 	},
+	getRank(packageSkillId: any) {
+		return instance.get<IApiResultData<any[]>>(url + '/rank/' + packageSkillId, {})
+	},
 	getByID(ID: number) {
 		return instance.get<IApiResultData<TIeltsExam>>(`${url}/${ID}`)
 	},
