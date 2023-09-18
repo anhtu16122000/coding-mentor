@@ -318,13 +318,14 @@ export const SalaryPage = () => {
 				total={totalRow}
 				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
 				TitleCard={
-					<div className="extra-table">
-						<div className="flex-1 max-w-[350px] mr-[16px] min-w-[150px]">
-							<DatePicker onChange={handleFilterMonth} picker="month" placeholder="Chọn tháng" value={valueDate} />
-						</div>
-						<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container" style={{ marginTop: -1 }}>
-							<TabComp data={salaryStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
-						</div>
+					<div className="flex items-center">
+						<DatePicker
+							className="primary-input mr-[8px]"
+							onChange={handleFilterMonth}
+							picker="month"
+							placeholder="Chọn tháng"
+							value={valueDate}
+						/>
 					</div>
 				}
 				data={dataTable}
@@ -373,7 +374,11 @@ export const SalaryPage = () => {
 						)}
 					</>
 				}
-			/>
+			>
+				<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container mb-[8px]">
+					<TabComp data={salaryStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
+				</div>
+			</PrimaryTable>
 		</div>
 	)
 }

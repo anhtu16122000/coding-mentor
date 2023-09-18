@@ -19,6 +19,7 @@ import IconButton from '../Primary/IconButton'
 import RestApi from '~/api/RestApi'
 import { useRouter } from 'next/router'
 import moment from 'moment'
+import { ieltsExamApi } from '~/api/IeltsExam'
 
 const CustomerAdviseForm = React.memo((props: any) => {
 	const { source, learningNeed, purpose, branch, refPopover, onRefresh } = props
@@ -265,6 +266,32 @@ const CustomerAdviseForm = React.memo((props: any) => {
 		setIsModalVisible(!isModalVisible)
 	}
 
+	const [testType, setTestType] = useState(1)
+
+	const [exams, setExams] = useState([])
+	const [examLoading, setExamLoading] = useState(false)
+
+	async function getExams() {
+		setExamLoading(true)
+		try {
+			const res = await ieltsExamApi.getOptions()
+			if (res.status == 200) {
+				setExams(res.data?.data)
+			} else {
+				setExams([])
+			}
+		} catch (error) {
+		} finally {
+			setExamLoading(false)
+		}
+	}
+
+	useEffect(() => {
+		if (isModalVisible && testType == 2 && exams.length == 0) {
+			getExams()
+		}
+	}, [testType, isModalVisible])
+
 	return (
 		<>
 			{rowData ? (
@@ -446,7 +473,6 @@ const CustomerAdviseForm = React.memo((props: any) => {
 									<div className="col-md-6 col-12">
 										<SelectField
 											name="Type"
-											disabled
 											label="Địa điểm làm bài"
 											placeholder="Chọn địa điểm làm bài"
 											optionList={[
@@ -466,14 +492,31 @@ const CustomerAdviseForm = React.memo((props: any) => {
 											mode="single"
 										/>
 									</div>
-									{/* {form.getFieldValue('Type') === 2 && (
-  								<div className="col-md-6 col-12">
-  									<SelectField name="ExamId" label="Đề test" placeholder="Chọn đề test" optionList={listExamination} />
-  								</div>
-  							)} */}
+
+									{form.getFieldValue('Type') === 2 && (
+										<Form.Item className="col-md-6 col-12" name="IeltsExamId" label="Đề" rules={formRequired}>
+											<Select
+												showSearch
+												optionFilterProp="children"
+												className="primary-input"
+												loading={examLoading}
+												disabled={examLoading}
+												placeholder="Chọn đề"
+											>
+												{exams.map((item) => {
+													return (
+														<Select.Option key={item.Id} value={item.Id}>
+															[{item?.Code}] - {item?.Name}
+														</Select.Option>
+													)
+												})}
+											</Select>
+										</Form.Item>
+									)}
 								</div>
 							</>
 						)}
+
 						<div className="row mt-3">
 							<div className="col-12 flex-all-center">
 								<PrimaryButton background="blue" type="submit" icon="save" disable={isLoading} loading={isLoading}>
