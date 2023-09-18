@@ -1,0 +1,4 @@
+.btn-add-study-time {
+	@apply bg-[#43A047] hover:bg-[#3b9140] active:bg-[#43A047] flex items-center text-[#fff];
+	@apply py-[2px] px-[8px] rounded-[4px] cursor-pointer;
+}

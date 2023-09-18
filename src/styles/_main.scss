@@ -803,6 +803,10 @@ button {
 	height: 38px !important;
 }
 
+.list-item-none-maxheight {
+	//
+}
+
 .class-details-container {
 	.ant-tabs-tabpane {
 		@media screen and (max-width: 768px) {
@@ -1062,7 +1066,7 @@ button {
 		&.ant-select-item-option-selected-blue {
 			height: 100px;
 		}
-	.ant-select-arrow {
+		.ant-select-arrow {
 			top: 40% !important;
 		}
 	}
