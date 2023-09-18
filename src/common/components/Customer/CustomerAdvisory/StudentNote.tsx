@@ -10,6 +10,7 @@ import DeleteTableRow from '../../Elements/DeleteTableRow'
 import TextBoxField from '../../FormControl/TextBoxField'
 import ModalFooter from '../../ModalFooter'
 import Router from 'next/router'
+import EntryHistories from '~/common/pages/Info-Course/Histories'
 
 const sharedOnCell = (_, index) => {
 	if (index === 1) {
@@ -57,21 +58,22 @@ const _columnGrades = [
 ]
 
 const StudentNote = (props) => {
-	const { currentUserIdUpdated, studentId } = props
+	console.log('---- StudentNote: ', props)
+
+	const { currentUserIdUpdated, studentId, rowData } = props
 	const [grades, setGrades] = useState([])
 
 	const handleGetGrades = async (studentId) => {
 		try {
-			const res = await customerAdviseApi.getStudentGrades({ studentId })
-			res.status == 200
-				? setGrades([
-						...res?.data?.data,
-						{
-							ListeningPoint: 'Ghi chú',
-							SpeakingPoint: res?.data?.data[0].Note
-						}
-				  ])
-				: setGrades([])
+			const res = await customerAdviseApi.getStudentGrades({
+				studentId: studentId,
+				status: 2 // Đã chấm làm mới có data, chưa có nó toàn null
+			})
+			if (res.status == 200) {
+				setGrades([...res?.data?.data])
+			} else {
+				setGrades([])
+			}
 		} catch (err) {
 			ShowNoti('error', err.message)
 		}
@@ -202,11 +204,17 @@ const StudentNote = (props) => {
 				</Form>
 			</Modal>
 
-			{Router.asPath.includes('/student') && (
-				<div className="mx-3">
-					<Table pagination={false} size="small" columns={columnGrades} dataSource={grades} />
-				</div>
-			)}
+			<div className="flex items-start flex-col">
+				{/* Khi nó là bài ONLINE */}
+				{!Router.asPath.includes('/users/personnel') && rowData?.Type == 2 && <EntryHistories item={rowData} />}
+
+				{/* Khi nó là bài OFFLINE */}
+				{!Router.asPath.includes('/users/personnel') && rowData?.Type == 1 && (
+					<div className="mb-[16px]">
+						<Table pagination={false} size="small" columns={columnGrades} dataSource={grades} />
+					</div>
+				)}
+			</div>
 
 			<Tooltip className="" title="Thêm ghi chú">
 				<button className="btn btn-warning" onClick={showModal}>

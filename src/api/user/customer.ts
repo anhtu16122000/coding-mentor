@@ -63,7 +63,7 @@ export const customerAdviseApi = {
 		return instance.delete(`/api/StudentNote/${id}`)
 	},
 
-	getStudentGrades({ studentId }) {
-		return instance.get('/api/TestAppointment', { params: { studentId } })
+	getStudentGrades(params) {
+		return instance.get('/api/TestAppointment', { params: params })
 	}
 }

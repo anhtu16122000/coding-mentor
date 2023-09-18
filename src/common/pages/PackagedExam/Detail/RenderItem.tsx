@@ -114,6 +114,31 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 	const [examWarning, setExamWarning] = useState<boolean>(false)
 	const [currentData, setCurrentData] = useState<any>(null)
 
+	// ----------------------------------------------------------------
+
+	const [preview, setPreview] = useState<boolean>(false)
+
+	const [previewLoading, setPreviewLoading] = useState<boolean>(false)
+
+	async function getPreview(skillId) {
+		setPreview(true)
+		setPreviewLoading(true)
+		try {
+			const res = await packageSkillApi.getRank(skillId)
+
+			if (res.status == 200) {
+				// setCurrentData({ ExamId: ExamId, HWId: HWId, draft: res.data?.data })
+				// setExamWarning(true)
+			} else {
+				// createDoingTest(ExamId, HWId)
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		} finally {
+			setPreviewLoading(false)
+		}
+	}
+
 	return (
 		<div key={thisId} id={thisId} className="pe-d-default">
 			{is(userInfo).admin && (
@@ -166,7 +191,11 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 								<div key={`ski-${iSkill}`} className="col-span-1 flex items-center bg-[#e4e1e1] hover:bg-[#d9d9d9] p-[8px] rounded-[6px]">
 									<div className="font-[600] flex-1">{itemSkill?.Name}</div>
 									<div className="flex items-center h-[26px]">
-										<div onClick={() => makeTest(itemSkill?.IeltsExamId, itemSkill)} className="pe-i-d-cart !px-[8px] !h-[26px]">
+										<div
+											// onClick={() => makeTest(itemSkill?.IeltsExamId, itemSkill)}
+											onClick={() => getPreview(itemSkill?.Id)}
+											className="pe-i-d-cart !px-[8px] !h-[26px]"
+										>
 											<div className="pe-i-d-c-title !ml-0">
 												{creatingTest?.Id == itemSkill?.Id && <Spin className="!ml-[0px] mr-[8px] loading-base" />}
 												{is(userInfo).student ? 'Làm bài' : 'Làm thử'}
@@ -191,6 +220,29 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 					</div>
 				)}
 			</div>
+
+			<Modal width={400} open={examWarning} onCancel={() => setExamWarning(false)} footer={null}>
+				<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+					<Lottie loop animationData={warning} play style={{ width: 160, height: 160, marginBottom: 8 }} />
+					<div style={{ fontSize: 18 }}>Bạn có muốn tiếp tục làm bản trước đó?</div>
+
+					<div className="none-selection" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
+						<div onClick={() => createDoingTest(currentData?.ExamId, currentData?.HWId)} className="exercise-btn-cancel">
+							<div>Làm bài mới</div>
+						</div>
+
+						<div
+							onClick={() => {
+								gotoTest(currentData?.draft)
+								setExamWarning(false)
+							}}
+							className="exercise-btn-continue"
+						>
+							<div>Làm tiếp</div>
+						</div>
+					</div>
+				</div>
+			</Modal>
 
 			<Modal width={400} open={examWarning} onCancel={() => setExamWarning(false)} footer={null}>
 				<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
