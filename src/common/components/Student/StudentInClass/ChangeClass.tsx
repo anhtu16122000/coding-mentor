@@ -1,6 +1,5 @@
-import { Card, Form, Input, InputNumber, Modal, Select, Avatar as AvatarAntd, DatePicker } from 'antd'
+import { Card, Form, Input, Modal, Select, DatePicker } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import RestApi from '~/api/RestApi'
 import { ShowNostis, ShowNoti } from '~/common/utils'
 import PrimaryTooltip from '../../PrimaryTooltip'
@@ -11,7 +10,6 @@ import Avatar from '../../Avatar'
 import { MdOpenInNew } from 'react-icons/md'
 import { parseToMoney } from '~/common/utils/common'
 import { paymentMethodsApi } from '~/api/business/payment-method'
-import AvatarComponent from '../../AvatarComponent'
 import ModalShowInfoPaymentMethod from '../../Class/ModalShowInfoPaymentMethod'
 import {
 	StyleContainerDropdown,
@@ -20,33 +18,8 @@ import {
 	StylePaymentMethodsItems,
 	StylePaymentMethodsLable
 } from './index.styled'
-import DatePickerField from '../../FormControl/DatePickerField'
 import { branchApi } from '~/api/manage/branch'
 import InputNumberField from '../../FormControl/InputNumberField'
-
-// type CurrentClass = {
-// 	BillId?: number
-// 	StudentId: number
-// 	ClassId: number
-// 	ProgramId?: number
-// 	CurriculumId?: number
-// 	CartId?: number
-// 	ProductId?: number
-// 	Quantity?: number
-// 	Price: number
-// 	TotalPrice: number
-// 	MonthAvailable?: string
-// 	ClassName?: string
-// 	ProgramName?: string
-// 	ProductName?: string
-// 	CurriculumName?: string
-// 	Id: number
-// 	Enable?: boolean
-// 	CreatedOn?: string
-// 	CreatedBy?: string
-// 	ModifiedOn?: string
-// 	ModifiedBy?: string
-// }
 
 interface IChangeClass {
 	isEdit?: boolean
@@ -58,8 +31,6 @@ interface IChangeClass {
 const url = 'ClassChange'
 
 const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
-	console.log('------- item: ', item)
-
 	const [form] = Form.useForm()
 	const [methods, setMethods] = useState<any>([])
 	const [loading, setLoading] = useState(false)

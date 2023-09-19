@@ -165,7 +165,7 @@ const Filters: FC<{ filters: any; onSubmit: Function; onReset: Function }> = (pr
 					</Select>
 				</Form.Item>
 
-				<Form.Item className="col-span-2" name="Status" label="Trạng thái" rules={formNoneRequired}>
+				<Form.Item className="col-span-2" name="status" label="Trạng thái" rules={formNoneRequired}>
 					<Select placeholder="Chọn trạng thái" allowClear>
 						<Select.Option key="1" value={1}>
 							Chưa thanh toán hết
