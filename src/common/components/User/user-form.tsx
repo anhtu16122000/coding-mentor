@@ -483,12 +483,12 @@ const CreateUser: FC<ICreateNew> = (props) => {
 							<Divider orientation="center">Ngân hàng</Divider>
 						</div>
 
-						<InputTextField className="col-span-2" label="Tên ngân hàng" name="BankName" isRequired rules={[{ require: true }]} />
-						<InputTextField className="col-span-2" label="Tên chi nhánh" name="BankBranch" isRequired rules={[{ require: true }]} />
-						<Form.Item name="BankAccountNumber" className="col-span-2" label="Số tài khoản" required rules={formNoneRequired}>
+						<InputTextField className="col-span-2" label="Tên ngân hàng" name="BankName" rules={[formNoneRequired]} />
+						<InputTextField className="col-span-2" label="Tên chi nhánh" name="BankBranch" rules={[formNoneRequired]} />
+						<Form.Item name="BankAccountNumber" className="col-span-2" label="Số tài khoản" rules={formNoneRequired}>
 							<InputNumber style={{ width: '100%', height: 35, borderRadius: 6 }} />
 						</Form.Item>
-						<InputTextField className="col-span-2" label="Tên tài khoản" name="BankAccountName" isRequired rules={[{ require: true }]} />
+						<InputTextField className="col-span-2" label="Tên tài khoản" name="BankAccountName" rules={[formNoneRequired]} />
 
 						<Divider className="col-span-4" orientation="center">
 							Địa chỉ
