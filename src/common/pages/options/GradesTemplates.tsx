@@ -12,7 +12,7 @@ import IconButton from '~/common/components/Primary/IconButton'
 import PrimaryTable from '~/common/components/Primary/Table'
 import { ShowNoti } from '~/common/utils'
 
-const initParameters = { pageSize: 2, pageIndex: 1, search: '' }
+const initParameters = { pageSize: 30, pageIndex: 1, search: '' }
 
 function GradesTemplates() {
 	const [loading, setLoading] = useState(false)

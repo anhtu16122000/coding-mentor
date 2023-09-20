@@ -350,6 +350,13 @@ export const ManagerChildMenu = [
 						Route: '/options/study-time',
 						Text: 'Ca học',
 						Icon: ''
+					},
+					{
+						ItemType: 'single',
+						Key: '/options/grades-templates',
+						Route: '/options/grades-templates',
+						Text: 'Bảng điểm mẫu',
+						Icon: ''
 					}
 				]
 			},
