@@ -438,6 +438,13 @@ export const AdminChildMenu = [
 						Route: '/options/zoom',
 						Text: 'Cấu hình Zoom',
 						Icon: ''
+					},
+					{
+						ItemType: 'single',
+						Key: '/options/grades-templates',
+						Route: '/options/grades-templates',
+						Text: 'Bảng điểm mẫu',
+						Icon: ''
 					}
 				]
 			},
