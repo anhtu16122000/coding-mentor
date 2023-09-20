@@ -2,7 +2,7 @@ import { Card, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { GiPayMoney, GiReceiveMoney, GiTakeMyMoney } from 'react-icons/gi'
 import EmptyData from '~/common/components/EmptyData'
-import { _format } from '~/common/utils'
+import { _format, log } from '~/common/utils'
 
 const ExpandTable = (props) => {
 	const [state, setState] = useState({ selectedRowKeys: [] })
@@ -63,9 +63,11 @@ const ExpandTable = (props) => {
 	useEffect(() => {
 		if (props?.dataSource && props?.dataSource.length > 0) {
 			let dataClone = [...props?.dataSource]
+
 			dataClone.forEach((item, index) => {
-				item.key = index.toString()
+				dataClone[index] = { ...item, key: index + '' }
 			})
+
 			setDataSource(dataClone)
 		} else {
 			setDataSource([])
