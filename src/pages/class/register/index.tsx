@@ -221,10 +221,20 @@ const RegisterClass = () => {
 
 		if (type == 1) {
 			classesSelected.forEach((item) => {
-				details.push({ ClassId: item.Id, ProgramId: 0, CartId: 0 })
+				details.push({
+					ClassId: item.Id,
+					ProgramId: 0,
+					CartId: 0,
+					...item
+				})
 			})
 			programsSelected.forEach((item) => {
-				details.push({ ClassId: 0, ProgramId: item.Id, CartId: 0 })
+				details.push({
+					ClassId: 0,
+					ProgramId: item.Id,
+					CartId: 0,
+					...item
+				})
 			})
 		}
 
@@ -236,9 +246,9 @@ const RegisterClass = () => {
 	}
 
 	const onSubmit = async (data) => {
-		const Expectations = listTimeFrames.map((_item) => {
-			return { ExectedDay: _item.ExectedDay, StudyTimeId: _item.StudyTimeId, Note: _item.Note }
-		})
+		// const Expectations = listTimeFrames.map((_item) => {
+		// 	return { ExectedDay: _item.ExectedDay, StudyTimeId: _item.StudyTimeId, Note: _item.Note }
+		// })
 
 		if (!data?.StudentId) {
 			ShowNoti('error', 'Vui lòng chọn học viên')
@@ -246,7 +256,7 @@ const RegisterClass = () => {
 		}
 
 		if (!!activeMethod && !!activeMethod?.Id) {
-			setIsLoading(true)
+			// setIsLoading(true)
 
 			let DATA_SUBMIT = {
 				StudentId: data.StudentId,
@@ -257,12 +267,13 @@ const RegisterClass = () => {
 				Note: data.Note,
 				Type: activeTab.Type,
 				Paid: !!data.Paid ? parseStringToNumber(data.Paid) : 0,
-				Details: getDetailSubmit(activeTab.Type),
-				Expectations
+				Details: getDetailSubmit(activeTab.Type)
+				// Expectations
 			}
 
 			console.log('DATA_SUBMIT: ', DATA_SUBMIT)
 			console.time('-- Gọi Api Bill hết')
+
 			try {
 				const res = await billApi.add(DATA_SUBMIT)
 				if (res.status == 200) {

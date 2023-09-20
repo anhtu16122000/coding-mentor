@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { branchApi } from '~/api/manage/branch'
 import { testAppointmentApi } from '~/api/learn/test-appointment'
 import FilterBase from '~/common/components/Elements/FilterBase'
@@ -23,10 +23,15 @@ import { userInformationApi } from '~/api/user/user'
 import ExpandedRowAppointment from '~/common/components/Service/ExpandedRowAppointment'
 import IconButton from '~/common/components/Primary/IconButton'
 import { useRouter } from 'next/router'
-import { Form, Select } from 'antd'
+import { Form, Modal, Select } from 'antd'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
-import { StudentNote } from '~/common/components'
+import { PrimaryTooltip, StudentNote } from '~/common/components'
+import { customerAdviseApi } from '~/api/user/customer'
+import Lottie from 'react-lottie-player'
+import warning from '~/common/components/json/100468-warning.json'
+import { doingTestApi } from '~/api/IeltsExam/doing-test'
+import { TbWritingSign } from 'react-icons/tb'
 
 const appointmenInitFilter = [
 	{
@@ -111,6 +116,7 @@ let listFieldFilter = {
 
 export default function ServiceAppointmentTest(props) {
 	const state = useSelector((state: RootState) => state)
+	const currentUserIdUpdated = useRef(0)
 	const [form] = Form.useForm()
 	const router = useRouter()
 	const dispatch = useDispatch()
@@ -168,7 +174,7 @@ export default function ServiceAppointmentTest(props) {
 		return userInformation?.RoleId == 4
 	}
 
-	function isStdent() {
+	function isStudent() {
 		return userInformation?.RoleId == 3
 	}
 
@@ -374,7 +380,7 @@ export default function ServiceAppointmentTest(props) {
 	const expandedRowRender = (record) => {
 		return (
 			<div className="w-[1000px]">
-				<StudentNote studentId={record?.StudentId} />
+				<StudentNote currentUserIdUpdated={currentUserIdUpdated} rowData={record} studentId={record?.StudentId} />
 			</div>
 		)
 	}
@@ -405,9 +411,17 @@ export default function ServiceAppointmentTest(props) {
 		},
 		{
 			width: 200,
-			title: 'Trung tâm',
+			title: 'Địa điểm',
 			dataIndex: 'BranchName',
-			render: (a) => <p className="font-weight-black">{a}</p>
+			render: (value, item, index) => {
+				return (
+					<div>
+						<div className="font-weight-black">Trung tâm: {value}</div>
+						{item?.Type == 1 && <p className="tag blue">{item.TypeName}</p>}
+						{item?.Type == 2 && <p className="tag yellow">{item.TypeName}</p>}
+					</div>
+				)
+			}
 		},
 		{
 			title: 'Thời gian',
@@ -465,12 +479,15 @@ export default function ServiceAppointmentTest(props) {
 								listTodoApi={listTodoApi}
 							/>
 						)}
+
 						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Status == 1 && (
 							<CancelTest onUpdateData={onUpdateData} dataRow={data} />
 						)}
-						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Type === 1 && (
-							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
+
+						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Type == 1 && (
+							<ScoreModal currentUserIdUpdated={currentUserIdUpdated} rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						)}
+
 						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Status == 2 && (
 							<IconButton
 								icon="study"
@@ -479,6 +496,17 @@ export default function ServiceAppointmentTest(props) {
 								type="button"
 								onClick={() => router.push({ pathname: '/class/register', query: { userId: data?.StudentId } })}
 							/>
+						)}
+
+						{isStudent() && data.Status == 1 && data?.Type == 2 && (
+							<PrimaryTooltip place="left" id={`hw-take-${data?.Id}`} content="Làm bài">
+								<div
+									onClick={() => getDraft(data?.IeltsExamId, data?.Id)}
+									className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+								>
+									<TbWritingSign size={22} />
+								</div>
+							</PrimaryTooltip>
 						)}
 					</div>
 				)
@@ -508,13 +536,45 @@ export default function ServiceAppointmentTest(props) {
 							<CancelTest onUpdateData={onUpdateData} dataRow={data} />
 						)}
 						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Type === 1 && (
-							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
+							<ScoreModal currentUserIdUpdated={currentUserIdUpdated} rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						)}
 					</div>
 				)
 			}
 		}
 	]
+
+	// -------- Take an exam
+	async function getDraft(ExamId, HWId) {
+		try {
+			// 1 - Làm bài thử 2 - Làm bài hẹn test 3 - Bài tập về nhà 4 - Bộ đề
+			const res = await doingTestApi.getDraft({ valueId: HWId, type: 2 })
+			if (res.status == 200) {
+				setCurrentData({ ExamId: ExamId, HWId: HWId, draft: res.data?.data })
+				setExamWarning(true)
+			} else {
+				createDoingTest(ExamId, HWId)
+			}
+		} catch (error) {}
+	}
+
+	const [examWarning, setExamWarning] = useState<boolean>(false)
+	const [currentData, setCurrentData] = useState<any>(null)
+
+	function gotoTest(params) {
+		if (params?.Id) {
+			window.open(`/take-an-exam/?exam=${params?.Id}`, '_blank')
+		}
+	}
+
+	async function createDoingTest(ExamId, HWId) {
+		try {
+			const res = await doingTestApi.post({ IeltsExamId: ExamId, ValueId: HWId, Type: 2 })
+			if (res?.status == 200) {
+				gotoTest(res.data?.data)
+			}
+		} catch (error) {}
+	}
 
 	return (
 		<>
@@ -579,6 +639,29 @@ export default function ServiceAppointmentTest(props) {
 					expandable={expandedRowRender}
 				/>
 			</div>
+
+			<Modal width={400} open={examWarning} onCancel={() => setExamWarning(false)} footer={null}>
+				<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+					<Lottie loop animationData={warning} play style={{ width: 160, height: 160, marginBottom: 8 }} />
+					<div style={{ fontSize: 18 }}>Bạn có muốn tiếp tục làm bản trước đó?</div>
+
+					<div className="none-selection" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
+						<div onClick={() => createDoingTest(currentData?.ExamId, currentData?.HWId)} className="exercise-btn-cancel">
+							<div>Làm bài mới</div>
+						</div>
+
+						<div
+							onClick={() => {
+								gotoTest(currentData?.draft)
+								setExamWarning(false)
+							}}
+							className="exercise-btn-continue"
+						>
+							<div>Làm tiếp</div>
+						</div>
+					</div>
+				</div>
+			</Modal>
 		</>
 	)
 }

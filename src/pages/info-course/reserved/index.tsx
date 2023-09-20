@@ -63,7 +63,9 @@ const ReservedPage = () => {
 	const expandedRowRender = (item) => {
 		return (
 			<>
-				<div>Ghi chú bảo lưu: {item?.Note}</div>
+				<div className="flex text-[16px]">
+					<div className="font-[600] mr-[4px]">Ghi chú bảo lưu:</div> {item?.Note || 'Không có ghi chú'}
+				</div>
 
 				<div className="w-[1000px] mt-[16px]">
 					<StudentNote studentId={item?.StudentId} />

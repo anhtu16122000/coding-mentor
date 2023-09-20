@@ -803,6 +803,10 @@ button {
 	height: 38px !important;
 }
 
+.list-item-none-maxheight {
+	//
+}
+
 .class-details-container {
 	.ant-tabs-tabpane {
 		@media screen and (max-width: 768px) {
@@ -1048,5 +1052,25 @@ button {
 	&::-webkit-scrollbar {
 		width: 0;
 		height: 0;
+	}
+}
+
+.ant-quis-custom {
+	.ant-select-selection-search {
+		height: 36px !important;
+	}
+	.ant-select-dropdown-by-chau {
+		overflow: visible;
+	}
+	.ant-select-selection-item {
+		overflow: visible;
+	}
+	.ant-select-status-success {
+		&.ant-select-item-option-selected-blue {
+			height: 100px;
+		}
+		.ant-select-arrow {
+			top: 40% !important;
+		}
 	}
 }

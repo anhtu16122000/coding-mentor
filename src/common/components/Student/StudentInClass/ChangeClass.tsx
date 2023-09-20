@@ -1,6 +1,5 @@
-import { Card, Form, Input, InputNumber, Modal, Select, Avatar as AvatarAntd, DatePicker } from 'antd'
+import { Card, Form, Input, Modal, Select, DatePicker } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import RestApi from '~/api/RestApi'
 import { ShowNostis, ShowNoti } from '~/common/utils'
 import PrimaryTooltip from '../../PrimaryTooltip'
@@ -11,7 +10,6 @@ import Avatar from '../../Avatar'
 import { MdOpenInNew } from 'react-icons/md'
 import { parseToMoney } from '~/common/utils/common'
 import { paymentMethodsApi } from '~/api/business/payment-method'
-import AvatarComponent from '../../AvatarComponent'
 import ModalShowInfoPaymentMethod from '../../Class/ModalShowInfoPaymentMethod'
 import {
 	StyleContainerDropdown,
@@ -20,32 +18,8 @@ import {
 	StylePaymentMethodsItems,
 	StylePaymentMethodsLable
 } from './index.styled'
-import DatePickerField from '../../FormControl/DatePickerField'
 import { branchApi } from '~/api/manage/branch'
-
-// type CurrentClass = {
-// 	BillId?: number
-// 	StudentId: number
-// 	ClassId: number
-// 	ProgramId?: number
-// 	CurriculumId?: number
-// 	CartId?: number
-// 	ProductId?: number
-// 	Quantity?: number
-// 	Price: number
-// 	TotalPrice: number
-// 	MonthAvailable?: string
-// 	ClassName?: string
-// 	ProgramName?: string
-// 	ProductName?: string
-// 	CurriculumName?: string
-// 	Id: number
-// 	Enable?: boolean
-// 	CreatedOn?: string
-// 	CreatedBy?: string
-// 	ModifiedOn?: string
-// 	ModifiedBy?: string
-// }
+import InputNumberField from '../../FormControl/InputNumberField'
 
 interface IChangeClass {
 	isEdit?: boolean
@@ -72,6 +46,8 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 			getCurrentClass()
 			getPaymentMethods()
 			getBranchs()
+
+			form.setFieldValue('BranchId', item?.BranchId)
 		}
 	}, [visible])
 
@@ -107,8 +83,7 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 	const getCurrentClass = async () => {
 		try {
 			const response = await RestApi.get('Class/old-class', {
-				'request.studentId': item?.StudentId,
-				'request.classId': item?.ClassId
+				studentInClassId: item?.Id
 			})
 			if (response.status == 200) {
 				setCurrentClass(response.data.data)
@@ -256,12 +231,7 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 				<div className="font-[500] mb-[4px]">Lớp hiện tại</div>
 				<Card className="mb-[16px] card-min-padding">
 					<div className="relative">
-						<div
-							style={{
-								display: 'flex',
-								flexDirection: 'column'
-							}}
-						>
+						<div style={{ display: 'flex', flexDirection: 'column' }}>
 							<div style={{ fontWeight: '600' }}>{item?.ClassName}</div>
 							{currentClass && (
 								<>
@@ -293,14 +263,20 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 					onFinish={onFinish}
 					autoComplete="on"
 				>
-					<Form.Item className="col-span-2 ant-select-class-selected" required={true} name="NewClassId" label="Lớp chuyển đến">
+					<Form.Item
+						className="col-span-2 ant-select-class-selected ant-quis-custom"
+						required={true}
+						name="NewClassId"
+						label="Lớp chuyển đến"
+					>
 						<Select
 							disabled={loading}
 							placeholder="Chọn lớp"
 							className="ant-select-item-option-selected-blue"
 							onChange={(value) => {
 								const selectedClass = classes?.find((_item) => _item.Id === value)
-								const monney = selectedClass?.Price - currentClass?.TotalPrice
+								console.log('Data: ', currentClass, selectedClass)
+								const monney = selectedClass?.Price - currentClass?.Price
 								if (monney > 0) {
 									form.setFieldValue('Price', monney)
 								} else {
@@ -331,6 +307,7 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 								bordered={false}
 								showSearch
 								allowClear
+								defaultValue={item?.BranchId || null}
 								placeholder="Chọn trung tâm"
 								onChange={(value) => {
 									form.setFieldValue('BranchId', value)
@@ -347,33 +324,22 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 						</StyleContainerDropdown>
 					</Form.Item>
 
-					<Form.Item className="col-span-2" label="Đóng thêm" name="Price" rules={formNoneRequired}>
-						<InputNumber
-							placeholder="Số tiền phải đóng thêm"
-							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
-						/>
-					</Form.Item>
-					
-					<Form.Item
+					<InputNumberField
+						placeholder="Số tiền phải đóng thêm"
+						className="col-span-2"
+						label="Đóng thêm"
+						name="Price"
+						rules={formNoneRequired}
+					/>
+
+					<InputNumberField
+						placeholder="Số tiền phải thanh toán"
 						className="col-span-2"
 						label="Thanh toán"
 						name="Paid"
-						rules={[
-							{
-								validator: async (_, names) => {
-									const team = Number(form.getFieldValue('Price'))
-									if (Number(names) >= team) {
-										return Promise.reject(new Error('Tiền thanh toán không hợp lệ'))
-									}
-								}
-							}
-						]}
-					>
-						<InputNumber
-							placeholder="Số tiền phải thanh toán"
-							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
-						/>
-					</Form.Item>
+						rules={formNoneRequired}
+					/>
+
 					<Form.Item required={true} className="col-span-2" label="Phương thức thanh toán" name="PaymentMethodId" rules={formNoneRequired}>
 						<StylePaymentMethods>
 							{methods?.map((method) => {
@@ -385,16 +351,6 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 											isChecked={activeMethod?.Id === method.Id}
 											onClick={() => handleChangeMethod(method)}
 										/>
-										{/* <img 
-											src={method.Thumbnail || '/images/cash-payment.png'}
-											alt="avatar"
-											style={{
-												height: 100,
-												borderRadius: 10
-											}}  /> */}
-										{/* <AvatarAntd shape="square" src={<img src={method.Thumbnail || '/images/cash-payment.png'} alt="avatar" />} /> */}
-										{/* <AvatarComponent url={method.Thumbnail} type="cash" className="payment-methods- student-change-class-avatar" /> */}
-
 										<StylePaymentMethodsLable isColumn={method?.Name?.length > 10}>
 											<p>{method.Name}</p>
 											<ModalShowInfoPaymentMethod method={method} />
@@ -405,13 +361,9 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 						</StylePaymentMethods>
 					</Form.Item>
 
-					{/* <div className="flex row items-center justify-between mb-3">
-						<span className="title">Ngày hẹn trả</span>
-						<DatePickerField className="mb-0 w-100%" mode="single" name="PaymentAppointmentDate" label="" />
-					</div> */}
 					<Form.Item className="col-span-2" label="Ngày hẹn trả" name="PaymentAppointmentDate" rules={formNoneRequired}>
 						<DatePicker
-							style={{ borderRadius: 6, width: '100%', height: 40, alignItems: 'center', display: 'flex' }}
+							style={{ borderRadius: 6, width: '100%', height: 36, alignItems: 'center', display: 'flex' }}
 							placeholder="Ngày hẹn trả"
 						/>
 					</Form.Item>

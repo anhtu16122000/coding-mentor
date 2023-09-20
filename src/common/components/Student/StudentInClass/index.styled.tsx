@@ -30,7 +30,7 @@ export const StylePaymentMethodsLable = styled.div<{ isColumn: boolean }>`
 `
 export const StyleContainerDropdown = styled.div`
 	display: flex;
-	height: 40px;
+	height: 36px;
 	border: 1px solid #dfdfdf;
 	cursor: pointer;
 	alignitems: center;

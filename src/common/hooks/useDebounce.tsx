@@ -8,6 +8,18 @@ const debounceImpl = (cb, delay: number) => {
 	}
 }
 
+export function debounce(func, delay) {
+	let timeout
+	return function () {
+		if (timeout) {
+			clearTimeout(timeout)
+		}
+		timeout = setTimeout(() => {
+			func()
+		}, delay)
+	}
+}
+
 export const useDebounce = (cb, delay: number, deps?: DependencyList) => {
 	const cbRef = useRef(cb)
 

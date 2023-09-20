@@ -309,7 +309,6 @@ const ModalAddScheduleEdit = (props) => {
 							</div>
 							<Button disabled={isLoading} onClick={save} style={{ marginTop: 'auto', width: 100, alignSelf: 'center'  }} type="primary">
 							{isLoading && <Spin size='small' style={{marginRight: 5}}/>} Lưu
-								
 							</Button>
 						</div>
 					)}

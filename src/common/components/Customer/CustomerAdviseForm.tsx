@@ -19,9 +19,10 @@ import IconButton from '../Primary/IconButton'
 import RestApi from '~/api/RestApi'
 import { useRouter } from 'next/router'
 import moment from 'moment'
+import { ieltsExamApi } from '~/api/IeltsExam'
 
 const CustomerAdviseForm = React.memo((props: any) => {
-	const { source, learningNeed, purpose, branch, refPopover, onRefresh } = props
+	const { source, learningNeed, purpose, branch, refPopover, onRefresh, isEntry } = props
 	const { customerStatus, rowData, listTodoApi, setTodoApi, isStudent, className } = props
 
 	const router = useRouter()
@@ -38,10 +39,9 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	const area = useSelector((state: RootState) => state.area.Area)
 
 	const getSaler = async (branchIds) => {
-		form.setFieldValue('SaleId', null)
-
 		if (!branchIds) {
 			setSalers([])
+			form.setFieldValue('SaleId', null)
 			return
 		}
 
@@ -168,15 +168,19 @@ const CustomerAdviseForm = React.memo((props: any) => {
 					  })
 					: customerAdviseApi.update(DATA_SUBMIT)
 				: customerAdviseApi.add(DATA_SUBMIT))
-			if (res.status === 200) {
+
+			if (res.status == 200) {
 				setTodoApi(listTodoApi)
 				form.resetFields()
+
+				!!onRefresh && onRefresh()
+
 				setIsModalVisible(false)
 				ShowNoti('success', res.data.message)
-				!!onRefresh && onRefresh()
-				router.push({
-					pathname: '/entry-test'
-				})
+
+				if (isEntry) {
+					router.push({ pathname: '/entry-test' })
+				}
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -188,7 +192,9 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	useEffect(() => {
 		if (isModalVisible) {
 			form.setFieldsValue({ Type: 1 })
+
 			getJobs()
+
 			if (rowData?.BranchId) {
 				getTeachers(rowData?.BranchId)
 			}
@@ -198,6 +204,12 @@ const CustomerAdviseForm = React.memo((props: any) => {
 					form.setFieldsValue({ Password: '123456' })
 					form.setFieldsValue({ BranchIds: !!rowData.BranchId ? parseInt(rowData.BranchId) : null })
 				}
+
+				form.setFieldsValue({ ...rowData })
+				form.setFieldsValue({ CustomerStatusId: !!rowData.CustomerStatusId ? parseInt(rowData.CustomerStatusId) : null })
+
+				getSaler(rowData?.BranchId)
+
 				!!rowData.AreaId && getDistrictByArea(rowData.AreaId)
 				!!rowData.DistrictId && getWardByDistrict(rowData.DistrictId)
 				form.setFieldsValue(rowData)
@@ -251,7 +263,9 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	}
 
 	function removeContaining(arr) {
-		return arr?.filter((person) => person?.value !== 2)
+		// return arr?.filter((person) => person?.value !== 2)
+
+		return arr
 	}
 
 	function onClickCreate() {
@@ -264,6 +278,32 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	function toggle() {
 		setIsModalVisible(!isModalVisible)
 	}
+
+	const [testType, setTestType] = useState(1)
+
+	const [exams, setExams] = useState([])
+	const [examLoading, setExamLoading] = useState(false)
+
+	async function getExams() {
+		setExamLoading(true)
+		try {
+			const res = await ieltsExamApi.getOptions()
+			if (res.status == 200) {
+				setExams(res.data?.data)
+			} else {
+				setExams([])
+			}
+		} catch (error) {
+		} finally {
+			setExamLoading(false)
+		}
+	}
+
+	useEffect(() => {
+		if (isModalVisible && testType == 2 && exams.length == 0) {
+			getExams()
+		}
+	}, [testType, isModalVisible])
 
 	return (
 		<>
@@ -427,12 +467,14 @@ const CustomerAdviseForm = React.memo((props: any) => {
 							<div className="col-md-6 col-12">
 								<SelectField name="SourceId" label="Nguồn" placeholder="Chọn nguồn" optionList={source} />
 							</div>
+
 							{!isSaler() && (
 								<div className="col-md-6 col-12">
 									<SelectField name="SaleId" label="Tư vấn viên" placeholder="Chọn tư vấn viên" optionList={salers} />
 								</div>
 							)}
 						</div>
+
 						{rowData && isStudent && (
 							<>
 								<Divider className="col-span-4" orientation="center">
@@ -446,8 +488,8 @@ const CustomerAdviseForm = React.memo((props: any) => {
 									<div className="col-md-6 col-12">
 										<SelectField
 											name="Type"
-											disabled
 											label="Địa điểm làm bài"
+											onChangeSelect={(e) => setTestType(e)}
 											placeholder="Chọn địa điểm làm bài"
 											optionList={[
 												{ title: 'Tại trung tâm', value: 1 },
@@ -466,14 +508,31 @@ const CustomerAdviseForm = React.memo((props: any) => {
 											mode="single"
 										/>
 									</div>
-									{/* {form.getFieldValue('Type') === 2 && (
-  								<div className="col-md-6 col-12">
-  									<SelectField name="ExamId" label="Đề test" placeholder="Chọn đề test" optionList={listExamination} />
-  								</div>
-  							)} */}
+
+									{form.getFieldValue('Type') == 2 && (
+										<Form.Item className="col-md-6 col-12" name="IeltsExamId" label="Đề" rules={formRequired}>
+											<Select
+												showSearch
+												optionFilterProp="children"
+												className="primary-input"
+												loading={examLoading}
+												disabled={examLoading}
+												placeholder="Chọn đề"
+											>
+												{exams.map((item) => {
+													return (
+														<Select.Option key={item.Id} value={item.Id}>
+															[{item?.Code}] - {item?.Name}
+														</Select.Option>
+													)
+												})}
+											</Select>
+										</Form.Item>
+									)}
 								</div>
 							</>
 						)}
+
 						<div className="row mt-3">
 							<div className="col-12 flex-all-center">
 								<PrimaryButton background="blue" type="submit" icon="save" disable={isLoading} loading={isLoading}>

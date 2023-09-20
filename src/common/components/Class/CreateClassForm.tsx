@@ -94,7 +94,7 @@ const CreateClassForm = (props) => {
 	const [curriculumSelected, setCurriculumSelected] = useState<Curriculum>()
 	const [noneConvertCurriculum, setNoneConvertCurriculum] = useState([])
 	const [teacher, setTeacher] = useState([])
-	const [tutors, setTutors] = useState<any>([])
+	// const [tutors, setTutors] = useState<any>([])
 	const [academic, setAcademic] = useState([])
 	const [selectedBranch, setSelectedBranch] = useState(null)
 
@@ -117,7 +117,6 @@ const CreateClassForm = (props) => {
 		Name: yup.string().required('Bạn không được để trống'),
 		GradeId: yup.string().required('Bạn không được để trống'),
 		ProgramId: yup.string().required('Bạn không được để trống'),
-
 		TeacherId: yup.string().required('Bạn không được để trống'),
 		CurriculumId: yup.string().required('Bạn không được để trống'),
 		StartDay: yup.string().required('Bạn không được để trống'),
@@ -266,19 +265,19 @@ const CreateClassForm = (props) => {
 		}
 	}
 
-	const getTutors = async (branchId: number, curriculumId: number) => {
-		try {
-			const res = await classApi.getAllTutor({ branchId, curriculumId })
-			if (res.status === 200) {
-				const convertData = parseSelectArrayUser(res.data.data, 'TutorName', 'TutorCode', 'TutorId')
-				setTutors(convertData)
-			} else {
-				setTutors([])
-			}
-		} catch (err) {
-			ShowNoti('error', err.message)
-		}
-	}
+	// const getTutors = async (branchId: number, curriculumId: number) => {
+	// 	try {
+	// 		const res = await classApi.getAllTutor({ branchId, curriculumId })
+	// 		if (res.status === 200) {
+	// 			const convertData = parseSelectArrayUser(res.data.data, 'TutorName', 'TutorCode', 'TutorId')
+	// 			setTutors(convertData)
+	// 		} else {
+	// 			setTutors([])
+	// 		}
+	// 	} catch (err) {
+	// 		ShowNoti('error', err.message)
+	// 	}
+	// }
 
 	const handleAddListTimeFrame = () => {
 		setListTimeFrames((prev) => {
@@ -386,8 +385,8 @@ const CreateClassForm = (props) => {
 			return {
 				DayOfWeek: timeFrame.DayOfWeek,
 				StudyTimeId: timeFrame.StudyTimeId,
-				TeacherId: timeFrame.TeacherId,
-				TutorIds: timeFrame.TutorIds
+				TeacherId: timeFrame.TeacherId
+				// TutorIds: timeFrame.TutorIds
 			}
 		})
 
@@ -427,7 +426,6 @@ const CreateClassForm = (props) => {
 			const res = await onSubmit(DATA_LESSON_WHEN_CREATE)
 			if (res.status == 200) {
 				setIsModalOpen(false)
-				setListTimeFrames([{ Id: 1, DayOfWeek: null, StudyTimeId: null, TeacherId: null, TutorIds: null }])
 			}
 		} catch (err) {
 		} finally {
@@ -462,11 +460,11 @@ const CreateClassForm = (props) => {
 		const curriculumId = form.getFieldValue('CurriculumId')
 		form.setFieldValue('TutorIds', [])
 
-		if (branchId && curriculumId) {
-			getTutors(branchId, curriculumId)
-		} else {
-			setTutors([])
-		}
+		// if (branchId && curriculumId) {
+		// 	getTutors(branchId, curriculumId)
+		// } else {
+		// 	setTutors([])
+		// }
 	}, [form.getFieldValue('BranchId'), form.getFieldValue('CurriculumId')])
 
 	return (
@@ -631,7 +629,7 @@ const CreateClassForm = (props) => {
 													</div>
 												</div>
 												<div className="row">
-													<div className="col-md-6 col-12">
+													{/* <div className="col-md-6 col-12">
 														<SelectField
 															mode="multiple"
 															placeholder="Chọn trợ giảng"
@@ -641,11 +639,11 @@ const CreateClassForm = (props) => {
 															optionList={tutors}
 															maxTagCount={1}
 														/>
-													</div>
+													</div> */}
 													<div className="col-md-6 col-12">
 														<SelectField
 															isRequired
-															rules={[{required: true, message: 'Không được để trống'}]}
+															rules={[{ required: true, message: 'Không được để trống' }]}
 															placeholder="Chọn giáo viên"
 															onChangeSelect={(value) => handleChangeTimeFrame(timeFrame, 'TeacherId', value)}
 															label="Giáo viên"

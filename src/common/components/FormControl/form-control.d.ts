@@ -32,6 +32,7 @@ type IFormInputNumber = {
 	style?: object
 	name: string
 	label: string
+	allowNegative?: boolean
 	isRequired?: boolean
 	className?: string
 	allowClear?: boolean
