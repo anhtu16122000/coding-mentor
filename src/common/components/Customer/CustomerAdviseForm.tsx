@@ -1,12 +1,12 @@
 import { Divider, Form, Modal, Select } from 'antd'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { districtApi, wardApi } from '~/api/area/area'
 import * as yup from 'yup'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 import SelectField from '~/common/components/FormControl/SelectField'
 import { ShowNoti } from '~/common/utils'
-import { parseSelectArray } from '~/common/utils/common'
+import { parseSelectArray, parseSelectArrayUser } from '~/common/utils/common'
 import { RootState } from '~/store'
 import { customerAdviseApi } from '~/api/user/customer'
 import CustomerModalConfirm from './CustomerModalConfirm'
@@ -17,10 +17,15 @@ import UploadImageField from '../FormControl/UploadImageField'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
 import RestApi from '~/api/RestApi'
+import { useRouter } from 'next/router'
+import moment from 'moment'
+import { ieltsExamApi } from '~/api/IeltsExam'
 
 const CustomerAdviseForm = React.memo((props: any) => {
-	const { source, learningNeed, purpose, branch, refPopover, onRefresh } = props
+	const { source, learningNeed, purpose, branch, refPopover, onRefresh, isEntry } = props
 	const { customerStatus, rowData, listTodoApi, setTodoApi, isStudent, className } = props
+
+	const router = useRouter()
 
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
@@ -28,16 +33,15 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	const [dataSubmit, setDataSubmit] = useState([])
 	const [districts, setDistricts] = useState([])
 	const [wards, setWards] = useState([])
-
+	const [listTeacher, setListTeacher] = useState([])
 	const [salers, setSalers] = useState([])
 
 	const area = useSelector((state: RootState) => state.area.Area)
 
 	const getSaler = async (branchIds) => {
-		form.setFieldValue('SaleId', null)
-
 		if (!branchIds) {
 			setSalers([])
+			form.setFieldValue('SaleId', null)
 			return
 		}
 
@@ -48,6 +52,24 @@ const CustomerAdviseForm = React.memo((props: any) => {
 				setSalers(convertData)
 			} else {
 				setSalers([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
+
+	const getTeachers = async (branchId) => {
+		if (!branchId) {
+			setListTeacher([])
+			return
+		}
+
+		try {
+			const res = await userInformationApi.getAvailableUser({ roleId: 2, branchId: branchId })
+			if (res.status == 200) {
+				setListTeacher(parseSelectArrayUser(res.data.data, 'FullName', 'UserCode', 'UserInformationId'))
+			} else {
+				setListTeacher([])
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -89,6 +111,13 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	}
 
 	const checkExistCustomer = async (data) => {
+		const rowData = {}
+		for (const property in data) {
+			const rawKey = property.split('-')[0]
+			rowData[rawKey] = data[property]
+		}
+		data = rowData
+
 		try {
 			if (rowData) {
 				onSubmit(data)
@@ -129,15 +158,29 @@ const CustomerAdviseForm = React.memo((props: any) => {
 
 			const res = await (rowData?.Id
 				? isStudent
-					? userInformationApi.add(DATA_SUBMIT)
+					? userInformationApi.addTestAppointment({
+							UserModel: DATA_SUBMIT,
+							TestAppointmentModel: {
+								Time: moment(data?.Time).format(),
+								TeacherId: data?.TeacherId,
+								Type: data?.Type
+							}
+					  })
 					: customerAdviseApi.update(DATA_SUBMIT)
 				: customerAdviseApi.add(DATA_SUBMIT))
-			if (res.status === 200) {
+
+			if (res.status == 200) {
 				setTodoApi(listTodoApi)
 				form.resetFields()
+
+				!!onRefresh && onRefresh()
+
 				setIsModalVisible(false)
 				ShowNoti('success', res.data.message)
-				!!onRefresh && onRefresh()
+
+				if (isEntry) {
+					router.push({ pathname: '/entry-test' })
+				}
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -148,12 +191,25 @@ const CustomerAdviseForm = React.memo((props: any) => {
 
 	useEffect(() => {
 		if (isModalVisible) {
+			form.setFieldsValue({ Type: 1 })
+
 			getJobs()
+
+			if (rowData?.BranchId) {
+				getTeachers(rowData?.BranchId)
+			}
+
 			if (rowData) {
 				if (isStudent) {
 					form.setFieldsValue({ Password: '123456' })
 					form.setFieldsValue({ BranchIds: !!rowData.BranchId ? parseInt(rowData.BranchId) : null })
 				}
+
+				form.setFieldsValue({ ...rowData })
+				form.setFieldsValue({ CustomerStatusId: !!rowData.CustomerStatusId ? parseInt(rowData.CustomerStatusId) : null })
+
+				getSaler(rowData?.BranchId)
+
 				!!rowData.AreaId && getDistrictByArea(rowData.AreaId)
 				!!rowData.DistrictId && getWardByDistrict(rowData.DistrictId)
 				form.setFieldsValue(rowData)
@@ -207,7 +263,9 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	}
 
 	function removeContaining(arr) {
-		return arr?.filter((person) => person?.value !== 2)
+		// return arr?.filter((person) => person?.value !== 2)
+
+		return arr
 	}
 
 	function onClickCreate() {
@@ -221,11 +279,37 @@ const CustomerAdviseForm = React.memo((props: any) => {
 		setIsModalVisible(!isModalVisible)
 	}
 
+	const [testType, setTestType] = useState(1)
+
+	const [exams, setExams] = useState([])
+	const [examLoading, setExamLoading] = useState(false)
+
+	async function getExams() {
+		setExamLoading(true)
+		try {
+			const res = await ieltsExamApi.getOptions()
+			if (res.status == 200) {
+				setExams(res.data?.data)
+			} else {
+				setExams([])
+			}
+		} catch (error) {
+		} finally {
+			setExamLoading(false)
+		}
+	}
+
+	useEffect(() => {
+		if (isModalVisible && testType == 2 && exams.length == 0) {
+			getExams()
+		}
+	}, [testType, isModalVisible])
+
 	return (
 		<>
 			{rowData ? (
 				isStudent ? (
-					<IconButton tooltip="Tạo học viên" icon="login" color="green" type="button" onClick={toggle} />
+					<IconButton tooltip="Hẹn test" icon="login" color="green" type="button" onClick={toggle} />
 				) : (
 					<IconButton type="button" color="yellow" tooltip="Cập nhật" icon="edit" onClick={toggle} />
 				)
@@ -236,7 +320,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 			)}
 
 			<Modal
-				title={rowData ? (isStudent ? 'Chuyển học viên' : 'Cập nhật thông tin khách hàng') : 'Thêm khách hàng'}
+				title={rowData ? (isStudent ? 'Hẹn test' : 'Cập nhật thông tin khách hàng') : 'Thêm khách hàng'}
 				open={isModalVisible}
 				onCancel={toggle}
 				footer={null}
@@ -244,7 +328,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 				centered
 			>
 				<div className="container-fluid">
-					<Form form={form} layout="vertical" onFinish={checkExistCustomer}>
+					<Form scrollToFirstError form={form} layout="vertical" onFinish={checkExistCustomer}>
 						<div className="row">
 							{isStudent && (
 								<>
@@ -252,7 +336,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 										<UploadImageField name="Avatar" label="Hình ảnh" form={form} />
 									</div>
 									<div className="col-md-6 col-12">
-										<InputTextField name="UserName" label="Tên đăng nhập" isRequired={true} rules={formRequired} />
+										<InputTextField name={`UserName-${rowData.Id}`} label="Tên đăng nhập" isRequired={true} rules={formRequired} />
 									</div>
 									<div className="col-md-6 col-12">
 										<InputTextField name="Password" label="Mật khẩu" isRequired={true} rules={formRequired} />
@@ -354,7 +438,10 @@ const CustomerAdviseForm = React.memo((props: any) => {
 									optionList={branch}
 									isRequired
 									rules={formRequired}
-									onChangeSelect={(e) => getSaler(e)}
+									onChangeSelect={(e) => {
+										getSaler(e)
+										getTeachers(e)
+									}}
 								/>
 							</div>
 
@@ -380,12 +467,71 @@ const CustomerAdviseForm = React.memo((props: any) => {
 							<div className="col-md-6 col-12">
 								<SelectField name="SourceId" label="Nguồn" placeholder="Chọn nguồn" optionList={source} />
 							</div>
+
 							{!isSaler() && (
 								<div className="col-md-6 col-12">
 									<SelectField name="SaleId" label="Tư vấn viên" placeholder="Chọn tư vấn viên" optionList={salers} />
 								</div>
 							)}
 						</div>
+
+						{rowData && isStudent && (
+							<>
+								<Divider className="col-span-4" orientation="center">
+									Hẹn test
+								</Divider>
+								<div className="row">
+									<div className="col-md-6 col-12">
+										<SelectField name="TeacherId" label="Giáo viên test" placeholder="Chọn giáo viên" optionList={listTeacher} />
+									</div>
+
+									<div className="col-md-6 col-12">
+										<SelectField
+											name="Type"
+											label="Địa điểm làm bài"
+											onChangeSelect={(e) => setTestType(e)}
+											placeholder="Chọn địa điểm làm bài"
+											optionList={[
+												{ title: 'Tại trung tâm', value: 1 },
+												{ title: 'Làm bài trực tuyến', value: 2 }
+											]}
+										/>
+									</div>
+
+									<div className="col-md-6 col-12">
+										<DatePickerField
+											format="DD/MM/YYYY HH:mm"
+											name="Time"
+											label="Thời gian test"
+											picker="showTime"
+											showTime={'HH:mm'}
+											mode="single"
+										/>
+									</div>
+
+									{form.getFieldValue('Type') == 2 && (
+										<Form.Item className="col-md-6 col-12" name="IeltsExamId" label="Đề" rules={formRequired}>
+											<Select
+												showSearch
+												optionFilterProp="children"
+												className="primary-input"
+												loading={examLoading}
+												disabled={examLoading}
+												placeholder="Chọn đề"
+											>
+												{exams.map((item) => {
+													return (
+														<Select.Option key={item.Id} value={item.Id}>
+															[{item?.Code}] - {item?.Name}
+														</Select.Option>
+													)
+												})}
+											</Select>
+										</Form.Item>
+									)}
+								</div>
+							</>
+						)}
 
 						<div className="row mt-3">
 							<div className="col-12 flex-all-center">

@@ -1,9 +1,10 @@
-import { Form, Modal } from 'antd'
+import { Form, Input, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { staffSalaryApi } from '~/api/business/staff-salary'
 import InputNumberField from '~/common/components/FormControl/InputNumberField'
 import SelectField from '~/common/components/FormControl/SelectField'
 import TextBoxField from '~/common/components/FormControl/TextBoxField'
+import ModalFooter from '~/common/components/ModalFooter'
 import PrimaryButton from '~/common/components/Primary/Button'
 import IconButton from '~/common/components/Primary/IconButton'
 import { ShowNoti } from '~/common/utils'
@@ -127,63 +128,35 @@ export const ModalSalaryCRUD: React.FC<IModalSalary> = ({ dataRow, onRefresh, mo
 
 	return (
 		<>
-			{mode === 'edit' && (
-				<div
-					className="flex items-center cursor-pointer"
-					onClick={() => {
-						onOpen()
-					}}
-				>
+			{mode == 'edit' && (
+				<div className="flex items-center cursor-pointer" onClick={onOpen}>
 					<IconButton type="button" icon={'edit'} color="green" className="Sửa" tooltip="Sửa" />
 				</div>
 			)}
-			{mode === 'salary' && (
-				<div
-					className="flex items-center cursor-pointer"
-					onClick={() => {
-						onOpen()
-					}}
-				>
-					<button
-						type="button"
-						className={`font-medium none-selection rounded-lg h-[38px] px-3 inline-flex items-center justify-center text-white bg-[#4CAF50] hover:bg-[#449a48] focus:bg-[#38853b]`}
-					>
-						Tính lương thủ công
-					</button>
-				</div>
+
+			{mode == 'salary' && (
+				<PrimaryButton onClick={onOpen} background="green" icon="none" type="button">
+					Tính lương thủ công
+				</PrimaryButton>
 			)}
 
 			<Modal
 				title={mode === 'edit' ? 'Cập nhật lương' : 'Tính lương thủ công '}
 				open={visible}
 				onCancel={onClose}
-				footer={
-					<>
-						<PrimaryButton onClick={() => onClose()} background="red" icon="cancel" type="button">
-							Huỷ
-						</PrimaryButton>
-						<PrimaryButton
-							loading={isLoading}
-							onClick={() => form.submit()}
-							className="ml-2"
-							background="blue"
-							icon="save"
-							type="button"
-							children="Lưu"
-						/>
-					</>
-				}
-				width={800}
+				footer={<ModalFooter loading={isLoading} onCancel={onClose} onOK={form.submit} />}
+				width={500}
 			>
 				<div className="container-fluid">
 					<Form form={form} layout="vertical" onFinish={_onSubmit}>
 						<div className="grid grid-cols-2 gap-x-4 antd-custom-wrap">
-							{mode === 'salary' && (
+							{mode == 'salary' && (
 								<>
 									<div className="col-span-2">
 										<SelectField label="Nhân viên" name="UserId" optionList={userDropdown} placeholder="Chọn nhân viên" />
 									</div>
-									<div className="col-span-2">
+
+									<div className="col-span-1">
 										<InputNumberField
 											name="BasicSalary"
 											label="Lương cơ bản"
@@ -193,7 +166,7 @@ export const ModalSalaryCRUD: React.FC<IModalSalary> = ({ dataRow, onRefresh, mo
 										/>
 									</div>
 
-									<div className="col-span-2">
+									<div className="col-span-1">
 										<InputNumberField
 											onChange={(val) => setTeachingSalary(val.target.value)}
 											name="TeachingSalary"
@@ -203,7 +176,8 @@ export const ModalSalaryCRUD: React.FC<IModalSalary> = ({ dataRow, onRefresh, mo
 									</div>
 								</>
 							)}
-							<div className="col-span-2">
+
+							<div className="col-span-1">
 								<InputNumberField
 									onChange={(val) => setDeduction(val.target.value)}
 									name="Deduction"
@@ -212,7 +186,7 @@ export const ModalSalaryCRUD: React.FC<IModalSalary> = ({ dataRow, onRefresh, mo
 								/>
 							</div>
 
-							<div className="col-span-2">
+							<div className="col-span-1">
 								<InputNumberField onChange={(val) => setBonus(val.target.value)} name="Bonus" label="Thưởng" placeholder="Nhập thưởng" />
 							</div>
 
@@ -222,7 +196,7 @@ export const ModalSalaryCRUD: React.FC<IModalSalary> = ({ dataRow, onRefresh, mo
 								</div>
 							)}
 
-							{mode === 'edit' && (
+							{mode == 'edit' && (
 								<div className="col-span-2">
 									<SelectField
 										label="Trạng thái"
@@ -238,7 +212,9 @@ export const ModalSalaryCRUD: React.FC<IModalSalary> = ({ dataRow, onRefresh, mo
 							)}
 
 							<div className="col-span-2">
-								<TextBoxField name="Note" label="Ghi chú" />
+								<Form.Item name="Note" label="Ghi chú">
+									<Input.TextArea rows={4} style={{ height: 'unset' }} />
+								</Form.Item>
 							</div>
 						</div>
 					</Form>

@@ -1,17 +1,25 @@
-import { List, Segmented, Skeleton } from 'antd'
-import Head from 'next/head'
-import React, { useEffect, useState } from 'react'
+import { List, Popconfirm, Popover, Skeleton } from 'antd'
+import React, { useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons'
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
-import dynamic from 'next/dynamic'
-import { FaQuestionCircle } from 'react-icons/fa'
+import { FaCartPlus } from 'react-icons/fa'
 import { isDesktop } from 'react-device-detect'
-import { PrimaryTooltip } from '~/common/components'
 import CCSearch from '~/common/components/CCSearch'
 import { getMorePacked, getPacked } from './util'
-
-const Tour = dynamic(() => import('reactour'), { ssr: false })
+import { is, parseToMoney } from '~/common/utils/common'
+import { IoMdCart } from 'react-icons/io'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
+import { BsThreeDotsVertical } from 'react-icons/bs'
+import { BiSolidDetail, BiTrash } from 'react-icons/bi'
+import { packedApi } from '~/api/packed'
+import { ShowNostis } from '~/common/utils'
+import CreatePackage from './CreatePackage'
+import ReadMoreText from './ReadMoreText'
+import DonatePackage from './donate'
+import RestApi from '~/api/RestApi'
+import { useDispatch } from 'react-redux'
+import { setCartData } from '~/store/cartReducer'
+import Router from 'next/router'
 
 const initParameters = { search: '', pageIndex: 1, pageSize: 22 }
 
@@ -24,15 +32,17 @@ function PackageExam() {
 	const [loading, setLoading] = useState(true)
 	const [loadingMore, setLoadingMore] = useState(true)
 
+	const userInfo = useSelector((state: RootState) => state.user.information)
+
 	useEffect(() => {
 		if (filters.pageIndex == 1) {
-			getExercises()
+			getPackages()
 		} else {
 			getMoreData()
 		}
 	}, [filters])
 
-	async function getExercises() {
+	async function getPackages() {
 		await getPacked(filters, (response) => {
 			setData(response.data)
 			setTotalItem(response.totalRow)
@@ -63,72 +73,80 @@ function PackageExam() {
 		setFilters({ ...filters, pageIndex: 1 })
 	}
 
-	// -----------------------------------------------------------------
-
-	const [isTourOpen, setIsTourOpen] = useState(false)
-
-	const accentColor = '#0a89ff'
-
-	const disableBody = (target) => disableBodyScroll(target)
-	const enableBody = (target) => enableBodyScroll(target)
-
-	const closeTour: any = () => {
-		setIsTourOpen(false)
-	}
-
-	const openTour = () => {
-		setIsTourOpen(true)
-	}
-
-	// You might need to adjust this part depending on your use case.
-	useEffect(() => {
-		if (isTourOpen) {
-			disableBody(document.querySelector('.helper'))
-		} else {
-			enableBody(document.querySelector('.helper'))
-		}
-	}, [isTourOpen])
-
-	const tourConfig = [
-		{
-			selector: '[data-tut="reactour-create"]',
-			content: `Tạo một đề mới thật dễ dàng bằng cách nhấn vào đây`
-		},
-		{
-			selector: '[data-tut="reactour-search"]',
-			content: `Tìm kiếm đề bằng cập nhập tên đề hoặc mã đề vào đây`
-		},
-		{
-			selector: '[data-tut="reactour-switch"]',
-			content: `Thay đổi phong cách hiển thị`
-		},
-		{
-			selector: '[data-tut="reactour-information"]',
-			content: `Bấm vào đây để xem và cập nhật thông tin đề`
-		}
-	]
-
 	function handleReset() {
 		setFilters(initParameters)
 	}
 
 	const [style, setStyle] = useState(1)
 
+	const [deleting, setDeleting] = useState<boolean>(false)
+
+	// Remove item đã xoá ra khõi mảng mà không cần gọi api
+	function removeItem(params) {
+		const idx = data.findIndex((item) => item?.Id == params)
+		let temp = []
+		if (idx != -1) {
+			for (let i = 0; i < data.length; i++) {
+				if (i != idx) {
+					temp.push({ ...data[i] })
+				}
+			}
+		}
+		setData([...temp])
+	}
+
+	// Gọi api xoá item
+	async function delThis(params) {
+		setDeleting(true)
+		try {
+			const response = await packedApi.delete(params)
+			if (response.status == 200) {
+				ShowNostis.success('Thành công')
+				removeItem(params)
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		} finally {
+			setDeleting(false)
+		}
+	}
+
+	const popRef = useRef(null)
+
+	const dispatch = useDispatch()
+
+	const [adding, setAdding] = useState<boolean>(true)
+
+	async function getCartData() {
+		try {
+			const response = await RestApi.get<any>('Cart/my-cart', { pageSize: 99999, pageIndex: 1 })
+			if (response.status == 200) {
+				dispatch(setCartData(response.data.data))
+			} else {
+				dispatch(setCartData([]))
+			}
+		} catch (error) {
+		} finally {
+			setAdding(false)
+		}
+	}
+
+	const _addToCart = async (item) => {
+		setAdding(true)
+		try {
+			let res = await RestApi.post('Cart', { ProductId: item.Id, Quantity: 1 })
+			if (res.status == 200) {
+				getCartData()
+				ShowNostis.success('Thành công')
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+			setAdding(false)
+		}
+	}
+
 	return (
 		<>
-			<Tour
-				// @ts-ignore
-				onRequestClose={closeTour}
-				steps={tourConfig}
-				isOpen={isTourOpen}
-				maskClassName="react-tur-mask"
-				className="helper"
-				rounded={5}
-				accentColor={accentColor}
-				onAfterOpen={() => disableBody(document.querySelector('.helper'))}
-				onBeforeClose={() => enableBody(document.querySelector('.helper'))}
-			/>
-
 			<div className="max-w-[2000px]">
 				<div className="cc-exam-header">
 					<div className="max-w-[350px] mr-[8px] flex items-center">
@@ -140,30 +158,33 @@ function PackageExam() {
 
 						<div data-tut="reactour-switch">
 							{/* @ts-ignore */}
-							<Segmented
+							{/* <Segmented
 								style={{ height: 36 }}
 								onChange={(e) => setStyle(e == 'Kanban' ? 1 : 2)}
 								options={[
 									{ value: 'Kanban', icon: <AppstoreOutlined /> },
 									{ value: 'List', icon: <BarsOutlined /> }
 								]}
-							/>
+							/> */}
 						</div>
-
-						{/* <FilterExam className="ml-[8px]" onReset={handleReset} onSubmit={(event) => setFilters(event)} /> */}
 					</div>
 
 					<div className="flex items-center">
 						<div data-tut="reactour-search" className="mr-[8px]">
 							<CCSearch data-tut="reactour-search" onSubmit={(value) => setFilters({ ...filters, pageIndex: 1, search: value })} />
 						</div>
-						{/* <CreateExam onRefresh={onRefresh} /> */}
+
+						<CreatePackage onRefresh={onRefresh} />
 					</div>
 				</div>
 
 				{(!loading || data.length > 0) && (
 					<div>
-						<div id="class-view" className="cc-exam-list-container" style={{ paddingRight: 8, marginRight: isDesktop ? -23 : -16 }}>
+						<div
+							id="class-view"
+							className="cc-exam-list-container ant-row-gap-y-8"
+							style={{ paddingRight: 8, marginRight: isDesktop ? -23 : -16 }}
+						>
 							<InfiniteScroll
 								dataLength={data.length}
 								next={loadMoreData}
@@ -173,12 +194,108 @@ function PackageExam() {
 								scrollableTarget="class-view"
 							>
 								<List
-									grid={style == 1 ? { gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 3, xxl: 4 } : null}
+									grid={
+										style == 1
+											? {
+													gutter: 16, // Khoảng cách giữa các item
+													xs: 1, // Mặc định 1 cột cho màn hình nhỏ hơn 576px
+													sm: 2, // 2 cột cho màn hình từ 576px trở lên
+													md: 3, // 2 cột cho màn hình từ 768px trở lên
+													lg: 3, // 2 cột cho màn hình từ 992px trở lên
+													xl: 4, // 2 cột cho màn hình từ 1200px trở lên
+													xxl: 5 // 2 cột cho màn hình từ 1600px trở lên
+											  }
+											: null
+									}
 									dataSource={data}
-									renderItem={(item, index) => (
-										<></>
-										// <ExamItem style={style} key={`ex-it-${index}`} index={index} data={item} onRefresh={onRefresh} />
-									)}
+									className="pr-[8px]"
+									renderItem={(item, index) => {
+										const thisId = `pac-${index}-${item.Id}`
+
+										return (
+											<div key={thisId} id={thisId} className="pe-i-default">
+												<img src={item?.Thumbnail || '/images/package-thumbnail.png'} className="pe-i-d-thumb" />
+
+												{is(userInfo).admin && (
+													<Popover
+														ref={popRef}
+														overlayClassName="show-arrow"
+														content={
+															<div>
+																<Popconfirm
+																	disabled={deleting}
+																	onConfirm={() => delThis(item?.Id)}
+																	title={`Xoá: ${item?.Name}`}
+																	placement="left"
+																>
+																	<div className="pe-menu-item">
+																		<BiTrash size={18} color="#E53935" className="ml-[-3px]" />
+																		<div className="ml-[8px]">Xoá</div>
+																	</div>
+																</Popconfirm>
+
+																<CreatePackage onOpen={() => popRef?.current?.close()} onRefresh={onRefresh} defaultData={item} isEdit />
+															</div>
+														}
+														placement="leftTop"
+														trigger="click"
+													>
+														<div className="pe-i-d-menu">
+															<BsThreeDotsVertical size={16} color="#000" />
+														</div>
+													</Popover>
+												)}
+
+												<div className="p-[8px] pb-0 flex-1">
+													<div className="pe-i-d-name">{item?.Name}</div>
+
+													<div className="pe-i-d-user">
+														<IoMdCart size={14} />
+														<div className="pe-i-d-u-label">{parseToMoney(item?.TotalStudent || 0)} lượt mua</div>
+													</div>
+
+													<div className="flex items-center my-[4px] text-[#4a4a4a]">
+														<div className="text-[14px] font-[500]">
+															<ReadMoreText title="Mô tả đầy đủ" text={item?.Description} />
+														</div>
+													</div>
+
+													<div className="pe-i-d-price mb-[-8px]">{parseToMoney(item?.Price || 0)}VNĐ</div>
+												</div>
+
+												<div className="pe-i-d-controller">
+													{is(userInfo).student && item?.Status != 2 && (
+														<div onClick={() => _addToCart(item)} className="pe-i-d-cart">
+															<FaCartPlus size={14} />
+															<div className="pe-i-d-c-title">Mua ngay</div>
+														</div>
+													)}
+
+													{is(userInfo).admin && (
+														<div
+															className="pe-i-d-detail"
+															onClick={() => Router.push({ pathname: '/package-exam/detail', query: { package: item?.Id } })}
+														>
+															<BiSolidDetail size={16} />
+															<div className="pe-i-d-c-title">Chi tiết</div>
+														</div>
+													)}
+
+													{is(userInfo).student && item?.Status == 2 && (
+														<div
+															className="pe-i-d-detail"
+															onClick={() => Router.push({ pathname: '/package-exam/detail', query: { package: item?.Id } })}
+														>
+															<BiSolidDetail size={16} />
+															<div className="pe-i-d-c-title">Chi tiết</div>
+														</div>
+													)}
+
+													{is(userInfo).admin && <DonatePackage onRefresh={onRefresh} item={item} />}
+												</div>
+											</div>
+										)
+									}}
 								/>
 							</InfiniteScroll>
 						</div>

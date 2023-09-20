@@ -123,7 +123,7 @@ const ExpandTable = (props) => {
 	const tempHeight = props?.height || window?.innerHeight - 295
 	const realHeight = tempHeight < 300 ? 300 : tempHeight
 
-	console.log('---- CHẠY TỚI HÀM RENDER')
+	// console.log('---- CHẠY TỚI HÀM RENDER')
 
 	return (
 		<>

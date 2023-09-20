@@ -1,4 +1,4 @@
-import { Form, Modal } from 'antd'
+import { Form, Modal, Select } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -13,6 +13,8 @@ import IconButton from '../Primary/IconButton'
 import * as yup from 'yup'
 import { userInformationApi } from '~/api/user/user'
 import ModalFooter from '../ModalFooter'
+import { ieltsExamApi } from '~/api/IeltsExam'
+import { formRequired } from '~/common/libs/others/form'
 
 const StudentForm = (props) => {
 	const { rowData, listExamination, setTodoApi, listTodoApi } = props
@@ -126,6 +128,32 @@ const StudentForm = (props) => {
 		setIsModalVisible(true)
 	}
 
+	const [testType, setTestType] = useState(1)
+
+	const [exams, setExams] = useState([])
+	const [examLoading, setExamLoading] = useState(false)
+
+	async function getExams() {
+		setExamLoading(true)
+		try {
+			const res = await ieltsExamApi.getOptions()
+			if (res.status == 200) {
+				setExams(res.data?.data)
+			} else {
+				setExams([])
+			}
+		} catch (error) {
+		} finally {
+			setExamLoading(false)
+		}
+	}
+
+	useEffect(() => {
+		if (isModalVisible && testType == 2 && exams.length == 0) {
+			getExams()
+		}
+	}, [testType, isModalVisible])
+
 	return (
 		<>
 			{!!rowData ? (
@@ -177,9 +205,9 @@ const StudentForm = (props) => {
 						<div className="col-md-6 col-12">
 							<SelectField
 								name="Type"
-								disabled
 								label="Địa điểm làm bài"
 								placeholder="Chọn địa điểm làm bài"
+								onChangeSelect={(e) => setTestType(e)}
 								optionList={[
 									{ title: 'Tại trung tâm', value: 1 },
 									{ title: 'Làm bài trực tuyến', value: 2 }
@@ -197,10 +225,26 @@ const StudentForm = (props) => {
 								mode="single"
 							/>
 						</div>
+
 						{form.getFieldValue('Type') === 2 && (
-							<div className="col-md-6 col-12">
-								<SelectField name="ExamId" label="Đề test" placeholder="Chọn đề test" optionList={listExamination} />
-							</div>
+							<Form.Item className="col-md-6 col-12" name="IeltsExamId" label="Đề" rules={formRequired}>
+								<Select
+									showSearch
+									optionFilterProp="children"
+									className="primary-input"
+									loading={examLoading}
+									disabled={examLoading}
+									placeholder="Chọn đề"
+								>
+									{exams.map((item) => {
+										return (
+											<Select.Option key={item.Id} value={item.Id}>
+												[{item?.Code}] - {item?.Name}
+											</Select.Option>
+										)
+									})}
+								</Select>
+							</Form.Item>
 						)}
 					</div>
 				</Form>

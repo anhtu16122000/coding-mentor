@@ -99,7 +99,7 @@ const ListClassPro = () => {
 	}, [filter])
 
 	function handleRefresh() {
-		if (filter != initFilter) {
+		if (filter?.pageIndex != initFilter?.pageIndex) {
 			setFilter(initFilter)
 		} else {
 			getAllClass()
@@ -109,7 +109,7 @@ const ListClassPro = () => {
 	const getAllClass = async () => {
 		setLoading(true)
 		try {
-			const res = await classApi.getAll(filter)
+			const res: any = await classApi.getAll(filter)
 			if (res.status == 200) {
 				if (is.parent) {
 					if (filter.studentId) {
@@ -118,7 +118,14 @@ const ListClassPro = () => {
 					} else {
 						dispatch(setListClass([]))
 						dispatch(setTotalClass(0))
-						// dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
+						dispatch(
+							setStatusData({
+								closing: res.data?.closing,
+								opening: res.data?.opening,
+								totalRow: res.data?.totalRow,
+								upcoming: res.data?.upcoming
+							})
+						)
 					}
 				} else {
 					if (filter?.pageIndex == 1) {
@@ -133,7 +140,7 @@ const ListClassPro = () => {
 			} else {
 				dispatch(setListClass([]))
 				dispatch(setTotalClass(0))
-				// dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
+				dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)

@@ -13,13 +13,9 @@ const { TextArea } = Input
 const CommentItem = (props: IConmmentItem) => {
 	const { hiddenRemove, item, active, onSave, onActive, onDeleteItem, loading, isSubmit, disabled } = props
 
-	// console.log('------- CommentItem: ', props)
-
 	function getTimeStamp() {
 		return new Date().getTime() // Example: 1653474514413
 	}
-
-	// console.log('--------- item: ', item)
 
 	const [pending, setPending] = useState(false)
 

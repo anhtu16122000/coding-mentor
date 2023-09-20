@@ -45,6 +45,7 @@ const dayOfWeek = [
 		value: 0
 	}
 ]
+
 const { Option } = Select
 
 type StudyTime = {
@@ -169,6 +170,8 @@ const FormRegisterClass = (props) => {
 		}
 	}
 
+	// console.log('--- programsSelected: ', programsSelected)
+
 	return (
 		<>
 			<div className="col-span-2">
@@ -199,6 +202,7 @@ const FormRegisterClass = (props) => {
 					<ListClassReview classesSelected={classesSelected} setClassesSelected={setClassesSelected} setClasses={setClasses} />
 				</div>
 			</div>
+
 			<div className="col-span-2">
 				<div className="wrapper-programs">
 					<div className="flex items-center gap-2 mb-3">
@@ -211,10 +215,12 @@ const FormRegisterClass = (props) => {
 							type="default"
 						/>
 					</div>
+
 					<ListProgramReview programsSelected={programsSelected} setProgramsSelected={setProgramsSelected} setPrograms={setPrograms} />
 				</div>
 			</div>
-			{programsSelected?.length > 0 && (
+
+			{/* {programsSelected?.length > 0 && (
 				<div className="col-span-2">
 					<div className="relative">
 						<button className="absolute top-0 right-0 z-10 -translate-x-2/4" type="button" onClick={handleAddListTimeFrame}>
@@ -280,7 +286,7 @@ const FormRegisterClass = (props) => {
 						</Form.Item>
 					</div>
 				</div>
-			)}
+			)} */}
 		</>
 	)
 }

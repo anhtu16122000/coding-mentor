@@ -16,7 +16,7 @@ export const StylePaymentStatusItem = styled.div<{ checked?: boolean }>`
 	border-radius: 6px;
 	height: 35px;
 	background-color: ${(props) => (props.checked ? '#1B73E8' : '#dadada')};
-	color: #fff;
+	color: ${(props) => (props.checked ? '#fff' : '#000')};
 	padding: 5px 10px;
 	margin-right: 5px;
 	cursor: pointer;

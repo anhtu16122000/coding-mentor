@@ -3,7 +3,7 @@ import React from 'react'
 import { NumericFormat } from 'react-number-format'
 
 const InputNumberField = (props: IFormInputNumber) => {
-	const { style, label, isRequired, className, placeholder, disabled, name, rules, max, onChange } = props
+	const { style, label, isRequired, className, placeholder, disabled, name, rules, max, onChange, allowNegative } = props
 
 	return (
 		<>
@@ -13,6 +13,7 @@ const InputNumberField = (props: IFormInputNumber) => {
 					placeholder={placeholder}
 					disabled={disabled}
 					thousandSeparator={true}
+					allowNegative={allowNegative || false}
 					className={`w-full is-error px-[11px] py-[4px] primary-input ${className}`}
 					isAllowed={(values) => {
 						if (max) {

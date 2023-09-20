@@ -214,7 +214,7 @@ const Filters: FC<IFilters> = (props) => {
 				autoComplete="on"
 			>
 				{!!showBranch && (
-					<Form.Item className="col-span-2" name="branhIds" label="Trung tâm" rules={formNoneRequired}>
+					<Form.Item className="col-span-2" name="branchIds" label="Trung tâm" rules={formNoneRequired}>
 						<Select placeholder="Chọn trung tâm" allowClear>
 							{branches.map((item) => {
 								return (

@@ -276,7 +276,12 @@ const MainCart = () => {
 									{cartData.map((item, index) => {
 										return (
 											<div className="cart-item">
-												<Avatar isThumbnail uri={item?.Thumbnail} className="cart-item-thumbnail" />
+												<Avatar
+													isThumbnail
+													uri={item?.Type != 2 ? item?.Thumbnail : !item?.Thumbnail ? '/images/package-thumbnail.png' : item?.Thumbnail}
+													className="cart-item-thumbnail"
+												/>
+
 												<div className="ml-[16px] flex-1">
 													<h1 className="cart-item-name in-2-line">{item?.ProductName}</h1>
 													{!!item?.TotalPrice && <h1 className="cart-item-price text-[#ed3737]">{parseToMoney(item?.TotalPrice)}</h1>}

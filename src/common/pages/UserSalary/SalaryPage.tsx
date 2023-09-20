@@ -14,6 +14,10 @@ import { RootState } from '~/store'
 import TabComp from '~/common/custom/TabComp'
 import { TabCompData } from '~/common/custom/TabComp/type'
 import { EditOutlined } from '@ant-design/icons'
+import IconButton from '~/common/components/Primary/IconButton'
+import { RiBankCard2Line } from 'react-icons/ri'
+import { PrimaryTooltip } from '~/common/components'
+import ModalBankInformation from './ModalBankInformation'
 
 export const SalaryPage = () => {
 	const [valueDate, setValueDate] = useState(moment().subtract(1, 'months'))
@@ -268,6 +272,8 @@ export const SalaryPage = () => {
 				if (isSaler() || isAcademic() || isTeacher()) return ''
 				return (
 					<div className="flex items-center">
+						<ModalBankInformation item={item} />
+
 						<ModalSalaryCRUD mode="edit" onRefresh={() => getSalary(apiParameters)} dataRow={item} />
 					</div>
 				)
@@ -312,13 +318,14 @@ export const SalaryPage = () => {
 				total={totalRow}
 				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
 				TitleCard={
-					<div className="extra-table">
-						<div className="flex-1 max-w-[350px] mr-[16px] min-w-[150px]">
-							<DatePicker onChange={handleFilterMonth} picker="month" placeholder="Chọn tháng" value={valueDate} />
-						</div>
-						<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container" style={{ marginTop: -1 }}>
-							<TabComp data={salaryStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
-						</div>
+					<div className="flex items-center">
+						<DatePicker
+							className="primary-input mr-[8px]"
+							onChange={handleFilterMonth}
+							picker="month"
+							placeholder="Chọn tháng"
+							value={valueDate}
+						/>
 					</div>
 				}
 				data={dataTable}
@@ -367,7 +374,11 @@ export const SalaryPage = () => {
 						)}
 					</>
 				}
-			/>
+			>
+				<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container mb-[8px]">
+					<TabComp data={salaryStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
+				</div>
+			</PrimaryTable>
 		</div>
 	)
 }

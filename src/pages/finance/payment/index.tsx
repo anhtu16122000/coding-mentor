@@ -1,4 +1,3 @@
-import { Input } from 'antd'
 import React, { useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
 import { MainLayout } from '~/common'
@@ -13,12 +12,21 @@ import Head from 'next/head'
 import appConfigs from '~/appConfig'
 import RefundForm from './Refund'
 import PaymentForm from '~/common/components/Finance/Payment/Create'
-import FilterBase from '~/common/components/Elements/FilterBase'
 import PaymentDetail from './PaymentDetail'
 import { TabCompData } from '~/common/custom/TabComp/type'
 import TabComp from '~/common/custom/TabComp'
+import Filters from './Filters'
 
-const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '', fromDate: null, toDate: null, type: 0 }
+const initParamters = {
+	pageSize: PAGE_SIZE,
+	branchIds: null,
+	pageIndex: 1,
+	search: '',
+	fromDate: null,
+	toDate: null,
+	type: 0
+}
+
 const PaymentManagementPage = () => {
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
@@ -28,49 +36,20 @@ const PaymentManagementPage = () => {
 	const [billStatus, setBillStatus] = useState<TabCompData[]>()
 	const [statusSelected, setStatusSelected] = useState<number>(0)
 
-	const [dataFilter, setDataFilter] = React.useState([
-		{
-			name: 'date-range',
-			title: 'Từ - đến',
-			col: 'grid-cols-1',
-			type: 'date-range'
-		}
-	])
 	useEffect(() => {
 		getData()
 	}, [filters])
-
-	let listFieldFilter = {
-		pageIndex: 1,
-		pageSize: PAGE_SIZE,
-		fromDate: null,
-		toDate: null
-	}
-	const handleFilter = (listFilter) => {
-		let newListFilter = { ...listFieldFilter }
-		listFilter.forEach((item, index) => {
-			let key = item.name
-			Object.keys(newListFilter).forEach((keyFilter) => {
-				if (keyFilter == key) {
-					newListFilter[key] = item.value
-				}
-			})
-		})
-		setFilter({ ...filters, ...newListFilter, pageIndex: 1 })
-	}
-
-	const handleReset = () => {
-		setFilter({ ...initParamters })
-	}
 
 	async function getData() {
 		setLoading(true)
 		try {
 			const res = await RestApi.get('Bill', filters)
+
 			if (res.status == 200) {
 				setData(res.data.data)
 				setTotalPage(res.data.totalRow)
 				setSumPrice(res.data)
+
 				setBillStatus([
 					{
 						id: 0,
@@ -191,14 +170,21 @@ const PaymentManagementPage = () => {
 			title: 'Loại',
 			dataIndex: 'Type',
 			width: 180,
-			render: (value, item) => (
-				<p className="font-[600] text-[#E53935]">
-					{value == 1 && <span className="tag blue">{item?.TypeName}</span>}
-					{value == 2 && <span className="tag green">{item?.TypeName}</span>}
-					{value == 3 && <span className="tag yellow">{item?.TypeName}</span>}
-					{value == 4 && <span className="tag gray">{item?.TypeName}</span>}
-				</p>
-			)
+			render: (value, item) => {
+				if (value == 1) {
+					return <span className="tag blue">{item?.TypeName}</span>
+				}
+
+				if (value == 2) {
+					return <span className="tag green">{item?.TypeName}</span>
+				}
+
+				if (value == 3) {
+					return <span className="tag yellow">{item?.TypeName}</span>
+				}
+
+				return <span className="tag gray">{item?.TypeName}</span>
+			}
 		},
 		{
 			title: 'Kỳ tiếp theo',
@@ -252,18 +238,9 @@ const PaymentManagementPage = () => {
 				TitleCard={
 					<div className="w-full flex items-center justify-between">
 						<div className="flex items-center">
-							<FilterBase dataFilter={dataFilter} handleFilter={handleFilter} handleReset={handleReset} />
-							{/* <Input.Search
-								className="primary-search max-w-[300px]"
-								onChange={(event) => {
-									if (event.target.value == '') {
-										setFilter({ ...filters, pageIndex: 1, search: '' })
-									}
-								}}
-								onSearch={(event) => setFilter({ ...filters, pageIndex: 1, search: event })}
-								placeholder="Tìm kiếm"
-							/> */}
-							<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container">
+							<Filters filters={filters} onReset={() => setFilter(initParamters)} onSubmit={(e) => setFilter({ ...e })} />
+
+							<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container ml-[8px] !mt-0">
 								<TabComp data={billStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
 							</div>
 						</div>

@@ -312,7 +312,6 @@ const TeacherForm = (props) => {
 										placeholder="Chọn trạng thái hoạt động"
 									/>
 								</div>
-
 								<div className="col-12">
 									<Divider orientation="center">Địa chỉ</Divider>
 								</div>

@@ -11,6 +11,7 @@ type ICreateExam = {
 	className?: string
 	isEdit?: boolean
 	onOpen?: Function
+	packageId?: any
 }
 
 type IPackage = {

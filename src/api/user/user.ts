@@ -31,6 +31,10 @@ export const userInformationApi = {
 		})
 	},
 
+	addTestAppointment(data) {
+		return instance.post(`${url}/test-appointment`, data)
+	},
+
 	getAll(params: IUserInputGetall) {
 		return instance.get<IApiResultData<IUserResponse[]>>(url, {
 			params
