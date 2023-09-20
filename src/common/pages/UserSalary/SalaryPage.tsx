@@ -5,7 +5,7 @@ import { staffSalaryApi } from '~/api/business/staff-salary'
 import PrimaryTable from '~/common/components/Primary/Table'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
-import { parseToMoney } from '~/common/utils/common'
+import { is, parseToMoney } from '~/common/utils/common'
 import FilterTable from '~/common/utils/table-filter'
 import { ModalSalaryCRUD } from './ModalSalaryCRUD'
 import { ModalTeachingDetail } from './ModalTeachingDetail'
@@ -14,9 +14,6 @@ import { RootState } from '~/store'
 import TabComp from '~/common/custom/TabComp'
 import { TabCompData } from '~/common/custom/TabComp/type'
 import { EditOutlined } from '@ant-design/icons'
-import IconButton from '~/common/components/Primary/IconButton'
-import { RiBankCard2Line } from 'react-icons/ri'
-import { PrimaryTooltip } from '~/common/components'
 import ModalBankInformation from './ModalBankInformation'
 
 export const SalaryPage = () => {
@@ -173,39 +170,15 @@ export const SalaryPage = () => {
 
 	const columns = [
 		{
-			title: '',
-			dataIndex: 'Id',
-			render: (text, item) => {
-				if (isSaler() || isAcademic() || isTeacher()) return ''
-				return (
-					<div className="flex items-center">
-						<Checkbox
-							defaultChecked={false}
-							checked={itemsChecked.includes(text)}
-							disabled={item.Status === 3}
-							onChange={(e) => {
-								if (itemsChecked.includes(text)) {
-									setItemsChecked(itemsChecked.filter((e) => e !== text))
-								} else {
-									setItemsChecked((prev) => [...prev, text])
-								}
-							}}
-						/>
-					</div>
-				)
-			}
-		},
-		{
 			...FilterTable({
 				type: 'search',
 				dataIndex: 'FullName',
 				handleSearch: (event) => setApiParameters({ ...apiParameters, fullName: event }),
 				handleReset: (event) => handleReset()
 			}),
-			width: 200,
 			title: 'Nhân viên',
 			dataIndex: 'FullName',
-			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+			render: (text) => <p className="font-semibold text-[#1b73e8] min-w-[120px]">{text}</p>
 		},
 		{
 			title: 'Năm',
@@ -289,6 +262,7 @@ export const SalaryPage = () => {
 	}
 
 	const text = `Cập nhật trạng thái của ${itemsChecked.length} nhân viên!`
+
 	const content = (
 		<div style={{ display: 'flex', flexDirection: 'column', width: 300 }}>
 			<Select
@@ -311,6 +285,30 @@ export const SalaryPage = () => {
 		</div>
 	)
 
+	const checkColumn = {
+		title: '',
+		dataIndex: 'Id',
+		render: (text, item) => {
+			if (isSaler() || isAcademic() || isTeacher()) return ''
+			return (
+				<div className="flex items-center">
+					<Checkbox
+						defaultChecked={false}
+						checked={itemsChecked.includes(text)}
+						disabled={item.Status == 3}
+						onChange={(e) => {
+							if (itemsChecked.includes(text)) {
+								setItemsChecked(itemsChecked.filter((e) => e !== text))
+							} else {
+								setItemsChecked((prev) => [...prev, text])
+							}
+						}}
+					/>
+				</div>
+			)
+		}
+	}
+
 	return (
 		<div className="salary-page-list">
 			<PrimaryTable
@@ -329,20 +327,11 @@ export const SalaryPage = () => {
 					</div>
 				}
 				data={dataTable}
-				columns={columns}
+				columns={is(theInformation).admin ? [checkColumn, ...columns] : [...columns]}
 				Extra={
 					<>
 						{(isAdmin() || isAccountant()) && itemsChecked.length > 0 && (
-							<div
-								style={{
-									color: '#fff',
-									backgroundColor: '#07BC0C',
-									borderRadius: 8,
-									marginRight: 6,
-									padding: 12,
-									fontWeight: '600'
-								}}
-							>
+							<div style={{ color: '#fff', backgroundColor: '#07BC0C', borderRadius: 8, marginRight: 6, padding: 12, fontWeight: '600' }}>
 								<Popover placement="left" title={text} content={content} trigger="click">
 									<Tooltip title="Cập nhật trạng thái" style={{ borderRadius: 4 }}>
 										<EditOutlined />
@@ -350,9 +339,12 @@ export const SalaryPage = () => {
 								</Popover>
 							</div>
 						)}
-						<div className="mr-2">
-							<ModalSalaryCRUD time={time} mode="salary" onRefresh={() => getSalary(apiParameters)} />
-						</div>
+
+						{(isAdmin() || isAccountant()) && (
+							<div className="mr-2">
+								<ModalSalaryCRUD time={time} mode="salary" onRefresh={() => getSalary(apiParameters)} />
+							</div>
+						)}
 
 						{(isAdmin() || isAccountant()) && (
 							<Popconfirm
@@ -375,9 +367,11 @@ export const SalaryPage = () => {
 					</>
 				}
 			>
-				<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container mb-[8px]">
-					<TabComp data={salaryStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
-				</div>
+				{isAdmin() && (
+					<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container mb-[8px]">
+						<TabComp data={salaryStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
+					</div>
+				)}
 			</PrimaryTable>
 		</div>
 	)

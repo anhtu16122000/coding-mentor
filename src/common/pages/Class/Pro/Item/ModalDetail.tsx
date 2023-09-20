@@ -6,13 +6,16 @@ import { BsCalendarCheckFill } from 'react-icons/bs'
 import { FaBook, FaInfoCircle, FaUserTie } from 'react-icons/fa'
 import UpdateClassForm from '~/common/components/Class/ProClass/UpdateClassForm'
 import PrimaryButton from '~/common/components/Primary/Button'
-import { parseToMoney } from '~/common/utils/common'
+import { is, parseToMoney } from '~/common/utils/common'
 import ProClassInfoItem from '../Common/ProClassInfoItem'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const ModalDetail = (props) => {
 	const { data, onRefresh, academics, isDesktop, isMobile } = props
 
 	const [visible, setVisible] = useState<boolean>(false)
+	const userInfo = useSelector((state: RootState) => state.user.information)
 
 	function viewDetails() {
 		Router.push({
@@ -73,7 +76,9 @@ const ModalDetail = (props) => {
 				onCancel={() => setVisible(false)}
 				footer={
 					<div className="flex item-center justify-center">
-						<UpdateClassForm onRefresh={onRefresh} dataRow={data} academic={academics} onShow={() => setVisible(false)} isPro isDetail />
+						{is(userInfo).admin && (
+							<UpdateClassForm onRefresh={onRefresh} dataRow={data} academic={academics} onShow={() => setVisible(false)} isPro isDetail />
+						)}
 						<PrimaryButton onClick={viewDetails} icon="enter" background="blue" type="button">
 							Vào lớp
 						</PrimaryButton>

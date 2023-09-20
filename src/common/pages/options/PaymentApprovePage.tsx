@@ -22,9 +22,8 @@ import { RootState } from '~/store'
 
 const PAGE_SIZE = 10
 
-
 const PaymentApprovePage = () => {
-	const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '', 'baseSearch.status': 0 }
+	const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '', status: 0 }
 	const [dataPaymentApprove, setDataPaymentApprove] = useState<any>()
 	const [paymentStatus, setPaymentStatus] = useState<TabCompData[]>()
 	const [statusSelected, setStatusSelected] = useState<number>(0)
@@ -131,15 +130,9 @@ const PaymentApprovePage = () => {
 			render: (text) => <p className="font-semibold">{text}</p>
 		},
 		{
-			title: 'Họ tên',
+			title: 'Người yêu cầu',
 			dataIndex: 'FullName',
-			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
-		},
-		{
-			width: 120,
-			title: 'Mã học viên',
-			dataIndex: 'UserCode',
-			render: (text) => <p className="font-semibold">{text}</p>
+			render: (text, item) => <div className="font-semibold text-[#1b73e8]">{text}</div>
 		},
 		{
 			title: 'Thêm lúc',
@@ -214,7 +207,7 @@ const PaymentApprovePage = () => {
 	const handleSelecStatus = (status: number) => {
 		if (statusSelected !== status) {
 			setStatusSelected(status)
-			setTodoApi({ ...todoApi, 'baseSearch.status': status })
+			setTodoApi({ ...todoApi, status: status })
 		}
 	}
 

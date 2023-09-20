@@ -126,13 +126,13 @@
 }
 
 .btn-class-info {
-	@apply w-[30px] h-[30px] bg-[#fff] rounded-[6px] shadow-sm cursor-pointer absolute top-[8px] right-[48px];
+	@apply w-[30px] h-[30px] bg-[#fff] rounded-[6px] shadow-sm cursor-pointer absolute top-[8px] right-[8px];
 	@apply flex items-center justify-center text-[#1b73e8];
 	border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .pro-class-menu {
-	@apply absolute top-[8px] right-[8px] cursor-pointer duration-300;
+	@apply absolute top-[8px] right-[48px] cursor-pointer duration-300;
 	@apply w-[30px] h-[30px] bg-[#fff] rounded-[6px] shadow-sm;
 
 	border: 1px solid rgba(0, 0, 0, 0.1);

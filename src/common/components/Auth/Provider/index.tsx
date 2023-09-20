@@ -34,7 +34,7 @@ function AuthProvider({ children }: IAuthLayout) {
 			router.pathname.search('login') < 1 &&
 			router.pathname.search('fogot-password') < 1 &&
 			router.pathname.search('reset-password') < 1 &&
-			router.pathname.search('register') < 1&&
+			router.pathname.search('register') < 1 &&
 			router.pathname.search('verify') < 1
 		) {
 			return false
@@ -98,12 +98,8 @@ function AuthProvider({ children }: IAuthLayout) {
 	}
 
 	async function checkLogin() {
-		console.log('--------------------------------- checkLogin -------')
-
 		try {
 			const response = await JSON.parse(localStorage.getItem('userData'))
-
-			console.log('--- response: ', response)
 
 			if (!!response?.theRefresh) {
 				const theRefresh = response.theRefresh
@@ -118,19 +114,12 @@ function AuthProvider({ children }: IAuthLayout) {
 						if (checkTimestamp(new Date(theRefresh?.refreshTokenExpires).getTime())) {
 							_refreshToken({ RefreshToken: theRefresh?.refreshToken, token: response?.token })
 						} else {
-							console.log('--------------------------------- ĐI QUA BAO NHIÊU THĂNG TRẦM -------')
-							console.log('---- userInformation: ', userInformation)
-
 							if (!userInformation) {
-								console.log('----------------- !userInformation ---------------')
-
 								dispatch(setUser(response?.user))
 								dispatch(setAuthData(response?.user))
 								dispatch(setRefreshToken(response?.theRefresh))
 								dispatch(setAuthLoading(false))
 							}
-
-							console.log('---- userInformation: ', userInformation)
 						}
 					}
 				}

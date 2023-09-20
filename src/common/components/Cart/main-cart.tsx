@@ -384,6 +384,7 @@ const MainCart = () => {
 									onKeyUp={(e) => {
 										if (e.keyCode === 13) applyDiscount(textDiscount)
 									}}
+									placeholder="Mã khuyến mãi"
 									value={textDiscount}
 									onChange={(event) => setTextDiscount(event.target?.value)}
 									className="primary-input text-[18px] flex-1"

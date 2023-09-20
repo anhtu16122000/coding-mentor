@@ -77,7 +77,8 @@ export const SalaryConfigPage = () => {
 		},
 		{
 			title: 'Ghi chú',
-			dataIndex: 'Note'
+			dataIndex: 'Note',
+			render: (text) => <div className="min-w-[80px]">{text}</div>
 		},
 		{
 			fixed: 'right',

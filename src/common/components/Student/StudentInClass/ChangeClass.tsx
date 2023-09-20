@@ -363,6 +363,7 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 
 					<Form.Item className="col-span-2" label="Ngày hẹn trả" name="PaymentAppointmentDate" rules={formNoneRequired}>
 						<DatePicker
+							format="DD/MM/YYYY"
 							style={{ borderRadius: 6, width: '100%', height: 36, alignItems: 'center', display: 'flex' }}
 							placeholder="Ngày hẹn trả"
 						/>

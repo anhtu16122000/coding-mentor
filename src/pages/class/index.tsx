@@ -5,8 +5,6 @@ import appConfigs from '~/appConfig'
 import MainLayout from '~/common/components/MainLayout'
 import ListClassPro from '~/common/pages/Class/Pro/ListClassPro'
 
- 
-
 const ListClass = () => {
 	return (
 		<>

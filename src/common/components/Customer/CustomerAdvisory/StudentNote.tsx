@@ -4,7 +4,7 @@ import moment from 'moment'
 import { Modal, Tooltip, Form, Table } from 'antd'
 import { customerAdviseApi } from '~/api/user/customer'
 import ReactHtmlParser from 'react-html-parser'
-import { ShowNoti, log } from '~/common/utils'
+import { ShowNoti } from '~/common/utils'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import DeleteTableRow from '../../Elements/DeleteTableRow'
 import TextBoxField from '../../FormControl/TextBoxField'
@@ -58,26 +58,8 @@ const _columnGrades = [
 ]
 
 const StudentNote = (props) => {
-	console.log('---- StudentNote: ', props)
-
-	const { currentUserIdUpdated, studentId, rowData } = props
+	const { studentId, rowData } = props
 	const [grades, setGrades] = useState([])
-
-	const handleGetGrades = async (studentId) => {
-		try {
-			const res = await customerAdviseApi.getStudentGrades({
-				studentId: studentId,
-				status: 2 // Đã chấm làm mới có data, chưa có nó toàn null
-			})
-			if (res.status == 200) {
-				setGrades([...res?.data?.data])
-			} else {
-				setGrades([])
-			}
-		} catch (err) {
-			ShowNoti('error', err.message)
-		}
-	}
 
 	const listTodoApi = {
 		studentId: studentId,
@@ -99,15 +81,8 @@ const StudentNote = (props) => {
 	}, [todoApi, studentId])
 
 	useEffect(() => {
-		handleGetGrades(studentId)
-	}, [])
-
-	useEffect(() => {
-		const isMatchUserId = currentUserIdUpdated?.current == studentId
-		if (isMatchUserId) {
-			handleGetGrades(studentId)
-		}
-	}, [currentUserIdUpdated?.current])
+		setGrades([{ ...rowData }])
+	}, [rowData])
 
 	const handleDelete = async (id) => {
 		try {
@@ -206,7 +181,7 @@ const StudentNote = (props) => {
 
 			<div className="flex items-start flex-col">
 				{/* Khi nó là bài ONLINE */}
-				{!Router.asPath.includes('/users/personnel') && rowData?.Type == 2 && <EntryHistories item={rowData} />}
+				{!Router.asPath.includes('/users/personnel') && rowData?.Type == 2 && <EntryHistories isEntry={true} item={rowData} />}
 
 				{/* Khi nó là bài OFFLINE */}
 				{!Router.asPath.includes('/users/personnel') && rowData?.Type == 1 && (
@@ -221,6 +196,7 @@ const StudentNote = (props) => {
 					Thêm ghi chú
 				</button>
 			</Tooltip>
+
 			<NestedTable addClass="basic-header" dataSource={data} columns={columns} haveBorder={true} />
 		</div>
 	)

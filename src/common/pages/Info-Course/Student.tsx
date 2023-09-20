@@ -16,7 +16,7 @@ import ImportStudent from '~/common/components/User/ImportStudent'
 import CreateUser from '~/common/components/User/user-form'
 import appConfigs from '~/appConfig'
 import { permissionApi } from '~/api/dev/permission'
-import { parseSelectArray } from '~/common/utils/common'
+import { is, parseSelectArray } from '~/common/utils/common'
 import { branchApi } from '~/api/manage/branch'
 import { setBranch } from '~/store/branchReducer'
 import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'
@@ -35,11 +35,12 @@ import { PrimaryTooltip, StudentNote } from '~/common/components'
 import Filters from '~/common/components/Student/Filters'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { exportAllStudentToExcel } from '~/common/utils/export-excel/students'
+import { forEach } from 'lodash'
 
 const Student: FC<IPersonnel> = (props) => {
 	const { reFresh, allowRegister, role } = props
 	const state = useSelector((state: RootState) => state)
-	const userInformation = useSelector((state: RootState) => state.user.information)
+	const userInfo = useSelector((state: RootState) => state.user.information)
 
 	const initParamters = {
 		sort: 0,
@@ -49,7 +50,7 @@ const Student: FC<IPersonnel> = (props) => {
 		PageIndex: 1,
 		RoleIds: role,
 		Search: null,
-		parentIds: userInformation?.RoleId == '8' ? userInformation.UserInformationId.toString() : ''
+		parentIds: is(userInfo).parent ? userInfo.UserInformationId.toString() : ''
 	}
 
 	const [apiParameters, setApiParameters] = useState(initParamters)
@@ -61,13 +62,9 @@ const Student: FC<IPersonnel> = (props) => {
 	const router = useRouter()
 	const dispatch = useDispatch()
 
-	function isManager() {
-		return userInformation?.RoleId == 4
-	}
-
 	const sale = useMemo(() => {
 		if (state.saler.Saler.length > 0) {
-			return parseSelectArray(state.saler.Saler, 'FullName', 'UserInformationId')
+			return parseSelectArray(state.saler.Saler, 'FullName', 'userInfoId')
 		}
 	}, [state.saler])
 
@@ -165,11 +162,24 @@ const Student: FC<IPersonnel> = (props) => {
 	const getRoleStaff = async () => {
 		try {
 			const res = await permissionApi.getRoleStaff()
-			if (res.status === 200) {
+			if (res.status == 200) {
 				const convertData = parseSelectArray(res.data.data, 'Name', 'Id')
-				setRoleStaff(convertData)
+
+				let temp = []
+
+				convertData.forEach((item) => {
+					if (is(userInfo).manager) {
+						if (item?.value != 1 && item?.value != 4) {
+							temp.push(item)
+						}
+					} else if (is(userInfo).admin) {
+						temp.push(item)
+					}
+				})
+
+				setRoleStaff(temp)
 			}
-			if (res.status === 204) {
+			if (res.status == 204) {
 				setRoleStaff([])
 			}
 		} catch (err) {
@@ -296,12 +306,12 @@ const Student: FC<IPersonnel> = (props) => {
 							type="button"
 							icon={'eye'}
 							color="blue"
-							onClick={() => router.push({ pathname: '/info-course/student/detail', query: { StudentID: item.UserInformationId } })}
+							onClick={() => router.push({ pathname: '/info-course/student/detail', query: { StudentID: item.userInfoId } })}
 							className=""
 							tooltip="Chi tiết"
 						/> */}
 
-						{isAdmin() && (
+						{is(userInfo).admin && (
 							<>
 								<CreateUser
 									isEdit
@@ -311,11 +321,14 @@ const Student: FC<IPersonnel> = (props) => {
 									onRefresh={() => getUsers(apiParameters)}
 									isStudent={false}
 								/>
-								<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.UserInformationId)} />
+								<DeleteTableRow
+									text={`${item.RoleName} ${item.FullName}`}
+									handleDelete={() => deleteUser(item?.userInfoId || item?.UserInformationId)}
+								/>
 							</>
 						)}
 
-						{isManager() && item?.RoleId !== 1 && item?.RoleId !== 4 && (
+						{is(userInfo).manager && item?.RoleId !== 1 && item?.RoleId !== 4 && (
 							<>
 								<CreateUser
 									isEdit
@@ -325,7 +338,10 @@ const Student: FC<IPersonnel> = (props) => {
 									onRefresh={() => getUsers(apiParameters)}
 									isStudent={false}
 								/>
-								<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.UserInformationId)} />
+								<DeleteTableRow
+									text={`${item.RoleName} ${item.FullName}`}
+									handleDelete={() => deleteUser(item?.userInfoId || item?.UserInformationId)}
+								/>
 							</>
 						)}
 					</div>
@@ -401,13 +417,13 @@ const Student: FC<IPersonnel> = (props) => {
 								onClick={() => {
 									router.push({
 										pathname: '/info-course/student/detail',
-										query: { StudentID: item.UserInformationId }
+										query: { StudentID: item?.userInfoId || item?.UserInformationId }
 									})
 								}}
 							/>
 						</PrimaryTooltip>
 
-						{role !== 3 && isAdmin() && (
+						{role !== 3 && is(userInfo).admin && (
 							<CreateUser
 								isEdit
 								roleStaff={roleStaff}
@@ -418,7 +434,7 @@ const Student: FC<IPersonnel> = (props) => {
 							/>
 						)}
 
-						{role == 3 && isAdmin() && (
+						{role == 3 && is(userInfo).admin && (
 							<CreateUser
 								isEdit
 								roleStaff={roleStaff}
@@ -432,13 +448,13 @@ const Student: FC<IPersonnel> = (props) => {
 								isStudent={true}
 							/>
 						)}
-						{isAdmin() && (
-							<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.UserInformationId)} />
+						{is(userInfo).admin && (
+							<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.userInfoId)} />
 						)}
 
-						{isAdmin() && (
+						{is(userInfo).admin && (
 							<IconButton
-								onClick={() => router.push({ pathname: '/training-student', query: { StudentID: item?.UserInformationId } })}
+								onClick={() => router.push({ pathname: '/training-student', query: { StudentID: item?.userInfoId } })}
 								type="button"
 								background="transparent"
 								color="blue"
@@ -468,32 +484,12 @@ const Student: FC<IPersonnel> = (props) => {
 		}
 	}
 
-	function isAdmin() {
-		return userInformation?.RoleId == 1
-	}
-
-	function isTeacher() {
-		return userInformation?.RoleId == 2
-	}
-
-	function isStdent() {
-		return userInformation?.RoleId == 3
-	}
-
-	function isAccountant() {
-		return userInformation?.RoleId == 6
-	}
-
-	function isAcademic() {
-		return userInformation?.RoleId == 7
-	}
-
 	const [visible, setVisible] = useState(false)
 
 	const expandedRowRender = (data) => {
 		return (
 			<div className="w-[1000px]">
-				<StudentNote studentId={data?.UserInformationId} />
+				<StudentNote studentId={data?.userInfoId} />
 			</div>
 		)
 	}
@@ -511,7 +507,7 @@ const Student: FC<IPersonnel> = (props) => {
 	const ButtonManager = () => {
 		return (
 			<>
-				{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
+				{role == 3 && (is(userInfo).admin || is(userInfo).manager || is(userInfo).academic) && (
 					<PrimaryButton
 						loading={loadingAllow}
 						className="mr-2 btn-block-registration"
@@ -524,7 +520,7 @@ const Student: FC<IPersonnel> = (props) => {
 					</PrimaryButton>
 				)}
 
-				{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
+				{role == 3 && (is(userInfo).admin || is(userInfo).manager || is(userInfo).academic) && (
 					<PrimaryButton
 						className="mr-2 btn-download"
 						type="button"
@@ -536,9 +532,9 @@ const Student: FC<IPersonnel> = (props) => {
 					</PrimaryButton>
 				)}
 
-				{role == 3 && isAdmin() && <ImportStudent className="mr-1 btn-import" onFetchData={() => getUsers(apiParameters)} />}
+				{role == 3 && is(userInfo).admin && <ImportStudent className="mr-1 btn-import" onFetchData={() => getUsers(apiParameters)} />}
 
-				{(isAdmin() || isManager() || isAcademic()) && (
+				{(is(userInfo).admin || is(userInfo).manager || is(userInfo).academic) && (
 					<PrimaryButton
 						className="mr-2 btn-block-registration"
 						type="button"
@@ -551,7 +547,7 @@ const Student: FC<IPersonnel> = (props) => {
 					</PrimaryButton>
 				)}
 
-				{role == 3 && (isAdmin() || isManager() || isAcademic()) && (
+				{role == 3 && (is(userInfo).admin || is(userInfo).manager || is(userInfo).academic) && (
 					<CreateUser
 						roleStaff={roleStaff}
 						source={source}
@@ -564,7 +560,7 @@ const Student: FC<IPersonnel> = (props) => {
 					/>
 				)}
 
-				{role !== 3 && (isAdmin() || isManager() || isAcademic()) && (
+				{role !== 3 && (is(userInfo).admin || is(userInfo).manager || is(userInfo).academic) && (
 					<CreateUser roleStaff={roleStaff} className="btn-create" onRefresh={() => getUsers(apiParameters)} isStudent={false} />
 				)}
 			</>

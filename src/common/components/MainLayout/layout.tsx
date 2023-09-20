@@ -172,9 +172,9 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 		)
 	}
 
-	useEffect(() => {
-		console.log('---- globalBreadcrumb: ', globalBreadcrumb)
-	}, [globalBreadcrumb])
+	// useEffect(() => {
+	// 	console.log('---- globalBreadcrumb: ', globalBreadcrumb)
+	// }, [globalBreadcrumb])
 
 	return (
 		<div className={`app ${is.parent ? 'simple-menu-pro' : ''}`}>
