@@ -1062,8 +1062,47 @@ button {
 		&.ant-select-item-option-selected-blue {
 			height: 100px;
 		}
-	.ant-select-arrow {
+		.ant-select-arrow {
 			top: 40% !important;
 		}
+	}
+}
+.html-button-verify-code {
+	.ant-spin-dot-item {
+		background-color: #fff;
+	}
+}
+.antd-input-register {
+	height: 40px;
+	width: 100%;
+	border-radius: 6px;
+}
+.login-form {
+	.ant-checkbox-wrapper {
+		padding: 10px 0;
+		opacity: 0;
+		visibility: hidden;
+		overflow: hidden;
+		height: 0;
+	}
+	.ant-checkbox-wrapper > span {
+		font-size: 15px;
+	}
+	@media screen and (max-width: 1200px) {
+		.sen-mail {
+			display: none;
+		}
+		.ant-checkbox-wrapper {
+			visibility: visible;
+			opacity: 1;
+			overflow: visible;
+			height: 100%;
+		}
+	}
+}
+
+.verify-code-container {
+	@media screen and (max-width: 999px) {
+		max-width: 600px;
 	}
 }

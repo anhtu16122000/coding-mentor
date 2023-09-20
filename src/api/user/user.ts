@@ -86,6 +86,14 @@ export const registerApi = {
 		return instance.post<IApiResultData<any>>('/api/Register/', params, {})
 	}
 }
+export const verifyApi = {
+	verify(params) {
+		return instance.post<IApiResultData<any>>(`api/ConfirmOTP?userId=${params.userId}&Otp=${params.Otp}`, {})
+	},
+	reSenOPT(params) {
+		return instance.post<IApiResultData<any>>(`api/ReSendOTP?userId=${params}`, {})
+	}
+}
 
 export const accountApi = {
 	changePassword(params) {

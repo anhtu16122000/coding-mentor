@@ -3,6 +3,7 @@ function path(root: string, sublink: string) {
 }
 
 const ROOTS_FINANCE = '/finance'
+export const ROOTS_VERIFY = '/verify'
 
 export const PATH_FINANCE = {
 	root: ROOTS_FINANCE,
