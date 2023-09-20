@@ -99,7 +99,8 @@ const HomeWork = () => {
 	const is = {
 		parent: userInfo?.RoleId == '8',
 		admin: userInfo?.RoleId == '1',
-		teacher: userInfo?.RoleId == '2'
+		teacher: userInfo?.RoleId == '2',
+		student: userInfo?.RoleId == '3'
 	}
 
 	const columns = [
@@ -183,14 +184,16 @@ const HomeWork = () => {
 							</PrimaryTooltip>
 						)}
 
-						<PrimaryTooltip place="left" id={`hw-take-${item?.Id}`} content="Làm bài">
-							<div
-								onClick={() => getDraft(item?.IeltsExamId, item?.Id)}
-								className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
-							>
-								<TbWritingSign size={22} />
-							</div>
-						</PrimaryTooltip>
+						{is.student && (
+							<PrimaryTooltip place="left" id={`hw-take-${item?.Id}`} content="Làm bài">
+								<div
+									onClick={() => getDraft(item?.IeltsExamId, item?.Id)}
+									className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+								>
+									<TbWritingSign size={22} />
+								</div>
+							</PrimaryTooltip>
+						)}
 
 						<PrimaryTooltip place="left" id={`hw-his-${item?.Id}`} content="Lịch sử làm bài">
 							<div

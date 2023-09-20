@@ -1,5 +1,5 @@
 import React from 'react'
-import { parseToMoney } from '~/common/utils/common'
+import { is, parseToMoney } from '~/common/utils/common'
 import AvatarComponent from '~/common/components/AvatarComponent'
 import moment from 'moment'
 import { FaUserGraduate } from 'react-icons/fa'
@@ -9,6 +9,8 @@ import ProClassType from '../Common/ProClassType'
 import { viewClassDetails } from '../utils/functions'
 import ModalDetail from './ModalDetail'
 import ProClassMenu from '../Common/ProClassMenu'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 function getStrDate(date) {
 	if (!date) return 'Không xác định'
@@ -20,6 +22,8 @@ const CardGrid = (props) => {
 
 	const isNotFull = parseInt(item?.TotalStudent || 0) < parseInt(item?.MaxQuantity || 0)
 
+	const userInfo = useSelector((state: RootState) => state.user.information)
+
 	function viewDetails() {
 		viewClassDetails(item)
 	}
@@ -28,7 +32,7 @@ const CardGrid = (props) => {
 		<div className="card-class-item bg-[#fff] hover:!border-[#b7b7b7] cursor-pointer">
 			<ModalDetail data={item} onRefresh={onRefresh} academics={academics} isDesktop isMobile />
 
-			<ProClassMenu data={item} onRefresh={onRefresh} academics={academics} />
+			{(is(userInfo).admin || is(userInfo).manager) && <ProClassMenu data={item} onRefresh={onRefresh} academics={academics} />}
 
 			<div onClick={viewDetails}>
 				<AvatarComponent url={item.Thumbnail} type="class" className="class-thubmnail" />

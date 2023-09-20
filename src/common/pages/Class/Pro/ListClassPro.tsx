@@ -65,23 +65,26 @@ const ListClassPro = () => {
 	const totalClassState = useSelector((state: RootState) => state.class.totalClass)
 
 	const userInfo = useSelector((state: RootState) => state.user.information)
+
 	const is = {
-		parent: userInfo?.RoleId === '8',
-		admin: userInfo?.RoleId === '1'
+		parent: userInfo?.RoleId == '8',
+		admin: userInfo?.RoleId == '1',
+		manager: userInfo?.RoleId == '4'
 	}
 
 	useEffect(() => {
-		if (is.admin) {
+		if (is.admin || is.manager) {
 			getAllBranchs()
 			getAcademics()
 		}
 	}, [])
 
 	useEffect(() => {
-		if (is.parent) {
+		if (is.parent || is.manager) {
 			getStudents()
 		}
-		if (is.admin) {
+
+		if (is.admin || is.manager) {
 			getAllBranchs()
 			getAcademics()
 		}
@@ -259,7 +262,7 @@ const ListClassPro = () => {
 	const [academics, setAcademics] = useState([])
 
 	const getAcademics = async () => {
-		if (is.admin) {
+		if (is.admin || is.manager) {
 			try {
 				const res = await userInformationApi.getAll({ roleIds: '7' })
 				if (res.status == 200) {

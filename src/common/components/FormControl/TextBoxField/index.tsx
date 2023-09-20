@@ -1,13 +1,13 @@
-import { Form } from 'antd'
-import TextArea from 'antd/lib/input/TextArea'
+import { Form, Input } from 'antd'
 
 export default function TextBoxField(props: ITextBoxField) {
 	const { style, label, isRequired, className, allowClear, placeholder, disabled, name, rules, rows, maxLength, onChange } = props
+
 	return (
 		<Form.Item name={name} style={style} label={label} className={`${className}`} required={isRequired} rules={rules}>
-			<TextArea
-				className={`${className}`}
-				rows={rows || 6}
+			<Input.TextArea
+				className={`primary-input !h-auto ${className}`}
+				rows={rows || 5}
 				allowClear={allowClear}
 				placeholder={placeholder}
 				disabled={disabled}

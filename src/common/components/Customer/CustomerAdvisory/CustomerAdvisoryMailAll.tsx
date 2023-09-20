@@ -62,14 +62,11 @@ const CustomerAdvisoryMailAll = () => {
 	const onSubmit = async (data) => {
 		if (data.Ids.length > 0) {
 			try {
-				const DATA_SUBMIT = {
-					...data,
-					Ids: data.Ids.join(',')
-				}
+				const DATA_SUBMIT = { ...data, Ids: data.Ids.join(',') }
 				const res = await customerAdviseApi.sendEmail(DATA_SUBMIT)
-				if (res.status === 200) {
+				if (res.status == 200) {
 					ShowNoti('success', res.data.message)
-					router.push('/users/customer')
+					router.push('/leads')
 				}
 			} catch (err) {
 				ShowNoti('error', err.message)

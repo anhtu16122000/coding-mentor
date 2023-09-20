@@ -4,6 +4,7 @@ import PrimaryTable from '~/common/components/Primary/Table'
 import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { parseToMoney } from '~/common/utils/common'
+import ServiceAppointmentTest from '../Info-Course/ServiceAppointmentTest'
 
 type ITabTestAppointment = {
 	StudentDetail: IUserResponse
@@ -106,13 +107,14 @@ export const TabTestAppointment: React.FC<ITabTestAppointment> = ({ StudentDetai
 	]
 	return (
 		<>
-			<PrimaryTable
+			{/* <PrimaryTable
 				loading={loading}
 				total={totalRow}
 				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
 				data={dataTable}
 				columns={columns}
-			/>
+			/> */}
+			<ServiceAppointmentTest student={StudentDetail} />
 		</>
 	)
 }

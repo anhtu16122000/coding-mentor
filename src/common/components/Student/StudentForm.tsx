@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { testAppointmentApi } from '~/api/learn/test-appointment'
 import { ShowNoti } from '~/common/utils'
-import { parseSelectArray, parseSelectArrayUser } from '~/common/utils/common'
+import { is, parseSelectArray, parseSelectArrayUser } from '~/common/utils/common'
 import { RootState } from '~/store'
 import DatePickerField from '../FormControl/DatePickerField'
 import SelectField from '../FormControl/SelectField'
@@ -25,6 +25,8 @@ const StudentForm = (props) => {
 
 	const [listStudent, setListStudent] = useState([])
 	const [listTeacher, setListTeacher] = useState([])
+
+	const userInfo = useSelector((state: RootState) => state.user.information)
 
 	let schema = yup.object().shape({
 		BranchId: yup.string().required('Bạn không được để trống'),
@@ -75,7 +77,7 @@ const StudentForm = (props) => {
 		try {
 			const res = await userInformationApi.getAvailableUser({ roleId: 2, branchId: branchId })
 			if (res.status == 200) {
-				setListTeacher(parseSelectArrayUser(res.data.data, 'FullName', 'UserCode', 'UserInformationId'))
+				setListTeacher(parseSelectArrayUser(res.data.data, 'UserCode', 'FullName', 'UserInformationId'))
 			} else {
 				setListTeacher([])
 			}
@@ -198,8 +200,15 @@ const StudentForm = (props) => {
 								rules={[yupSync]}
 							/>
 						</div>
+
 						<div className="col-md-6 col-12">
-							<SelectField name="TeacherId" label="Giáo viên test" placeholder="Chọn giáo viên" optionList={listTeacher} />
+							<SelectField
+								disabled={!is(userInfo).admin && !is(userInfo).manager}
+								name="TeacherId"
+								label="Giáo viên test"
+								placeholder="Chọn giáo viên"
+								optionList={listTeacher}
+							/>
 						</div>
 
 						<div className="col-md-6 col-12">

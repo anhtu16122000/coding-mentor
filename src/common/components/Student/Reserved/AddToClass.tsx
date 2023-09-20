@@ -167,7 +167,12 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
 					onFinish={onFinish}
 					autoComplete="on"
 				>
-					<Form.Item className="col-span-2 ant-select-class-selected" name="ClassId" label="Lớp chuyển đến" rules={formRequired}>
+					<Form.Item
+						className="col-span-2 ant-select-class-selected ant-quis-custom"
+						name="ClassId"
+						label="Lớp chuyển đến"
+						rules={formRequired}
+					>
 						<Select disabled={loading} placeholder="Chọn lớp" className="ant-select-item-option-selected-blue">
 							{classes.map((thisClass) => {
 								return (

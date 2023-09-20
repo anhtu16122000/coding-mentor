@@ -1,5 +1,5 @@
 import React from 'react'
-import { parseToMoney } from '~/common/utils/common'
+import { is, parseToMoney } from '~/common/utils/common'
 import AvatarComponent from '~/common/components/AvatarComponent'
 import moment from 'moment'
 import { MdRemoveRedEye } from 'react-icons/md'
@@ -9,6 +9,8 @@ import ProClassInfoItem from '../Common/ProClassInfoItem'
 import ProClassType from '../Common/ProClassType'
 import { viewClassDetails } from '../utils/functions'
 import ProClassMenu from '../Common/ProClassMenu'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 function getStrDate(date) {
 	if (!date) return 'Không xác định'
@@ -17,6 +19,7 @@ function getStrDate(date) {
 
 const CardList = (props) => {
 	const { item, onRefresh, academics, onUpdate } = props
+	const userInfo = useSelector((state: RootState) => state.user.information)
 
 	function viewDetails() {
 		viewClassDetails(item)
@@ -44,6 +47,7 @@ const CardList = (props) => {
 
 					<div className="mt-[16px] flex items-center w600:hidden">
 						<ModalDetail data={item} onRefresh={onRefresh} academics={academics} isMobile />
+
 						<div
 							onClick={viewDetails}
 							className={`ml-[8px] flex items-center flex-shrink-0 bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff] px-[8px] h-[30px] rounded-[6px]`}
@@ -56,14 +60,12 @@ const CardList = (props) => {
 			</div>
 
 			<ModalDetail data={item} onRefresh={onRefresh} academics={academics} isDesktop />
-
-			<ProClassMenu data={item} onRefresh={onRefresh} academics={academics} />
+			{(is(userInfo).admin || is(userInfo).manager) && <ProClassMenu data={item} onRefresh={onRefresh} academics={academics} />}
 
 			<div onClick={viewDetails} className="ml-[8px] col-span-2 hidden w1500:block">
 				<ProClassInfoItem title="Bắt đầu" value={getStrDate(item.StartDay)} />
 				<ProClassInfoItem title="Kết thúc" value={getStrDate(item.EndDay)} />
 			</div>
-
 			<div onClick={viewDetails} className="ml-[8px] col-span-2 hidden w700:block">
 				{!!item?.Price && <ProClassInfoItem title="Giá" value={`${parseToMoney(item?.Price)}đ`} />}
 				{!item?.Price && <ProClassInfoItem title="Giá" value="Miễn phí" />}

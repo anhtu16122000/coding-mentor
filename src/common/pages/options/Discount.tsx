@@ -24,6 +24,7 @@ const Discount = () => {
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
 	const [totalPage, setTotalPage] = useState(null)
 	const [currentPage, setCurrentPage] = useState(1)
+	const [data, setData] = useState([])
 
 	// PARAMS API GETALL
 	const listTodoApi = {
@@ -40,10 +41,12 @@ const Discount = () => {
 			let res = await discountApi.getAll(todoApi)
 			if (res.status == 200) {
 				dispatch(setDiscount(res.data.data))
+				setData(res.data.data)
 				setTotalPage(res.data.totalRow)
 			}
 			if (res.status == 204) {
 				dispatch(setDiscount([]))
+				setData([])
 			}
 		} catch (error) {
 			ShowNoti('error', error.message)
@@ -257,7 +260,7 @@ const Discount = () => {
 							totalPage={totalPage && totalPage}
 							getPagination={getPagination}
 							TitleCard={(isAdmin() || isManager()) && <DiscountForm setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
-							dataSource={state.discount.Discount}
+							dataSource={data}
 							columns={columns}
 							expandable={expandedRowRender}
 						/>
