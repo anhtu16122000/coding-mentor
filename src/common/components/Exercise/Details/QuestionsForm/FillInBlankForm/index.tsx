@@ -174,8 +174,34 @@ const CreateTyping = (props) => {
 
 	function handleChangeContent(questIndex, ansIndex, params) {
 		var cloneData = [...questionWithAnswers]
-		cloneData[questIndex].IeltsAnswers[ansIndex].Content = params.target.value
-		setData([...cloneData])
+
+		// console.log('---- cloneData[questIndex].IeltsAnswers[ansIndex]: ', cloneData[questIndex].IeltsAnswers[ansIndex])
+
+		// cloneData[questIndex].IeltsAnswers[ansIndex].Content = params.target.value
+
+		let temp = []
+
+		for (let i = 0; i < cloneData.length; i++) {
+			if (!!cloneData[i].IeltsAnswers && cloneData[i].IeltsAnswers.length > 0) {
+				let tempAns = []
+
+				for (let j = 0; j < cloneData[i].IeltsAnswers.length; j++) {
+					const element = cloneData[i].IeltsAnswers[j]
+
+					if (i == questIndex && j == ansIndex) {
+						tempAns.push({ ...element, Content: params.target.value })
+					} else {
+						tempAns.push(element)
+					}
+				}
+
+				temp.push({ ...cloneData[i], IeltsAnswers: tempAns })
+			} else {
+				temp.push({ ...cloneData[i] })
+			}
+		}
+
+		setData([...temp])
 	}
 
 	return (

@@ -235,6 +235,23 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 	const editorRef = useRef(null)
 
+	// ----------------------------------------------------------------
+	const [rightHeight, setRightHeight] = useState(0)
+
+	useEffect(() => {
+		getRightHeight()
+	}, [isModalVisible])
+
+	async function getRightHeight() {
+		await wait(300)
+		const leftElement = document.getElementById('the-left-form')
+
+		if (leftElement) {
+			console.log('---- leftElement.offsetHeight: ', leftElement.offsetHeight)
+			setRightHeight(leftElement.offsetHeight)
+		}
+	}
+
 	return (
 		<>
 			<ButtonCreate />
@@ -259,7 +276,11 @@ const GroupForm: FC<IGroupForm> = (props) => {
 			>
 				<Form disabled={loading} form={form} layout="vertical" initialValues={{ remember: true }} onFinish={onFinish}>
 					<div className="grid grid-cols-8 gap-x-1">
-						<div className="col-span-8 w800:col-span-4 pr-[16px] grid grid-cols-4 gap-x-4" style={{ borderRight: '1px solid #0000002b' }}>
+						<div
+							id="the-left-form"
+							className="col-span-8 w800:col-span-4 pr-[16px] grid grid-cols-4 gap-x-4"
+							style={{ borderRight: '1px solid #0000002b' }}
+						>
 							<div id="the-baby-form" className="col-span-4 grid grid-cols-4 gap-x-4">
 								<Form.Item className="col-span-2" label="Tên nhóm" name="Name" rules={formRequired}>
 									<Input className="primary-input" placeholder="" />
@@ -305,6 +326,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 										height={350}
 										initialValue={defaultData?.Content || ''}
 										onChange={(event) => form.setFieldValue('Content', event)}
+										onInit={getRightHeight}
 									/>
 								</Form.Item>
 							)}
@@ -315,7 +337,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 							)}
 						</div>
 
-						<div className="cc-group-quest-list">
+						<div className="cc-group-quest-list" style={{ height: rightHeight }}>
 							{textError && <div className="mb-2 text-danger">{textError}</div>}
 
 							{currentType == QUESTION_TYPES.MultipleChoice && <MultipleChoiceForm />}

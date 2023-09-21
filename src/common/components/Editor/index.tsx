@@ -28,6 +28,8 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 	function _init(evt, editor) {
 		editorRef.current = editor
 		setLoading(false)
+
+		!!onInit && onInit()
 	}
 
 	const quest = useSelector((state: RootState) => state.createQuestion.Questions)
