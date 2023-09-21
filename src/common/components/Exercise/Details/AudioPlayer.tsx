@@ -1,7 +1,6 @@
 import React from 'react'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import { IoCloseSharp } from 'react-icons/io5'
-import { VscSettings } from 'react-icons/vsc'
 import AudioPlayer from 'react-h5-audio-player'
 import { FaMinus } from 'react-icons/fa'
 import { TbArrowsMaximize } from 'react-icons/tb'
@@ -16,7 +15,7 @@ const MainAudioPlayer = (props) => {
 					<AudioPlayer
 						className="h-[94px] duration-200 !w-[calc(100vw-32px)] w400:!w-[350px] hide-loop"
 						src={curAudio?.Audio}
-						onPlay={(e) => console.log('onPlay')}
+						onPlay={(e) => {}}
 						showSkipControls={false}
 						showDownloadProgress={false}
 						showJumpControls={false}

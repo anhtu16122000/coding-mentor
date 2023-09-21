@@ -227,6 +227,7 @@ function ExamDetail() {
 			getSections()
 			heightChange()
 		}
+		setCurAudio(null)
 	}, [currentSkill])
 
 	useEffect(() => {
