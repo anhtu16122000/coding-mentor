@@ -1,7 +1,6 @@
 import { Form, Modal, Skeleton, Tabs, TabsProps, Tooltip } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { FiUpload } from 'react-icons/fi'
 import { useSelector } from 'react-redux'
 import { userInformationApi } from '~/api/user/user'
 import UploadImageField from '~/common/components/FormControl/UploadImageField'
@@ -19,6 +18,8 @@ import { TabTestAppointment } from './TabTestAppointment'
 import { StudentNote } from '~/common/components'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
+import { BsFillCameraFill } from 'react-icons/bs'
+import Avatar from '~/common/components/Avatar'
 
 export interface IStudentDetailInfoPageProps {}
 
@@ -170,11 +171,17 @@ export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps
 								<div className="name">{studentDetail.FullName}</div>
 								<span className="email">{studentDetail.Email}</span>
 							</div>
-							<div className="avatar">
-								<img src={studentDetail.Avatar || '/default-avatar.png'} alt="" />
-								<div className="overlay" onClick={() => setIsVisibleModal(true)}>
+
+							<div className="avatar relative">
+								<div className="bg-[#ffffff] rounded-full p-[5px] shadow-sm m-[4px]">
+									<Avatar uri={studentDetail?.Avatar} alt="user-avt" className="rounded-full shadow-sm" />
+								</div>
+								<div
+									className="bottom-[8px] border-[2px] border-[#fff] shadow-sm absolute flex items-center justify-center right-[8px] bg-[#3d88ec] rounded-full w-[36px] h-[36px]"
+									onClick={() => setIsVisibleModal(true)}
+								>
 									<Tooltip title="Tải ảnh lên">
-										<FiUpload size={30} color="#d9d9d9" />
+										<BsFillCameraFill size={20} color="#fff" />
 									</Tooltip>
 								</div>
 							</div>

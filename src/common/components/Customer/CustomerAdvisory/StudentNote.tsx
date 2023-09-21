@@ -11,6 +11,9 @@ import TextBoxField from '../../FormControl/TextBoxField'
 import ModalFooter from '../../ModalFooter'
 import Router from 'next/router'
 import EntryHistories from '~/common/pages/Info-Course/Histories'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
+import { is } from '~/common/utils/common'
 
 const sharedOnCell = (_, index) => {
 	if (index === 1) {
@@ -30,10 +33,7 @@ const _columnGrades = [
 	{
 		title: 'Speaking',
 		dataIndex: 'SpeakingPoint',
-		onCell: (_, index) => ({
-			colSpan: index === 1 ? 5 : 1
-		}),
-		render: (text, _, index) => (index === 1 ? <p className="whitespace-pre-wrap">{text}</p> : text)
+		render: (text, _, index) => <div className="whitespace-pre-wrap min-h-[21px]">{text}</div>
 	},
 	{
 		title: 'Reading',
@@ -73,6 +73,8 @@ const StudentNote = (props) => {
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState([])
 	const [columnGrades] = useState(_columnGrades)
+
+	const userInfo = useSelector((state: RootState) => state.user.information)
 
 	useEffect(() => {
 		if (studentId) {
@@ -116,7 +118,13 @@ const StudentNote = (props) => {
 		},
 		{
 			title: 'Chức năng',
-			render: (data) => <DeleteTableRow handleDelete={() => handleDelete(data?.Id)} />
+			render: (data) => (
+				<>
+					{(is(userInfo).admin || is(userInfo).manager || is(userInfo).teacher || is(userInfo).academic) && (
+						<DeleteTableRow handleDelete={() => handleDelete(data?.Id)} />
+					)}
+				</>
+			)
 		}
 	]
 
@@ -191,11 +199,13 @@ const StudentNote = (props) => {
 				)}
 			</div>
 
-			<Tooltip className="" title="Thêm ghi chú">
-				<button className="btn btn-warning" onClick={showModal}>
-					Thêm ghi chú
-				</button>
-			</Tooltip>
+			{(is(userInfo).admin || is(userInfo).manager || is(userInfo).teacher || is(userInfo).academic) && (
+				<Tooltip className="" title="Thêm ghi chú">
+					<button className="btn btn-warning" onClick={showModal}>
+						Thêm ghi chú
+					</button>
+				</Tooltip>
+			)}
 
 			<NestedTable addClass="basic-header" dataSource={data} columns={columns} haveBorder={true} />
 		</div>

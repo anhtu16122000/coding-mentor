@@ -225,9 +225,9 @@ export default function ServiceAppointmentTest(props) {
 	const getDataSource = async () => {
 		setIsLoading(true)
 		try {
-			let res = await testAppointmentApi.getAll({ ...todoApi, studentId: student?.UserInformationId })
+			let res = await testAppointmentApi.getAll(isStudent() ? { ...todoApi, studentId: student?.UserInformationId } : todoApi)
 			if (res.status === 200) {
-				if (userInformation?.RoleId === '8') {
+				if (userInformation?.RoleId == '8') {
 					if (todoApi.studentId) {
 						setDataSource(res.data.data)
 						setTotalPage(res.data.totalRow)

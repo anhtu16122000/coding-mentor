@@ -163,7 +163,6 @@ const EntryHistories = (props) => {
 	const TableEntryHistories = () => {
 		return (
 			<div className="mb-[24px]">
-				<div className="mb-[8px] font-[600] text-[16px]">Kết quả làm bài</div>
 				{data.map((result, index) => {
 					return <Table pagination={false} size="small" columns={_columnGrades} dataSource={data} />
 				})}
@@ -181,6 +180,8 @@ const EntryHistories = (props) => {
 
 			{isEntry && (
 				<>
+					<div className="mb-[8px] font-[600] text-[16px]">Kết quả làm bài</div>
+
 					{loadingResult && <Skeleton active paragraph={false} />}
 
 					{!loadingResult && data.length == 0 && <div className="tag red">Chưa làm bài</div>}
