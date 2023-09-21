@@ -1,35 +1,29 @@
 import React from 'react'
 import { MainLayout } from '~/common'
-import { Form, Modal, Skeleton, Tabs, TabsProps, Tooltip } from 'antd'
+import { Form, Modal, Skeleton, Tooltip } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { FiUpload } from 'react-icons/fi'
-import { useSelector } from 'react-redux'
 import { userInformationApi } from '~/api/user/user'
 import UploadImageField from '~/common/components/FormControl/UploadImageField'
 import PrimaryButton from '~/common/components/Primary/Button'
-import TabStudentContract from '~/common/components/Student/TabStudentContract'
 import TabStudentDetail from '~/common/components/Student/TabStudentDetail'
 import { ShowNoti } from '~/common/utils'
-import { RootState } from '~/store'
+import Avatar from '~/common/components/Avatar'
+import { BsFillCameraFill } from 'react-icons/bs'
 
-export interface IUserInfoDetailProps {}
+export default function UserInfoDetail() {
+	const router = useRouter()
+	const [form] = Form.useForm()
 
-export default function UserInfoDetail(props: IUserInfoDetailProps) {
 	const [studentDetail, setStudentDetail] = useState<IUserResponse>()
 	const [isVisibleModal, setIsVisibleModal] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
-	const router = useRouter()
-	const [form] = Form.useForm()
-	const userInformation = useSelector((state: RootState) => state.user.information)
 
 	const getStudentDetail = async () => {
 		try {
 			const res = await userInformationApi.getByID(router.query.UserID)
 			if (res.status === 200) {
 				setStudentDetail(res.data.data)
-			}
-			if (res.status === 204) {
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -76,20 +70,22 @@ export default function UserInfoDetail(props: IUserInfoDetailProps) {
 							<div className="name">{studentDetail.FullName}</div>
 							<span className="email">{studentDetail.Email}</span>
 						</div>
-						<div className="avatar">
-							<img src={studentDetail.Avatar} alt="" />
+
+						<div className="avatar relative">
+							<div className="bg-[#ffffff] rounded-full p-[5px] shadow-sm m-[4px]">
+								<Avatar uri={studentDetail?.Avatar} alt="user-avt" className="rounded-full shadow-sm" />
+							</div>
 							<div
-								className="overlay"
-								onClick={() => {
-									setIsVisibleModal(true)
-								}}
+								className="bottom-[8px] border-[2px] border-[#fff] shadow-sm absolute flex items-center justify-center right-[8px] bg-[#3d88ec] rounded-full w-[36px] h-[36px]"
+								onClick={() => setIsVisibleModal(true)}
 							>
 								<Tooltip title="Tải ảnh lên">
-									<FiUpload size={30} color="#d9d9d9" />
+									<BsFillCameraFill size={20} color="#fff" />
 								</Tooltip>
 							</div>
 						</div>
 					</div>
+
 					<div className="body">
 						<TabStudentDetail StudentDetail={studentDetail} />
 					</div>
