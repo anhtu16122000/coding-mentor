@@ -266,14 +266,13 @@ const Programs = () => {
 		},
 		{
 			title: 'Người tạo',
-			width: 110,
-			dataIndex: 'ModifiedBy'
+			dataIndex: 'CreatedBy',
+			render: (value: any) => <div className="min-w-[100px]">{value}</div>
 		},
 		{
 			title: 'Ngày tạo',
-			width: 150,
 			dataIndex: 'ModifiedOn',
-			render: (date: any) => moment(date).format('DD/MM/YYYY')
+			render: (date: any) => <div className="min-w-[170px]">{moment(date).format('DD/MM/YYYY')}</div>
 		},
 		{
 			title: 'Chức năng',
