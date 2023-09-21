@@ -50,6 +50,7 @@ const ModalCreateTrainingStudent = (props) => {
 			if (res.status == 200) {
 				ShowNostis.success('Thành công')
 				!!onRefresh && onRefresh()
+				form.resetFields()
 				setVisible(false)
 			}
 		} catch (error) {

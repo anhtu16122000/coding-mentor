@@ -22,6 +22,7 @@ import { trainingRouteFormApi } from '~/api/practice/TrainingRouteForm'
 import ModalCreateTrainingRouteForm from './ModalCreate'
 import TrainingRouteDetail from './Detail'
 import RenderItem from './RenderItem'
+import { ShowNoti } from '~/common/utils'
 
 const listTodoApi = {
 	pageSize: PAGE_SIZE,
@@ -121,6 +122,7 @@ const TrainingRouteForm = () => {
 			}
 		} catch (error) {
 			setLoading(false)
+			ShowNoti('error', error?.message)
 		}
 	}
 
