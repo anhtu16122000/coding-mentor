@@ -209,8 +209,12 @@
 
 .cc-group-quest-list {
 	@apply col-span-8 border-[rgba(0,0,0,0.2)] w800:col-span-4 w800:pl-4 w800-scrollable;
+}
 
-	//  w800:max-h-[420px]
+.rhap_container {
+	&:hover {
+		box-shadow: 0 0 3px 1px #137cde;
+	}
 }
 
 .cc-writing-testing {

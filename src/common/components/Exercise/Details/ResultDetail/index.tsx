@@ -424,6 +424,7 @@ function ResultDetail() {
 				<div className="flex-1 flex relative">
 					<MainAudioPlayer
 						curAudio={curAudio}
+						setCurAudio={setCurAudio}
 						showAudioControl={showAudioControl}
 						setShowAudioControl={setShowAudioControl}
 						curSection={currentSection}
