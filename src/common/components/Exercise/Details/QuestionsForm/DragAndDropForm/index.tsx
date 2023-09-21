@@ -1,19 +1,10 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
-import DraggableList from 'react-draggable-list'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
-import ReactHTMLParser from 'react-html-parser'
-import cx from 'classnames'
-import { setCurrentExerciseForm } from '~/store/globalState'
-import QestDragMenu from '../QuestDragMenu'
-import { QUESTION_TYPES } from '~/common/libs'
-import FormWriting from './form-drag'
-import FormSpeaking from './form-drag'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { log, wait } from '~/common/utils'
 import { Input, Skeleton } from 'antd'
 import { IoClose } from 'react-icons/io5'
-import { setQuestionsWithAnswers } from '~/store/createQuestion'
 import { useExamContext } from '~/common/components/Auth/Provider/exam'
 
 const CreateDragAndDrop = (props) => {
@@ -112,8 +103,6 @@ const CreateDragAndDrop = (props) => {
 		fuckingChanged()
 	}, [quest])
 
-	// log.Yellow('data', questionWithAnswers)
-
 	function removeItemAtIndex(array, index) {
 		const cloned = [...array]
 
@@ -133,8 +122,6 @@ const CreateDragAndDrop = (props) => {
 			}
 		}
 
-		console.log('---- removeItemAtIndex temp: ', temp)
-
 		return temp
 	}
 
@@ -142,6 +129,23 @@ const CreateDragAndDrop = (props) => {
 		var cloneData = [...questionWithAnswers]
 		cloneData[questIndex].IeltsAnswers[ansIndex].Content = params.target.value
 		setData([...cloneData])
+	}
+
+	// --------
+	function handleChangePoint(questIndex, params) {
+		var cloneData = [...questionWithAnswers]
+
+		let temp = []
+
+		for (let i = 0; i < cloneData.length; i++) {
+			if (questIndex == i) {
+				temp.push({ ...cloneData[i], Point: params.target.value })
+			} else {
+				temp.push({ ...cloneData[i] })
+			}
+		}
+
+		setData([...temp])
 	}
 
 	return (
@@ -155,7 +159,16 @@ const CreateDragAndDrop = (props) => {
 
 						return (
 							<div id={`the-quest-${thisQuest?.id}`} key={`f-quest-${questIndex}`} className="mt-[16px]">
-								<div className="mb-[4px] font-[600] text-[#3477c9]">Câu {questIndex + 1}</div>
+								<div className="mb-[16px] font-[600] text-[#3477c9]">
+									Câu {questIndex + 1}
+									<Input
+										onBlur={(e) => handleChangePoint(questIndex, e)}
+										defaultValue={thisQuest?.Point || ''}
+										id={thisQuest?.InputId || ''}
+										className="primary-input ml-[8px] w-[70px] !h-[30px]"
+										placeholder="Điểm"
+									/>
+								</div>
 
 								<div className="grid grid-cols-2 gap-4">
 									{thisQuest?.IeltsAnswers.map((item: any, ansIndex) => {

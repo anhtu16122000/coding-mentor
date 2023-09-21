@@ -1,73 +1,47 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Divider, Drawer, Empty, Modal, Popconfirm, Skeleton, Switch } from 'antd'
+import { Drawer, Modal, Switch } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { setGlobalBreadcrumbs } from '~/store/globalState'
 import Router, { useRouter } from 'next/router'
 import { RootState } from '~/store'
 import PrimaryButton from '../../../Primary/Button'
-import { HiOutlineBookOpen } from 'react-icons/hi'
 import { ieltsExamApi } from '~/api/IeltsExam'
-import { decode, wait } from '~/common/utils/common'
+import { wait } from '~/common/utils/common'
 import { ShowNostis, log } from '~/common/utils'
 import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
-import CreateExamSkill from '../ExamSkillNext/exam-skill-form'
-import ExamSkillItem from '../ExamSkillNext/exam-skill-item'
 import { ieltsSectionApi } from '~/api/IeltsExam/ieltsSection'
-import ExamSectionItem from '../ExamSkillNext/exam-section-item'
-import CreateExamSection from '../ExamSkillSection/exam-section-form'
 import ButtonQuestion from '../ButtonQuestion'
-import { MdArrowForwardIos, MdSettings } from 'react-icons/md'
+import { MdArrowForwardIos } from 'react-icons/md'
 import { BsFillGrid3X2GapFill } from 'react-icons/bs'
 import htmlParser from '../../../HtmlParser'
-import { ieltsGroupApi } from '~/api/IeltsExam/ieltsGroup'
 import TestingQuestions from '../../Testing/Questions'
-import ChoiceInputForm from '../QuestionsForm/MultipleChoiceForm/Form'
 import { setNewCurrentGroup } from '~/store/newExamReducer'
-import GroupForm from '../Group/form-group'
 import ExamProvider from '../../../Auth/Provider/exam'
 import { QUESTION_TYPES } from '~/common/libs'
 import DragHeader from '../Components/drag-header'
 import GroupContent from '../Components/group-content'
-import { IoClose, IoCloseSharp, IoPaperPlaneOutline } from 'react-icons/io5'
-import CurrentGroupController from '../Components/current-group-controller'
-
-import { AiFillControl } from 'react-icons/ai'
-import { VscSettings } from 'react-icons/vsc'
-import PrimaryTooltip from '../../../PrimaryTooltip'
+import { IoPaperPlaneOutline } from 'react-icons/io5'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
-
 import Lottie from 'react-lottie-player'
 import lottieFile from '~/common/components/json/animation_lludr9cs.json'
-import timer from '~/common/components/json/131525-timer.json'
-import CountdownTimer from '../Countdown'
 import { closeSubmitModal, openSubmitModal, setGlobalCurGroup, setSubmited, setSuperOverview, setTimeOut } from '~/store/take-an-exam'
 import TakeAnExamHeader from './Header'
 import TakeAnExamController from './Controller'
-import AudioPlayer from '../AudioPlayer'
 import MainAudioPlayer from '../AudioPlayer'
 import { FaTelegramPlane } from 'react-icons/fa'
 
 import submitAni from '~/common/components/json/110944-plane.json'
 import successAni from '~/common/components/json/134369-sucess.json'
-import timeupAni from '~/common/components/json/6640-times-up.json'
 import { examResultApi } from '~/api/exam/result'
-import { IoMdClose } from 'react-icons/io'
-import { EyeOutlined } from '@ant-design/icons'
 
 let curDragAnswers = []
-let dragSelectedAnswers = []
-
 let dragSelected = []
 
 function TakeAnExamDetail() {
 	const router = useRouter()
 	const dispatch = useDispatch()
 
-	// console.log('----------------------- curDragAnswers: ', curDragAnswers)
-
 	const user = useSelector((state: RootState) => state.user.information)
-
-	// const totalPoint = useSelector((state: RootState) => state.globalState.packageTotalPoint)
 
 	const [testInfo, setTestInfo] = useState(null)
 	const [loading, setLoading] = useState(true)
@@ -418,10 +392,6 @@ function TakeAnExamDetail() {
 	const [dragAns, setDragAns] = useState([])
 	const [timeStamp, setTimeStamp] = useState(0)
 
-	useEffect(() => {
-		console.log('--- dragAns: ', dragAns)
-	}, [dragAns])
-
 	async function formatInput() {
 		const inputs: any = document.getElementsByClassName('b-in')
 		const temp = [...inputs]
@@ -697,11 +667,9 @@ function TakeAnExamDetail() {
 
 	useEffect(() => {
 		if (curAudio?.Audio) {
-			ShowNostis.success(`Đang phát audio: ${curAudio?.Name}`)
+			ShowNostis.success(`Playing: ${curAudio?.Name}`)
 		}
 	}, [curAudio])
-
-	// ---------------------------------------
 
 	const [overview, setOverview] = useState(null)
 
@@ -875,7 +843,7 @@ function TakeAnExamDetail() {
 							</div>
 						</div>
 
-						{router?.asPath.includes('take-an-exam') && (
+						{router?.asPath.includes('take-an-exam') && testInfo?.Type != 1 && (
 							<div
 								onClick={() => dispatch(openSubmitModal())}
 								className="h-[34px] cursor-pointer no-select px-[8px] rounded-[6px] all-center text-[#fff] bg-[#1b73e8] hover:bg-[#1867cf]"
@@ -971,7 +939,7 @@ function TakeAnExamDetail() {
 
 							<PrimaryButton
 								className="ml-[8px]"
-								onClick={() => Router.replace(`/result/${submitData?.ID}`)}
+								onClick={() => Router.replace(`/exam-result/?test=${submitData?.Id}`)}
 								background="blue"
 								icon="eye"
 								type="button"

@@ -2,7 +2,7 @@ import Router from 'next/router'
 import React, { useState } from 'react'
 import ReactHTMLParser from 'react-html-parser'
 import { FaCheck } from 'react-icons/fa'
-import { TbLoader } from 'react-icons/tb'
+import { TbFileCertificate, TbLoader } from 'react-icons/tb'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import AudioRecord from '~/common/components/AudioRecord/AudioRecord'
 import MarkingExam from '~/common/components/Mark/MarkingExam/MarkingExam'
@@ -77,14 +77,18 @@ const SpeakingQuestion = (props) => {
 			<div className="exam-quest-wrapper none-selection">
 				{!Router.asPath.includes('questions') && (
 					<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
-						Câu {IndexInExam}
+						Question {IndexInExam}
+						<div className="cc-choice-point">
+							<TbFileCertificate size={12} className="mr-1" />
+							<div className="mt-[1px]">Point: {data?.Point || 0}</div>
+						</div>
 					</div>
 				)}
 				{ReactHTMLParser(data?.Content)}
 			</div>
 
 			<div>
-				<div className="font-[600] mb-2 mt-3">Câu trả lời</div>
+				<div className="font-[600] mb-2 mt-3">Answer</div>
 
 				<>
 					{!isResult && (
@@ -93,7 +97,6 @@ const SpeakingQuestion = (props) => {
 							linkRecord={getLinkRecorded()}
 							getLinkRecord={(linkRecord) => onChange(data.Id, linkRecord)}
 							packageResult={[]}
-							// dataQuestion={group}
 							exerciseID={data.Id}
 							getActiveID={() => {}}
 						/>
@@ -106,15 +109,6 @@ const SpeakingQuestion = (props) => {
 					)}
 
 					{!!isResult && !getLinkRecorded() && <div className="text-[red]">Không trả lời</div>}
-
-					{/* <div className="mt-4" style={{ display: 'flex' }}>
-							<UploadAudioField
-								isHideControl
-								getFile={(file: any) => onChange(exercise.ExerciseTopicId, file)}
-								link={getLinkRecorded(exerIndex)}
-							/>
-							<div style={{ marginTop: 5, marginLeft: 9 }}>(Phương thức dự phòng)</div>
-						</div> */}
 
 					{!!isResult && (
 						<div className="flex flex-col items-start mt-[16px]">

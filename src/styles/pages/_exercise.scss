@@ -695,3 +695,11 @@
 		background-color: #2ab849 !important;
 	}
 }
+
+.btn-sort-left {
+	@apply ml-[-2px] mr-[8px] w-[18px] h-[18px] bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff] all-center cursor-pointer rounded-full;
+}
+
+.btn-sort-right {
+	@apply mr-[-2px] ml-[8px] w-[18px] h-[18px] bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff] all-center cursor-pointer rounded-full;
+}

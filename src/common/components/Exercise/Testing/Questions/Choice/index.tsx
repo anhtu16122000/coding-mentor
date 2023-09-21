@@ -151,9 +151,6 @@ const Choice = (props) => {
 		return cor.length > 0 ? cor.join(', ') : ''
 	}
 
-	// ----------------------------------------------------------------
-	// Doing test
-
 	async function insertDetails(answer) {
 		if (!isDoing) {
 			return
@@ -232,11 +229,11 @@ const Choice = (props) => {
 		>
 			<div className="exam-quest-wrapper none-selection">
 				<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
-					{!Router.asPath.includes('questions') && <div className="mr-[8px]">Câu {indexInExam}</div>}
+					{!Router.asPath.includes('questions') && <div className="mr-[8px]">Question {indexInExam}</div>}
 
 					<div className="cc-choice-point !ml-0">
 						<TbFileCertificate size={12} className="mr-1" />
-						<div className="mt-[1px]">{data?.Point} điểm</div>
+						<div className="mt-[1px]">Point: {data?.Point || 0}</div>
 					</div>
 
 					{!!showEdit && (

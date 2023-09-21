@@ -162,6 +162,15 @@ const FormWriting: FC<IGroupForm> = (props) => {
 			>
 				<div className="grid grid-cols-4 gap-x-4">
 					<Form form={form} onFinish={_submit} layout="vertical" className="col-span-4 grid grid-cols-4 gap-x-4">
+						{/* <Form.Item label="Điểm" name="Point" className="col-span-4" required rules={formRequired}>
+							<NumericFormat
+								id="input-point"
+								onChange={(event) => form.setFieldValue('Point', event.target.value)}
+								className="primary-input px-2 w-full"
+								thousandSeparator
+							/>
+						</Form.Item> */}
+
 						<Form.Item className="col-span-4" name="Content" label="Nội dung câu hỏi" required rules={formRequired}>
 							<PrimaryEditor
 								id={`quest-content-${new Date().getTime()}`}

@@ -1,65 +1,12 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
-import DraggableList from 'react-draggable-list'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
-import cx from 'classnames'
-import { setCurrentExerciseForm } from '~/store/globalState'
-import QestDragMenu from '../QuestDragMenu'
-import { QUESTION_TYPES } from '~/common/libs'
 import CreateMindmap from './Create'
-import { log } from '~/common/utils'
-
 import HTMLParser from 'react-html-parser'
 import { Checkbox } from 'antd'
 
-class GroupItem extends React.Component<PlanetProps, PlanetState> {
-	state = { value: 0 }
-
-	getDragHeight() {
-		return 36
-	}
-
-	render() {
-		const { item, itemSelected, dragHandleProps } = this.props
-
-		const scale = itemSelected * 0.005 + 1
-		const shadow = itemSelected * 1 + 0
-		const dragged = itemSelected !== 0
-
-		return (
-			<div className={cx('cc-quest-wrapper', { dragged })} style={{ transform: `scale(${scale})`, borderWidth: 1, borderStyle: 'solid' }}>
-				<div className="dragHandle mt-[10px] ml-2" {...dragHandleProps} />
-
-				<div className="cc-form-group-header">
-					<div className="cc-form-gr-number mt-2">
-						Câu {item.Index}
-						<span className="text-[#000000] font-[600] ml-2">({item?.Point} điểm)</span>
-					</div>
-
-					<div className="!inline-flex">
-						<QestDragMenu item={item} isQuest questionType={QUESTION_TYPES.MultipleChoice} />
-					</div>
-				</div>
-
-				{/* <Choice data={item} type="edit" /> */}
-			</div>
-		)
-	}
-}
-
 const MindMapForm = () => {
-	const questRef = useRef()
-
-	const dispatch = useDispatch()
 	const exercises = useSelector((state: RootState) => state.globalState.currentExerciseForm)
-
-	function changeQuestions(newList) {
-		let newIndexList = []
-		newList.forEach((item, index) => {
-			newIndexList.push({ ...item, Index: index + 1 })
-		})
-		dispatch(setCurrentExerciseForm(newIndexList))
-	}
 
 	function formatData(param) {
 		let temp = []
@@ -72,15 +19,6 @@ const MindMapForm = () => {
 		})
 		return temp
 	}
-
-	log.Blue('exercises: ', exercises)
-	log.Red('formatData(exercises): ', formatData(exercises))
-
-	/*
-	*
-	- Random đáp án, đảo vị trí nó lại
-	*
-	*/
 
 	const [answerFormated, setAnswerFormated] = useState([])
 
@@ -107,8 +45,6 @@ const MindMapForm = () => {
 		}
 		setAnswerFormated(shuffleArray(temp))
 	}
-
-	// log.Yellow('answerFormated: ', answerFormated)
 
 	return (
 		<div className="flex flex-col ">

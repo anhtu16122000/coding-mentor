@@ -1,54 +1,11 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
-import DraggableList from 'react-draggable-list'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
-import ReactHTMLParser from 'react-html-parser'
-import cx from 'classnames'
-import { setCurrentExerciseForm } from '~/store/globalState'
-import QestDragMenu from '../QuestDragMenu'
-import { QUESTION_TYPES } from '~/common/libs'
-import FormWriting from './form-typing'
-import FormSpeaking from './form-typing'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { log, wait } from '~/common/utils'
 import { Input, Skeleton } from 'antd'
 import { IoClose } from 'react-icons/io5'
-import { setQuestionsWithAnswers } from '~/store/createQuestion'
 import { useExamContext } from '~/common/components/Auth/Provider/exam'
-
-class GroupItem extends React.Component<PlanetProps, PlanetState> {
-	state = { value: 0 }
-
-	getDragHeight() {
-		return 36
-	}
-
-	render() {
-		const { item, itemSelected, dragHandleProps } = this.props
-
-		const scale = itemSelected * 0.005 + 1
-		const shadow = itemSelected * 1 + 0
-		const dragged = itemSelected !== 0
-
-		return (
-			<>
-				<div className={cx('cc-quest-wrapper', { dragged })} style={{ transform: `scale(${scale})`, borderWidth: 1, borderStyle: 'solid' }}>
-					<div className="dragHandle mt-[10px] ml-2" {...dragHandleProps} />
-
-					<div className="cc-form-group-header">
-						<div className="cc-form-gr-number">Câu {item.Index}</div>
-
-						<div className="!inline-flex">
-							<QestDragMenu item={item} isQuest questionType={QUESTION_TYPES.Write} />
-						</div>
-					</div>
-
-					<div className="w-full pr-2">{ReactHTMLParser(item?.Content)}</div>
-				</div>
-			</>
-		)
-	}
-}
 
 const CreateTyping = (props) => {
 	const { isEdit } = props
@@ -146,8 +103,6 @@ const CreateTyping = (props) => {
 		fuckingChanged()
 	}, [quest])
 
-	// log.Yellow('data', questionWithAnswers)
-
 	function removeItemAtIndex(array, index) {
 		const cloned = [...array]
 
@@ -167,17 +122,11 @@ const CreateTyping = (props) => {
 			}
 		}
 
-		console.log('---- removeItemAtIndex temp: ', temp)
-
 		return temp
 	}
 
 	function handleChangeContent(questIndex, ansIndex, params) {
 		var cloneData = [...questionWithAnswers]
-
-		// console.log('---- cloneData[questIndex].IeltsAnswers[ansIndex]: ', cloneData[questIndex].IeltsAnswers[ansIndex])
-
-		// cloneData[questIndex].IeltsAnswers[ansIndex].Content = params.target.value
 
 		let temp = []
 
@@ -204,6 +153,23 @@ const CreateTyping = (props) => {
 		setData([...temp])
 	}
 
+	// --------
+	function handleChangePoint(questIndex, params) {
+		var cloneData = [...questionWithAnswers]
+
+		let temp = []
+
+		for (let i = 0; i < cloneData.length; i++) {
+			if (questIndex == i) {
+				temp.push({ ...cloneData[i], Point: params.target.value })
+			} else {
+				temp.push({ ...cloneData[i] })
+			}
+		}
+
+		setData([...temp])
+	}
+
 	return (
 		<div className="drag-list">
 			<div className="drag-section">
@@ -215,7 +181,16 @@ const CreateTyping = (props) => {
 
 						return (
 							<div id={`the-quest-${thisQuest?.id}`} key={`f-quest-${questIndex}`} className="mt-[16px]">
-								<div className="mb-[4px] font-[600] text-[#3477c9]">Câu {questIndex + 1}</div>
+								<div className="mb-[16px] font-[600] text-[#3477c9]">
+									Câu {questIndex + 1}
+									<Input
+										onBlur={(e) => handleChangePoint(questIndex, e)}
+										defaultValue={thisQuest?.Point || ''}
+										id={thisQuest?.InputId || ''}
+										className="primary-input ml-[8px] w-[70px] !h-[30px]"
+										placeholder="Điểm"
+									/>
+								</div>
 
 								<div className="grid grid-cols-2 gap-4">
 									{thisQuest?.IeltsAnswers.map((item: any, ansIndex) => {
@@ -266,7 +241,7 @@ const CreateTyping = (props) => {
 									})}
 								</div>
 
-								<div className="col-span-1 flex mt-[8px]">
+								<div className="col-span-1 flex items-center mt-[8px]">
 									<PrimaryButton
 										onClick={() => {
 											const cloneData = [...questionWithAnswers]

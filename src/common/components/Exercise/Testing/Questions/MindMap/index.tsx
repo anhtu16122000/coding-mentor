@@ -188,8 +188,7 @@ const MindMap = (props) => {
 								<div className="h-[46px]" />
 								{dataFormated.map((exercise, exIndex) => {
 									const thisItem = isResult ? getResultQuestIndex(allQuestions, exercise) : getQuestIndex(allQuestions, exercise)
-
-									return <QuestionContent Index={thisItem?.Index} Content={exercise?.Content} />
+									return <QuestionContent Index={thisItem?.Index} Content={exercise?.Content} question={exercise} />
 								})}
 							</div>
 
@@ -235,7 +234,7 @@ const MindMap = (props) => {
 									<div className="h-[46px]" />
 									{dataFormated.map((exercise, exIndex) => {
 										const thisItem = isResult ? getResultQuestIndex(allQuestions, exercise) : getQuestIndex(allQuestions, exercise)
-										return <QuestionContent Index={thisItem?.Index} Content={exercise?.Content} />
+										return <QuestionContent Index={thisItem?.Index} Content={exercise?.Content} question={exercise} />
 									})}
 								</div>
 

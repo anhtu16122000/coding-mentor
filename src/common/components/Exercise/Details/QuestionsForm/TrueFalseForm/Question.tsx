@@ -1,13 +1,14 @@
 import { Checkbox } from 'antd'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { TbFileCertificate } from 'react-icons/tb'
 import { useSelector } from 'react-redux'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import htmlParser from '~/common/components/HtmlParser'
 import { RootState } from '~/store'
 
 const TrueFalseQuestion = (props) => {
-	const { data, isDoing, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav, indexInExam, isResult } = props
+	const { data, type, isDoing, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav, indexInExam, isResult } = props
 
 	const [loading, setLoading] = useState<boolean>(true)
 
@@ -97,12 +98,18 @@ const TrueFalseQuestion = (props) => {
 		<div
 			onClick={() =>
 				!Router.asPath.includes('/questions') &&
+				// !Router.asPath.includes('/exam/detail') &&
 				setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionGroupId: curGroup?.Id })
 			}
 			className="flex items-start"
 		>
 			<div id={`cauhoi-${data.Id}`} className="flex flex-1 mt-1">
-				{!Router.asPath.includes('questions') && <span className="flex-shrink-0 inline font-[600] mr-[8px]">Câu {indexInExam}:</span>}
+				{!Router.asPath.includes('questions') && type != 'edit' && (
+					<span className="flex-shrink-0 inline font-[600] mr-[8px]">
+						<div className="text-[#1b73e8] inline">Câu {indexInExam}</div> ({data?.Point} điểm):
+					</span>
+				)}
+
 				{htmlParser(data?.Content)}
 			</div>
 

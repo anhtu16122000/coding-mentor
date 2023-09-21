@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Divider, Drawer, Empty, Skeleton, Switch } from 'antd'
+import { Divider, Drawer, Empty, Modal, Skeleton, Switch } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { setGlobalBreadcrumbs } from '~/store/globalState'
 import { useRouter } from 'next/router'
@@ -34,9 +34,14 @@ import MainAudioPlayer from './AudioPlayer'
 import { FaSort } from 'react-icons/fa'
 import { RiSave2Fill } from 'react-icons/ri'
 
+import Lottie from 'react-lottie-player'
+import lottieFile from '~/common/components/json/animation_lludr9cs.json'
+
 function ExamDetail() {
 	const router = useRouter()
 	const dispatch = useDispatch()
+
+	const user = useSelector((state: RootState) => state.user.information)
 
 	const [examInfo, setExamInfo] = useState(null)
 	const [loading, setLoading] = useState(true)
@@ -47,6 +52,8 @@ function ExamDetail() {
 
 	const [currentQuestion, setCurrentQuestion] = useState(null)
 	const [showQuestions, setShowQuestions] = useState<boolean>(true)
+
+	const [blocked, setBlocked] = useState('')
 
 	useEffect(() => {
 		getHeight()
@@ -67,11 +74,15 @@ function ExamDetail() {
 	}, [])
 
 	useEffect(() => {
-		if (!!router?.query?.exam) {
-			getExamInfo()
-			getExamSkill()
+		if (!!router?.query?.exam && !!user) {
+			if (user?.RoleId == 1 || user?.RoleId == 4 || user?.RoleId == 2) {
+				getExamInfo()
+				getExamSkill()
+			} else {
+				setBlocked('Không có quyền truy cập')
+			}
 		}
-	}, [router])
+	}, [router, user])
 
 	async function getExamInfo() {
 		try {
@@ -358,7 +369,7 @@ function ExamDetail() {
 
 	useEffect(() => {
 		if (curAudio?.Audio) {
-			ShowNostis.success(`Đang phát audio: ${curAudio?.Name}`)
+			ShowNostis.success(`Playing: ${curAudio?.Name}`)
 		}
 	}, [curAudio])
 
@@ -444,16 +455,18 @@ function ExamDetail() {
 							</a>
 						</PrimaryTooltip>
 
-						<div className="ml-[16px] flex-1 pr-2">
-							<div className="cc-text-16-700 in-1-line">{examInfo?.Name}</div>
-							<div className="cc-text-14-500-blue flex items-center mt-[2px]">
-								<div className="all-center inline-flex cc-choice-point !ml-0">{examInfo?.QuestionsAmount} câu</div>
-								<div className="cc-choice-correct-number">{examInfo?.Point} điểm</div>
+						{!loading && (
+							<div className="ml-[16px] flex-1 pr-2">
+								<div className="cc-text-16-700 in-1-line">{examInfo?.Name}</div>
+								<div className="cc-text-14-500-blue flex items-center mt-[2px]">
+									<div className="all-center inline-flex cc-choice-point !ml-0">{examInfo?.QuestionsAmount} câu</div>
+									<div className="cc-choice-correct-number">{examInfo?.Point} điểm</div>
+								</div>
 							</div>
-						</div>
+						)}
 
 						<div className="mr-[8px] flex-shrink-0">
-							{showTestButton() && (
+							{!loading && showTestButton() && (
 								<PrimaryButton loading={creatingTest} onClick={createDoingTest} background="blue" type="button">
 									{!creatingTest && <HiOutlineBookOpen size={20} />}
 									<div className="ml-2 hidden w500:inline">Làm thử</div>
@@ -461,9 +474,11 @@ function ExamDetail() {
 							)}
 						</div>
 
-						<PrimaryButton onClick={() => setShowSetings(!showSettings)} className="mr-[16px]" type="button" background="yellow">
-							<MdSettings size={20} />
-						</PrimaryButton>
+						{!loading && (
+							<PrimaryButton onClick={() => setShowSetings(!showSettings)} className="mr-[16px]" type="button" background="yellow">
+								<MdSettings size={20} />
+							</PrimaryButton>
+						)}
 					</div>
 
 					{(showSkills || showSections) && (
@@ -483,29 +498,33 @@ function ExamDetail() {
 
 						{showSkills && (
 							<div className="flex items-center pb-[16px] scroll-h">
-								<CreateExamSkill onRefresh={getExamSkill} />
+								{!loading && <CreateExamSkill onRefresh={getExamSkill} />}
 
-								{!sortSkill && (
-									<div
-										onClick={() => setSortSkill(true)}
-										className={`cc-23-skill bg-[#FFBA0A] hover:bg-[#e7ab11] focus:bg-[#d19b10] text-[#000]`}
-									>
-										<FaSort size={16} className="ml-[-2px]" />
-										<div className="ml-[4px]">Sắp xếp</div>
-									</div>
-								)}
+								{!loading && (
+									<>
+										{!sortSkill && (
+											<div
+												onClick={() => setSortSkill(true)}
+												className={`cc-23-skill bg-[#FFBA0A] hover:bg-[#e7ab11] focus:bg-[#d19b10] text-[#000]`}
+											>
+												<FaSort size={16} className="ml-[-2px]" />
+												<div className="ml-[4px]">Sắp xếp</div>
+											</div>
+										)}
 
-								{sortSkill && (
-									<div
-										onClick={() => {
-											saveNewSkillsPosition()
-											setSortSkill(false)
-										}}
-										className={`cc-23-skill bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff]`}
-									>
-										<RiSave2Fill size={16} className="ml-[-2px]" />
-										<div className="ml-[4px]">Lưu</div>
-									</div>
+										{sortSkill && (
+											<div
+												onClick={() => {
+													saveNewSkillsPosition()
+													setSortSkill(false)
+												}}
+												className={`cc-23-skill bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff]`}
+											>
+												<RiSave2Fill size={16} className="ml-[-2px]" />
+												<div className="ml-[4px]">Lưu</div>
+											</div>
+										)}
+									</>
 								)}
 
 								{skills.map((sk, index) => {
@@ -614,7 +633,7 @@ function ExamDetail() {
 
 							<GroupContent is={is} curGroup={curGroup} questionsInSection={questionsInSection} />
 
-							<TestingQuestions data={curGroup} questions={questionsInSection} />
+							<TestingQuestions setCurrentQuestion={setCurrentQuestion} data={curGroup} questions={questionsInSection} />
 
 							{curAudio?.Audio && <div className="h-[200px]" />}
 						</div>
@@ -702,6 +721,13 @@ function ExamDetail() {
 						</div>
 					</Drawer>
 				)}
+
+				<Modal centered closable={false} width={400} open={!!blocked} footer={null}>
+					<div className="w-full flex flex-col items-center">
+						<Lottie loop animationData={lottieFile} play className="w-[220px]" />
+						<div className="text-[18px] font-[600] text-[red]">{blocked}</div>
+					</div>
+				</Modal>
 			</div>
 		</ExamProvider>
 	)

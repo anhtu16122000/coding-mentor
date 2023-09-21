@@ -1,11 +1,10 @@
 import { Modal, Form, Select, Input, Skeleton } from 'antd'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { ShowNostis, ShowNoti, log, wait } from '~/common/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import PrimaryButton from '~/common/components/Primary/Button'
 import { setCurrentExerciseForm } from '~/store/globalState'
 import { FiEdit } from 'react-icons/fi'
-import { examGroupsApi } from '~/api/exam/group'
 import { MultipleChoiceForm } from '../QuestionsForm'
 import { RootState } from '~/store'
 import { formNoneRequired, formRequired } from '~/common/libs/others/form'
@@ -17,17 +16,12 @@ import CreateWriting from '../QuestionsForm/WritingForm'
 import TrueFalseForm from '../QuestionsForm/TrueFalseForm'
 import MindMapForm from '../QuestionsForm/MindMap'
 import { ieltsGroupApi } from '~/api/IeltsExam/ieltsGroup'
-import { IoCloseSharp } from 'react-icons/io5'
 import CreateSpeaking from '../QuestionsForm/SpeakingForm'
 import CreateTyping from '../QuestionsForm/FillInBlankForm'
 import { useExamContext } from '~/common/components/Auth/Provider/exam'
 import { setQuestions } from '~/store/createQuestion'
 import CreateDragAndDrop from '../QuestionsForm/DragAndDropForm'
-import { tagCategoryApi } from '~/api/configs/tagCategory'
 import { tagApi } from '~/api/configs/tag'
-
-let fullEditor = false
-const quickMenu = 'bold italic underline strikethrough | fontfamily fontsize blocks | codesample | forecolor backcolor | customInsertButton'
 
 const GroupForm: FC<IGroupForm> = (props) => {
 	const { isEdit, defaultData, isChangeInfo, onOpen, section, onRefresh } = props
@@ -181,8 +175,6 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 	// Assign current data to this form
 	function openEdit() {
-		console.log('---- defaultData: ', defaultData)
-
 		if (!!onOpen) onOpen()
 
 		setQuestionWithAnswers([...defaultData?.IeltsQuestions])
@@ -228,14 +220,6 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		)
 	}
 
-	// GET NOW TIMESTAMP
-	function getTimeStamp() {
-		return new Date().getTime() // Example: 1653474514413
-	}
-
-	const editorRef = useRef(null)
-
-	// ----------------------------------------------------------------
 	const [rightHeight, setRightHeight] = useState(0)
 
 	useEffect(() => {
@@ -247,7 +231,6 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		const leftElement = document.getElementById('the-left-form')
 
 		if (leftElement) {
-			console.log('---- leftElement.offsetHeight: ', leftElement.offsetHeight)
 			setRightHeight(leftElement.offsetHeight)
 		}
 	}
@@ -345,6 +328,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 							{currentType == QUESTION_TYPES.TrueOrFalse && <TrueFalseForm />}
 							{currentType == QUESTION_TYPES.Mindmap && <MindMapForm />}
 							{currentType == QUESTION_TYPES.Speak && <CreateSpeaking />}
+
 							{currentType == QUESTION_TYPES.FillInTheBlank && <CreateTyping isEdit={isEdit} />}
 							{currentType == QUESTION_TYPES.DragDrop && <CreateDragAndDrop isEdit={isEdit} />}
 						</div>
