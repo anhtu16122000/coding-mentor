@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Divider, Drawer, Empty, Popconfirm, Skeleton, Switch } from 'antd'
+import { Divider, Drawer, Empty, Skeleton, Switch } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { setGlobalBreadcrumbs } from '~/store/globalState'
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { RootState } from '~/store'
 import PrimaryButton from '../../Primary/Button'
 import { HiOutlineBookOpen } from 'react-icons/hi'
 import { ieltsExamApi } from '~/api/IeltsExam'
 import { decode, wait } from '~/common/utils/common'
-import { ShowNostis, log } from '~/common/utils'
+import { ShowNostis, ShowNoti, log } from '~/common/utils'
 import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
 import CreateExamSkill from './ExamSkillNext/exam-skill-form'
 import ExamSkillItem from './ExamSkillNext/exam-skill-item'
@@ -21,32 +21,22 @@ import { BsFillGrid3X2GapFill } from 'react-icons/bs'
 import htmlParser from '../../HtmlParser'
 import { ieltsGroupApi } from '~/api/IeltsExam/ieltsGroup'
 import TestingQuestions from '../Testing/Questions'
-import ChoiceInputForm from './QuestionsForm/MultipleChoiceForm/Form'
 import { setNewCurrentGroup } from '~/store/newExamReducer'
 import GroupForm from './Group/form-group'
 import ExamProvider from '../../Auth/Provider/exam'
 import { QUESTION_TYPES } from '~/common/libs'
 import DragHeader from './Components/drag-header'
 import GroupContent from './Components/group-content'
-import { IoClose, IoCloseSharp } from 'react-icons/io5'
 import CurrentGroupController from './Components/current-group-controller'
-
-// import AudioPlayer from 'react-h5-audio-player'
-import { AiFillControl } from 'react-icons/ai'
-import { VscSettings } from 'react-icons/vsc'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import MainAudioPlayer from './AudioPlayer'
-
-import { BiPlus } from 'react-icons/bi'
 import { FaSort } from 'react-icons/fa'
-import { RiSave2Fill, RiSave2Line } from 'react-icons/ri'
+import { RiSave2Fill } from 'react-icons/ri'
 
 function ExamDetail() {
 	const router = useRouter()
 	const dispatch = useDispatch()
-
-	// const totalPoint = useSelector((state: RootState) => state.globalState.packageTotalPoint)
 
 	const [examInfo, setExamInfo] = useState(null)
 	const [loading, setLoading] = useState(true)
@@ -129,10 +119,7 @@ function ExamDetail() {
 	}
 
 	const [sections, setSections] = useState([])
-
 	const [currentSection, setCurrentSection] = useState(null)
-
-	// const [currentSection, setCurrentSection] = useState(null)
 
 	async function getSections(e?: any, oldIndex?: number) {
 		try {
@@ -140,7 +127,7 @@ function ExamDetail() {
 			if (res.status == 200) {
 				setSections(res.data.data)
 
-				if (!currentSection) {
+				if (!currentSection || currentSkill?.Id != currentSection?.IeltsSkillId) {
 					setCurrentSection(res.data.data[0])
 				}
 
@@ -160,6 +147,7 @@ function ExamDetail() {
 					}
 				}
 			} else {
+				setGetingGroup(false)
 				setSections([])
 				setCurrentSection(null)
 			}
@@ -193,10 +181,12 @@ function ExamDetail() {
 		}
 	}
 
+	const [getingGroup, setGetingGroup] = useState<boolean>(false)
 	const [curGroup, setCurGroup] = useState<any>(null)
 
 	async function getQuestionsByGroup() {
 		if (currentQuestion?.IeltsQuestionGroupId) {
+			setGetingGroup(true)
 			try {
 				const res = await ieltsGroupApi.getByID(currentQuestion?.IeltsQuestionGroupId)
 				if (res.status == 200) {
@@ -209,24 +199,26 @@ function ExamDetail() {
 			} catch (error) {
 				ShowNostis.error(error?.message)
 			} finally {
+				setGetingGroup(false)
 				setLoading(false)
 			}
 		}
 	}
 
 	useEffect(() => {
-		// console.log('--- currentQuestion: ', currentQuestion)
-
 		if (!!currentQuestion?.IeltsQuestionGroupId) {
 			getQuestionsByGroup()
 		}
 	}, [currentQuestion?.IeltsQuestionGroupId])
 
 	useEffect(() => {
+		setCurGroup(null)
+
 		if (!!currentSkill?.Id) {
 			getSections()
 			heightChange()
 		}
+
 		setCurAudio(null)
 	}, [currentSkill])
 
@@ -241,8 +233,6 @@ function ExamDetail() {
 	useEffect(() => {
 		if (sections.length == 0) {
 			setCurrentSection(null)
-		} else {
-			// setCurrentSection(sections[0])
 		}
 	}, [sections])
 
@@ -265,8 +255,6 @@ function ExamDetail() {
 			return false
 		}
 	}
-
-	const [visiblePreview, setVisiblePreview] = useState(false)
 
 	function toggleQuestions() {
 		setShowQuestions(!showQuestions)
@@ -375,20 +363,19 @@ function ExamDetail() {
 	}, [curAudio])
 
 	const [creatingTest, setCreatingTest] = useState<boolean>(false)
+
 	function gotoTest(params) {
 		if (params?.Id) {
 			window.open(`/take-an-exam/?exam=${params?.Id}`, '_blank')
 		}
 	}
+
 	async function createDoingTest() {
 		setCreatingTest(true)
 		try {
 			const res = await doingTestApi.post({ IeltsExamId: parseInt(decode(router?.query?.exam + '')), ValueId: 0, Type: 1 })
-
 			if (res?.status == 200) {
-				log.Green('Created test', res.data?.data)
 				gotoTest(res.data?.data)
-				// Make some noise...
 			}
 		} catch (error) {
 		} finally {
@@ -421,10 +408,7 @@ function ExamDetail() {
 	}
 
 	async function saveNewSkillsPosition() {
-		console.log('----- SKILLS: ', skills)
-
 		// CÁI SAVE NÀY API CHƯA LƯU --> GET LẠI NÓ RA CÁI CŨ
-
 		let temp = []
 
 		for (let i = 0; i < skills.length; i++) {
@@ -434,14 +418,19 @@ function ExamDetail() {
 		try {
 			const res = await ieltsSkillApi.saveIndex({ Items: temp })
 		} catch (error) {
-		} finally {
-			// getExamSkill()
+			ShowNoti('error', error?.message)
 		}
 	}
 
 	return (
 		<ExamProvider>
 			<div className="exam-23-container">
+				{getingGroup && (
+					<div className="bg-[rgba(0,0,0,0.1)] z-[9999] all-center rounded-[6px] absolute top-0 left-0 w-full h-full">
+						<div className="text-[#000] font-[500]">Đang xử lý...</div>
+					</div>
+				)}
+
 				<div className="cc-exam-detail z-10 !w-full bg-[#fff]">
 					<div className="exam-23-header">
 						<PrimaryTooltip id="fucking-home" content="Trang chủ" place="right">
@@ -648,7 +637,26 @@ function ExamDetail() {
 											key={`quest-num-${index}`}
 											isActivated={activated}
 											data={item}
-											onClick={() => setCurrentQuestion(item)}
+											onClick={() => {
+												let elementId = null
+
+												if (item?.InputId) {
+													elementId = item.InputId
+												} else {
+													elementId = `cauhoi-${item?.IeltsQuestionId}`
+												}
+
+												const theIndex = document.getElementById(elementId)
+												const classIndex = document.getElementsByClassName(elementId)
+
+												if (!!theIndex) {
+													theIndex.scrollIntoView({ behavior: 'smooth', block: 'center' })
+												} else if (classIndex.length > 0) {
+													classIndex[0].scrollIntoView({ behavior: 'smooth', block: 'center' })
+												}
+
+												setCurrentQuestion(item)
+											}}
 										/>
 									)
 								})}

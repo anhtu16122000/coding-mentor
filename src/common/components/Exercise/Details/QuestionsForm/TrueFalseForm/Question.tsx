@@ -91,6 +91,8 @@ const TrueFalseQuestion = (props) => {
 		return ''
 	}
 
+	const disabledCheckbox = loading || !isDoing || isResult
+
 	return (
 		<div
 			onClick={() =>
@@ -106,19 +108,19 @@ const TrueFalseQuestion = (props) => {
 
 			{!isResult && (
 				<div className="flex items-center mr-[2px] true-false-checkbox">
-					<div className="w-[50px] flex items-center justify-center">
+					<div className="w-[50px] all-center">
 						<Checkbox
-							disabled={loading || !isDoing || isResult}
-							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
+							disabled={disabledCheckbox}
+							id={`check-box-${data?.Id || ''}`}
 							defaultChecked={checkChecked(0)}
 							onClick={(e: any) => !isResult && e.target?.checked && insertDetails(data.IeltsAnswers[0])}
 						/>
 					</div>
 
-					<div className="w-[50px] flex items-center justify-center">
+					<div className="w-[50px] all-center">
 						<Checkbox
-							disabled={loading || !isDoing || isResult}
-							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
+							disabled={disabledCheckbox}
+							id={`check-box-${data?.Id || ''}`}
 							defaultChecked={checkChecked(1)}
 							onClick={(e: any) => !isResult && e.target?.checked && insertDetails(data.IeltsAnswers[1])}
 						/>
@@ -128,9 +130,9 @@ const TrueFalseQuestion = (props) => {
 
 			{!!isResult && (
 				<div className="flex items-center mr-[2px] true-false-checkbox">
-					<div className="w-[50px] flex items-center justify-center">
+					<div className="w-[50px] all-center">
 						<Checkbox
-							disabled={loading || !isDoing || isResult}
+							disabled={disabledCheckbox}
 							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
 							defaultChecked={checkChecked(0) || getTrueAns(0)}
 							className={`${getClass(0)}`}
@@ -138,9 +140,9 @@ const TrueFalseQuestion = (props) => {
 						/>
 					</div>
 
-					<div className="w-[50px] flex items-center justify-center">
+					<div className="w-[50px] all-center">
 						<Checkbox
-							disabled={loading || !isDoing || isResult}
+							disabled={disabledCheckbox}
 							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
 							defaultChecked={checkChecked(1) || getTrueAns(1)}
 							className={`${getClass(1)}`}

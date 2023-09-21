@@ -7,12 +7,9 @@ import { TbLoader } from 'react-icons/tb'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import MarkingExam from '~/common/components/Mark/MarkingExam/MarkingExam'
 import PrimaryTag from '~/common/components/Primary/Tag'
-import { log } from '~/common/utils'
 
 const Write = (props) => {
 	const { data, IndexInExam, isDoing, setCurrentQuestion, onRefreshNav, isResult, curGroup, onRefresh } = props
-
-	log.Yellow('Write props', props)
 
 	async function insertDetails(answer) {
 		let items = []
