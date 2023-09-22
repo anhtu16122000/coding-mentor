@@ -91,7 +91,7 @@ const ListClassPro = () => {
 	}, [userInfo])
 
 	useEffect(() => {
-		if (filter != initFilter || listClassState.length == 0) {
+		if (userInfo?.UserInformationId) {
 			if (!is.parent) {
 				getAllClass()
 			}
