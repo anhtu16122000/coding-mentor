@@ -188,7 +188,7 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 									{!!GroupName && (
 										<>
 											<div className="mx-[8px] mt-[2px] inline-block">➤</div>
-											<PrimaryTooltip place="right" id={`group-${Id}`} content={`Nhóm: ${GroupName}`}>
+											<PrimaryTooltip place="right" id={`group-${item?.Id}-${index}`} content={`Nhóm: ${GroupName}`}>
 												<div onClick={_clickGroup} className="cc-news-poster-name cc-news-poster-group">
 													{GroupName}
 												</div>
@@ -206,10 +206,8 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 												return (
 													<>
 														<div className="mx-[8px] mt-[2px] inline-block">➤</div>
-														<PrimaryTooltip place="right" id={`group-${Id}`} content={`Trung tâm: ${name}`}>
-															<div onClick={_clickGroup} className="cc-news-poster-name cc-news-poster-group">
-																{name}
-															</div>
+														<PrimaryTooltip place="right" id={`branch-${item?.Id}-${index}`} content={`Trung tâm: ${name}`}>
+															<div className="cc-news-poster-name cc-news-poster-group">{name}</div>
 														</PrimaryTooltip>
 													</>
 												)
