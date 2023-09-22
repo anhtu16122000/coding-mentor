@@ -7,7 +7,6 @@ import { AiOutlineFieldTime } from 'react-icons/ai'
 import { HiOutlineArrowRight } from 'react-icons/hi'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
-import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import { setDataChangeSchedule, setListCalendar, setPrevSchedule, setRoom, setShowModal, setTeacher } from '~/store/classReducer'
 import PrimaryButton from '../Primary/Button'
@@ -19,9 +18,12 @@ const ModalReviewScheduleClass = (props) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const router = useRouter()
 	const dispatch = useDispatch()
+
 	moment.locale('vi')
+
 	const handleSubmit = async () => {
 		const res = await handleCreateClass()
+
 		if (!!res && res.status === 200) {
 			setIsModalOpen(false)
 			dispatch(setListCalendar([]))
@@ -33,13 +35,15 @@ const ModalReviewScheduleClass = (props) => {
 			router.push('/class')
 		}
 	}
+
 	return (
 		<>
 			{listCalendar.length > 0 && (
-				<PrimaryButton onClick={() => setIsModalOpen(true)} className="ml-3" background="yellow" icon="save" type="button">
+				<PrimaryButton onClick={() => setIsModalOpen(true)} className="ml-3" background="blue" icon="save" type="button">
 					Lưu
 				</PrimaryButton>
 			)}
+
 			<Modal
 				width={900}
 				title="Thông tin lớp học"

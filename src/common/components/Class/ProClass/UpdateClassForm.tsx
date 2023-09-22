@@ -118,9 +118,16 @@ const UpdateClassForm = (props) => {
 						<div className="col-md-6 col-12">
 							<SelectField name="AcademicId" label="Học vụ" optionList={academic} />
 						</div>
-						<div className="col-md-6 col-12">
-							<SelectField name="TeacherId" label="Giáo viên" optionList={teachers} />
-						</div>
+						{/* <div className="col-md-6 col-12">
+							<SelectField
+								name="PaymentType"
+								label="Hình thức thanh toán"
+								optionList={[
+									{ value: 1, title: 'Thanh toán một lần' },
+									{ value: 2, title: 'Thanh toán theo tháng' }
+								]}
+							/>
+						</div> */}
 					</div>
 				</Form>
 			</Modal>

@@ -45,7 +45,9 @@ const CardGrid = (props) => {
 
 				<div className="class-time">{`${getStrDate(item.StartDay)} - ${getStrDate(item.EndDay)}`}</div>
 
-				<ProClassInfoItem title="Giảng viên" value={item.TeacherName} />
+				{(is(userInfo).admin || is(userInfo).manager || is(userInfo).teacher) && (
+					<ProClassInfoItem title="Thanh toán" value={item?.PaymentTypeName || 'Chưa nhập'} />
+				)}
 
 				<div className="flex items-center">
 					<div className="class-info-item flex-1">

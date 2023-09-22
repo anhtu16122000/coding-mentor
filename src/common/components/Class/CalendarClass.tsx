@@ -3,7 +3,7 @@ import moment from 'moment'
 import React, { useRef, useState } from 'react'
 import { BsThreeDots } from 'react-icons/bs'
 import { classApi } from '~/api/learn/class'
-import { ShowNoti } from '~/common/utils'
+import { ShowNoti, log } from '~/common/utils'
 import PrimaryButton from '../Primary/Button'
 import CreateClassForm from './CreateClassForm'
 import ModalReviewScheduleClass from './ModalReviewScheduleClass'
@@ -95,7 +95,6 @@ const CalenderClass = () => {
 				thisCalendar.current.calendar.gotoDate(moment(res.data.data[0].StartTime).format())
 
 				if (res.data.data.length > 0) {
-					
 					const newListCalendar = res.data.data.map((item, index) => {
 						return {
 							...item,
@@ -133,12 +132,13 @@ const CalenderClass = () => {
 			Price: dataChangeSchedule.Price,
 			ProgramId: dataChangeSchedule.ProgramId,
 			StartDay: moment(dataChangeSchedule.StartDay).format(),
-			TeacherId: dataChangeSchedule.TeacherId,
 			TeachingFee: dataChangeSchedule.TeachingFee,
 			Thumbnail: dataChangeSchedule.Thumbnail,
 			Type: dataChangeSchedule.Type,
+			PaymentType: dataChangeSchedule?.PaymentType,
 			schedules: listCalendar
 		}
+
 		try {
 			const res = await classApi.addClass(DATA_SUBMIT)
 			if (res.status === 200) {

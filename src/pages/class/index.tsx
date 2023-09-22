@@ -1,4 +1,3 @@
-import { GetStaticPaths } from 'next'
 import Head from 'next/head'
 import React from 'react'
 import appConfigs from '~/appConfig'
