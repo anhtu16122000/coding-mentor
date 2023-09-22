@@ -4,6 +4,24 @@
 			display: none;
 		}
 	}
+
+	.full-content {
+		@apply hidden;
+	}
+	&.news-item-modal {
+		.ant-modal-body {
+			padding: 0px !important;
+			.cc-news-item {
+				margin: 0px !important;
+				width: 100% !important;
+				max-width: 1000px !important;
+			}
+		}
+		.full-content {
+			@apply block;
+		}
+	}
+
 	.cc-news-container {
 		@apply max-w-[680px] w-[100%] m-auto;
 	}

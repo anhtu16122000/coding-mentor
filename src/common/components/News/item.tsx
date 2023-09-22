@@ -9,7 +9,7 @@ import ListComment from './Comment/list'
 import { deleteNews, getComments, getLiked, getNewsDetail, getTimeSince } from './utils'
 import NewsFiles from './files'
 import { FiMoreVertical } from 'react-icons/fi'
-import { Popconfirm, Popover } from 'antd'
+import { Modal, Popconfirm, Popover } from 'antd'
 import Avatar from '../Avatar'
 import Router from 'next/router'
 import RestApi from '~/api/RestApi'
@@ -18,7 +18,6 @@ import { encode } from '~/common/utils/common'
 import PrimaryTooltip from '../PrimaryTooltip'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
-import ShowMore from '../ShowMore'
 import CreateNews from './Create'
 
 const ButtonPost: FC<TNewType> = (props) => {
@@ -156,157 +155,220 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 		getComments(filterComments, setComments, setLoadingComment, setTotalComment)
 	}
 
-	return (
-		<div className="cc-news-item" key={`li-`} id={`li-${index}-32`}>
-			<div className="cc-news-item-header">
-				<div className="cc-news-item-user py-[4px]">
-					<div className="flex items-center">
-						<Avatar uri={item?.Avatar} className="cc-news-avatar" />
-						<div className="ml-[16px] mt-[-2px]">
-							<div className="flex">
-								<div className="cc-news-poster-name">{CreatedBy}</div>
-								{!!GroupName && (
-									<>
-										<div className="mx-[8px] inline-block">➤</div>
-										<PrimaryTooltip place="left" id={`group-${Id}`} content={GroupName}>
-											<div onClick={_clickGroup} className="cc-news-poster-name cc-news-poster-group">
-												{GroupName}
-											</div>
-										</PrimaryTooltip>
-									</>
-								)}
-							</div>
-							<div className="flex row-center">
-								{!!RoleName && <div className={`cc-news-post-role ${RoleName == 'Admin' ? 'is-admin' : ''}`}>{RoleName}</div>}
-								<PrimaryTooltip place="left" id={`since-${Id}`} content={CreatedOn}>
-									<div className="cc-news-post-since hover:underline">{getTimeSince(CreatedOn)}</div>{' '}
-								</PrimaryTooltip>
+	const [visible, setVisible] = useState<boolean>(false)
+	const [showButton, setShowButton] = useState<boolean>(false)
+
+	useEffect(() => {
+		const thisElement = document.getElementById('news-item-content-' + item?.Id)
+		const desiredLineCount = 2
+
+		// Tính toán chiều cao mong muốn dựa trên số dòng
+		const lineHeight = parseInt(window.getComputedStyle(thisElement).lineHeight)
+		const maxHeight = lineHeight * desiredLineCount
+
+		// Kiểm tra chiều cao thực tế
+		if (thisElement.scrollHeight > maxHeight) {
+			!showButton && setShowButton(true)
+		} else {
+			showButton && setShowButton(false)
+		}
+	}, [item?.Id])
+
+	const ItemContent = () => {
+		return (
+			<div className="cc-news-item" key={`li-`} id={`li-${index}-32`}>
+				<div className="cc-news-item-header">
+					<div className="cc-news-item-user py-[4px]">
+						<div className="flex items-center">
+							<Avatar uri={item?.Avatar} className="cc-news-avatar" />
+
+							<div className="ml-[16px] mt-[-2px]">
+								<div className="flex">
+									<div className="cc-news-poster-name">{CreatedBy}</div>
+									{!!GroupName && (
+										<>
+											<div className="mx-[8px] mt-[2px] inline-block">➤</div>
+											<PrimaryTooltip place="right" id={`group-${Id}`} content={`Nhóm: ${GroupName}`}>
+												<div onClick={_clickGroup} className="cc-news-poster-name cc-news-poster-group">
+													{GroupName}
+												</div>
+											</PrimaryTooltip>
+										</>
+									)}
+
+									{item?.BranchNameList && (
+										<>
+											{item.BranchNameList.map((name, index) => {
+												if (index > 0) {
+													return ''
+												}
+
+												return (
+													<>
+														<div className="mx-[8px] mt-[2px] inline-block">➤</div>
+														<PrimaryTooltip place="right" id={`group-${Id}`} content={`Trung tâm: ${name}`}>
+															<div onClick={_clickGroup} className="cc-news-poster-name cc-news-poster-group">
+																{name}
+															</div>
+														</PrimaryTooltip>
+													</>
+												)
+											})}
+
+											{item.BranchNameList.length > 1 && (
+												<Popover
+													title="Danh sách trung tâm"
+													content={item.BranchNameList.map((name, index) => (
+														<li className="text-[14px] text-[#000000] font-[600] mt-[4px]" key={name + Math.random() * 1000}>
+															{name}
+														</li>
+													))}
+													placement="rightTop"
+													trigger="click"
+													overlayClassName="show-arrow"
+												>
+													<div className="flex items-center">
+														<div className="text-[16px] font-[600]">,</div>
+														<div className="cc-news-poster-name cc-news-poster-group ml-[4px] !text-[#1E88E5] cursor-pointer">
+															xem thêm...
+														</div>
+													</div>
+												</Popover>
+											)}
+										</>
+									)}
+								</div>
+
+								<div className="flex row-center">
+									{!!RoleName && <div className={`cc-news-post-role ${RoleName == 'Admin' ? 'is-admin' : ''}`}>{RoleName}</div>}
+									<PrimaryTooltip place="left" id={`since-${Id}`} content={CreatedOn}>
+										<div className="cc-news-post-since hover:underline">{getTimeSince(CreatedOn)}</div>{' '}
+									</PrimaryTooltip>
+								</div>
 							</div>
 						</div>
 					</div>
-					{item.BranchNameList && (
-						<ul className="cc-center-branch-news">
-							{item.BranchNameList &&
-								item.BranchNameList.map((name, index) => {
-									if (index > 2) return
-									else
-										return (
-											<li className="cc_li" key={name + Math.random() * 1000}>
-												{name}
-											</li>
-										)
-								})}
 
-							{item.BranchNameList.length > 3 && (
-								<Popover
-									content={item.BranchNameList.map(
-										(name, index) =>
-											index > 2 && (
-												<li className="text-[12px] text-[#b1b1b1]" key={name + Math.random() * 1000}>
-													{name}
-												</li>
-											)
-									)}
-									showArrow
-									placement="rightTop"
-								>
-									<li className="cursor-pointer select-none cc_li">. . .</li>
-								</Popover>
-							)}
-						</ul>
+					{user?.RoleId == 1 && (
+						<Popover
+							ref={menuRef}
+							placement="rightTop"
+							content={menuContent}
+							title={null}
+							onOpenChange={(newOpen: boolean) => setIsShowPopover(newOpen)}
+							open={isShowPopover}
+							showArrow={false}
+							trigger="click"
+						>
+							<div className="cc-news-item-menu">
+								<FiMoreVertical size={18} />
+							</div>
+						</Popover>
 					)}
 				</div>
 
-				{user?.RoleId == 1 && (
-					<Popover
-						ref={menuRef}
-						placement="rightTop"
-						content={menuContent}
-						title={null}
-						onOpenChange={(newOpen: boolean) => setIsShowPopover(newOpen)}
-						open={isShowPopover}
-						showArrow={false}
-						trigger="click"
-					>
-						<div className="cc-news-item-menu">
-							<FiMoreVertical size={18} />
-						</div>
-					</Popover>
-				)}
-			</div>
+				<div className="cc-news-item-body">
+					<div>
+						<span id={'news-item-content-' + item?.Id} className="cc-news-item-content in-4-line">
+							{Content}
+						</span>
 
-			<div className="cc-news-item-body">
-				<div>
-					{/* <ShowMore lines={3}> */}
-					<span className="cc-news-item-content">{ReactHtmlParser(Content)}</span>
-					{/* </ShowMore> */}
-				</div>
-
-				{!!details?.FileList && (
-					<div className="cc-news-item-files">
-						<NewsFiles files={details?.FileList} />
-					</div>
-				)}
-			</div>
-
-			<div className="cc-news-item-footer">
-				<div className="cc-footer-top">
-					<div className="cc-news-likes">
-						{!!details?.TotalLike && (
-							<>
-								<AiFillLike size={20} className="mr-[8px] text-[#1E88E5]" />
-								<div className="number-of-likes">{getLiked(details, user.UserInformationId).text}</div>
-							</>
+						{!visible && showButton && (
+							<div onClick={() => setVisible(true)} className="text-[#1E88E5] mt-[8px] cursor-pointer">
+								Xem thêm...
+							</div>
 						)}
+
+						<span className="cc-news-item-content full-content">{Content}</span>
 					</div>
 
-					{!!details?.TotalComment && <div className="number-of-likes">{details?.TotalComment} nhận xét</div>}
+					{!!details?.FileList && (
+						<div className="cc-news-item-files">
+							<NewsFiles files={details?.FileList} />
+						</div>
+					)}
 				</div>
 
-				<div className="cc-hr my-[8px] mx-[-6px]" />
+				<div className="cc-news-item-footer">
+					<div className="cc-footer-top">
+						<div className="cc-news-likes">
+							{!!details?.TotalLike && (
+								<>
+									<AiFillLike size={20} className="mr-[8px] text-[#1E88E5]" />
+									<div className="number-of-likes">{getLiked(details, user.UserInformationId).text}</div>
+								</>
+							)}
+						</div>
 
-				<div className="cc-footer-bottom">
-					<ButtonPost
-						onClick={_like}
-						title="Thích"
-						loading={loadingLike}
-						activated={!!details?.IsLike}
-						icon={
-							!!details?.IsLike ? <AiFillLike size={18} className="mr-[8px] text-[#1E88E5]" /> : <BiLike size={18} className="mr-[8px]" />
-						}
-					/>
+						{!!details?.TotalComment && <div className="number-of-likes">{details?.TotalComment} nhận xét</div>}
+					</div>
 
-					<ButtonPost onClick={_clickComment} title="Nhận xét" icon={<GoCommentDiscussion size={18} className="mr-[8px] text-[#000]" />} />
-				</div>
-				{showComment && (
-					<div className="cc-news-comment">
-						<div className="cc-hr my-[8px] mt-[14px] mx-[-6px]" />
-						<div className="cc-comments">
-							<div className="cc-news-create-comment">
-								<Avatar uri={user.Avatar} className="cc-news-avatar" />
-								<div className="relative cc-comment-input">
-									<input
-										onKeyUp={inpuKeyUp}
-										disabled={loadingComment}
-										placeholder="Nhập nhận xét..."
-										value={currentComment}
-										onChange={(event) => setCurrentComment(event.target.value)}
-									/>
-									<div onClick={_comment} className="cc-comment-submit">
-										{loadingComment ? (
-											<BaseLoading.Blue />
-										) : (
-											<FaTelegramPlane size={20} color={!currentComment ? '#0000003d' : '#1E88E5'} className="ml-[-2px]" />
-										)}
+					<div className="cc-hr my-[8px] mx-[-6px]" />
+
+					<div className="cc-footer-bottom">
+						<ButtonPost
+							onClick={_like}
+							title="Thích"
+							loading={loadingLike}
+							activated={!!details?.IsLike}
+							icon={
+								!!details?.IsLike ? <AiFillLike size={18} className="mr-[8px] text-[#1E88E5]" /> : <BiLike size={18} className="mr-[8px]" />
+							}
+						/>
+
+						<ButtonPost
+							onClick={_clickComment}
+							title="Nhận xét"
+							icon={<GoCommentDiscussion size={18} className="mr-[8px] text-[#000]" />}
+						/>
+					</div>
+					{showComment && (
+						<div className="cc-news-comment">
+							<div className="cc-hr my-[8px] mt-[14px] mx-[-6px]" />
+							<div className="cc-comments">
+								<div className="cc-news-create-comment">
+									<Avatar uri={user.Avatar} className="cc-news-avatar" />
+									<div className="relative cc-comment-input">
+										<input
+											onKeyUp={inpuKeyUp}
+											disabled={loadingComment}
+											placeholder="Nhập nhận xét..."
+											value={currentComment}
+											onChange={(event) => setCurrentComment(event.target.value)}
+										/>
+										<div onClick={_comment} className="cc-comment-submit">
+											{loadingComment ? (
+												<BaseLoading.Blue />
+											) : (
+												<FaTelegramPlane size={20} color={!currentComment ? '#0000003d' : '#1E88E5'} className="ml-[-2px]" />
+											)}
+										</div>
 									</div>
 								</div>
+								<ListComment data={comments} onShowAll={showAllComment} totalComment={totalComment} onRefresh={refreshComment} />
 							</div>
-							<ListComment data={comments} onShowAll={showAllComment} totalComment={totalComment} onRefresh={refreshComment} />
 						</div>
-					</div>
-				)}
+					)}
+				</div>
 			</div>
-		</div>
+		)
+	}
+
+	return (
+		<>
+			<ItemContent />
+
+			<Modal
+				width={700}
+				closable={false}
+				className="cc-news news-item-modal"
+				footer={null}
+				open={visible}
+				onCancel={() => setVisible(false)}
+			>
+				<ItemContent />
+			</Modal>
+		</>
 	)
 }
 

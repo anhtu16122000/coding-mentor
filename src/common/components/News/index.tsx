@@ -3,7 +3,7 @@ import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useNewsContext } from '~/common/providers/News'
-import { decode } from '~/common/utils/common'
+import { decode, is } from '~/common/utils/common'
 import CreateNews from './Create'
 import NewsGroup from './Group'
 import GroupHeader from './Group/header'
@@ -107,31 +107,7 @@ function NewsFeed() {
 		setFilter({ ...filter, pageIndex: filter.pageIndex + 1 })
 	}
 
-	const userInformation = useSelector((state: RootState) => state.user.information)
-
-	function isAdmin() {
-		return userInformation?.RoleId == 1
-	}
-
-	function isTeacher() {
-		return userInformation?.RoleId == 2
-	}
-
-	function isManager() {
-		return userInformation?.RoleId == 4
-	}
-
-	function isStdent() {
-		return userInformation?.RoleId == 3
-	}
-
-	function isAccountant() {
-		return userInformation?.RoleId == 6
-	}
-
-	function isAcademic() {
-		return userInformation?.RoleId == 7
-	}
+	const userInfo = useSelector((state: RootState) => state.user.information)
 
 	return (
 		<>
@@ -146,7 +122,7 @@ function NewsFeed() {
 						</div>
 					)}
 
-					{(isAdmin() || isTeacher() || isManager() || isAcademic()) && (
+					{(is(userInfo).admin || is(userInfo).teacher || is(userInfo).manager || is(userInfo).academic) && (
 						<div className="cc-news-container pb-[16px]">
 							<CreateNews onRefresh={() => setFilter({ ...filter, pageIndex: 1 })} />
 						</div>
