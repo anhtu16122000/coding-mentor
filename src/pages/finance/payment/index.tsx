@@ -16,6 +16,7 @@ import PaymentDetail from './PaymentDetail'
 import { TabCompData } from '~/common/custom/TabComp/type'
 import TabComp from '~/common/custom/TabComp'
 import Filters from './Filters'
+import { Select } from 'antd'
 
 const initParamters = {
 	pageSize: PAGE_SIZE,
@@ -33,7 +34,7 @@ const PaymentManagementPage = () => {
 	const [data, setData] = React.useState([])
 	const [sumPrice, setSumPrice] = React.useState({})
 	const [filters, setFilter] = React.useState(initParamters)
-	const [billStatus, setBillStatus] = useState<TabCompData[]>()
+	const [billStatus, setBillStatus] = useState<TabCompData[]>([])
 	const [statusSelected, setStatusSelected] = useState<number>(0)
 
 	useEffect(() => {
@@ -53,37 +54,37 @@ const PaymentManagementPage = () => {
 				setBillStatus([
 					{
 						id: 0,
-						title: 'Tất cả',
+						title: 'Tất cả' + ` (${res?.data?.typeAll})`,
 						value: res?.data?.typeAll
 					},
 					{
 						id: 1,
-						title: 'Đăng ký học',
+						title: 'Đăng ký học' + ` (${res?.data?.typeRegis})`,
 						value: res?.data?.typeRegis
 					},
 					{
 						id: 2,
-						title: 'Mua dịch vụ',
+						title: 'Mua dịch vụ' + ` (${res?.data?.typeService})`,
 						value: res?.data?.typeService
 					},
 					{
 						id: 3,
-						title: 'Đăng ký lớp dạy kèm',
+						title: 'Đăng ký lớp dạy kèm' + ` (${res?.data?.typeTutorial})`,
 						value: res?.data?.typeTutorial
 					},
 					{
 						id: 4,
-						title: 'Tạo thủ công',
+						title: 'Tạo thủ công' + ` (${res?.data?.typeManual})`,
 						value: res?.data?.typeManual
 					},
 					{
 						id: 5,
-						title: 'Học phí hàng tháng',
+						title: 'Học phí hàng tháng' + ` (${res?.data?.typeMonthly})`,
 						value: res?.data?.typeMonthly
 					},
 					{
 						id: 6,
-						title: 'Phí chuyển lớp',
+						title: 'Phí chuyển lớp' + ` (${res?.data?.typeClassChange})`,
 						value: res?.data?.typeClassChange
 					}
 				])
@@ -262,9 +263,24 @@ const PaymentManagementPage = () => {
 						<div className="flex items-center">
 							<Filters filters={filters} onReset={() => setFilter(initParamters)} onSubmit={(e) => setFilter({ ...e })} />
 
-							<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container ml-[8px] !mt-0">
+							{/* <div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container ml-[8px] !mt-0">
 								<TabComp data={billStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
-							</div>
+							</div> */}
+
+							<Select
+								placeholder="Loại thanh toán"
+								className="primay-input min-w-[210px] ml-[8px] !h-[36px]"
+								defaultValue={0}
+								onChange={(e) => handleSelecStatus(e)}
+							>
+								{billStatus.map((item, index) => {
+									return (
+										<Select.Option key={item?.id} value={item?.id}>
+											{item?.title}
+										</Select.Option>
+									)
+								})}
+							</Select>
 						</div>
 
 						<PaymentForm onRefresh={getData} />
