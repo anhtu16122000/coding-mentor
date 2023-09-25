@@ -10,12 +10,18 @@ import { playWithToken } from '~/common/utils/token-handle'
 import LoginForm from '~/common/components/Auth/LoginForm'
 import { setListClass, setStatusData, setTotalClass } from '~/store/classReducer'
 
+import { setAuthData, setAuthLoading, setRefreshToken } from '~/store/authReducer'
+
 function SignInx({ csrfToken }) {
 	const dispatch = useDispatch()
 
 	const [alloweRegisters, setAlloweRegisters] = useState(false)
 
 	useEffect(() => {
+		console.log('SignInx + useEffect')
+
+		dispatch(setAuthLoading(false))
+
 		getAllow()
 		dispatch(setListClass([]))
 		dispatch(setTotalClass(0))

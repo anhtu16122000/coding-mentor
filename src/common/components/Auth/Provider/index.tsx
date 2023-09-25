@@ -1,14 +1,12 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { classApi } from '~/api/learn/class'
-import { log } from '~/common/utils'
 import { logOut, playWithToken } from '~/common/utils/token-handle'
 import { userApi } from '~/services/auth'
 import { RootState } from '~/store'
 import { setAuthData, setAuthLoading, setRefreshToken } from '~/store/authReducer'
-import { setListClass, setStatusData, setTotalClass } from '~/store/classReducer'
 import { setUser } from '~/store/userReducer'
+import LoadingLayout from '../../MainLayout/LoadingLayout'
 
 type IAuthLayout = {
 	children: React.ReactNode
@@ -19,8 +17,6 @@ function AuthProvider({ children }: IAuthLayout) {
 
 	const { loading, data, refreshToken } = useSelector((state: RootState) => state.auth)
 
-	const listClassState = useSelector((state: RootState) => state.class.listClass)
-
 	const router = useRouter()
 
 	useEffect(() => {
@@ -28,6 +24,7 @@ function AuthProvider({ children }: IAuthLayout) {
 	}, [])
 
 	const allowNoneLogin = () => {
+		// Đây là nhưng page không yêu cầu login
 		if (
 			router.pathname.search('support-portal') < 1 &&
 			router.pathname.search('404') < 1 &&
@@ -53,44 +50,27 @@ function AuthProvider({ children }: IAuthLayout) {
 
 	const userInformation = useSelector((state: RootState) => state.user.information)
 
-	const is = {
-		parent: userInformation?.RoleId == '8',
-		admin: userInformation?.RoleId == '1'
-	}
-
-	const getClass = async () => {
-		// if (!!listClassState && listClassState.length == 0) {
-		// 	try {
-		// 		const res = await classApi.getAll({ pageSize: 10, pageIndex: 1 })
-		// 		if (res.status == 200) {
-		// 			dispatch(setListClass([...res.data.data]))
-		// 			dispatch(setTotalClass(res.data?.totalRow))
-		// 		}
-		// 	} catch (err) {}
-		// }
-	}
-
+	// Gọi api để lấy token mới
 	const _refreshToken = async (param) => {
-		log.Red('AuthProvider Refreshing Token', new Date().getTime())
-
 		if (!allowNoneLogin()) {
-			console.time('Gọi api RefreshToken hết')
 			try {
 				const response = await userApi.refreshToken(param)
 				if (response.status == 200) {
-					playWithToken(response?.data, dispatch, getClass)
+					// Bỏ token mới dô đây để lưu lại
+					playWithToken(response?.data, dispatch)
 				}
 			} catch (error) {}
-			console.timeEnd('Gọi api RefreshToken hết')
 		}
 	}
 
 	function isPastDate(timestamp) {
+		// Kiểm tra xem token đã hết hạn refresh hay chưa
 		const date = new Date(timestamp)
 		return date < new Date()
 	}
 
 	function checkTimestamp(timestamp) {
+		// Kiểm tra xem hạn refresh của token còn trên 8 tiếng hay không
 		const currentTime = Date.now()
 		const eightHoursInMilliseconds = 8 * 60 * 60 * 1000
 
@@ -102,16 +82,17 @@ function AuthProvider({ children }: IAuthLayout) {
 			const response = await JSON.parse(localStorage.getItem('userData'))
 
 			if (!!response?.theRefresh) {
+				// Nếu có token thì mới vào đây, không thì logout luôn
 				const theRefresh = response.theRefresh
 				dispatch(setRefreshToken(theRefresh))
 
 				if (theRefresh?.refreshTokenExpires) {
 					if (isPastDate(new Date(theRefresh?.refreshTokenExpires).getTime())) {
-						if (!allowNoneLogin()) {
-							logOut()
-						}
+						// Nếu hết hạn refresh token thì logout
+						logOut()
 					} else {
 						if (checkTimestamp(new Date(theRefresh?.refreshTokenExpires).getTime())) {
+							// Nếu hạn refresh token còn dưới 8 tiếng thì refresh token
 							_refreshToken({ RefreshToken: theRefresh?.refreshToken, token: response?.token })
 						} else {
 							if (!userInformation) {
@@ -124,15 +105,24 @@ function AuthProvider({ children }: IAuthLayout) {
 					}
 				}
 			} else {
-				if (!allowNoneLogin()) {
-					logOut()
-					dispatch(setAuthLoading(false))
-				}
+				logOut()
 			}
 		} catch (error) {}
 	}
 
-	return <>{children}</>
+	useEffect(() => {
+		if (router.asPath.includes('/signin') || router.asPath.includes('/login')) {
+			// Khi router về trang login thì ngưng load
+			dispatch(setAuthLoading(false))
+		}
+	}, [router])
+
+	if (loading == false) {
+		// Chỉ khi ngưng loading thì mới hiện ra
+		return <>{children}</>
+	}
+
+	return <LoadingLayout />
 }
 
 export default AuthProvider
