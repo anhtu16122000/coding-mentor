@@ -89,6 +89,10 @@ const ModalReviewScheduleClass = (props) => {
 						<p className="font-medium">Ngày bắt đầu:</p>
 						<span>{moment(dataChangeSchedule.StartDay).format('DD/MM/YYYY')}</span>
 					</div>
+					<div className="col-md-6 col-12 mb-3">
+						<p className="font-medium">Bảng điểm mẫu:</p>
+						<span>{dataChangeSchedule?.ScoreboardTemplateName}</span>
+					</div>
 					<Divider>Lịch học tổng quát</Divider>
 					{listCalendar.map((calendar) => {
 						return (

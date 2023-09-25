@@ -7,7 +7,7 @@ import { CgAddR, CgFileDocument } from 'react-icons/cg'
 import { FaChalkboardTeacher } from 'react-icons/fa'
 import { FiArrowDownCircle, FiArrowUpCircle, FiEdit, FiMenu, FiMoreVertical, FiPrinter, FiSave, FiSend, FiTrash2 } from 'react-icons/fi'
 import { HiOutlineFilter } from 'react-icons/hi'
-import { MdOutlineCancel, MdOutlineMoney } from 'react-icons/md'
+import { MdOutlineCancel, MdOutlineMoney, MdOutlineZoomOutMap } from 'react-icons/md'
 import { RiExchangeLine } from 'react-icons/ri'
 import { TbDownload, TbReportMoney, TbSchool, TbUpload } from 'react-icons/tb'
 import { VscRootFolderOpened } from 'react-icons/vsc'
@@ -33,6 +33,9 @@ const IconButton: FC<IIconButton> = (props) => {
 		}
 		if (background == 'primary') {
 			return 'bg-[#ab1d38] hover:bg-[#9a1b33] focus:bg-[#85172c]'
+		}
+		if (background == 'purple') {
+			return 'bg-[#800080] hover:bg-[#660066] focus:bg-[#4c004c]'
 		}
 		if (background == 'disabled') {
 			return 'bg-[#cacaca] hover:bg-[#bababa] focus:bg-[#acacac] cursor-not-allowed'

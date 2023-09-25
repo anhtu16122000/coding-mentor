@@ -95,7 +95,6 @@ const CalenderClass = () => {
 				thisCalendar.current.calendar.gotoDate(moment(res.data.data[0].StartTime).format())
 
 				if (res.data.data.length > 0) {
-					
 					const newListCalendar = res.data.data.map((item, index) => {
 						return {
 							...item,
@@ -137,7 +136,8 @@ const CalenderClass = () => {
 			TeachingFee: dataChangeSchedule.TeachingFee,
 			Thumbnail: dataChangeSchedule.Thumbnail,
 			Type: dataChangeSchedule.Type,
-			schedules: listCalendar
+			schedules: listCalendar,
+			ScoreboardTemplateId: dataChangeSchedule?.ScoreboardTemplateId
 		}
 		try {
 			const res = await classApi.addClass(DATA_SUBMIT)

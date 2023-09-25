@@ -28,6 +28,7 @@ import * as yup from 'yup'
 import { formRequired } from '~/common/libs/others/form'
 import { setRoom } from '~/store/classReducer'
 import { removeCommas } from '~/common/utils/super-functions'
+import { gradesTemplatesApi } from '~/api/configs/score-broad-templates'
 
 const ContainerTime = styled.div`
 	display: flex;
@@ -97,7 +98,7 @@ const CreateClassForm = (props) => {
 	// const [tutors, setTutors] = useState<any>([])
 	const [academic, setAcademic] = useState([])
 	const [selectedBranch, setSelectedBranch] = useState(null)
-
+	const [dataScoreBoardTemplate, setDataScoreBoardTemplate] = useState([])
 	// Program lúc chưa parse
 	const [programs, setPrograms] = useState([])
 	const [listTimeFrames, setListTimeFrames] = useState([{ Id: 1, DayOfWeek: null, StudyTimeId: null, TeacherId: null, TutorIds: null }])
@@ -121,7 +122,8 @@ const CreateClassForm = (props) => {
 		CurriculumId: yup.string().required('Bạn không được để trống'),
 		StartDay: yup.string().required('Bạn không được để trống'),
 		TeachingFee: yup.string().required('Bạn không được để trống'),
-		Price: yup.string().required('Bạn không được để trống')
+		Price: yup.string().required('Bạn không được để trống'),
+		ScoreboardTemplateId: yup.string().required('Bạn không được để trống')
 	})
 
 	const yupSync = {
@@ -187,6 +189,21 @@ const CreateClassForm = (props) => {
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
+		}
+	}
+	const getAllScoreBoardTemplate = async () => {
+		try {
+			const res = await gradesTemplatesApi.get()
+			if (res?.status === 200) {
+				const options = res?.data?.data?.map(({ Id, Name }) => ({ title: Name, value: Id })) || []
+				console.log('options', options)
+				setDataScoreBoardTemplate(options)
+			}
+			if (res?.status === 204) {
+				setDataScoreBoardTemplate([])
+			}
+		} catch (err) {
+			ShowNoti('error', err?.message)
 		}
 	}
 
@@ -396,6 +413,7 @@ const CreateClassForm = (props) => {
 		const getAcademicNameById = academic.find((item) =>
 			isAcademic() ? item.value === Number(user.UserInformationId) : item.value === data.AcademicId
 		)
+		const scoreboardTemplateName = dataScoreBoardTemplate.find((item) => item?.value === data?.ScoreboardTemplateId)?.title
 		const getRoomNameById = room.find((item) => item.value === data.RoomId)
 
 		let DATA_LESSON_WHEN_CREATE = {
@@ -418,9 +436,10 @@ const CreateClassForm = (props) => {
 			AcademicName: getAcademicNameById?.title,
 			TeachingFee: removeCommas(data.TeachingFee),
 			MaxQuantity: data.MaxQuantity || 20,
-			Type: isOnline ? 2 : 1
+			Type: isOnline ? 2 : 1,
+			ScoreboardTemplateId: data?.ScoreboardTemplateId,
+			ScoreboardTemplateName: scoreboardTemplateName
 		}
-
 		try {
 			setIsLoading(true)
 			const res = await onSubmit(DATA_LESSON_WHEN_CREATE)
@@ -444,6 +463,9 @@ const CreateClassForm = (props) => {
 			}
 			if (state.studyTime.StudyTime.length === 0) {
 				getAllStudyTime()
+			}
+			if (dataScoreBoardTemplate.length === 0) {
+				getAllScoreBoardTemplate()
 			}
 			refPopoverWrapperBtn.current.close()
 		}
@@ -573,6 +595,16 @@ const CreateClassForm = (props) => {
 									</div>
 								</ContainerTime>
 							)}
+						</div>
+						<div className="col-md-6 col-12">
+							<SelectField
+								isRequired
+								rules={[yupSync]}
+								placeholder="Chọn bảng điểm mẫu"
+								label="Bảng điểm mẫu"
+								name="ScoreboardTemplateId"
+								optionList={dataScoreBoardTemplate}
+							/>
 						</div>
 						<div className="relative">
 							<button className="absolute top-0 right-0 z-10 -translate-x-2/4" type="button" onClick={handleAddListTimeFrame}>

@@ -5,21 +5,31 @@ import { gradesTemplatesApi } from '~/api/configs/score-broad-templates'
 import PrimaryButton from '../../Primary/Button'
 import { ShowNoti } from '~/common/utils'
 import { gradesColTemplatesApi } from '~/api/configs/score-column-templates'
+import { scoreColumnApi } from '~/api/configs/score-column'
 
 function ModalEditCol(props) {
-	const { isShow, onCancel, data, handleRefresh } = props
+	const { isShow, onCancel, data, handleRefresh, isClass = false } = props
 	const [form] = Form.useForm()
 	const [isLoading, setIsLoading] = useState(false)
 
 	const handleFinishForm = async (dataForm) => {
 		setIsLoading(true)
 		try {
-			const res = await gradesColTemplatesApi.put({
-				ScoreBoardTemplateId: data?.ScoreBoardTemplateId,
-				Index: data?.Index,
-				Id: data?.Id,
-				...dataForm
-			})
+			let res
+			if (isClass) {
+				// bảng mẫu từng class
+				res = await scoreColumnApi.put({
+					Id: data?.Id,
+					...dataForm
+				})
+			} else {
+				// bảng mẫu chung
+				res = await gradesColTemplatesApi.put({
+					ScoreBoardTemplateId: data?.ScoreBoardTemplateId,
+					Id: data?.Id,
+					...dataForm
+				})
+			}
 			if (res?.status === 200) {
 				ShowNoti('success', res?.data?.message)
 				handleRefresh()
