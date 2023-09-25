@@ -37,7 +37,6 @@ function TransScriptFlexColumnWrapper() {
 
 			for (const gradesStudent of infoGradesStudent) {
 				keyIndexAndTitleGrades[gradesStudent?.ScoreColumnId] = gradesStudent?.Value
-				keyIndexAndTitleGrades[`GradesId-${gradesStudent?.Id}`] = gradesStudent?.Id
 			}
 
 			return {
@@ -54,6 +53,7 @@ function TransScriptFlexColumnWrapper() {
 	const gradesColumns = colTemplate.map((item) => ({
 		title: item?.Name,
 		dataIndex: item?.Id,
+		width: item?.Type == 3 ? 250 : 150,
 		render: (value, dataRow, index) => {
 			return (
 				<InputScoreStudent
@@ -71,11 +71,13 @@ function TransScriptFlexColumnWrapper() {
 	const columns = [
 		{
 			title: 'Mã',
-			dataIndex: 'UserCode'
+			dataIndex: 'UserCode',
+			width: 150
 		},
 		{
 			title: 'Tên học viên',
 			dataIndex: 'FullName',
+			width: 200,
 			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
 		},
 		...gradesColumns
