@@ -16,7 +16,7 @@ import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import { setDiscount } from '~/store/discountReducer'
 import { setPaymentMethod } from '~/store/paymentMethodReducer'
-import { parseStringToNumber, wait } from '~/common/utils/common'
+import { parseStringToNumber, parseToMoney, wait } from '~/common/utils/common'
 import moment from 'moment'
 import ModalAllDiscount from '~/common/components/Class/ModalAllDiscount'
 import AvatarComponent from '~/common/components/AvatarComponent'
@@ -26,6 +26,7 @@ import { branchApi } from '~/api/manage/branch'
 import { setBranch } from '~/store/branchReducer'
 import { useRouter } from 'next/router'
 import { PATH_FINANCE } from '~/Router/path'
+import ModalReserve from '~/common/components/Class/ModalReserve'
 
 const tabs = [
 	{ Type: 1, label: 'Đăng ký học' },
@@ -85,6 +86,67 @@ const RegisterClass = () => {
 	const [listTimeFrames, setListTimeFrames] = useState([{ Id: 1, ExectedDay: null, StudyTimeId: null, Note: '' }])
 	const [activeMethod, setActiveMethod] = useState<IPaymentMethod>()
 
+	const [curReserve, setCurReserve] = useState(null)
+
+	function getRealPrice() {
+		if (!curReserve?.MoneyRemaining) {
+			return 0
+		}
+
+		let thatPrice = curReserve?.MoneyRemaining
+
+		if (totalPrice < thatPrice) {
+			thatPrice = totalPrice
+		}
+
+		if (discount && totalPrice > 0) {
+			thatPrice = totalPrice - discountPrice
+		}
+
+		return thatPrice > 0 ? thatPrice : 0
+	}
+
+	useEffect(() => {
+		if (paymentMethod && paymentMethod.length > 0) {
+			setActiveMethod(paymentMethod[0])
+		}
+	}, [])
+
+	useEffect(() => {
+		const reservePrice = getRealPrice()
+
+		const newLeftPrice =
+			totalPrice - (discountPrice || 0) - reservePrice - parseStringToNumber(!!form.getFieldValue('Paid') ? form.getFieldValue('Paid') : 0)
+
+		setLeftPrice(newLeftPrice)
+	}, [classesSelected, totalPrice, discountPrice])
+
+	const handleChangePay = (data) => {
+		const reservePrice = getRealPrice()
+
+		const calculateLeftPrice = totalPrice - discountPrice - reservePrice - parseStringToNumber(data.target.value)
+
+		setLeftPrice(calculateLeftPrice)
+	}
+
+	useEffect(() => {
+		const reservePrice = getRealPrice()
+
+		const discountValue = getDiscountValue()
+		setDiscountPrice(discountValue)
+
+		const newLeftPrice =
+			totalPrice - (discountValue || 0) - reservePrice - parseStringToNumber(!!form.getFieldValue('Paid') ? form.getFieldValue('Paid') : 0)
+
+		setLeftPrice(newLeftPrice)
+	}, [totalPrice, detailDiscount, curReserve])
+
+	useEffect(() => {
+		if (paymentMethod && paymentMethod.length > 0) {
+			setActiveMethod(paymentMethod[0])
+		}
+	}, [paymentMethod])
+
 	const [form] = Form.useForm()
 	const dispatch = useDispatch()
 
@@ -112,17 +174,18 @@ const RegisterClass = () => {
 
 	const handleSetClass = async () => {
 		const body = classesSelected.map((_item) => _item.Id)
-		try {
-			const res = await voucherApi.getVoucher(body)
-			if (res.status === 200) {
-				setVoucher(res.data.data)
-			}
-			if (res.status === 204) {
-				setVoucher(0)
-			}
-		} catch (err) {
-			ShowNoti('error', err.message)
-		}
+
+		// try {
+		// 	const res = await voucherApi.getVoucher(body)
+		// 	if (res.status === 200) {
+		// 		setVoucher(res.data.data)
+		// 	}
+		// 	if (res.status === 204) {
+		// 		setVoucher(0)
+		// 	}
+		// } catch (err) {
+		// 	ShowNoti('error', err.message)
+		// }
 	}
 
 	useEffect(() => {
@@ -161,14 +224,6 @@ const RegisterClass = () => {
 			return getNormalDiscountValue(totalPrice, detailDiscount?.MaxDiscount)
 		}
 	}
-
-	useEffect(() => {
-		const discountValue = getDiscountValue()
-		setDiscountPrice(discountValue)
-		const newLeftPrice =
-			totalPrice - discountValue - voucher - parseStringToNumber(!!form.getFieldValue('Paid') ? form.getFieldValue('Paid') : 0)
-		setLeftPrice(newLeftPrice)
-	}, [totalPrice, detailDiscount, voucher])
 
 	useEffect(() => {
 		setDetailDiscount(null)
@@ -211,11 +266,6 @@ const RegisterClass = () => {
 		}
 	}, [])
 
-	const handleChangePay = (data) => {
-		const calculateLeftPrice = totalPrice - discountPrice - parseStringToNumber(data.target.value)
-		setLeftPrice(calculateLeftPrice)
-	}
-
 	function getDetailSubmit(type) {
 		let details = []
 
@@ -246,18 +296,13 @@ const RegisterClass = () => {
 	}
 
 	const onSubmit = async (data) => {
-		// const Expectations = listTimeFrames.map((_item) => {
-		// 	return { ExectedDay: _item.ExectedDay, StudyTimeId: _item.StudyTimeId, Note: _item.Note }
-		// })
-
 		if (!data?.StudentId) {
 			ShowNoti('error', 'Vui lòng chọn học viên')
 			return false
 		}
 
 		if (!!activeMethod && !!activeMethod?.Id) {
-			// setIsLoading(true)
-
+			setIsLoading(true)
 			let DATA_SUBMIT = {
 				StudentId: data.StudentId,
 				DiscountId: !!detailDiscount ? detailDiscount.Id : null,
@@ -267,15 +312,14 @@ const RegisterClass = () => {
 				Note: data.Note,
 				Type: activeTab.Type,
 				Paid: !!data.Paid ? parseStringToNumber(data.Paid) : 0,
-				Details: getDetailSubmit(activeTab.Type)
-				// Expectations
+				Details: getDetailSubmit(activeTab.Type),
+				ClassReserveId: curReserve?.Id || null
 			}
 
 			console.log('DATA_SUBMIT: ', DATA_SUBMIT)
-			console.time('-- Gọi Api Bill hết')
 
 			try {
-				const res = await billApi.add(DATA_SUBMIT)
+				const res = await billApi.v2(DATA_SUBMIT)
 				if (res.status == 200) {
 					ShowNoti('success', res.data.message)
 					resetThis()
@@ -285,7 +329,6 @@ const RegisterClass = () => {
 				ShowNoti('error', err.message)
 			} finally {
 				setIsLoading(false)
-				console.timeEnd('-- Gọi Api Bill hết')
 			}
 		} else {
 			ShowNoti('error', 'Vui lòng chọn phương thức thanh toán')
@@ -318,7 +361,7 @@ const RegisterClass = () => {
 	}, [activeTab])
 
 	useEffect(() => {
-		if (classesSelected.length > 0 || programsSelected.length > 0) {
+		if (classesSelected || programsSelected) {
 			getTotalPrice()
 		}
 	}, [classesSelected, programsSelected])
@@ -328,12 +371,11 @@ const RegisterClass = () => {
 		setTotalPrice(totalPrice)
 	}
 
-	const handleSetDiscount = (_value) => {
-		if (!!_value) {
-			const checkDiscount = leftPrice - _value.Value
-
+	const handleSetDiscount = (discountItem) => {
+		if (!!discountItem) {
+			const checkDiscount = totalPrice - discountItem?.Value
 			if (checkDiscount > 0) {
-				setDetailDiscount(_value)
+				setDetailDiscount(discountItem)
 				ShowNoti('success', 'Áp dụng thành công')
 			} else {
 				ShowNoti('error', 'Khuyến mãi không phù hợp! Vui lòng chọn lại!')
@@ -343,13 +385,21 @@ const RegisterClass = () => {
 		}
 	}
 
+	// Không set thì form nó không rerender nên không làm được gì hết
+	const [curStudent, setCurStudent] = useState(null)
+
+	useEffect(() => {
+		setCurReserve(null)
+		setDetailDiscount(null)
+	}, [curStudent])
+
 	return (
 		<div className="wrapper-register-class">
 			<Form onFinish={onSubmit} layout="vertical" form={form}>
 				<div className="grid grid-cols-2 gap-4">
 					<div className="col-span-2">
 						<Card title="Thông tin cá nhân">
-							<FormUserRegister setClasses={setClasses} form={form} isReset={isReset} />
+							<FormUserRegister setClasses={setClasses} form={form} isReset={isReset} setCurStudent={setCurStudent} />
 						</Card>
 					</div>
 
@@ -381,8 +431,11 @@ const RegisterClass = () => {
 
 							<div className="col-span-1">
 								<div className="info-payment-register-class">
-									<p className="title mb-2">Phương thức thanh toán</p>
-									<div className="wrapper-payment-method-register-class">
+									<p className="title pb-[8px]">
+										Phương thức thanh toán <div className="inline text-[red]">*</div>
+									</p>
+
+									<div className="flex flex-wrap gap-[8px]">
 										{!!paymentMethod &&
 											paymentMethod.map((method) => {
 												return (
@@ -396,7 +449,7 @@ const RegisterClass = () => {
 														</div>
 
 														<div className="flex items-center justify-center gap-1 mt-1">
-															<p className="title text-sm">{method.Name}</p>
+															<p className="title text-[14px] mb-[-2px]">{method.Name}</p>
 															<ModalShowInfoPaymentMethod method={method} />
 														</div>
 													</div>
@@ -414,10 +467,6 @@ const RegisterClass = () => {
 										<span className="title">Tổng tiền</span>
 										<span className="title text-tw-orange">{Intl.NumberFormat('ja-JP').format(totalPrice)}</span>
 									</div>
-									<div className="flex items-center justify-between mb-3">
-										<span className="title">Giảm giá</span>
-										<span className="title text-tw-orange">{Intl.NumberFormat('ja-JP').format(voucher)}</span>
-									</div>
 
 									<div className="flex items-center justify-between mb-3">
 										<div className="flex items-center gap-1">
@@ -431,9 +480,16 @@ const RegisterClass = () => {
 											/>
 										</div>
 										<span className="title">{!!detailDiscount && detailDiscount?.Code}</span>
-
 										<span className="title text-tw-primary">{Intl.NumberFormat('ja-JP').format(discountPrice)}</span>
 									</div>
+
+									<ModalReserve
+										studentId={curStudent}
+										curReserve={curReserve}
+										onSubmit={setCurReserve}
+										totalPrice={totalPrice}
+										discount={discountPrice}
+									/>
 
 									<div className="flex items-center justify-between mb-3">
 										<span className="title">Thanh toán</span>
@@ -448,16 +504,26 @@ const RegisterClass = () => {
 
 									<div className="flex items-center justify-between mb-3">
 										<span className="title">Ngày hẹn trả</span>
-										<DatePickerField className="mb-0 w-auto" mode="single" name="PaymentAppointmentDate" label="" />
+										<DatePickerField
+											placeholder="Chọn thời gian"
+											className="mb-0 !w-[180px]"
+											mode="single"
+											name="PaymentAppointmentDate"
+											label=""
+										/>
 									</div>
+
 									<div className="flex items-center">
 										<TextBoxField className="w-full" label="Ghi chú" name="Note" />
 									</div>
+
 									<Divider />
+
 									<div className="flex items-center justify-between mb-3">
 										<span className="text-xl font-medium">Thành tiền</span>
-										<span className="text-xl font-medium text-tw-secondary">{Intl.NumberFormat('ja-JP').format(leftPrice)}</span>
+										<span className="text-xl font-medium text-tw-secondary">{!leftPrice ? 0 : parseToMoney(leftPrice)}</span>
 									</div>
+
 									<div className="flex-all-center">
 										<PrimaryButton
 											loading={isLoading}

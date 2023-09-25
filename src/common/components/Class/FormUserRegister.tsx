@@ -10,8 +10,10 @@ import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 
 const FormUserRegister = (props) => {
+	const { form, setClasses, isReset, setCurStudent } = props
+
 	const router = useRouter()
-	const { form, setClasses, isReset } = props
+
 	const [students, setStudents] = useState([])
 	const [userInfo, setUserInfo] = useState<IUserInformation>()
 
@@ -40,8 +42,11 @@ const FormUserRegister = (props) => {
 	}
 
 	const handleGetStudent = async (data) => {
+		!!setCurStudent && setCurStudent(data)
+
 		const getStudent = students.find((student) => student.UserInformationId == data)
 		form.setFieldsValue({ StudentId: getStudent?.UserInformationId })
+
 		setUserInfo(getStudent)
 		if (!!form.getFieldValue('BranchId')) {
 			try {

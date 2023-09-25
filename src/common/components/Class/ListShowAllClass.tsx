@@ -73,10 +73,20 @@ const ListShowAllClass = (props) => {
 									<span className="title">Giá:</span>
 									<span className="font-normal ml-1">{Intl.NumberFormat('ja-JP').format(item?.Price)}</span>
 								</p>
+								{/* <p>
+									<span className="title">Hình thức:</span>
+									<span className="font-normal ml-1">{item?.PaymentTypeName}</span>
+								</p> */}
 								<p>
-									<span className="title">Số lượng:</span>
+									<span className="title">Buổi đã học:</span>
 									<span className="font-normal ml-1">
-										{item.StudentQuantity}/{item.MaxQuantity} học viên
+										{item?.CompletedLesson} / {item?.TotalLesson}
+									</span>
+								</p>
+								<p>
+									<span className="title">Học viên:</span>
+									<span className="font-normal ml-1">
+										{item.StudentQuantity} / {item.MaxQuantity}
 									</span>
 								</p>
 							</div>

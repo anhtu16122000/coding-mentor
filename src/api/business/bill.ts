@@ -8,11 +8,17 @@ export const billApi = {
 	getClassAvailable(params) {
 		return instance.get(`${url}/class-available`, { params: params })
 	},
+	getStudentReserve(params) {
+		return instance.get(`${url}/class-reserve-option`, { params: params })
+	},
 	getBillDetail(id) {
 		return instance.get<IApiResultData<IBillDetail[]>>(`${url}/detail/${id}`)
 	},
 	add(data) {
 		return instance.post(url, data)
+	},
+	v2(data) {
+		return instance.post(url + '/v2', data)
 	},
 	getDiscountHistory(params) {
 		return instance.get<IApiResultData<IGetDiscountHistory[]>>(`${url}/GetDiscountHistory`, { params })

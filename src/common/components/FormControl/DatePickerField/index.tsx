@@ -21,7 +21,7 @@ export default function DatePickerField(props: IDatePickerField) {
 						showTime={{ format: showTime }}
 						placement={placement}
 						allowClear={allowClear}
-						format={format}
+						format={format || 'HH:mm DD/MM/YYYY'}
 						disabledDate={props?.disabledDate}
 					/>
 				) : (
@@ -33,7 +33,7 @@ export default function DatePickerField(props: IDatePickerField) {
 						picker={picker}
 						placement={placement}
 						allowClear={allowClear}
-						format={format}
+						format={format || 'DD/MM/YYYY'}
 						disabledDate={props?.disabledDate}
 					/>
 				)
@@ -46,7 +46,7 @@ export default function DatePickerField(props: IDatePickerField) {
 					showTime={{ format: showTime }}
 					placement={placement}
 					allowClear={allowClear}
-					format={format}
+					format={format || 'HH:mm DD/MM/YYYY'}
 					disabledDate={props?.disabledDate}
 				/>
 			) : (
@@ -58,7 +58,7 @@ export default function DatePickerField(props: IDatePickerField) {
 					picker={picker}
 					placement={placement}
 					allowClear={allowClear}
-					format={format}
+					format={format || 'DD/MM/YYYY'}
 					disabledDate={props?.disabledDate}
 				/>
 			)}
