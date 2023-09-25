@@ -7,7 +7,8 @@ const InputScoreStudent = ({ value = '', gradeStudentsChange, isEditTable, dataC
 			// điểm
 			width: 'w-100%',
 			textAlign: 'text-right',
-			typeIp: 'number'
+			typeIp: 'number',
+			placeHolder: 'Nhập điểm'
 		},
 		2: {
 			// điểm trung bình
@@ -19,7 +20,8 @@ const InputScoreStudent = ({ value = '', gradeStudentsChange, isEditTable, dataC
 			// ghi chú
 			width: 'w-100%',
 			textAlign: 'text-left',
-			typeIp: 'text'
+			typeIp: 'text',
+			placeHolder: 'Thêm ghi chú'
 		}
 	}
 	const styleCell = TYPE_STYLE[Number(dataCol?.Type)]
@@ -85,7 +87,7 @@ const InputScoreStudent = ({ value = '', gradeStudentsChange, isEditTable, dataC
 	return (
 		<div className="flex justify-end">
 			<Input
-				placeholder="Nhập điểm"
+				placeholder={styleCell?.placeHolder || ''}
 				value={newValue}
 				type={styleCell.typeIp}
 				className={`rounded-lg mb-0 ${styleCell.width} `}
