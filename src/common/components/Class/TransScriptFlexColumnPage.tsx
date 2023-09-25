@@ -9,9 +9,14 @@ import { scoreColumnApi } from '~/api/configs/score-column'
 import { transformArrayToObject } from '~/common/utils/array'
 import InputScoreStudent from './InputScoreStudent'
 import TransScriptFlexColumn from './TranscriptFlexColumn'
+import { RootState } from '~/store'
+import { useSelector } from 'react-redux'
 
 function TransScriptFlexColumnWrapper() {
 	const router = useRouter()
+
+	const { RoleId } = useSelector((state: RootState) => state.user.information)
+
 	const { scoreBoardTemplateId = '', class: classId = '' } = router.query
 
 	const [transcripts, setTranscripts] = useState([])
@@ -160,6 +165,11 @@ function TransScriptFlexColumnWrapper() {
 	}, [])
 
 	const submitGradesConcurrently = useCallback(async (dataGrades) => {
+		if (dataGrades?.length <= 0) {
+			setIsEditTable(false)
+			return
+		}
+
 		setLoading(true)
 		const handleSubmitGrades = async (dataGrade) => {
 			try {
