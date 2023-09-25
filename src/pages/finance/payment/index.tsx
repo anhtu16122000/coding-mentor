@@ -104,9 +104,44 @@ const PaymentManagementPage = () => {
 
 	const columns = [
 		{
-			title: 'Mã',
-			dataIndex: 'Code',
-			width: 100
+			title: '',
+			dataIndex: 'Type',
+			width: 100,
+			render: (value, item) => {
+				if (value == 1) {
+					return (
+						<>
+							<div className="font-[600] mb-[4px]">Mã: {item?.Code}</div>
+							<span className="tag blue !ml-[-1px]">{item?.TypeName}</span>
+						</>
+					)
+				}
+
+				if (value == 2) {
+					return (
+						<>
+							<div className="font-[600] mb-[4px]">Mã: {item?.Code}</div>
+							<span className="tag green !ml-[-1px]">{item?.TypeName}</span>
+						</>
+					)
+				}
+
+				if (value == 3) {
+					return (
+						<>
+							<div className="font-[600] mb-[4px]">Mã: {item?.Code}</div>
+							<span className="tag yellow !ml-[-1px]">{item?.TypeName}</span>
+						</>
+					)
+				}
+
+				return (
+					<>
+						<div className="font-[600] mb-[4px]">Mã: {item?.Code}</div>
+						<span className="tag gray !ml-[-1px]">{item?.TypeName}</span>
+					</>
+				)
+			}
 		},
 		{
 			title: 'Người thanh toán',
@@ -122,6 +157,25 @@ const PaymentManagementPage = () => {
 						<p className="text-[#1E88E5] font-[600]">{value}</p>
 						<p className="text-[#000]">
 							Mã: <div className="inline font-[600]">{item?.UserCode}</div>
+						</p>
+					</>
+				)
+			}
+		},
+		{
+			title: 'Thanh toán',
+			dataIndex: 'Paid',
+			render: (value, item) => {
+				return (
+					<>
+						<p className="text-[#000]">
+							Tổng: <div className="inline font-[700] text-[#1E88E5]">{parseToMoney(item?.TotalPrice)}</div>
+						</p>
+						<p className="text-[#000]">
+							Đã thanh toán: <div className="inline font-[700] text-[#388E3C]">{parseToMoney(value)}</div>
+						</p>
+						<p className="text-[#000]">
+							Chưa thanh toán: <div className="inline font-[700] text-[#E53935]">{parseToMoney(item?.Debt)}</div>
 						</p>
 					</>
 				)
@@ -148,42 +202,10 @@ const PaymentManagementPage = () => {
 			}
 		},
 		{
-			title: 'Thanh toán',
-			dataIndex: 'Paid',
+			title: 'Tiền bảo lưu',
+			dataIndex: 'UsedMoneyReserve',
 			render: (value, item) => {
-				return (
-					<>
-						<p className="text-[#000]">
-							Tổng: <div className="inline font-[600] text-[#1E88E5]">{parseToMoney(item?.TotalPrice)}</div>
-						</p>
-						<p className="text-[#000]">
-							Đã thanh toán: <div className="inline font-[600] text-[#388E3C]">{parseToMoney(value)}</div>
-						</p>
-						<p className="text-[#000]">
-							Chưa thanh toán: <div className="inline font-[600] text-[#E53935]">{parseToMoney(item?.Debt)}</div>
-						</p>
-					</>
-				)
-			}
-		},
-		{
-			title: 'Loại',
-			dataIndex: 'Type',
-			width: 180,
-			render: (value, item) => {
-				if (value == 1) {
-					return <span className="tag blue">{item?.TypeName}</span>
-				}
-
-				if (value == 2) {
-					return <span className="tag green">{item?.TypeName}</span>
-				}
-
-				if (value == 3) {
-					return <span className="tag yellow">{item?.TypeName}</span>
-				}
-
-				return <span className="tag gray">{item?.TypeName}</span>
+				return <div className="font-[600] min-w-[100px]">{!!value && parseToMoney(value)}</div>
 			}
 		},
 		{

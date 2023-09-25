@@ -59,8 +59,6 @@ const ModalAllDiscount = (props) => {
 	}
 
 	const handleAddDiscount = (data) => {
-		console.log('----- handleAddDiscount: ', handleAddDiscount)
-
 		setDetailDiscount(data)
 		form.setFieldsValue({ DiscountId: data.Id })
 		setIsModalOpen(false)
