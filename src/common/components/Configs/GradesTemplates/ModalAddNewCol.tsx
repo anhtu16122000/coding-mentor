@@ -5,21 +5,30 @@ import { gradesTemplatesApi } from '~/api/configs/score-broad-templates'
 import PrimaryButton from '../../Primary/Button'
 import { ShowNoti } from '~/common/utils'
 import { gradesColTemplatesApi } from '~/api/configs/score-column-templates'
+import { scoreColumnApi } from '~/api/configs/score-column'
 
 function ModalAddNewCol(props) {
-	const { isShow, onCancel, dataTemplates, handleRefresh } = props
+	const { isShow, onCancel, dataTemplates, handleRefresh, classId, isClass } = props
 	const [form] = Form.useForm()
 	const [isLoading, setIsLoading] = useState(false)
 	const type = Form.useWatch('Type', form)
 
 	const handleFinishForm = async (dataForm) => {
 		setIsLoading(true)
-
 		try {
-			const res = await gradesColTemplatesApi.post({
-				...dataForm,
-				ScoreBoardTemplateId: dataTemplates?.Id
-			})
+			let res
+			if (isClass) {
+				res = await scoreColumnApi.post({
+					...dataForm,
+					ClassId: classId
+				})
+			} else {
+				res = await gradesColTemplatesApi.post({
+					...dataForm,
+					ScoreBoardTemplateId: dataTemplates?.Id
+				})
+			}
+
 			if (res?.status === 200) {
 				handleRefresh()
 				ShowNoti('success', res?.data?.message)

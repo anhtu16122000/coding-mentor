@@ -7,13 +7,14 @@ import { ShowNostis, ShowNoti } from '~/common/utils'
 import ModalEditCol from '../../Configs/GradesTemplates/ModalEditCol'
 import PrimaryButton from '../../Primary/Button'
 import { scoreColumnApi } from '~/api/configs/score-column'
+import ModalAddNewCol from '../../Configs/GradesTemplates/ModalAddNewCol'
 
 type SingleColType = {
 	Id: number
 }
 
 const ModalDraggableTableColumn = (props) => {
-	let { data = [], setData, handleRefresh } = props
+	let { data = [], setData, classId, handleRefresh } = props
 
 	const [isEditOrderCol, setIsEditOrderCol] = useState(false)
 
@@ -42,6 +43,7 @@ const ModalDraggableTableColumn = (props) => {
 
 	const [dragOver, setDragOver] = useState('')
 	const [isDragging, setIsDragging] = useState(false)
+	const [isShowAddCol, setShowAddCol] = useState(false)
 	const [sideInsert, setSideInsert] = useState('right')
 	const [isShowUpdateCol, setIsShowUpdateCol] = useState(false)
 	const [dataSingleCol, setDataSingleCol] = useState<SingleColType>({ Id: 0 })
@@ -157,6 +159,20 @@ const ModalDraggableTableColumn = (props) => {
 				Chỉnh sửa
 			</PrimaryButton>
 			<Modal footer={null} title="Cấu hình bảng điểm chung" open={isEditOrderCol} onCancel={() => setIsEditOrderCol(false)} width={1300}>
+				<div className="flex justify-end mb-4">
+					<PrimaryButton className="" onClick={() => setShowAddCol(true)} background="green" icon="add" type="button">
+						Thêm cột
+					</PrimaryButton>
+				</div>
+				<ModalAddNewCol
+					isShow={isShowAddCol}
+					onCancel={() => {
+						setShowAddCol(false)
+					}}
+					classId={classId}
+					isClass
+					handleRefresh={handleRefresh}
+				/>
 				<div className={styles.containerTable}>
 					<table cellSpacing={0} className={` border ${styles.table}`}>
 						<thead>

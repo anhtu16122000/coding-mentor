@@ -11,6 +11,6 @@ export const scoreApi = {
 		return instance.post(`${url}/InsertOrUpdate`, data)
 	},
 	calcMediumScore(data = {}) {
-		return instance.post(`${url}/Calculater-Medium-Score`, data)
+		return instance.post(`${url}/CalculaterMediumScore`, data)
 	}
 }

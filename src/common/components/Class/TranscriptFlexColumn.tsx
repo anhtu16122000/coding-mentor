@@ -1,11 +1,12 @@
 import { Select, Tooltip } from 'antd'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PrimaryButton from '../Primary/Button'
 import PrimaryTable from '../Primary/Table'
 import { ModalTranscript } from './ModalTranscript'
 import { scoreApi } from '~/api/configs/score'
 import { ShowNoti } from '~/common/utils'
 import ModalDraggableTableColumn from './ModalDraggableTableColumn'
+import ModalCalculateAverage from './ModalCalculateAverage'
 
 const TransScriptFlexColumn = ({
 	colTemplate,
@@ -30,23 +31,6 @@ const TransScriptFlexColumn = ({
 	gradeStudentsChange,
 	submitGradesConcurrently
 }) => {
-	const calMediumScores = async (classId, transcriptId) => {
-		setLoading(true)
-		try {
-			const res = await scoreApi.calcMediumScore({
-				classId: classId,
-				transcriptId: transcriptId
-			})
-			if (res?.status === 200) {
-				ShowNoti('success', res?.data?.message)
-				getTranscriptPointByClassId(classId, transcriptId)
-			}
-		} catch (error) {
-			ShowNoti('error', error?.message)
-		}
-		setLoading(false)
-	}
-
 	return (
 		<PrimaryTable
 			loading={loading}
@@ -89,30 +73,22 @@ const TransScriptFlexColumn = ({
 					</div>
 					<div className="flex gap-2 flex-wrap justify-end">
 						{!isEditTable && (
-							<ModalDraggableTableColumn data={colTemplate} setData={setColTemplate} handleRefresh={getColGradesTemplateById} />
+							<ModalDraggableTableColumn
+								classId={classId}
+								data={colTemplate}
+								setData={setColTemplate}
+								handleRefresh={() => getColGradesTemplateById(classId)}
+							/>
 						)}
 						{!isEditTable && (
-							<PrimaryButton
-								background="green"
-								type="button"
-								icon="calculate"
-								disable={!Boolean(transcriptId)}
-								onClick={() => {
-									calMediumScores(classId, transcriptId)
-								}}
-								loading={loading}
-							>
-								Tính điểm trung bình
-							</PrimaryButton>
+							<ModalCalculateAverage classId={classId} transcriptId={transcriptId} refreshAllGrades={getTranscriptPointByClassId} />
 						)}
 						{isEditTable && (
 							<PrimaryButton
 								background="blue"
 								type="button"
 								icon="save"
-								// disable={disabled}
 								onClick={() => {
-									// setIsEditTable(false)
 									const updatedGrades = []
 									Object.values(gradeStudentsChange.current).forEach((listGrades: any) => {
 										listGrades.forEach((item) => {
@@ -148,11 +124,10 @@ const TransScriptFlexColumn = ({
 								background="blue"
 								type="button"
 								icon="print"
-								// disable={disabled}
+								disable={!transcriptId}
 								onClick={() => {
 									setIsEditTable(true)
 								}}
-								// loading={isLoading}
 							>
 								Nhập điểm
 							</PrimaryButton>
@@ -163,11 +138,9 @@ const TransScriptFlexColumn = ({
 									background="purple"
 									type="button"
 									icon={`${openFullSCreen ? 'restore-screen' : 'full-screen'}`}
-									// disable={disabled} openFullSCreen
 									onClick={() => {
 										setOpenFullScreen(!openFullSCreen)
 									}}
-									// loading={isLoading}
 								/>
 							</span>
 						</Tooltip>
