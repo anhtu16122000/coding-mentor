@@ -5,14 +5,16 @@ import { transcriptApi } from '~/api/learn/transcript'
 import { ShowNoti } from '~/common/utils'
 import InputTextField from '../FormControl/InputTextField'
 import PrimaryButton from '../Primary/Button'
+import { scoreApi } from '~/api/configs/score'
 
 type IModalTranscript = {
 	mode: 'add' | 'edit' | 'delete'
 	Id?: any
 	onRefresh?: Function
 	setTranscriptId?: Function
+	data?: any
 }
-export const ModalTranscript: React.FC<IModalTranscript> = ({ mode, Id, onRefresh, setTranscriptId }) => {
+export const ModalTranscript: React.FC<IModalTranscript> = ({ mode, Id, onRefresh, data, setTranscriptId }) => {
 	const router = useRouter()
 	const [visible, setVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
@@ -51,12 +53,17 @@ export const ModalTranscript: React.FC<IModalTranscript> = ({ mode, Id, onRefres
 				setIsLoading(true)
 				const res = await transcriptApi.add(data)
 				if (res.status === 200) {
+					const transcriptId = res?.data?.data?.Id
 					onClose()
 					onRefresh && onRefresh()
 					setIsLoading(false)
 					form.resetFields()
+					const createInitScoreStudent = async (data) => {
+						const res = await scoreApi.postInsertOrUpdate(data)
+					}
+
 					ShowNoti('success', res.data.message)
-					setTranscriptId && setTranscriptId(res?.data?.data?.Id)
+					setTranscriptId && setTranscriptId(transcriptId)
 				}
 			} catch (error) {
 				setIsLoading(true)

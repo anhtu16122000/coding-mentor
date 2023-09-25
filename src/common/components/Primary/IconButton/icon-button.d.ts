@@ -1,6 +1,6 @@
 type IIconButton = {
 	disabled?: boolean
-	background?: 'green' | 'yellow' | 'blue' | 'red' | 'black' | 'disabled' | 'primary' | 'transparent'
+	background?: 'green' | 'yellow' | 'blue' | 'red' | 'black' | 'purple' | 'disabled' | 'primary' | 'transparent'
 	color: 'green' | 'yellow' | 'blue' | 'red' | 'black' | 'disabled' | 'primary' | 'transparent' | 'white'
 	icon?:
 		| 'add'
@@ -33,6 +33,7 @@ type IIconButton = {
 		| 'study'
 		| 'hide'
 		| 'salary'
+		| 'full-screen'
 	type: 'button' | 'submit'
 	onClick?: Function
 	className?: string
