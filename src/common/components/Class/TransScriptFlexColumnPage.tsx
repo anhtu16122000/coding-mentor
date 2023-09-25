@@ -1,5 +1,5 @@
 import { Card, Input, Modal, Select, Table, Tooltip } from 'antd'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { transcriptApi } from '~/api/learn/transcript'
 import { scoreApi } from '~/api/configs/score'
@@ -83,7 +83,7 @@ function TransScriptFlexColumnWrapper() {
 		...gradesColumns
 	]
 
-	const getTranscriptPointByClassId = async (classId, transcriptId) => {
+	const getTranscriptPointByClassId = useCallback(async (classId, transcriptId) => {
 		setLoading(true)
 		try {
 			const res = await scoreApi.get({
@@ -102,9 +102,9 @@ function TransScriptFlexColumnWrapper() {
 			ShowNoti('error', error?.message)
 		}
 		setLoading(false)
-	}
+	}, [])
 
-	const getStudentByClassId = async (classId, pageIndex) => {
+	const getStudentByClassId = useCallback(async (classId, pageIndex) => {
 		setLoading(true)
 		try {
 			const res = await studentInClassApi.getAll({
@@ -121,9 +121,9 @@ function TransScriptFlexColumnWrapper() {
 			ShowNoti('error', error?.message)
 		}
 		setLoading(false)
-	}
+	}, [])
 
-	const getTranscripts = async (classId) => {
+	const getTranscripts = useCallback(async (classId) => {
 		setLoading(true)
 		try {
 			const res = await transcriptApi.getTranscriptByClass(classId)
@@ -137,8 +137,9 @@ function TransScriptFlexColumnWrapper() {
 			ShowNoti('error', error?.message)
 		}
 		setLoading(false)
-	}
-	const getColGradesTemplateById = async (classId) => {
+	}, [])
+
+	const getColGradesTemplateById = useCallback(async (classId) => {
 		setLoading(true)
 		try {
 			const res = await scoreColumnApi.get({
@@ -146,7 +147,8 @@ function TransScriptFlexColumnWrapper() {
 				pageSize: 999
 			})
 			if (res?.status === 200) {
-				setColTemplate(res?.data?.data || [])
+				// sort Index từ bé đến lớn
+				setColTemplate(res?.data?.data?.sort((a, b) => a?.Index - b?.Index) || [])
 			}
 			if (res?.status === 204) {
 				setColTemplate([])
@@ -155,9 +157,9 @@ function TransScriptFlexColumnWrapper() {
 			ShowNoti('error', error?.message)
 		}
 		setLoading(false)
-	}
+	}, [])
 
-	const submitGradesConcurrently = async (dataGrades) => {
+	const submitGradesConcurrently = useCallback(async (dataGrades) => {
 		setLoading(true)
 		const handleSubmitGrades = async (dataGrade) => {
 			try {
@@ -179,7 +181,7 @@ function TransScriptFlexColumnWrapper() {
 		}
 		setLoading(false)
 		setGradeStudents(gradeStudentsChange.current)
-	}
+	}, [])
 
 	useEffect(() => {
 		getTranscripts(classId)

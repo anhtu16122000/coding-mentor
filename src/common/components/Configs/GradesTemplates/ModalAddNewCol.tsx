@@ -20,7 +20,8 @@ function ModalAddNewCol(props) {
 			if (isClass) {
 				res = await scoreColumnApi.post({
 					...dataForm,
-					ClassId: classId
+					ClassId: classId,
+					Factor: dataForm?.Factor || 0
 				})
 			} else {
 				res = await gradesColTemplatesApi.post({

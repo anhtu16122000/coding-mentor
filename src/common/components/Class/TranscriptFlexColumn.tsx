@@ -3,8 +3,6 @@ import React, { useRef, useState } from 'react'
 import PrimaryButton from '../Primary/Button'
 import PrimaryTable from '../Primary/Table'
 import { ModalTranscript } from './ModalTranscript'
-import { scoreApi } from '~/api/configs/score'
-import { ShowNoti } from '~/common/utils'
 import ModalDraggableTableColumn from './ModalDraggableTableColumn'
 import ModalCalculateAverage from './ModalCalculateAverage'
 
@@ -77,7 +75,11 @@ const TransScriptFlexColumn = ({
 								classId={classId}
 								data={colTemplate}
 								setData={setColTemplate}
-								handleRefresh={() => getColGradesTemplateById(classId)}
+								transcriptId={transcriptId}
+								handleRefresh={() => {
+									getTranscriptPointByClassId(classId, transcriptId)
+									getColGradesTemplateById(classId)
+								}}
 							/>
 						)}
 						{!isEditTable && (
@@ -109,11 +111,9 @@ const TransScriptFlexColumn = ({
 								background="red"
 								type="button"
 								icon="cancel"
-								// disable={disabled}
 								onClick={() => {
 									setIsEditTable(false)
 								}}
-								// loading={isLoading}
 							>
 								Hủy
 							</PrimaryButton>

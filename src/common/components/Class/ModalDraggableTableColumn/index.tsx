@@ -8,13 +8,14 @@ import ModalEditCol from '../../Configs/GradesTemplates/ModalEditCol'
 import PrimaryButton from '../../Primary/Button'
 import { scoreColumnApi } from '~/api/configs/score-column'
 import ModalAddNewCol from '../../Configs/GradesTemplates/ModalAddNewCol'
+import { scoreApi } from '~/api/configs/score'
 
 type SingleColType = {
 	Id: number
 }
 
 const ModalDraggableTableColumn = (props) => {
-	let { data = [], setData, classId, handleRefresh } = props
+	let { data = [], setData, transcriptId, classId, handleRefresh } = props
 
 	const [isEditOrderCol, setIsEditOrderCol] = useState(false)
 
@@ -48,6 +49,17 @@ const ModalDraggableTableColumn = (props) => {
 	const [isShowUpdateCol, setIsShowUpdateCol] = useState(false)
 	const [dataSingleCol, setDataSingleCol] = useState<SingleColType>({ Id: 0 })
 
+	const calMediumScores = useCallback(async (classId, transcriptId) => {
+		try {
+			const res = await scoreApi.calcMediumScore({
+				ClassId: Number(classId),
+				TranscriptId: Number(transcriptId)
+			})
+		} catch (error) {
+			ShowNoti('error', error?.message)
+		}
+	}, [])
+
 	const draggedId = useRef(0)
 	const prevData = useRef(data || [])
 	const styleBorder = sideInsert === 'right' ? styles.borderRight : styles.borderLeft
@@ -59,7 +71,9 @@ const ModalDraggableTableColumn = (props) => {
 					const res = await scoreColumnApi.delete(dataSingleCol?.Id)
 					if (res?.status === 200) {
 						ShowNoti('success', res?.data?.message)
-						handleRefresh()
+						calMediumScores(classId, transcriptId).then(() => {
+							handleRefresh()
+						})
 					}
 				} catch (error) {
 					ShowNoti('error', error?.message)
@@ -218,7 +232,10 @@ const ModalDraggableTableColumn = (props) => {
 				<ModalEditCol
 					isShow={isShowUpdateCol}
 					data={dataSingleCol}
-					handleRefresh={handleRefresh}
+					handleRefresh={() => {
+						calMediumScores(classId, transcriptId)
+						handleRefresh()
+					}}
 					onCancel={() => setIsShowUpdateCol(false)}
 					isClass
 				/>
