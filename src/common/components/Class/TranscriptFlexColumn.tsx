@@ -5,6 +5,22 @@ import PrimaryTable from '../Primary/Table'
 import { ModalTranscript } from './ModalTranscript'
 import ModalDraggableTableColumn from './ModalDraggableTableColumn'
 import ModalCalculateAverage from './ModalCalculateAverage'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
+
+// role như sau:
+// admin = 1,
+// teacher = 2,
+// student = 3,
+// manager = 4,
+// sale = 5,
+// accountant = 6,
+// academic = 7,
+// parents = 8,
+// tutor = 9
+// ADMIN MANAGER ACADEMIC  full quyền
+// TEACHER = nhập điểm - crud đợt thi - tính điểm trung bình
+// các roles còn lại chỉ được xem
 
 const TransScriptFlexColumn = ({
 	colTemplate,
@@ -29,6 +45,11 @@ const TransScriptFlexColumn = ({
 	gradeStudentsChange,
 	submitGradesConcurrently
 }) => {
+	const { RoleId } = useSelector((state: RootState) => state.user.information)
+	const isFullPermission = [1, 4, 7].includes(Number(RoleId))
+	const isTeacherPermission = [2].includes(Number(RoleId))
+	const isJustViewable = [3, 5, 6, 8, 9].includes(Number(RoleId))
+
 	return (
 		<PrimaryTable
 			loading={loading}
@@ -41,9 +62,9 @@ const TransScriptFlexColumn = ({
 			Extra={
 				<div className="flex flex-col justify-end gap-3">
 					<div className="flex gap-2 justify-end flex-wrap">
-						<ModalTranscript mode="add" onRefresh={() => getTranscripts(classId)} />
-
+						{(isFullPermission || isTeacherPermission) && <ModalTranscript mode="add" onRefresh={() => getTranscripts(classId)} />}
 						<Select
+							disabled={isEditTable}
 							className="w-[140px] custom-select-transcript"
 							onChange={(val) => {
 								setTranscriptId(val)
@@ -58,19 +79,21 @@ const TransScriptFlexColumn = ({
 								</Select.Option>
 							))}
 						</Select>
-						<ModalTranscript
-							mode="delete"
-							Id={transcriptId}
-							onRefresh={() => {
-								getTranscripts(classId)
-								setTranscriptId(null)
-								getTranscriptPointByClassId(classId, null)
-							}}
-							setTranscriptId={setTranscriptId}
-						/>
+						{(isFullPermission || isTeacherPermission) && (
+							<ModalTranscript
+								mode="delete"
+								Id={transcriptId}
+								onRefresh={() => {
+									getTranscripts(classId)
+									setTranscriptId(null)
+									getTranscriptPointByClassId(classId, null)
+								}}
+								setTranscriptId={setTranscriptId}
+							/>
+						)}
 					</div>
 					<div className="flex gap-2 flex-wrap justify-end">
-						{!isEditTable && (
+						{!isEditTable && isFullPermission && (
 							<ModalDraggableTableColumn
 								classId={classId}
 								data={colTemplate}
@@ -82,10 +105,10 @@ const TransScriptFlexColumn = ({
 								}}
 							/>
 						)}
-						{!isEditTable && (
+						{!isEditTable && (isFullPermission || isTeacherPermission) && (
 							<ModalCalculateAverage classId={classId} transcriptId={transcriptId} refreshAllGrades={getTranscriptPointByClassId} />
 						)}
-						{isEditTable && (
+						{isEditTable && (isFullPermission || isTeacherPermission) && (
 							<PrimaryButton
 								background="blue"
 								type="button"
@@ -106,7 +129,7 @@ const TransScriptFlexColumn = ({
 								Lưu tất cả
 							</PrimaryButton>
 						)}
-						{isEditTable && (
+						{isEditTable && (isFullPermission || isTeacherPermission) && (
 							<PrimaryButton
 								background="red"
 								type="button"
@@ -119,7 +142,7 @@ const TransScriptFlexColumn = ({
 							</PrimaryButton>
 						)}
 
-						{!isEditTable && (
+						{!isEditTable && (isFullPermission || isTeacherPermission) && (
 							<PrimaryButton
 								background="blue"
 								type="button"

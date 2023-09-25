@@ -18,7 +18,6 @@ import { RollUpPage } from './RollUpPage'
 import { RollUpStudent } from './RollUpStudent'
 import { RollUpTeacherPage } from './RollUpTeacherPage'
 import { ScheduleList } from './ScheduleList'
-import { TranscriptPage } from './TranscriptPage'
 import HomeWork from './HomeWork'
 import TransScriptFlexColumnPage from './TransScriptFlexColumnPage'
 
@@ -45,7 +44,6 @@ const itemsTeacher = [
 	'Tài liệu',
 	'Điểm danh',
 	'Bảng điểm',
-	'Bảng điểm old',
 	'Điểm danh giáo viên',
 	'Phản hồi buổi học',
 	'Thông báo'
