@@ -27,10 +27,11 @@ import { setBranch } from '~/store/branchReducer'
 import { useRouter } from 'next/router'
 import { PATH_FINANCE } from '~/Router/path'
 import ModalReserve from '~/common/components/Class/ModalReserve'
+import ModalTuitionOption from '~/common/components/Class/ModalTuitionOption'
 
 const tabs = [
 	{ Type: 1, label: 'Đăng ký học' },
-	{ Type: 3, label: 'Đăng ký dạy kèm' }
+	{ Type: 2, label: 'Đóng trước' }
 ]
 
 const CardBody = (props) => {
@@ -39,7 +40,7 @@ const CardBody = (props) => {
 
 	return (
 		<>
-			{type == 1 && (
+			{(type == 1 || type == 2) && (
 				<FormRegisterClass
 					setClasses={setClasses}
 					classes={classes}
@@ -48,6 +49,7 @@ const CardBody = (props) => {
 					programsSelected={programsSelected}
 					setProgramsSelected={setProgramsSelected}
 					form={form}
+					type={type}
 					setTotalPrice={() => {}}
 					setLeftPrice={setLeftPrice}
 					discountPrice={discountPrice}
@@ -71,20 +73,25 @@ const RegisterClass = () => {
 	const discount = useSelector((state: RootState) => state.discount.Discount)
 	const paymentMethod = useSelector((state: any) => state.paymentMethod.PaymentMethod)
 	const { push } = useRouter()
+
 	const [classes, setClasses] = useState([])
+
 	const [classesSelected, setClassesSelected] = useState([])
 	const [programsSelected, setProgramsSelected] = useState([])
 	const [detailDiscount, setDetailDiscount] = useState<IDiscount>()
 	const [totalPrice, setTotalPrice] = useState(0)
 	const [discountPrice, setDiscountPrice] = useState(0)
 	const [leftPrice, setLeftPrice] = useState(0)
-	const [activeTab] = useState(tabs[0])
+	// const [activeTab] = useState(tabs[0])
 	const [isLoading, setIsLoading] = useState(false)
 	const [curriculum, setCurriculum] = useState(null)
 	const [listTimeFrames, setListTimeFrames] = useState([{ Id: 1, ExectedDay: null, StudyTimeId: null, Note: '' }])
 	const [activeMethod, setActiveMethod] = useState<IPaymentMethod>()
 
 	const [curReserve, setCurReserve] = useState(null)
+	const [curTuition, setCurTuition] = useState(null)
+
+	const [totalWithTuition, setTotalWithTuition] = useState(null)
 
 	function getRealPrice() {
 		if (!curReserve?.MoneyRemaining) {
@@ -93,15 +100,17 @@ const RegisterClass = () => {
 
 		let thatPrice = curReserve?.MoneyRemaining
 
-		if (totalPrice < thatPrice) {
-			thatPrice = totalPrice
+		const curPrice = activeTab?.Type == 1 ? totalPrice : totalWithTuition
+
+		if (curPrice < thatPrice) {
+			thatPrice = curPrice
 		}
 
-		if (discountPrice > 0 && totalPrice > 0) {
-			thatPrice = totalPrice - discountPrice
+		if (discountPrice > 0 && curPrice > 0) {
+			thatPrice = curPrice - discountPrice
 		}
 
-		return thatPrice > 0 ? thatPrice : 0
+		return thatPrice > curReserve?.MoneyRemaining ? curReserve?.MoneyRemaining : thatPrice
 	}
 
 	useEffect(() => {
@@ -113,30 +122,62 @@ const RegisterClass = () => {
 	useEffect(() => {
 		const reservePrice = getRealPrice()
 
-		const newLeftPrice =
-			totalPrice - (discountPrice || 0) - reservePrice - parseStringToNumber(!!form.getFieldValue('Paid') ? form.getFieldValue('Paid') : 0)
+		let tempLeftPrice = 0
 
-		setLeftPrice(newLeftPrice)
-	}, [classesSelected, totalPrice, discountPrice])
+		let tempPaid = parseStringToNumber(!!form.getFieldValue('Paid') ? form.getFieldValue('Paid') : 0)
+
+		// const newLeftPrice = totalPrice - discountPrice - reservePrice - tempPaid
+
+		if (activeTab?.Type == 1) {
+			tempLeftPrice = totalPrice - discountPrice - reservePrice - tempPaid
+		}
+
+		if (activeTab?.Type == 2) {
+			tempLeftPrice = totalWithTuition - discountPrice - reservePrice - tempPaid
+		}
+
+		// activeTab?.Type == 2
+
+		setLeftPrice(tempLeftPrice)
+	}, [classesSelected, totalPrice, discountPrice, totalWithTuition])
 
 	const handleChangePay = (data) => {
 		const reservePrice = getRealPrice()
 
-		const calculateLeftPrice = totalPrice - discountPrice - reservePrice - parseStringToNumber(data.target.value)
+		let tempLeftPrice = 0
 
-		setLeftPrice(calculateLeftPrice)
+		// const calculateLeftPrice = totalPrice - discountPrice - reservePrice - parseStringToNumber(data.target.value)
+
+		if (activeTab?.Type == 1) {
+			tempLeftPrice = totalPrice - discountPrice - reservePrice - parseStringToNumber(data.target.value)
+		}
+
+		if (activeTab?.Type == 2) {
+			tempLeftPrice = totalWithTuition - discountPrice - reservePrice - parseStringToNumber(data.target.value)
+		}
+
+		setLeftPrice(tempLeftPrice)
 	}
 
 	useEffect(() => {
 		const reservePrice = getRealPrice()
 
+		let tempLeftPrice = 0
+
+		let tempPaid = parseStringToNumber(!!form.getFieldValue('Paid') ? form.getFieldValue('Paid') : 0)
+
 		const discountValue = getDiscountValue()
 		setDiscountPrice(discountValue)
 
-		const newLeftPrice =
-			totalPrice - (discountValue || 0) - reservePrice - parseStringToNumber(!!form.getFieldValue('Paid') ? form.getFieldValue('Paid') : 0)
+		if (activeTab?.Type == 1) {
+			tempLeftPrice = totalPrice - discountValue - reservePrice - tempPaid
+		}
 
-		setLeftPrice(newLeftPrice)
+		if (activeTab?.Type == 2) {
+			tempLeftPrice = totalWithTuition - discountValue - reservePrice - tempPaid
+		}
+
+		setLeftPrice(tempLeftPrice)
 	}, [totalPrice, detailDiscount, curReserve])
 
 	useEffect(() => {
@@ -293,6 +334,8 @@ const RegisterClass = () => {
 		return details
 	}
 
+	console.log('------- classesSelected: ', classesSelected)
+
 	const onSubmit = async (data) => {
 		if (!data?.StudentId) {
 			ShowNoti('error', 'Vui lòng chọn học viên')
@@ -316,20 +359,47 @@ const RegisterClass = () => {
 
 			console.log('DATA_SUBMIT: ', DATA_SUBMIT)
 
-			try {
-				const res = await billApi.v2(DATA_SUBMIT)
-				if (res.status == 200) {
-					ShowNoti('success', res.data.message)
-					resetThis()
-					push(PATH_FINANCE.payment)
-				}
-			} catch (err) {
-				ShowNoti('error', err.message)
-			} finally {
-				setIsLoading(false)
+			if (activeTab.Type == 1) {
+				postBillv2(DATA_SUBMIT)
+			}
+
+			if (activeTab.Type == 2) {
+				postTuition({ ...DATA_SUBMIT, TuitionPackageId: curTuition?.Id, ClassId: classesSelected[0]?.Id })
 			}
 		} else {
 			ShowNoti('error', 'Vui lòng chọn phương thức thanh toán')
+		}
+	}
+
+	async function postBillv2(params) {
+		try {
+			const res = await billApi.v2(params)
+			if (res.status == 200) {
+				ShowNoti('success', res.data.message)
+				resetThis()
+				push(PATH_FINANCE.payment)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	async function postTuition(params) {
+		console.log('------ postTuition DATA_SUBMIT: ', params)
+
+		try {
+			const res = await billApi.tuition(params)
+			if (res.status == 200) {
+				ShowNoti('success', res.data.message)
+				resetThis()
+				push(PATH_FINANCE.payment)
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		} finally {
+			setIsLoading(false)
 		}
 	}
 
@@ -350,13 +420,6 @@ const RegisterClass = () => {
 			ShowNoti('error', err.message)
 		}
 	}
-
-	useEffect(() => {
-		getBranchs()
-		setProgramsSelected([])
-		setClassesSelected([])
-		setCurriculum(null)
-	}, [activeTab])
 
 	useEffect(() => {
 		if (classesSelected || programsSelected) {
@@ -391,20 +454,122 @@ const RegisterClass = () => {
 		setDetailDiscount(null)
 	}, [curStudent])
 
+	const [activeTab, setActiveTab] = useState({ Type: 1, label: 'Đăng ký học' })
+
+	useEffect(() => {
+		getBranchs()
+		setProgramsSelected([])
+		setClassesSelected([])
+		setCurriculum(null)
+	}, [activeTab])
+
+	const handleChangeTab = (tab) => {
+		setActiveTab(tab)
+	}
+
+	function calculateDiscountAmount(totalAmount, discountPercentage) {
+		// Calculate the discount amount
+		var discountAmount = (totalAmount * discountPercentage) / 100
+
+		console.log('--- discountAmount: ', discountAmount)
+
+		return discountAmount
+	}
+
+	const [disPrice, setDisPrice] = useState(0)
+
+	function getDiscountPrice() {
+		const totalWithMonths = totalPrice * curTuition?.Months
+
+		if (!curTuition?.DiscountType) {
+			return 0
+		}
+
+		if (curTuition?.DiscountType == 1) {
+			const result = curTuition?.Discount
+			setDisPrice(result > 0 ? result : 0)
+		}
+
+		if (curTuition?.DiscountType == 2) {
+			const result = calculateDiscountAmount(totalWithMonths, curTuition?.Discount)
+			setDisPrice(result > 0 ? result : 0)
+		}
+	}
+
+	function getFuckingDiscount() {
+		const totalWithMonths = totalPrice * curTuition?.Months
+
+		if (!curTuition?.DiscountType) {
+			return 0
+		}
+
+		if (curTuition?.DiscountType == 1) {
+			const result = totalWithMonths - curTuition?.Discount
+			setTotalWithTuition(result > 0 ? result : 0)
+		}
+
+		if (curTuition?.DiscountType == 2) {
+			const result = totalWithMonths - calculateDiscountAmount(totalWithMonths, curTuition?.Discount)
+			setTotalWithTuition(result > 0 ? result : 0)
+		}
+	}
+
+	useEffect(() => {
+		if (classesSelected.length > 0) {
+			if (!curTuition?.Discount) {
+				setTotalWithTuition(0)
+				setDisPrice(0)
+			} else {
+				getDiscountPrice()
+				getFuckingDiscount()
+			}
+		} else {
+			setTotalWithTuition(0)
+			setDisPrice(0)
+			setCurTuition(null)
+			setDiscountPrice(0)
+		}
+	}, [curTuition, classesSelected])
+
+	useEffect(() => {
+		if (activeTab.Type == 2) {
+			setTotalWithTuition(0)
+			setDisPrice(0)
+			setCurTuition(null)
+			setDiscountPrice(0)
+		}
+	}, [activeTab])
+
 	return (
 		<div className="wrapper-register-class">
 			<Form onFinish={onSubmit} layout="vertical" form={form}>
 				<div className="grid grid-cols-2 gap-4">
 					<div className="col-span-2">
 						<Card title="Thông tin cá nhân">
-							<FormUserRegister setClasses={setClasses} form={form} isReset={isReset} setCurStudent={setCurStudent} />
+							<FormUserRegister type={activeTab.Type} setClasses={setClasses} form={form} isReset={isReset} setCurStudent={setCurStudent} />
 						</Card>
 					</div>
 
 					<div className="col-span-2">
 						<div className="grid grid-cols-2 gap-x-4 responsive-mobile">
 							<div className="col-span-1">
-								<Card title={activeTab.label}>
+								<Card
+									title={
+										<div className="flex items-center justify-center gap-3">
+											{tabs.map((tab, index) => {
+												return (
+													<button
+														type="button"
+														onClick={() => handleChangeTab(tab)}
+														className={`mx-[8px] cursor-pointer no-select tab-item ${activeTab.Type == tab.Type ? 'active' : ''}`}
+													>
+														<div className="mb-[-2px]">{tab.label}</div>
+													</button>
+												)
+											})}
+										</div>
+									}
+								>
 									<div className="form-register-class">
 										<div className="col-span-2">
 											<CardBody
@@ -457,35 +622,81 @@ const RegisterClass = () => {
 
 									<Divider />
 
-									<div className="flex items-center justify-between mb-3">
-										<span className="title">Sản phẩm</span>
-										<span className="title">{classesSelected?.length + programsSelected?.length}</span>
-									</div>
-									<div className="flex items-center justify-between mb-3">
-										<span className="title">Tổng tiền</span>
-										<span className="title text-tw-orange">{Intl.NumberFormat('ja-JP').format(totalPrice)}</span>
-									</div>
-
-									<div className="flex items-center justify-between mb-3">
-										<div className="flex items-center gap-1">
-											<span className="title">Mã giảm giá</span>
-											<ModalAllDiscount
-												classesSelected={classesSelected}
-												programsSelected={programsSelected}
-												form={form}
-												setDetailDiscount={handleSetDiscount}
-												detailDiscount={detailDiscount}
-											/>
+									{activeTab?.Type == 1 && (
+										<div className="flex items-center justify-between mb-3">
+											<span className="title">Sản phẩm</span>
+											<span className="title">{classesSelected?.length + programsSelected?.length}</span>
 										</div>
-										<span className="title">{!!detailDiscount && detailDiscount?.Code}</span>
-										<span className="title text-tw-primary">{Intl.NumberFormat('ja-JP').format(discountPrice)}</span>
-									</div>
+									)}
+
+									{activeTab?.Type == 2 && (
+										<div className="flex items-center justify-between mb-3">
+											<span className="title">Học phí</span>
+											<span className="title text-tw-orange">{parseToMoney(totalPrice)} / tháng</span>
+										</div>
+									)}
+
+									{activeTab?.Type == 1 && (
+										<div className="flex items-center justify-between mb-3">
+											<span className="title">Tổng</span>
+											<span className="title text-tw-orange">{Intl.NumberFormat('ja-JP').format(totalPrice)}</span>
+										</div>
+									)}
+
+									{/* 	// Code: '3THANGGIAM500'
+		// Description: 'Đóng 3 tháng giảm ngay 500k học phí'
+		// Discount: 50000
+		// DiscountType: 1
+		// DiscountTypeName: 'Giảm theo số tiền'
+		// Id: 1
+		// Months: 3 */}
+
+									<ModalTuitionOption
+										studentId={curStudent}
+										curTuition={curTuition}
+										onSubmit={setCurTuition}
+										totalPrice={totalPrice}
+										discount={discountPrice}
+									/>
+
+									{activeTab?.Type == 2 && (
+										<div className="flex items-center justify-between mb-3">
+											<span className="title">Tổng</span>
+											<span className="title text-tw-orange">
+												{parseToMoney(!(totalPrice * curTuition?.Months) ? 0 : totalPrice * curTuition?.Months)}
+											</span>
+										</div>
+									)}
+
+									{activeTab?.Type == 2 && (
+										<div className="flex items-center justify-between mb-3">
+											<span className="title">Giảm giá</span>
+											<span className="title text-tw-orange">{parseToMoney(disPrice)}</span>
+										</div>
+									)}
+
+									{activeTab?.Type == 1 && (
+										<div className="flex items-center justify-between mb-3">
+											<div className="flex items-center gap-1">
+												<span className="title">Mã giảm giá</span>
+												<ModalAllDiscount
+													classesSelected={classesSelected}
+													programsSelected={programsSelected}
+													form={form}
+													setDetailDiscount={handleSetDiscount}
+													detailDiscount={detailDiscount}
+												/>
+											</div>
+											<span className="title">{!!detailDiscount && detailDiscount?.Code}</span>
+											<span className="title text-tw-primary">{Intl.NumberFormat('ja-JP').format(discountPrice)}</span>
+										</div>
+									)}
 
 									<ModalReserve
 										studentId={curStudent}
 										curReserve={curReserve}
 										onSubmit={setCurReserve}
-										totalPrice={totalPrice}
+										totalPrice={activeTab?.Type == 1 ? totalPrice : totalWithTuition}
 										discount={discountPrice}
 									/>
 
@@ -525,7 +736,7 @@ const RegisterClass = () => {
 									<div className="flex-all-center">
 										<PrimaryButton
 											loading={isLoading}
-											disable={isLoading || leftPrice < 0}
+											disable={isLoading || leftPrice < 0 || (activeTab?.Type == 2 && totalWithTuition == 0)}
 											className="w-full"
 											background="blue"
 											icon="payment"

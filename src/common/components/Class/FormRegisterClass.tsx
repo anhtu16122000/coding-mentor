@@ -18,21 +18,23 @@ type StudyTime = {
 
 const FormRegisterClass = (props) => {
 	const dispatch = useDispatch()
-	const { form, setClasses, classes, classesSelected, setClassesSelected, programsSelected, setProgramsSelected } = props
+	const { form, type, setClasses, classes, classesSelected, setClassesSelected, programsSelected, setProgramsSelected } = props
 	const branch = useSelector((state: RootState) => state.branch.Branch)
 	const [studyTime, setStudyTime] = useState<StudyTime[]>([])
 	const [programs, setPrograms] = useState([])
 
 	const getAllStudyTime = async () => {
-		try {
-			const res = await studyTimeApi.getAll({ pageSize: 9999 })
-			if (res.status == 200) {
-				setStudyTime(parseSelectArray(res.data.data, 'Name', 'Id'))
-			} else {
-				setStudyTime([])
+		if (type == 1) {
+			try {
+				const res = await studyTimeApi.getAll({ pageSize: 9999 })
+				if (res.status == 200) {
+					setStudyTime(parseSelectArray(res.data.data, 'Name', 'Id'))
+				} else {
+					setStudyTime([])
+				}
+			} catch (err) {
+				ShowNoti('error', err.message)
 			}
-		} catch (err) {
-			ShowNoti('error', err.message)
 		}
 	}
 
@@ -42,16 +44,17 @@ const FormRegisterClass = (props) => {
 	}, [])
 
 	const getPrograms = async () => {
-		try {
-			const res = await programApi.getAll()
-			if (res.status == 200) {
-				setPrograms(res.data.data)
+		if (type == 1) {
+			try {
+				const res = await programApi.getAll()
+				if (res.status == 200) {
+					setPrograms(res.data.data)
+				} else {
+					setPrograms([])
+				}
+			} catch (err) {
+				ShowNoti('error', err.message)
 			}
-			if (res.status == 204) {
-				setPrograms([])
-			}
-		} catch (err) {
-			ShowNoti('error', err.message)
 		}
 	}
 
@@ -76,52 +79,45 @@ const FormRegisterClass = (props) => {
 
 	return (
 		<>
-			{/* <div className="col-span-2">
-				<Form.Item required={true} rules={formRequired} label="Trung tâm" name="BranchId">
-					<Select onChange={getAvailableClasses} showSearch allowClear className="primary-input" placeholder="Chọn trung tâm">
-						{branch.map((item) => {
-							return (
-								<Select.Option key={item.Id} value={item.Id}>
-									{item.Name}
-								</Select.Option>
-							)
-						})}
-					</Select>
-				</Form.Item>
-			</div> */}
-
 			<div className="col-span-2">
 				<div className="wrapper-classes">
 					<div className="flex items-center gap-2 mb-3">
 						<p className="title">Lớp học</p>
-						<ModalAddClass
-							classes={classes}
-							classesSelected={classesSelected}
-							setClassesSelected={setClassesSelected}
-							setClasses={setClasses}
-							form={form}
-						/>
+
+						{(type == 1 || (type == 2 && classesSelected.length == 0)) && (
+							<ModalAddClass
+								type={type}
+								classes={classes}
+								classesSelected={classesSelected}
+								setClassesSelected={setClassesSelected}
+								setClasses={setClasses}
+								form={form}
+							/>
+						)}
 					</div>
+
 					<ListClassReview classesSelected={classesSelected} setClassesSelected={setClassesSelected} setClasses={setClasses} />
 				</div>
 			</div>
 
-			<div className="col-span-2">
-				<div className="wrapper-programs">
-					<div className="flex items-center gap-2 mb-3">
-						<p className="title">Chương trình mong muốn</p>
-						<ModalAddProgram
-							programs={programs}
-							programsSelected={programsSelected}
-							setProgramsSelected={setProgramsSelected}
-							setPrograms={setPrograms}
-							type="default"
-						/>
-					</div>
+			{type == 1 && (
+				<div className="col-span-2 mt-[16px]">
+					<div className="wrapper-programs">
+						<div className="flex items-center gap-2 mb-3">
+							<p className="title">Chương trình mong muốn</p>
+							<ModalAddProgram
+								programs={programs}
+								programsSelected={programsSelected}
+								setProgramsSelected={setProgramsSelected}
+								setPrograms={setPrograms}
+								type="default"
+							/>
+						</div>
 
-					<ListProgramReview programsSelected={programsSelected} setProgramsSelected={setProgramsSelected} setPrograms={setPrograms} />
+						<ListProgramReview programsSelected={programsSelected} setProgramsSelected={setProgramsSelected} setPrograms={setPrograms} />
+					</div>
 				</div>
-			</div>
+			)}
 		</>
 	)
 }

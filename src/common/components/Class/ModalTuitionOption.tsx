@@ -7,11 +7,10 @@ import { parseToMoney } from '~/common/utils/common'
 import { MdAdd } from 'react-icons/md'
 import PrimaryTooltip from '../PrimaryTooltip'
 import { IoClose } from 'react-icons/io5'
+import { FaInfoCircle } from 'react-icons/fa'
 
-const ModalReserve = (props) => {
-	const { onSubmit, curReserve, totalPrice, discount } = props
-
-	console.log('----- ModalReserve: ', props)
+const ModalTuitionOption = (props) => {
+	const { onSubmit, curTuition, totalPrice, discount } = props
 
 	const { studentId } = props
 
@@ -20,13 +19,13 @@ const ModalReserve = (props) => {
 
 	useEffect(() => {
 		if (studentId) {
-			getStudentReserves()
+			getTuitions()
 		}
 	}, [studentId])
 
-	async function getStudentReserves() {
+	async function getTuitions() {
 		try {
-			const res = await billApi.getStudentReserve({ studentId: studentId })
+			const res = await billApi.getTuitionOption({ studentId: studentId })
 			if (res.status == 200) {
 				setData(res.data?.data)
 			} else {
@@ -36,17 +35,17 @@ const ModalReserve = (props) => {
 	}
 
 	function getRealPrice() {
-		let thatPrice = curReserve?.MoneyRemaining
+		// Code: '3THANGGIAM500'
+		// Description: 'Đóng 3 tháng giảm ngay 500k học phí'
+		// Discount: 50000
+		// DiscountType: 1
+		// DiscountTypeName: 'Giảm theo số tiền'
+		// Id: 1
+		// Months: 3
 
-		if (totalPrice < thatPrice) {
-			thatPrice = totalPrice
-		}
+		let thatPrice = curTuition?.Discount
 
-		if (discount && totalPrice > 0) {
-			thatPrice = totalPrice - discount
-		}
-
-		return thatPrice > curReserve?.MoneyRemaining ? curReserve?.MoneyRemaining : thatPrice
+		return thatPrice > 0 ? thatPrice : 0
 	}
 
 	return (
@@ -54,16 +53,23 @@ const ModalReserve = (props) => {
 			{!!data && data.length > 0 && totalPrice > 0 && (
 				<div className="flex items-center justify-between mb-3">
 					<div className="flex items-center gap-1">
-						<span className="title">Tiền bảo lưu</span>
+						<span className="title">Gói học phí</span>
 
-						<PrimaryTooltip place="right" id="rev-09-07-66" content="Sử dụng tiền bảo lưu">
+						<PrimaryTooltip place="right" id="rev-09-07-66" content="Chọn gói học phí">
 							<button type="button" onClick={() => setVisible(true)} className="text-tw-primary !mt-[-4px]">
 								<AiOutlinePlusCircle size={18} />
 							</button>
 						</PrimaryTooltip>
 					</div>
 
-					<span className="title text-tw-primary">{parseToMoney(!curReserve ? 0 : getRealPrice())}</span>
+					{curTuition?.Months && <span className="title text-tw-primary">{curTuition?.Months} tháng</span>}
+
+					{curTuition?.Months && (
+						<span className="title text-tw-primary">
+							Giảm: {parseToMoney(!curTuition ? 0 : getRealPrice())}
+							{curTuition?.DiscountType == 2 && '%'}
+						</span>
+					)}
 				</div>
 			)}
 
@@ -72,56 +78,58 @@ const ModalReserve = (props) => {
 				open={visible}
 				onCancel={() => setVisible(false)}
 				footer={
-					<>
-						<PrimaryButton type="button" icon="cancel" background="red" onClick={() => setVisible(false)}>
-							Đóng
-						</PrimaryButton>
-					</>
+					<PrimaryButton type="button" icon="cancel" background="red" onClick={() => setVisible(false)}>
+						Đóng
+					</PrimaryButton>
 				}
 			>
 				<div className="gap-[8px] flex flex-col">
 					{data.map((item, index) => {
 						return (
 							<div
-								key={`reserve-${studentId}-${item?.Id}`}
+								key={`tuition-${studentId}-${item?.Id}`}
 								className="p-[16px] flex items-center bg-[#f3f3f3] hover:bg-[#ededed] rounded-[8px]"
 							>
 								<div className="flex-1">
 									<div className="flex items-center">
-										<div className="font-[600] mr-[4px]">Lớp:</div>
-										<div>{item?.ClassName}</div>
+										<div className="font-[600] mr-[4px]">Mã:</div>
+										<div>{item?.Code}</div>
 									</div>
 
 									<div className="flex items-center">
-										<div className="font-[600] mr-[4px]">Số tiền bảo lưu:</div>
-										<div>{parseToMoney(item?.Price)}</div>
-									</div>
-
-									<div className="flex items-center">
-										<div className="font-[600] mr-[4px]">Số tiền đã sử dụng:</div>
-										<div>{parseToMoney(item?.MoneyUsed)}</div>
+										<div className="font-[600] mr-[4px]">Số tháng:</div>
+										<div>{parseToMoney(item?.Months)}</div>
 									</div>
 
 									<div className="flex font-[600] items-center text-[#1b73e8] text-[14px]">
-										<div className="mr-[4px]">Số tiền còn lại:</div>
-										<div>{parseToMoney(item?.MoneyRemaining)}</div>
+										<div className="mr-[4px]">Số tiền giảm:</div>
+										<div>
+											{parseToMoney(item?.Discount)}
+											{item?.DiscountType == 2 && '%'}
+										</div>
 									</div>
 
-									{curReserve?.Id != item.Id && (
-										<div className="ml-[-1px] mt-[4px]">
-											{item?.Status == 1 && <div className="tag blue">{item?.StatusName}</div>}
-											{item?.Status == 2 && <div className="tag yellow">{item?.StatusName}</div>}
+									{item?.Description && (
+										<div className="flex items-center">
+											<div>{item?.Description}</div>
 										</div>
 									)}
 
-									{curReserve?.Id == item.Id && (
+									{curTuition?.Id != item.Id && (
+										<div className="ml-[-1px] mt-[4px] flex items-center">
+											{item?.DiscountType == 1 && <div className="tag blue">{item?.DiscountTypeName}</div>}
+											{item?.DiscountType == 2 && <div className="tag yellow">{item?.DiscountTypeName}</div>}
+										</div>
+									)}
+
+									{curTuition?.Id == item.Id && (
 										<div className="ml-[-1px] mt-[4px]">
 											<div className="tag green">Đang sử dụng</div>
 										</div>
 									)}
 								</div>
 
-								{curReserve?.Id != item.Id && (
+								{curTuition?.Id != item.Id && (
 									<PrimaryTooltip id={`add-${studentId}-${item?.Id}`} content="Sử dụng" place="left">
 										<div
 											onClick={() => {
@@ -135,7 +143,7 @@ const ModalReserve = (props) => {
 									</PrimaryTooltip>
 								)}
 
-								{curReserve?.Id == item.Id && (
+								{curTuition?.Id == item.Id && (
 									<PrimaryTooltip id={`rm-${studentId}-${item?.Id}`} content="Bỏ chọn" place="left">
 										<div onClick={() => onSubmit(null)} className="hover:bg-[#e6e6e6] cursor-pointer p-[8px] rounded-[8px]">
 											<IoClose size={28} color="red" />
@@ -151,4 +159,4 @@ const ModalReserve = (props) => {
 	)
 }
 
-export default ModalReserve
+export default ModalTuitionOption

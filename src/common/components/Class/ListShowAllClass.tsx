@@ -6,13 +6,17 @@ import AvatarComponent from '../AvatarComponent'
 import IconButton from '../Primary/IconButton'
 
 const ListShowAllClass = (props) => {
-	const { classes, setClassesSelected, setClasses, form, classesSelected } = props
+	const { classes, setClassesSelected, setClasses, form, onClose, classesSelected, type } = props
 	const [searchValue, setSearchValue] = useState(null)
+
 	const handleAddClass = (data) => {
 		const newClasses = classes.filter((item) => item.Id !== data.Id)
 		setClassesSelected((prev) => [...prev, data])
 		setClasses(newClasses)
+
+		!!onClose && onClose()
 	}
+
 	const handleSearch = async (data) => {
 		setSearchValue(data.target.value)
 	}
@@ -20,9 +24,10 @@ const ListShowAllClass = (props) => {
 	const handleSearchClass = async (data) => {
 		try {
 			const res = await billApi.getClassAvailable({
-				studentId: form.getFieldValue('StudentId'),
+				studentId: type == 1 ? form.getFieldValue('StudentId') : null,
 				branchId: form.getFieldValue('BranchId'),
-				search: data
+				search: data,
+				paymentType: type || 1
 			})
 			if (res.status === 200) {
 				const results = res.data.data.filter((item) => !classesSelected.some((data) => data.Id === item.Id))
@@ -42,9 +47,11 @@ const ListShowAllClass = (props) => {
 			return () => clearTimeout(timeID)
 		}
 	}, [searchValue])
+
 	return (
 		<>
 			<Input className="primary-input mb-3" value={searchValue} onChange={handleSearch} placeholder="Tìm kiếm lớp học" />
+
 			<List
 				className="modal-review-class-program"
 				itemLayout="horizontal"
@@ -73,10 +80,6 @@ const ListShowAllClass = (props) => {
 									<span className="title">Giá:</span>
 									<span className="font-normal ml-1">{Intl.NumberFormat('ja-JP').format(item?.Price)}</span>
 								</p>
-								{/* <p>
-									<span className="title">Hình thức:</span>
-									<span className="font-normal ml-1">{item?.PaymentTypeName}</span>
-								</p> */}
 								<p>
 									<span className="title">Buổi đã học:</span>
 									<span className="font-normal ml-1">

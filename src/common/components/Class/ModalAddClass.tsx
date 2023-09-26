@@ -6,8 +6,9 @@ import ListShowAllClass from './ListShowAllClass'
 import ListShowClassSelected from './ListShowClassSeleted'
 
 const ModalAddClass = (props) => {
-	const { classes, classesSelected, setClassesSelected, setClasses, form } = props
+	const { classes, classesSelected, setClassesSelected, setClasses, form, type } = props
 	const [isModalOpen, setIsModalOpen] = useState(false)
+
 	let items = [
 		{
 			label: (
@@ -18,10 +19,12 @@ const ModalAddClass = (props) => {
 			key: 'item-1',
 			children: (
 				<ListShowAllClass
+					onClose={() => setIsModalOpen(false)}
 					setClassesSelected={setClassesSelected}
 					classes={classes}
 					setClasses={setClasses}
 					form={form}
+					type={type}
 					classesSelected={classesSelected}
 				/>
 			)
@@ -36,6 +39,7 @@ const ModalAddClass = (props) => {
 			children: <ListShowClassSelected setClassesSelected={setClassesSelected} classesSelected={classesSelected} setClasses={setClasses} />
 		}
 	]
+
 	return (
 		<>
 			<Tooltip title="Thêm lớp học">
@@ -43,6 +47,7 @@ const ModalAddClass = (props) => {
 					<AiOutlinePlusCircle size={18} />
 				</button>
 			</Tooltip>
+
 			<Modal
 				centered
 				title="Thêm lớp học"

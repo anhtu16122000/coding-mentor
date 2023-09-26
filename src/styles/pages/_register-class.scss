@@ -6,7 +6,7 @@
 		&.active {
 			@apply relative text-tw-primary font-[600];
 			&::after {
-				@apply content-[''] block absolute top-[105%] left-0 right-0 h-[2px] bg-tw-primary;
+				@apply content-[''] block absolute bottom-[-13px] left-0 right-0 h-[2px] bg-tw-primary;
 			}
 		}
 		&:hover {

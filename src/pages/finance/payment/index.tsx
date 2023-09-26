@@ -184,7 +184,7 @@ const PaymentManagementPage = () => {
 		},
 		{
 			title: 'Khuyến mãi',
-			dataIndex: 'DiscountCode',
+			dataIndex: 'Reduced',
 			render: (value, item) => {
 				if (!value) {
 					return ''
@@ -192,9 +192,11 @@ const PaymentManagementPage = () => {
 
 				return (
 					<>
-						<p className="text-[#000]">
-							Mã: <div className="inline font-[600]">{value}</div>
-						</p>
+						{item?.DiscountCode && (
+							<p className="text-[#000]">
+								Mã: <div className="inline font-[600]">{item?.DiscountCode}</div>
+							</p>
+						)}
 						<p className="text-[#000]">
 							Số tiền: <div className="inline font-[600]">{parseToMoney(item?.Reduced)}</div>
 						</p>

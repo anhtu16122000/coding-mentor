@@ -11,7 +11,7 @@ import { RootState } from '~/store'
 import { formRequired } from '~/common/libs/others/form'
 
 const FormUserRegister = (props) => {
-	const { form, setClasses, isReset, setCurStudent } = props
+	const { form, setClasses, isReset, setCurStudent, type } = props
 
 	const router = useRouter()
 
@@ -75,16 +75,16 @@ const FormUserRegister = (props) => {
 		}
 	}
 
-	const handleGetStudent = async (data) => {
+	const handleGetStudent = async (data?: any) => {
 		!!setCurStudent && setCurStudent(data)
 
-		const getStudent = students.find((student) => student.UserInformationId == data)
-		form.setFieldsValue({ StudentId: getStudent?.UserInformationId })
+		// const getStudent = students.find((student) => student.UserInformationId == data)
+		// form.setFieldsValue({ StudentId: getStudent?.UserInformationId })
 
-		setUserInfo(getStudent)
+		// setUserInfo(getStudent)
 
 		try {
-			const res = await billApi.getClassAvailable({ studentId: data, branchId: curBranch })
+			const res = await billApi.getClassAvailable({ studentId: type == 1 ? data : null, branchId: curBranch, paymentType: type || 1 })
 			if (res.status == 200) {
 				setClasses(res.data.data)
 			} else {
@@ -94,6 +94,12 @@ const FormUserRegister = (props) => {
 			ShowNoti('error', err.message)
 		}
 	}
+
+	useEffect(() => {
+		if (!!type && !!curBranch) {
+			handleGetStudent()
+		}
+	}, [type])
 
 	useEffect(() => {
 		if (router?.query?.student) {

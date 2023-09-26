@@ -14,7 +14,7 @@ const ListClassReview = (props) => {
 
 	return (
 		<List
-			className="rounded-lg mb-3 p-[3px]"
+			className="rounded-lg mt-3 p-[3px]"
 			bordered
 			itemLayout="horizontal"
 			dataSource={classesSelected}
@@ -31,20 +31,19 @@ const ListClassReview = (props) => {
 								<span className="title">Lớp:</span>
 								<span className="font-normal ml-1">{item?.Name}</span>
 							</p>
+
 							<p>
 								<span className="title">Giá:</span>
 								<span className="font-normal ml-1">{Intl.NumberFormat('ja-JP').format(item?.Price)}</span>
 							</p>
-							{/* <p>
-								<span className="title">Hình thức:</span>
-								<span className="font-normal ml-1">{item?.PaymentTypeName}</span>
-							</p> */}
+
 							<p>
 								<span className="title">Buổi đã học:</span>
 								<span className="font-normal ml-1">
 									{item?.CompletedLesson} / {item?.TotalLesson}
 								</span>
 							</p>
+
 							<p>
 								<span className="title">Học viên:</span>
 								<span className="font-normal ml-1">
