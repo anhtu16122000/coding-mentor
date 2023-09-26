@@ -18,8 +18,8 @@ import { RollUpPage } from './RollUpPage'
 import { RollUpStudent } from './RollUpStudent'
 import { RollUpTeacherPage } from './RollUpTeacherPage'
 import { ScheduleList } from './ScheduleList'
-import { TranscriptPage } from './TranscriptPage'
 import HomeWork from './HomeWork'
+import TransScriptFlexColumnPage from './TransScriptFlexColumnPage'
 
 const itemsAdmin = [
 	'Lịch học',
@@ -66,8 +66,10 @@ const MenuClass = () => {
 				return <DocumentsPageInClass />
 			case 'Điểm danh':
 				return <RollUpPage />
+			// case 'Bảng điểm old':
+			// 	return <TranscriptPage />
 			case 'Bảng điểm':
-				return <TranscriptPage />
+				return <TransScriptFlexColumnPage />
 			case 'Điểm danh giáo viên':
 				return <RollUpTeacherPage />
 			case 'Phản hồi buổi học':

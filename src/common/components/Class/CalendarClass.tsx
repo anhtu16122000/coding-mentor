@@ -136,6 +136,7 @@ const CalenderClass = () => {
 			Thumbnail: dataChangeSchedule.Thumbnail,
 			Type: dataChangeSchedule.Type,
 			PaymentType: dataChangeSchedule?.PaymentType,
+			ScoreboardTemplateId: dataChangeSchedule?.ScoreboardTemplateId,
 			schedules: listCalendar
 		}
 
