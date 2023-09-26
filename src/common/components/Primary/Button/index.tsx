@@ -7,6 +7,7 @@ import { FiEdit, FiSave, FiSend, FiTrash2, FiXCircle } from 'react-icons/fi'
 import { IoEnterOutline, IoPowerSharp } from 'react-icons/io5'
 import { MdOutlinePayments, MdOutlineZoomInMap, MdOutlineZoomOutMap } from 'react-icons/md'
 import { RiArrowDownSFill, RiArrowUpSFill, RiCalculatorLine, RiExchangeLine } from 'react-icons/ri'
+import { RxInput } from 'react-icons/rx'
 import { SiMicrosoftexcel } from 'react-icons/si'
 import { TbDownload, TbShoppingCartPlus, TbUpload } from 'react-icons/tb'
 
@@ -161,6 +162,9 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 		}
 		if (icon == 'restore-screen') {
 			return <MdOutlineZoomInMap size={18} className={iconClass} />
+		}
+		if (icon == 'input') {
+			return <RxInput size={18} className={iconClass} />
 		}
 	}
 

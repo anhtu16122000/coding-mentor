@@ -40,7 +40,7 @@ const ModalCalculateAverage = ({ classId, transcriptId, refreshAllGrades }: any)
 						setVisible(true)
 					}}
 				>
-					Tính điểm trung bình
+					Tính điểm TB
 				</PrimaryButton>
 			</div>
 			<Modal footer={null} width={500} open={visible} onCancel={() => setVisible(false)}>

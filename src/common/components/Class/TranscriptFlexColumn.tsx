@@ -59,13 +59,13 @@ const TransScriptFlexColumn = ({
 			}}
 			data={dataTable}
 			columns={columns}
-			Extra={
-				<div className="flex flex-col justify-end gap-3">
+			TitleCard={
+				<div className="flex gap-2 flex-wrap justify-between w-[100%]">
 					<div className="flex gap-2 justify-end flex-wrap">
 						{(isFullPermission || isTeacherPermission) && <ModalTranscript mode="add" onRefresh={() => getTranscripts(classId)} />}
 						<Select
 							disabled={isEditTable}
-							className="w-[140px] custom-select-transcript"
+							className="w-[220px] custom-select-transcript"
 							onChange={(val) => {
 								setTranscriptId(val)
 								getTranscriptPointByClassId(classId, val)
@@ -92,7 +92,7 @@ const TransScriptFlexColumn = ({
 							/>
 						)}
 					</div>
-					<div className="flex gap-2 flex-wrap justify-end">
+					<div className="flex gap-2 flex-wrap justify-start">
 						{!isEditTable && isFullPermission && (
 							<ModalDraggableTableColumn
 								classId={classId}
@@ -146,7 +146,7 @@ const TransScriptFlexColumn = ({
 							<PrimaryButton
 								background="blue"
 								type="button"
-								icon="print"
+								icon="input"
 								disable={!transcriptId}
 								onClick={() => {
 									setIsEditTable(true)
