@@ -82,10 +82,7 @@ function ExamSkillItem(props) {
 		<>
 			<div onClick={() => !showSort && setCurrentSkill(data)} className={`cc-23-skill ${!!showSort ? noneActiveClass : classApply}`}>
 				{index > 0 && !!showSort && (
-					<div
-						onClick={onUp}
-						className="ml-[-2px] mr-[8px] w-[18px] h-[18px] bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff] all-center cursor-pointer rounded-full"
-					>
+					<div onClick={onUp} className="btn-sort-left">
 						<TiArrowSortedDown size={16} className="rotate-90 ml-[-2px]" />
 					</div>
 				)}
@@ -93,10 +90,7 @@ function ExamSkillItem(props) {
 				<div>{data?.Name}</div>
 
 				{index < allSkills.length - 1 && !!showSort && (
-					<div
-						onClick={onDown}
-						className="mr-[-2px] ml-[8px] w-[18px] h-[18px] bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff] all-center cursor-pointer rounded-full"
-					>
+					<div onClick={onDown} className="btn-sort-right">
 						<TiArrowSortedDown size={16} className="-rotate-90 mr-[-2px]" />
 					</div>
 				)}
@@ -110,7 +104,7 @@ function ExamSkillItem(props) {
 									onPlayAudio(data)
 								}}
 							>
-								<PrimaryTooltip place="left" id={`au-sk-${index}`} content="Phát âm thanh">
+								<PrimaryTooltip place="left" id={`au-sk-${index}`} content="Play audio">
 									<div className={`cc-23-skill-info ml-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
 										<FaHeadphonesAlt size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
 									</div>

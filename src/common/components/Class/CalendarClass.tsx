@@ -3,7 +3,7 @@ import moment from 'moment'
 import React, { useRef, useState } from 'react'
 import { BsThreeDots } from 'react-icons/bs'
 import { classApi } from '~/api/learn/class'
-import { ShowNoti } from '~/common/utils'
+import { ShowNoti, log } from '~/common/utils'
 import PrimaryButton from '../Primary/Button'
 import CreateClassForm from './CreateClassForm'
 import ModalReviewScheduleClass from './ModalReviewScheduleClass'
@@ -132,13 +132,14 @@ const CalenderClass = () => {
 			Price: dataChangeSchedule.Price,
 			ProgramId: dataChangeSchedule.ProgramId,
 			StartDay: moment(dataChangeSchedule.StartDay).format(),
-			TeacherId: dataChangeSchedule.TeacherId,
 			TeachingFee: dataChangeSchedule.TeachingFee,
 			Thumbnail: dataChangeSchedule.Thumbnail,
 			Type: dataChangeSchedule.Type,
-			schedules: listCalendar,
-			ScoreboardTemplateId: dataChangeSchedule?.ScoreboardTemplateId
+      PaymentType: dataChangeSchedule?.PaymentType,
+	    schedules: listCalendar,
+			ScoreboardTemplateId: dataChangeSchedule?.ScoreboardTemplateId,
 		}
+
 		try {
 			const res = await classApi.addClass(DATA_SUBMIT)
 			if (res.status === 200) {

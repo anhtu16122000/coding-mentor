@@ -66,7 +66,7 @@ function ExamSectionItem(props) {
 							onPlayAudio(data)
 						}}
 					>
-						<PrimaryTooltip place="left" id={`au-sk-${index}`} content="Phát âm thanh">
+						<PrimaryTooltip place="left" id={`au-sk-${index}`} content="Play audio">
 							<div className={`cc-23-skill-info ml-[8px] ${activated ? 'bg-[#fff]' : 'bg-[#0A89FF]'}`}>
 								<FaHeadphonesAlt size={12} className={activated ? 'text-[#000]' : 'text-[#fff]'} />
 							</div>

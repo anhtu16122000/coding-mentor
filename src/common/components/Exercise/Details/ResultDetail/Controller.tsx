@@ -56,12 +56,12 @@ const ResultDetailController = (props) => {
 					<div className="flex items-center pb-[16px] scroll-h w-full">
 						<div className="flex-1 flex flex-col">
 							<div>
-								<div className="tae-skill-name">Kỹ năng: {skills[indexOfSkill]?.Name}</div>
+								<div className="tae-skill-name">Skill: {skills[indexOfSkill]?.Name}</div>
 								<div className="mt-[4px] flex items-center">
 									{skills[indexOfSkill]?.Audio && (
 										<div onClick={(e) => setCurAudio(skills[indexOfSkill])} className="ex-23-btn-play-audio">
 											<FaHeadphonesAlt size={14} className="text-[#fff] mr-[4px]" />
-											<div className="play-audio-text">Phát âm thanh</div>
+											<div className="play-audio-text">Play audio</div>
 										</div>
 									)}
 								</div>

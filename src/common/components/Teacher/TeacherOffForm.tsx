@@ -25,6 +25,7 @@ const TeacherOffForm = (props) => {
 			}
 			const res = await teacherOffApi.add(DATA_SUBMIT)
 			if (res.status === 200) {
+				form.resetFields()
 				setTodoApi(listTodoApi)
 				setIsModalOpen(false)
 				ShowNoti('success', res.data.message)

@@ -27,10 +27,10 @@ const ResultDetailHeader = (props) => {
 			<div className="ml-[16px] flex-1 pr-2">
 				<div className="cc-text-16-700 in-1-line">{overview?.Name}</div>
 				<div className="cc-text-14-500-blue flex items-center mt-[2px]">
-					<div className="all-center inline-flex cc-choice-point !ml-0">{overview?.QuestionsAmount} câu</div>
-					<div className="cc-choice-correct-number">{overview?.Point} điểm</div>
+					<div className="all-center inline-flex cc-choice-point !ml-0">Question: {overview?.QuestionsAmount}</div>
+					<div className="cc-choice-correct-number">Point: {overview?.Point}</div>
 					<div className="cc-choice-orange">
-						Kỹ năng: {indexOfSkill + 1}/{skills.length}
+						Skill: {indexOfSkill + 1}/{skills.length}
 					</div>
 				</div>
 			</div>
@@ -41,7 +41,7 @@ const ResultDetailHeader = (props) => {
 						{loading && <>-- : -- : --</>}
 						{!loading && (
 							<>
-								Thời gian: {overview?.TimeSpent > 1 ? overview?.TimeSpent : 1} / {overview?.Time} phút
+								Time: {overview?.TimeSpent > 1 ? overview?.TimeSpent : 1} / {overview?.Time} minutes
 							</>
 						)}
 					</div>

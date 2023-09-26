@@ -14,8 +14,6 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 	const { initialValue, height, id, inline, skin, menubar, apiKey, init, ref, noFullscreen } = props
 	const { onInit, onChange, onBlur, isFillInBlank } = props
 
-	console.log('---- PrimaryEditor: ', props)
-
 	let editorRef = useRef(null)
 
 	function generateShortHash(input) {
@@ -28,6 +26,8 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 	function _init(evt, editor) {
 		editorRef.current = editor
 		setLoading(false)
+
+		!!onInit && onInit()
 	}
 
 	const quest = useSelector((state: RootState) => state.createQuestion.Questions)
@@ -103,39 +103,6 @@ const PrimaryEditor: FC<TPrimaryEditor> = (props) => {
 									editor.insertContent(textInsert) // Add textInsert to editor value
 								}
 							})
-
-						// editor.ui.registry.addButton('customfullscreen', {
-						// 	icon: 'fullscreen', // Sử dụng icon fullscreen có sẵn
-						// 	tooltip: 'Full Screen', // Chú thích khi di chuột qua nút
-						// 	onAction: function () {
-						// 		const theBabyForm = document.getElementById('the-baby-form')
-						// 		// console.log('------- theBabyForm: ', theBabyForm)
-
-						// 		const thisEditor = document.getElementsByClassName('tox tox-tinymce')
-						// 		// console.log('------- thisEditor: ', thisEditor)
-
-						// 		const thisEditorFullscreen = document.getElementsByClassName('tox-tbtn')
-						// 		// console.log('------- thisEditorFullscreen: ', thisEditorFullscreen)
-
-						// 		if (theBabyForm.style.display == 'none') {
-						// 			theBabyForm.style.display = 'grid'
-						// 			if (thisEditor.length > 0) {
-						// 				thisEditor[0].setAttribute('style', 'height: 210px')
-						// 			}
-						// 			if (thisEditorFullscreen.length > 0) {
-						// 				thisEditorFullscreen[0].setAttribute('style', 'background: #fff')
-						// 			}
-						// 		} else {
-						// 			theBabyForm.style.display = 'none'
-						// 			if (thisEditor.length > 0) {
-						// 				thisEditor[0].setAttribute('style', 'height:' + (window.innerHeight - 250) + 'px')
-						// 			}
-						// 			if (thisEditorFullscreen.length > 0) {
-						// 				thisEditorFullscreen[0].setAttribute('style', 'background: #d7d7d7')
-						// 			}
-						// 		}
-						// 	}
-						// })
 					}
 				}}
 			/>

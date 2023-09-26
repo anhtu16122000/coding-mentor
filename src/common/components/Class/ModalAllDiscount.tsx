@@ -63,6 +63,7 @@ const ModalAllDiscount = (props) => {
 		form.setFieldsValue({ DiscountId: data.Id })
 		setIsModalOpen(false)
 	}
+
 	return (
 		<div>
 			<Tooltip title="Xem mã giảm giá">
@@ -70,16 +71,15 @@ const ModalAllDiscount = (props) => {
 					<AiOutlinePlusCircle size={18} />
 				</button>
 			</Tooltip>
+
 			<Modal
 				title="Danh sách mã khuyến mãi"
 				open={isModalOpen}
 				onCancel={() => setIsModalOpen(false)}
 				footer={
-					<>
-						<PrimaryButton type="button" icon="cancel" background="blue" onClick={() => setIsModalOpen(false)}>
-							Đóng
-						</PrimaryButton>
-					</>
+					<PrimaryButton type="button" icon="cancel" background="red" onClick={() => setIsModalOpen(false)}>
+						Đóng
+					</PrimaryButton>
 				}
 			>
 				<List

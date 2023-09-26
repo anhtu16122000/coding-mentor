@@ -133,6 +133,15 @@ button {
 	white-space: pre-line;
 }
 
+.in-4-line {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: pre-line;
+}
+
 .h-100 {
 	height: 100%;
 }

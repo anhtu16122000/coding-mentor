@@ -49,7 +49,7 @@ const ModalAddClass = (props) => {
 				open={isModalOpen}
 				onCancel={() => setIsModalOpen(false)}
 				footer={
-					<PrimaryButton background="primary" icon="cancel" type="button" onClick={() => setIsModalOpen(false)}>
+					<PrimaryButton background="red" icon="cancel" type="button" onClick={() => setIsModalOpen(false)}>
 						Đóng
 					</PrimaryButton>
 				}

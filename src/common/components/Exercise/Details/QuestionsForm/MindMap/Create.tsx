@@ -2,6 +2,7 @@
  * Form create new writing question
  * Created by https://ischau.org
  */
+
 import { Modal, Form, Input, Checkbox } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,11 +11,10 @@ import { setCurrentExerciseForm } from '~/store/globalState'
 import { FiEdit } from 'react-icons/fi'
 import { RootState } from '~/store'
 import { X } from 'react-feather'
-import { formNoneRequired, formRequired } from '~/common/libs/others/form'
+import { formRequired } from '~/common/libs/others/form'
 import { NumericFormat } from 'react-number-format'
 import PrimaryEditor from '~/common/components/Editor'
 import { removeChoiceAnswer } from '../utils'
-import { log } from '~/common/utils'
 
 const CreateMindmap: FC<IGroupForm> = (props) => {
 	const { isEdit, defaultData, isChangeInfo, onOpen, section, isWriting } = props
@@ -154,8 +154,6 @@ const CreateMindmap: FC<IGroupForm> = (props) => {
 		removeChoiceAnswer(answers, ans, (event) => setAnswers(event))
 	}
 
-	log.Blue('Answers: ', answers)
-
 	return (
 		<>
 			{!isEdit && !isChangeInfo && (
@@ -190,6 +188,15 @@ const CreateMindmap: FC<IGroupForm> = (props) => {
 			>
 				<div className="grid grid-cols-4 gap-x-4">
 					<Form form={form} onFinish={_submit} layout="vertical" className="col-span-4 grid grid-cols-4 gap-x-4">
+						<Form.Item label="Điểm" name="Point" className="col-span-4" required rules={formRequired}>
+							<NumericFormat
+								id="input-point"
+								onChange={(event) => form.setFieldValue('Point', event.target.value)}
+								className="primary-input px-2 w-full"
+								thousandSeparator
+							/>
+						</Form.Item>
+
 						<Form.Item className="col-span-4" name="Content" label="Nội dung câu hỏi" required rules={formRequired}>
 							<PrimaryEditor
 								id={`quest-content-${new Date().getTime()}`}

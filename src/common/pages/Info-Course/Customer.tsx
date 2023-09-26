@@ -14,7 +14,7 @@ import { setBranch } from '~/store/branchReducer'
 import { areaApi } from '~/api/area/area'
 import { setArea } from '~/store/areaReducer'
 import { sourceApi } from '~/api/configs/source'
-import { parseSelectArray } from '~/common/utils/common'
+import { is, parseSelectArray } from '~/common/utils/common'
 import { learningNeedApi } from '~/api/configs/learning-needs'
 import { purposeApi } from '~/api/configs/purpose'
 import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'
@@ -48,6 +48,8 @@ const CustomerAdvisory = () => {
 	const [isLoading, setIsLoading] = useState(false)
 
 	const [todoApi, setTodoApi] = useState(listTodoApi)
+
+	const userInfo = useSelector((state: RootState) => state.user.information)
 
 	const dispatch = useDispatch()
 	const state = useSelector((state: RootState) => state)
@@ -311,7 +313,7 @@ const CustomerAdvisory = () => {
 	}
 
 	function handleRefresh() {
-		console.log('---- handleRefresh: ', todoApi)
+		// console.log('---- handleRefresh: ', todoApi)
 
 		if (todoApi?.pageIndex == 1) {
 			getAllCustomer()
@@ -417,7 +419,7 @@ const CustomerAdvisory = () => {
 			render: (text, data) => {
 				return (
 					<div className="d-flex align-items-center">
-						<DeleteTableRow text={`khách hàng ${data.FullName}`} handleDelete={() => handleDelete(data.Id)} />
+						{is(userInfo).admin && <DeleteTableRow text={`khách hàng ${data.FullName}`} handleDelete={() => handleDelete(data.Id)} />}
 
 						<CustomerAdviseForm
 							onRefresh={handleRefresh}

@@ -208,7 +208,13 @@
 }
 
 .cc-group-quest-list {
-	@apply col-span-8 border-[rgba(0,0,0,0.2)] w800:col-span-4 w800:max-h-[420px] w800:pl-4 w800-scrollable;
+	@apply col-span-8 border-[rgba(0,0,0,0.2)] w800:col-span-4 w800:pl-4 w800-scrollable;
+}
+
+.rhap_container {
+	&:hover {
+		box-shadow: 0 0 3px 1px #137cde;
+	}
 }
 
 .cc-writing-testing {
@@ -688,4 +694,12 @@
 	.ant-switch-checked {
 		background-color: #2ab849 !important;
 	}
+}
+
+.btn-sort-left {
+	@apply ml-[-2px] mr-[8px] w-[18px] h-[18px] bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff] all-center cursor-pointer rounded-full;
+}
+
+.btn-sort-right {
+	@apply mr-[-2px] ml-[8px] w-[18px] h-[18px] bg-[#0A89FF] hover:bg-[#157ddd] focus:bg-[#1576cf] text-[#fff] all-center cursor-pointer rounded-full;
 }

@@ -23,11 +23,9 @@ const ModalShowInfoPaymentMethod = (props) => {
 				open={isModalOpen}
 				onCancel={() => setIsModalOpen(false)}
 				footer={
-					<>
-						<PrimaryButton background="blue" icon="cancel" type="button" onClick={() => setIsModalOpen(false)}>
-							Đóng
-						</PrimaryButton>
-					</>
+					<PrimaryButton background="red" icon="cancel" type="button" onClick={() => setIsModalOpen(false)}>
+						Đóng
+					</PrimaryButton>
 				}
 			>
 				{!!method && !!method.Description ? ReactHtmlParser(method.Description) : null}

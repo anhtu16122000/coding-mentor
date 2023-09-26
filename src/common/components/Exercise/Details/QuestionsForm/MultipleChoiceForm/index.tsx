@@ -1,4 +1,4 @@
-import React, { FC, useRef } from 'react'
+import React, { useRef } from 'react'
 import DraggableList from 'react-draggable-list'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '~/store'

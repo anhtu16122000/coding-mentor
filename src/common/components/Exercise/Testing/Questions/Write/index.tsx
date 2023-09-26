@@ -3,16 +3,13 @@ import Router from 'next/router'
 import React from 'react'
 import ReactHTMLParser from 'react-html-parser'
 import { FaCheck } from 'react-icons/fa'
-import { TbLoader } from 'react-icons/tb'
+import { TbFileCertificate, TbLoader } from 'react-icons/tb'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import MarkingExam from '~/common/components/Mark/MarkingExam/MarkingExam'
 import PrimaryTag from '~/common/components/Primary/Tag'
-import { log } from '~/common/utils'
 
 const Write = (props) => {
 	const { data, IndexInExam, isDoing, setCurrentQuestion, onRefreshNav, isResult, curGroup, onRefresh } = props
-
-	log.Yellow('Write props', props)
 
 	async function insertDetails(answer) {
 		let items = []
@@ -64,15 +61,21 @@ const Write = (props) => {
 		>
 			<div className="exam-quest-wrapper none-selection">
 				{!Router.asPath.includes('questions') && (
-					<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
-						Câu {IndexInExam}
+					<div>
+						<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
+							Question {IndexInExam}
+						</div>
+						<div className="cc-choice-point">
+							<TbFileCertificate size={12} className="mr-1" />
+							<div className="mt-[1px]">Point: {data?.Point || 0}</div>
+						</div>
 					</div>
 				)}
 				{ReactHTMLParser(data?.Content)}
 			</div>
 
 			<div>
-				<div className="font-[600] mb-2 mt-3">Câu trả lời</div>
+				<div className="font-[600] mb-2 mt-3">Answer</div>
 				{!isResult && (
 					<Input.TextArea
 						key={'the-answer-' + data.id}

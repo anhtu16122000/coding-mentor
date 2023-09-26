@@ -12,7 +12,7 @@ import { programApi } from '~/api/learn/program'
 import { roomApi } from '~/api/configs/room'
 import { studyTimeApi } from '~/api/configs/study-time'
 import { userInformationApi } from '~/api/user/user'
-import { ShowNoti } from '~/common/utils'
+import { ShowNoti, log } from '~/common/utils'
 import { parseSelectArray, parseSelectArrayUser } from '~/common/utils/common'
 import { RootState } from '~/store'
 import { setBranch } from '~/store/branchReducer'
@@ -95,7 +95,6 @@ const CreateClassForm = (props) => {
 	const [curriculumSelected, setCurriculumSelected] = useState<Curriculum>()
 	const [noneConvertCurriculum, setNoneConvertCurriculum] = useState([])
 	const [teacher, setTeacher] = useState([])
-	// const [tutors, setTutors] = useState<any>([])
 	const [academic, setAcademic] = useState([])
 	const [selectedBranch, setSelectedBranch] = useState(null)
 	const [dataScoreBoardTemplate, setDataScoreBoardTemplate] = useState([])
@@ -282,20 +281,6 @@ const CreateClassForm = (props) => {
 		}
 	}
 
-	// const getTutors = async (branchId: number, curriculumId: number) => {
-	// 	try {
-	// 		const res = await classApi.getAllTutor({ branchId, curriculumId })
-	// 		if (res.status === 200) {
-	// 			const convertData = parseSelectArrayUser(res.data.data, 'TutorName', 'TutorCode', 'TutorId')
-	// 			setTutors(convertData)
-	// 		} else {
-	// 			setTutors([])
-	// 		}
-	// 	} catch (err) {
-	// 		ShowNoti('error', err.message)
-	// 	}
-	// }
-
 	const handleAddListTimeFrame = () => {
 		setListTimeFrames((prev) => {
 			return [...listTimeFrames, { Id: prev[prev.length - 1].Id + 1, DayOfWeek: null, StudyTimeId: null, TeacherId: null, TutorIds: null }]
@@ -403,35 +388,27 @@ const CreateClassForm = (props) => {
 				DayOfWeek: timeFrame.DayOfWeek,
 				StudyTimeId: timeFrame.StudyTimeId,
 				TeacherId: timeFrame.TeacherId
-				// TutorIds: timeFrame.TutorIds
 			}
 		})
 
 		const getBranchNameById = branch.find((item) => item.value === data.BranchId)
 		const getCurriculumNameById = curriculum.find((item) => item.value === data.CurriculumId)
 		const getProgramNameById = program.find((item) => item.value === data.ProgramId)
+
 		const getAcademicNameById = academic.find((item) =>
 			isAcademic() ? item.value === Number(user.UserInformationId) : item.value === data.AcademicId
 		)
-		const scoreboardTemplateName = dataScoreBoardTemplate.find((item) => item?.value === data?.ScoreboardTemplateId)?.title
+    const scoreboardTemplateName = dataScoreBoardTemplate.find((item) => item?.value === data?.ScoreboardTemplateId)?.title
 		const getRoomNameById = room.find((item) => item.value === data.RoomId)
 
 		let DATA_LESSON_WHEN_CREATE = {
-			CurriculumId: data.CurriculumId,
+			...data,
 			CurriculumName: getCurriculumNameById?.title,
-			StartDay: data.StartDay,
-			RoomId: data.RoomId,
 			RoomName: getRoomNameById?.title,
 			TimeModels: convertListTimeFrame,
-			BranchId: data.BranchId,
 			BranchName: getBranchNameById?.title,
-			TeacherId: data.TeacherId,
-			ProgramId: data.ProgramId,
 			ProgramName: getProgramNameById?.title,
-			Name: data.Name,
-			Thumbnail: data.Thumbnail,
-			GradeId: data.GradeId,
-			Price: removeCommas(data.Price),
+			Price: data.Price ? removeCommas(data.Price) : null,
 			AcademicId: isAcademic() ? Number(user.UserInformationId) : data.AcademicId,
 			AcademicName: getAcademicNameById?.title,
 			TeachingFee: removeCommas(data.TeachingFee),
@@ -448,7 +425,6 @@ const CreateClassForm = (props) => {
 			}
 		} catch (err) {
 		} finally {
-			// form.resetFields()
 			setIsLoading(false)
 		}
 	}
@@ -478,15 +454,7 @@ const CreateClassForm = (props) => {
 	}, [form.getFieldValue('BranchId'), form.getFieldValue('ProgramId')])
 
 	useEffect(() => {
-		const branchId = form.getFieldValue('BranchId')
-		const curriculumId = form.getFieldValue('CurriculumId')
 		form.setFieldValue('TutorIds', [])
-
-		// if (branchId && curriculumId) {
-		// 	getTutors(branchId, curriculumId)
-		// } else {
-		// 	setTutors([])
-		// }
 	}, [form.getFieldValue('BranchId'), form.getFieldValue('CurriculumId')])
 
 	return (
@@ -496,7 +464,7 @@ const CreateClassForm = (props) => {
 					Tạo lớp online
 				</PrimaryButton>
 			) : (
-				<PrimaryButton background="blue" type="button" icon="add" onClick={() => setIsModalOpen(true)}>
+				<PrimaryButton background="purple" type="button" icon="add" onClick={() => setIsModalOpen(true)}>
 					Tạo lớp offline
 				</PrimaryButton>
 			)}
@@ -661,17 +629,6 @@ const CreateClassForm = (props) => {
 													</div>
 												</div>
 												<div className="row">
-													{/* <div className="col-md-6 col-12">
-														<SelectField
-															mode="multiple"
-															placeholder="Chọn trợ giảng"
-															label="Trợ giảng"
-															name={`TutorIds-${timeFrame.Id}`}
-															onChangeSelect={(value) => handleChangeTimeFrame(timeFrame, 'TutorIds', value)}
-															optionList={tutors}
-															maxTagCount={1}
-														/>
-													</div> */}
 													<div className="col-md-6 col-12">
 														<SelectField
 															isRequired
@@ -689,19 +646,22 @@ const CreateClassForm = (props) => {
 									})}
 							</Form.Item>
 						</div>
+
 						<div className="col-md-6 col-12">
 							<InputNumberField
 								isRequired
 								rules={[yupSync]}
-								placeholder="Nhập lương/buổi"
+								placeholder="Nhập lương / buổi"
 								className="w-full"
-								label="Lương/buổi"
+								label="Lương / buổi"
 								name="TeachingFee"
 							/>
 						</div>
+
 						<div className="col-md-6 col-12">
 							<DatePickerField isRequired rules={[yupSync]} mode="single" label="Ngày mở lớp" name="StartDay" />
 						</div>
+
 						<div className="col-md-6 col-12">
 							<InputNumberField
 								isRequired
@@ -712,6 +672,24 @@ const CreateClassForm = (props) => {
 								name="Price"
 							/>
 						</div>
+
+						<Form.Item className="col-md-6 col-12" name="PaymentType" label="Hình thức thanh toán" required={true} rules={formRequired}>
+							<Select
+								className="primary-input"
+								showSearch
+								loading={isLoading}
+								placeholder="Chọn hình thức thanh toán"
+								optionFilterProp="children"
+							>
+								<Option key={1} value={1}>
+									Thanh toán một lần
+								</Option>
+								<Option key={2} value={2}>
+									Thanh toán theo tháng
+								</Option>
+							</Select>
+						</Form.Item>
+
 						<div className="col-md-6 col-12">
 							<InputNumberField
 								placeholder="Nhập số lượng học viên tối đa (mặc định 20)"
@@ -720,6 +698,7 @@ const CreateClassForm = (props) => {
 								name="MaxQuantity"
 							/>
 						</div>
+
 						{!isAcademic() && (
 							<div className="col-md-6 col-12">
 								<SelectField
@@ -733,16 +712,6 @@ const CreateClassForm = (props) => {
 								/>
 							</div>
 						)}
-						{/* <div className="col-md-6 col-12">
-							<SelectField
-								isRequired
-								rules={[yupSync]}
-								placeholder="Chọn giáo viên"
-								label="Giáo viên"
-								name="TeacherId"
-								optionList={teacher}
-							/>
-						</div> */}
 					</div>
 				</Form>
 			</Modal>

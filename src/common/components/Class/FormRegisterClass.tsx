@@ -66,57 +66,6 @@ const FormRegisterClass = (props) => {
 	const [listDisabledTimeFrames, setListDisabledTimeFrames] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 
-	const handleChangeTimeFrame = (Id, name, value) => {
-		const getIndexTimeFrame = listTimeFrames.findIndex((timeFrame) => timeFrame.Id === Id)
-		listTimeFrames[getIndexTimeFrame] = { ...listTimeFrames[getIndexTimeFrame], [name]: value }
-		setListTimeFrames([...listTimeFrames])
-		handleListTimeFrames([...listTimeFrames])
-		// let newArr = listTimeFrames.map((item) => {
-		// 	if (item.Id === Id) {
-		// 		return { ...item, [name]: value }
-		// 	} else {
-		// 		return item
-		// 	}
-		// })
-		// setListTimeFrames(newArr)
-	}
-
-	const handleAddListTimeFrame = () => {
-		setListTimeFrames((prev) => [...listTimeFrames, { Id: prev[prev.length - 1].Id + 1, ExectedDay: null, StudyTimeId: null, Note: '' }])
-		setListDisabledTimeFrames((prev) => [
-			...listDisabledTimeFrames,
-			{ Id: prev[prev.length - 1]?.Id + 1, ExectedDay: null, StudyTimeId: null }
-		])
-	}
-
-	const handleRemoveListTimeFrame = (Id) => {
-		if (listTimeFrames.length !== 1) {
-			form.setFieldValue(`ExectedDay-${Id}`, undefined)
-			form.setFieldValue(`StudyTimeId-${Id}`, undefined)
-			const filterListTimeFrames = listTimeFrames.filter((timeFrame) => {
-				return timeFrame.Id !== Id
-			})
-			setListTimeFrames(filterListTimeFrames)
-			const filterListDisabledTimeFrames = listDisabledTimeFrames.filter((disabledTimeFrame) => {
-				return disabledTimeFrame.Id !== Id
-			})
-			setListDisabledTimeFrames(filterListDisabledTimeFrames)
-		} else {
-			ShowNoti('error', 'Vui lòng chọn ít nhất 1 khung thời gian')
-		}
-	}
-
-	const handleDisableSelect = (data, value) => {
-		const checkExist = listDisabledTimeFrames.find((item) => {
-			if (item.ExectedDay === null) {
-				return item.StudyTimeId === value
-			} else {
-				return item.ExectedDay === data.ExectedDay && item.StudyTimeId === value
-			}
-		})
-		return !!checkExist
-	}
-
 	const getAllStudyTime = async () => {
 		try {
 			const res = await studyTimeApi.getAll({ pageSize: 9999 })
@@ -150,18 +99,17 @@ const FormRegisterClass = (props) => {
 		}
 	}
 
-	const handleGetClassAvailable = async (data) => {
+	const getAvailableClasses = async (data) => {
 		form.setFieldsValue({ branchId: data })
+
 		if (!!form.getFieldValue('StudentId')) {
 			try {
-				// Tham số 1: branchId
-				// Tham số 2: studentId
-
-				const res = await billApi.getClassAvailable({ studentId: form.getFieldValue('StudentId'), branchId: data })
+				const res = await billApi.getClassAvailable({ studentId: form.getFieldValue('StudentId'), branchId: data, paymentType: 1 })
 				if (res.status === 200) {
 					setClasses(res.data.data)
 				}
-				if (res.status === 204) {
+				if (res.status == 204) {
+					ShowNoti('warning', 'Không tìm thấy lớp phù hợp')
 					setClasses([])
 				}
 			} catch (err) {
@@ -176,7 +124,7 @@ const FormRegisterClass = (props) => {
 		<>
 			<div className="col-span-2">
 				<Form.Item required={true} rules={formRequired} label="Trung tâm" name="BranchId">
-					<Select onChange={handleGetClassAvailable} showSearch allowClear className="primary-input" placeholder="Chọn trung tâm">
+					<Select onChange={getAvailableClasses} showSearch allowClear className="primary-input" placeholder="Chọn trung tâm">
 						{branch.map((item) => {
 							return (
 								<Select.Option key={item.Id} value={item.Id}>
@@ -187,6 +135,7 @@ const FormRegisterClass = (props) => {
 					</Select>
 				</Form.Item>
 			</div>
+
 			<div className="col-span-2">
 				<div className="wrapper-classes">
 					<div className="flex items-center gap-2 mb-3">

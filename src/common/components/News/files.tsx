@@ -99,13 +99,7 @@ const NewsFiles: FC<TNewsFiles> = React.memo(({ files }) => {
 				)}
 
 				{!visible.includes('.mp4') && !visible.includes('.avi') && (
-					<img
-						className="shadow-md"
-						draggable={false}
-						alt="example"
-						style={{ width: '100%', maxHeight: '80vh', objectFit: 'cover' }}
-						src={visible}
-					/>
+					<img className="shadow-md" draggable={false} alt="example" style={{ width: '100%', objectFit: 'cover' }} src={visible} />
 				)}
 			</Modal>
 		</>

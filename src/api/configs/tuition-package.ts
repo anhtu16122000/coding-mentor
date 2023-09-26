@@ -1,7 +1,7 @@
-import { instance } from './instance'
+import { instance } from '~/api/instance'
 
-const url = '/api/Exam/'
-export const exampleApi = {
+const url = '/api/TuitionPackage'
+export const tuitionPackageApi = {
 	getAll(params) {
 		return instance.get<IApiResultData<any[]>>(url, { params })
 	},

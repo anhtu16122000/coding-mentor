@@ -135,26 +135,26 @@ const TrainingRouteDetail = (props) => {
 			dataIndex: 'ExamName',
 			render: (value, item, index) => <div className="min-w-[80px]">{value || 0}</div>
 		},
-		{
-			title: 'Thời gian làm',
-			dataIndex: 'DoingTimes',
-			render: (value, item, index) => <div className="min-w-[90px]">{value || 0}</div>
-		},
-		{
-			title: 'Điểm cao nhất',
-			dataIndex: 'HighestScore',
-			render: (value, item, index) => <div className="min-w-[100px]">{value || 0}</div>
-		},
-		{
-			title: 'Làm gần nhất',
-			dataIndex: 'LastestDoing',
-			render: (value, item, index) => <div className="min-w-[90px]">{value || 0}</div>
-		},
-		{
-			title: 'Làm gần nhất',
-			dataIndex: 'LastestDoing',
-			render: (value, item, index) => <div className="min-w-[100px]">{value || 0}</div>
-		},
+		// {
+		// 	title: 'Thời gian làm',
+		// 	dataIndex: 'DoingTimes',
+		// 	render: (value, item, index) => <div className="min-w-[90px]">{value || 0}</div>
+		// },
+		// {
+		// 	title: 'Điểm cao nhất',
+		// 	dataIndex: 'HighestScore',
+		// 	render: (value, item, index) => <div className="min-w-[100px]">{value || 0}</div>
+		// },
+		// {
+		// 	title: 'Làm gần nhất',
+		// 	dataIndex: 'LastestDoing',
+		// 	render: (value, item, index) => <div className="min-w-[90px]">{value || 0}</div>
+		// },
+		// {
+		// 	title: 'Làm gần nhất',
+		// 	dataIndex: 'LastestDoing',
+		// 	render: (value, item, index) => <div className="min-w-[100px]">{value || 0}</div>
+		// },
 		{
 			title: 'Level',
 			dataIndex: 'Level',
@@ -220,21 +220,6 @@ const TrainingRouteDetail = (props) => {
 		}
 	]
 
-	// CreatedBy: 'Admin'
-	// CreatedOn: '2023-08-30T18:05:58.113'
-	// DoingTimes: 0
-	// Enable: true
-	// ExamId: 1
-	// HighestScore: null
-	// Id: 1
-	// LastestDoing: null
-	// Level: 1
-	// ModifiedBy: 'Admin'
-	// ModifiedOn: '2023-08-30T18:05:58.113'
-	// Skill: 'Nghe'
-	// TrainingRouteFormId: 1
-	// TrainingRouteId: 1
-
 	const [visible, setVisible] = useState<boolean>(false)
 
 	return (
@@ -246,7 +231,7 @@ const TrainingRouteDetail = (props) => {
 				<FiEye size={20} />
 			</div>
 
-			<Modal open={visible} onCancel={() => setVisible(false)} title={'Chi tiết danh mục: ' + parent?.Name} footer={null} width="90%">
+			<Modal open={visible} onCancel={() => setVisible(false)} title={'Chi tiết danh mục: ' + parent?.Name} footer={null} width="80%">
 				<Card
 					className="shadow-sm"
 					title={

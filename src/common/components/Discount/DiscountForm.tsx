@@ -139,7 +139,7 @@ const DiscountForm = (props) => {
 					Thêm mới
 				</PrimaryButton>
 			)}
-			{console.log('rowData: ', rowData)}
+
 			<Modal
 				title={<>{rowData ? 'Cập nhật mã khuyến mãi' : 'Thêm mã khuyến mãi'}</>}
 				open={isModalVisible}

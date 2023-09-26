@@ -58,7 +58,6 @@ instance.interceptors.response.use(
 		if (!!error?.response) {
 			if (error?.response?.status == 401 && !isTimeout) {
 				isTimeout = true
-				ShowNostis.success('Phiên đăng nhập đã hết hạn')
 				logOut()
 			}
 

@@ -368,6 +368,13 @@ export const ManagerChildMenu = [
 				SubMenuList: [
 					{
 						ItemType: 'single',
+						Key: '/options/tuition-package',
+						Route: '/options/tuition-package',
+						Text: 'Gói học phí',
+						Icon: ''
+					},
+					{
+						ItemType: 'single',
 						Key: '/options/discount',
 						Route: '/options/discount',
 						Text: 'Mã khuyến mãi',

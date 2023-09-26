@@ -113,9 +113,11 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 
 	useEffect(() => {
 		if (StudentDetail) {
+			// console.log('---- StudentDetail: ', StudentDetail)
+
 			form.setFieldsValue({
 				...StudentDetail,
-				BranchIds: Number(StudentDetail.BranchIds),
+				BranchIds: !StudentDetail.BranchIds ? null : StudentDetail.BranchIds.split(',').map(Number),
 				DOB: StudentDetail?.DOB ? moment(StudentDetail?.DOB) : null
 			})
 			if (StudentDetail.AreaId) {
@@ -183,25 +185,17 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 								name="StatusId"
 								label="Trạng thái hoạt động"
 								optionList={[
-									{
-										value: 0,
-										title: 'Hoạt động'
-									},
-									{
-										value: 1,
-										title: 'Khóa'
-									}
+									{ value: 0, title: 'Hoạt động' },
+									{ value: 1, title: 'Khóa' }
 								]}
 								placeholder="Chọn trạng thái hoạt động"
 							/>
 						</div>
-						<div className="col-md-6 col-12">
-							<TextBoxField name="Extension" label="Giới thiệu thêm" />
-						</div>
+
 						<Divider>Địa chỉ</Divider>
 
 						<div className="col-12">
-							<SelectField name="BranchIds" label="Trung tâm" optionList={optionList.branch} onChangeSelect={(data) => {}} />
+							<SelectField mode="tags" name="BranchIds" label="Trung tâm" optionList={optionList.branch} />
 						</div>
 
 						<div className="col-md-6 col-12">
@@ -266,17 +260,12 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 						)}
 					</div>
 
-					<div className="row mt-3">
-						<div className="col-12 flex justify-end">
-							<PrimaryButton
-								background="blue"
-								type="submit"
-								loading={isLoading}
-								children={<span>Lưu</span>}
-								icon="save"
-								onClick={() => {}}
-							/>
-						</div>
+					<div className="col-12">
+						<TextBoxField name="Extension" label="Giới thiệu thêm" />
+					</div>
+
+					<div className="mt-3 col-12 flex items-center justify-center">
+						<PrimaryButton background="blue" type="submit" loading={isLoading} children={<span>Lưu</span>} icon="save" onClick={() => {}} />
 					</div>
 				</Form>
 			</Card>

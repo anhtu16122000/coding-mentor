@@ -43,8 +43,6 @@ const TakeAnExamHeader = (props) => {
 		// Tính số phút còn lại bằng cách lấy thời gian kết thúc trừ đi thời gian bắt đầu, chia cho 60000 (mili giây) và làm tròn xuống
 		const remainingMinutes = Math.floor((end.getTime() - nowTime.getTime()) / 60000)
 
-		// console.log('--- THỜI GIAN LÀM BÀI CÒN LẠI: ', remainingMinutes > -1 ? remainingMinutes : 0)
-
 		const tobeContinue = isEndTimeGreaterThanStartTime(start, end)
 
 		if (tobeContinue) {
@@ -72,10 +70,10 @@ const TakeAnExamHeader = (props) => {
 			<div className="ml-[16px] flex-1 pr-2">
 				<div className="cc-text-16-700 in-1-line">{overview?.Name}</div>
 				<div className="cc-text-14-500-blue flex items-center mt-[2px]">
-					<div className="all-center inline-flex cc-choice-point !ml-0">{overview?.QuestionsAmount} câu</div>
-					<div className="cc-choice-correct-number">{overview?.Point} điểm</div>
+					<div className="all-center inline-flex cc-choice-point !ml-0">Questions: {overview?.QuestionsAmount}</div>
+					<div className="cc-choice-correct-number">Point: {overview?.Point}</div>
 					<div className="cc-choice-orange">
-						Kỹ năng: {indexOfSkill + 1}/{!skills ? 0 : skills.length}
+						Skill: {indexOfSkill + 1}/{!skills ? 0 : skills.length}
 					</div>
 				</div>
 			</div>

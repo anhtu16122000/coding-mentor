@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { branchApi } from '~/api/manage/branch'
 import { testAppointmentApi } from '~/api/learn/test-appointment'
 import FilterBase from '~/common/components/Elements/FilterBase'
@@ -20,14 +20,10 @@ import { setBranch } from '~/store/branchReducer'
 import StudentForm from '~/common/components/Student/StudentForm'
 import { examApi } from '~/api/exam'
 import { userInformationApi } from '~/api/user/user'
-import ExpandedRowAppointment from '~/common/components/Service/ExpandedRowAppointment'
 import IconButton from '~/common/components/Primary/IconButton'
 import { useRouter } from 'next/router'
 import { Form, Modal, Select } from 'antd'
-import Head from 'next/head'
-import appConfigs from '~/appConfig'
 import { PrimaryTooltip, StudentNote } from '~/common/components'
-import { customerAdviseApi } from '~/api/user/customer'
 import Lottie from 'react-lottie-player'
 import warning from '~/common/components/json/100468-warning.json'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
@@ -55,18 +51,6 @@ const appointmenInitFilter = [
 		],
 		value: null
 	}
-	// {
-	// 	name: 'Type',
-	// 	title: 'Địa điểm làm bài',
-	// 	col: 'col-md-12 col-12',
-	// 	type: 'select',
-	// 	mode: 'multiple',
-	// 	optionList: [
-	// 		{ value: 1, title: 'Tại trung tâm' },
-	// 		{ value: 2, title: 'Làm bài trực tuyến' }
-	// 	],
-	// 	value: null
-	// }
 ]
 
 const appointmenDataOption = [
@@ -115,8 +99,9 @@ let listFieldFilter = {
 }
 
 export default function ServiceAppointmentTest(props) {
+	const { student } = props // Trường hợp xem trong thông ti học viên
+
 	const state = useSelector((state: RootState) => state)
-	const currentUserIdUpdated = useRef(0)
 	const [form] = Form.useForm()
 	const router = useRouter()
 	const dispatch = useDispatch()
@@ -225,9 +210,12 @@ export default function ServiceAppointmentTest(props) {
 	}
 
 	useEffect(() => {
-		if (state.branch.Branch.length === 0) {
-			getAllBranch()
+		if (!student) {
+			if (state.branch.Branch.length === 0) {
+				getAllBranch()
+			}
 		}
+
 		if (userInformation?.RoleId === '8') {
 			getUsers(apiParametersStudent)
 		}
@@ -237,9 +225,9 @@ export default function ServiceAppointmentTest(props) {
 	const getDataSource = async () => {
 		setIsLoading(true)
 		try {
-			let res = await testAppointmentApi.getAll(todoApi)
+			let res = await testAppointmentApi.getAll(isStudent() ? { ...todoApi, studentId: student?.UserInformationId } : todoApi)
 			if (res.status === 200) {
-				if (userInformation?.RoleId === '8') {
+				if (userInformation?.RoleId == '8') {
 					if (todoApi.studentId) {
 						setDataSource(res.data.data)
 						setTotalPage(res.data.totalRow)
@@ -380,7 +368,7 @@ export default function ServiceAppointmentTest(props) {
 	const expandedRowRender = (record) => {
 		return (
 			<div className="w-[1000px]">
-				<StudentNote currentUserIdUpdated={currentUserIdUpdated} rowData={record} studentId={record?.StudentId} />
+				<StudentNote rowData={record} studentId={record?.StudentId} />
 			</div>
 		)
 	}
@@ -410,12 +398,11 @@ export default function ServiceAppointmentTest(props) {
 			...FilterColumn('FullName', onSearch, handleReset, 'text')
 		},
 		{
-			width: 200,
 			title: 'Địa điểm',
 			dataIndex: 'BranchName',
 			render: (value, item, index) => {
 				return (
-					<div>
+					<div className="min-w-[100px]">
 						<div className="font-weight-black">Trung tâm: {value}</div>
 						{item?.Type == 1 && <p className="tag blue">{item.TypeName}</p>}
 						{item?.Type == 2 && <p className="tag yellow">{item.TypeName}</p>}
@@ -469,7 +456,7 @@ export default function ServiceAppointmentTest(props) {
 			render: (text, data, index) => {
 				return (
 					<div onClick={(e) => e.stopPropagation()}>
-						{(isAdmin() || isManager() || isTeacher() || isSaler() || isAcademic()) && (
+						{(isAdmin() || isManager()) && (
 							<StudentForm
 								rowData={data}
 								listStudent={listStudent}
@@ -480,15 +467,13 @@ export default function ServiceAppointmentTest(props) {
 							/>
 						)}
 
-						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Status == 1 && (
-							<CancelTest onUpdateData={onUpdateData} dataRow={data} />
+						{(isAdmin() || isManager()) && data.Status == 1 && <CancelTest onUpdateData={onUpdateData} dataRow={data} />}
+
+						{(isAdmin() || isManager() || isTeacher() || isAcademic()) && data.Type == 1 && (
+							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						)}
 
-						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Type == 1 && (
-							<ScoreModal currentUserIdUpdated={currentUserIdUpdated} rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
-						)}
-
-						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Status == 2 && (
+						{(isAdmin() || isManager() || isAcademic()) && data.Status == 2 && (
 							<IconButton
 								icon="study"
 								tooltip="Đăng ký học"
@@ -518,11 +503,7 @@ export default function ServiceAppointmentTest(props) {
 			render: (text, data, index) => {
 				return (
 					<div onClick={(e) => e.stopPropagation()}>
-						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && (
-							<TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
-						)}
-
-						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && (
+						{(isAdmin() || isManager()) && (
 							<StudentForm
 								rowData={data}
 								listStudent={listStudent}
@@ -532,11 +513,32 @@ export default function ServiceAppointmentTest(props) {
 								listTodoApi={listTodoApi}
 							/>
 						)}
-						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Status == 1 && (
-							<CancelTest onUpdateData={onUpdateData} dataRow={data} />
+
+						{(isAdmin() || isManager()) && data.Status == 1 && <CancelTest onUpdateData={onUpdateData} dataRow={data} />}
+
+						{(isAdmin() || isManager() || isTeacher() || isAcademic()) && data.Type == 1 && (
+							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 						)}
-						{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && data.Type === 1 && (
-							<ScoreModal currentUserIdUpdated={currentUserIdUpdated} rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
+
+						{(isAdmin() || isManager() || isAcademic()) && data.Status == 2 && (
+							<IconButton
+								icon="study"
+								tooltip="Đăng ký học"
+								color="green"
+								type="button"
+								onClick={() => router.push({ pathname: '/class/register', query: { userId: data?.StudentId } })}
+							/>
+						)}
+
+						{isStudent() && data.Status == 1 && data?.Type == 2 && (
+							<PrimaryTooltip place="left" id={`hw-take-${data?.Id}`} content="Làm bài">
+								<div
+									onClick={() => getDraft(data?.IeltsExamId, data?.Id)}
+									className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+								>
+									<TbWritingSign size={22} />
+								</div>
+							</PrimaryTooltip>
 						)}
 					</div>
 				)
@@ -607,7 +609,7 @@ export default function ServiceAppointmentTest(props) {
 					}
 					Extra={
 						<>
-							{(isAdmin() || isSaler() || isManager() || isTeacher() || isAcademic()) && (
+							{(isAdmin() || isManager()) && !student && (
 								<StudentForm
 									listStudent={listStudent}
 									listTeacher={listTeacher}
@@ -616,7 +618,8 @@ export default function ServiceAppointmentTest(props) {
 									listTodoApi={listTodoApi}
 								/>
 							)}
-							{userInformation?.RoleId === '8' ? (
+
+							{userInformation?.RoleId == '8' ? (
 								<>
 									<Form form={form}>
 										<Form.Item name="student">

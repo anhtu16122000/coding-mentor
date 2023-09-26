@@ -5,11 +5,13 @@ import IconButton from '../Primary/IconButton'
 
 const ListClassReview = (props) => {
 	const { classesSelected, setClassesSelected, setClasses } = props
+
 	const handleRemoveClass = (data) => {
 		const newClassesSelected = classesSelected.filter((item) => item.Id !== data.Id)
 		setClassesSelected(newClassesSelected)
 		setClasses((prev) => [{ ...data }, ...prev])
 	}
+
 	return (
 		<List
 			className="rounded-lg mb-3 p-[3px]"
@@ -17,9 +19,13 @@ const ListClassReview = (props) => {
 			itemLayout="horizontal"
 			dataSource={classesSelected}
 			renderItem={(item: IClass) => (
-				<List.Item extra={<IconButton icon="remove" color="red" type="button" tooltip="Xóa" onClick={() => handleRemoveClass(item)} />}>
+				<List.Item
+					className="!px-[14px]"
+					extra={<IconButton icon="remove" color="red" type="button" tooltip="Xóa" onClick={() => handleRemoveClass(item)} />}
+				>
 					<div className="wrapper-item-class">
-						<AvatarComponent className="img-class" url={item?.Thumbnail} type="class"/>
+						<AvatarComponent className="img-class" url={item?.Thumbnail} type="class" />
+
 						<div className="wrapper-info-class">
 							<p>
 								<span className="title">Lớp:</span>
@@ -29,14 +35,20 @@ const ListClassReview = (props) => {
 								<span className="title">Giá:</span>
 								<span className="font-normal ml-1">{Intl.NumberFormat('ja-JP').format(item?.Price)}</span>
 							</p>
+							{/* <p>
+								<span className="title">Hình thức:</span>
+								<span className="font-normal ml-1">{item?.PaymentTypeName}</span>
+							</p> */}
 							<p>
 								<span className="title">Buổi đã học:</span>
-								<span className="font-normal ml-1">{Intl.NumberFormat('ja-JP').format(item?.CompletedLesson)}</span>
+								<span className="font-normal ml-1">
+									{item?.CompletedLesson} / {item?.TotalLesson}
+								</span>
 							</p>
 							<p>
-								<span className="title">Số lượng:</span>
+								<span className="title">Học viên:</span>
 								<span className="font-normal ml-1">
-									{item.StudentQuantity}/{item.MaxQuantity} học viên
+									{item.StudentQuantity} / {item.MaxQuantity}
 								</span>
 							</p>
 						</div>

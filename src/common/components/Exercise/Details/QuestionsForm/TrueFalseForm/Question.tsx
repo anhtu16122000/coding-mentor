@@ -1,13 +1,14 @@
 import { Checkbox } from 'antd'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { TbFileCertificate } from 'react-icons/tb'
 import { useSelector } from 'react-redux'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import htmlParser from '~/common/components/HtmlParser'
 import { RootState } from '~/store'
 
 const TrueFalseQuestion = (props) => {
-	const { data, isDoing, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav, indexInExam, isResult } = props
+	const { data, type, isDoing, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav, indexInExam, isResult } = props
 
 	const [loading, setLoading] = useState<boolean>(true)
 
@@ -91,34 +92,42 @@ const TrueFalseQuestion = (props) => {
 		return ''
 	}
 
+	const disabledCheckbox = loading || !isDoing || isResult
+
 	return (
 		<div
 			onClick={() =>
 				!Router.asPath.includes('/questions') &&
+				// !Router.asPath.includes('/exam/detail') &&
 				setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionGroupId: curGroup?.Id })
 			}
 			className="flex items-start"
 		>
 			<div id={`cauhoi-${data.Id}`} className="flex flex-1 mt-1">
-				{!Router.asPath.includes('questions') && <span className="flex-shrink-0 inline font-[600] mr-[8px]">Câu {indexInExam}:</span>}
+				{!Router.asPath.includes('questions') && type != 'edit' && (
+					<span className="flex-shrink-0 inline font-[600] mr-[8px]">
+						<div className="text-[#1b73e8] inline">Câu {indexInExam}</div> ({data?.Point} điểm):
+					</span>
+				)}
+
 				{htmlParser(data?.Content)}
 			</div>
 
 			{!isResult && (
 				<div className="flex items-center mr-[2px] true-false-checkbox">
-					<div className="w-[50px] flex items-center justify-center">
+					<div className="w-[50px] all-center">
 						<Checkbox
-							disabled={loading || !isDoing || isResult}
-							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
+							disabled={disabledCheckbox}
+							id={`check-box-${data?.Id || ''}`}
 							defaultChecked={checkChecked(0)}
 							onClick={(e: any) => !isResult && e.target?.checked && insertDetails(data.IeltsAnswers[0])}
 						/>
 					</div>
 
-					<div className="w-[50px] flex items-center justify-center">
+					<div className="w-[50px] all-center">
 						<Checkbox
-							disabled={loading || !isDoing || isResult}
-							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
+							disabled={disabledCheckbox}
+							id={`check-box-${data?.Id || ''}`}
 							defaultChecked={checkChecked(1)}
 							onClick={(e: any) => !isResult && e.target?.checked && insertDetails(data.IeltsAnswers[1])}
 						/>
@@ -128,9 +137,9 @@ const TrueFalseQuestion = (props) => {
 
 			{!!isResult && (
 				<div className="flex items-center mr-[2px] true-false-checkbox">
-					<div className="w-[50px] flex items-center justify-center">
+					<div className="w-[50px] all-center">
 						<Checkbox
-							disabled={loading || !isDoing || isResult}
+							disabled={disabledCheckbox}
 							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
 							defaultChecked={checkChecked(0) || getTrueAns(0)}
 							className={`${getClass(0)}`}
@@ -138,9 +147,9 @@ const TrueFalseQuestion = (props) => {
 						/>
 					</div>
 
-					<div className="w-[50px] flex items-center justify-center">
+					<div className="w-[50px] all-center">
 						<Checkbox
-							disabled={loading || !isDoing || isResult}
+							disabled={disabledCheckbox}
 							id={`check-box-${!!data?.IeltsAnswer ? data?.IeltsAnswers[0]?.Id : data?.IeltsAnswerResults[0]?.Id}`}
 							defaultChecked={checkChecked(1) || getTrueAns(1)}
 							className={`${getClass(1)}`}

@@ -196,7 +196,7 @@ export const ModalStudyRoute: React.FC<IModalStudyRoute> = ({ mode, onRefresh, d
 						/>
 					</>
 				}
-				width={mode != 'delete' ? 500 : 400}
+				width={mode != 'delete' ? 400 : 400}
 			>
 				<div className="container-fluid">
 					<Form form={form} layout="vertical" onFinish={_onSubmit}>
@@ -206,30 +206,19 @@ export const ModalStudyRoute: React.FC<IModalStudyRoute> = ({ mode, onRefresh, d
 									<p>Bạn có chắc muốn xóa?</p>
 								</div>
 							)}
+
 							{mode != 'delete' && (
 								<>
 									<div className="col-span-2">
-										<SelectField
-											// form={form}
-											label="Khóa học"
-											name="ProgramId"
-											optionList={program}
-											placeholder="Chọn chương trình"
-											// rules={[{ required: true, message: 'Bạn không được để trống' }]}
-										/>
+										<SelectField label="Chương trình" name="ProgramId" optionList={program} placeholder="Chọn chương trình" />
 									</div>
+
 									{mode == 'edit' && (
 										<div className="col-span-2">
-											<SelectField
-												// form={form}
-												label="Trạng thái"
-												name="Status"
-												optionList={status}
-												placeholder="Chọn trạng thái"
-												// rules={[{ required: true, message: 'Bạn không được để trống' }]}
-											/>
+											<SelectField label="Trạng thái" name="Status" optionList={status} placeholder="Chọn trạng thái" />
 										</div>
 									)}
+
 									<div className="col-span-2">
 										<TextBoxField name="Note" label="Ghi chú" />
 									</div>

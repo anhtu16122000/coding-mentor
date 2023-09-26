@@ -1,4 +1,5 @@
 import { Form, Input, Select } from 'antd'
+import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { studentInClassApi } from '~/api/user/student-in-class'
@@ -131,6 +132,15 @@ export const StudentWarningPage = () => {
 					<PrimaryTag color={item?.Type == 1 ? 'green' : 'red'} children={text} />
 				</>
 			)
+		},
+		{
+			title: 'Ngày',
+			dataIndex: 'CreatedOn',
+			render: (text, item) => <>{moment(text).format('HH:mm DD/MM/YYYY')}</>
+		},
+		{
+			title: 'Người tạo',
+			dataIndex: 'CreatedBy'
 		}
 	]
 

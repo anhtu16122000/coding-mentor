@@ -72,11 +72,7 @@ function ResultDetail() {
 		}
 	}
 
-	// log.Yellow('---- XX currentQuestion: ', currentQuestion)
-
 	async function getResultQuestionGroup(runAnyway?: any) {
-		log.Yellow('----------------------------------------------------------------', '')
-
 		if (!runAnyway && !currentQuestion?.IeltsQuestionGroupResultId) {
 			return
 		}
@@ -336,9 +332,6 @@ function ResultDetail() {
 			}
 		}
 
-		// console.log('---- dragSelected: ', dragSelected)
-
-		// ----
 		formatInput()
 	}, [curGroup])
 
@@ -359,7 +352,7 @@ function ResultDetail() {
 
 	useEffect(() => {
 		if (curAudio?.Audio) {
-			ShowNostis.success(`Đang phát audio: ${curAudio?.Name}`)
+			ShowNostis.success(`Playing: ${curAudio?.Name}`)
 		}
 	}, [curAudio])
 
@@ -382,11 +375,6 @@ function ResultDetail() {
 		} finally {
 			setLoading(false)
 		}
-	}
-
-	function handleChangeSkill(params) {
-		setCurrentSection(null)
-		setCurrentSkill(params)
 	}
 
 	return (
@@ -424,6 +412,7 @@ function ResultDetail() {
 				<div className="flex-1 flex relative">
 					<MainAudioPlayer
 						curAudio={curAudio}
+						setCurAudio={setCurAudio}
 						showAudioControl={showAudioControl}
 						setShowAudioControl={setShowAudioControl}
 						curSection={currentSection}

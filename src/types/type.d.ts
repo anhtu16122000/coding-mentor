@@ -89,6 +89,8 @@ type IClass = IBaseApi<{
 	LessonComple: number
 	Time?: number
 	Id: number
+	PaymentTypeName?: string
+	PaymentTypeId?: number
 	CompletedLesson: number
 }>
 

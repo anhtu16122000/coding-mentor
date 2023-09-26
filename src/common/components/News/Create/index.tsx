@@ -12,8 +12,6 @@ import { useNewsContext } from '~/common/providers/News'
 import { log, ShowNostis } from '~/common/utils'
 import { RootState } from '~/store'
 import Avatar from '../../Avatar'
-import BaseLoading from '../../BaseLoading'
-import SelectField from '../../FormControl/SelectField'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import MainCreate from './main-create'
 
@@ -125,9 +123,7 @@ const CreateNews: FC<TCreateNews> = (props) => {
 		try {
 			const response = await RestApi.get<IBranch[]>('Branch', {})
 			setListBranch(response.data.data)
-		} catch (err) {
-			console.log('🚀 ~ file: index.tsx:130 ~ getAllBranch ~ err', err)
-		}
+		} catch (err) {}
 	}
 
 	useEffect(() => {

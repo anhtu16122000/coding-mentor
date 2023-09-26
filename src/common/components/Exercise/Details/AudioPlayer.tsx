@@ -1,11 +1,12 @@
 import React from 'react'
 import PrimaryTooltip from '../../PrimaryTooltip'
 import { IoCloseSharp } from 'react-icons/io5'
-import { VscSettings } from 'react-icons/vsc'
 import AudioPlayer from 'react-h5-audio-player'
+import { FaMinus } from 'react-icons/fa'
+import { TbArrowsMaximize } from 'react-icons/tb'
 
 const MainAudioPlayer = (props) => {
-	const { curAudio, showAudioControl, setShowAudioControl, curSection, curSkill } = props
+	const { curAudio, setCurAudio, showAudioControl, setShowAudioControl, curSection, curSkill } = props
 
 	return (
 		<>
@@ -14,7 +15,7 @@ const MainAudioPlayer = (props) => {
 					<AudioPlayer
 						className="h-[94px] duration-200 !w-[calc(100vw-32px)] w400:!w-[350px] hide-loop"
 						src={curAudio?.Audio}
-						onPlay={(e) => console.log('onPlay')}
+						onPlay={(e) => {}}
 						showSkipControls={false}
 						showDownloadProgress={false}
 						showJumpControls={false}
@@ -23,15 +24,31 @@ const MainAudioPlayer = (props) => {
 						layout="horizontal-reverse"
 						header={
 							<div className="flex items-center">
-								<PrimaryTooltip content={showAudioControl ? 'Thu nhỏ' : 'Mở rộng'} place="left" id={`x-${curSection?.Id}-${curSkill?.Id}`}>
+								<PrimaryTooltip content="Đóng" place="left" id={`x-${curSection?.Id}-${curSkill?.Id}`}>
 									<div
-										onClick={() => setShowAudioControl(!showAudioControl)}
-										className={`all-center rounded-full w-[24px] h-[24px] cursor-pointer ${showAudioControl ? 'bg-[red]' : 'bg-[#0A89FF]'}`}
+										onClick={() => setCurAudio(null)}
+										className={`all-center rounded-full w-[24px] h-[24px] cursor-pointer mr-[8px] bg-[red]`}
 									>
-										{showAudioControl && <IoCloseSharp size={18} color="#fff" />}
-										{!showAudioControl && <VscSettings size={16} color="#fff" />}
+										<IoCloseSharp size={18} color="#fff" />
 									</div>
 								</PrimaryTooltip>
+
+								<PrimaryTooltip
+									content={showAudioControl ? 'Thu nhỏ' : 'Mở rộng'}
+									place="left"
+									id={`min-${curSection?.Id}-${curSkill?.Id}`}
+								>
+									<div
+										onClick={() => setShowAudioControl(!showAudioControl)}
+										className={`all-center rounded-full w-[24px] h-[24px] cursor-pointer ${
+											showAudioControl ? 'bg-[#a2a2a2]' : 'bg-[#0A89FF]'
+										}`}
+									>
+										{showAudioControl && <FaMinus size={14} color="#fff" />}
+										{!showAudioControl && <TbArrowsMaximize size={14} color="#fff" />}
+									</div>
+								</PrimaryTooltip>
+
 								<div className="ml-[8px] font-[600] in-1-line">{curAudio?.Name}</div>
 							</div>
 						}

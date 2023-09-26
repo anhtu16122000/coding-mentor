@@ -1,11 +1,8 @@
-import { GetStaticPaths } from 'next'
 import Head from 'next/head'
 import React from 'react'
 import appConfigs from '~/appConfig'
 import MainLayout from '~/common/components/MainLayout'
 import ListClassPro from '~/common/pages/Class/Pro/ListClassPro'
-
- 
 
 const ListClass = () => {
 	return (
