@@ -136,13 +136,13 @@ const CalenderClass = () => {
 			Thumbnail: dataChangeSchedule.Thumbnail,
 			Type: dataChangeSchedule.Type,
 			PaymentType: dataChangeSchedule?.PaymentType,
-			ScoreboardTemplateId: dataChangeSchedule?.ScoreboardTemplateId,
-			schedules: listCalendar
+			schedules: listCalendar,
+			ScoreboardTemplateId: dataChangeSchedule?.ScoreboardTemplateId
 		}
 
 		try {
 			const res = await classApi.addClass(DATA_SUBMIT)
-			if (res.status === 200) {
+			if (res.status == 200) {
 				ShowNoti('success', res.data.message)
 				return res
 			}
