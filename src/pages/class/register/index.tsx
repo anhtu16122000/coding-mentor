@@ -51,7 +51,6 @@ const CardBody = (props) => {
 					setTotalPrice={() => {}}
 					setLeftPrice={setLeftPrice}
 					discountPrice={discountPrice}
-					handleListTimeFrames={handleListTimeFrames}
 				/>
 			)}
 
@@ -77,7 +76,6 @@ const RegisterClass = () => {
 	const [programsSelected, setProgramsSelected] = useState([])
 	const [detailDiscount, setDetailDiscount] = useState<IDiscount>()
 	const [totalPrice, setTotalPrice] = useState(0)
-	const [voucher, setVoucher] = useState(0)
 	const [discountPrice, setDiscountPrice] = useState(0)
 	const [leftPrice, setLeftPrice] = useState(0)
 	const [activeTab] = useState(tabs[0])
@@ -99,7 +97,7 @@ const RegisterClass = () => {
 			thatPrice = totalPrice
 		}
 
-		if (discount && totalPrice > 0) {
+		if (discountPrice > 0 && totalPrice > 0) {
 			thatPrice = totalPrice - discountPrice
 		}
 

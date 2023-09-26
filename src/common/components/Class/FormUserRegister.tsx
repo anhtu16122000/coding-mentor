@@ -8,6 +8,7 @@ import { ShowNoti } from '~/common/utils'
 import Avatar from '../Avatar'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
+import { formRequired } from '~/common/libs/others/form'
 
 const FormUserRegister = (props) => {
 	const { form, setClasses, isReset, setCurStudent } = props
@@ -16,25 +17,58 @@ const FormUserRegister = (props) => {
 
 	const [students, setStudents] = useState([])
 	const [userInfo, setUserInfo] = useState<IUserInformation>()
+	const [curBranch, setCurBranch] = useState(null)
 
 	const userInformation = useSelector((state: RootState) => state.user.information)
+
+	const branch = useSelector((state: RootState) => state.branch.Branch)
+
+	const [routerStudent, setRouterStudent] = useState(null)
 
 	useEffect(() => {
 		!!isReset && setUserInfo(null)
 	}, [isReset])
 
-	const getAllStudent = async () => {
+	useEffect(() => {
+		if (routerStudent) {
+			getStudentDetail(routerStudent)
+		}
+	}, [routerStudent])
+
+	function handleSelectBranch(e) {
+		form.setFieldValue('StudentId', null)
+		setClasses([])
+		setUserInfo(null)
+		getAllStudent(e)
+	}
+
+	const getAllStudent = async (params?: any) => {
+		const branchId = !!curBranch ? curBranch : userInformation?.RoleId == '1' ? null : userInformation.BranchIds
+
 		try {
-			const ROLE_STUDENT = 3
-			const res = await userInformationApi.getAll({
-				roleIds: ROLE_STUDENT,
-				branchIds: userInformation?.RoleId == '1' ? null : userInformation.BranchIds
-			})
+			const res = await userInformationApi.getAll({ roleIds: 3, branchIds: !params ? branchId : params })
 			if (res.status == 200) {
 				setStudents(res.data.data)
-			}
-			if (res.status == 204) {
+			} else {
 				setStudents([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
+
+	const getStudentDetail = async (id) => {
+		try {
+			const res = await userInformationApi.getByID(id)
+			if (res.status == 200) {
+				setUserInfo(res.data.data)
+				if (!!res.data.data?.BranchIds) {
+					setCurBranch(parseInt(res.data.data?.BranchIds + ''))
+					form.setFieldValue('BranchId', parseInt(res.data.data?.BranchIds + ''))
+					getAllStudent(parseInt(res.data.data?.BranchIds + ''))
+				}
+			} else {
+				setUserInfo(null)
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -48,44 +82,65 @@ const FormUserRegister = (props) => {
 		form.setFieldsValue({ StudentId: getStudent?.UserInformationId })
 
 		setUserInfo(getStudent)
-		if (!!form.getFieldValue('BranchId')) {
-			try {
-				// Tham số 1: branchId
-				// Tham số 2: studentId
-				const res = await billApi.getClassAvailable({
-					studentId: data,
-					branchId: form.getFieldValue('BranchId')
-				})
-				if (res.status == 200) {
-					setClasses(res.data.data)
-				}
-				if (res.status == 204) {
-					setClasses([])
-				}
-			} catch (err) {
-				ShowNoti('error', err.message)
+
+		try {
+			const res = await billApi.getClassAvailable({ studentId: data, branchId: curBranch })
+			if (res.status == 200) {
+				setClasses(res.data.data)
+			} else {
+				setClasses([])
 			}
+		} catch (err) {
+			ShowNoti('error', err.message)
 		}
 	}
 
 	useEffect(() => {
-		getAllStudent()
-	}, [])
-
-	useEffect(() => {
-		if (router?.query?.userId) {
-			handleGetStudent(router?.query?.userId)
+		if (router?.query?.student) {
+			form.setFieldValue('StudentId', parseInt(router?.query?.student + ''))
+			setRouterStudent(parseInt(router?.query?.student + ''))
+			setCurStudent(parseInt(router?.query?.student + ''))
+		} else {
+			form.setFieldValue('StudentId', null)
+			setRouterStudent(null)
+			setCurStudent(null)
+			setCurBranch(null)
+			form.setFieldValue('BranchId', null)
 		}
-	}, [router?.query?.userId, students])
+	}, [router])
 
 	return (
 		<div className="form-user-register">
 			<div className="grid grid-cols-2 gap-x-4">
-				<div className="col-span-2">
+				{/* <div className="col-span-2">
 					<Form.Item label="">
 						<Avatar className="w-[62px] h-[62px] object-fill rounded-lg" uri={!!userInfo?.Avatar ? userInfo?.Avatar : null} />
 					</Form.Item>
-				</div>
+				</div> */}
+
+				<Form.Item className="col-span-1" required={true} rules={formRequired} label="Trung tâm" name="BranchId">
+					<Select
+						onChange={(e) => {
+							form.setFieldsValue({ branchId: e })
+							setCurBranch(e)
+							handleSelectBranch(e)
+						}}
+						showSearch
+						optionFilterProp="children"
+						className="primary-input"
+						placeholder="Chọn trung tâm"
+					>
+						{branch.map((item) => {
+							return (
+								<Select.Option key={item.Id} value={item.Id}>
+									{item.Name}
+								</Select.Option>
+							)
+						})}
+					</Select>
+				</Form.Item>
+
+				<div className="col-span-1" />
 
 				<div className="col-span-1">
 					<Form.Item label="Học viên" name="StudentId">
@@ -93,6 +148,7 @@ const FormUserRegister = (props) => {
 							onChange={handleGetStudent}
 							showSearch
 							allowClear
+							disabled={!curBranch}
 							optionFilterProp="children"
 							className="primary-input"
 							placeholder="Chọn học viên"
@@ -101,7 +157,7 @@ const FormUserRegister = (props) => {
 							{students.map((student) => {
 								return (
 									<Select.Option key={student.UserInformationId} value={student.UserInformationId}>
-										{student.FullName} - {student.UserCode}
+										[{student.UserCode}] - {student.FullName}
 									</Select.Option>
 								)
 							})}
@@ -114,6 +170,7 @@ const FormUserRegister = (props) => {
 							onChange={handleGetStudent}
 							showSearch
 							allowClear
+							disabled={!curBranch}
 							optionFilterProp="children"
 							className="primary-input"
 							placeholder="Chọn email"
@@ -135,6 +192,7 @@ const FormUserRegister = (props) => {
 							onChange={handleGetStudent}
 							showSearch
 							allowClear
+							disabled={!curBranch}
 							optionFilterProp="children"
 							className="primary-input"
 							placeholder="Chọn số điện thoại"
@@ -150,6 +208,7 @@ const FormUserRegister = (props) => {
 						</Select>
 					</Form.Item>
 				</div>
+
 				<div className="col-span-1">
 					<Form.Item label="Ngày sinh">
 						<Input

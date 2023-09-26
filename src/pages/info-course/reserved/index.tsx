@@ -29,6 +29,7 @@ import { userInfoColumn } from '~/common/libs/columns/user-info'
 import Filters from '~/common/components/Student/Filters'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
+import ButtonMoveTo from '~/common/components/TableButton/MOVETO'
 
 const initFilters = { PageSize: PAGE_SIZE, PageIndex: 1, Search: '' }
 
@@ -114,7 +115,22 @@ const ReservedPage = () => {
 
 				{item?.Status == 1 && (
 					<>
-						<AddToClass item={item} onRefresh={getData} />
+						{/* <AddToClass item={item} onRefresh={getData} /> */}
+
+						<PrimaryTooltip id={`reg-to-${item?.Id}`} place="left" content="Đăng ký học">
+							<ButtonMoveTo
+								onClick={() =>
+									Router.push({
+										pathname: '/class/register/',
+										query: {
+											student: item?.StudentId
+										}
+									})
+								}
+								className="ml-[16px]"
+							/>
+						</PrimaryTooltip>
+
 						<RefundForm item={item} onRefresh={getData} />
 					</>
 				)}
@@ -133,7 +149,21 @@ const ReservedPage = () => {
 			title: 'Số tiền bảo lưu',
 			dataIndex: 'Price',
 			width: 130,
-			render: (value, item) => <p className="font-[600] text-[#1976D2]">{parseToMoney(value)}</p>
+			render: (value, item) => {
+				return <p className="font-[600] text-[#1976D2]">{parseToMoney(value)}</p>
+			}
+		},
+		{
+			title: 'Thông tin khác',
+			dataIndex: 'Price',
+			render: (value, item) => {
+				return (
+					<>
+						<p className="font-[600] text-[#e14d4f]">Đã sử dụng: {parseToMoney(item?.MoneyUsed || 0)}</p>
+						<p className="font-[600] text-[#2ba568]">Còn lại: {parseToMoney(item?.MoneyRemaining || 0)}</p>
+					</>
+				)
+			}
 		},
 		{
 			title: 'Trạng thái',
@@ -163,8 +193,7 @@ const ReservedPage = () => {
 		{
 			title: 'Người tạo',
 			dataIndex: 'CreatedBy',
-			width: 150,
-			render: (value, item) => <p className="font-[600] text-[#1976D2]">{value}</p>
+			render: (value, item) => <p className="font-[600] min-w-[150px] text-[#1976D2]">{value}</p>
 		},
 		{
 			title: '',

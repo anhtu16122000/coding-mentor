@@ -95,6 +95,20 @@ const StudentInClassPage = () => {
 	function handleColumn(value, item) {
 		if (isSaler()) return ''
 
+		function showReserve() {
+			if (item?.TotalMonth == 0 || item?.RemainingMonth == 0) {
+				// Chưa đóng tiền trước hoặc đã học hết
+				return false
+			}
+
+			if (item?.TotalLesson == 0 || item?.RemainingLesson == 0) {
+				// Không có buổi học  hoặc đã học hết
+				return false
+			}
+
+			return true
+		}
+
 		return (
 			<div className="flex item-center">
 				<PrimaryTooltip content="Thông tin học viên" place="left" id={`view-st-${item?.Id}`}>
@@ -103,8 +117,8 @@ const StudentInClassPage = () => {
 
 				{item?.ClassType !== 3 && (
 					<>
-						<ChangeClass item={item} onRefresh={getData} />
-						<ReserveForm item={item} onRefresh={getData} />
+						{item?.TotalMonth == 0 && <ChangeClass item={item} onRefresh={getData} />}
+						{showReserve() && <ReserveForm item={item} onRefresh={getData} />}
 					</>
 				)}
 			</div>

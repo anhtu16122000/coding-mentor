@@ -41,7 +41,7 @@ export const userInformationApi = {
 		})
 	},
 	getByID(ID) {
-		return instance.get<IApiResultData<IUserResponse>>(`${url}/${ID}`)
+		return instance.get<IApiResultData<any>>(`${url}/${ID}`)
 	},
 	getAllParams(params) {
 		return instance.get<IApiResultData<IUserInformation[]>>('/api/UserInformation', {
