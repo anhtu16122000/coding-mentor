@@ -5,13 +5,12 @@ import React, { useEffect, useState } from 'react'
 import { billApi } from '~/api/business/bill'
 import { userInformationApi } from '~/api/user/user'
 import { ShowNoti } from '~/common/utils'
-import Avatar from '../Avatar'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import { formRequired } from '~/common/libs/others/form'
 
 const FormUserRegister = (props) => {
-	const { form, setClasses, isReset, setCurStudent, type } = props
+	const { form, setClasses, isReset, setCurStudent, type, curStudent } = props
 
 	const router = useRouter()
 
@@ -78,11 +77,6 @@ const FormUserRegister = (props) => {
 	const handleGetStudent = async (data?: any) => {
 		!!setCurStudent && setCurStudent(data)
 
-		// const getStudent = students.find((student) => student.UserInformationId == data)
-		// form.setFieldsValue({ StudentId: getStudent?.UserInformationId })
-
-		// setUserInfo(getStudent)
-
 		try {
 			const res = await billApi.getClassAvailable({ studentId: type == 1 ? data : null, branchId: curBranch, paymentType: type || 1 })
 			if (res.status == 200) {
@@ -97,7 +91,7 @@ const FormUserRegister = (props) => {
 
 	useEffect(() => {
 		if (!!type && !!curBranch) {
-			handleGetStudent()
+			handleGetStudent(curStudent)
 		}
 	}, [type])
 
@@ -118,12 +112,6 @@ const FormUserRegister = (props) => {
 	return (
 		<div className="form-user-register">
 			<div className="grid grid-cols-2 gap-x-4">
-				{/* <div className="col-span-2">
-					<Form.Item label="">
-						<Avatar className="w-[62px] h-[62px] object-fill rounded-lg" uri={!!userInfo?.Avatar ? userInfo?.Avatar : null} />
-					</Form.Item>
-				</div> */}
-
 				<Form.Item className="col-span-1" required={true} rules={formRequired} label="Trung tâm" name="BranchId">
 					<Select
 						onChange={(e) => {

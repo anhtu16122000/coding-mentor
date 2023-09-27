@@ -1,4 +1,4 @@
-import { Card, DatePicker, Form, Input, InputNumber, Modal, Select } from 'antd'
+import { Card, DatePicker, Form, Input, Modal } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
 import { ShowNostis, log } from '~/common/utils'
@@ -149,8 +149,6 @@ const ReserveForm: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 			setLoading(false)
 		}
 	}
-
-	log.Yellow('---- review', review)
 
 	return (
 		<>

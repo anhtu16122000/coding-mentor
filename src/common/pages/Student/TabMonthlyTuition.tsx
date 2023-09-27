@@ -7,15 +7,28 @@ import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { RiBillLine } from 'react-icons/ri'
 import { PrimaryTooltip } from '~/common/components'
 import Router, { useRouter } from 'next/router'
-import { encode, is } from '~/common/utils/common'
+import { encode, is, parseToMoney } from '~/common/utils/common'
+import PrimaryButton from '~/common/components/Primary/Button'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
+import { ShowNoti } from '~/common/utils'
+import { DatePicker } from 'antd'
 
 export const TabMonthlyTuition = ({ StudentDetail }) => {
 	const router = useRouter()
 
-	const [filters, setFilters] = useState({ pageIndex: 1, pageSize: PAGE_SIZE })
+	const [filters, setFilters] = useState({
+		pageIndex: 1,
+		month: new Date().getMonth() + 1,
+		year: new Date().getFullYear(),
+		pageSize: PAGE_SIZE
+	})
 	const [dataTable, setDataTable] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
 	const [totalPage, setTotalPage] = useState(null)
+	const [valueDate, setValueDate] = useState(moment())
+
+	const user = useSelector((state: RootState) => state.user.information)
 
 	const getData = async (params) => {
 		setIsLoading(true)
@@ -34,7 +47,7 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 		}
 	}
 
-	useEffect(() => {
+	function apiHandler() {
 		if (router.asPath.includes('class=')) {
 			if (router?.query?.class) {
 				getData({
@@ -46,6 +59,10 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 		} else if (StudentDetail?.UserInformationId) {
 			getData({ ...filters, studentId: parseInt(StudentDetail?.UserInformationId) })
 		}
+	}
+
+	useEffect(() => {
+		apiHandler()
 	}, [StudentDetail, filters, router])
 
 	const columns = [
@@ -70,6 +87,13 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 			align: 'center',
 			render: (value, item, index) => {
 				return <div className="min-w-[50px] text-[#000] font-[600]">{value}</div>
+			}
+		},
+		{
+			title: 'Số tiền',
+			dataIndex: 'Price',
+			render: (value, item, index) => {
+				return <div className="min-w-[50px] text-[#000] font-[600]">{parseToMoney(value || 0)}</div>
 			}
 		},
 		{
@@ -154,6 +178,13 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 			}
 		},
 		{
+			title: 'Số tiền',
+			dataIndex: 'Price',
+			render: (value, item, index) => {
+				return <div className="min-w-[50px] text-[#000] font-[600]">{parseToMoney(value || 0)}</div>
+			}
+		},
+		{
 			title: 'Trạng thái',
 			dataIndex: 'Status',
 			render: (status, data) => {
@@ -205,6 +236,36 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 		}
 	]
 
+	const [loading, setLoading] = useState<boolean>(false)
+	const postingTuition = async () => {
+		setLoading(true)
+		try {
+			const res = await monthlyTuitionApi.add({
+				ClassId: parseInt(router?.query?.class + ''),
+				Month: filters.month,
+				Year: filters.year
+			})
+			if (res.status == 200) {
+				ShowNoti('success', 'Thành công')
+				apiHandler()
+			}
+		} catch (error) {
+			ShowNoti('error', error?.message)
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const handleFilterMonth = (data) => {
+		setValueDate(data)
+		setFilters({
+			...filters,
+			pageIndex: 1,
+			month: new Date(data).getMonth() + 1,
+			year: new Date(data).getFullYear()
+		})
+	}
+
 	return (
 		<ExpandTable
 			currentPage={filters?.pageIndex}
@@ -213,6 +274,26 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 			loading={isLoading}
 			dataSource={dataTable}
 			columns={router.asPath.includes('class=') ? classColumns : columns}
+			TitleCard={
+				<div className="flex items-center w-full">
+					<div className="flex-1">
+						<DatePicker
+							className="primary-input mr-[8px]"
+							onChange={handleFilterMonth}
+							picker="month"
+							placeholder="Chọn tháng"
+							value={valueDate}
+							format="MM-YYYY"
+						/>
+					</div>
+
+					{is(user).admin && router.asPath.includes('class=') && (
+						<PrimaryButton onClick={postingTuition} loading={loading} type="button" background="blue" icon="send">
+							Gửi học phí
+						</PrimaryButton>
+					)}
+				</div>
+			}
 		/>
 	)
 }

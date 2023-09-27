@@ -1,27 +1,16 @@
-import { Input, Modal } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { FaMoneyBill } from 'react-icons/fa'
-import { GiReceiveMoney } from 'react-icons/gi'
+import { Input } from 'antd'
+import React, { useEffect } from 'react'
 import RestApi from '~/api/RestApi'
 import { MainLayout } from '~/common'
 import { PrimaryTooltip, StudentNote } from '~/common/components'
-import PayForm from '~/common/components/Finance/Payment/pay'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNostis } from '~/common/utils'
-import { parseToMoney } from '~/common/utils/common'
-import BillDetails from '../../../common/components/Finance/BillDetails'
-import moment from 'moment'
-import PrimaryButton from '~/common/components/Primary/Button'
-import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
-import AvatarComponent from '~/common/components/AvatarComponent'
-import Avatar from '~/common/components/Avatar'
 import Router from 'next/router'
-import { IoMdOpen } from 'react-icons/io'
 import { ImWarning } from 'react-icons/im'
-import { ButtonEye } from '~/common/components/TableButton'
+import { ButtonChange, ButtonEye } from '~/common/components/TableButton'
 import { ChangeClass, ReserveForm } from '~/common/components/Student/StudentInClass'
 import { userInfoColumn } from '~/common/libs/columns/user-info'
 import Filters from '~/common/components/Student/Filters'
@@ -59,10 +48,6 @@ const StudentInClassPage = () => {
 		}
 	}
 
-	function gotoClass(params) {
-		Router.push(`/class/list-class/detail/?class=${params.ClassId}`)
-	}
-
 	function viewStudentDetails(params) {
 		Router.push({
 			pathname: '/info-course/student/detail',
@@ -72,22 +57,6 @@ const StudentInClassPage = () => {
 
 	const theInformation = useSelector((state: RootState) => state.user?.information)
 
-	function isAdmin() {
-		return theInformation?.RoleId == 1
-	}
-
-	function isTeacher() {
-		return theInformation?.RoleId == 2
-	}
-
-	function isManager() {
-		return theInformation?.RoleId == 4
-	}
-
-	function isStdent() {
-		return theInformation?.RoleId == 3
-	}
-
 	function isSaler() {
 		return theInformation?.RoleId == 5
 	}
@@ -96,12 +65,12 @@ const StudentInClassPage = () => {
 		if (isSaler()) return ''
 
 		function showReserve() {
-			if (item?.TotalMonth == 0 || item?.RemainingMonth == 0) {
+			if (item?.TotalMonth == 0 && item?.TotalLesson == 0) {
 				// Chưa đóng tiền trước hoặc đã học hết
 				return false
 			}
 
-			if (item?.TotalLesson == 0 || item?.RemainingLesson == 0) {
+			if (item?.RemainingMonth == 0 && item?.RemainingLesson == 0) {
 				// Không có buổi học  hoặc đã học hết
 				return false
 			}
@@ -117,7 +86,7 @@ const StudentInClassPage = () => {
 
 				{item?.ClassType !== 3 && (
 					<>
-						{item?.TotalMonth == 0 && <ChangeClass item={item} onRefresh={getData} />}
+						{item?.TotalMonth == 0 ? <ChangeClass item={item} onRefresh={getData} /> : <ButtonChange className="ml-[16px] opacity-0" />}
 						{showReserve() && <ReserveForm item={item} onRefresh={getData} />}
 					</>
 				)}
@@ -128,7 +97,7 @@ const StudentInClassPage = () => {
 	const columns = [
 		userInfoColumn,
 		{
-			width: 250,
+			width: 280,
 			title: 'Liên hệ',
 			dataIndex: 'Mobile',
 			render: (a, item) => (
@@ -136,29 +105,11 @@ const StudentInClassPage = () => {
 					<p>
 						<div className="font-[500] inline-block">Điện thoại:</div> {a}
 					</p>
-					<p>
+					<div>
 						<div className="font-[500] inline-block">Email:</div> {item?.Email}
-					</p>
+					</div>
 				</div>
 			)
-		},
-		{
-			title: 'Lớp',
-			dataIndex: 'ClassName',
-			width: 170,
-			render: (value, item) => {
-				return (
-					<PrimaryTooltip className="flex items-center" id={`class-tip-${item?.Id}`} content={'Xem lớp: ' + value} place="top">
-						<Link href={`/class/list-class/detail/?class=${item.ClassId}`}>
-							<a>
-								<div className="max-w-[150px] in-1-line cursor-pointer font-[500] text-[#1976D2] hover:text-[#1968b7] hover:underline">
-									{value}
-								</div>
-							</a>
-						</Link>
-					</PrimaryTooltip>
-				)
-			}
 		},
 		{
 			title: 'Loại học viên',
@@ -173,6 +124,26 @@ const StudentInClassPage = () => {
 			)
 		},
 		{
+			title: 'Lớp',
+			dataIndex: 'ClassName',
+			width: 170,
+			render: (value, item) => {
+				return (
+					<div className="flex justify-start">
+						<PrimaryTooltip className="flex items-center" id={`class-tip-${item?.Id}`} content={'Xem lớp: ' + value} place="top">
+							<Link href={`/class/list-class/detail/?class=${item.ClassId}`}>
+								<a>
+									<div className="max-w-[150px] in-1-line cursor-pointer font-[500] text-[#1976D2] hover:text-[#1968b7] hover:underline">
+										{value}
+									</div>
+								</a>
+							</Link>
+						</PrimaryTooltip>
+					</div>
+				)
+			}
+		},
+		{
 			title: 'Loại lớp',
 			dataIndex: 'ClassType',
 			width: 110,
@@ -183,6 +154,30 @@ const StudentInClassPage = () => {
 					{value == 3 && <span className="tag blue">{item?.ClassTypeName}</span>}
 				</p>
 			)
+		},
+		{
+			title: 'Thông tin học',
+			dataIndex: 'ClassType',
+			width: 150,
+			render: (value, item) => {
+				if (item?.TotalMonth > 0) {
+					return (
+						<div>
+							<div className="">Tổng: {item?.TotalMonth} tháng</div>
+							<div className="">Còn lại: {item?.RemainingMonth} tháng</div>
+						</div>
+					)
+				}
+
+				if (item?.TotalLesson > 0) {
+					return (
+						<div>
+							<div className="">Tổng: {item?.TotalLesson} buổi</div>
+							<div className="">Còn lại: {item?.RemainingLesson} buổi</div>
+						</div>
+					)
+				}
+			}
 		},
 		{
 			title: 'Cảnh báo',

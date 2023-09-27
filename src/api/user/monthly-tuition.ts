@@ -9,7 +9,7 @@ export const monthlyTuitionApi = {
 		return instance.get<IApiResultData<any>>(`${url}${ID}`)
 	},
 	add(data) {
-		return instance.post(url, data)
+		return instance.post(url + '/items', data)
 	},
 	update(data) {
 		return instance.put(url, data)

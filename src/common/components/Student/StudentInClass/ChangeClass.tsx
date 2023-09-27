@@ -189,6 +189,8 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 		form.setFieldValue('PaymentMethodId', data.Id)
 	}
 
+	const [curPrice, setCurPrice] = useState(0)
+
 	return (
 		<>
 			<PrimaryTooltip id={`change-${item?.Id}`} place="left" content="Chuyển lớp">
@@ -275,11 +277,12 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 							className="ant-select-item-option-selected-blue"
 							onChange={(value) => {
 								const selectedClass = classes?.find((_item) => _item.Id === value)
-								console.log('Data: ', currentClass, selectedClass)
 								const monney = selectedClass?.Price - currentClass?.Price
 								if (monney > 0) {
+									setCurPrice(monney)
 									form.setFieldValue('Price', monney)
 								} else {
+									setCurPrice(0)
 									form.setFieldValue('Price', 0)
 								}
 							}}
@@ -309,9 +312,7 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 								allowClear
 								defaultValue={item?.BranchId || null}
 								placeholder="Chọn trung tâm"
-								onChange={(value) => {
-									form.setFieldValue('BranchId', value)
-								}}
+								onChange={(value) => form.setFieldValue('BranchId', value)}
 							>
 								{branch.map((item) => {
 									return (
@@ -329,45 +330,59 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 						className="col-span-2"
 						label="Đóng thêm"
 						name="Price"
+						onChange={(e) => {
+							setCurPrice(e)
+							form.setFieldValue('Price', e)
+						}}
 						rules={formNoneRequired}
 					/>
 
-					<InputNumberField
-						placeholder="Số tiền phải thanh toán"
-						className="col-span-2"
-						label="Thanh toán"
-						name="Paid"
-						rules={formNoneRequired}
-					/>
+					{curPrice > 0 && (
+						<>
+							<InputNumberField
+								placeholder="Số tiền phải thanh toán"
+								className="col-span-2"
+								label="Thanh toán"
+								name="Paid"
+								rules={formNoneRequired}
+							/>
 
-					<Form.Item required={true} className="col-span-2" label="Phương thức thanh toán" name="PaymentMethodId" rules={formNoneRequired}>
-						<StylePaymentMethods>
-							{methods?.map((method) => {
-								return (
-									<StylePaymentMethodsItems key={method.Id}>
-										<StylePaymentMethodsAvatar
-											src={method.Thumbnail || '/images/cash-payment.png'}
-											alt="avatar"
-											isChecked={activeMethod?.Id === method.Id}
-											onClick={() => handleChangeMethod(method)}
-										/>
-										<StylePaymentMethodsLable isColumn={method?.Name?.length > 10}>
-											<p>{method.Name}</p>
-											<ModalShowInfoPaymentMethod method={method} />
-										</StylePaymentMethodsLable>
-									</StylePaymentMethodsItems>
-								)
-							})}
-						</StylePaymentMethods>
-					</Form.Item>
+							<Form.Item
+								required={true}
+								className="col-span-2"
+								label="Phương thức thanh toán"
+								name="PaymentMethodId"
+								rules={formNoneRequired}
+							>
+								<StylePaymentMethods>
+									{methods?.map((method) => {
+										return (
+											<StylePaymentMethodsItems key={method.Id}>
+												<StylePaymentMethodsAvatar
+													src={method.Thumbnail || '/images/cash-payment.png'}
+													alt="avatar"
+													isChecked={activeMethod?.Id === method.Id}
+													onClick={() => handleChangeMethod(method)}
+												/>
+												<StylePaymentMethodsLable isColumn={method?.Name?.length > 10}>
+													<p>{method.Name}</p>
+													<ModalShowInfoPaymentMethod method={method} />
+												</StylePaymentMethodsLable>
+											</StylePaymentMethodsItems>
+										)
+									})}
+								</StylePaymentMethods>
+							</Form.Item>
 
-					<Form.Item className="col-span-2" label="Ngày hẹn trả" name="PaymentAppointmentDate" rules={formNoneRequired}>
-						<DatePicker
-							format="DD/MM/YYYY"
-							style={{ borderRadius: 6, width: '100%', height: 36, alignItems: 'center', display: 'flex' }}
-							placeholder="Ngày hẹn trả"
-						/>
-					</Form.Item>
+							<Form.Item className="col-span-2" label="Ngày hẹn trả" name="PaymentAppointmentDate" rules={formNoneRequired}>
+								<DatePicker
+									format="DD/MM/YYYY"
+									style={{ borderRadius: 6, width: '100%', height: 36, alignItems: 'center', display: 'flex' }}
+									placeholder="Ngày hẹn trả"
+								/>
+							</Form.Item>
+						</>
+					)}
 
 					<Form.Item className="col-span-2" label="Ghi chú" name="Note" rules={formNoneRequired}>
 						<Input.TextArea rows={5} placeholder="" disabled={loading} />

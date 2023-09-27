@@ -2,7 +2,7 @@ import { Card, Divider, Form } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
-import { discountApi, voucherApi } from '~/api/business/discount'
+import { discountApi } from '~/api/business/discount'
 import { paymentMethodsApi } from '~/api/business/payment-method'
 import FormRegisterClass from '~/common/components/Class/FormRegisterClass'
 import RegisterOneVsOne from '~/common/components/Class/RegisterOneVsOne'
@@ -145,8 +145,6 @@ const RegisterClass = () => {
 		const reservePrice = getRealPrice()
 
 		let tempLeftPrice = 0
-
-		// const calculateLeftPrice = totalPrice - discountPrice - reservePrice - parseStringToNumber(data.target.value)
 
 		if (activeTab?.Type == 1) {
 			tempLeftPrice = totalPrice - discountPrice - reservePrice - parseStringToNumber(data.target.value)
@@ -334,8 +332,6 @@ const RegisterClass = () => {
 		return details
 	}
 
-	console.log('------- classesSelected: ', classesSelected)
-
 	const onSubmit = async (data) => {
 		if (!data?.StudentId) {
 			ShowNoti('error', 'Vui lòng chọn học viên')
@@ -346,15 +342,15 @@ const RegisterClass = () => {
 			setIsLoading(true)
 			let DATA_SUBMIT = {
 				StudentId: data.StudentId,
-				DiscountId: !!detailDiscount ? detailDiscount.Id : null,
+				DiscountId: !!detailDiscount ? detailDiscount.Id : 0,
 				PaymentMethodId: activeMethod.Id,
-				PaymentAppointmentDate: !!data.PaymentAppointmentDate ? moment(data.PaymentAppointmentDate).format() : null,
+				PaymentAppointmentDate: !!data.PaymentAppointmentDate ? moment(data.PaymentAppointmentDate).format() : 0,
 				BranchId: data.BranchId,
 				Note: data.Note,
 				Type: activeTab.Type,
-				Paid: !!data.Paid ? parseStringToNumber(data.Paid) : 0,
+				Paid: activeTab.Type == 1 ? (!!data.Paid ? parseStringToNumber(data.Paid) : 0) : leftPrice,
 				Details: getDetailSubmit(activeTab.Type),
-				ClassReserveId: curReserve?.Id || null
+				ClassReserveId: curReserve?.Id || 0
 			}
 
 			console.log('DATA_SUBMIT: ', DATA_SUBMIT)
@@ -546,7 +542,14 @@ const RegisterClass = () => {
 				<div className="grid grid-cols-2 gap-4">
 					<div className="col-span-2">
 						<Card title="Thông tin cá nhân">
-							<FormUserRegister type={activeTab.Type} setClasses={setClasses} form={form} isReset={isReset} setCurStudent={setCurStudent} />
+							<FormUserRegister
+								type={activeTab.Type}
+								setClasses={setClasses}
+								form={form}
+								isReset={isReset}
+								curStudent={curStudent}
+								setCurStudent={setCurStudent}
+							/>
 						</Card>
 					</div>
 
@@ -643,21 +646,15 @@ const RegisterClass = () => {
 										</div>
 									)}
 
-									{/* 	// Code: '3THANGGIAM500'
-		// Description: 'Đóng 3 tháng giảm ngay 500k học phí'
-		// Discount: 50000
-		// DiscountType: 1
-		// DiscountTypeName: 'Giảm theo số tiền'
-		// Id: 1
-		// Months: 3 */}
-
-									<ModalTuitionOption
-										studentId={curStudent}
-										curTuition={curTuition}
-										onSubmit={setCurTuition}
-										totalPrice={totalPrice}
-										discount={discountPrice}
-									/>
+									{activeTab?.Type == 2 && (
+										<ModalTuitionOption
+											studentId={curStudent}
+											curTuition={curTuition}
+											onSubmit={setCurTuition}
+											totalPrice={totalPrice}
+											discount={discountPrice}
+										/>
+									)}
 
 									{activeTab?.Type == 2 && (
 										<div className="flex items-center justify-between mb-3">
@@ -702,25 +699,30 @@ const RegisterClass = () => {
 
 									<div className="flex items-center justify-between mb-3">
 										<span className="title">Thanh toán</span>
-										<InputNumberField
-											onChange={handleChangePay}
-											label=""
-											name="Paid"
-											placeholder="Nhập số tiền thanh toán"
-											className="mb-0"
-										/>
+										{activeTab?.Type == 1 && (
+											<InputNumberField
+												onChange={handleChangePay}
+												label=""
+												name="Paid"
+												placeholder="Nhập số tiền thanh toán"
+												className="mb-0"
+											/>
+										)}
+										{activeTab?.Type == 2 && <div>{parseToMoney(leftPrice || 0)}</div>}
 									</div>
 
-									<div className="flex items-center justify-between mb-3">
-										<span className="title">Ngày hẹn trả</span>
-										<DatePickerField
-											placeholder="Chọn thời gian"
-											className="mb-0 !w-[180px]"
-											mode="single"
-											name="PaymentAppointmentDate"
-											label=""
-										/>
-									</div>
+									{activeTab?.Type == 1 && (
+										<div className="flex items-center justify-between mb-3">
+											<span className="title">Ngày hẹn trả</span>
+											<DatePickerField
+												placeholder="Chọn thời gian"
+												className="mb-0 !w-[180px]"
+												mode="single"
+												name="PaymentAppointmentDate"
+												label=""
+											/>
+										</div>
+									)}
 
 									<div className="flex items-center">
 										<TextBoxField className="w-full" label="Ghi chú" name="Note" />
@@ -728,23 +730,42 @@ const RegisterClass = () => {
 
 									<Divider />
 
-									<div className="flex items-center justify-between mb-3">
-										<span className="text-xl font-medium">Thành tiền</span>
-										<span className="text-xl font-medium text-tw-secondary">{!leftPrice ? 0 : parseToMoney(leftPrice)}</span>
-									</div>
+									{activeTab?.Type == 1 && (
+										<div className="flex items-center justify-between mb-3">
+											<span className="text-xl font-medium">Còn lại</span>
+											<span className="text-xl font-medium text-tw-secondary">{!leftPrice ? 0 : parseToMoney(leftPrice)}</span>
+										</div>
+									)}
 
-									<div className="flex-all-center">
-										<PrimaryButton
-											loading={isLoading}
-											disable={isLoading || leftPrice < 0 || (activeTab?.Type == 2 && totalWithTuition == 0)}
-											className="w-full"
-											background="blue"
-											icon="payment"
-											type="submit"
-										>
-											Thanh toán
-										</PrimaryButton>
-									</div>
+									{activeTab?.Type == 1 && (
+										<div className="flex-all-center">
+											<PrimaryButton
+												loading={isLoading}
+												disable={isLoading || leftPrice < 0}
+												className="w-full"
+												background="blue"
+												icon="payment"
+												type="submit"
+											>
+												Thanh toán
+											</PrimaryButton>
+										</div>
+									)}
+
+									{activeTab?.Type == 2 && (
+										<div className="flex-all-center">
+											<PrimaryButton
+												loading={isLoading}
+												disable={isLoading || totalWithTuition == 0}
+												className="w-full"
+												background="blue"
+												icon="payment"
+												type="submit"
+											>
+												Thanh toán
+											</PrimaryButton>
+										</div>
+									)}
 								</div>
 							</div>
 						</div>

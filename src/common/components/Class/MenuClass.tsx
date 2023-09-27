@@ -188,7 +188,7 @@ const MenuClass = () => {
 					tabPosition="left"
 					items={itemsAdmin.map((item, index) => {
 						return {
-							label: getLabel(item, index),
+							label: <div className="no-select">{getLabel(item, index)}</div>,
 							key: index.toString(),
 							children: getChildren(item)
 						}
@@ -203,7 +203,7 @@ const MenuClass = () => {
 					tabPosition="left"
 					items={itemsTeacher.map((item, index) => {
 						return {
-							label: getLabel(item, index),
+							label: <div className="no-select">{getLabel(item, index)}</div>,
 							key: index.toString(),
 							children: getChildren(item)
 						}
@@ -218,7 +218,7 @@ const MenuClass = () => {
 					tabPosition="left"
 					items={itemsStudent.map((item, index) => {
 						return {
-							label: getLabel(item, index),
+							label: <div className="no-select">{getLabel(item, index)}</div>,
 							key: index.toString(),
 							children: getChildren(item)
 						}
@@ -233,7 +233,7 @@ const MenuClass = () => {
 					tabPosition="left"
 					items={itemsParent.map((item, index) => {
 						return {
-							label: getLabel(item, index),
+							label: <div className="no-select">{getLabel(item, index)}</div>,
 							key: index.toString(),
 							children: getChildren(item)
 						}

@@ -8,7 +8,6 @@ import { formNoneRequired, formRequired } from '~/common/libs/others/form'
 import Avatar from '../../Avatar'
 import { MdOpenInNew } from 'react-icons/md'
 import { parseToMoney } from '~/common/utils/common'
-import moment from 'moment'
 import ButtonMoveTo from '../../TableButton/MOVETO'
 import { programApi } from '~/api/learn/program'
 
@@ -136,11 +135,6 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
 	function viewStudentDetails(params) {
 		const uri = '/info-course/student/detail'
 		window.open(uri + `/?StudentID=${params?.StudentId}`, '_blank')
-	}
-
-	function viewClassDetails(params) {
-		const uri = `/class/list-class/detail/?class=${params.ClassId}`
-		window.open(uri, '_blank')
 	}
 
 	return (

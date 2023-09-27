@@ -11,8 +11,6 @@ import { IoClose } from 'react-icons/io5'
 const ModalReserve = (props) => {
 	const { onSubmit, curReserve, totalPrice, discount } = props
 
-	console.log('----- ModalReserve: ', props)
-
 	const { studentId } = props
 
 	const [visible, setVisible] = useState(false)
