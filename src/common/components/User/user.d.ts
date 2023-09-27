@@ -17,4 +17,5 @@ type IPersonnel = {
 	allowRegister?: boolean
 	reFresh?: Function
 	role?: any
+	isStaff?: any
 }

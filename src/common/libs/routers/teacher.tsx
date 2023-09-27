@@ -195,14 +195,14 @@ export const TeacherChildMenu = [
 				Route: '/users/teacher/teacher-off',
 				Text: 'Đăng ký lịch nghỉ',
 				Icon: ''
-			},
-			{
-				ItemType: 'single',
-				Key: '/users/teacher/open-calender',
-				Route: '/users/teacher/open-calender',
-				Text: 'Mở lịch trống',
-				Icon: ''
 			}
+			// {
+			// 	ItemType: 'single',
+			// 	Key: '/users/teacher/open-calender',
+			// 	Route: '/users/teacher/open-calender',
+			// 	Text: 'Mở lịch trống',
+			// 	Icon: ''
+			// }
 		]
 	}
 ]

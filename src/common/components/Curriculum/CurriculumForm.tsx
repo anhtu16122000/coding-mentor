@@ -1,8 +1,6 @@
-import { Form, Modal, Spin, Tooltip } from 'antd'
+import { Form, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { curriculumApi } from '~/api/learn/curriculum'
-import { MdAddCircleOutline, MdSave } from 'react-icons/md'
-import { Edit } from 'react-feather'
 import InputTextField from '../FormControl/InputTextField'
 import { useRouter } from 'next/router'
 import InputNumberField from '../FormControl/InputNumberField'
@@ -12,7 +10,7 @@ import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
 
 const CurriculumForm = (props: any) => {
-	const { dataRow, setTodoApi, listTodoApi, onRefresh } = props
+	const { dataRow, onRefresh } = props
 	const router = useRouter()
 	const { slug, name } = router.query
 	const [form] = Form.useForm()
@@ -43,11 +41,10 @@ const CurriculumForm = (props: any) => {
 			}
 			const res = await (dataRow?.Id ? curriculumApi.update(DATA_SUBMIT) : curriculumApi.add(DATA_SUBMIT))
 			if (res.status === 200) {
-				setTodoApi(listTodoApi)
-				setIsModalVisible(false)
 				form.resetFields()
 				ShowNoti('success', res.data.message)
 				onRefresh && onRefresh()
+				setIsModalVisible(false)
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -80,6 +77,7 @@ const CurriculumForm = (props: any) => {
 				visible={isModalVisible}
 				onCancel={() => setIsModalVisible(false)}
 				footer={null}
+				width={500}
 			>
 				<div className="container-fluid">
 					<Form form={form} onFinish={onSubmit} layout="vertical">

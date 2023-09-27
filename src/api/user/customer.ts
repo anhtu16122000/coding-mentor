@@ -65,5 +65,15 @@ export const customerAdviseApi = {
 
 	getStudentGrades(params) {
 		return instance.get('/api/TestAppointment', { params: params })
+	},
+
+	getStaffNotes(params) {
+		return instance.get('/api/StaffNote', { params: params })
+	},
+	addStaffNote(data: any) {
+		return instance.post('/api/StaffNote', data, {})
+	},
+	deleteStaffNote(id) {
+		return instance.delete(`/api/StaffNote/${id}`)
 	}
 }

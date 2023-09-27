@@ -206,7 +206,7 @@ const CreateClassForm = (props) => {
 		}
 	}
 
-	// Lấy danh sách học vụ bằng chi nhánh với chương trình
+	// Lấy danh sách học vụ bằng trung tâm với chương trình
 	const getAcademics = async (branch) => {
 		try {
 			const res = await userInformationApi.getAll({ pageSize: 9999, roleIds: 7, branchId: branch })
@@ -266,11 +266,11 @@ const CreateClassForm = (props) => {
 		}
 	}
 
-	// Lấy danh sách giáo viên bằng chi nhánh với chương trình
+	// Lấy danh sách giáo viên bằng trung tâm với chương trình
 	const getTeachers = async (branchId, programId) => {
 		try {
 			const res = await classApi.getAllTeachers({ branchId: branchId, programId: programId })
-			if (res.status === 200) {
+			if (res.status == 200) {
 				const convertData = parseSelectArrayUser(res.data.data, 'TeacherName', 'TeacherCode', 'TeacherId')
 				setTeacher(convertData)
 			} else {

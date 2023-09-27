@@ -12,6 +12,7 @@ import ModalFooter from '~/common/components/ModalFooter'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 import { trainingRouteApi } from '~/api/practice'
 import { studentInTrainingApi } from '~/api/practice/StudentInTraining'
+import { is } from '~/common/utils/common'
 
 const ModalCreateTrainingStudent = (props) => {
 	const { onRefresh, isEdit, defaultData } = props
@@ -22,14 +23,6 @@ const ModalCreateTrainingStudent = (props) => {
 	const [loading, setLoading] = useState<boolean>(false)
 
 	const user = useSelector((state: RootState) => state.user.information)
-
-	function isAdmin() {
-		return user?.RoleId == 1
-	}
-
-	function isTeacher() {
-		return user?.RoleId == 2
-	}
 
 	async function postCreate(params) {
 		try {
@@ -108,7 +101,7 @@ const ModalCreateTrainingStudent = (props) => {
 
 	return (
 		<>
-			{(isAdmin() || isTeacher()) && (
+			{(is(user).admin || is(user).teacher || is(user).manager || is(user).academic) && (
 				<>
 					{isEdit ? (
 						<PrimaryTooltip place="left" id={`hw-take-${defaultData?.Id}`} content="Cập nhật">

@@ -19,7 +19,7 @@ const ModalBankInformation = (props) => {
 
 	return (
 		<>
-			{is(userInfo).admin && (
+			{(is(userInfo).admin || is(userInfo).accountant) && (
 				<PrimaryTooltip place="left" content="Thông tin ngân hàng" id={`BANK-${item?.Id}`}>
 					<div onClick={toggle} className="text-[#0A89FF] cursor-pointer hover:text-[#157ddd] active:text-[#1576cf] mr-[8px]">
 						<RiBankCard2Line size={22} />

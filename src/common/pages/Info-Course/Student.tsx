@@ -38,7 +38,7 @@ import { exportAllStudentToExcel } from '~/common/utils/export-excel/students'
 import { forEach } from 'lodash'
 
 const Student: FC<IPersonnel> = (props) => {
-	const { reFresh, allowRegister, role } = props
+	const { reFresh, allowRegister, role, isStaff } = props
 	const state = useSelector((state: RootState) => state)
 	const userInfo = useSelector((state: RootState) => state.user.information)
 
@@ -302,15 +302,6 @@ const Student: FC<IPersonnel> = (props) => {
 			render: (data, item) => {
 				return (
 					<div className="flex items-center">
-						{/* <IconButton
-							type="button"
-							icon={'eye'}
-							color="blue"
-							onClick={() => router.push({ pathname: '/info-course/student/detail', query: { StudentID: item.userInfoId } })}
-							className=""
-							tooltip="Chi tiết"
-						/> */}
-
 						{is(userInfo).admin && (
 							<>
 								<CreateUser
@@ -423,7 +414,7 @@ const Student: FC<IPersonnel> = (props) => {
 							/>
 						</PrimaryTooltip>
 
-						{role !== 3 && is(userInfo).admin && (
+						{role !== 3 && (is(userInfo).admin || is(userInfo).manager || is(userInfo).academic) && (
 							<CreateUser
 								isEdit
 								roleStaff={roleStaff}
@@ -434,7 +425,7 @@ const Student: FC<IPersonnel> = (props) => {
 							/>
 						)}
 
-						{role == 3 && is(userInfo).admin && (
+						{role == 3 && (is(userInfo).admin || is(userInfo).manager || is(userInfo).academic) && (
 							<CreateUser
 								isEdit
 								roleStaff={roleStaff}
@@ -448,13 +439,14 @@ const Student: FC<IPersonnel> = (props) => {
 								isStudent={true}
 							/>
 						)}
-						{is(userInfo).admin && (
-							<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.userInfoId)} />
+
+						{(is(userInfo).admin || is(userInfo).manager || is(userInfo).academic) && (
+							<DeleteTableRow text={`${item.RoleName} ${item.FullName}`} handleDelete={() => deleteUser(item.UserInformationId)} />
 						)}
 
-						{is(userInfo).admin && (
+						{(is(userInfo).admin || is(userInfo).manager || is(userInfo).academic) && (
 							<IconButton
-								onClick={() => router.push({ pathname: '/training-student', query: { StudentID: item?.userInfoId } })}
+								onClick={() => router.push({ pathname: '/training-student', query: { StudentID: item?.UserInformationId } })}
 								type="button"
 								background="transparent"
 								color="blue"
@@ -489,7 +481,7 @@ const Student: FC<IPersonnel> = (props) => {
 	const expandedRowRender = (data) => {
 		return (
 			<div className="w-[1000px]">
-				<StudentNote studentId={data?.userInfoId} />
+				<StudentNote studentId={data?.userInfoId || data?.UserInformationId} isStaff={isStaff} />
 			</div>
 		)
 	}

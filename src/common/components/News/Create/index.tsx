@@ -224,7 +224,7 @@ const CreateNews: FC<TCreateNews> = (props) => {
 							<Select
 								mode="multiple"
 								className="cc-news-branch-wrapper"
-								placeholder="Chọn chi nhánh"
+								placeholder="Chọn trung tâm"
 								onChange={(value) => setBranchIdSelect(value)}
 								value={branchIdSelect}
 							>

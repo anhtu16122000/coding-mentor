@@ -114,13 +114,40 @@ const ListClassPro = () => {
 		try {
 			const res: any = await classApi.getAll(filter)
 			if (res.status == 200) {
-				if (is.parent) {
-					if (filter.studentId) {
-						dispatch(setListClass([...listClassState, ...res.data.data]))
-						dispatch(setTotalClass(res.data.totalRow))
+				if (res.data?.data != null && res.data?.data.length > 0) {
+					if (is.parent) {
+						if (filter.studentId) {
+							dispatch(setListClass([...listClassState, ...res.data.data]))
+							dispatch(setTotalClass(res.data.totalRow))
+							dispatch(
+								setStatusData({
+									closing: res.data?.closing,
+									opening: res.data?.opening,
+									totalRow: res.data?.totalRow,
+									upcoming: res.data?.upcoming
+								})
+							)
+						} else {
+							dispatch(setListClass([]))
+							dispatch(setTotalClass(0))
+							dispatch(
+								setStatusData({
+									closing: res.data?.closing,
+									opening: res.data?.opening,
+									totalRow: res.data?.totalRow,
+									upcoming: res.data?.upcoming
+								})
+							)
+						}
 					} else {
-						dispatch(setListClass([]))
-						dispatch(setTotalClass(0))
+						if (filter?.pageIndex == 1) {
+							const temp = [...res.data.data]
+							dispatch(setListClass(temp))
+						} else {
+							const temp = [...listClassState, ...res.data.data]
+							dispatch(setListClass(temp))
+						}
+						dispatch(setTotalClass(res.data.totalRow))
 						dispatch(
 							setStatusData({
 								closing: res.data?.closing,
@@ -131,34 +158,19 @@ const ListClassPro = () => {
 						)
 					}
 				} else {
-					if (filter?.pageIndex == 1) {
-						const temp = [...res.data.data]
-						dispatch(setListClass(temp))
-					} else {
-						const temp = [...listClassState, ...res.data.data]
-						dispatch(setListClass(temp))
-					}
-					dispatch(setTotalClass(res.data.totalRow))
+					dispatch(setListClass([]))
+					dispatch(setTotalClass(0))
 				}
 			} else {
 				dispatch(setListClass([]))
 				dispatch(setTotalClass(0))
-				dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
+				// dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
 		} finally {
 			setLoading(false)
 		}
-	}
-
-	async function getStatusData() {
-		try {
-			const res = await classApi.getStatusRow(filter)
-			if (res.status == 200) {
-				dispatch(setStatusData({ ...res.data, data: [] }))
-			}
-		} catch (error) {}
 	}
 
 	const getAllBranchs = async () => {
@@ -288,16 +300,12 @@ const ListClassPro = () => {
 		let temp = [...listClassState]
 		temp[index] = { ...listClassState[index], ...param }
 		dispatch(setListClass([...temp]))
-
-		getStatusData()
 	}
 
 	const [currentStyle, setCurrentStyle] = useState(0)
 
 	useEffect(() => {
 		getStyleSaved()
-
-		getStatusData()
 	}, [])
 
 	async function handleChangeStyleSaved(e) {

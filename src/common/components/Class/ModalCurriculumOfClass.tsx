@@ -15,7 +15,7 @@ export default function ModalCurriculumOfClassCRUD(props: IModalCurriculumOfClas
 	const { mode, dataRow, isLoading, onSubmit } = props
 	const [visible, setVisible] = useState(false)
 	const [form] = Form.useForm()
-	const { TabPane } = Tabs
+
 	useEffect(() => {
 		if (dataRow) {
 			form.setFieldsValue(dataRow)
@@ -49,46 +49,14 @@ export default function ModalCurriculumOfClassCRUD(props: IModalCurriculumOfClas
 
 	return (
 		<>
-			{mode == 'add' && (
-				<PrimaryButton
-					background="green"
-					type="button"
-					children={<span>Thêm chủ đề</span>}
-					icon="add"
-					onClick={() => {
-						onOpen()
-					}}
-				/>
-			)}
-			{mode == 'edit' && (
-				<IconButton
-					type="button"
-					icon={'edit'}
-					color="green"
-					onClick={() => {
-						onOpen()
-					}}
-					tooltip="Sửa chủ đề"
-				/>
-			)}
+			{mode == 'add' && <PrimaryButton background="green" type="button" children="Thêm chủ đề" icon="add" onClick={onOpen} />}
+			{mode == 'edit' && <IconButton type="button" icon={'edit'} color="green" onClick={onOpen} tooltip="Sửa chủ đề" />}
+			{mode == 'delete' && <IconButton type="button" icon={'remove'} color="red" onClick={onOpen} tooltip="Xóa chủ đề" />}
 
-			{mode == 'delete' && (
-				<IconButton
-					type="button"
-					icon={'remove'}
-					color="red"
-					onClick={() => {
-						onOpen()
-					}}
-					tooltip="Xóa chủ đề"
-				/>
-			)}
 			<Modal
 				footer={null}
 				open={visible}
-				onCancel={() => {
-					onClose()
-				}}
+				onCancel={onClose}
 				title={mode == 'add' ? 'Thêm chủ đề' : mode == 'edit' ? 'Cập nhật chủ đề' : 'Xóa chủ đề'}
 				width={mode != 'delete' ? 600 : 400}
 			>
@@ -99,18 +67,17 @@ export default function ModalCurriculumOfClassCRUD(props: IModalCurriculumOfClas
 								<p>Bạn xác nhận muốn xóa chủ đề này?</p>
 							</div>
 						)}
+
 						{mode != 'delete' && (
-							<>
-								<div className="col-span-2">
-									<InputTextField
-										label="Tên chủ đề"
-										name="Name"
-										placeholder="Nhập tên chủ đề"
-										isRequired={true}
-										rules={[{ required: true, message: 'Bạn không được để trống!' }]}
-									/>
-								</div>
-							</>
+							<div className="col-span-2">
+								<InputTextField
+									label="Tên chủ đề"
+									name="Name"
+									placeholder="Nhập tên chủ đề"
+									isRequired={true}
+									rules={[{ required: true, message: 'Bạn không được để trống!' }]}
+								/>
+							</div>
 						)}
 
 						<div className="col-span-2 flex justify-center items-center">

@@ -192,7 +192,7 @@ const CustomerAdvisory = () => {
 
 	const getStatusCount = async () => {
 		try {
-			const res = await customerStatusApi.count()
+			const res = await customerStatusApi.count({ branchIds: todoApi?.branchIds })
 			if (res.status == 200) {
 				setStatusCount(res.data.data)
 			} else {
@@ -286,6 +286,7 @@ const CustomerAdvisory = () => {
 
 	useEffect(() => {
 		getAllCustomer()
+		getStatusCount()
 	}, [todoApi])
 
 	async function putUpdateStatus(params, newList) {

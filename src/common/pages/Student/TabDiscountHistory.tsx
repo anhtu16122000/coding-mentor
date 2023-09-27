@@ -14,7 +14,7 @@ type ITabBill = {
 let pageIndex = 1
 export const TabDiscountHistory: React.FC<ITabBill> = ({ StudentDetail }) => {
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
-	const initParameters = { studentIds: StudentDetail?.UserInformationId, pageIndex: 1, pageSize: PAGE_SIZE }
+	const initParameters = { studentId: StudentDetail?.UserInformationId, pageIndex: 1, pageSize: PAGE_SIZE }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [totalRow, setTotalRow] = useState(1)
 	const [dataTable, setDataTable] = useState([])
@@ -51,18 +51,17 @@ export const TabDiscountHistory: React.FC<ITabBill> = ({ StudentDetail }) => {
 			width: 150,
 			dataIndex: 'DiscountCode'
 		},
-
 		{
 			title: 'Tiền khuyến mãi',
 			width: 150,
 			dataIndex: 'Reduced',
 			render: (text) => <>{parseToMoney(text)}</>
 		},
-
 		{
-			title: 'Loại',
+			title: 'Mã đơn hàng',
 			width: 150,
-			dataIndex: 'TypeName'
+			dataIndex: 'BillCode',
+			render: (text) => <>{text}</>
 		}
 	]
 

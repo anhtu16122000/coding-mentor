@@ -122,9 +122,9 @@ export default function IncomeExpenseManagementModalCRUD(props: IIncomeExpenseMa
 								<div className="col-span-2">
 									<SelectField
 										optionList={dataOption.branch}
-										label="Chi nhánh"
+										label="Trung tâm"
 										name="BranchId"
-										placeholder="Chọn chi nhánh"
+										placeholder="Chọn trung tâm"
 										isRequired={true}
 										rules={[{ required: true, message: 'Bạn không được để trống!' }]}
 									/>

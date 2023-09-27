@@ -200,7 +200,7 @@ export default function RefundPage(props: IRefundPageProps) {
 
 				tempFilter.push({
 					name: 'BranhIds',
-					title: 'Chi nhánh',
+					title: 'Trung tâm',
 					mode: 'multiple',
 					type: 'select',
 					col: 'col-span-2',
@@ -411,9 +411,6 @@ export default function RefundPage(props: IRefundPageProps) {
 		})
 	}
 
-	// if (isLoading.type == 'GET_ALL' && isLoading.status) {
-	// 	return <Skeleton active />
-	// }
 	const handleSelecStatus = (_value: number) => {
 		if (statusSelected !== _value) {
 			setStatusSelected(_value)
@@ -437,16 +434,7 @@ export default function RefundPage(props: IRefundPageProps) {
 				TitleCard={
 					<div className="flex justify-start items-center">
 						<FilterBaseVer2 handleFilter={handleFilter} dataFilter={filterList} handleReset={() => setTodoApi({ ...initialParams })} />
-						{/* <Input.Search
-							className="primary-search max-w-[300px]"
-							onChange={(event) => {
-								if (event.target.value == '') {
-									setTodoApi({ ...todoApi, pageIndex: 1, search: '' })
-								}
-							}}
-							onSearch={(event) => setTodoApi({ ...todoApi, pageIndex: 1, search: event })}
-							placeholder="Tìm kiếm"
-						/> */}
+
 						<TabComp data={resfundStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
 					</div>
 				}
@@ -454,7 +442,8 @@ export default function RefundPage(props: IRefundPageProps) {
 				columns={columns}
 				Extra={
 					<>
-						<div className="custom-footer-table">Tổng: {_format.numberToPrice(totalMoney)} VND</div>
+						<div className="custom-footer-table">Tổng: {_format.numberToPrice(totalMoney || 0)} VND</div>
+
 						{(isAdmin() || isManager() || isAccountant() || isSaler() || isTeacher()) && (
 							<ModalRefundCRUD
 								dataOption={optionList}

@@ -89,7 +89,7 @@ const ModalDetail = (props) => {
 					<div>
 						<div className="font-[600]">{`${getStrDate(data.StartDay)} - ${getStrDate(data.EndDay)}`}</div>
 						<div className="font-[600]">
-							Chi nhánh: <div className="font-[600] inline">{`${data.BranchName}`}</div>
+							Trung tâm: <div className="font-[600] inline">{`${data.BranchName}`}</div>
 						</div>
 						<div className="font-[600]">
 							Số lượng học viên: <div className="font-[600] inline">{`${data.TotalStudent || 0} / ${data.MaxQuantity || 0}`}</div>

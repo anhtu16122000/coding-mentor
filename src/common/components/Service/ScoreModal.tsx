@@ -23,7 +23,9 @@ const ScoreModal = (props) => {
 				setVisible(false)
 				setTodoApi(listTodoApi)
 				form.resetFields()
-				currentUserIdUpdated.current = rowData?.StudentId
+				if (!!currentUserIdUpdated?.current) {
+					currentUserIdUpdated.current = rowData?.StudentId
+				}
 				ShowNoti('success', res.data.message)
 			}
 		} catch (err) {

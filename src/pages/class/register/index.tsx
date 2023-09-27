@@ -431,6 +431,7 @@ const RegisterClass = () => {
 	const handleSetDiscount = (discountItem) => {
 		if (!!discountItem) {
 			const checkDiscount = totalPrice - discountItem?.Value
+
 			if (checkDiscount > 0) {
 				setDetailDiscount(discountItem)
 				ShowNoti('success', 'Áp dụng thành công')

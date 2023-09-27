@@ -229,15 +229,7 @@ const Programs = () => {
 	// COLUMN
 	const columns = [
 		{
-			title: 'Chuyên môn',
-			width: 200,
-			dataIndex: 'GradeName',
-			render: (text) => {
-				return <p className="font-weight-black">{text}</p>
-			}
-		},
-		{
-			title: 'Mã chương trình',
+			title: 'Mã',
 			width: 170,
 			dataIndex: 'Code',
 			...FilterColumn('Code', onSearch, handleReset, 'text'),
@@ -246,10 +238,9 @@ const Programs = () => {
 		{
 			title: 'Tên chương trình',
 			dataIndex: 'Name',
-			width: 170,
 			...FilterColumn('Name', onSearch, handleReset, 'text'),
 			render: (text) => {
-				return <p className="font-weight-primary">{text}</p>
+				return <p className="font-weight-primary min-w-[170px]">{text}</p>
 			}
 		},
 		{
@@ -262,6 +253,14 @@ const Programs = () => {
 						{new Intl.NumberFormat().format(Price)}
 					</p>
 				)
+			}
+		},
+		{
+			title: 'Chuyên môn',
+			width: 200,
+			dataIndex: 'GradeName',
+			render: (text) => {
+				return <p className="font-weight-black">{text}</p>
 			}
 		},
 		{

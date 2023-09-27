@@ -27,6 +27,6 @@ export const billApi = {
 		return instance.post(url + '/register-tuition-package', data)
 	},
 	getDiscountHistory(params) {
-		return instance.get<IApiResultData<IGetDiscountHistory[]>>(`${url}/GetDiscountHistory`, { params })
+		return instance.get<IApiResultData<IGetDiscountHistory[]>>(`${url}/discount-history`, { params })
 	}
 }

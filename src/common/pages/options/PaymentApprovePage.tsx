@@ -148,7 +148,7 @@ const PaymentApprovePage = () => {
 			}
 		},
 		{
-			title: 'Ghi Chú ',
+			title: 'Ghi chú ',
 			dataIndex: 'Note',
 			width: 140
 		},
@@ -168,7 +168,7 @@ const PaymentApprovePage = () => {
 		{
 			title: 'Chức năng',
 			render: (data) => {
-				if (!isAdmin() && !isAccountant()) return ''
+				if (!isAdmin() && !isAccountant() && !isManager()) return ''
 
 				return (
 					<div className="flex items-center">
@@ -373,7 +373,7 @@ PaymentApprovePage.ApproveMoneyBack = ({ id, onRefresh }) => {
 				<div className="container-fluid">
 					<Form form={form} layout="vertical" onFinish={onSubmit} initialValues={{ status: 2, BranchId: allBranch[0]?.Id }}>
 						<div className="row">
-							<Form.Item name="BranchId" label="Danh sách chi nhánh" className="w-full col-12">
+							<Form.Item name="BranchId" label="Danh sách trung tâm" className="w-full col-12">
 								<Select>
 									{allBranch.map((branch) => (
 										<Select.Option value={branch.Id} key={Math.random() * 1000 + Date.now()}>

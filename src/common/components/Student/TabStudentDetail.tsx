@@ -16,6 +16,7 @@ import InputTextField from '../FormControl/InputTextField'
 import SelectField from '../FormControl/SelectField'
 import TextBoxField from '../FormControl/TextBoxField'
 import PrimaryButton from '../Primary/Button'
+import { is } from '~/common/utils/common'
 
 export interface ITabStudentDetailProps {
 	StudentDetail: IUserResponse
@@ -28,7 +29,7 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 	const [ward, setWard] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [form] = Form.useForm()
-	const userInformation = useSelector((state: RootState) => state.user.information)
+	const userInfo = useSelector((state: RootState) => state.user.information)
 	const router = useRouter()
 
 	const getDistrict = async (areaID) => {
@@ -195,7 +196,13 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 						<Divider>Địa chỉ</Divider>
 
 						<div className="col-12">
-							<SelectField mode="tags" name="BranchIds" label="Trung tâm" optionList={optionList.branch} />
+							<SelectField
+								disabled={!is(userInfo).admin && !is(userInfo).manager}
+								mode="tags"
+								name="BranchIds"
+								label="Trung tâm"
+								optionList={optionList.branch}
+							/>
 						</div>
 
 						<div className="col-md-6 col-12">

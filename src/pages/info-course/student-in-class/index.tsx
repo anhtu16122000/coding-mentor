@@ -70,12 +70,27 @@ const StudentInClassPage = () => {
 				return false
 			}
 
-			if (item?.RemainingMonth == 0 && item?.RemainingLesson == 0) {
-				// Không có buổi học  hoặc đã học hết
-				return false
+			if (item?.TotalMonth > 0) {
+				if (item?.RemainingMonth == 0) {
+					return false
+				}
+			}
+
+			if (item?.TotalLesson > 0) {
+				if (item?.RemainingLesson == 0) {
+					return false
+				}
 			}
 
 			return true
+		}
+
+		function showChange() {
+			if (item?.TotalMonth == 0 || (item?.TotalMonth > 0 && item?.RemainingMonth == 0)) {
+				return true
+			}
+
+			return false
 		}
 
 		return (
@@ -86,7 +101,7 @@ const StudentInClassPage = () => {
 
 				{item?.ClassType !== 3 && (
 					<>
-						{item?.TotalMonth == 0 ? <ChangeClass item={item} onRefresh={getData} /> : <ButtonChange className="ml-[16px] opacity-0" />}
+						{showChange() ? <ChangeClass item={item} onRefresh={getData} /> : <ButtonChange className="ml-[16px] opacity-0" />}
 						{showReserve() && <ReserveForm item={item} onRefresh={getData} />}
 					</>
 				)}
@@ -148,7 +163,7 @@ const StudentInClassPage = () => {
 			dataIndex: 'ClassType',
 			width: 110,
 			render: (value, item) => (
-				<p className="font-[600] text-[#E53935]">
+				<p className="font-[600]">
 					{value == 1 && <span className="tag green">{item?.ClassTypeName}</span>}
 					{value == 2 && <span className="tag yellow">{item?.ClassTypeName}</span>}
 					{value == 3 && <span className="tag blue">{item?.ClassTypeName}</span>}
@@ -163,7 +178,12 @@ const StudentInClassPage = () => {
 				if (item?.TotalMonth > 0) {
 					return (
 						<div>
-							<div className="">Tổng: {item?.TotalMonth} tháng</div>
+							<div className="font-[600] ml-[-1px] pb-[3px]">
+								{item?.PaymentType == 1 && <span className="tag green">{item?.PaymentTypeName}</span>}
+								{item?.PaymentType == 2 && <span className="tag blue">{item?.PaymentTypeName}</span>}
+							</div>
+
+							<div className="">Đã thanh toán: {item?.TotalMonth} tháng</div>
 							<div className="">Còn lại: {item?.RemainingMonth} tháng</div>
 						</div>
 					)
@@ -172,6 +192,11 @@ const StudentInClassPage = () => {
 				if (item?.TotalLesson > 0) {
 					return (
 						<div>
+							<div className="font-[600] ml-[-1px] pb-[3px]">
+								{item?.PaymentType == 1 && <span className="tag green">{item?.PaymentTypeName}</span>}
+								{item?.PaymentType == 2 && <span className="tag yellow">{item?.PaymentTypeName}</span>}
+							</div>
+
 							<div className="">Tổng: {item?.TotalLesson} buổi</div>
 							<div className="">Còn lại: {item?.RemainingLesson} buổi</div>
 						</div>

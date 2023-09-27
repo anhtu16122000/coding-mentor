@@ -218,7 +218,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 
 				tempFilter.push({
 					name: 'BranchIds',
-					title: 'Chi nhánh',
+					title: 'Trung tâm',
 					type: 'select',
 					col: 'col-span-2',
 					optionList: temp
@@ -284,7 +284,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 	const renderStatistical = () => {
 		return (
 			<div className="statistical-contain">
-				<div className="item total-income">
+				<div className="item total-revenue">
 					<div className="text">
 						<p className="name">Tổng thu</p>
 						<p className="number">{_format.numberToPrice(dataStatistical.income)}₫</p>
@@ -293,7 +293,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 						<GiReceiveMoney />
 					</div>
 				</div>
-				<div className="item total-expense">
+				<div className="item total-income">
 					<div className="text">
 						<p className="name">Tổng chi</p>
 						<p className="number">{_format.numberToPrice(dataStatistical.expense)}₫</p>
@@ -302,7 +302,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 						<GiPayMoney />
 					</div>
 				</div>
-				<div className="item total-revenue">
+				<div className="item total-expense">
 					<div className="text">
 						<p className="name">Lợi nhuận</p>
 						<p className="number">{_format.numberToPrice(dataStatistical.revenue)}₫</p>

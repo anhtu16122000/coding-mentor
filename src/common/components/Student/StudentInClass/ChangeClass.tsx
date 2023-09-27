@@ -38,7 +38,7 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 	const [classes, setClasses] = useState<any>([])
 	const [branch, setBranch] = useState<any>([])
 	const [currentClass, setCurrentClass] = useState<any>()
-	const [activeMethod, setActiveMethod] = useState<IPaymentMethod>()
+	const [activeMethod, setActiveMethod] = useState<IPaymentMethod>(null)
 
 	useEffect(() => {
 		if (visible) {
@@ -125,6 +125,11 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 	}
 
 	function onFinish(params) {
+		if (!activeMethod) {
+			ShowNoti('error', 'Vui lòng chọn phương thức thanh toán')
+			return
+		}
+
 		setLoading(true)
 
 		const DATA_SUBMIT = {
@@ -330,9 +335,9 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 						className="col-span-2"
 						label="Đóng thêm"
 						name="Price"
-						onChange={(e) => {
-							setCurPrice(e)
-							form.setFieldValue('Price', e)
+						onValueChange={(e) => {
+							setCurPrice(e?.floatValue || 0)
+							form.setFieldValue('Price', e?.floatValue || 0)
 						}}
 						rules={formNoneRequired}
 					/>

@@ -58,14 +58,12 @@ const _columnGrades = [
 ]
 
 const StudentNote = (props) => {
-	const { studentId, rowData } = props
+	const { studentId, rowData, isStaff } = props
 	const [grades, setGrades] = useState([])
 
-	const listTodoApi = {
-		studentId: studentId,
-		pageSize: PAGE_SIZE,
-		pageIndex: 1
-	}
+	const listTodoApi = isStaff
+		? { StaffId: studentId, pageSize: PAGE_SIZE, pageIndex: 1 }
+		: { studentId: studentId, pageSize: PAGE_SIZE, pageIndex: 1 }
 
 	const [form] = Form.useForm()
 	const [todoApi, setTodoApi] = useState(listTodoApi)
@@ -88,7 +86,7 @@ const StudentNote = (props) => {
 
 	const handleDelete = async (id) => {
 		try {
-			const res = await customerAdviseApi.deleteStudentNote(id)
+			const res = await (isStaff ? customerAdviseApi.deleteStaffNote(id) : customerAdviseApi.deleteStudentNote(id))
 			if (res.status == 200) {
 				setIsModalVisible(false)
 				setTodoApi(listTodoApi)
@@ -130,7 +128,7 @@ const StudentNote = (props) => {
 
 	const handleGetNotes = async () => {
 		try {
-			const res = await customerAdviseApi.getStudentNotes(todoApi)
+			const res = await (isStaff ? customerAdviseApi.getStaffNotes(todoApi) : customerAdviseApi.getStudentNotes(todoApi))
 			if (res.status == 200) {
 				setData(res.data.data)
 			} else {
@@ -142,10 +140,12 @@ const StudentNote = (props) => {
 	}
 
 	const addNote = async (data) => {
-		let DATA_SUBMIT = { ...data, studentId: studentId }
 		setLoading(true)
 		try {
-			const res = await customerAdviseApi.addStudentNote(DATA_SUBMIT)
+			const res = await (isStaff
+				? customerAdviseApi.addStaffNote({ ...data, StaffId: studentId })
+				: customerAdviseApi.addStudentNote({ ...data, studentId: studentId }))
+
 			if (res.status === 200) {
 				setIsModalVisible(false)
 				form.resetFields()
@@ -194,6 +194,7 @@ const StudentNote = (props) => {
 				{/* Khi nó là bài OFFLINE */}
 				{!Router.asPath.includes('/users/personnel') && rowData?.Type == 1 && (
 					<div className="mb-[16px]">
+						<div className="mb-[8px]">Ghi chú: {rowData?.Note}</div>
 						<Table pagination={false} size="small" columns={columnGrades} dataSource={grades} />
 					</div>
 				)}

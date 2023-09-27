@@ -55,7 +55,7 @@ export const exportAllLeadsToExcel = async () => {
 			E: 'Điện thoại',
 			F: 'Tư vấn',
 			G: 'Trạng thái',
-			H: 'Chi nhánh',
+			H: 'Trung tâm',
 			I: 'Người tạo',
 			J: 'Ngày tạo',
 			K: 'Người cập nhật',

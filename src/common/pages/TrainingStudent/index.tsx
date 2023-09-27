@@ -2,17 +2,11 @@ import { Card, Popconfirm } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { FaUserClock } from 'react-icons/fa'
 import { FiEye } from 'react-icons/fi'
 import { IoClose } from 'react-icons/io5'
-import { TbWritingSign } from 'react-icons/tb'
 import { useSelector } from 'react-redux'
-import { doingTestApi } from '~/api/IeltsExam/doing-test'
-import { examResultApi } from '~/api/exam/result'
-import { trainingRouteApi } from '~/api/practice'
 import { PrimaryTooltip } from '~/common/components'
 import PrimaryTable from '~/common/components/Primary/Table'
-import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { RootState } from '~/store'
 import ModalCreatePractice from './ModalCreate'
@@ -20,6 +14,7 @@ import { studentInTrainingApi } from '~/api/practice/StudentInTraining'
 import { useDispatch } from 'react-redux'
 import { setGlobalBreadcrumbs } from '~/store/globalState'
 import ModalCreateTrainingStudent from './ModalCreate'
+import { is } from '~/common/utils/common'
 
 const listTodoApi = {
 	pageSize: PAGE_SIZE,
@@ -34,7 +29,6 @@ const TrainingStudent = () => {
 	const userInfo = useSelector((state: RootState) => state.user.information)
 
 	const [data, setData] = useState([])
-	const [studentHomeWork, setStudentHomeWork] = useState([])
 	const [filters, setFilters] = useState(listTodoApi)
 	const [loading, setLoading] = useState<boolean>(true)
 	const [totalPage, setTotalPage] = useState(null)
@@ -73,25 +67,6 @@ const TrainingStudent = () => {
 		}
 	}
 
-	const [loadingResult, setLoadingResult] = useState<boolean>(true)
-	async function getStudentHomeWork(HWId) {
-		setLoadingResult(true)
-
-		let SId = userInfo?.RoleId == '3' ? userInfo?.UserInformationId : null
-
-		try {
-			const res = await examResultApi.getAll({ valueId: HWId, studentId: SId || null, pageIndex: 1, pageSize: 9999 })
-			if (res.status == 200) {
-				setStudentHomeWork(res.data?.data)
-			} else {
-				setStudentHomeWork([])
-			}
-		} catch (error) {
-		} finally {
-			setLoadingResult(false)
-		}
-	}
-
 	async function delThis(Id) {
 		setLoading(true)
 		try {
@@ -106,12 +81,6 @@ const TrainingStudent = () => {
 		}
 	}
 
-	const is = {
-		parent: userInfo?.RoleId == '8',
-		admin: userInfo?.RoleId == '1',
-		teacher: userInfo?.RoleId == '2'
-	}
-
 	const columns = [
 		{
 			title: 'Học viên',
@@ -123,17 +92,6 @@ const TrainingStudent = () => {
 			dataIndex: 'TrainingRouteName',
 			render: (value, item, index) => <div className="font-[600] text-[#1b73e8] min-w-[100px] max-w-[250px]">{value}</div>
 		},
-		// {
-		// 	title: 'Tổng số bài',
-		// 	dataIndex: 'TotalExam',
-		// 	render: (value, item, index) => <div className="min-w-[80px]">{value || 0}</div>
-		// },
-		// {
-		// 	title: 'Bài đã hoàn thành',
-		// 	width: 100,
-		// 	dataIndex: 'CompletedExam',
-		// 	render: (value, item, index) => <div className="min-w-[120px]">{value || 0}</div>
-		// },
 		{
 			title: 'Người tạo',
 			dataIndex: 'CreatedBy',
@@ -149,10 +107,12 @@ const TrainingStudent = () => {
 			render: (value, item, index) => {
 				return (
 					<div className="flex items-center">
-						{(is.admin || is.teacher) && <ModalCreatePractice isEdit defaultData={item} onRefresh={getData} />}
+						{/* {(is(userInfo).admin || is(userInfo).teacher || is(userInfo).academic || is(userInfo).manager) && (
+							<ModalCreatePractice isEdit defaultData={item} onRefresh={getData} />
+						)} */}
 
-						{(is.admin || is.teacher) && (
-							<PrimaryTooltip place="left" id={`hw-del-${item?.Id}`} content="Làm bài">
+						{(is(userInfo).admin || is(userInfo).teacher || is(userInfo).academic || is(userInfo).manager) && (
+							<PrimaryTooltip place="left" id={`hw-del-${item?.Id}`} content="Xoá">
 								<Popconfirm placement="left" title={`Xoá?`} onConfirm={() => delThis(item?.Id)}>
 									<div className="w-[28px] text-[#C94A4F] h-[30px] all-center hover:opacity-70 cursor-pointer ml-[8px]">
 										<IoClose size={26} className="mb-[-2px]" />
@@ -182,7 +142,9 @@ const TrainingStudent = () => {
 				title={
 					<div className="w-full flex items-center justify-between">
 						<div>Luyện tập</div>
-						{(is.admin || is.teacher) && <ModalCreateTrainingStudent onRefresh={getData} />}
+						{(is(userInfo).admin || is(userInfo).teacher || is(userInfo).manager || is(userInfo).academic) && (
+							<ModalCreateTrainingStudent onRefresh={getData} />
+						)}
 					</div>
 				}
 			>

@@ -41,6 +41,7 @@ type IFormInputNumber = {
 	rules?: array
 	max?: number
 	onChange?: any
+	onValueChange?: any
 	loading?: boolean
 }
 

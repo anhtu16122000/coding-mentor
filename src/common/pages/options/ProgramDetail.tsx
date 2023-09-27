@@ -14,19 +14,22 @@ import { ShowNoti } from '~/common/utils'
 const ProgramDetail = () => {
 	const router = useRouter()
 	const { slug, name } = router.query
+
 	const listTodoApi = {
 		programId: null,
 		pageSize: PAGE_SIZE,
 		pageIndex: 1
 	}
+
 	const [listCurriculum, setListCurriculum] = useState<ICurriculum[]>([])
 	const [totalRow, setTotalRow] = useState(0)
 	const [isLoading, setIsLoading] = useState(false)
 	const [todoApi, setTodoApi] = useState(listTodoApi)
+
 	const getAllCurriculum = async () => {
 		try {
 			setIsLoading(true)
-			const res = await curriculumApi.getAll(todoApi)
+			const res = await curriculumApi.getAll({ ...todoApi, programId: slug })
 			if (res.status === 200) {
 				setListCurriculum(res.data.data)
 				setTotalRow(res.data.totalRow)
@@ -95,6 +98,7 @@ const ProgramDetail = () => {
 			render: (text, data) => (
 				<>
 					<CurriculumForm onRefresh={() => getAllCurriculum()} dataRow={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
+
 					<IconButton
 						color="blue"
 						type="button"
@@ -105,32 +109,33 @@ const ProgramDetail = () => {
 								pathname: '/options/program/curriculum-detail',
 								query: {
 									group: name,
-									name: data.Id
+									name: data?.Name,
+									curriculum: data?.Id
 								}
 							})
 						}}
 					/>
+
 					<DeleteTableRow text={data.Name} handleDelete={() => handleDelete(data.Id)} />
 				</>
 			)
 		}
 	]
+
 	return (
-		<>
-			<PrimaryTable
-				total={totalRow && totalRow}
-				columns={columns}
-				data={listCurriculum}
-				loading={isLoading}
-				onChangePage={(event: number) => setTodoApi({ ...listTodoApi, pageIndex: event })}
-				Extra={<CurriculumForm onRefresh={() => getAllCurriculum()} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />}
-				TitleCard={
-					<>
-						Chương trình:<span className="ml-2 text-tw-primary">{name}</span>
-					</>
-				}
-			/>
-		</>
+		<PrimaryTable
+			total={totalRow && totalRow}
+			columns={columns}
+			data={listCurriculum}
+			loading={isLoading}
+			onChangePage={(event: number) => setTodoApi({ ...listTodoApi, pageIndex: event })}
+			Extra={<CurriculumForm onRefresh={() => getAllCurriculum()} />}
+			TitleCard={
+				<>
+					Chương trình:<span className="ml-2 text-tw-primary">{name}</span>
+				</>
+			}
+		/>
 	)
 }
 

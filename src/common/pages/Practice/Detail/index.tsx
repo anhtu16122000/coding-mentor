@@ -2,20 +2,14 @@ import { Card, Popconfirm } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { FaUserClock } from 'react-icons/fa'
-import { FiEye } from 'react-icons/fi'
 import { IoClose } from 'react-icons/io5'
-import { TbWritingSign } from 'react-icons/tb'
 import { useSelector } from 'react-redux'
-import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import { examResultApi } from '~/api/exam/result'
 import { trainingRouteApi } from '~/api/practice'
 import { PrimaryTooltip } from '~/common/components'
 import PrimaryTable from '~/common/components/Primary/Table'
-import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { RootState } from '~/store'
-import ModalCreatePractice from './ModalCreate'
 import { useDispatch } from 'react-redux'
 import { setGlobalBreadcrumbs } from '~/store/globalState'
 import { trainingRouteFormApi } from '~/api/practice/TrainingRouteForm'
@@ -23,6 +17,7 @@ import ModalCreateTrainingRouteForm from './ModalCreate'
 import TrainingRouteDetail from './Detail'
 import RenderItem from './RenderItem'
 import { ShowNoti } from '~/common/utils'
+import { is } from '~/common/utils/common'
 
 const listTodoApi = {
 	pageSize: PAGE_SIZE,
@@ -92,25 +87,6 @@ const TrainingRouteForm = () => {
 		}
 	}
 
-	const [loadingResult, setLoadingResult] = useState<boolean>(true)
-	async function getStudentHomeWork(HWId) {
-		setLoadingResult(true)
-
-		let SId = userInfo?.RoleId == '3' ? userInfo?.UserInformationId : null
-
-		try {
-			const res = await examResultApi.getAll({ valueId: HWId, studentId: SId || null, pageIndex: 1, pageSize: 9999 })
-			if (res.status == 200) {
-				setStudentHomeWork(res.data?.data)
-			} else {
-				setStudentHomeWork([])
-			}
-		} catch (error) {
-		} finally {
-			setLoadingResult(false)
-		}
-	}
-
 	async function delThis(Id) {
 		setLoading(true)
 		try {
@@ -124,12 +100,6 @@ const TrainingRouteForm = () => {
 			setLoading(false)
 			ShowNoti('error', error?.message)
 		}
-	}
-
-	const is = {
-		parent: userInfo?.RoleId == '8',
-		admin: userInfo?.RoleId == '1',
-		teacher: userInfo?.RoleId == '2'
 	}
 
 	const columns = [
@@ -153,7 +123,7 @@ const TrainingRouteForm = () => {
 			render: (value, item, index) => {
 				return (
 					<div className="flex items-center">
-						{(is.admin || is.teacher) && (
+						{(is(userInfo).admin || is(userInfo).teacher || is(userInfo).academic || is(userInfo).manager) && (
 							<ModalCreateTrainingRouteForm
 								isEdit
 								defaultData={item}
@@ -162,7 +132,7 @@ const TrainingRouteForm = () => {
 							/>
 						)}
 
-						{(is.admin || is.teacher) && (
+						{(is(userInfo).admin || is(userInfo).teacher || is(userInfo).academic || is(userInfo).manager) && (
 							<PrimaryTooltip place="left" id={`hw-del-${item?.Id}`} content="Làm bài">
 								<Popconfirm placement="left" title={`Xoá bài tập: ${item?.Name}?`} onConfirm={() => delThis(item?.Id)}>
 									<div className="w-[28px] text-[#C94A4F] h-[30px] all-center hover:opacity-70 cursor-pointer ml-[8px]">
@@ -188,7 +158,7 @@ const TrainingRouteForm = () => {
 				title={
 					<div className="w-full flex items-center justify-between">
 						<div>{detail?.Name || 'Luyện tập'}</div>
-						{(is.admin || is.teacher) && (
+						{(is(userInfo).admin || is(userInfo).teacher || is(userInfo).academic || is(userInfo).manager) && (
 							<ModalCreateTrainingRouteForm onRefresh={getData} TrainingRouteId={parseInt(router?.query?.practice + '')} />
 						)}
 					</div>

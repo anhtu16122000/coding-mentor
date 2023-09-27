@@ -17,7 +17,10 @@ import { EditOutlined } from '@ant-design/icons'
 import ModalBankInformation from './ModalBankInformation'
 
 export const SalaryPage = () => {
-	const [valueDate, setValueDate] = useState(moment().subtract(1, 'months'))
+	// const [valueDate, setValueDate] = useState(moment().subtract(1, 'months'))
+
+	const [valueDate, setValueDate] = useState(null)
+
 	const initParameters = { fullName: '', userCode: '', year: null, month: null, pageIndex: 1, pageSize: PAGE_SIZE, status: 0 }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [totalRow, setTotalRow] = useState(1)
@@ -35,11 +38,14 @@ export const SalaryPage = () => {
 			const month = Number(moment(valueDate).format('MM'))
 			setApiParameters({ ...apiParameters, month: month, year: year })
 			setTime({ month: month, year: year })
+		} else {
+			setApiParameters({ ...apiParameters, month: null, year: null })
+			setTime({ month: null, year: null })
 		}
 	}, [valueDate])
 
 	useEffect(() => {
-		if (!!apiParameters?.year) {
+		if (apiParameters) {
 			getSalary(apiParameters)
 		}
 	}, [apiParameters])

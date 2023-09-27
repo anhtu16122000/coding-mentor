@@ -21,14 +21,6 @@ const ModalCreateTrainingRouteForm = (props) => {
 
 	const user = useSelector((state: RootState) => state.user.information)
 
-	function isAdmin() {
-		return user?.RoleId == 1
-	}
-
-	function isTeacher() {
-		return user?.RoleId == 2
-	}
-
 	async function postCreate(params) {
 		try {
 			const res = await trainingRouteFormApi.post(params)
@@ -83,21 +75,19 @@ const ModalCreateTrainingRouteForm = (props) => {
 
 	return (
 		<>
-			{(isAdmin() || isTeacher()) && (
-				<>
-					{isEdit ? (
-						<PrimaryTooltip place="left" id={`hw-take-${defaultData?.Id}`} content="Cập nhật">
-							<div onClick={openEdit} className="w-[28px] text-[#FFBA0A] h-[30px] all-center hover:opacity-70 cursor-pointer">
-								<FaEdit size={20} />
-							</div>
-						</PrimaryTooltip>
-					) : (
-						<PrimaryButton icon="add" type="button" onClick={toggle} background="green">
-							Thêm mới
-						</PrimaryButton>
-					)}
-				</>
-			)}
+			<>
+				{isEdit ? (
+					<PrimaryTooltip place="left" id={`hw-take-${defaultData?.Id}`} content="Cập nhật">
+						<div onClick={openEdit} className="w-[28px] text-[#FFBA0A] h-[30px] all-center hover:opacity-70 cursor-pointer">
+							<FaEdit size={20} />
+						</div>
+					</PrimaryTooltip>
+				) : (
+					<PrimaryButton icon="add" type="button" onClick={toggle} background="green">
+						Thêm mới
+					</PrimaryButton>
+				)}
+			</>
 
 			<Modal
 				title={isEdit ? 'Cập nhật danh mục' : 'Thêm danh mục'}

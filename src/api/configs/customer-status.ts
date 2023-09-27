@@ -8,8 +8,8 @@ export const customerStatusApi = {
 			params: Params
 		})
 	},
-	count() {
-		return instance.get<IApiResultData<IConsultationStatus[]>>(url + '/status-count', {})
+	count(params) {
+		return instance.get<IApiResultData<IConsultationStatus[]>>(url + '/status-count', { params })
 	},
 	add(data: IConsultationStatus) {
 		return instance.post(url, data)

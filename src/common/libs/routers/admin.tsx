@@ -242,13 +242,13 @@ export const AdminChildMenu = [
 				Text: 'Bảng lương',
 				Icon: ''
 			},
-			{
-				ItemType: 'single',
-				Key: '/users/teacher/open-calender',
-				Route: '/users/teacher/open-calender',
-				Text: 'Mở lịch trống',
-				Icon: ''
-			},
+			// {
+			// 	ItemType: 'single',
+			// 	Key: '/users/teacher/open-calender',
+			// 	Route: '/users/teacher/open-calender',
+			// 	Text: 'Mở lịch trống',
+			// 	Icon: ''
+			// },
 			{
 				ItemType: 'single',
 				Key: '/users/salary-tutoring-config',
@@ -328,13 +328,13 @@ export const AdminChildMenu = [
 				Route: '/class/register',
 				Text: 'Đăng ký học'
 			},
-			{
-				TypeItem: 'single',
-				Key: '/class/tutoring-config',
-				Icon: '',
-				Route: '/class/tutoring-config',
-				Text: 'Cấu hình thời gian đặt lịch'
-			},
+			// {
+			// 	TypeItem: 'single',
+			// 	Key: '/class/tutoring-config',
+			// 	Icon: '',
+			// 	Route: '/class/tutoring-config',
+			// 	Text: 'Cấu hình thời gian đặt lịch'
+			// },
 			{
 				TypeItem: 'single',
 				Key: '/class/zoom-rooms',

@@ -199,14 +199,14 @@ export const AcademicChildMenu = [
 				Route: '/users/salary',
 				Text: 'Bảng lương',
 				Icon: ''
-			},
-			{
-				ItemType: 'single',
-				Key: '/users/teacher/open-calender',
-				Route: '/users/teacher/open-calender',
-				Text: 'Mở lịch trống',
-				Icon: ''
 			}
+			// {
+			// 	ItemType: 'single',
+			// 	Key: '/users/teacher/open-calender',
+			// 	Route: '/users/teacher/open-calender',
+			// 	Text: 'Mở lịch trống',
+			// 	Icon: ''
+			// }
 		]
 	},
 	{

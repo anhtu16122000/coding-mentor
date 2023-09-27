@@ -5,7 +5,7 @@ import { districtApi, wardApi } from '~/api/area/area'
 import * as yup from 'yup'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 import SelectField from '~/common/components/FormControl/SelectField'
-import { ShowNoti } from '~/common/utils'
+import { ShowNoti, log } from '~/common/utils'
 import { parseSelectArray, parseSelectArrayUser } from '~/common/utils/common'
 import { RootState } from '~/store'
 import { customerAdviseApi } from '~/api/user/customer'
@@ -17,7 +17,7 @@ import UploadImageField from '../FormControl/UploadImageField'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
 import RestApi from '~/api/RestApi'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import moment from 'moment'
 import { ieltsExamApi } from '~/api/IeltsExam'
 
@@ -111,13 +111,6 @@ const CustomerAdviseForm = React.memo((props: any) => {
 	}
 
 	const checkExistCustomer = async (data) => {
-		const rowData = {}
-		for (const property in data) {
-			const rawKey = property.split('-')[0]
-			rowData[rawKey] = data[property]
-		}
-		data = rowData
-
 		try {
 			if (rowData) {
 				onSubmit(data)
@@ -366,9 +359,17 @@ const CustomerAdviseForm = React.memo((props: any) => {
 								</Select>
 							</Form.Item>
 
-							<div className="col-span-1">
-								<InputTextField name="Email" label="Email" isRequired={true} rules={[yupSync]} />
-							</div>
+							{!Router.asPath.includes('/leads') && (
+								<div className="col-span-1">
+									<InputTextField name="Email" label="Email" isRequired={true} rules={[yupSync]} />
+								</div>
+							)}
+
+							{Router.asPath.includes('/leads') && (
+								<div className="col-span-1">
+									<InputTextField name="Email" label="Email" isRequired={false} rules={formNoneRequired} />
+								</div>
+							)}
 						</div>
 
 						<div className="row">

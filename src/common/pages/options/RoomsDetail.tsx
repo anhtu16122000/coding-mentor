@@ -8,7 +8,7 @@ import { branchApi } from '~/api/manage/branch'
 import { ShowNoti } from '~/common/utils'
 import moment from 'moment'
 import DeleteTableRow from '~/common/components/Elements/DeleteTableRow'
-import { parseSelectArray } from '~/common/utils/common'
+import { is, parseSelectArray } from '~/common/utils/common'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
@@ -26,11 +26,7 @@ const RoomsDetail = () => {
 	const [dataCenter, setDataCenter] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [totalPage, setTotalPage] = useState(null)
-	const theInformation = useSelector((state: RootState) => state.user.information)
-
-	function isAdmin() {
-		return theInformation?.RoleId == 1
-	}
+	const theInfo = useSelector((state: RootState) => state.user.information)
 
 	// DELETE ITEM
 	const onDelete = async (roomID: number) => {
@@ -114,65 +110,66 @@ const RoomsDetail = () => {
 		}
 	}, [router.query.slug])
 
-	const columns = isAdmin()
-		? [
-				{
-					title: 'Mã phòng',
-					dataIndex: 'Code',
-					...FilterColumn('Code', onSearch, handleReset, 'text')
-				},
-				{
-					title: 'Tên phòng',
-					dataIndex: 'Name',
-					...FilterColumn('Name', onSearch, handleReset, 'text')
-				},
-				{
-					title: 'Người cập nhật',
-					dataIndex: 'ModifiedBy'
-				},
-				{
-					title: 'Ngày cập nhật',
-					dataIndex: 'ModifiedOn',
-					render: (date) => moment(date).format('DD/MM/YYYY')
-				},
-				{
-					title: 'Chức năng',
-					render: (text, data, index) => (
-						<>
-							<RoomForm dataCenter={dataCenter} rowData={data} getDataRoom={getDataRoom} />
-							<DeleteTableRow handleDelete={() => onDelete(data.Id)} text={data.Name} />
-						</>
-					)
-				}
-		  ]
-		: [
-				{
-					title: 'Mã phòng',
-					dataIndex: 'Code',
-					...FilterColumn('Code', onSearch, handleReset, 'text')
-				},
-				{
-					title: 'Tên phòng',
-					dataIndex: 'Name',
-					...FilterColumn('Name', onSearch, handleReset, 'text')
-				},
-				{
-					title: 'Người cập nhật',
-					dataIndex: 'ModifiedBy'
-				},
-				{
-					title: 'Ngày cập nhật',
-					dataIndex: 'ModifiedOn',
-					render: (date) => moment(date).format('DD/MM/YYYY')
-				}
-		  ]
+	const columns =
+		is(theInfo).admin || is(theInfo).manager
+			? [
+					{
+						title: 'Mã phòng',
+						dataIndex: 'Code',
+						...FilterColumn('Code', onSearch, handleReset, 'text')
+					},
+					{
+						title: 'Tên phòng',
+						dataIndex: 'Name',
+						...FilterColumn('Name', onSearch, handleReset, 'text')
+					},
+					{
+						title: 'Người cập nhật',
+						dataIndex: 'ModifiedBy'
+					},
+					{
+						title: 'Ngày cập nhật',
+						dataIndex: 'ModifiedOn',
+						render: (date) => moment(date).format('DD/MM/YYYY')
+					},
+					{
+						title: 'Chức năng',
+						render: (text, data, index) => (
+							<>
+								<RoomForm dataCenter={dataCenter} rowData={data} getDataRoom={getDataRoom} />
+								<DeleteTableRow handleDelete={() => onDelete(data.Id)} text={data.Name} />
+							</>
+						)
+					}
+			  ]
+			: [
+					{
+						title: 'Mã phòng',
+						dataIndex: 'Code',
+						...FilterColumn('Code', onSearch, handleReset, 'text')
+					},
+					{
+						title: 'Tên phòng',
+						dataIndex: 'Name',
+						...FilterColumn('Name', onSearch, handleReset, 'text')
+					},
+					{
+						title: 'Người cập nhật',
+						dataIndex: 'ModifiedBy'
+					},
+					{
+						title: 'Ngày cập nhật',
+						dataIndex: 'ModifiedOn',
+						render: (date) => moment(date).format('DD/MM/YYYY')
+					}
+			  ]
 
 	return (
 		<>
 			<PrimaryTable
 				loading={isLoading}
 				total={totalPage && totalPage}
-				Extra={isAdmin() ? <RoomForm dataCenter={dataCenter} getDataRoom={getDataRoom} /> : ''}
+				Extra={is(theInfo).admin || is(theInfo).manager ? <RoomForm dataCenter={dataCenter} getDataRoom={getDataRoom} /> : ''}
 				data={roomData}
 				onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
 				columns={columns}
