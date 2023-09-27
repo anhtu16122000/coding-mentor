@@ -6,11 +6,13 @@ import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { RiBillLine } from 'react-icons/ri'
 import { PrimaryTooltip } from '~/common/components'
-import Router from 'next/router'
-import { encode } from '~/common/utils/common'
+import Router, { useRouter } from 'next/router'
+import { encode, is } from '~/common/utils/common'
 
 export const TabMonthlyTuition = ({ StudentDetail }) => {
-	const [filters, setFilters] = useState({ studentId: StudentDetail?.UserInformationId, pageIndex: 1, pageSize: PAGE_SIZE })
+	const router = useRouter()
+
+	const [filters, setFilters] = useState({ pageIndex: 1, pageSize: PAGE_SIZE })
 	const [dataTable, setDataTable] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
 	const [totalPage, setTotalPage] = useState(null)
@@ -33,27 +35,18 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 	}
 
 	useEffect(() => {
-		if (StudentDetail?.UserInformationId) {
-			getData(filters)
+		if (router.asPath.includes('class=')) {
+			if (router?.query?.class) {
+				getData({
+					...filters,
+					studentId: is(StudentDetail).student ? parseInt(StudentDetail?.UserInformationId) : null,
+					classId: parseInt(router?.query?.class + '')
+				})
+			}
+		} else if (StudentDetail?.UserInformationId) {
+			getData({ ...filters, studentId: parseInt(StudentDetail?.UserInformationId) })
 		}
-	}, [StudentDetail, filters])
-
-	// BillId: 1238
-	// ClassId: 1075
-	// ClassName: 'F8191'
-	// CreatedBy: 'Nguyễn Chaos'
-	// CreatedOn: '2023-09-26T17:51:20.347'
-	// Enable: true
-	// Id: 42
-	// ModifiedBy: 'Nguyễn Chaos'
-	// ModifiedOn: '2023-09-26T17:51:20.347'
-	// Month: 9
-	// Status: 2
-	// StatusName: 'Đã thanh toán'
-	// StudentCode: 'HV00069'
-	// StudentId: 1292
-	// StudentName: 'Bùi Thị Trang'
-	// Year: 2023
+	}, [StudentDetail, filters, router])
 
 	const columns = [
 		{
@@ -131,6 +124,87 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 		}
 	]
 
+	const classColumns = [
+		{
+			title: 'Học viên',
+			dataIndex: 'Code',
+			render: (value, item) => (
+				<div className="flex items-center">
+					<div className="ml-[8px]">
+						<div className="text-[16px] font-[600]">{item?.StudentName}</div>
+						<div className="text-[14px] font-[400]">{item?.StudentCode}</div>
+					</div>
+				</div>
+			)
+		},
+		{
+			title: 'Tháng',
+			dataIndex: 'Month',
+			align: 'center',
+			render: (value, item, index) => {
+				return <div className="min-w-[50px] text-[#000] font-[600]">{value}</div>
+			}
+		},
+		{
+			title: 'Năm',
+			dataIndex: 'Year',
+			align: 'center',
+			render: (value, item, index) => {
+				return <div className="min-w-[50px] text-[#000] font-[600]">{value}</div>
+			}
+		},
+		{
+			title: 'Trạng thái',
+			dataIndex: 'Status',
+			render: (status, data) => {
+				if (status == 1) {
+					return <p className="tag red">{data.StatusName}</p>
+				}
+				if (status == 2) {
+					return <p className="tag blue">{data.StatusName}</p>
+				}
+				return <p className="tag yellow">{data.StatusName}</p>
+			}
+		},
+		{
+			title: 'Khởi tạo',
+			dataIndex: 'ModifiedOn',
+			render: (date: any, item) => {
+				return (
+					<div>
+						<div className="font-weight-primary">{item?.CreatedBy}</div>
+						<div>{moment(item?.CreatedOn).format('HH:mm DD/MM/YYYY')}</div>
+					</div>
+				)
+			}
+		},
+		{
+			title: '',
+			dataIndex: 'Id',
+			fixed: 'right',
+			align: 'center',
+			render: (date: any, item) => {
+				return (
+					<>
+						<PrimaryTooltip id={`bill-${item?.Id}`} place="left" content="Xem chi tiết">
+							<div
+								onClick={() =>
+									Router.push({
+										pathname: '/finance/payment/',
+										query: { bill: encode(item?.BillId) }
+									})
+								}
+								className="p-[2px] cursor-pointer"
+							>
+								<RiBillLine size={22} className="text-[#1b73e8]" />
+							</div>
+						</PrimaryTooltip>
+					</>
+				)
+			}
+		}
+	]
+
 	return (
 		<ExpandTable
 			currentPage={filters?.pageIndex}
@@ -138,9 +212,7 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 			getPagination={(pageNumber: number) => setFilters({ ...filters, pageIndex: pageNumber })}
 			loading={isLoading}
 			dataSource={dataTable}
-			columns={columns}
-			TitleCard={<div className="extra-table"></div>}
-			Extra={<></>}
+			columns={router.asPath.includes('class=') ? classColumns : columns}
 		/>
 	)
 }

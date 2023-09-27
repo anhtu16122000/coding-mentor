@@ -5,7 +5,7 @@ import PayForm from '~/common/components/Finance/Payment/pay'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNostis } from '~/common/utils'
-import { decode, parseToMoney } from '~/common/utils/common'
+import { decode, is, parseToMoney } from '~/common/utils/common'
 import BillDetails from '../../../common/components/Finance/BillDetails'
 import moment from 'moment'
 import Head from 'next/head'
@@ -18,6 +18,8 @@ import TabComp from '~/common/custom/TabComp'
 import Filters from './Filters'
 import { Select } from 'antd'
 import { useRouter } from 'next/router'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 const initParamters = {
 	pageSize: PAGE_SIZE,
@@ -37,6 +39,8 @@ const PaymentManagementPage = () => {
 	const [filters, setFilter] = React.useState(initParamters)
 	const [billStatus, setBillStatus] = useState<TabCompData[]>([])
 	const [statusSelected, setStatusSelected] = useState<number>(0)
+
+	const user = useSelector((state: RootState) => state.user.information)
 
 	const router = useRouter()
 
@@ -195,6 +199,7 @@ const PaymentManagementPage = () => {
 		{
 			title: 'Giảm giá',
 			dataIndex: 'Reduced',
+			width: 100,
 			render: (value, item) => {
 				if (!value) {
 					return ''
@@ -237,19 +242,6 @@ const PaymentManagementPage = () => {
 					</div>
 				)
 			}
-		},
-		{
-			title: '',
-			dataIndex: 'Type',
-			fixed: 'right',
-			width: 60,
-			render: (value, item) => (
-				<div className="flex item-center">
-					<PaymentDetail data={item} />
-					<PayForm isEdit defaultData={item} onRefresh={getData} />
-					{item?.Debt < 0 && <RefundForm onRefresh={getData} item={item} />}
-				</div>
-			)
 		}
 	]
 
@@ -279,12 +271,33 @@ const PaymentManagementPage = () => {
 				getPagination={(page: number) => setFilter({ ...filters, pageIndex: page })}
 				loading={{ type: 'GET_ALL', status: loading }}
 				dataSource={data}
-				columns={columns}
-				sumPrice={sumPrice}
+				columns={
+					is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic
+						? [
+								...columns,
+								{
+									title: '',
+									dataIndex: 'Type',
+									fixed: 'right',
+									width: 60,
+									render: (value, item) => (
+										<div className="flex item-center">
+											<PaymentDetail data={item} />
+											<PayForm isEdit defaultData={item} onRefresh={getData} />
+											{item?.Debt < 0 && <RefundForm onRefresh={getData} item={item} />}
+										</div>
+									)
+								}
+						  ]
+						: columns
+				}
+				sumPrice={is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic ? sumPrice : null}
 				TitleCard={
 					<div className="w-full flex items-center justify-between">
 						<div className="flex items-center">
-							<Filters filters={filters} onReset={() => setFilter(initParamters)} onSubmit={(e) => setFilter({ ...e })} />
+							{(is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic) && (
+								<Filters filters={filters} onReset={() => setFilter(initParamters)} onSubmit={(e) => setFilter({ ...e })} />
+							)}
 							<Select
 								placeholder="Loại thanh toán"
 								className="primay-input min-w-[210px] ml-[8px] !h-[36px]"
@@ -301,7 +314,9 @@ const PaymentManagementPage = () => {
 							</Select>
 						</div>
 
-						<PaymentForm onRefresh={getData} />
+						{(is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic) && (
+							<PaymentForm onRefresh={getData} />
+						)}
 					</div>
 				}
 				expandable={expandedRowRender}

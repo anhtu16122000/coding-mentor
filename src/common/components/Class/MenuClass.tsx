@@ -5,7 +5,7 @@ import { BsCalendar2Week } from 'react-icons/bs'
 import { CgTranscript } from 'react-icons/cg'
 import { FiUserCheck } from 'react-icons/fi'
 import { IoNotificationsOutline } from 'react-icons/io5'
-import { RiContactsBook2Line, RiFileList2Line, RiQuillPenLine } from 'react-icons/ri'
+import { RiContactsBook2Line, RiFileList2Line, RiFileList3Line, RiQuillPenLine } from 'react-icons/ri'
 import { VscFeedback, VscFolderLibrary } from 'react-icons/vsc'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
@@ -20,10 +20,12 @@ import { RollUpTeacherPage } from './RollUpTeacherPage'
 import { ScheduleList } from './ScheduleList'
 import HomeWork from './HomeWork'
 import TransScriptFlexColumnPage from './TransScriptFlexColumnPage'
+import { TabMonthlyTuition } from '~/common/pages/Student/TabMonthlyTuition'
 
 const itemsAdmin = [
 	'Lịch học',
 	'Học viên',
+	'Học phí',
 	'Các buổi học',
 	'Bài tập',
 	'Tài liệu',
@@ -34,11 +36,12 @@ const itemsAdmin = [
 	'Thông báo'
 ]
 
-const itemsStudent = ['Lịch học', 'Các buổi học', 'Bài tập', 'Tài liệu', 'Bảng điểm', 'Điểm danh bằng QR']
+const itemsStudent = ['Lịch học', 'Học phí', 'Các buổi học', 'Bài tập', 'Tài liệu', 'Bảng điểm', 'Điểm danh bằng QR']
 
 const itemsTeacher = [
 	'Lịch học',
 	'Học viên',
+	'Học phí',
 	'Các buổi học',
 	'Bài tập',
 	'Tài liệu',
@@ -60,14 +63,14 @@ const MenuClass = () => {
 				return <CalendarClassEdit />
 			case 'Học viên':
 				return <ListStudentInClass />
+			case 'Học phí':
+				return <TabMonthlyTuition StudentDetail={user} />
 			case 'Các buổi học':
 				return <ScheduleList />
 			case 'Tài liệu':
 				return <DocumentsPageInClass />
 			case 'Điểm danh':
 				return <RollUpPage />
-			// case 'Bảng điểm old':
-			// 	return <TranscriptPage />
 			case 'Bảng điểm':
 				return <TransScriptFlexColumnPage />
 			case 'Điểm danh giáo viên':
@@ -98,6 +101,13 @@ const MenuClass = () => {
 				return (
 					<div className="label-tab">
 						<RiContactsBook2Line className="mr-3" size={20} />
+						<span>{item}</span>
+					</div>
+				)
+			case 'Học phí':
+				return (
+					<div className="label-tab">
+						<RiFileList3Line className="mr-3" size={20} />
 						<span>{item}</span>
 					</div>
 				)
