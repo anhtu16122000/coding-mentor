@@ -20,6 +20,7 @@ import Head from 'next/head'
 import appConfigs from '~/appConfig'
 import { BsFillCameraFill } from 'react-icons/bs'
 import Avatar from '~/common/components/Avatar'
+import { TabMonthlyTuition } from './TabMonthlyTuition'
 
 export interface IStudentDetailInfoPageProps {}
 
@@ -117,6 +118,11 @@ export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps
 						key: '9',
 						label: `Ghi chú`,
 						children: <StudentNote studentId={studentDetail?.UserInformationId} />
+					},
+					{
+						key: '10',
+						label: `Học phí`,
+						children: <TabMonthlyTuition StudentDetail={studentDetail} />
 					}
 			  ]
 

@@ -12,6 +12,8 @@ const BillDetails = ({ bill }) => {
 	const [data, setData] = React.useState(null)
 	const [filters, setFilter] = React.useState({ PageSize: PAGE_SIZE, PageIndex: 1, Search: '' })
 
+	console.log('---- bill: ', bill)
+
 	useEffect(() => {
 		getData()
 	}, [])
@@ -112,6 +114,35 @@ const BillDetails = ({ bill }) => {
 		}
 	]
 
+	// ClassName
+	const tuitionColumns = [
+		{
+			title: 'Lớp',
+			dataIndex: 'ClassName',
+			width: 80,
+			render: (value, item, index) => {
+				return <div className="min-w-[80px] text-[#1b73e8] font-[600]">{value}</div>
+			}
+		},
+		{
+			title: 'Giá tiền',
+			dataIndex: 'Price',
+			width: 116,
+			render: (value, item) => <p className="font-[600] text-[#000]">{parseToMoney(value)}</p>
+		},
+		{
+			title: 'Tổng số tiền',
+			dataIndex: 'TotalPrice',
+			width: 116,
+			render: (value, item) => <p className="font-[600] text-[#000]">{parseToMoney(value)}</p>
+		},
+		{
+			title: 'Số tháng',
+			dataIndex: 'Quantity',
+			width: 126
+		}
+	]
+
 	const columns =
 		bill?.Type == 1
 			? [...type1Colums, ...defaultColumns]
@@ -131,7 +162,7 @@ const BillDetails = ({ bill }) => {
 						total={totalPage && totalPage}
 						onChangePage={(page: number) => setFilter({ ...filters, PageIndex: page })}
 						data={data}
-						columns={columns}
+						columns={bill?.Type == 5 ? [...tuitionColumns] : columns}
 					/>
 				</div>
 			)}

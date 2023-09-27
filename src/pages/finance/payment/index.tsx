@@ -5,7 +5,7 @@ import PayForm from '~/common/components/Finance/Payment/pay'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNostis } from '~/common/utils'
-import { parseToMoney } from '~/common/utils/common'
+import { decode, parseToMoney } from '~/common/utils/common'
 import BillDetails from '../../../common/components/Finance/BillDetails'
 import moment from 'moment'
 import Head from 'next/head'
@@ -17,6 +17,7 @@ import { TabCompData } from '~/common/custom/TabComp/type'
 import TabComp from '~/common/custom/TabComp'
 import Filters from './Filters'
 import { Select } from 'antd'
+import { useRouter } from 'next/router'
 
 const initParamters = {
 	pageSize: PAGE_SIZE,
@@ -37,14 +38,23 @@ const PaymentManagementPage = () => {
 	const [billStatus, setBillStatus] = useState<TabCompData[]>([])
 	const [statusSelected, setStatusSelected] = useState<number>(0)
 
-	useEffect(() => {
-		getData()
-	}, [filters])
+	const router = useRouter()
 
-	async function getData() {
+	useEffect(() => {
+		if (router?.asPath.includes('bill=')) {
+			if (router?.query?.bill) {
+				getData(parseInt(decode(router?.query?.bill) + ''))
+			}
+		} else {
+			getData()
+		}
+	}, [filters, router])
+
+	async function getData(bill?: number) {
 		setLoading(true)
+
 		try {
-			const res = await RestApi.get('Bill', filters)
+			const res = await RestApi.get('Bill', { ...filters, id: bill || null })
 
 			if (res.status == 200) {
 				setData(res.data.data)
@@ -183,7 +193,7 @@ const PaymentManagementPage = () => {
 			}
 		},
 		{
-			title: 'Khuyến mãi',
+			title: 'Giảm giá',
 			dataIndex: 'Reduced',
 			render: (value, item) => {
 				if (!value) {
@@ -200,15 +210,14 @@ const PaymentManagementPage = () => {
 						<p className="text-[#000]">
 							Số tiền: <div className="inline font-[600]">{parseToMoney(item?.Reduced)}</div>
 						</p>
+
+						{!!item?.UsedMoneyReserve && (
+							<p className="text-[#000]">
+								Tiền bảo lưu: <div className="inline font-[600]">{parseToMoney(item?.UsedMoneyReserve)}</div>
+							</p>
+						)}
 					</>
 				)
-			}
-		},
-		{
-			title: 'Tiền bảo lưu',
-			dataIndex: 'UsedMoneyReserve',
-			render: (value, item) => {
-				return <div className="font-[600] min-w-[100px]">{!!value && parseToMoney(value)}</div>
 			}
 		},
 		{
@@ -216,6 +225,18 @@ const PaymentManagementPage = () => {
 			dataIndex: 'PaymentAppointmentDate',
 			width: 130,
 			render: (value, item) => <p>{!!value ? moment(value).format('DD/MM/YYYY') : ''}</p>
+		},
+		{
+			title: 'Khởi tạo',
+			dataIndex: 'CreatedOn',
+			render: (date: any, item) => {
+				return (
+					<div>
+						<div className="font-weight-primary">{item?.CreatedBy}</div>
+						<div>{moment(item?.CreatedOn).format('HH:mm DD/MM/YYYY')}</div>
+					</div>
+				)
+			}
 		},
 		{
 			title: '',
@@ -264,11 +285,6 @@ const PaymentManagementPage = () => {
 					<div className="w-full flex items-center justify-between">
 						<div className="flex items-center">
 							<Filters filters={filters} onReset={() => setFilter(initParamters)} onSubmit={(e) => setFilter({ ...e })} />
-
-							{/* <div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container ml-[8px] !mt-0">
-								<TabComp data={billStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
-							</div> */}
-
 							<Select
 								placeholder="Loại thanh toán"
 								className="primay-input min-w-[210px] ml-[8px] !h-[36px]"
