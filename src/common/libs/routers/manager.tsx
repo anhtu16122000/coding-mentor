@@ -308,6 +308,12 @@ export const ManagerChildMenu = [
 				Route: '/course/codes',
 				Text: 'Khoá học đã bán',
 				Icon: ''
+			},
+			{
+				TypeItem: 'single',
+				Key: '/course/donation-history',
+				Route: '/course/donation-history',
+				Text: 'Lịch sử tặng'
 			}
 		]
 	},

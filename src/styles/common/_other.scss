@@ -18,6 +18,13 @@
 		box-shadow: none;
 		border: 0px solid #9e9e9e !important;
 	}
+
+	// ----- update multiselect
+	&.ant-select-multiple {
+		.ant-select-selector {
+			margin-right: 0px !important;
+		}
+	}
 }
 
 .ant-form-item-has-error {

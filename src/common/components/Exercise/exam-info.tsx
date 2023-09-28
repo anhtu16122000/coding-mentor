@@ -123,12 +123,12 @@ const ExamInfo = (params) => {
 
 			<div className="flex items-center none-selection">
 				<div className="flex items-center flex-1">
-					<CreateExam onRefresh={onRefresh} isEdit defaultData={data} />
 					<Popconfirm title="Xoá đề này?" placement="top" onConfirm={deleteExercise}>
-						<PrimaryButton loading={loading} className="ml-[8px]" type="button" background="red" icon="remove">
+						<PrimaryButton loading={loading} className="mr-[8px]" type="button" background="red" icon="remove">
 							Xoá
 						</PrimaryButton>
 					</Popconfirm>
+					<CreateExam onRefresh={onRefresh} isEdit defaultData={data} />
 				</div>
 				<div className="btn-exam-detail">
 					<div>Chi tiết</div>

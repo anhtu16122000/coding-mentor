@@ -1,22 +1,12 @@
-import { Button, Form, Modal, Select, Switch, Table } from 'antd'
+import { Form, Modal, Select, Switch } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import type { ColumnsType } from 'antd/es/table'
 import { studentInClassApi } from '~/api/user/student-in-class'
 import { ShowNoti } from '~/common/utils'
 import SelectField from '../FormControl/SelectField'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
-import InputTextField from '~/common/components/FormControl/InputTextField'
 import TextBoxField from '../FormControl/TextBoxField'
-import styled from 'styled-components'
-
-const SelcectClass = styled(Select)`
-	width: 632px;
-	@media (max-width: 700px) {
-		width: 86.5vw;
-	}
-`
 
 type IModalStudentInClass = {
 	mode: 'add' | 'edit' | 'delete'
@@ -30,7 +20,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 	const [isLoading, setIsLoading] = useState(false)
 	const [loadingStudent, setLoadingStudent] = useState(false)
 	const [form] = Form.useForm()
-	const [student, setStudent] = useState<{ title: string; value: string }[]>([])
+	const [students, setStudents] = useState([])
 	const [classList, setClassList] = useState<any>([])
 	const [checkedWarning, setCheckWarning] = useState(false)
 
@@ -40,7 +30,7 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 	const onOpen = () => {
 		if (mode === 'add') {
 			getClass()
-			getStudent(null)
+			getStudents()
 		}
 		setVisible(true)
 	}
@@ -49,24 +39,17 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 		setCheckWarning(val)
 	}
 
-	const getStudent = async (classId?: number) => {
+	const getStudents = async () => {
 		try {
 			setLoadingStudent(true)
-			const res = await studentInClassApi.getStudentAvailable(router?.query?.class, classId)
-			if (res.status === 200) {
-				let temp = []
-				res?.data?.data?.forEach((item) => {
-					temp.push({ title: `${item?.FullName} - ${item?.UserCode}`, value: item?.UserInformationId })
-				})
-				setStudent(temp)
-				setLoadingStudent(false)
-			}
-			if (res.status == 204) {
-				setStudent([])
+			const res = await studentInClassApi.getStudentAvailableV2(router?.query?.class)
+			if (res.status == 200) {
+				setStudents(res.data.data)
+			} else {
+				setStudents([])
 			}
 		} catch (error) {
 			console.log(error)
-			setLoadingStudent(true)
 		} finally {
 			setLoadingStudent(false)
 		}
@@ -129,10 +112,12 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 	}
 
 	const handleCreate = async (data) => {
+		console.log('--- Submit data: ', data)
+
 		try {
 			setIsLoading(true)
-			const res = await studentInClassApi.add(data)
-			if (res.status === 200) {
+			const res = await studentInClassApi.adds(data)
+			if (res.status == 200) {
 				onClose()
 				onRefresh()
 				setIsLoading(false)
@@ -176,11 +161,6 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 			setCheckWarning(dataRow?.Warning)
 		}
 	}, [dataRow])
-
-	const handleSelectedClass = (value) => {
-		form.setFieldValue('StudentIds', [])
-		getStudent(value)
-	}
 
 	return (
 		<>
@@ -240,11 +220,11 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 						/>
 					</>
 				}
-				width={mode != 'delete' ? (mode === 'add' ? 700 : 500) : 400}
+				width={mode != 'delete' ? (mode === 'add' ? 500 : 500) : 400}
 			>
 				<div className="container-fluid">
 					<Form form={form} layout="vertical" onFinish={_onSubmit}>
-						<div className="grid grid-cols-2 gap-x-4 antd-custom-wrap">
+						<div className="grid grid-cols-2 gap-x-4">
 							{mode == 'delete' && (
 								<div className="col-span-2 mb-4 text-center text-[16px]">
 									<p>Bạn có chắc muốn xóa?</p>
@@ -255,49 +235,30 @@ export const ModalStudentInClassCRUD: React.FC<IModalStudentInClass> = ({ dataRo
 								<>
 									{mode === 'add' && (
 										<>
-											<div
-												style={{
-													marginBottom: 15
-												}}
-											>
-												<div style={{ marginBottom: 10, fontWeight: '600' }}>Lớp học</div>
-												<SelcectClass allowClear placeholder="Chọn lớp học" onChange={handleSelectedClass} options={classList} />
-											</div>
-											<div
+											<Form.Item
 												className="col-span-2"
-												style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+												name="StudentIds"
+												label="Chọn học viên"
+												rules={[{ required: true, message: 'Vui lòng chọn học viên' }]}
 											>
-												<SelectField
-													mode="multiple"
-													label="Học viên"
-													name="StudentIds"
-													maxTagCount={2}
-													isLoading={loadingStudent}
-													optionList={student}
-													placeholder="Chọn học viên"
-													isRequired
-													style={{
-														width: '100%',
-														marginRight: 10,
-														maxWidth: 515
-													}}
-													rules={[{ required: true, message: 'Bạn không được để trống' }]}
-												/>
-												<Button
-													disabled={student.length < 1}
-													onClick={() => {
-														const ids = student.map((_item) => _item.value)
-														form.setFieldValue('StudentIds', ids)
-													}}
-													style={{
-														height: 35,
-														marginBottom: -5
-													}}
-													type="primary"
-												>
-													Chọn tất cả
-												</Button>
-											</div>
+												<Select className="primary-input" mode="multiple" maxTagCount={2} allowClear showSearch placeholder="Chọn học viên">
+													{students?.map((item: any) => {
+														return (
+															<Select.Option value={item?.UserInformationId} label={item?.UserInformationId} key={item?.UserInformationId}>
+																<div className="selected-option">{item?.FullName}</div>
+																<div className="select-option-propdown">
+																	<div className="ml-[8px]">
+																		<div className="font-[500]">
+																			{item?.FullName} - {item?.UserCode}
+																		</div>
+																		<div>Lớp hiện tại: {item?.CurrentClassName ? item?.CurrentClassName : 'Chưa có lớp'}</div>
+																	</div>
+																</div>
+															</Select.Option>
+														)
+													})}
+												</Select>
+											</Form.Item>
 
 											<div className="col-span-2">
 												<SelectField

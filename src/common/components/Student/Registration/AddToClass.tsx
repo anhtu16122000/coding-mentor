@@ -1,4 +1,4 @@
-import { Card, Form, Modal, Select } from 'antd'
+import { Card, Form, Modal, Select, Tooltip } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
 import { ShowNostis } from '~/common/utils'
@@ -10,17 +10,21 @@ import { MdOpenInNew } from 'react-icons/md'
 import { parseToMoney } from '~/common/utils/common'
 import ButtonMoveTo from '../../TableButton/MOVETO'
 import { programApi } from '~/api/learn/program'
+import PrimaryButton from '../../Primary/Button'
+import { AiOutlineWarning } from 'react-icons/ai'
 
 interface IAddToClass {
 	isEdit?: boolean
 	onRefresh?: Function
 	item?: any
 	onOpen?: Function
+	items?: any
+	isTop?: boolean
 }
 
 const url = 'ClassRegistration'
 
-const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
+const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item, items, isTop }) => {
 	const [form] = Form.useForm()
 
 	const [loading, setLoading] = useState(false)
@@ -30,7 +34,7 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
 	useEffect(() => {
 		if (visible) {
 			getPrograms()
-			getClass(item?.ProgramId)
+			getClass(item?.ProgramId || items[0]?.ProgramId)
 		}
 	}, [visible])
 
@@ -50,14 +54,24 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
 	}
 
 	const [loadingClass, setLoadingClass] = useState(false)
+
 	async function getClass(params) {
 		setLoadingClass(true)
 		form.setFieldValue('ClassId', null)
+
+		let tempStudents = []
+
+		if (isTop) {
+			for (let i = 0; i < items.length; i++) {
+				tempStudents.push(items[i]?.StudentId)
+			}
+		}
+
 		try {
-			const response = await RestApi.get(`Bill/class-available`, {
+			const response = await RestApi.get(`ClassRegistration/class-available`, {
 				programId: params,
-				branchId: item?.BranchId,
-				studentId: item?.StudentId
+				branchId: items[0]?.BranchId,
+				studentIds: tempStudents.join(', ')
 			})
 
 			if (response.status == 200) {
@@ -79,7 +93,12 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
 
 	function openEdit() {
 		setVisible(!visible)
-		form.setFieldValue('ProgramId', item?.ProgramId)
+
+		if (!isTop) {
+			form.setFieldValue('ProgramId', item?.ProgramId)
+		} else {
+			form.setFieldValue('ProgramId', items[0]?.ProgramId)
+		}
 	}
 
 	function onFinish(params) {
@@ -137,44 +156,58 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
 		window.open(uri + `/?StudentID=${params?.StudentId}`, '_blank')
 	}
 
+	const [showStudent, setShowstudent] = useState<boolean>(false)
+
 	return (
 		<>
-			<PrimaryTooltip id={`add-to-${item?.Id}`} place="left" content="Chuyển vào lớp">
-				<ButtonMoveTo onClick={openEdit} className="ml-[16px]" />
-			</PrimaryTooltip>
+			{!isTop && (
+				<PrimaryTooltip id={`add-to-${item?.Id}`} place="left" content="Chuyển vào lớp">
+					<ButtonMoveTo onClick={openEdit} className="ml-[16px]" />
+				</PrimaryTooltip>
+			)}
+
+			{!!isTop && (
+				<PrimaryTooltip id={`add-all-to`} place="left" content={items.length == 0 ? 'Chưa chọn học viên' : `Chọn lớp để xếp`}>
+					<PrimaryButton disable={!!items && items.length == 0} onClick={openEdit} background="blue" icon="enter" type="button">
+						Chọn lớp
+					</PrimaryButton>
+				</PrimaryTooltip>
+			)}
 
 			<Modal
 				width={500}
-				title="Chuyển vào lớp"
+				title={isTop ? `Chuyển ${items.length} học viên vào lớp` : 'Chuyển vào lớp'}
 				open={visible}
 				onCancel={toggle}
 				footer={<ModalFooter loading={loading} onCancel={toggle} onOK={submitForm} />}
 			>
-				<Card className="mb-[16px] card-min-padding">
-					<div className="flex relative">
-						<Avatar uri={item?.Avatar} className="w-[64px] h-[64px] rounded-full shadow-sm border-[1px] border-solid border-[#f4f4f4]" />
-						<div className="flex-1 ml-[16px]">
-							<div className="w-full in-1-line font-[600] text-[16px]">{item?.FullName}</div>
-							<div className="w-full in-1-line font-[400] text-[14px]">
-								<div className="font-[600] inline-flex">Mã:</div> {item?.UserCode}
+				{!isTop && (
+					<Card className="mb-[16px] card-min-padding">
+						<div className="flex relative">
+							<Avatar uri={item?.Avatar} className="w-[64px] h-[64px] rounded-full shadow-sm border-[1px] border-solid border-[#f4f4f4]" />
+							<div className="flex-1 ml-[16px]">
+								<div className="w-full in-1-line font-[600] text-[16px]">{item?.FullName}</div>
+								<div className="w-full in-1-line font-[400] text-[14px]">
+									<div className="font-[600] inline-flex">Mã:</div> {item?.UserCode}
+								</div>
+								<div className="w-full in-1-line font-[400] text-[14px]">
+									<div className="font-[600] inline-flex">Số tiền đăng ký:</div> {parseToMoney(item?.Price)}
+								</div>
 							</div>
-							<div className="w-full in-1-line font-[400] text-[14px]">
-								<div className="font-[600] inline-flex">Số tiền đăng ký:</div> {parseToMoney(item?.Price)}
-							</div>
-						</div>
 
-						<PrimaryTooltip
-							className="top-[-4px] right-[-4px] absolute w-[28px] h-[18px]"
-							id={`view-in-new-${item?.Id}`}
-							place="right"
-							content="Xem thông tin"
-						>
-							<div onClick={() => viewStudentDetails(item)} className="btn-open-in-new-tab text-[#1976D2]">
-								<MdOpenInNew size={16} />
-							</div>
-						</PrimaryTooltip>
-					</div>
-				</Card>
+							<PrimaryTooltip
+								className="top-[-4px] right-[-4px] absolute w-[28px] h-[18px]"
+								id={`view-in-new-${item?.Id}`}
+								place="right"
+								content="Xem thông tin"
+							>
+								<div onClick={() => viewStudentDetails(item)} className="btn-open-in-new-tab text-[#1976D2]">
+									<MdOpenInNew size={16} />
+								</div>
+							</PrimaryTooltip>
+						</div>
+					</Card>
+				)}
 
 				<Form
 					form={form}
@@ -184,36 +217,37 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item }) => {
 					onFinish={onFinish}
 					autoComplete="on"
 				>
-					<Form.Item className="col-span-2" name="ProgramId" label="Chương trình" rules={formRequired}>
-						<Select
-							defaultValue={item?.ProgramId}
-							disabled={loading}
-							onChange={(event) => getClass(event)}
-							placeholder="Chọn chương trình"
-							className=""
-						>
-							{programs.map((thisItem) => {
+					<Form.Item className="col-span-2 ant-select-class-selected" name="ClassId" label="Lớp chuyển đến" rules={formRequired}>
+						<Select loading={loadingClass} disabled={loading} placeholder="Chọn lớp" className="ant-select-item-option-selected-blue">
+							{classes.map((thisClass) => {
 								return (
-									<Select.Option key={thisItem.Id} value={thisItem.Id}>
-										{thisItem?.Name}
+									<Select.Option disabled={!thisClass?.Fit} key={thisClass.ClassId} value={thisClass.ClassId}>
+										<div className="flex items-center justify-between w-full ant-select-class-option">
+											<div className="ant-select-item-option-name">{thisClass?.ClassName}</div>
+											{!thisClass?.Fit && <div className="text-[#e011116c]">{thisClass?.Note}</div>}
+										</div>
+										<div className="hiddens ant-select-dropdown-by-chau">
+											<div className="text-[12px]">Giá: {parseToMoney(thisClass?.Price)}</div>
+											<div className="text-[12px]">Học viên: {parseToMoney(thisClass?.StudentQuantity)}</div>
+										</div>
 									</Select.Option>
 								)
 							})}
 						</Select>
 					</Form.Item>
 
-					<Form.Item className="col-span-2 ant-select-class-selected" name="ClassId" label="Lớp chuyển đến" rules={formRequired}>
-						<Select loading={loadingClass} disabled={loading} placeholder="Chọn lớp" className="ant-select-item-option-selected-blue">
-							{classes.map((thisClass) => {
+					<Form.Item name="ClassId" label="Lớp chuyển đến" rules={formRequired}>
+						<Select loading={loadingClass} disabled={loading} placeholder="Chọn lớp">
+							{classes.map((item) => {
 								return (
-									<Select.Option disabled={!thisClass?.Fit} key={thisClass.Id} value={thisClass.Id}>
-										<div className="flex items-center justify-between w-full ant-select-class-option">
-											<div className="ant-select-item-option-name">{thisClass?.Name}</div>
-											{!thisClass?.Fit && <div className="text-[#e011116c]">{thisClass?.Note}</div>}
-										</div>
-										<div className="hiddens ant-select-dropdown-by-chau">
-											<div className="text-[12px]">Giá: {parseToMoney(thisClass?.Price)}</div>
-											<div className="text-[12px]">Học viên: {parseToMoney(thisClass?.StudentQuantity)}</div>
+									<Select.Option disabled={!item.Fit} key={item.ClassId} value={item.ClassId}>
+										<div className="flex items-center justify-between w-full">
+											{item.ClassId}
+											{!item.Fit && (
+												<Tooltip placement="right" title={!!item.Note ? item.Note : `Giáo viên ${item.TeacherName} bị trùng lịch`}>
+													<AiOutlineWarning className="text-tw-red" />
+												</Tooltip>
+											)}
 										</div>
 									</Select.Option>
 								)

@@ -1027,12 +1027,6 @@ button {
 		overflow-y: hidden;
 		white-space: nowrap;
 		margin-top: 5px;
-		// -ms-overflow-style: none; /* IE and Edge */
-		// scrollbar-width: none; /* Firefox */
-
-		// &::-webkit-scrollbar {
-		// 	display: none;
-		// }
 	}
 }
 
@@ -1047,9 +1041,32 @@ button {
 	justify-content: space-between;
 	transition: all 0.2 ease;
 	margin-bottom: 5px;
+	border: 1px solid #fff;
 	&:hover {
-		box-shadow: 0 3px 10px 0 #1b73e8;
-		transform: translateY(-2px);
+		border: 1px solid #1b73e8;
+	}
+}
+
+.ant-select {
+	.ant-select-selection-item {
+		.selected-option {
+			display: block !important;
+		}
+		.select-option-propdown {
+			display: none !important;
+		}
+	}
+}
+
+.ant-select-dropdown {
+	.ant-select-item-option-content {
+		.selected-option {
+			display: none !important;
+		}
+		.select-option-propdown {
+			display: flex !important;
+			align-items: center;
+		}
 	}
 }
 

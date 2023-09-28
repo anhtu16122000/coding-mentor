@@ -1,7 +1,7 @@
 import { Button, Form, Modal, Select, Spin, Tooltip } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineWarning } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { scheduleApi } from '~/api/learn/schedule'
@@ -16,6 +16,9 @@ import ModalFooter from '../ModalFooter'
 import { formRequired } from '~/common/libs/others/form'
 import { formatDateTime } from '../Calculate/TimeFormat'
 import { DeleteOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { roomApi } from '~/api/configs/room'
+import InputNumberField from '../FormControl/InputNumberField'
+import { IoClose } from 'react-icons/io5'
 
 type DataAdd = {
 	RoomId?: number
@@ -40,7 +43,7 @@ const ModalAddScheduleEdit = (props) => {
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [openModalAdd, setOpenModalAdd] = useState(false)
-	const [scheduleList, setScheduleList] = useState<DataAdd[]>([])
+	const [scheduleList, setScheduleList] = useState<any[]>([])
 
 	function addMinutesToMoment(inputMoment, minutes) {
 		if (!moment.isMoment(inputMoment) || typeof minutes !== 'number') {
@@ -61,9 +64,13 @@ const ModalAddScheduleEdit = (props) => {
 				StartTime: moment(e.StartTime).format(),
 				EndTime: moment(e.EndTime).format(),
 				TeacherId: e.TeacherId.split('&')[0],
-				Note: e.Note
+				Note: e.Note,
+				TeachingFee: e.TeachingFee
 			})
 		)
+
+		console.log('----- DATA_SUBMIT: ', DATA_SUBMIT)
+
 		try {
 			const res = await scheduleApi.adds({ schedules: DATA_SUBMIT })
 			if (res.status === 200) {
@@ -185,7 +192,37 @@ const ModalAddScheduleEdit = (props) => {
 		setOpenModalAdd(false)
 	}
 
-	log.Yellow('infoClass', infoClass)
+	const [rooms, setRooms] = useState([])
+
+	useEffect(() => {
+		if (infoClass?.Type == 1) {
+			getRooms()
+		}
+	}, [infoClass])
+
+	const getRooms = async () => {
+		try {
+			const res = await roomApi.getAll({ pageSize: 9999, branchId: infoClass?.BranchId })
+			if (res.status == 200) {
+				setRooms(res.data.data)
+			} else {
+				setRooms([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
+
+	// log.Yellow('infoClass', infoClass)
+	// log.Green('scheduleList', scheduleList)
+
+	function getRoomName(params) {
+		const thisIndex = rooms.findIndex((thisRoom) => thisRoom.Id == params)
+		if (thisIndex != -1) {
+			return rooms[thisIndex]?.Name
+		}
+		return ''
+	}
 
 	return (
 		<>
@@ -217,6 +254,7 @@ const ModalAddScheduleEdit = (props) => {
 							name="StartTime"
 							onChange={getDataAvailable}
 						/>
+
 						<DatePickerField
 							mode="single"
 							showTime={'HH:mm'}
@@ -226,6 +264,7 @@ const ModalAddScheduleEdit = (props) => {
 							name="EndTime"
 							onChange={getDataAvailable}
 						/>
+
 						<Form.Item name="TeacherId" label="Giáo viên" rules={formRequired}>
 							<Select placeholder="Chọn giáo viên">
 								{teacher.map((item) => {
@@ -245,26 +284,21 @@ const ModalAddScheduleEdit = (props) => {
 							</Select>
 						</Form.Item>
 
-						{!!Type && parseInt(Type.toString()) == 1 ? (
-							<Form.Item name="RoomId" label="Phòng học" rules={formRequired}>
+						<InputNumberField className="col-span-2" label="Lương / buổi" name="TeachingFee" placeholder="Nhập mức lương" isRequired />
+
+						{infoClass?.Type == 1 && rooms.length > 0 && (
+							<Form.Item className="col-span-2" name="RoomId" label="Phòng học" rules={formRequired}>
 								<Select placeholder="Chọn phòng học">
-									{room.map((item) => {
+									{rooms.map((item) => {
 										return (
-											<Select.Option disabled={!item.Fit} key={item.RoomId} value={item.RoomId}>
-												<div className="flex items-center justify-between w-full">
-													{item.RoomName}
-													{!item.Fit ? (
-														<Tooltip placement="right" title={item.Note}>
-															<AiOutlineWarning className="text-tw-red" />
-														</Tooltip>
-													) : null}
-												</div>
+											<Select.Option key={item.Id} value={item.Id}>
+												[{item.Code}] - {item.Name}
 											</Select.Option>
 										)
 									})}
 								</Select>
 							</Form.Item>
-						) : null}
+						)}
 
 						<TextBoxField name="Note" label="Ghi chú" />
 
@@ -272,43 +306,51 @@ const ModalAddScheduleEdit = (props) => {
 							Thêm
 						</Button>
 					</Form>
+
 					{scheduleList.length > 0 && (
-						<div
-							style={{
-								flex: 45,
-								display: 'flex',
-								justifyContent: 'center',
-								flexDirection: 'column',
-								marginLeft: 10
-							}}
-						>
-							<div
-								className="schedule-list-container"
-								style={{
-									height: Number(Type) === 1 ? '65vh' : '53vh',
-									maxHeight: Number(Type) === 1 ? '65vh' : '53vh'
-								}}
-							>
-								{scheduleList?.map((_item: DataAdd) => {
+						<div style={{ flex: 45, display: 'flex', justifyContent: 'center', flexDirection: 'column', marginLeft: 10 }}>
+							<div className="schedule-list-container" style={{ height: infoClass?.Type == 1 ? '608px' : '524px' }}>
+								{scheduleList?.map((_item: any) => {
 									return (
-										<div className="schedule-new-item">
+										<div className="schedule-new-item relative">
 											<div>
 												<div style={{ fontSize: 14, fontWeight: '600' }}>{_item.TeacherId.split('&')[1]}</div>
 												<div style={{ display: 'flex', marginTop: 3, marginBottom: 3 }}>
 													<div style={{ height: 5, width: 35, borderRadius: 5, backgroundColor: '#FF0000', marginRight: 6 }} />
 													<div style={{ height: 5, width: 30, borderRadius: 5, backgroundColor: '#0A8FDC' }} />
 												</div>
+
 												<div>
-													<span>{formatDateTime(_item.StartTime)}</span> - <span>{formatDateTime(_item.EndTime)}</span>
+													<span>{moment(new Date(_item.StartTime)).format('HH:mm DD/MM/YYYY')}</span>
+													<span> - </span>
+													<span>{moment(new Date(_item.EndTime)).format('HH:mm DD/MM/YYYY')}</span>
+												</div>
+
+												{infoClass?.Type == 1 && (
+													<div className="mt-[4px] flex items-center">
+														<div className="font-[600] mr-[4px]">Phòng: </div>
+														{getRoomName(_item?.RoomId)}
+													</div>
+												)}
+
+												<div className="mt-[0px] flex items-center">
+													<div className="font-[600] mr-[4px]">Lương / buổi:</div>
+													{_item?.TeachingFee}
 												</div>
 											</div>
-											<DeleteOutlined onClick={() => setScheduleList(scheduleList.filter((e) => e !== _item))} />
+
+											<div
+												onClick={() => setScheduleList(scheduleList.filter((e) => e !== _item))}
+												className="top-[8px] absolute right-[8px] cursor-pointer"
+											>
+												<IoClose size={22} color="red" />
+											</div>
 										</div>
 									)
 								})}
 							</div>
-							<Button disabled={isLoading} onClick={save} style={{ marginTop: 'auto', width: 100, alignSelf: 'center'  }} type="primary">
-							{isLoading && <Spin size='small' style={{marginRight: 5}}/>} Lưu
+							<Button disabled={isLoading} onClick={save} style={{ marginTop: 'auto', width: 100, alignSelf: 'center' }} type="primary">
+								{isLoading && <Spin size="small" style={{ marginRight: 5 }} />} Lưu
 							</Button>
 						</div>
 					)}

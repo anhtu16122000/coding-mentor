@@ -10,18 +10,18 @@ export const rollUpApi = {
 		})
 	},
 
-    // thêm data
-    add(data) {
+	// thêm data
+	add(data) {
 		return instance.post(`${url}/InsertOrUpdate`, data)
 	},
 
-    // xóa data
-    delete(ID) {
+	// xóa data
+	delete(ID) {
 		return instance.delete(`${url}/${ID}`)
 	},
 
 	getRollUpStudent(params) {
-		return instance.get<IApiResultData<IRollUpStudent[]>>(`${url}/roll-up-student`, {
+		return instance.get<IApiResultData<IRollUpStudent[]>>(`${url}`, {
 			params
 		})
 	}

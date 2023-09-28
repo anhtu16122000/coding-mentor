@@ -135,8 +135,8 @@ const ModalDetail = (props) => {
 						<BsCalendarCheckFill size={20} className="" />
 					</div>
 					<div className="flex-1 flex flex-col ml-[16px]">
-						<ProClassInfoItem title="Tổng số buổi" value={`${data?.TotalLesson}`} />
-						<ProClassInfoItem title="Số buổi đã học" value={`${data?.LessonCompleted}`} />
+						<ProClassInfoItem title="Số buổi đã học" value={`${data?.LessonCompleted} / ${data?.TotalLesson}`} />
+						<ProClassInfoItem title="Số buổi còn lại" value={`${data?.TotalLesson - data?.LessonCompleted}`} />
 					</div>
 				</div>
 

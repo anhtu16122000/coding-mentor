@@ -12,8 +12,6 @@ const BillDetails = ({ bill }) => {
 	const [data, setData] = React.useState(null)
 	const [filters, setFilter] = React.useState({ PageSize: PAGE_SIZE, PageIndex: 1, Search: '' })
 
-	console.log('---- bill: ', bill)
-
 	useEffect(() => {
 		getData()
 	}, [])

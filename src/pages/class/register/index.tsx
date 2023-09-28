@@ -344,7 +344,7 @@ const RegisterClass = () => {
 				StudentId: data.StudentId,
 				DiscountId: !!detailDiscount ? detailDiscount.Id : 0,
 				PaymentMethodId: activeMethod.Id,
-				PaymentAppointmentDate: !!data.PaymentAppointmentDate ? moment(data.PaymentAppointmentDate).format() : 0,
+				PaymentAppointmentDate: !!data.PaymentAppointmentDate ? moment(data.PaymentAppointmentDate).format() : null,
 				BranchId: data.BranchId,
 				Note: data.Note,
 				Type: activeTab.Type,

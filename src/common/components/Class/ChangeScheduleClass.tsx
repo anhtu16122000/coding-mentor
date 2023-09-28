@@ -13,6 +13,7 @@ import PrimaryButton from '../Primary/Button'
 import ModalRemoveSchedule from './ModalRemoveSchedule'
 import InputMoneyField from '~/common/components/FormControl/InputNumberField'
 import PrimaryTooltip from '../PrimaryTooltip'
+import InputNumberField from '~/common/components/FormControl/InputNumberField'
 
 const ChangeScheduleClass = (props) => {
 	const { dataRow, checkTeacherAvailable, handleChangeInfo, checkRoomAvailable } = props
@@ -186,7 +187,6 @@ const ChangeScheduleClass = (props) => {
 		handleOpen()
 		refPopover.current.close()
 	}
-
 
 	return (
 		<>
@@ -372,7 +372,9 @@ const ChangeScheduleClass = (props) => {
 							</Select>
 						</Form.Item>
 					)}
-					<InputMoneyField className="col-span-2" label="Lương / buổi" name="TeachingFee" placeholder="Nhập mức lương" isRequired />
+
+					<InputNumberField className="col-span-2" label="Lương / buổi" name="TeachingFee" placeholder="Nhập mức lương" isRequired />
+
 					<TextBoxField className="col-span-2" name="Note" label="Ghi chú" />
 				</Form>
 			</Modal>

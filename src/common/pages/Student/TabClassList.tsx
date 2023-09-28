@@ -45,7 +45,12 @@ export const TabClassList: React.FC<ITabClassList> = ({ StudentDetail }) => {
 	}
 
 	const onChange = (value) => {
-		getRollUp({ classId: Number(value), scheduleId: 0, studentIds: StudentDetail.UserInformationId, pageIndex: 1, pageSize: PAGE_SIZE })
+		getRollUp({
+			classId: Number(value),
+			studentIds: StudentDetail.UserInformationId,
+			pageIndex: 1,
+			pageSize: 99999
+		})
 	}
 
 	const getStudentInClass = async (Id) => {

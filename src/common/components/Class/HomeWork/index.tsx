@@ -153,7 +153,8 @@ const HomeWork = () => {
 			  }
 			: {
 					title: 'Người tạo',
-					dataIndex: 'CreatedBy'
+					dataIndex: 'CreatedBy',
+					width: 120
 			  },
 
 		{

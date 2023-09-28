@@ -19,6 +19,8 @@ import Lottie from 'react-lottie-player'
 
 import loadingJson from '~/common/components/json/loading-calendar.json'
 import { userInformationApi } from '~/api/user/user'
+import { is } from '~/common/utils/common'
+import Router from 'next/router'
 
 const Schedule = () => {
 	const thisCalendar = useRef(null)
@@ -49,8 +51,13 @@ const Schedule = () => {
 	const getAllSchedule = async (params) => {
 		setIsLoading(true)
 		try {
-			const res = await scheduleApi.getAll(params)
-			if (res.status === 200) {
+			const res = await scheduleApi.getAll(
+				is(userInformation).teacher && Router.asPath.includes('/class/schedule')
+					? { ...params, teacherIds: userInformation?.UserInformationId }
+					: params
+			)
+
+			if (res.status == 200) {
 				const newListSchedule = res.data.data.map((item, index) => {
 					return {
 						...item,

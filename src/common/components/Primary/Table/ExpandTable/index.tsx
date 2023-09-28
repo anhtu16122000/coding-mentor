@@ -4,6 +4,8 @@ import { GiPayMoney, GiReceiveMoney, GiTakeMyMoney } from 'react-icons/gi'
 import EmptyData from '~/common/components/EmptyData'
 import { _format, log } from '~/common/utils'
 
+import type { ColumnsType } from 'antd/es/table'
+
 const ExpandTable = (props) => {
 	const [state, setState] = useState({ selectedRowKeys: [] })
 	const [dataSource, setDataSource] = useState([])
@@ -169,7 +171,7 @@ const ExpandTable = (props) => {
 									setActiveIndex(index)
 								}
 							})}
-							rowSelection={props?.isSelect ? rowSelection : null}
+							rowSelection={!!props?.rowSelection ? props?.rowSelection : props?.isSelect ? rowSelection : null}
 							onExpand={onExpand}
 							expandable={{
 								expandedRowRender: props?.expandable,

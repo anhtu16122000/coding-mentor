@@ -228,7 +228,7 @@ const Filters: FC<IFilters> = (props) => {
 				)}
 
 				{!!showProgram && (
-					<Form.Item className="col-span-2" name="classId" label="Chương trình" rules={formNoneRequired}>
+					<Form.Item className="col-span-2" name="programIds" label="Chương trình" rules={formNoneRequired}>
 						<Select placeholder="Chọn chương trình" allowClear>
 							{programs.map((item) => {
 								return (

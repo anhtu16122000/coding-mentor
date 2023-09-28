@@ -1,34 +1,25 @@
-import { Input, Modal } from 'antd'
+import { Input } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { FaMoneyBill } from 'react-icons/fa'
-import { GiReceiveMoney } from 'react-icons/gi'
 import RestApi from '~/api/RestApi'
 import { MainLayout } from '~/common'
 import { PrimaryTooltip, StudentNote } from '~/common/components'
-import PayForm from '~/common/components/Finance/Payment/pay'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNostis } from '~/common/utils'
 import { parseToMoney } from '~/common/utils/common'
-import BillDetails from '../../../common/components/Finance/BillDetails'
 import moment from 'moment'
-import PrimaryButton from '~/common/components/Primary/Button'
-import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'
-import AvatarComponent from '~/common/components/AvatarComponent'
-import Avatar from '~/common/components/Avatar'
 import Router from 'next/router'
-import { IoMdOpen } from 'react-icons/io'
-import { ImWarning } from 'react-icons/im'
 import { ButtonEye } from '~/common/components/TableButton'
-import { ChangeClass, ReserveForm } from '~/common/components/Student/StudentInClass'
-import PrimaryEditor from '~/common/components/Editor'
 import { AddToClass, RefundForm } from '~/common/components/Student/Registration'
 import { userInfoColumn } from '~/common/libs/columns/user-info'
 import Filters from '~/common/components/Student/Filters'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
+import NestedTable from '~/common/components/NestedTable'
+import PrimaryButton from '~/common/components/Primary/Button'
+import FirstTepModal from './FirstTepModal'
 
 const url = 'ClassRegistration'
 
@@ -62,10 +53,32 @@ const RegistrationPage = () => {
 		}
 	}
 
+	const Nesadgavcolumns = [
+		{
+			title: 'Thứ',
+			dataIndex: 'ExectedDayName',
+			render: (text) => <p>{text}</p>
+		},
+		{
+			title: 'Ca học',
+			dataIndex: 'StudyTimeName'
+		}
+	]
+
 	const expandedRowRender = (item) => {
 		return (
 			<>
+				{!!item?.Expectations && (
+					<>
+						<div className="font-[600]">Danh sách ca học:</div>
+						<div className="mb-[8px] max-w-[1000px]">
+							<NestedTable addClass="basic-header" dataSource={item?.Expectations} columns={Nesadgavcolumns} haveBorder={true} />
+						</div>
+					</>
+				)}
+
 				<div>Ghi chú: {item?.Note}</div>
+
 				<div className="w-[1000px] mt-[16px]">
 					<StudentNote studentId={item?.StudentId} />
 				</div>
@@ -74,22 +87,6 @@ const RegistrationPage = () => {
 	}
 
 	const theInformation = useSelector((state: RootState) => state.user.information)
-
-	function isAdmin() {
-		return theInformation?.RoleId == 1
-	}
-
-	function isTeacher() {
-		return theInformation?.RoleId == 2
-	}
-
-	function isManager() {
-		return theInformation?.RoleId == 4
-	}
-
-	function isStdent() {
-		return theInformation?.RoleId == 3
-	}
 
 	function isSaler() {
 		return theInformation?.RoleId == 5
@@ -175,6 +172,23 @@ const RegistrationPage = () => {
 		}
 	]
 
+	const [selected, setSelected] = useState([])
+
+	// rowSelection object indicates the need for row selection
+	const rowSelection = {
+		onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
+			setSelected(selectedRows)
+		},
+		getCheckboxProps: (record: any) => ({
+			disabled: record.name === 'Disabled User', // Column configuration not to be checked
+			name: record.name
+		})
+	}
+
+	console.log('selected: ', selected)
+
+	const [curStep, setCurStep] = useState(1)
+
 	return (
 		<>
 			<Head>
@@ -182,6 +196,8 @@ const RegistrationPage = () => {
 			</Head>
 
 			<ExpandTable
+				rowSelection={{ type: 'checkbox', ...rowSelection }}
+				// ---------
 				currentPage={filters.PageIndex}
 				totalPage={totalPage && totalPage}
 				getPagination={(page: number) => setFilter({ ...filters, PageIndex: page })}
@@ -190,29 +206,57 @@ const RegistrationPage = () => {
 				columns={columns}
 				TitleCard={
 					<div className="w-full flex items-center">
-						<Filters
-							showBranch
-							showProgram
-							statusList={[
-								{ value: 1, title: 'Chờ xếp lớp' },
-								{ value: 2, title: 'Đã xếp lớp' },
-								{ value: 3, title: 'Đã hoàn tiền' }
-							]}
-							filters={filters}
-							onSubmit={(event) => setFilter(event)}
-							onReset={() => setFilter(initFilters)}
-						/>
-						<Input.Search
-							className="primary-search max-w-[300px] ml-[8px]"
-							onChange={(event) => {
-								if (event.target.value == '') {
-									setFilter({ ...filters, PageIndex: 1, Search: '' })
-								}
-							}}
-							onSearch={(event) => setFilter({ ...filters, PageIndex: 1, Search: event })}
-							placeholder="Tìm kiếm"
-						/>
+						{curStep > 1 && <div>Đã chọn: {selected?.length}</div>}
+
+						{curStep == 1 && (
+							<>
+								<Filters
+									showBranch
+									showProgram
+									statusList={[
+										{ value: 1, title: 'Chờ xếp lớp' },
+										{ value: 2, title: 'Đã xếp lớp' },
+										{ value: 3, title: 'Đã hoàn tiền' }
+									]}
+									filters={filters}
+									onSubmit={(event) => setFilter(event)}
+									onReset={() => setFilter(initFilters)}
+								/>
+								<Input.Search
+									className="primary-search max-w-[300px] ml-[8px]"
+									onChange={(event) => {
+										if (event.target.value == '') {
+											setFilter({ ...filters, PageIndex: 1, Search: '' })
+										}
+									}}
+									onSearch={(event) => setFilter({ ...filters, PageIndex: 1, Search: event })}
+									placeholder="Tìm kiếm"
+								/>
+							</>
+						)}
 					</div>
+				}
+				Extra={
+					<>
+						{curStep == 2 && (
+							<div className="mr-[8px]">
+								<AddToClass isTop items={selected} onRefresh={getData} />
+							</div>
+						)}
+
+						<FirstTepModal
+							filters={filters}
+							curStep={curStep}
+							onReset={() => {
+								setCurStep(1)
+								setFilter(initFilters)
+							}}
+							onSubmit={(event) => {
+								setFilter({ ...event, status: 1 })
+								setCurStep(2)
+							}}
+						/>
+					</>
 				}
 				expandable={expandedRowRender}
 			/>
