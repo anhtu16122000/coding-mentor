@@ -20,11 +20,12 @@ interface IAddToClass {
 	onOpen?: Function
 	items?: any
 	isTop?: boolean
+	setStep?: Function
 }
 
 const url = 'ClassRegistration'
 
-const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item, items, isTop }) => {
+const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item, items, isTop, setStep }) => {
 	const [form] = Form.useForm()
 
 	const [loading, setLoading] = useState(false)
@@ -104,9 +105,17 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item, items, isTop }) 
 	function onFinish(params) {
 		setLoading(true)
 
+		let tempStudents = []
+
+		if (isTop) {
+			for (let i = 0; i < items.length; i++) {
+				tempStudents.push(items[i]?.Id)
+			}
+		}
+
 		const DATA_SUBMIT = {
 			...params,
-			ClassRegistrationIds: [item?.Id]
+			ClassRegistrationIds: tempStudents
 		}
 
 		console.log('-- DATA_SUBMIT', DATA_SUBMIT)
@@ -122,6 +131,7 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item, items, isTop }) 
 				ShowNostis.success('Thành công')
 				!!onRefresh && onRefresh()
 				setVisible(false)
+				setStep(1)
 				form.resetFields()
 			}
 		} catch (error) {
@@ -217,7 +227,7 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item, items, isTop }) 
 					onFinish={onFinish}
 					autoComplete="on"
 				>
-					<Form.Item className="col-span-2 ant-select-class-selected" name="ClassId" label="Lớp chuyển đến" rules={formRequired}>
+					{/* <Form.Item className="col-span-2 ant-select-class-selected" name="ClassId" label="Lớp chuyển đến" rules={formRequired}>
 						<Select loading={loadingClass} disabled={loading} placeholder="Chọn lớp" className="ant-select-item-option-selected-blue">
 							{classes.map((thisClass) => {
 								return (
@@ -234,15 +244,15 @@ const AddToClass: FC<IAddToClass> = ({ isEdit, onRefresh, item, items, isTop }) 
 								)
 							})}
 						</Select>
-					</Form.Item>
+					</Form.Item> */}
 
-					<Form.Item name="ClassId" label="Lớp chuyển đến" rules={formRequired}>
+					<Form.Item className="col-span-2" name="ClassId" label="Lớp chuyển đến" rules={formRequired}>
 						<Select loading={loadingClass} disabled={loading} placeholder="Chọn lớp">
 							{classes.map((item) => {
 								return (
 									<Select.Option disabled={!item.Fit} key={item.ClassId} value={item.ClassId}>
 										<div className="flex items-center justify-between w-full">
-											{item.ClassId}
+											{item.ClassName}
 											{!item.Fit && (
 												<Tooltip placement="right" title={!!item.Note ? item.Note : `Giáo viên ${item.TeacherName} bị trùng lịch`}>
 													<AiOutlineWarning className="text-tw-red" />

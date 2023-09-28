@@ -3,7 +3,7 @@ import PrimaryButton from '../../Primary/Button'
 import { DatePicker, Form, Input, Modal, Select } from 'antd'
 import { ShowNostis } from '~/common/utils'
 import ModalFooter from '../../ModalFooter'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import InputTextField from '../../FormControl/InputTextField'
 import { formRequired } from '~/common/libs/others/form'
 import moment from 'moment'
@@ -128,7 +128,7 @@ const ModalCreateHomeWork = (props) => {
 
 	async function getTeacher() {
 		try {
-			const res = await homeWorkApi.getTeacher()
+			const res = await homeWorkApi.getTeacher(parseInt(Router?.query?.class + ''))
 			if (res.status == 200) {
 				setTeachers(res.data?.data)
 			}

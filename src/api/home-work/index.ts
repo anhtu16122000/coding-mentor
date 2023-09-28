@@ -6,8 +6,8 @@ export const homeWorkApi = {
 	getAll(params) {
 		return instance.get<IApiResultData<any[]>>(url, { params })
 	},
-	getTeacher() {
-		return instance.get<IApiResultData<any[]>>(url + '/teacher-available', {})
+	getTeacher(Id) {
+		return instance.get<IApiResultData<any[]>>(url + '/teacher-available/' + Id, {})
 	},
 	getByID(ID: number) {
 		return instance.get<IApiResultData<any>>(`${url}/${ID}`)

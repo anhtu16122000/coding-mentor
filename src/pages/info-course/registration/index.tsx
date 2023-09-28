@@ -196,7 +196,7 @@ const RegistrationPage = () => {
 			</Head>
 
 			<ExpandTable
-				rowSelection={{ type: 'checkbox', ...rowSelection }}
+				rowSelection={curStep == 1 ? null : { type: 'checkbox', ...rowSelection }}
 				// ---------
 				currentPage={filters.PageIndex}
 				totalPage={totalPage && totalPage}
@@ -240,7 +240,16 @@ const RegistrationPage = () => {
 					<>
 						{curStep == 2 && (
 							<div className="mr-[8px]">
-								<AddToClass isTop items={selected} onRefresh={getData} />
+								<AddToClass
+									isTop
+									items={selected}
+									onRefresh={getData}
+									setStep={(e) => {
+										setCurStep(e)
+										setSelected([])
+										setFilter(initFilters)
+									}}
+								/>
 							</div>
 						)}
 

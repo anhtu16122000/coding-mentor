@@ -73,7 +73,7 @@ export default function UserInfoDetail() {
 
 						<div className="avatar relative">
 							<div className="bg-[#ffffff] rounded-full p-[5px] shadow-sm m-[4px]">
-								<Avatar uri={studentDetail?.Avatar} alt="user-avt" className="rounded-full shadow-sm" />
+								<Avatar uri={studentDetail?.Avatar} alt="user-avt" className="rounded-full w-[132px] h-[132px] object-cover shadow-sm" />
 							</div>
 							<div
 								className="bottom-[8px] border-[2px] border-[#fff] shadow-sm absolute flex items-center justify-center right-[8px] bg-[#3d88ec] rounded-full w-[36px] h-[36px]"
