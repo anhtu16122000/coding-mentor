@@ -11,6 +11,8 @@ import ModalDetail from './ModalDetail'
 import ProClassMenu from '../Common/ProClassMenu'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
+import { PrimaryTooltip } from '~/common/components'
+import { Tooltip } from 'antd'
 
 function getStrDate(date) {
 	if (!date) return 'Không xác định'
@@ -48,6 +50,36 @@ const CardGrid = (props) => {
 				{(is(userInfo).admin || is(userInfo).manager || is(userInfo).teacher) && (
 					<ProClassInfoItem title="Thanh toán" value={item?.PaymentTypeName || 'Chưa nhập'} />
 				)}
+
+				<div className="flex items-center">
+					<div className="class-info-item flex-1 in-1-line">
+						Giảng viên:{' '}
+						<div className="info-value !inline">
+							<Tooltip
+								id={`i-cl-${item?.Id}`}
+								title={item?.Teachers.map((teacher, index) => {
+									return (
+										<div key={`te-n-${index}`} className="block">
+											{teacher?.TeacherName}
+										</div>
+									)
+								})}
+								placement="top"
+							>
+								<>
+									{item?.Teachers.map((teacher, index) => {
+										return (
+											<div key={`te-n-${index}`} className="inline">
+												{index > 0 && ', '}
+												{teacher?.TeacherName}
+											</div>
+										)
+									})}
+								</>
+							</Tooltip>
+						</div>
+					</div>
+				</div>
 
 				<div className="flex items-center">
 					<div className="class-info-item flex-1">

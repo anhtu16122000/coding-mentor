@@ -164,7 +164,6 @@ const ListClassPro = () => {
 			} else {
 				dispatch(setListClass([]))
 				dispatch(setTotalClass(0))
-				// dispatch(setStatusData({ closing: 0, opening: 0, totalRow: 0, upcoming: 0 }))
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)

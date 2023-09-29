@@ -11,6 +11,7 @@ import { viewClassDetails } from '../utils/functions'
 import ProClassMenu from '../Common/ProClassMenu'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
+import { Tooltip } from 'antd'
 
 function getStrDate(date) {
 	if (!date) return 'Không xác định'
@@ -33,6 +34,36 @@ const CardList = (props) => {
 				<div className="pro-cl-content-main">
 					<div onClick={viewDetails}>
 						<a>{item.Name}</a>
+
+						<div className="flex items-center">
+							<div className="class-info-item flex-1 in-1-line">
+								Giảng viên:{' '}
+								<div className="info-value !inline">
+									<Tooltip
+										id={`i-cl-${item?.Id}`}
+										title={item?.Teachers.map((teacher, index) => {
+											return (
+												<div key={`te-n-${index}`} className="block">
+													{teacher?.TeacherName}
+												</div>
+											)
+										})}
+										placement="top"
+									>
+										<>
+											{item?.Teachers.map((teacher, index) => {
+												return (
+													<div key={`te-n-${index}`} className="inline">
+														{index > 0 && ', '}
+														{teacher?.TeacherName}
+													</div>
+												)
+											})}
+										</>
+									</Tooltip>
+								</div>
+							</div>
+						</div>
 
 						<div className="col-span-2 block w1500:hidden">
 							<ProClassInfoItem title="Bắt đầu" value={getStrDate(item.StartDay)} />
@@ -66,6 +97,7 @@ const CardList = (props) => {
 				<ProClassInfoItem title="Bắt đầu" value={getStrDate(item.StartDay)} />
 				<ProClassInfoItem title="Kết thúc" value={getStrDate(item.EndDay)} />
 			</div>
+
 			<div onClick={viewDetails} className="ml-[8px] col-span-2 hidden w700:block">
 				{!!item?.Price && <ProClassInfoItem title="Giá" value={`${parseToMoney(item?.Price)}đ`} />}
 				{!item?.Price && <ProClassInfoItem title="Giá" value="Miễn phí" />}
