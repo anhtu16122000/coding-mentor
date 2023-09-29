@@ -196,13 +196,7 @@ export default function TabStudentDetail(props: ITabStudentDetailProps) {
 						<Divider>Địa chỉ</Divider>
 
 						<div className="col-12">
-							<SelectField
-								disabled={!is(userInfo).admin && !is(userInfo).manager}
-								mode="tags"
-								name="BranchIds"
-								label="Trung tâm"
-								optionList={optionList.branch}
-							/>
+							<SelectField disabled={!is(userInfo).admin} mode="tags" name="BranchIds" label="Trung tâm" optionList={optionList.branch} />
 						</div>
 
 						<div className="col-md-6 col-12">
