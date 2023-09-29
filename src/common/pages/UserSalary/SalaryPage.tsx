@@ -19,8 +19,6 @@ import ModalBankInformation from './ModalBankInformation'
 export const SalaryPage = () => {
 	// const [valueDate, setValueDate] = useState(moment().subtract(1, 'months'))
 
-	const [valueDate, setValueDate] = useState(null)
-
 	const initParameters = { fullName: '', userCode: '', year: null, month: null, pageIndex: 1, pageSize: PAGE_SIZE, status: 0 }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [totalRow, setTotalRow] = useState(1)
@@ -31,6 +29,12 @@ export const SalaryPage = () => {
 	const [statusSelected, setStatusSelected] = useState<number>(0)
 	const [itemsChecked, setItemsChecked] = useState<any[]>([])
 	const [statusUpdate, setStatusUpdate] = useState<number>(null)
+
+	const theInformation = useSelector((state: RootState) => state.user.information)
+
+	const [valueDate, setValueDate] = useState(
+		is(theInformation).admin || is(theInformation).accountant ? moment().subtract(1, 'months') : null
+	)
 
 	useEffect(() => {
 		if (valueDate) {
@@ -49,8 +53,6 @@ export const SalaryPage = () => {
 			getSalary(apiParameters)
 		}
 	}, [apiParameters])
-
-	const theInformation = useSelector((state: RootState) => state.user.information)
 
 	function isAdmin() {
 		return theInformation?.RoleId == 1
@@ -323,13 +325,16 @@ export const SalaryPage = () => {
 				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
 				TitleCard={
 					<div className="flex items-center">
-						<DatePicker
-							className="primary-input mr-[8px]"
-							onChange={handleFilterMonth}
-							picker="month"
-							placeholder="Chọn tháng"
-							value={valueDate}
-						/>
+						{!!theInformation && (
+							<DatePicker
+								className="primary-input mr-[8px]"
+								onChange={handleFilterMonth}
+								picker="month"
+								placeholder="Chọn tháng"
+								// value={valueDate}
+								defaultValue={is(theInformation).admin || is(theInformation).accountant ? moment().subtract(1, 'months') : null}
+							/>
+						)}
 					</div>
 				}
 				data={dataTable}

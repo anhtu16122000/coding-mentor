@@ -19,6 +19,7 @@ import { Select } from 'antd'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
+import PrimaryButton from '~/common/components/Primary/Button'
 
 const initParamters = {
 	pageSize: PAGE_SIZE,
@@ -197,6 +198,7 @@ const PaymentManagementPage = () => {
 		{
 			title: 'Giảm giá',
 			dataIndex: 'Reduced',
+			width: 130,
 			render: (value, item) => {
 				if (!value) {
 					return ''
@@ -292,28 +294,41 @@ const PaymentManagementPage = () => {
 				TitleCard={
 					<div className="w-full flex items-center justify-between">
 						<div className="flex items-center">
-							{(is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic) && (
-								<Filters filters={filters} onReset={() => setFilter(initParamters)} onSubmit={(e) => setFilter({ ...e })} />
+							{!!router?.asPath.includes('bill=') && is(user).student && <>Thông tin thanh toán</>}
+
+							{!!router?.asPath.includes('bill=') &&
+								(is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic) && (
+									<PrimaryButton type="button" background="green" icon="file" onClick={() => router.push('/finance/payment')}>
+										Xem tất cả
+									</PrimaryButton>
+								)}
+
+							{!router?.asPath.includes('bill=') && (
+								<>
+									{(is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic) && (
+										<Filters filters={filters} onReset={() => setFilter(initParamters)} onSubmit={(e) => setFilter({ ...e })} />
+									)}
+
+									<Select
+										placeholder="Loại thanh toán"
+										className="primay-input min-w-[210px] ml-[8px] !h-[36px]"
+										defaultValue={0}
+										onChange={(e) => handleSelecStatus(e)}
+									>
+										{billStatus.map((item, index) => {
+											return (
+												<Select.Option key={item?.id} value={item?.id}>
+													{item?.title}
+												</Select.Option>
+											)
+										})}
+									</Select>
+								</>
 							)}
-							<Select
-								placeholder="Loại thanh toán"
-								className="primay-input min-w-[210px] ml-[8px] !h-[36px]"
-								defaultValue={0}
-								onChange={(e) => handleSelecStatus(e)}
-							>
-								{billStatus.map((item, index) => {
-									return (
-										<Select.Option key={item?.id} value={item?.id}>
-											{item?.title}
-										</Select.Option>
-									)
-								})}
-							</Select>
 						</div>
 
-						{(is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic) && (
-							<PaymentForm onRefresh={getData} />
-						)}
+						{(is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic) &&
+							!router?.asPath.includes('bill=') && <PaymentForm onRefresh={getData} />}
 					</div>
 				}
 				expandable={expandedRowRender}

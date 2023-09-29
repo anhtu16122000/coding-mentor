@@ -125,10 +125,10 @@ const ChangeClass: FC<IChangeClass> = ({ isEdit, onRefresh, item }) => {
 	}
 
 	function onFinish(params) {
-		if (!activeMethod) {
-			ShowNoti('error', 'Vui lòng chọn phương thức thanh toán')
-			return
-		}
+		// if (!activeMethod) {
+		// 	ShowNoti('error', 'Vui lòng chọn phương thức thanh toán')
+		// 	return
+		// }
 
 		setLoading(true)
 

@@ -70,6 +70,26 @@ const BillDetails = ({ bill }) => {
 		}
 	]
 
+	// Chuyển lớp
+	const changeColumns = [
+		{
+			title: 'Giá tiền',
+			dataIndex: 'Price',
+			width: 116,
+			render: (value, item) => <p className="font-[600] text-[#000]">{parseToMoney(value)}</p>
+		},
+		{
+			title: 'Lớp cũ',
+			dataIndex: 'OldClassName',
+			width: 126
+		},
+		{
+			title: 'Lớp mới',
+			dataIndex: 'NewClassName',
+			width: 126
+		}
+	]
+
 	const defaultColumns = [
 		{
 			title: 'Giá tiền',
@@ -145,8 +165,12 @@ const BillDetails = ({ bill }) => {
 		}
 	]
 
+	console.log('bill?.Type: ', bill?.Type)
+
 	const columns =
-		bill?.Type == 1
+		bill?.Type == 6
+			? changeColumns
+			: bill?.Type == 1
 			? [...type1Colums, ...defaultColumns]
 			: bill?.Type == 2
 			? [...type2Colums, ...defaultColumns]

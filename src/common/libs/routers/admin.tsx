@@ -241,7 +241,7 @@ export const AdminChildMenu = [
 				Route: '/users/salary',
 				Text: 'Bảng lương',
 				Icon: ''
-			},
+			}
 			// {
 			// 	ItemType: 'single',
 			// 	Key: '/users/teacher/open-calender',
@@ -249,13 +249,13 @@ export const AdminChildMenu = [
 			// 	Text: 'Mở lịch trống',
 			// 	Icon: ''
 			// },
-			{
-				ItemType: 'single',
-				Key: '/users/salary-tutoring-config',
-				Route: '/users/salary-tutoring-config',
-				Text: 'Cấu hình lương dạy kèm',
-				Icon: ''
-			}
+			// {
+			// 	ItemType: 'single',
+			// 	Key: '/users/salary-tutoring-config',
+			// 	Route: '/users/salary-tutoring-config',
+			// 	Text: 'Cấu hình lương dạy kèm',
+			// 	Icon: ''
+			// }
 		]
 	},
 	{
