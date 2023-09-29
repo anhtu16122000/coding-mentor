@@ -111,7 +111,37 @@ const ModalDetail = (props) => {
 						<FaUserTie size={22} className="" />
 					</div>
 					<div className="flex-1 flex flex-col ml-[16px]">
-						<ProClassInfoItem title="Giảng viên" value={data.TeacherName} />
+						{/* <ProClassInfoItem title="Giảng viên" value={data.TeacherName} /> */}
+						<div className="flex items-center">
+							<div className="class-info-item flex-1 in-1-line">
+								Giảng viên:{' '}
+								<div className="info-value !inline">
+									<Tooltip
+										id={`ix-cl-${data?.Id}`}
+										title={data?.Teachers.map((teacher, index) => {
+											return (
+												<div key={`te-n-${index}`} className="block">
+													{teacher?.TeacherName}
+												</div>
+											)
+										})}
+										placement="top"
+									>
+										<>
+											{data?.Teachers.map((teacher, index) => {
+												return (
+													<div key={`te-n-${index}`} className="inline">
+														{index > 0 && ', '}
+														{teacher?.TeacherName}
+													</div>
+												)
+											})}
+										</>
+									</Tooltip>
+								</div>
+							</div>
+						</div>
+
 						<ProClassInfoItem title="Học vụ" value={data.AcademicName} />
 					</div>
 				</div>
