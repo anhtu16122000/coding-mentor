@@ -87,7 +87,11 @@ const BillDetails = ({ bill }) => {
 			title: 'Số lượng',
 			dataIndex: 'Quantity',
 			width: 126
-		},
+		}
+	]
+
+	// Khoá video mới có
+	const ActiveCodeColumn = [
 		{
 			title: 'Mã kích hoạt',
 			dataIndex: 'ActiveCode',
@@ -150,17 +154,15 @@ const BillDetails = ({ bill }) => {
 
 	return (
 		<>
-			<div>
-				<div className="font-[600]">Ghi chú:</div> {bill?.Note}
-			</div>
+			<div className="font-[600]">Ghi chú:</div> {bill?.Note}
 			{bill?.Type !== 4 && (
-				<div className="w-[1300px]">
+				<div className="w-[1200px] !ml-[-10px]">
 					<PrimaryTable
 						current={filters.PageIndex}
 						total={totalPage && totalPage}
 						onChangePage={(page: number) => setFilter({ ...filters, PageIndex: page })}
 						data={data}
-						columns={bill?.Type == 5 ? [...tuitionColumns] : columns}
+						columns={bill?.Type == 5 ? [...tuitionColumns] : bill?.Type == 2 ? [...columns, ...ActiveCodeColumn] : columns}
 					/>
 				</div>
 			)}

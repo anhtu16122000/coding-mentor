@@ -80,11 +80,11 @@ const PaymentManagementPage = () => {
 						title: 'Mua dịch vụ' + ` (${res?.data?.typeService})`,
 						value: res?.data?.typeService
 					},
-					{
-						id: 3,
-						title: 'Đăng ký lớp dạy kèm' + ` (${res?.data?.typeTutorial})`,
-						value: res?.data?.typeTutorial
-					},
+					// {
+					// 	id: 3,
+					// 	title: 'Đăng ký lớp dạy kèm' + ` (${res?.data?.typeTutorial})`,
+					// 	value: res?.data?.typeTutorial
+					// },
 					{
 						id: 4,
 						title: 'Tạo thủ công' + ` (${res?.data?.typeManual})`,
@@ -120,7 +120,6 @@ const PaymentManagementPage = () => {
 		{
 			title: '',
 			dataIndex: 'Type',
-			width: 100,
 			render: (value, item) => {
 				if (value == 1) {
 					return (
@@ -198,7 +197,6 @@ const PaymentManagementPage = () => {
 		{
 			title: 'Giảm giá',
 			dataIndex: 'Reduced',
-			width: 100,
 			render: (value, item) => {
 				if (!value) {
 					return ''
@@ -247,7 +245,7 @@ const PaymentManagementPage = () => {
 	const handleSelecStatus = (status: number) => {
 		if (statusSelected !== status) {
 			setStatusSelected(status)
-			setFilter({ ...filters, type: status })
+			setFilter({ ...filters, type: status, pageIndex: 1 })
 		}
 	}
 
