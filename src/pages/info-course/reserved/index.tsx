@@ -161,6 +161,7 @@ const ReservedPage = () => {
 					<>
 						<p className="font-[600] text-[#e14d4f]">Đã sử dụng: {parseToMoney(item?.MoneyUsed || 0)}</p>
 						<p className="font-[600] text-[#2ba568]">Còn lại: {parseToMoney(item?.MoneyRemaining || 0)}</p>
+						{item?.Status == 3 && <p className="font-[600] text-[#9000ff]">Đã hoàn: {parseToMoney(item?.MoneyRefund || 0)}</p>}
 					</>
 				)
 			}

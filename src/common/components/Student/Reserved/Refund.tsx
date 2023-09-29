@@ -34,10 +34,7 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 
 	const getCurrentClass = async () => {
 		try {
-			const response = await RestApi.get('Class/old-class', {
-				'request.studentId': item?.StudentId,
-				'request.classId': item?.ClassId
-			})
+			const response = await RestApi.get('Class/' + item?.ClassId, {})
 			if (response.status == 200) {
 				setCurrentClass(response.data.data)
 			} else {
@@ -211,21 +208,9 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 				<div className="font-[500] mb-[4px]">Lớp hiện tại</div>
 				<Card className="mb-[16px] card-min-padding">
 					<div className="relative">
-						<div
-							style={{
-								display: 'flex',
-								flexDirection: 'column'
-							}}
-						>
+						<div style={{ display: 'flex', flexDirection: 'column' }}>
 							<div style={{ fontWeight: '600' }}>{item?.ClassName}</div>
-							{currentClass && (
-								<>
-									<div className="text-[12px]">Giá: {parseToMoney(currentClass?.Price)}</div>
-									<div className="text-[12px]">
-										Đã học: {currentClass?.CompletedLesson}/{currentClass?.TotalLesson}
-									</div>
-								</>
-							)}
+							{currentClass && <div className="text-[12px]">Giá: {parseToMoney(currentClass?.Price)}</div>}
 						</div>
 						<PrimaryTooltip
 							className="top-[-4px] right-[-4px] absolute w-[28px] h-[18px]"
@@ -239,13 +224,6 @@ const RefundForm: FC<IRefund> = ({ isEdit, onRefresh, item }) => {
 						</PrimaryTooltip>
 					</div>
 				</Card>
-
-				{/* <div className="font-[500] mb-[4px]">Tạm tính</div>
-				<Input value={item.Paid===null ? 0 : item.Paid} style={{
-					marginBottom: 10,
-					height: 38,
-					borderRadius: 6
-				}}/> */}
 
 				<Form
 					form={form}
