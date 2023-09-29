@@ -17,6 +17,8 @@ const MainHeader = () => {
 			<meta content={viewport} name="viewport" />
 			<meta name="description" content={description} />
 
+			<meta name="robots" content="noindex" />
+
 			<meta name="og:title" content={siteTitle} />
 			<meta property="og:site_name" content="Hệ thống quản lý giáo dục chuyên nghiệp" />
 			<meta property="og:description" content={description} />
