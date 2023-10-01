@@ -338,7 +338,7 @@ export const SalaryPage = () => {
 					</div>
 				}
 				data={dataTable}
-				columns={is(theInformation).admin ? [checkColumn, ...columns] : [...columns]}
+				columns={is(theInformation).admin || isAccountant() ? [checkColumn, ...columns] : [...columns]}
 				Extra={
 					<>
 						{(isAdmin() || isAccountant()) && itemsChecked.length > 0 && (
@@ -378,7 +378,7 @@ export const SalaryPage = () => {
 					</>
 				}
 			>
-				{isAdmin() && (
+				{(isAdmin() || isAccountant()) && (
 					<div id="tabcomp-custom-container-scroll-horizontal" className="tabcomp-custom-container mb-[8px]">
 						<TabComp data={salaryStatus} selected={statusSelected} handleSelected={handleSelecStatus} />
 					</div>

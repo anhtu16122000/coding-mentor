@@ -18,7 +18,7 @@ function SignInx({ csrfToken }) {
 	const [alloweRegisters, setAlloweRegisters] = useState(false)
 
 	useEffect(() => {
-		console.log('SignInx + useEffect')
+		// console.log('SignInx + useEffect')
 
 		dispatch(setAuthLoading(false))
 

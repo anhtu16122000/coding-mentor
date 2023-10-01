@@ -8,11 +8,8 @@ import { RootState } from '~/store'
 import PrimaryTable from '../Primary/Table'
 import PrimaryTag from '../Primary/Tag'
 import { ModalStudentInClassCRUD } from './ModalStudentInClassCRUD'
-import { GrCertificate } from 'react-icons/gr'
-import { Tooltip } from 'antd'
-import { ShowNoti } from '~/common/utils'
 
-export const ListStudentInClass = () => {
+export const ListCertificates = () => {
 	const user = useSelector((state: RootState) => state.user.information)
 
 	function isAdmin() {
@@ -42,7 +39,7 @@ export const ListStudentInClass = () => {
 	const router = useRouter()
 	const [loading, setLoading] = useState(false)
 	const initParameters = {
-		classId: router.query.class,
+		classId: parseInt(router.query.class + ''),
 		warning: null,
 		sort: null,
 		sortType: null,
@@ -56,34 +53,18 @@ export const ListStudentInClass = () => {
 	const getStudentInClass = async (params) => {
 		try {
 			setLoading(true)
-			const res = await studentInClassApi.getAll(params)
-			if (res.status === 200) {
+			const res = await studentInClassApi.getCers(params?.classId)
+			if (res.status == 200) {
 				setDataTable(res.data.data)
 				setTotalRow(res.data.totalRow)
 				setLoading(false)
 			}
-			if (res.status === 204) {
+			if (res.status == 204) {
 				setLoading(true)
 				setDataTable([])
 			}
 		} catch (error) {
 			setLoading(true)
-		} finally {
-			setLoading(false)
-		}
-	}
-
-	const createCertificate = async (params) => {
-		try {
-			const res = await studentInClassApi.getAll({
-				StudentId: params,
-				ClassId: parseInt(router.query.class + '')
-			})
-			if (res.status === 200) {
-				ShowNoti('success', 'Thành công')
-			}
-		} catch (error) {
-			ShowNoti('success', error?.message)
 		} finally {
 			setLoading(false)
 		}
@@ -145,15 +126,6 @@ export const ListStudentInClass = () => {
 								<div className="flex items-center">
 									<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="edit" dataRow={item} />
 									<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="delete" dataRow={item} />
-
-									<Tooltip placement="left" title="Cấp chứng chỉ">
-										<div
-											onClick={() => createCertificate(item?.StudentId)}
-											className="flex all-center !text-[#1b73e8] cursor-pointer pt-[2px] pl-[12px]"
-										>
-											<GrCertificate size={18} />
-										</div>
-									</Tooltip>
 								</div>
 							)
 						}
@@ -209,7 +181,7 @@ export const ListStudentInClass = () => {
 			loading={loading}
 			total={totalRow}
 			onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
-			TitleCard={<div className="extra-table">Danh sách học viên</div>}
+			TitleCard={<div className="extra-table">Danh sách chứng chỉ</div>}
 			data={dataTable}
 			columns={columns}
 			Extra={

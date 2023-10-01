@@ -128,7 +128,7 @@ const ChangedPage = () => {
 			width: 150,
 			render: (value, item) => (
 				<div className="ml-[8px]">
-					<h3 className="text-[14px] font-[600] text-[#43A047]">{parseToMoney(item?.NewPrice)}</h3>
+					<h3 className="text-[14px] font-[600] text-[#43A047]">{parseToMoney(item?.Paid)}</h3>
 				</div>
 			)
 		},

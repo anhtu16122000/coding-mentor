@@ -1,7 +1,7 @@
-import { Form, Modal } from 'antd'
+import { Form, Modal, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { classApi } from '~/api/learn/class'
-import { ShowNostis } from '~/common/utils'
+import { ShowNostis, ShowNoti } from '~/common/utils'
 import { parseSelectArray } from '~/common/utils/common'
 import InputNumberField from '../../FormControl/InputNumberField'
 import InputTextField from '../../FormControl/InputTextField'
@@ -11,6 +11,8 @@ import IconButton from '../../Primary/IconButton'
 import { FaEdit } from 'react-icons/fa'
 import ModalFooter from '../../ModalFooter'
 import PrimaryButton from '../../Primary/Button'
+import { certificateConfigApi } from '~/api/certificate/certificate-config'
+import { formRequired } from '~/common/libs/others/form'
 
 const UpdateClassForm = (props) => {
 	const { dataRow, academic, setShowPop, onRefresh, isDetail, onShow } = props
@@ -37,6 +39,22 @@ const UpdateClassForm = (props) => {
 		}
 	}
 
+	const [cers, setCers] = useState([])
+
+	const getCers = async () => {
+		try {
+			const res = await certificateConfigApi.getAll({ pageIndex: 1, pageSize: 99999 })
+			if (res.status == 200) {
+				const { data, totalRow } = res.data
+				setCers(data)
+			} else {
+				setCers([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
+
 	const getTeachers = async (branchId, programId) => {
 		try {
 			const res = await classApi.getAllTeachers({ branchId: branchId, programId: programId })
@@ -53,6 +71,7 @@ const UpdateClassForm = (props) => {
 
 	useEffect(() => {
 		if (!!visible && dataRow) {
+			getCers()
 			getTeachers(dataRow.BranchId, dataRow.ProgramId)
 			form.setFieldsValue(dataRow)
 		}
@@ -118,16 +137,17 @@ const UpdateClassForm = (props) => {
 						<div className="col-md-6 col-12">
 							<SelectField name="AcademicId" label="Học vụ" optionList={academic} />
 						</div>
-						{/* <div className="col-md-6 col-12">
-							<SelectField
-								name="PaymentType"
-								label="Hình thức thanh toán"
-								optionList={[
-									{ value: 1, title: 'Thanh toán một lần' },
-									{ value: 2, title: 'Thanh toán theo tháng' }
-								]}
-							/>
-						</div> */}
+						<Form.Item className="col-md-6 col-12" name="CertificateTemplateId" label="Chứng chỉ" required={true} rules={formRequired}>
+							<Select className="primary-input" showSearch loading={isLoading} placeholder="" optionFilterProp="children">
+								{cers.map((cer, index) => {
+									return (
+										<Select.Option key={cer?.Id} value={cer?.Id}>
+											{cer?.Name}
+										</Select.Option>
+									)
+								})}
+							</Select>
+						</Form.Item>
 					</div>
 				</Form>
 			</Modal>

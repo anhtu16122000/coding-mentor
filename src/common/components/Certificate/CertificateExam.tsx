@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Popover, Tooltip, Form } from 'antd'
-import { certificateConfigApi } from '~/api/certificate/certificate-config'
+import { certificateConfigApi } from '~/api/certificate-old/certificate-config'
 import { ShowNoti } from '~/common/utils'
 import EditorField from '../FormControl/EditorField'
 import { Eye } from 'react-feather'

@@ -456,6 +456,13 @@ export const AdminChildMenu = [
 				SubMenuList: [
 					{
 						ItemType: 'single',
+						Key: '/configs/certificates',
+						Route: '/configs/certificates',
+						Text: 'Mẫu chứng chỉ',
+						Icon: ''
+					},
+					{
+						ItemType: 'single',
 						Key: '/options/tuition-package',
 						Route: '/options/tuition-package',
 						Text: 'Gói học phí',

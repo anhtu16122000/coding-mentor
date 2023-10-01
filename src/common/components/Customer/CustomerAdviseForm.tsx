@@ -149,6 +149,8 @@ const CustomerAdviseForm = React.memo((props: any) => {
 				DATA_SUBMIT = { ...data, SaleId: isSaler() ? Number(theInformation.UserInformationId) : data.SaleId }
 			}
 
+			console.log('--- DATA_SUBMIT: ', DATA_SUBMIT)
+
 			const res = await (rowData?.Id
 				? isStudent
 					? userInformationApi.addTestAppointment({
@@ -329,7 +331,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 										<UploadImageField name="Avatar" label="Hình ảnh" form={form} />
 									</div>
 									<div className="col-md-6 col-12">
-										<InputTextField name={`UserName-${rowData.Id}`} label="Tên đăng nhập" isRequired={true} rules={formRequired} />
+										<InputTextField name={`UserName`} label="Tên đăng nhập" isRequired={true} rules={formRequired} />
 									</div>
 									<div className="col-md-6 col-12">
 										<InputTextField name="Password" label="Mật khẩu" isRequired={true} rules={formRequired} />
@@ -483,7 +485,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 								</Divider>
 								<div className="row">
 									<div className="col-md-6 col-12">
-										<SelectField name="TeacherId" label="Giáo viên test" placeholder="Chọn giáo viên" optionList={listTeacher} />
+										<SelectField name="TeacherId" label="Giáo viên" placeholder="Chọn giáo viên" optionList={listTeacher} />
 									</div>
 
 									<div className="col-md-6 col-12">

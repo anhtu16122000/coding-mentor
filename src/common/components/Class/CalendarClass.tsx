@@ -137,8 +137,11 @@ const CalenderClass = () => {
 			Type: dataChangeSchedule.Type,
 			PaymentType: dataChangeSchedule?.PaymentType,
 			schedules: listCalendar,
-			ScoreboardTemplateId: dataChangeSchedule?.ScoreboardTemplateId
+			ScoreboardTemplateId: dataChangeSchedule?.ScoreboardTemplateId,
+			CertificateTemplateId: dataChangeSchedule?.CertificateTemplateId
 		}
+
+		console.log('-- DATA_SUBMIT: ', DATA_SUBMIT)
 
 		try {
 			const res = await classApi.addClass(DATA_SUBMIT)

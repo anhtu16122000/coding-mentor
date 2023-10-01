@@ -33,6 +33,11 @@ export const studentInClassApi = {
 	},
 	getAllClass() {
 		return instance.get<IApiResultData<any[]>>('api/Class')
+	},
+	getCers(ID) {
+		return instance.get(`${url}/certificate`, {
+			params: { classId: ID }
+		})
 	}
 }
 

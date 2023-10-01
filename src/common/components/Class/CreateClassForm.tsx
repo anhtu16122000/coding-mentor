@@ -29,6 +29,7 @@ import { formRequired } from '~/common/libs/others/form'
 import { setRoom } from '~/store/classReducer'
 import { removeCommas } from '~/common/utils/super-functions'
 import { gradesTemplatesApi } from '~/api/configs/score-broad-templates'
+import { certificateConfigApi } from '~/api/certificate/certificate-config'
 
 const ContainerTime = styled.div`
 	display: flex;
@@ -107,6 +108,8 @@ const CreateClassForm = (props) => {
 	const user = useSelector((state: RootState) => state.user.information)
 	const dispatch = useDispatch()
 	const [form] = Form.useForm()
+
+	const [cers, setCers] = useState([])
 
 	function isAcademic() {
 		return user?.RoleId == 7
@@ -215,6 +218,20 @@ const CreateClassForm = (props) => {
 				setAcademic(convertData)
 			} else {
 				setAcademic([])
+			}
+		} catch (err) {
+			ShowNoti('error', err.message)
+		}
+	}
+
+	const getCers = async () => {
+		try {
+			const res = await certificateConfigApi.getAll({ pageIndex: 1, pageSize: 99999 })
+			if (res.status == 200) {
+				const { data, totalRow } = res.data
+				setCers(data)
+			} else {
+				setCers([])
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)
@@ -417,6 +434,7 @@ const CreateClassForm = (props) => {
 			ScoreboardTemplateId: data?.ScoreboardTemplateId,
 			ScoreboardTemplateName: scoreboardTemplateName
 		}
+
 		try {
 			setIsLoading(true)
 			const res = await onSubmit(DATA_LESSON_WHEN_CREATE)
@@ -431,6 +449,7 @@ const CreateClassForm = (props) => {
 
 	useEffect(() => {
 		if (isModalOpen) {
+			getCers()
 			if (state.branch.Branch.length === 0) {
 				getAllBranch()
 			}
@@ -712,6 +731,18 @@ const CreateClassForm = (props) => {
 								/>
 							</div>
 						)}
+
+						<Form.Item className="col-md-6 col-12" name="CertificateTemplateId" label="Chứng chỉ" required={true} rules={formRequired}>
+							<Select className="primary-input" showSearch loading={isLoading} placeholder="" optionFilterProp="children">
+								{cers.map((cer, index) => {
+									return (
+										<Option key={cer?.Id} value={cer?.Id}>
+											{cer?.Name}
+										</Option>
+									)
+								})}
+							</Select>
+						</Form.Item>
 					</div>
 				</Form>
 			</Modal>

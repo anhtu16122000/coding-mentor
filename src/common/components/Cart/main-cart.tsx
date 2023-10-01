@@ -159,7 +159,7 @@ const MainCart = () => {
 		setLoading(true)
 		setTextError('')
 		try {
-			const response = await RestApi.post('Bill', params)
+			const response = await RestApi.post('Bill/v2', params)
 			if (response.status == 200) {
 				getData()
 				setAppliedDiscount(null)

@@ -21,10 +21,13 @@ import { ScheduleList } from './ScheduleList'
 import HomeWork from './HomeWork'
 import TransScriptFlexColumnPage from './TransScriptFlexColumnPage'
 import { TabMonthlyTuition } from '~/common/pages/Student/TabMonthlyTuition'
+import { GrCertificate } from 'react-icons/gr'
+import { ListCertificates } from './ListCertificates'
 
 const itemsAdmin = [
 	'Lịch học',
 	'Học viên',
+	'Chứng chỉ',
 	'Học phí',
 	'Các buổi học',
 	'Bài tập',
@@ -36,11 +39,12 @@ const itemsAdmin = [
 	'Thông báo'
 ]
 
-const itemsStudent = ['Lịch học', 'Học phí', 'Các buổi học', 'Bài tập', 'Tài liệu', 'Bảng điểm', 'Điểm danh bằng QR']
+const itemsStudent = ['Lịch học', 'Chứng chỉ', 'Học phí', 'Các buổi học', 'Bài tập', 'Tài liệu', 'Bảng điểm', 'Điểm danh bằng QR']
 
 const itemsTeacher = [
 	'Lịch học',
 	'Học viên',
+	'Chứng chỉ',
 	'Học phí',
 	'Các buổi học',
 	'Bài tập',
@@ -63,6 +67,8 @@ const MenuClass = () => {
 				return <CalendarClassEdit />
 			case 'Học viên':
 				return <ListStudentInClass />
+			case 'Chứng chỉ':
+				return <ListCertificates />
 			case 'Học phí':
 				return <TabMonthlyTuition StudentDetail={user} />
 			case 'Các buổi học':
@@ -101,6 +107,13 @@ const MenuClass = () => {
 				return (
 					<div className="label-tab">
 						<RiContactsBook2Line className="mr-3" size={20} />
+						<span>{item}</span>
+					</div>
+				)
+			case 'Chứng chỉ':
+				return (
+					<div className="label-tab">
+						<GrCertificate className="mr-3" size={20} />
 						<span>{item}</span>
 					</div>
 				)

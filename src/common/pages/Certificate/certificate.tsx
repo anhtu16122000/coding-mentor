@@ -1,6 +1,6 @@
 import { Card, Form } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
-import { certificateConfigApi } from '~/api/certificate/certificate-config'
+import { certificateConfigApi } from '~/api/certificate-old/certificate-config'
 import { ShowNoti } from '~/common/utils'
 import PrimaryButton from '~/common/components/Primary/Button'
 

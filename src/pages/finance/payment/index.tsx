@@ -198,29 +198,27 @@ const PaymentManagementPage = () => {
 		{
 			title: 'Giảm giá',
 			dataIndex: 'Reduced',
-			width: 130,
 			render: (value, item) => {
-				if (!value) {
-					return ''
-				}
-
 				return (
-					<>
+					<div className="min-w-[120px]">
 						{item?.DiscountCode && (
 							<p className="text-[#000]">
 								Mã: <div className="inline font-[600]">{item?.DiscountCode}</div>
 							</p>
 						)}
-						<p className="text-[#000]">
-							Số tiền: <div className="inline font-[600]">{parseToMoney(item?.Reduced)}</div>
-						</p>
+
+						{!!item?.Reduced && (
+							<p className="text-[#000]">
+								Số tiền: <div className="inline font-[600]">{parseToMoney(item?.Reduced)}</div>
+							</p>
+						)}
 
 						{!!item?.UsedMoneyReserve && (
 							<p className="text-[#000]">
 								Tiền bảo lưu: <div className="inline font-[600]">{parseToMoney(item?.UsedMoneyReserve)}</div>
 							</p>
 						)}
-					</>
+					</div>
 				)
 			}
 		},
