@@ -11,6 +11,7 @@ import { ModalStudentInClassCRUD } from './ModalStudentInClassCRUD'
 import { GrCertificate } from 'react-icons/gr'
 import { Tooltip } from 'antd'
 import { ShowNoti } from '~/common/utils'
+import ViewCertificate from './StudentInClass/ViewCertificate'
 
 export const ListStudentInClass = () => {
 	const user = useSelector((state: RootState) => state.user.information)
@@ -73,14 +74,16 @@ export const ListStudentInClass = () => {
 		}
 	}
 
+	// Cấp chứng chỉ cho học viên
 	const createCertificate = async (params) => {
 		try {
-			const res = await studentInClassApi.getAll({
+			const res = await studentInClassApi.postCers({
 				StudentId: params,
 				ClassId: parseInt(router.query.class + '')
 			})
-			if (res.status === 200) {
+			if (res.status == 200) {
 				ShowNoti('success', 'Thành công')
+				handleRefresh()
 			}
 		} catch (error) {
 			ShowNoti('success', error?.message)
@@ -95,29 +98,48 @@ export const ListStudentInClass = () => {
 		}
 	}, [router?.query?.class])
 
+	function handleRefresh() {
+		apiParameters?.pageIndex == 1 ? getStudentInClass(apiParameters) : setApiParameters(initParameters)
+	}
+
 	const columns =
 		isAdmin() || isAcademic() || isManager()
 			? [
 					{
-						title: 'Mã',
-						width: 100,
-						dataIndex: 'UserCode'
+						title: 'Học viên',
+						dataIndex: 'UserCode',
+						render: (text, item) => {
+							return (
+								<div className="min-w-[120px]">
+									<div className="flex items-center">
+										<div className="font-[600] text-[#1b73e8]">{item?.UserCode}</div>
+									</div>
+									<div className="flex items-center">
+										<div className="font-[600] mr-[4px]">Mã:</div>
+										<div>{item?.FullName}</div>
+									</div>
+								</div>
+							)
+						}
 					},
 					{
-						title: 'Tên học viên',
-						width: 200,
-						dataIndex: 'FullName',
-						render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
-					},
-					{
-						title: 'Số điện thoại',
+						title: 'Liên hệ',
 						width: 150,
-						dataIndex: 'Mobile'
-					},
-					{
-						title: 'Email',
-						width: 200,
-						dataIndex: 'Email'
+						dataIndex: 'Mobile',
+						render: (text, item) => {
+							return (
+								<div className="min-w-[120px]">
+									<div className="flex items-center">
+										<div className="font-[600] mr-[4px]">Điện thoại:</div>
+										<div>{item?.Mobile}</div>
+									</div>
+									<div className="flex items-center">
+										<div className="font-[600] mr-[4px]">Mail:</div>
+										<div>{item?.Email}</div>
+									</div>
+								</div>
+							)
+						}
 					},
 					{
 						title: 'Loại',
@@ -139,6 +161,7 @@ export const ListStudentInClass = () => {
 					{
 						title: 'Chức năng',
 						width: 150,
+						fixed: 'right',
 						dataIndex: 'Action',
 						render: (text, item) => {
 							return (
@@ -146,14 +169,18 @@ export const ListStudentInClass = () => {
 									<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="edit" dataRow={item} />
 									<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="delete" dataRow={item} />
 
-									<Tooltip placement="left" title="Cấp chứng chỉ">
-										<div
-											onClick={() => createCertificate(item?.StudentId)}
-											className="flex all-center !text-[#1b73e8] cursor-pointer pt-[2px] pl-[12px]"
-										>
-											<GrCertificate size={18} />
-										</div>
-									</Tooltip>
+									{!item?.HasCertificate && (
+										<Tooltip placement="left" title="Cấp chứng chỉ">
+											<div
+												onClick={() => createCertificate(item?.StudentId)}
+												className="flex all-center !text-[#1b73e8] cursor-pointer pt-[2px] pl-[12px]"
+											>
+												<GrCertificate size={18} />
+											</div>
+										</Tooltip>
+									)}
+
+									{item?.HasCertificate && <ViewCertificate data={item} onRefresh={handleRefresh} />}
 								</div>
 							)
 						}
@@ -205,18 +232,21 @@ export const ListStudentInClass = () => {
 			  ]
 
 	return (
-		<PrimaryTable
-			loading={loading}
-			total={totalRow}
-			onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
-			TitleCard={<div className="extra-table">Danh sách học viên</div>}
-			data={dataTable}
-			columns={columns}
-			Extra={
-				(isAdmin() || isAcademic() || isManager()) && (
-					<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="add" />
-				)
-			}
-		/>
+		<>
+			{/* <ModalViewCertificateExam open={open} setOpen={setOpen} background={background} content={watchContent} backside={backside} /> */}
+			<PrimaryTable
+				loading={loading}
+				total={totalRow}
+				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
+				TitleCard={<div className="extra-table">Danh sách học viên</div>}
+				data={dataTable}
+				columns={columns}
+				Extra={
+					(isAdmin() || isAcademic() || isManager()) && (
+						<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="add" />
+					)
+				}
+			/>
+		</>
 	)
 }

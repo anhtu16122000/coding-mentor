@@ -34,10 +34,21 @@ export const studentInClassApi = {
 	getAllClass() {
 		return instance.get<IApiResultData<any[]>>('api/Class')
 	},
-	getCers(ID) {
+	getCers(params) {
 		return instance.get(`${url}/certificate`, {
-			params: { classId: ID }
+			params
 		})
+	},
+	postCers(data) {
+		return instance.post(`${url}/certificate`, data, {})
+	},
+	expCers(data) {
+		console.log('----- Export data: ', data)
+
+		return instance.post(`${url}/export-certificate`, data, {})
+	},
+	delCer(ID) {
+		return instance.delete(`${url}/certificate/${ID}`)
 	}
 }
 

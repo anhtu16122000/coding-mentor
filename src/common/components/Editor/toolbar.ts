@@ -5,3 +5,5 @@ const FONT = 'fontfamily fontsize blocks'
 const ALIGN = 'alignleft aligncenter alignright alignjustify'
 
 export default `${UNDO} | customInsertButton | link | ${TEXT_STYLE} | ${COLOR} | ${FONT} | ${ALIGN} | image | code`
+
+export const cerToolBar = `${UNDO} | fontsize | ${TEXT_STYLE} | ${ALIGN} | ${COLOR} | code`

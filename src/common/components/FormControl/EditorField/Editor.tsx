@@ -2,6 +2,7 @@ import { Editor } from '@tinymce/tinymce-react'
 import { useEffect, useRef } from 'react'
 import { UploadFileApi } from '~/api/common/upload-image'
 import { ShowNoti } from '~/common/utils'
+import toolbar, { cerToolBar } from '../../Editor/toolbar'
 
 const quickMenu =
 	'undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | fontfamily fontsize blocks | forecolor backcolor | customInsertButton | link image'
@@ -9,7 +10,7 @@ const editorPlugins =
 	'preview importcss searchreplace autolink autosave save directionality visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons image code'
 
 const EditorBase = (props) => {
-	const { initialValue, value, placeholder, handleChangeDataEditor, customFieldProps, disableButton, height , disabled} = props
+	const { initialValue, value, placeholder, handleChangeDataEditor, customFieldProps, disableButton, height, disabled } = props
 	const editorRef = useRef(null)
 
 	const checkHandleChangeDataEditor = (content) => {
@@ -47,7 +48,9 @@ const EditorBase = (props) => {
 					inline: false, // Remove iframe tag
 					plugins: editorPlugins,
 					placeholder: placeholder,
-					toolbar: quickMenu,
+					// toolbar: quickMenu,
+
+					toolbar: cerToolBar,
 					height: height || 600,
 					content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
 					menubar: false,

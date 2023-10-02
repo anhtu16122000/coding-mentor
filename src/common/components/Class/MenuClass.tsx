@@ -27,7 +27,6 @@ import { ListCertificates } from './ListCertificates'
 const itemsAdmin = [
 	'Lịch học',
 	'Học viên',
-	'Chứng chỉ',
 	'Học phí',
 	'Các buổi học',
 	'Bài tập',
@@ -39,12 +38,11 @@ const itemsAdmin = [
 	'Thông báo'
 ]
 
-const itemsStudent = ['Lịch học', 'Chứng chỉ', 'Học phí', 'Các buổi học', 'Bài tập', 'Tài liệu', 'Bảng điểm', 'Điểm danh bằng QR']
+const itemsStudent = ['Lịch học', 'Học phí', 'Các buổi học', 'Bài tập', 'Tài liệu', 'Bảng điểm', 'Điểm danh bằng QR']
 
 const itemsTeacher = [
 	'Lịch học',
 	'Học viên',
-	'Chứng chỉ',
 	'Học phí',
 	'Các buổi học',
 	'Bài tập',

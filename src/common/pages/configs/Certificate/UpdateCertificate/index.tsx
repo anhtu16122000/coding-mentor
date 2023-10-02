@@ -232,6 +232,7 @@ const UpdateCertificate = () => {
 			{!uploading ? (
 				<>
 					<label className="text-[14px] font-[500] mb-1 inline-flex items-center">Nội dung mặt trước</label>
+
 					<EditorField
 						height={800}
 						customFieldProps={{

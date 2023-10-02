@@ -1,4 +1,4 @@
-import { Card, Modal, Tabs } from 'antd'
+import { Modal } from 'antd'
 import PrimaryButton from '~/common/components/Primary/Button'
 
 export const templateCertificate = (background, backside, content) => {
@@ -71,13 +71,13 @@ export const templateCertificate = (background, backside, content) => {
 const ModalViewCertificateExam = ({ open, setOpen, background, content, backside }) => {
 	return (
 		<Modal
-			title="Xem trước chứng nhận"
-			width={750}
+			title="Xem trước chứng chỉ"
+			width={850}
 			open={open}
 			onCancel={() => setOpen(false)}
 			bodyStyle={{ padding: '1rem', maxHeight: '800px', overflow: 'auto' }}
 			footer={[
-				<PrimaryButton type="button" icon="cancel" onClick={() => setOpen(false)} background="green">
+				<PrimaryButton type="button" icon="cancel" onClick={() => setOpen(false)} background="red">
 					Đóng
 				</PrimaryButton>
 			]}
@@ -86,7 +86,7 @@ const ModalViewCertificateExam = ({ open, setOpen, background, content, backside
 				className="overflow-auto d-flex justify-center items-center"
 				contentEditable="false"
 				dangerouslySetInnerHTML={{ __html: templateCertificate(background, backside, content) }}
-			></div>
+			/>
 		</Modal>
 	)
 }
