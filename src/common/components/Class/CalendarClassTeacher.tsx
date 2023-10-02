@@ -84,6 +84,7 @@ const CalenderClassTeacher = () => {
 		<div className="wrapper-calendar">
 			<Card className="card-calendar" extra={null}>
 				{!!slug ? (
+					// @ts-ignore
 					<FullCalendar
 						ref={thisCalendar}
 						plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

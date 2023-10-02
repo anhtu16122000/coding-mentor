@@ -141,6 +141,7 @@ const Schedule = () => {
 					)
 				}
 			>
+				{/* @ts-ignore */}
 				<FullCalendar
 					ref={thisCalendar}
 					plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -165,7 +166,6 @@ const Schedule = () => {
 					firstDay={1}
 					eventContent={(eventInfo) => <ScheduleCalendar dataRow={eventInfo} onRefresh={getAllSchedule} />}
 				/>
-
 				<div className="wrapper-status">
 					<div className="wrapper-tag">
 						<div className="bg-[#fb862d] w-[20px] h-[20px] rounded-[4px] mr-[8px]"></div>
@@ -176,7 +176,6 @@ const Schedule = () => {
 						<span>Đã học</span>
 					</div>
 				</div>
-
 				{isLoading && (
 					<div className="overlay-calendar">
 						<Lottie loop animationData={loadingJson} play className="w-52" />

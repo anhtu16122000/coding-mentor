@@ -142,6 +142,7 @@ const TeacherOpenCalendarPage = () => {
 					</>
 				}
 			>
+				{/* @ts-ignore */}
 				<FullCalendar
 					ref={thisCalendar}
 					plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

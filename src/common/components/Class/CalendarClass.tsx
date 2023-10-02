@@ -340,6 +340,7 @@ const CalenderClass = () => {
 					</>
 				}
 			>
+				{/* @ts-ignore */}
 				<FullCalendar
 					ref={thisCalendar}
 					plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

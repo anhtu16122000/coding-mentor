@@ -232,6 +232,7 @@ const CalendarClassTutoringEdit = () => {
 				}
 			>
 				{!!slug ? (
+					// @ts-ignore
 					<FullCalendar
 						ref={thisCalendar}
 						plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
