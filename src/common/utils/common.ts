@@ -130,3 +130,16 @@ export function is(params) {
 		parent: params?.RoleId == 8
 	}
 }
+
+export function userIs(params) {
+	return {
+		admin: params?.RoleId == 1,
+		teacher: params?.RoleId == 2,
+		student: params?.RoleId == 3,
+		manager: params?.RoleId == 4,
+		saler: params?.RoleId == 5,
+		accountant: params?.RoleId == 6,
+		academic: params?.RoleId == 7,
+		parent: params?.RoleId == 8
+	}
+}

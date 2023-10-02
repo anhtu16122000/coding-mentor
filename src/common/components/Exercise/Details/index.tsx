@@ -7,7 +7,7 @@ import { RootState } from '~/store'
 import PrimaryButton from '../../Primary/Button'
 import { HiOutlineBookOpen } from 'react-icons/hi'
 import { ieltsExamApi } from '~/api/IeltsExam'
-import { decode, wait } from '~/common/utils/common'
+import { decode, userIs, wait } from '~/common/utils/common'
 import { ShowNostis, ShowNoti, log } from '~/common/utils'
 import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
 import CreateExamSkill from './ExamSkillNext/exam-skill-form'
@@ -433,6 +433,8 @@ function ExamDetail() {
 		}
 	}
 
+	const [showRead, setShowRead] = useState<boolean>(false)
+
 	return (
 		<ExamProvider>
 			<div className="exam-23-container">
@@ -502,7 +504,7 @@ function ExamDetail() {
 
 								{!loading && (
 									<>
-										{!sortSkill && (
+										{(userIs(user).admin || userIs(user).manager) && !sortSkill && (
 											<div
 												onClick={() => setSortSkill(true)}
 												className={`cc-23-skill bg-[#FFBA0A] hover:bg-[#e7ab11] focus:bg-[#d19b10] text-[#000]`}
@@ -608,15 +610,72 @@ function ExamDetail() {
 					<>
 						{showMain && <div id="the-fica-block" className="w-[0.5px] bg-transparent" />}
 
-						{!!currentSection?.ReadingPassage && (
-							<div className="flex-1 p-[16px] bg-[#fff] scrollable" style={{ height: mainHeight }}>
+						{!!currentSection?.ReadingPassage && showRead && (
+							<div className="flex-1 p-[16px] bg-[#fff] scrollable block w750:hidden" style={{ height: mainHeight }}>
+								{showRead && (
+									<div className="flex justify-start">
+										<div
+											onClick={() => setShowRead(false)}
+											className="block w750:hidden mb-[16px] bg-[#0A89FF] px-[8px] text-[#fff] rounded-[4px] font-[600] py-[4px]"
+										>
+											Xem câu hỏi
+										</div>
+									</div>
+								)}
+
 								{htmlParser(currentSection?.ReadingPassage || '')}
 							</div>
 						)}
 
+						{!!currentSection?.ReadingPassage && (
+							<div className="flex-1 p-[16px] bg-[#fff] scrollable hidden w750:block" style={{ height: mainHeight }}>
+								{htmlParser(currentSection?.ReadingPassage || '')}
+							</div>
+						)}
+
+						{/* ----------------------------------------------------------------------------------- */}
+
 						{/* RIGHT OF SCREEN */}
-						<div className="flex-1 p-[16px] scrollable max-w-[1200px] mx-auto" style={{ height: mainHeight }}>
-							{questionsInSection.length > 0 && (
+						{!showRead && (
+							<div className="flex-1 p-[16px] scrollable max-w-[1200px] mx-auto block w750:hidden" style={{ height: mainHeight }}>
+								{(userIs(user).admin || userIs(user).manager) && questionsInSection.length > 0 && (
+									<CurrentGroupController
+										key={`gr-ctr-${curGroup?.Id}`}
+										currentSection={currentSection}
+										curGroup={curGroup}
+										getQuestions={getQuestions}
+										onRefresh={() => {
+											getQuestionsByGroup()
+											getQuestions()
+										}}
+									/>
+								)}
+
+								{is.drag && <DragHeader answers={dragAns} />}
+
+								{!showRead && (
+									<div className="flex justify-start">
+										<div
+											onClick={() => setShowRead(true)}
+											className="block w750:hidden mb-[16px] bg-[#0A89FF] px-[8px] text-[#fff] rounded-[4px] font-[600] py-[4px]"
+										>
+											Xem bài đọc
+										</div>
+									</div>
+								)}
+
+								<GroupContent is={is} curGroup={curGroup} questionsInSection={questionsInSection} />
+
+								<TestingQuestions setCurrentQuestion={setCurrentQuestion} data={curGroup} questions={questionsInSection} />
+
+								{curAudio?.Audio && <div className="h-[200px]" />}
+								<div className="h-[100px]" />
+							</div>
+						)}
+
+						{/* RIGHT OF SCREEN */}
+						<div className="flex-1 p-[16px] scrollable max-w-[1200px] mx-auto hidden w750:block" style={{ height: mainHeight }}>
+							{(userIs(user).admin || userIs(user).manager) && questionsInSection.length > 0 && (
 								<CurrentGroupController
 									key={`gr-ctr-${curGroup?.Id}`}
 									currentSection={currentSection}
@@ -636,6 +695,8 @@ function ExamDetail() {
 							<TestingQuestions setCurrentQuestion={setCurrentQuestion} data={curGroup} questions={questionsInSection} />
 
 							{curAudio?.Audio && <div className="h-[200px]" />}
+
+							<div className="h-[100px]" />
 						</div>
 					</>
 				</div>

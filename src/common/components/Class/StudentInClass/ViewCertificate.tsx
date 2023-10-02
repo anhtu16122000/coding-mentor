@@ -108,9 +108,9 @@ const ViewCertificate = (props) => {
 				open={visible}
 				footer={
 					<div className="w-full all-center">
-						<PrimaryButton loading={exporting} onClick={exportCer} background="blue" icon="download" type="button">
+						{/* <PrimaryButton loading={exporting} onClick={exportCer} background="blue" icon="download" type="button">
 							Lưu file
-						</PrimaryButton>
+						</PrimaryButton> */}
 
 						<PrimaryButton className="ml-[8px]" loading={deleting} onClick={delCer} background="red" icon="cancel" type="button">
 							Xoá chứng chỉ

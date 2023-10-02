@@ -24,7 +24,7 @@ import CreateDragAndDrop from '../QuestionsForm/DragAndDropForm'
 import { tagApi } from '~/api/configs/tag'
 
 const GroupForm: FC<IGroupForm> = (props) => {
-	const { isEdit, defaultData, isChangeInfo, onOpen, section, onRefresh } = props
+	const { isEdit, defaultData, isChangeInfo, onOpen, section, onRefresh, isQuestionsBank } = props
 
 	const { questionWithAnswers, setQuestionWithAnswers } = useExamContext()
 
@@ -156,7 +156,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 				postGroup({
 					...values,
 					TagIds: xTags,
-					IeltsSectionId: section.Id,
+					IeltsSectionId: section?.Id || 0,
 					IeltsQuestions: isTyping || isDrag ? questionWithAnswers : exercises
 				})
 			}
@@ -197,13 +197,23 @@ const GroupForm: FC<IGroupForm> = (props) => {
 			return <></>
 		}
 
-		return (
-			<>
-				<div onClick={openCreate} className="cc-23-skill-menu-item">
-					<PlusCircle size={17} className="text-[#4CAF50] ml-[-2px]" />
-					<div className="ml-[8px] font-[500]">Thêm câu hỏi</div>
+		if (!!isQuestionsBank) {
+			return (
+				<div
+					onClick={openCreate}
+					className="cc-23-skill-menu-item !rounded-[6px] !h-[36px] min-w-[36px] all-center !bg-[#4CAF50] text-[#fff]"
+				>
+					<PlusCircle size={17} />
+					<div className="ml-[8px] font-[500] hidden w500:block">Thêm câu hỏi</div>
 				</div>
-			</>
+			)
+		}
+
+		return (
+			<div onClick={openCreate} className="cc-23-skill-menu-item">
+				<PlusCircle size={17} className="text-[#4CAF50] ml-[-2px]" />
+				<div className="ml-[8px] font-[500]">Thêm câu hỏi</div>
+			</div>
 		)
 	}
 
@@ -235,6 +245,8 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		}
 	}
 
+	// console.log('--------- rightHeight: ', rightHeight)
+
 	return (
 		<>
 			<ButtonCreate />
@@ -251,7 +263,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 						<PrimaryButton disable={loading} onClick={() => setIsModalVisible(false)} background="red" icon="cancel" type="button">
 							Huỷ
 						</PrimaryButton>
-						<PrimaryButton loading={loading} onClick={() => form.submit()} className="ml-2" background="blue" icon="save" type="button">
+						<PrimaryButton onClick={() => form.submit()} className="ml-2" background="blue" icon="save" type="button">
 							Lưu
 						</PrimaryButton>
 					</>

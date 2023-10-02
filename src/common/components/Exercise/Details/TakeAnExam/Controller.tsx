@@ -20,7 +20,7 @@ function SkillLoading({ loading }) {
 const TakeAnExamController = (props) => {
 	const { showSkills, showSections, loading, skills, setCurAudio, currentSkill, setCurrentSkill, onRefreshSkill, sections } = props
 
-	const { currentSection, setCurrentSection, getSections } = props
+	const { currentSection, setCurrentSection, getSections, children, curAudio } = props
 
 	const indexOfSkill = !skills ? 0 : skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
 
@@ -51,17 +51,21 @@ const TakeAnExamController = (props) => {
 							<div>
 								<div className="tae-skill-name">Skill: {!skills ? '' : skills[indexOfSkill]?.Name}</div>
 								<div className="mt-[4px] flex items-center">
-									{skills[indexOfSkill]?.Audio && (
+									{!curAudio?.Audio && skills[indexOfSkill]?.Audio && (
 										<div onClick={(e) => setCurAudio(skills[indexOfSkill])} className="ex-23-btn-play-audio">
 											<FaHeadphonesAlt size={14} className="text-[#fff] mr-[4px]" />
 											<div className="play-audio-text">Play audio</div>
 										</div>
 									)}
+
+									{/* <div className="block w750:hidden">{children}</div> */}
 								</div>
 							</div>
 						</div>
 
 						<div className="flex-1 flex justify-end">
+							<div className="hidden w750:block mr-[8px] mt-[-4px]">{children}</div>
+
 							{!!skills[indexOfSkill - 1] && (
 								<div onClick={() => handleChangeSkill('down')} className="ex-23-btn-change-skill">
 									<MdArrowBackIos size={18} />

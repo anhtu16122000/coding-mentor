@@ -85,7 +85,7 @@ const CreatePackage: FC<ICreateExam> = (props) => {
 
 	return (
 		<>
-			{is(user).admin && !isEdit && (
+			{(is(user).admin || is(user).manager) && !isEdit && (
 				<div data-tut="reactour-create" className="flex-shrink-0">
 					<ButtonAdd icon="outline" onClick={() => setVisible(true)}>
 						Tạo mới
@@ -93,7 +93,7 @@ const CreatePackage: FC<ICreateExam> = (props) => {
 				</div>
 			)}
 
-			{is(user).admin && !!isEdit && (
+			{(is(user).admin || is(user).manager) && !!isEdit && (
 				<div onClick={openEdit} className="pe-menu-item mt-[8px]">
 					<FaEdit size={16} color="#1b73e8" />
 					<div className="ml-[8px]">Chỉnh sửa</div>

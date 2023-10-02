@@ -41,11 +41,11 @@ export const ManagerMenu = [
 		TabName: 'Thư viện online',
 		Icon: <IoLibrarySharp size={22} />
 	},
-	// {
-	// 	Key: 'library',
-	// 	TabName: 'Đề thi',
-	// 	Icon: <RiFileList2Fill size={22} />
-	// },
+	{
+		Key: 'library',
+		TabName: 'Đề thi',
+		Icon: <RiFileList2Fill size={22} />
+	},
 	{
 		Key: 'config',
 		TabName: 'Cấu hình',
@@ -217,21 +217,6 @@ export const ManagerChildMenu = [
 		]
 	},
 	{
-		MenuName: 'Đề thi',
-		MenuTitle: 'Đề thi',
-		MenuKey: '/exercise',
-		Parent: 'library',
-		MenuItem: [
-			{
-				ItemType: 'single',
-				Key: '/exercise/all',
-				Route: '/exercise/all',
-				Text: 'Quản lý đề thi',
-				Icon: ''
-			}
-		]
-	},
-	{
 		MenuName: 'Lớp học',
 		MenuTitle: 'Lớp học',
 		MenuKey: '/class',
@@ -285,6 +270,35 @@ export const ManagerChildMenu = [
 				Key: '/library-online/library',
 				Route: '/library-online/library',
 				Text: 'Tài liệu',
+				Icon: ''
+			}
+		]
+	},
+	{
+		MenuName: 'Đề thi',
+		MenuTitle: 'Đề thi',
+		MenuKey: '/exercise',
+		Parent: 'library',
+		MenuItem: [
+			{
+				ItemType: 'single',
+				Key: '/package-exam',
+				Route: '/package-exam',
+				Text: 'Bộ đề',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/questions',
+				Route: '/questions',
+				Text: 'Ngân hàng câu hỏi',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/exam',
+				Route: '/exam',
+				Text: 'Ngân hàng đề',
 				Icon: ''
 			}
 		]

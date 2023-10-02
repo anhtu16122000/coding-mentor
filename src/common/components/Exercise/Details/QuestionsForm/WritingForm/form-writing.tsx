@@ -112,7 +112,7 @@ const FormWriting: FC<IGroupForm> = (props) => {
 			return null
 		}
 
-		const DATA_SUBMIT = { ...param, Answers: answers }
+		const DATA_SUBMIT = { ...param, Answers: answers, Point: 0 }
 		if (!!defaultData) {
 			postEditQuestion({ ...defaultData, ...DATA_SUBMIT, AnswerUpdates: answers })
 		} else {

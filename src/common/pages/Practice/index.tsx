@@ -16,6 +16,7 @@ import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { RootState } from '~/store'
 import ModalCreatePractice from './ModalCreate'
+import { ShowNoti } from '~/common/utils'
 
 const listTodoApi = {
 	pageSize: PAGE_SIZE,
@@ -87,6 +88,7 @@ const Practice = () => {
 				setLoading(false)
 			}
 		} catch (error) {
+			ShowNoti('error', error?.message)
 			setLoading(false)
 		}
 	}
@@ -161,119 +163,8 @@ const Practice = () => {
 		}
 	]
 
-	// -------
-	const resultColumns = [
-		{
-			title: 'Mã học viên',
-			dataIndex: 'StudentCode',
-			render: (value, item, index) => <div className="font-[600] text-[#000] min-w-[100px] max-w-[250px]">{value}</div>
-		},
-		{
-			title: 'Tên học viên',
-			dataIndex: 'StudentName',
-			render: (value, item, index) => <div className="font-[600] text-[#1b73e8] min-w-[100px] max-w-[250px]">{value}</div>
-		},
-		{
-			title: 'Thời gian làm',
-			width: 120,
-			dataIndex: 'TimeSpent',
-			render: (value, item, index) => <>{value < 1 ? 1 : value} phút</>
-		},
-		{
-			title: 'Tổng điểm',
-			width: 120,
-			dataIndex: 'MyPoint',
-			render: (value, item, index) => (
-				<div className="font-[600]">
-					{value} / {item?.Point}
-				</div>
-			)
-		},
-		{
-			title: 'Điểm trung bình',
-			width: 140,
-			dataIndex: 'AveragePoint'
-		},
-		{
-			title: 'Ngày',
-			dataIndex: 'CreatedOn',
-			render: (value, item, index) => <>{moment(new Date(value)).format('HH:mm DD/MM/YYYY')}</>
-		},
-		{
-			title: 'Trạng thái',
-			dataIndex: 'StatusName',
-			render: (value, item, index) => {
-				if (item?.Status == 1) {
-					return <PrimaryTag children={value || ''} color="yellow" />
-				}
-
-				if (item?.Status == 2) {
-					return <PrimaryTag children={value || ''} color="blue" />
-				}
-
-				if (item?.Status == 3) {
-					return <PrimaryTag children={value || ''} color="green" />
-				}
-
-				return <PrimaryTag children={value || ''} color="red" />
-			}
-		},
-		{
-			fixed: 'right',
-			render: (value, item, index) => {
-				return (
-					<div className="flex items-center">
-						<PrimaryTooltip place="left" id={`hw-res-${item?.Id}`} content="Xem kết quả">
-							<div
-								onClick={() => window.open(`/exam-result/?test=${item?.Id}`, '_blank')}
-								className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
-							>
-								<FiEye size={22} />
-							</div>
-						</PrimaryTooltip>
-					</div>
-				)
-			}
-		}
-	]
-
-	// -------- Take an exam
-	async function getDraft(ExamId, HWId) {
-		try {
-			// 1 - Làm bài thử 2 - Làm bài hẹn test 3 - Bài tập về nhà 4 - Bộ đề
-			const res = await doingTestApi.getDraft({ valueId: HWId, type: 3 })
-			if (res.status == 200) {
-				setCurrentData({ ExamId: ExamId, HWId: HWId, draft: res.data?.data })
-				setExamWarning(true)
-			} else {
-				createDoingTest(ExamId, HWId)
-			}
-		} catch (error) {
-		} finally {
-		}
-	}
-
 	const [examWarning, setExamWarning] = useState<boolean>(false)
 	const [currentData, setCurrentData] = useState<any>(null)
-
-	function gotoTest(params) {
-		if (params?.Id) {
-			window.open(`/take-an-exam/?exam=${params?.Id}`, '_blank')
-		}
-	}
-	async function createDoingTest(ExamId, HWId) {
-		// try {
-		// 	const res = await doingTestApi.post({ IeltsExamId: ExamId, ValueId: HWId, Type: 3 })
-		// 	if (res?.status == 200) {
-		// 		log.Green('Created test', res.data?.data)
-		// 		gotoTest(res.data?.data)
-		// 	}
-		// } catch (error) {
-		// } finally {
-		// }
-	}
-
-	const [histories, setHistories] = useState<any>(null)
 
 	return (
 		<>

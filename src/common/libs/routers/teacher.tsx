@@ -39,11 +39,11 @@ export const TeacherMenu = [
 		TabName: 'Thư viện online',
 		Icon: <IoLibrarySharp size={22} />
 	},
-	// {
-	// 	Key: 'library',
-	// 	TabName: 'Đề thi',
-	// 	Icon: <RiFileList2Fill size={22} />
-	// },
+	{
+		Key: 'library',
+		TabName: 'Đề thi',
+		Icon: <RiFileList2Fill size={22} />
+	},
 	{
 		Key: 'assignment',
 		TabName: 'Phân công',
@@ -176,9 +176,23 @@ export const TeacherChildMenu = [
 		MenuItem: [
 			{
 				ItemType: 'single',
-				Key: '/exercise/all',
-				Route: '/exercise/all',
-				Text: 'Quản lý đề thi',
+				Key: '/package-exam',
+				Route: '/package-exam',
+				Text: 'Bộ đề',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/questions',
+				Route: '/questions',
+				Text: 'Ngân hàng câu hỏi',
+				Icon: ''
+			},
+			{
+				ItemType: 'single',
+				Key: '/exam',
+				Route: '/exam',
+				Text: 'Ngân hàng đề',
 				Icon: ''
 			}
 		]

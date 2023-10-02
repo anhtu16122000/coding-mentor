@@ -13,6 +13,7 @@ import { FiEdit } from 'react-icons/fi'
 import { ieltsSectionApi } from '~/api/IeltsExam/ieltsSection'
 import PrimaryEditor from '~/common/components/Editor'
 import { BiPlus } from 'react-icons/bi'
+import { is } from '~/common/utils/common'
 
 const activeClass = 'bg-[#4CAF50] hover:bg-[#449a48] focus:bg-[#38853b] text-[#fff]'
 
@@ -120,14 +121,14 @@ const CreateExamSection: FC<ICreateExam & { skill?: any }> = (props) => {
 
 	return (
 		<>
-			{user?.RoleId == 1 && !!!isEdit && (
+			{(is(user).admin || is(user).manager) && !!!isEdit && (
 				<div onClick={toggle} className={`cc-23-skill flex-shrink-0 ${activeClass}`}>
 					<BiPlus size={18} />
 					<div className="ml-[4px]">Phần mới</div>
 				</div>
 			)}
 
-			{user?.RoleId == 1 && !!isEdit && (
+			{(is(user).admin || is(user).manager) && !!isEdit && (
 				<div onClick={clickEdit} className="cc-23-skill-menu-item">
 					<FiEdit size={16} className="text-[#9C27B0]" />
 					<div className="ml-[8px] font-[500]">Cập nhật</div>

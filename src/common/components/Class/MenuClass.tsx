@@ -59,6 +59,10 @@ const itemsParent = ['Lịch học', 'Các buổi học', 'Điểm danh', 'Bản
 const MenuClass = () => {
 	const user = useSelector((state: RootState) => state.user.information)
 
+	const infoClass = useSelector((state: any) => state.class.infoClass)
+
+	console.log('---- infoClass: ', infoClass)
+
 	const getChildren = (title) => {
 		switch (title) {
 			case 'Lịch học':
@@ -198,6 +202,10 @@ const MenuClass = () => {
 					defaultActiveKey="0"
 					tabPosition="left"
 					items={itemsAdmin.map((item, index) => {
+						if (infoClass?.PaymentType == 1 && item == 'Học phí') {
+							return null
+						}
+
 						return {
 							label: <div className="no-select">{getLabel(item, index)}</div>,
 							key: index.toString(),

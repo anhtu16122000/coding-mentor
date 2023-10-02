@@ -9,6 +9,10 @@ import QuestionBankRenderItem from './RenderItem'
 import Router, { useRouter } from 'next/router'
 import { BiSolidArrowToTop } from 'react-icons/bi'
 import ExamProvider from '../../Auth/Provider/exam'
+import GroupForm from '../Details/Group/form-group'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
+import { is } from '~/common/utils/common'
 
 const initParameters = {
 	search: '',
@@ -27,6 +31,16 @@ const QuestionsBank = () => {
 
 	const [loading, setLoading] = useState(true)
 	const [loadingMore, setLoadingMore] = useState(true)
+
+	const userInfo = useSelector((state: RootState) => state.user.information)
+
+	function handleRefresh() {
+		if (filters.pageIndex == 1) {
+			getExercises()
+		} else {
+			setFilters(initParameters)
+		}
+	}
 
 	useEffect(() => {
 		if (filters.pageIndex == 1) {
@@ -76,9 +90,6 @@ const QuestionsBank = () => {
 			const types = !router.query?.types ? null : router.query?.types + ''
 			const levels: any = !router.query?.levels ? null : router.query?.levels
 
-			console.log('00000 - levels: ', levels)
-			console.log('00000 - types: ', types)
-
 			setFilters({
 				...filters,
 				types: !types ? null : types,
@@ -103,7 +114,7 @@ const QuestionsBank = () => {
 							<Select
 								placeholder="Loại"
 								mode="multiple"
-								className="primary-input w-[200px]"
+								className="primary-input w-[100px] w500:w-[200px]"
 								allowClear
 								// @ts-ignore
 								value={!Router?.query?.types ? [] : Router?.query?.types.split(',').map(Number)}
@@ -130,6 +141,8 @@ const QuestionsBank = () => {
 								<Select.Option value={3}>Khó</Select.Option>
 							</Select>
 						</div>
+
+						{(is(userInfo).admin || is(userInfo).manager) && <GroupForm onRefresh={handleRefresh} isQuestionsBank />}
 					</div>
 
 					{(!loading || data.length > 0) && (
@@ -176,7 +189,7 @@ const QuestionsBank = () => {
 													dragAns={dragAns}
 													index={index}
 													item={item}
-													is={is}
+													questIs={is}
 												/>
 											)
 										}}

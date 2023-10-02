@@ -17,7 +17,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"~/*": ["src/*"],
-			"react": ["./node_modules/@types/react"]
+			"react": ["./node_modules/@types/react"] // https://stackoverflow.com/questions/73019348/component-cannot-be-used-as-a-jsx-component-its-element-type-reactelementan
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],

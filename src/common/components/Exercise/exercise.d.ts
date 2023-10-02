@@ -76,6 +76,7 @@ type IGroupForm = {
 	isChangeInfo?: boolean
 	className?: string
 	onOpen?: Function
+	isQuestionsBank?: boolean
 	section?: any
 	isWriting?: boolean
 }

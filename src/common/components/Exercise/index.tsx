@@ -140,12 +140,6 @@ function ExamList() {
 			<div className="max-w-[2000px]">
 				<div className="cc-exam-header">
 					<div className="max-w-[350px] mr-[8px] flex items-center">
-						<PrimaryTooltip id="exam-x" content="Hướng dẫn sử dụng" place="right">
-							<div onClick={openTour} className="cc-exam-btn-tour">
-								<FaQuestionCircle size={20} color="#1b73e8" />
-							</div>
-						</PrimaryTooltip>
-
 						<div data-tut="reactour-switch">
 							{/* @ts-ignore */}
 							<Segmented
@@ -162,9 +156,10 @@ function ExamList() {
 					</div>
 
 					<div className="flex items-center">
-						<div data-tut="reactour-search" className="mr-[8px]">
+						<div data-tut="reactour-search" className="">
 							<CCSearch data-tut="reactour-search" onSubmit={(value) => setFilters({ ...filters, pageIndex: 1, search: value })} />
 						</div>
+
 						<CreateExam onRefresh={onRefresh} />
 					</div>
 				</div>

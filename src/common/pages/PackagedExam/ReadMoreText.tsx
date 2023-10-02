@@ -35,9 +35,7 @@ function ReadMoreText({ text, title }) {
 				ref={containerRef}
 				style={{ overflow: 'hidden', lineHeight: `${lineHeight}px`, maxHeight: showFullText ? 'none' : `${lineHeight * 2}px` }}
 			>
-				{text.split('\n').map((line, index) => (
-					<p key={index}>{line}</p>
-				))}
+				{!!text && text.split('\n').map((line, index) => <p key={index}>{line}</p>)}
 			</div>
 
 			{lineCount > 1 && (

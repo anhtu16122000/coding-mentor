@@ -9,6 +9,7 @@ import ButtonAdd from '../DirtyButton/Button-Add'
 import ButtonCancel from '../DirtyButton/Button-Cancel'
 import ButtonSave from '../DirtyButton/Button-Save'
 import { ieltsExamApi } from '~/api/IeltsExam'
+import { is } from '~/common/utils/common'
 
 const CreateExam: FC<ICreateExam> = (props) => {
 	const { onRefresh, isEdit, defaultData, className, onOpen } = props
@@ -85,15 +86,15 @@ const CreateExam: FC<ICreateExam> = (props) => {
 
 	return (
 		<>
-			{user?.RoleId == 1 && !!!isEdit && (
-				<div data-tut="reactour-create" className="flex-shrink-0">
+			{(is(user).admin || is(user).manager) && !!!isEdit && (
+				<div data-tut="reactour-create" className="flex-shrink-0 !ml-[8px]">
 					<ButtonAdd icon="outline" onClick={() => setIsModalVisible(true)}>
 						Tạo mới
 					</ButtonAdd>
 				</div>
 			)}
 
-			{user?.RoleId == 1 && !!isEdit && (
+			{(is(user).admin || is(user).manager) && !!isEdit && (
 				<PrimaryButton className={className} onClick={openEdit} type="button" background="yellow" icon="edit">
 					Cập nhật
 				</PrimaryButton>

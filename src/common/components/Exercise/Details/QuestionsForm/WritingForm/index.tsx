@@ -30,7 +30,7 @@ class GroupItem extends React.Component<PlanetProps, PlanetState> {
 					<div className="cc-form-group-header">
 						<div className="cc-form-gr-number">
 							Câu {item.Index}
-							<span className="text-[#000000] font-[600] ml-2">({item?.Point} điểm)</span>
+							{/* <span className="text-[#000000] font-[600] ml-2">({item?.Point} điểm)</span> */}
 						</div>
 
 						<div className="!inline-flex">

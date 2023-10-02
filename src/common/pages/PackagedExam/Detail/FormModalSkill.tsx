@@ -105,14 +105,14 @@ const FormPackageSkill: FC<ICreateExam & { packageSectionId: any }> = (props) =>
 
 	return (
 		<>
-			{is(user).admin && !isEdit && (
+			{(is(user).admin || is(user).manager) && !isEdit && (
 				<div onClick={() => setVisible(true)} className="pe-i-d-cart !px-[8px] !pl-[6px]">
 					<FaPlus size={14} />
 					<div className="pe-i-d-c-title">Thêm kỹ năng</div>
 				</div>
 			)}
 
-			{is(user).admin && !!isEdit && (
+			{(is(user).admin || is(user).manager) && !!isEdit && (
 				<div onClick={openEdit} className="pe-menu-item mt-[8px]">
 					<FaEdit size={16} color="#1b73e8" />
 					<div className="ml-[8px]">Chỉnh sửa</div>

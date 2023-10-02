@@ -66,7 +66,7 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 		setCreatingTest(skillItem)
 		setPreview(false)
 
-		if (is(userInfo).admin) {
+		if (is(userInfo).admin || is(userInfo).manager) {
 			createAdminTest(exam)
 		}
 
@@ -145,7 +145,7 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 
 	return (
 		<div key={thisId} id={thisId} className="pe-d-default">
-			{is(userInfo).admin && (
+			{(is(userInfo).admin || is(userInfo).manager) && (
 				<Popover
 					ref={popRef}
 					overlayClassName="show-arrow"
@@ -180,7 +180,7 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 				<div className="text-[18px] font-[600]">{item?.Name}</div>
 			</div>
 
-			{is(userInfo).admin && (
+			{(is(userInfo).admin || is(userInfo).manager) && (
 				<div className="flex flex-col w-full items-start pl-[8px]">
 					<FormPackageSkill packageSectionId={item?.Id} onRefresh={getPackageSkill} />
 				</div>
@@ -212,7 +212,7 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 											<PackageHistories item={itemSkill} />
 										</PrimaryTooltip>
 
-										{is(userInfo).admin && (
+										{(is(userInfo).admin || is(userInfo).manager) && (
 											<Popconfirm onConfirm={() => delPackageSkill(itemSkill)} title={`Xoá: ${itemSkill?.Name}`} placement="left">
 												<div onClick={null} className="pe-i-d-red !px-[8px] !h-[26px] ml-[8px]">
 													<div className="pe-i-d-c-title !ml-0">Xoá</div>

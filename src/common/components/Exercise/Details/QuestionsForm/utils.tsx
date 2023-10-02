@@ -35,5 +35,5 @@ export function formatExerciseInGroup(params, isAdd, section) {
 			dataUpdate.push({ ...temp, Index: index + 1, IeltsAnswers: element.Answers })
 		})
 	}
-	return isAdd ? { ...params, IeltsQuestions: dataUpdate, ExamSectionId: section?.Id } : { ...params, IeltsQuestions: dataUpdate }
+	return isAdd ? { ...params, IeltsQuestions: dataUpdate, ExamSectionId: section?.Id || null } : { ...params, IeltsQuestions: dataUpdate }
 }

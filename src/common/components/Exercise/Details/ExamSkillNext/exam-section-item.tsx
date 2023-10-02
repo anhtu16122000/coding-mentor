@@ -1,17 +1,22 @@
 import React, { useRef } from 'react'
 import { Popconfirm, Popover } from 'antd'
-import { ShowNoti, log } from '~/common/utils'
+import { ShowNoti } from '~/common/utils'
 import { FaHeadphonesAlt } from 'react-icons/fa'
 import { IoCloseSharp } from 'react-icons/io5'
 import PrimaryTooltip from '~/common/components/PrimaryTooltip'
 import { FiMoreVertical } from 'react-icons/fi'
 import { ieltsSectionApi } from '~/api/IeltsExam/ieltsSection'
 import CreateExamSection from '../ExamSkillSection/exam-section-form'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
+import { is } from '~/common/utils/common'
 
 function ExamSectionItem(props) {
 	const { data, index, onRefresh, currentSection, setCurrentSection, createGroupComponent, onPlayAudio, hideController } = props
 
 	const popref = useRef(null)
+
+	const user = useSelector((state: RootState) => state.user.information)
 
 	async function handleDelete(event) {
 		event?.stopPropagation()
@@ -74,7 +79,7 @@ function ExamSectionItem(props) {
 					</div>
 				)}
 
-				{!hideController && (
+				{(is(user).admin || is(user).manager) && !hideController && (
 					<div onClick={(e) => e.stopPropagation()}>
 						<PrimaryTooltip place="left" id={`tip-${index}`} content="Menu">
 							<Popover

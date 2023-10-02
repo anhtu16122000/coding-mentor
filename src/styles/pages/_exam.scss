@@ -176,11 +176,46 @@
 	}
 }
 
+.rhap_play-pause-button {
+	font-size: 32px !important;
+	width: 30px !important;
+	height: 30px !important;
+}
+
 .rhap_main-controls {
 	margin-left: -8px !important;
 }
 
-// 'ex-au-show' : 'ex-au-hidden
+.full-s-audio {
+	width: 100vw !important;
+	padding-right: 8px !important;
+
+	.ex-au-show {
+		max-width: 100vw !important;
+
+		.rhap_container {
+			width: calc(100vw - 38px) !important;
+			height: 48px !important;
+			padding: 4px !important;
+			margin-bottom: 16px !important;
+			max-width: 100vw !important;
+			padding-left: 14px !important;
+			padding-right: 14px !important;
+			box-shadow: none !important;
+		}
+	}
+}
+
+.ex-au-show {
+	max-width: 350px !important;
+	.rhap_container {
+		padding: 4px !important;
+		max-width: 350px !important;
+		padding-left: 4px !important;
+		padding-right: 4px !important;
+		box-shadow: none !important;
+	}
+}
 
 .ex-au-hidden {
 	.rhap_volume-controls {

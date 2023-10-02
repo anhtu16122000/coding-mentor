@@ -65,10 +65,6 @@ const Write = (props) => {
 						<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
 							Question {IndexInExam}
 						</div>
-						<div className="cc-choice-point">
-							<TbFileCertificate size={12} className="mr-1" />
-							<div className="mt-[1px]">Point: {data?.Point || 0}</div>
-						</div>
 					</div>
 				)}
 				{ReactHTMLParser(data?.Content)}

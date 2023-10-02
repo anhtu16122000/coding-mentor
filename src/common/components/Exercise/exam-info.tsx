@@ -9,9 +9,14 @@ import { MdDateRange, MdOutlineKeyboardArrowDown } from 'react-icons/md'
 import { parseDateTime } from '~/common/utils/main-function'
 import CountUp from 'react-countup'
 import { ieltsExamApi } from '~/api/IeltsExam'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
+import { is } from '~/common/utils/common'
 
 const ExamInfo = (params) => {
 	const { data, onRefresh, onClose } = params
+
+	const userInfo = useSelector((state: RootState) => state.user.information)
 
 	const [loading, setLoading] = useState(false)
 
@@ -123,12 +128,16 @@ const ExamInfo = (params) => {
 
 			<div className="flex items-center none-selection">
 				<div className="flex items-center flex-1">
-					<Popconfirm title="Xoá đề này?" placement="top" onConfirm={deleteExercise}>
-						<PrimaryButton loading={loading} className="mr-[8px]" type="button" background="red" icon="remove">
-							Xoá
-						</PrimaryButton>
-					</Popconfirm>
-					<CreateExam onRefresh={onRefresh} isEdit defaultData={data} />
+					{(is(userInfo).admin || is(userInfo).manager) && (
+						<>
+							<Popconfirm title="Xoá đề này?" placement="top" onConfirm={deleteExercise}>
+								<PrimaryButton loading={loading} className="mr-[8px]" type="button" background="red" icon="remove">
+									Xoá
+								</PrimaryButton>
+							</Popconfirm>
+							<CreateExam onRefresh={onRefresh} isEdit defaultData={data} />
+						</>
+					)}
 				</div>
 				<div className="btn-exam-detail">
 					<div>Chi tiết</div>

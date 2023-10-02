@@ -33,6 +33,7 @@ import { FaTelegramPlane } from 'react-icons/fa'
 import submitAni from '~/common/components/json/110944-plane.json'
 import successAni from '~/common/components/json/134369-sucess.json'
 import { examResultApi } from '~/api/exam/result'
+import MainAudioPlayer2 from '../AudioPlayer2'
 
 let curDragAnswers = []
 let dragSelected = []
@@ -303,6 +304,7 @@ function TakeAnExamDetail() {
 
 	const [mainHeight, setMainHeight] = useState(0)
 	const [showMain, setShowMain] = useState<boolean>(true)
+	const [curAudio, setCurAudio] = useState(null)
 
 	async function heightChange() {
 		setMainHeight(300)
@@ -315,7 +317,7 @@ function TakeAnExamDetail() {
 
 	useEffect(() => {
 		heightChange()
-	}, [showSections, showSkills, showQuestions])
+	}, [showSections, showSkills, showQuestions, curAudio])
 
 	function getHeight() {
 		const theFica = document.getElementById('the-fica-block')
@@ -663,7 +665,6 @@ function TakeAnExamDetail() {
 	}
 
 	const [showAudioControl, setShowAudioControl] = useState<boolean>(false)
-	const [curAudio, setCurAudio] = useState(null)
 
 	useEffect(() => {
 		if (curAudio?.Audio) {
@@ -733,6 +734,8 @@ function TakeAnExamDetail() {
 		}
 	}
 
+	const [showRead, setShowRead] = useState<boolean>(false)
+
 	return (
 		<ExamProvider>
 			<div className="exam-23-container relative">
@@ -760,30 +763,105 @@ function TakeAnExamDetail() {
 						currentSection={currentSection}
 						setCurrentSection={setCurrentSection}
 						getSections={getSections}
-					/>
+						curAudio={curAudio}
+					>
+						<MainAudioPlayer2
+							curAudio={curAudio}
+							setCurAudio={setCurAudio}
+							showAudioControl={showAudioControl}
+							setShowAudioControl={setShowAudioControl}
+							curSection={currentSection}
+							curSkill={currentSkill}
+						/>
+					</TakeAnExamController>
 				</div>
 
 				<div className="flex-1 flex relative">
-					<MainAudioPlayer
+					{/* <MainAudioPlayer
 						curAudio={curAudio}
 						setCurAudio={setCurAudio}
 						showAudioControl={showAudioControl}
 						setShowAudioControl={setShowAudioControl}
 						curSection={currentSection}
 						curSkill={currentSkill}
-					/>
+					/> */}
 
 					<>
 						{showMain && <div id="the-fica-block" className="w-[0.5px] bg-transparent" />}
 
-						{!!currentSection?.ReadingPassage && (
-							<div className="flex-1 p-[16px] bg-[#fff] scrollable" style={{ height: mainHeight }}>
+						{!!currentSection?.ReadingPassage && showRead && (
+							<div className="flex-1 p-[16px] bg-[#fff] scrollable block w750:hidden" style={{ height: mainHeight }}>
+								{showRead && (
+									<div className="flex justify-start">
+										<div
+											onClick={() => setShowRead(false)}
+											className="block w750:hidden mb-[16px] bg-[#0A89FF] px-[8px] text-[#fff] rounded-[4px] font-[600] py-[4px]"
+										>
+											Xem câu hỏi
+										</div>
+									</div>
+								)}
+
 								{htmlParser(currentSection?.ReadingPassage || '')}
 							</div>
 						)}
 
+						{!!currentSection?.ReadingPassage && (
+							<div className="flex-1 p-[16px] bg-[#fff] scrollable hidden w750:block" style={{ height: mainHeight }}>
+								{htmlParser(currentSection?.ReadingPassage || '')}
+							</div>
+						)}
+
+						{/* ------------------------------ */}
+
 						{/* RIGHT OF SCREEN */}
-						<div className="flex-1 p-[16px] scrollable max-w-[1200px] mx-auto" style={{ height: mainHeight }}>
+
+						{!showRead && (
+							<div className="flex-1 p-[16px] scrollable max-w-[1200px] mx-auto block w750:hidden" style={{ height: mainHeight }}>
+								<div id={`cauhoi-0`} />
+
+								<div className="block w750:hidden mr-[8px] mt-[-4px] full-s-audio">
+									<MainAudioPlayer2
+										curAudio={curAudio}
+										setCurAudio={setCurAudio}
+										showAudioControl={showAudioControl}
+										setShowAudioControl={setShowAudioControl}
+										curSection={currentSection}
+										curSkill={currentSkill}
+									/>
+								</div>
+
+								{is.drag && <DragHeader answers={dragAns} />}
+
+								{!!currentSection?.ReadingPassage && (
+									<div className="flex justify-start">
+										<div
+											onClick={() => setShowRead(true)}
+											className="block w750:hidden mb-[16px] bg-[#0A89FF] px-[8px] text-[#fff] rounded-[4px] font-[600] py-[4px]"
+										>
+											Xem bài đọc
+										</div>
+									</div>
+								)}
+
+								<GroupContent is={is} curGroup={curGroup} questionsInSection={questionsInSection} />
+
+								<TestingQuestions
+									data={curGroup}
+									questions={questionsInSection}
+									setCurrentQuestion={setCurrentQuestion}
+									getDoingQuestionGroup={getDoingQuestionGroup}
+									onRefreshNav={() => {
+										setNotSetCurrentQuest(true)
+										getQuestions()
+									}}
+								/>
+
+								{curAudio?.Audio && <div className="h-[200px]" />}
+							</div>
+						)}
+
+						<div className="flex-1 p-[16px] scrollable max-w-[1200px] mx-auto hidden w750:block" style={{ height: mainHeight }}>
 							<div id={`cauhoi-0`} />
 
 							{is.drag && <DragHeader answers={dragAns} />}
@@ -814,7 +892,7 @@ function TakeAnExamDetail() {
 								<div className="font-[500]">Câu hỏi ({questionsInSection.length})</div>
 							</div>
 
-							<div className="flex items-center no-select">
+							<div className="flex flex-wrap gap-y-[8px] items-center no-select">
 								{questionsInSection.map((item, index) => {
 									const activated = currentQuestion?.IeltsQuestionId == item?.IeltsQuestionId
 
@@ -856,7 +934,7 @@ function TakeAnExamDetail() {
 				)}
 
 				{!showQuestions && (
-					<div onClick={toggleQuestions} className="cc-23-btn-quests all-center">
+					<div onClick={toggleQuestions} className="cc-23-btn-quests all-center" style={{ zIndex: 99999 }}>
 						<BsFillGrid3X2GapFill size={20} className="mt-[2px]" />
 						<div>Câu hỏi ({questionsInSection.length})</div>
 					</div>

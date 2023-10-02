@@ -9,6 +9,9 @@ import PrimaryTooltip from '~/common/components/PrimaryTooltip'
 import CreateExamSkill from './exam-skill-form'
 import { FiMoreVertical } from 'react-icons/fi'
 import { TiArrowSortedDown } from 'react-icons/ti'
+import { userIs } from '~/common/utils/common'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store'
 
 function ExamSkillItem(props) {
 	const { data, index, allSkills, onRefresh, onUp, onDown, showSort, currentSkill, setCurrentSkill, onPlayAudio, hideController } = props
@@ -73,6 +76,8 @@ function ExamSkillItem(props) {
 		</div>
 	)
 
+	const user = useSelector((state: RootState) => state.user.information)
+
 	const noneActiveClass = 'text-[#000] bg-[#e9e9e9] hover:bg-[#dad9d9]'
 	const activeClass = 'text-[#fff] bg-[#1b73e8] hover:bg-[#1867cf]'
 
@@ -112,7 +117,7 @@ function ExamSkillItem(props) {
 							</div>
 						)}
 
-						{!hideController && (
+						{(userIs(user).admin || userIs(user).manager) && !hideController && (
 							<div onClick={(e) => e.stopPropagation()}>
 								<PrimaryTooltip place="left" id={`tip-${index}`} content="Menu">
 									<Popover

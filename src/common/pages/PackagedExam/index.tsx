@@ -73,10 +73,6 @@ function PackageExam() {
 		setFilters({ ...filters, pageIndex: 1 })
 	}
 
-	function handleReset() {
-		setFilters(initParameters)
-	}
-
 	const [style, setStyle] = useState(1)
 
 	const [deleting, setDeleting] = useState<boolean>(false)
@@ -150,13 +146,9 @@ function PackageExam() {
 			<div className="max-w-[2000px]">
 				<div className="cc-exam-header">
 					<div className="max-w-[350px] mr-[8px] flex items-center">
-						{/* <PrimaryTooltip id="exam-x" content="Hướng dẫn sử dụng" place="right">
-							<div onClick={openTour} className="cc-exam-btn-tour">
-								<FaQuestionCircle size={20} color="#1b73e8" />
-							</div>
-						</PrimaryTooltip> */}
-
 						<div data-tut="reactour-switch">
+							<div className="font-[600] ml-[4px]">Danh sách bộ đề</div>
+
 							{/* @ts-ignore */}
 							{/* <Segmented
 								style={{ height: 36 }}
@@ -216,7 +208,7 @@ function PackageExam() {
 											<div key={thisId} id={thisId} className="pe-i-default">
 												<img src={item?.Thumbnail || '/images/package-thumbnail.png'} className="pe-i-d-thumb" />
 
-												{is(userInfo).admin && (
+												{(is(userInfo).admin || is(userInfo).manager) && (
 													<Popover
 														ref={popRef}
 														overlayClassName="show-arrow"
@@ -271,7 +263,7 @@ function PackageExam() {
 														</div>
 													)}
 
-													{is(userInfo).admin && (
+													{(is(userInfo).admin || is(userInfo).manager) && (
 														<div
 															className="pe-i-d-detail"
 															onClick={() => Router.push({ pathname: '/package-exam/detail', query: { package: item?.Id } })}
@@ -291,7 +283,7 @@ function PackageExam() {
 														</div>
 													)}
 
-													{is(userInfo).admin && <DonatePackage onRefresh={onRefresh} item={item} />}
+													{is(userInfo).admin || (is(userInfo).manager && <DonatePackage onRefresh={onRefresh} item={item} />)}
 												</div>
 											</div>
 										)
