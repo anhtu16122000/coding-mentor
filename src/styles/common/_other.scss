@@ -206,8 +206,12 @@ $strawberry: #01b446;
 	margin: 0px !important;
 }
 
-// .ant-list-grid {
-// 	.ant-row > div {
-// 		max-width: 23.9% !important;
-// 	}
-// }
+.time-line-hidden-time {
+	.vertical-timeline-element-date {
+		padding: 0px !important;
+		display: none !important;
+	}
+	.vertical-timeline-element-content-arrow {
+		border-right-color: #1b73e8e0 !important;
+	}
+}

@@ -6,6 +6,9 @@ export const trainingRouteApi = {
 	getAll(params) {
 		return instance.get<IApiResultData<any[]>>(url, { params })
 	},
+	getForm(params) {
+		return instance.get<IApiResultData<any[]>>(url + '/form', { params })
+	},
 	getByID(ID: number) {
 		return instance.get<IApiResultData<any>>(`${url}/${ID}`)
 	},

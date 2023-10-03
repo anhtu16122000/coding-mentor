@@ -107,10 +107,6 @@ const TrainingStudent = () => {
 			render: (value, item, index) => {
 				return (
 					<div className="flex items-center">
-						{/* {(is(userInfo).admin || is(userInfo).teacher || is(userInfo).academic || is(userInfo).manager) && (
-							<ModalCreatePractice isEdit defaultData={item} onRefresh={getData} />
-						)} */}
-
 						{(is(userInfo).admin || is(userInfo).teacher || is(userInfo).academic || is(userInfo).manager) && (
 							<PrimaryTooltip place="left" id={`hw-del-${item?.Id}`} content="Xoá">
 								<Popconfirm placement="left" title={`Xoá?`} onConfirm={() => delThis(item?.Id)}>
@@ -123,7 +119,7 @@ const TrainingStudent = () => {
 
 						<PrimaryTooltip place="left" id={`hw-res-${item?.Id}`} content="Xem chi tiết">
 							<div
-								onClick={() => router.push(`/practice/detail/?practice=${userInfo?.RoleId == 3 ? item?.TrainingRouteId : item?.Id}`)}
+								onClick={() => router.push(`/practice/detail/?practice=${item?.TrainingRouteId}`)}
 								className="w-[28px] ml-[8px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
 							>
 								<FiEye size={20} />

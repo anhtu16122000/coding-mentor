@@ -3,7 +3,7 @@ import { Form, Modal, Select } from 'antd'
 import { ShowNostis } from '~/common/utils'
 import { formRequired } from '~/common/libs/others/form'
 import { ieltsExamApi } from '~/api/IeltsExam'
-import { FaEdit } from 'react-icons/fa'
+import { FaEdit, FaPlus } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import { PrimaryTooltip } from '~/common/components'
@@ -11,6 +11,8 @@ import PrimaryButton from '~/common/components/Primary/Button'
 import ModalFooter from '~/common/components/ModalFooter'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 import { trainingRouteDetailApi } from '~/api/practice/TrainingRouteDetail'
+import { BiPlus } from 'react-icons/bi'
+import { is } from '~/common/utils/common'
 
 const ModalCreateTrainingRouteDetail = (props) => {
 	const { onRefresh, isEdit, defaultData, TrainingRouteFormId, TrainingRouteId } = props
@@ -27,6 +29,7 @@ const ModalCreateTrainingRouteDetail = (props) => {
 			const res = await trainingRouteDetailApi.post(params)
 			if (res.status == 200) {
 				ShowNostis.success('Thành công')
+				form.resetFields()
 				!!onRefresh && onRefresh()
 				setVisible(false)
 			}
@@ -40,6 +43,7 @@ const ModalCreateTrainingRouteDetail = (props) => {
 			const res = await trainingRouteDetailApi.put(params)
 			if (res.status == 200) {
 				ShowNostis.success('Thành công')
+				form.resetFields()
 				!!onRefresh && onRefresh()
 				setVisible(false)
 			}
@@ -98,18 +102,21 @@ const ModalCreateTrainingRouteDetail = (props) => {
 
 	return (
 		<>
-			{(user?.RoleId == 1 || user?.RoleId == 2) && (
+			{(is(user).admin || is(user).academic || is(user).manager || is(user).teacher) && (
 				<>
 					{isEdit ? (
-						<PrimaryTooltip place="left" id={`hw-take-${defaultData?.Id}`} content="Cập nhật">
-							<div onClick={openEdit} className="w-[28px] text-[#FFBA0A] h-[30px] all-center hover:opacity-70 cursor-pointer">
-								<FaEdit size={20} />
-							</div>
-						</PrimaryTooltip>
+						<div onClick={openEdit} className="h-[28px] px-[8px] all-center bg-[#4c93f1] hover:bg-[#4680ff] text-[#fff] rounded-full">
+							<FaEdit size={16} className="mr-[4px]" />
+							<div>Cập nhật</div>
+						</div>
 					) : (
-						<PrimaryButton icon="add" type="button" onClick={toggle} background="green">
-							Thêm mới
-						</PrimaryButton>
+						<div
+							onClick={toggle}
+							className="h-[30px] px-[16px] all-center cursor-pointer shadow-sm duration-150 hover:opacity-80 rounded-full bg-[#fff] text-[#4CAF50] font-[600]"
+						>
+							<FaPlus size={14} className="ml-[-4px] mr-[4px]" />
+							<div>Thêm kỹ năng</div>
+						</div>
 					)}
 				</>
 			)}
@@ -125,7 +132,7 @@ const ModalCreateTrainingRouteDetail = (props) => {
 					<Form form={form} layout="vertical" onFinish={handleSubmit}>
 						<InputTextField isRequired name="Skill" label="Tên kỹ năng" rules={formRequired} />
 
-						<Form.Item name="ExamId" label="Đề" rules={formRequired}>
+						<Form.Item name="IeltsExamId" label="Đề" rules={formRequired}>
 							<Select
 								showSearch
 								optionFilterProp="children"
