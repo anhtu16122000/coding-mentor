@@ -12,6 +12,9 @@ export const trainingRouteFormApi = {
 	post(data: IPostExam) {
 		return instance.post(url, data)
 	},
+	saveIndex(data) {
+		return instance.post(url + '/change-index', data)
+	},
 	put(data: IPostExam) {
 		return instance.put(url, data)
 	},

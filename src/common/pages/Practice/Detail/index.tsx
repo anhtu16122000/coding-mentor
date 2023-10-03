@@ -1,8 +1,8 @@
-import { Card, Modal, Popconfirm, Popover } from 'antd'
+import { Card, Modal, Popconfirm } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import { IoBook, IoCheckmarkDoneSharp, IoClose, IoCloseSharp } from 'react-icons/io5'
+import { IoCheckmarkDoneSharp, IoClose } from 'react-icons/io5'
 import { useSelector } from 'react-redux'
 import { examResultApi } from '~/api/exam/result'
 import { trainingRouteApi } from '~/api/practice'
@@ -15,20 +15,19 @@ import { setGlobalBreadcrumbs } from '~/store/globalState'
 import { trainingRouteFormApi } from '~/api/practice/TrainingRouteForm'
 import ModalCreateTrainingRouteForm from './ModalCreate'
 import TrainingRouteDetail from './Detail'
-import RenderItem from './RenderItem'
 import { ShowNoti, log } from '~/common/utils'
 import Lottie from 'react-lottie-player'
 import warning from '~/common/components/json/100468-warning.json'
 import { is } from '~/common/utils/common'
-
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import ModalCreateTrainingRouteDetail from './Detail/ModalCreate'
-import { FaEdit } from 'react-icons/fa'
 import { BiTrash } from 'react-icons/bi'
 import { trainingRouteDetailApi } from '~/api/practice/TrainingRouteDetail'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import PrimaryTag from '~/common/components/Primary/Tag'
 import { FiEye } from 'react-icons/fi'
+import PrimaryButton from '~/common/components/Primary/Button'
+import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti'
 
 const listTodoApi = {
 	pageSize: PAGE_SIZE,
@@ -329,6 +328,48 @@ const TrainingRouteForm = () => {
 		}
 	]
 
+	const [sorting, setSorting] = useState<boolean>(false)
+
+	function moveItemUpOnePosition(arr, item) {
+		const index = arr.indexOf(item)
+
+		if (index !== -1 && index !== 0) {
+			// Sử dụng destructuring để hoán đổi phần tử và phần tử trước nó
+			;[arr[index - 1], arr[index]] = [arr[index], arr[index - 1]]
+		}
+
+		setData([...arr])
+	}
+
+	function moveItemDownOnePosition(arr, item) {
+		const index = arr.indexOf(item)
+
+		if (index !== -1 && index !== arr.length - 1) {
+			// Sử dụng destructuring để hoán đổi phần tử và phần tử trước nó
+			;[arr[index + 1], arr[index]] = [arr[index], arr[index + 1]]
+		}
+
+		setData([...arr])
+	}
+
+	async function saveIndex() {
+		let temp = []
+
+		for (let i = 0; i < data.length; i++) {
+			temp.push({ Id: data[i].Id, Index: i + 1 })
+		}
+
+		try {
+			const res = await trainingRouteFormApi.saveIndex({ Items: temp })
+			if (res.status == 200) {
+				getData()
+				setSorting(false)
+			}
+		} catch (error) {
+			ShowNoti('error', error?.message)
+		}
+	}
+
 	return (
 		<>
 			<Card
@@ -337,7 +378,34 @@ const TrainingRouteForm = () => {
 					<div className="w-full flex items-center justify-between">
 						<div>{detail?.Name || 'Luyện tập'}</div>
 						{(is(userInfo).admin || is(userInfo).teacher || is(userInfo).academic || is(userInfo).manager) && (
-							<ModalCreateTrainingRouteForm onRefresh={getData} TrainingRouteId={parseInt(router?.query?.practice + '')} />
+							<div className="flex items-center">
+								{data.length > 0 && !sorting && (
+									<PrimaryButton onClick={() => setSorting(!sorting)} className="mr-[8px]" type="button" background="yellow" icon="sort">
+										Sắp xếp
+									</PrimaryButton>
+								)}
+
+								{data.length > 0 && sorting && (
+									<>
+										<PrimaryButton
+											onClick={() => {
+												getData()
+												setSorting(false)
+											}}
+											type="button"
+											background="red"
+											icon="cancel"
+										>
+											Huỷ
+										</PrimaryButton>
+										<PrimaryButton onClick={() => saveIndex()} className="mr-[8px]" type="button" background="blue" icon="save">
+											Lưu thay đổi
+										</PrimaryButton>
+									</>
+								)}
+
+								{!sorting && <ModalCreateTrainingRouteForm onRefresh={getData} TrainingRouteId={parseInt(router?.query?.practice + '')} />}
+							</div>
 						)}
 					</div>
 				}
@@ -373,7 +441,31 @@ const TrainingRouteForm = () => {
 
 									<div className="w-full bg-[#fff] h-[1px] mt-[8px] mb-[14px]" />
 
-									{typeof item?.Details == 'object' && (
+									{sorting && (
+										<div className="flex items-center gap-[8px] mt-[8px]">
+											<div
+												onClick={() => dataIndex > 0 && moveItemUpOnePosition(data, item)}
+												className="h-[28px] cursor-pointer bg-[#fff] duration-150 hover:mt-[-2px] hover:mb-[2px] rounded-[4px] all-center px-[8px]"
+												style={{
+													opacity: dataIndex > 0 ? '1' : '0.5'
+												}}
+											>
+												<TiArrowSortedUp color="#1b73e8e0" size={18} />
+											</div>
+
+											<div
+												onClick={() => dataIndex < data.length - 1 && moveItemDownOnePosition(data, item)}
+												className="h-[28px] cursor-pointer bg-[#fff] duration-150 hover:mt-[-2px] hover:mb-[2px] rounded-[4px] all-center px-[8px]"
+												style={{
+													opacity: dataIndex < data.length - 1 ? '1' : '0.5'
+												}}
+											>
+												<TiArrowSortedDown color="#1b73e8e0" size={18} />
+											</div>
+										</div>
+									)}
+
+									{!sorting && typeof item?.Details == 'object' && (
 										<div className="flex flex-wrap flex-col items-start gap-[8px] mt-[8px]">
 											{(is(userInfo).admin || is(userInfo).manager || is(userInfo).teacher || is(userInfo).academic) && (
 												<div className="mb-[8px] flex items-start gap-[8px]">
@@ -467,24 +559,6 @@ const TrainingRouteForm = () => {
 						)
 					})}
 				</VerticalTimeline>
-
-				{/* {userInfo?.RoleId == 3 && (
-					<div className="grid grid-cols-1 w600:grid-cols-2 w1000:grid-cols-3 w1200:grid-cols-4 gap-4">
-						{data.map((item, index) => {
-							return <RenderItem key={`iko-${index}-${item?.Id}`} item={item} />
-						})}
-					</div>
-				)}
-
-				{userInfo?.RoleId != 3 && (
-					<PrimaryTable
-						loading={loading}
-						total={totalPage && totalPage}
-						data={data}
-						columns={columns}
-						onChangePage={(event: number) => setFilters({ ...filters, pageIndex: event })}
-					/>
-				)} */}
 			</Card>
 
 			<Modal width={400} open={examWarning} onCancel={() => setExamWarning(false)} footer={null}>

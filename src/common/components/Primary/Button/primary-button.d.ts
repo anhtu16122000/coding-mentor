@@ -28,6 +28,7 @@ type IPrimaryButton = {
 		| 'full-screen'
 		| 'restore-screen'
 		| 'input'
+		| 'sort'
 		| 'none'
 	type: 'button' | 'submit'
 	onClick?: Function

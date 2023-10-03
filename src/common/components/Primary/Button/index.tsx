@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { PlusCircle } from 'react-feather'
 import { AiFillPrinter, AiOutlineCheckCircle, AiOutlineEye, AiOutlineFileSearch } from 'react-icons/ai'
 import { BiHide, BiReset, BiSearchAlt2 } from 'react-icons/bi'
+import { FaSort } from 'react-icons/fa'
 import { FiEdit, FiSave, FiSend, FiTrash2, FiXCircle } from 'react-icons/fi'
 import { IoEnterOutline, IoPowerSharp } from 'react-icons/io5'
 import { MdOutlinePayments, MdOutlineZoomInMap, MdOutlineZoomOutMap } from 'react-icons/md'
@@ -85,6 +86,9 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 	const iconClass = iconClassName ? iconClassName : !!children ? 'mr-2' : ''
 
 	function getIcon() {
+		if (icon == 'sort') {
+			return <FaSort size={18} className={iconClass} />
+		}
 		if (icon == 'add') {
 			return <PlusCircle size={18} className={iconClass} />
 		}
