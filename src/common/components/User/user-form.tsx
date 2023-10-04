@@ -309,6 +309,7 @@ const CreateUser: FC<ICreateNew> = (props) => {
 		form.setFieldsValue({ WardId: !!defaultData.WardId ? parseInt(defaultData.WardId) : null })
 		form.setFieldsValue({ DistrictId: !!defaultData.DistrictId ? parseInt(defaultData.DistrictId) : null })
 		if (isStudent && isEdit) {
+			getSaler(defaultData?.BranchIds)
 			form.setFieldsValue({ SourceId: !!defaultData.SourceId ? defaultData.SourceId : null })
 			form.setFieldsValue({ LearningNeedId: !!defaultData.LearningNeedId ? defaultData.LearningNeedId : null })
 			form.setFieldsValue({ SaleId: !!defaultData.SaleId ? defaultData.SaleId : null })

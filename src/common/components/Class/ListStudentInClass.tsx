@@ -81,10 +81,8 @@ export const ListStudentInClass = () => {
 	}
 
 	useEffect(() => {
-		if (router?.query?.class) {
-			getStudentInClass(apiParameters)
-		}
-	}, [router?.query?.class])
+		getStudentInClass(apiParameters)
+	}, [router?.query])
 
 	function handleRefresh() {
 		apiParameters?.pageIndex == 1 ? getStudentInClass(apiParameters) : setApiParameters(initParameters)
