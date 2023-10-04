@@ -4,7 +4,7 @@ import PrimaryTable from '~/common/components/Primary/Table'
 import PrimaryTag from '~/common/components/Primary/Tag'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { parseToMoney } from '~/common/utils/common'
-import ServiceAppointmentTest from '../Info-Course/ServiceAppointmentTest'
+import ServiceAppointmentTest from '../InfoCourse/ServiceAppointmentTest'
 
 type ITabTestAppointment = {
 	StudentDetail: IUserResponse

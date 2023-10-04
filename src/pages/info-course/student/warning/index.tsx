@@ -2,7 +2,7 @@ import Head from 'next/head'
 import React from 'react'
 import appConfigs from '~/appConfig'
 import MainLayout from '~/common/components/MainLayout'
-import { StudentWarningPage } from '~/common/pages/Info-Course/StudentWarningPage'
+import { StudentWarningPage } from '~/common/pages/InfoCourse/StudentWarningPage'
 
 const StudentWarning = () => {
 	return (

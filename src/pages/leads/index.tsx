@@ -1,5 +1,5 @@
 import React from 'react'
-import CustomerAdvisory from '~/common/pages/Info-Course/Customer'
+import CustomerAdvisory from '~/common/pages/InfoCourse/Customer'
 import MainLayout from '~/common/components/MainLayout'
 
 const Customer = () => {

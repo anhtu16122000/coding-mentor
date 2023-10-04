@@ -1,6 +1,6 @@
 import React from 'react'
 import { MainLayout } from '~/common/index'
-import Feedbacks from '~/common/pages/Info-Course/FeedBacks'
+import Feedbacks from '~/common/pages/InfoCourse/FeedBacks'
 
 function FeedbacksPage() {
 	return <Feedbacks />
