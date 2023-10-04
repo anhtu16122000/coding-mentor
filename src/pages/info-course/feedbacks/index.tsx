@@ -1,5 +1,5 @@
 import React from 'react'
-import { MainLayout } from '~/common'
+import { MainLayout } from '~/common/index'
 import Feedbacks from '~/common/pages/Info-Course/FeedBacks'
 
 function FeedbacksPage() {

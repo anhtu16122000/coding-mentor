@@ -1,4 +1,4 @@
-import { MainLayout } from '~/common'
+import { MainLayout } from '~/common/index'
 import Dashboard from '../home/dashboard'
 
 function DashboardPage() {

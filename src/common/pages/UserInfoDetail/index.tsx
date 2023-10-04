@@ -1,5 +1,5 @@
 import React from 'react'
-import { MainLayout } from '~/common'
+import { MainLayout } from '~/common/index'
 import { Form, Modal, Skeleton, Tooltip } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'

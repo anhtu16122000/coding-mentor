@@ -1,7 +1,7 @@
 import { Input } from 'antd'
 import React, { useEffect } from 'react'
 import RestApi from '~/api/RestApi'
-import { MainLayout } from '~/common'
+import { MainLayout } from '~/common/index'
 import { PrimaryTooltip, StudentNote } from '~/common/components'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'

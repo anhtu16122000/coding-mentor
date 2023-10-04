@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import RestApi from '~/api/RestApi'
-import { MainLayout } from '~/common'
+import { MainLayout } from '~/common/index'
 import PayForm from '~/common/components/Finance/Payment/pay'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
