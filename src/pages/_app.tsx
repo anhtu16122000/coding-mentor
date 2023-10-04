@@ -26,14 +26,12 @@ import 'react-vertical-timeline-component/style.min.css'
 import 'react-h5-audio-player/lib/styles.css'
 import 'react-image-crop/src/ReactCrop.scss'
 
-import 'react-tooltip/dist/react-tooltip.css'
-
 import ToastifyContainer from '~/common/providers/Toastify'
 import { checkInternet } from '~/common/utils/main-function'
 import MainHeader from '~/common/libs/SEO/main-header'
 
 import { GoogleAnalytics } from 'nextjs-google-analytics'
-import { log } from '~/common/utils'
+import { removeProductionLog } from '~/common/utils/super-functions'
 
 const gaMeasurementId = 'G-HLZL768WH8' // G-KXHWW4100Q
 
@@ -41,11 +39,11 @@ function App({ Component, pageProps }: AppProps & IViewProps) {
 	const Layout = Component.Layout || ((props) => <>{props.children}</>)
 	const breadcrumb = Component.breadcrumb || ''
 
-	// log.Yellow('Đi qua App', new Date().getTime())
-
 	useEffect(() => {
 		checkInternet()
 	}, [])
+
+	removeProductionLog()
 
 	return (
 		<>

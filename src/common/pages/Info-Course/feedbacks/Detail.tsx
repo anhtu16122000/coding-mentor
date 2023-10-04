@@ -1,8 +1,7 @@
-import { Popconfirm, Popover, Rate, Skeleton, Spin } from 'antd'
+import { Popconfirm, Rate, Skeleton, Spin } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { HiMail, HiPhone } from 'react-icons/hi'
-import { MdKeyboardArrowLeft } from 'react-icons/md'
 import { TiLocation } from 'react-icons/ti'
 import { useSelector } from 'react-redux'
 import { feedbackStudentApi } from '~/api/manage/feedbacks-student'
@@ -12,15 +11,12 @@ import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import FeedbackBlock from './FeedbackBlock'
 
-export interface IFeedbackDetailPageProps {}
-
-export default function FeedbackDetailPage(props: IFeedbackDetailPageProps) {
+function DetailFeedback() {
 	const router = useRouter()
 
 	const [dataSource, setDataSource] = useState<any>(null)
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
 	const [userInformation, setUserInformation] = useState<any>()
-	const [isVisiblePopover, setIsVisiblePopover] = useState(false)
 
 	const user = useSelector((state: RootState) => state.user.information)
 
@@ -28,24 +24,8 @@ export default function FeedbackDetailPage(props: IFeedbackDetailPageProps) {
 		return user?.RoleId == 1
 	}
 
-	function isTeacher() {
-		return user?.RoleId == 2
-	}
-
-	function isManager() {
-		return user?.RoleId == 4
-	}
-
 	function isStdent() {
 		return user?.RoleId == 3
-	}
-
-	function isAccountant() {
-		return user?.RoleId == 6
-	}
-
-	function isAcademic() {
-		return user?.RoleId == 7
 	}
 
 	function isParent() {
@@ -99,7 +79,6 @@ export default function FeedbackDetailPage(props: IFeedbackDetailPageProps) {
 			let res = await feedbackStudentApi.updateRating({ Id: router.query.feedbackId, Rating: data })
 			if (res.status == 200) {
 				ShowNoti('success', res.data.message)
-				setIsVisiblePopover(false)
 			}
 		} catch (error) {
 			ShowNoti('error', error.message)
@@ -232,3 +211,5 @@ export default function FeedbackDetailPage(props: IFeedbackDetailPageProps) {
 		</div>
 	)
 }
+
+export default DetailFeedback

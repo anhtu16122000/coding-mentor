@@ -8,13 +8,12 @@ import { RootState } from '~/store'
 import { TeacherChildMenu, TeacherMenu } from '~/common/libs/routers/teacher'
 import { StudentChildMenu, StudentMenu } from '~/common/libs/routers/student'
 import ReactHtmlParser from 'react-html-parser'
-import { log } from '~/common/utils'
-import PrimaryTooltip from '../../PrimaryTooltip'
 import { ManagerChildMenu, ManagerMenu } from '~/common/libs/routers/manager'
 import { SalerChildMenu, SalerMenu } from '~/common/libs/routers/saler'
 import { AccountantChildMenu, AccountantMenu } from '~/common/libs/routers/accountant'
 import { AcademicChildMenu, AcademicMenu } from '~/common/libs/routers/academic'
 import { ParentStudentChildMenu, ParentStudentMenu } from '~/common/libs/routers/parent'
+import appConfigs from '~/appConfig'
 
 const { SubMenu } = Menu
 
@@ -25,10 +24,6 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 	let pathname = router.pathname
 
 	const menuChild = useRef(null)
-
-	// if (pathname == '/') {
-	// 	pathname = '/user/student'
-	// }
 
 	const [isHover, setIsHover] = useState({ changeHeight: null, status: false, position: null })
 	const [posMenu, setPosMenu] = useState(null)
@@ -48,15 +43,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 		}
 	}, [parentMenu])
 
-	function getActiveTab() {
-		// console.time('- getActiveTab')
-
-		if (pathname == '/') {
-			//
-		}
-
-		// console.timeEnd('- getActiveTab')
-	}
+	function getActiveTab() {}
 
 	const changeTabs = (e) => {
 		e.preventDefault()
@@ -313,7 +300,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 			<div className="menu-parent">
 				<div className="menu-parent-logo" />
 
-				<div className="menu-parent-body">
+				<div className="menu-parent-body overflow-auto  max-h-[calc(100vh-120px)] h-full w500:max-h-[95vh]">
 					<ul className="list-menu">
 						{parentMenu.map((item, index) => {
 							const isActive = mainActivated == item.Key
@@ -338,6 +325,10 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 						})}
 					</ul>
 				</div>
+
+				<div className="absolute bottom-0 left-0 w-[70px] flex all-center pb-[16px]">
+					<div className="text-[#fff] opacity-70 text-[14px] font-[500]">{appConfigs.appVersion}</div>
+				</div>
 			</div>
 
 			<div className={`menu-child-bg ${!isOpen && `${isHover.status ? 'open' : ''}`}`} onMouseEnter={closeTabs}></div>
@@ -345,7 +336,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 			<div className={`menu-child  ${!isOpen && `close-app  ${isHover.status ? 'hover-open' : ''} `}`}>
 				<div className="app-header-logo flex items-center justify-center">
 					<a href="/">
-						<img className={isOpen ? 'logo-img h-[40px]' : 'logo-img-none'} src="/images/logo-2.jpg" />
+						<img className={isOpen ? 'logo-img h-[34px] ml-[-4px] w1000:ml-0 w1000:h-[40px]' : 'logo-img-none'} src="/images/logo-2.jpg" />
 					</a>
 				</div>
 

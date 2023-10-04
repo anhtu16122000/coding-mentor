@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { accountApi } from '~/api/dev/account'
 import { Spin, Table, Form, Input } from 'antd'
-import { parseJwt } from '~/common/utils'
 import { useDispatch } from 'react-redux'
 import { setUser } from '~/store/userReducer'
-import { setAuthData, setAuthLoading } from '~/store/authReducer'
-import Router from 'next/router'
 import { setListClass, setStatusData, setTotalClass } from '~/store/classReducer'
 import { playWithToken } from '~/common/utils/token-handle'
 
@@ -55,8 +52,6 @@ const MonaSupportPattern = () => {
 	}, [])
 
 	const onSubmit = async (data) => {
-		console.log('---- onSubmit: ', data)
-
 		try {
 			setLoading(true)
 			const res = await accountApi.loginDev(data)

@@ -1,5 +1,6 @@
 const appConfigs = {
 	appName: 'Mona Edutech',
+	appVersion: 'v3.0',
 	primaryColor: '#004aad',
 	secondColor: '#eaede8',
 	oneSignalKey: process.env.NEXT_PUBLIC_ONE_SIGNAL,

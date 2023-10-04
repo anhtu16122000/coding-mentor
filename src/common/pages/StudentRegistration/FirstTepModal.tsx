@@ -1,18 +1,14 @@
-import { Form, Input, InputNumber, Modal, Popover, Select, Tree } from 'antd'
-import React, { FC, useEffect, useState } from 'react'
+import { Form, Modal, Select } from 'antd'
+import React, {   useEffect, useState } from 'react'
 import { ShowNostis } from '~/common/utils'
-import { formNoneRequired, formRequired } from '~/common/libs/others/form'
-import { Filter } from 'react-feather'
+import { formRequired } from '~/common/libs/others/form'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import { branchApi } from '~/api/manage/branch'
 import { useDispatch } from 'react-redux'
-import { setFilterBranchs, setFilterClass, setFilterPrograms } from '~/store/filterReducer'
+import { setFilterBranchs, setFilterPrograms } from '~/store/filterReducer'
 import { programApi } from '~/api/learn/program'
-import RestApi from '~/api/RestApi'
-import NumericInput from '~/common/pages/nearing-completion/NumberInput'
 import PrimaryButton from '~/common/components/Primary/Button'
-import ModalFooter from '~/common/components/ModalFooter'
 
 const FirstTepModal = (props) => {
 	const { filters, onSubmit, onReset, curStep } = props
@@ -22,13 +18,9 @@ const FirstTepModal = (props) => {
 	const dispatch = useDispatch()
 
 	const [visible, setVisible] = useState(false)
-	const [numberValue, setNumberValue] = useState<string>('1')
 
 	const branches = useSelector((state: RootState) => state.filter.Branchs)
 	const programs = useSelector((state: RootState) => state.filter.Programs)
-	const classes = useSelector((state: RootState) => state.filter.Classes)
-
-	const [tags, setTags] = useState([])
 
 	useEffect(() => {
 		if (visible) {
@@ -49,19 +41,6 @@ const FirstTepModal = (props) => {
 				dispatch(setFilterBranchs(response.data.data))
 			} else {
 				dispatch(setFilterBranchs([]))
-			}
-		} catch (error) {
-			ShowNostis.error(error?.message)
-		}
-	}
-
-	const getClasses = async () => {
-		try {
-			const response = await RestApi.get<any>('Class', { pageIndex: 1, pageSize: 99999, types: '1,2' })
-			if (response.status == 200) {
-				dispatch(setFilterClass(response.data.data))
-			} else {
-				dispatch(setFilterClass([]))
 			}
 		} catch (error) {
 			ShowNostis.error(error?.message)
@@ -161,23 +140,7 @@ const FirstTepModal = (props) => {
 								})}
 							</Select>
 						</Form.Item>
-
-						{/* {!!showClass && (
-							<Form.Item className="col-span-2" name="classId" label="Lớp học" rules={formNoneRequired}>
-								<Select placeholder="Chọn lớp học" allowClear>
-									{classes.map((item) => {
-										return (
-											<Select.Option key={item.Id} value={item.Id}>
-												{item?.Name}
-											</Select.Option>
-										)
-									})}
-								</Select>
-							</Form.Item>
-						)} */}
 					</Form>
-
-					{/* <FooterFilters onSubmit={submitForm} onReset={resetForm} /> */}
 				</div>
 			</Modal>
 		</>

@@ -12,7 +12,7 @@ import { setFilterBranchs, setFilterClass, setFilterPrograms } from '~/store/fil
 import { programApi } from '~/api/learn/program'
 import FooterFilters from '../../Footer/Filters'
 import RestApi from '~/api/RestApi'
-import NumericInput from '~/common/pages/nearing-completion/NumberInput'
+import NumericInput from '~/common/pages/NearingCompletion/NumberInput'
 
 interface IFilters {
 	filters?: any

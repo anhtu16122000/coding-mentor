@@ -22,9 +22,7 @@ import { BsFillCameraFill } from 'react-icons/bs'
 import Avatar from '~/common/components/Avatar'
 import { TabMonthlyTuition } from './TabMonthlyTuition'
 
-export interface IStudentDetailInfoPageProps {}
-
-export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps) {
+function StudentDetailInfo() {
 	const [studentDetail, setStudentDetail] = useState<IUserResponse>()
 	const [isVisibleModal, setIsVisibleModal] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
@@ -220,3 +218,5 @@ export default function StudentDetailInfoPage(props: IStudentDetailInfoPageProps
 		</>
 	)
 }
+
+export default StudentDetailInfo

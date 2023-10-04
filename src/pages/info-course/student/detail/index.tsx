@@ -2,18 +2,18 @@ import Head from 'next/head'
 import React from 'react'
 import appConfigs from '~/appConfig'
 import { MainLayout } from '~/common'
-import StudentDetailInfoPage from '~/common/pages/Student/StudentDetailInfoPage'
+import StudentDetailInfo from '~/common/pages/Student/StudentDetailInfo'
 
-export interface IStudentDetailInfoProps {}
-
-export default function StudentDetailInfo(props: IStudentDetailInfoProps) {
+function StudentDetailInfoPage() {
 	return (
 		<>
 			<Head>
 				<title>{appConfigs.appName} - Thông tin học viên</title>
 			</Head>
-			<StudentDetailInfoPage />
+			<StudentDetailInfo />
 		</>
 	)
 }
-StudentDetailInfo.Layout = MainLayout
+
+StudentDetailInfoPage.Layout = MainLayout
+export default StudentDetailInfoPage

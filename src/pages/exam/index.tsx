@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux'
 import appConfigs from '~/appConfig'
 import ExamList from '~/common/components/Exercise'
 import MainLayout from '~/common/components/MainLayout'
-import { wait } from '~/common/utils'
 import { setGlobalBreadcrumbs } from '~/store/globalState'
 
 function ExamListPage() {

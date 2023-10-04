@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Lottie from 'react-lottie-player'
 
 import loadingJson from '~/common/components/json/28893-book-loading.json'

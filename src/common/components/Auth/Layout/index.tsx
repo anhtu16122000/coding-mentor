@@ -104,11 +104,12 @@ function AuthLayout({ children }: IAuthLayout) {
 								</p>
 							</>
 						)}
-						{/* <h1 className="content-idiom">{ReactHtmlParser(contentIdiom?.Content)}</h1> */}
 					</div>
 				</div>
-				<div className="col-md-4 col-12 m-0 right-login">{children}</div>
-				<div className="form-term">
+
+				<div className="col-md-4 col-12 m-0 right-login h-[100vh] w1000:h-[95vh]">{children}</div>
+
+				<div className="form-term hidden w1000:block">
 					<div className="content">
 						<div className="item">
 							<div className="icon">
@@ -137,6 +138,7 @@ function AuthLayout({ children }: IAuthLayout) {
 					</div>
 				</div>
 			</div>
+
 			<Modal
 				open={visible}
 				onCancel={onClose}

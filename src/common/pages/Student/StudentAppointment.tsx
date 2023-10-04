@@ -2,7 +2,6 @@ import { Checkbox, Tooltip } from 'antd'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { Eye } from 'react-feather'
-// import { branchApi, programApi } from '~/src/apiBase'
 import { courseRegistrationApi } from '~/api/course/course-registration'
 import { branchApi } from '~/api/manage/branch'
 import { programApi } from '~/api/learn/program'
@@ -13,7 +12,6 @@ import PrimaryTable from '~/common/components/Primary/Table'
 import FilterColumn from '~/common/components/FilterTable/Filter/FilterColumn'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
-// import { useWrap } from '~/src/context/wrap'
 import { ShowNoti } from '~/common/utils'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 
@@ -21,7 +19,6 @@ const CourseRegistration = () => {
 	const [listStudent, setListStudent] = useState([])
 	const [listChecked, setListChecked] = useState([])
 	const [isPickedProgramID, setIsPickedProgramID] = useState(null)
-	// const { userInformation, showNoti } = useWrap()
 	const { information: userInformation } = useSelector((state: RootState) => state.user)
 	const onSearch = (data) => {
 		setCurrentPage(1)

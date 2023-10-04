@@ -1,5 +1,4 @@
 import React from 'react'
-import CustomerAdvisory from '~/common/pages/Info-Course/Customer'
 import MainLayout from '~/common/components/MainLayout'
 import Head from 'next/head'
 import appConfigs from '~/appConfig'

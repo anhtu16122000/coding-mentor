@@ -22,7 +22,7 @@ import { RootState } from '~/store'
 
 const PAGE_SIZE = 10
 
-const PaymentApprovePage = () => {
+const PaymentVerification = () => {
 	const initParamters = { pageSize: PAGE_SIZE, pageIndex: 1, search: '', status: 0 }
 	const [dataPaymentApprove, setDataPaymentApprove] = useState<any>()
 	const [paymentStatus, setPaymentStatus] = useState<TabCompData[]>()
@@ -102,24 +102,12 @@ const PaymentApprovePage = () => {
 		return user?.RoleId == 1
 	}
 
-	function isTeacher() {
-		return user?.RoleId == 2
-	}
-
 	function isManager() {
 		return user?.RoleId == 4
 	}
 
-	function isStdent() {
-		return user?.RoleId == 3
-	}
-
 	function isAccountant() {
 		return user?.RoleId == 6
-	}
-
-	function isAcademic() {
-		return user?.RoleId == 7
 	}
 
 	const columns = [
@@ -173,7 +161,7 @@ const PaymentApprovePage = () => {
 				return (
 					<div className="flex items-center">
 						<DeleteTableRow handleDelete={() => handleDelete(data.Id)} />
-						{data.Status == 1 && <PaymentApprovePage.ApproveMoney id={data.Id} onRefresh={getPaymentApprove} />}
+						{data.Status == 1 && <PaymentVerification.ApproveMoney id={data.Id} onRefresh={getPaymentApprove} />}
 					</div>
 				)
 			},
@@ -249,9 +237,9 @@ const PaymentApprovePage = () => {
 	)
 }
 
-export default PaymentApprovePage
+export default PaymentVerification
 
-PaymentApprovePage.ApproveMoney = ({ id, onRefresh }) => {
+PaymentVerification.ApproveMoney = ({ id, onRefresh }) => {
 	const [form] = Form.useForm()
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
@@ -302,7 +290,7 @@ PaymentApprovePage.ApproveMoney = ({ id, onRefresh }) => {
 	)
 }
 
-PaymentApprovePage.ApproveMoneyBack = ({ id, onRefresh }) => {
+PaymentVerification.ApproveMoneyBack = ({ id, onRefresh }) => {
 	const [form] = Form.useForm()
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)

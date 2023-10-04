@@ -16,6 +16,7 @@ import { RootState } from '~/store'
 import CreateNews from './Create'
 import { encode } from '~/common/utils/common'
 import Router from 'next/router'
+import moment from 'moment'
 
 const ButtonPost: FC<TNewType> = (props) => {
 	const { onClick, title, icon, loading, activated } = props
@@ -190,7 +191,7 @@ const ItemContent = (props) => {
 
 							<div className="flex row-center">
 								{!!RoleName && <div className={`cc-news-post-role ${RoleName == 'Admin' ? 'is-admin' : ''}`}>{RoleName}</div>}
-								<PrimaryTooltip place="left" id={`since-${Id}`} content={CreatedOn}>
+								<PrimaryTooltip place="right" id={`since-${Id}`} content={moment(new Date(CreatedOn)).format('HH:mm DD/MM/YYYY')}>
 									<div className="cc-news-post-since hover:underline">{getTimeSince(CreatedOn)}</div>{' '}
 								</PrimaryTooltip>
 							</div>

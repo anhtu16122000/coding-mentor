@@ -11,5 +11,4 @@ const ReportPage = () => {
 }
 
 ReportPage.Layout = MainLayout
-
 export default ReportPage

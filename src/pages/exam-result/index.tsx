@@ -15,5 +15,4 @@ const ExamResultPage = () => {
 	)
 }
 
-// ExamResultPage.Layout = MainLayout
 export default ExamResultPage

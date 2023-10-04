@@ -20,20 +20,8 @@ export const ListStudentInClass = () => {
 		return user?.RoleId == 1
 	}
 
-	function isTeacher() {
-		return user?.RoleId == 2
-	}
-
 	function isManager() {
 		return user?.RoleId == 4
-	}
-
-	function isStdent() {
-		return user?.RoleId == 3
-	}
-
-	function isAccountant() {
-		return user?.RoleId == 6
 	}
 
 	function isAcademic() {
@@ -232,21 +220,18 @@ export const ListStudentInClass = () => {
 			  ]
 
 	return (
-		<>
-			{/* <ModalViewCertificateExam open={open} setOpen={setOpen} background={background} content={watchContent} backside={backside} /> */}
-			<PrimaryTable
-				loading={loading}
-				total={totalRow}
-				onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
-				TitleCard={<div className="extra-table">Danh sách học viên</div>}
-				data={dataTable}
-				columns={columns}
-				Extra={
-					(isAdmin() || isAcademic() || isManager()) && (
-						<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="add" />
-					)
-				}
-			/>
-		</>
+		<PrimaryTable
+			loading={loading}
+			total={totalRow}
+			onChangePage={(event: number) => setApiParameters({ ...apiParameters, pageIndex: event })}
+			TitleCard={<div className="extra-table">Danh sách học viên</div>}
+			data={dataTable}
+			columns={columns}
+			Extra={
+				(isAdmin() || isAcademic() || isManager()) && (
+					<ModalStudentInClassCRUD onRefresh={() => getStudentInClass(apiParameters)} mode="add" />
+				)
+			}
+		/>
 	)
 }

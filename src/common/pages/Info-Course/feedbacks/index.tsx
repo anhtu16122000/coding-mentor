@@ -2,12 +2,9 @@ import { Form, Popconfirm, Rate, Select } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { HiStar } from 'react-icons/hi'
-import { RiShieldStarFill } from 'react-icons/ri'
 import { useSelector } from 'react-redux'
 import { feedbackStudentApi } from '~/api/manage/feedbacks-student'
 import { userInformationApi } from '~/api/user/user'
-import { ModalLessonFeedback } from '~/common/components/Class/ModalLessonFeedback'
 import IconButton from '~/common/components/Primary/IconButton'
 import PrimaryTable from '~/common/components/Primary/Table'
 import PrimaryTag from '~/common/components/Primary/Tag'
@@ -17,16 +14,16 @@ import { RootState } from '~/store'
 import { ModalFeedback } from './ModalFeedback'
 import Avatar from '~/common/components/Avatar'
 
-export interface IFeedbacksStudentPageProps {}
-
-export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) {
+function Feedbacks() {
 	const userInformation = useSelector((state: RootState) => state.user.information)
 	const [form] = Form.useForm()
+
 	const initialParams = {
 		pageIndex: 1,
 		pageSize: PAGE_SIZE,
 		userIds: userInformation?.RoleId === '3' ? userInformation.UserInformationId.toString() : ''
 	}
+
 	const [dataSource, setDataSource] = useState<IFeedbackStudent[]>([])
 	const [totalRow, setTotalRow] = useState(0)
 	const [isLoading, setIsLoading] = useState({ type: '', status: false })
@@ -130,28 +127,8 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 		}
 	}, [students])
 
-	function isAdmin() {
-		return userInformation?.RoleId == 1
-	}
-
-	function isTeacher() {
-		return userInformation?.RoleId == 2
-	}
-
-	function isManager() {
-		return userInformation?.RoleId == 4
-	}
-
 	function isStdent() {
 		return userInformation?.RoleId == 3
-	}
-
-	function isAccountant() {
-		return userInformation?.RoleId == 6
-	}
-
-	function isAcademic() {
-		return userInformation?.RoleId == 7
 	}
 
 	function isParent() {
@@ -277,3 +254,5 @@ export default function FeedbacksStudentPage(props: IFeedbacksStudentPageProps) 
 		</>
 	)
 }
+
+export default Feedbacks

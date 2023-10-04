@@ -4,7 +4,6 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import appConfigs from '~/appConfig'
 import MainLayout from '~/common/components/MainLayout'
-import TrainingRouteForm from '~/common/pages/Practice/Detail'
 import TrainingStudent from '~/common/pages/TrainingStudent'
 import { setGlobalBreadcrumbs } from '~/store/globalState'
 

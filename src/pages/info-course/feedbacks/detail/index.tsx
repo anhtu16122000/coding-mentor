@@ -1,14 +1,10 @@
 import React from 'react'
 import { MainLayout } from '~/common'
-import FeedbackDetailPage from '~/common/pages/Info-Course/feedbacks/FeedbackDetailPage'
+import DetailFeedback from '~/common/pages/Info-Course/FeedBacks/Detail'
 
-export interface IFeedbackDetailProps {}
-
-export default function FeedbackDetail(props: IFeedbackDetailProps) {
-	return (
-		<>
-			<FeedbackDetailPage />
-		</>
-	)
+function DetailFeedbackPage() {
+	return <DetailFeedback />
 }
-FeedbackDetail.Layout = MainLayout
+
+DetailFeedbackPage.Layout = MainLayout
+export default DetailFeedbackPage

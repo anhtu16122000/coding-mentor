@@ -6,6 +6,7 @@ import Lottie from 'react-lottie-player'
 
 import loadingJson from '~/common/components/json/121421-login.json'
 import { FiLogIn } from 'react-icons/fi'
+import appConfigs from '~/appConfig'
 
 type ILoginForm = {
 	csrfToken?: string
@@ -99,6 +100,10 @@ function LoginForm(props: ILoginForm) {
 
 				<div className="wrap-password mt-3 w-full flex items-center justify-center">
 					<a href="/fogot-password">Quên mật khẩu?</a>
+				</div>
+
+				<div className="absolute bottom-0 left-0 w-full flex all-center pb-[16px]">
+					<div className="text-[#000] opacity-30 text-[14px] font-[500]">{appConfigs.appVersion}</div>
 				</div>
 			</div>
 

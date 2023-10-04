@@ -102,8 +102,8 @@ export const AcademicChildMenu = [
 			},
 			{
 				TypeItem: 'single',
-				Key: '/finance/paymentApprove',
-				Route: '/finance/paymentApprove',
+				Key: '/finance/verification',
+				Route: '/finance/verification',
 				Icon: '',
 				Text: 'Duyệt thanh toán'
 			}

@@ -28,7 +28,6 @@ const MainHeader = () => {
 			<meta http-equiv="Expires" content="0" />
 
 			<link rel="icon" href="/white-logo.png" />
-			<link rel="canonical" href="https://mona.media/phan-mem-quan-ly-truong-hoc-giao-duc-lms" />
 
 			<Script src="https://cdn.tiny.cloud/1/lmr9ug3bh4iwjsrap9hgwgxqcngllssiraqluwto4slerrwg/tinymce/6/tinymce.min.js" />
 		</Head>

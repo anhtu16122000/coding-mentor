@@ -1,14 +1,10 @@
 import React from 'react'
 import { MainLayout } from '~/common'
-import FeedbacksStudentPage from '~/common/pages/Info-Course/feedbacks/FeedbacksPage'
+import Feedbacks from '~/common/pages/Info-Course/FeedBacks'
 
-export interface IFeedbacksStudentProps {}
-
-export default function FeedbacksStudent(props: IFeedbacksStudentProps) {
-	return (
-		<>
-			<FeedbacksStudentPage />
-		</>
-	)
+function FeedbacksPage() {
+	return <Feedbacks />
 }
-FeedbacksStudent.Layout = MainLayout
+
+FeedbacksPage.Layout = MainLayout
+export default FeedbacksPage
