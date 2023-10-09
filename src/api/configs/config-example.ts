@@ -1,4 +1,4 @@
-import { instance } from '~/services/instance'
+import { instance } from '../instance'
 
 const url = '/api/Template'
 export const configTemplateApi = {
