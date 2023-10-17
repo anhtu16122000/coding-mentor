@@ -8,6 +8,7 @@ import MindMapFullLoading from './FullLoading'
 import QuestionContent from './QuestionContent'
 import MindMapCheckBox from './CustomCheckbox'
 import MindMapAnswer from './Answer'
+import { useExamContext } from '~/common/providers/Exam'
 
 function getQuestIndex(questions, curQuest) {
 	if (Router.asPath.includes('questions')) {
@@ -34,7 +35,9 @@ function getResultQuestIndex(questions, curQuest) {
 }
 
 const MindMap = (props) => {
-	const { dataSource, getDoingQuestionGroup, onRefreshNav, isResult, allQuestions } = props
+	const { dataSource, isResult, setCurGroup } = props
+
+	const { questionsInSection, setQuestionsInSection, setNotSetCurrentQuest, setCurrentQuestion } = useExamContext()
 
 	const [isFirst, setIsFirst] = useState<boolean>(true)
 	const [answerFormated, setAnswerFormated] = useState([])
@@ -105,7 +108,7 @@ const MindMap = (props) => {
 
 	const [loading, setLoading] = useState<boolean>(false)
 	async function insertDetails(quest, answer) {
-		setLoading(true)
+		// setLoading(true)
 
 		let items = []
 
@@ -118,12 +121,29 @@ const MindMap = (props) => {
 			console.log('-------- PUT Mindmap items: ', items)
 
 			try {
-				await doingTestApi.insertDetail({ DoingTestId: parseInt(Router?.query?.exam + ''), IeltsQuestionId: quest.Id, Items: [...items] })
-			} catch (error) {
-			} finally {
-				getDoingQuestionGroup()
-				onRefreshNav()
-			}
+				const res = await doingTestApi.insertDetail({
+					DoingTestId: parseInt(Router?.query?.exam + ''),
+					IeltsQuestionId: quest?.Id,
+					Items: [...items]
+				})
+
+				// --------------------------------
+				if (res.status == 200) {
+					setCurGroup(res.data?.data)
+
+					const indexInQuestions = questionsInSection.findIndex((qx) => qx?.IeltsQuestionId == quest?.Id)
+
+					if (indexInQuestions > -1) {
+						setNotSetCurrentQuest(true)
+
+						setCurrentQuestion(questionsInSection[indexInQuestions])
+
+						let temp = [...questionsInSection]
+						temp[indexInQuestions].IsDone = true
+						setQuestionsInSection([...temp])
+					}
+				}
+			} catch (error) {}
 		}
 
 		setLoading(false)
@@ -152,9 +172,9 @@ const MindMap = (props) => {
 		// Lấy index của câu đầu tiên trong nhóm
 		if (isResult) {
 			// Coi kết quả
-			return getResultQuestIndex(allQuestions, mapQuestions[0])?.Index
+			return getResultQuestIndex(questionsInSection, mapQuestions[0])?.Index
 		}
-		return getQuestIndex(allQuestions, mapQuestions[0])?.Index
+		return getQuestIndex(questionsInSection, mapQuestions[0])?.Index
 	}
 
 	function getFinalIndex() {
@@ -162,9 +182,9 @@ const MindMap = (props) => {
 		const mapLength = mapQuestions.length
 		if (isResult) {
 			// Coi kết quả
-			return getResultQuestIndex(allQuestions, mapQuestions[mapLength - 1])?.Index
+			return getResultQuestIndex(questionsInSection, mapQuestions[mapLength - 1])?.Index
 		}
-		return getQuestIndex(allQuestions, mapQuestions[mapLength - 1])?.Index
+		return getQuestIndex(questionsInSection, mapQuestions[mapLength - 1])?.Index
 	}
 
 	useEffect(() => {
@@ -187,7 +207,9 @@ const MindMap = (props) => {
 							<div className="ex23-mind-quest-wrapper">
 								<div className="h-[46px]" />
 								{dataFormated.map((exercise, exIndex) => {
-									const thisItem = isResult ? getResultQuestIndex(allQuestions, exercise) : getQuestIndex(allQuestions, exercise)
+									const thisItem = isResult
+										? getResultQuestIndex(questionsInSection, exercise)
+										: getQuestIndex(questionsInSection, exercise)
 									return <QuestionContent Index={thisItem?.Index} Content={exercise?.Content} question={exercise} />
 								})}
 							</div>
@@ -233,7 +255,9 @@ const MindMap = (props) => {
 								<div className="ex23-mind-quest-wrapper">
 									<div className="h-[46px]" />
 									{dataFormated.map((exercise, exIndex) => {
-										const thisItem = isResult ? getResultQuestIndex(allQuestions, exercise) : getQuestIndex(allQuestions, exercise)
+										const thisItem = isResult
+											? getResultQuestIndex(questionsInSection, exercise)
+											: getQuestIndex(questionsInSection, exercise)
 										return <QuestionContent Index={thisItem?.Index} Content={exercise?.Content} question={exercise} />
 									})}
 								</div>

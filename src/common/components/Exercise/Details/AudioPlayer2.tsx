@@ -1,12 +1,9 @@
 import React from 'react'
-import PrimaryTooltip from '../../PrimaryTooltip'
-import { IoCloseSharp } from 'react-icons/io5'
 import AudioPlayer from 'react-h5-audio-player'
-import { FaMinus } from 'react-icons/fa'
-import { TbArrowsMaximize } from 'react-icons/tb'
+import { useExamContext } from '~/common/providers/Exam'
 
-const MainAudioPlayer2 = (props) => {
-	const { curAudio, setCurAudio, showAudioControl, setShowAudioControl, curSection, curSkill } = props
+const MainAudioPlayer2 = () => {
+	const { curAudio } = useExamContext()
 
 	return (
 		<>

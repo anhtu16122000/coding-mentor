@@ -74,7 +74,7 @@ function AuthProvider({ children }: IAuthLayout) {
 		const currentTime = Date.now()
 		const eightHoursInMilliseconds = 8 * 60 * 60 * 1000
 
-		return timestamp - currentTime > eightHoursInMilliseconds
+		return timestamp - currentTime < eightHoursInMilliseconds
 	}
 
 	async function checkLogin() {

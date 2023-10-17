@@ -1,15 +1,18 @@
 import React from 'react'
-import { MdSettings } from 'react-icons/md'
-import PrimaryButton from '~/common/components/Primary/Button'
 import CountdownTimer from '../Countdown'
 import Lottie from 'react-lottie-player'
 import timer from '~/common/components/json/131525-timer.json'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import PrimaryTooltip from '~/common/components/PrimaryTooltip'
+import DrawerSettings from '../../Components/DrawerSettings'
+import { useExamContext } from '~/common/providers/Exam'
 
 const TakeAnExamHeader = (props) => {
-	const { testInfo, overview, loading, setShowSetings, showSettings, skills, currentSkill } = props
+	const { testInfo, overview, skills, currentSkill, onSubmit } = props
+	const { showSkills, setShowSkills, showSections, setShowSections, showQuestions, setShowQuestions } = props
+
+	const { loading } = useExamContext()
 
 	const globalState = useSelector((state: RootState) => state.takeAnExam)
 
@@ -79,7 +82,7 @@ const TakeAnExamHeader = (props) => {
 			</div>
 
 			{!globalState?.submited && (
-				<div className="take-an-exam__right">
+				<div className="take-an-exam__right mr-[8px]">
 					<Lottie
 						loop
 						animationData={timer}
@@ -89,15 +92,20 @@ const TakeAnExamHeader = (props) => {
 					<div className="take-an-exam__countdown">
 						{loading && <>-- : -- : --</>}
 						{!loading && !!overview?.Time && !!overview && (
-							<CountdownTimer minutes={calculateEndTime(testInfo?.StartTime, parseInt(overview?.Time.toString()))} />
+							<CountdownTimer onSubmit={onSubmit} minutes={calculateEndTime(testInfo?.StartTime, parseInt(overview?.Time.toString()))} />
 						)}
 					</div>
 				</div>
 			)}
 
-			<PrimaryButton onClick={() => setShowSetings(!showSettings)} className="mx-[16px]" type="button" background="yellow">
-				<MdSettings size={20} />
-			</PrimaryButton>
+			<DrawerSettings
+				showSkills={showSkills}
+				showSections={showSections}
+				showQuestions={showQuestions}
+				setShowSkills={setShowSkills}
+				setShowQuestions={setShowQuestions}
+				setShowSections={setShowSections}
+			/>
 		</div>
 	)
 }

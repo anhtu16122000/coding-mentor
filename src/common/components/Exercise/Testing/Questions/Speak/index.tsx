@@ -71,11 +71,11 @@ const SpeakingQuestion = (props) => {
 				})
 			}
 			key={'question-' + data.Id}
-			id={'question-' + data.Id}
+			id={'cauhoi-' + data.Id}
 			className={`cc-choice-warpper border-[1px] border-[#e6e6e6]`}
 		>
 			<div className="exam-quest-wrapper none-selection">
-				{!Router.asPath.includes('questions') && (
+				{/* {!Router.asPath.includes('questions') && (
 					<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
 						Question {IndexInExam}
 						<div className="cc-choice-point">
@@ -83,7 +83,22 @@ const SpeakingQuestion = (props) => {
 							<div className="mt-[1px]">Point: {data?.Point || 0}</div>
 						</div>
 					</div>
-				)}
+				)} */}
+
+				<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
+					{!Router.asPath.includes('questions') && (
+						<div id={`quest-num-${data.Id}`} className="ex-quest-tf">
+							{IndexInExam}
+						</div>
+					)}
+
+					<div className="bg-[#e9e9e9] h-[26px] px-[8px] rounded-full text-[14px] inline-flex items-center justify-center">
+						<div>Point: {data?.Point}</div>
+					</div>
+				</div>
+
+				<div className="h-[16px]" />
+
 				{ReactHTMLParser(data?.Content)}
 			</div>
 
@@ -114,7 +129,7 @@ const SpeakingQuestion = (props) => {
 						<div className="flex flex-col items-start mt-[16px]">
 							{!data?.Point && (
 								<PrimaryTag color="yellow" className="!px-[8px]">
-									<TbLoader size={18} className="mr-[4px] animate-spin custom-spin" /> Chưa chấm
+									Chưa chấm
 								</PrimaryTag>
 							)}
 

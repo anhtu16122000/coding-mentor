@@ -4,7 +4,6 @@ import { formNoneRequired, formRequired } from '~/common/libs/others/form'
 import { ShowNoti, log } from '~/common/utils'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
-import ButtonAdd from '../../../DirtyButton/Button-Add'
 import ButtonCancel from '../../../DirtyButton/Button-Cancel'
 import ButtonSave from '../../../DirtyButton/Button-Save'
 import Router from 'next/router'
@@ -162,6 +161,7 @@ const CreateExamSkill: FC<ICreateExam> = (props) => {
 						</Form.Item>
 
 						<InputNumberField
+							disabled={loading}
 							placeholder="Nhập số phút"
 							className="col-span-4 w500:col-span-2"
 							label="Thời gian (phút)"
@@ -170,7 +170,15 @@ const CreateExamSkill: FC<ICreateExam> = (props) => {
 							rules={formRequired}
 						/>
 
-						<UploadAudioField loading={loading} className="col-span-4" form={form} name="Audio" label="Âm thanh" rules={formNoneRequired} />
+						<UploadAudioField
+							loading={loading}
+							defaultValue={defaultData?.Audio}
+							className="col-span-4"
+							form={form}
+							name="Audio"
+							label="Âm thanh"
+							rules={formNoneRequired}
+						/>
 					</div>
 				</Form>
 			</Modal>

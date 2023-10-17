@@ -18,7 +18,7 @@ import MindMapForm from '../QuestionsForm/MindMap'
 import { ieltsGroupApi } from '~/api/IeltsExam/ieltsGroup'
 import CreateSpeaking from '../QuestionsForm/SpeakingForm'
 import CreateTyping from '../QuestionsForm/FillInBlankForm'
-import { useExamContext } from '~/common/components/Auth/Provider/exam'
+import { useExamContext } from '~/common/providers/Exam'
 import { setQuestions } from '~/store/createQuestion'
 import CreateDragAndDrop from '../QuestionsForm/DragAndDropForm'
 import { tagApi } from '~/api/configs/tag'
@@ -35,7 +35,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 	const [currentType, setCurrentType] = useState(null)
 	const [loading, setLoading] = useState(false)
-	const [isModalVisible, setIsModalVisible] = useState(false)
+	const [visible, setVisible] = useState(false)
 	const [showEditor, setShowEditor] = useState<boolean>(true)
 
 	const [tags, setTags] = useState([])
@@ -55,8 +55,10 @@ const GroupForm: FC<IGroupForm> = (props) => {
 	}
 
 	useEffect(() => {
-		getAllTags()
-	}, [])
+		if (visible && tags.length == 0) {
+			getAllTags()
+		}
+	}, [visible])
 
 	useEffect(() => {
 		changeType()
@@ -66,6 +68,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		setShowEditor(false)
 		await wait(200)
 		setShowEditor(true)
+		getRightHeight()
 	}
 
 	function reset() {
@@ -76,7 +79,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		dispatch(setQuestions([]))
 
 		dispatch(setCurrentExerciseForm([]))
-		setIsModalVisible(false)
+		setVisible(false)
 		form.resetFields()
 		setCurrentType(null)
 	}
@@ -183,12 +186,12 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		setCurrentType(defaultData?.Type)
 		dispatch(setCurrentExerciseForm([...defaultData.IeltsQuestions]))
 
-		setIsModalVisible(true)
+		setVisible(true)
 	}
 
 	function openCreate() {
 		if (!!onOpen) onOpen()
-		setIsModalVisible(true)
+		setVisible(true)
 		dispatch(setCurrentExerciseForm([]))
 	}
 
@@ -230,19 +233,20 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		)
 	}
 
-	const [rightHeight, setRightHeight] = useState(0)
+	const [rightHeight, setRightHeight] = useState(560)
 
 	useEffect(() => {
 		getRightHeight()
-	}, [isModalVisible])
+	}, [visible])
 
 	async function getRightHeight() {
-		await wait(300)
-		const leftElement = document.getElementById('the-left-form')
-
-		if (leftElement) {
-			setRightHeight(leftElement.offsetHeight)
-		}
+		// await wait(1000)
+		// const leftElement = document.getElementById('the-left-form')
+		// console.log('--- the-left-form: ', leftElement)
+		// console.log('-- leftElement.offsetHeight: ', leftElement?.offsetHeight)
+		// if (leftElement?.offsetHeight > 0) {
+		// 	setRightHeight(leftElement.offsetHeight)
+		// }
 	}
 
 	// console.log('--------- rightHeight: ', rightHeight)
@@ -256,14 +260,14 @@ const GroupForm: FC<IGroupForm> = (props) => {
 				centered
 				title={isEdit ? 'Cập nhật nhóm' : 'Thêm nhóm mới'}
 				width={currentType! == QUESTION_TYPES.FillInTheBlank ? '98%' : '98%'}
-				open={isModalVisible}
-				onCancel={() => !loading && setIsModalVisible(false)}
+				open={visible}
+				onCancel={() => !loading && setVisible(false)}
 				footer={
 					<>
-						<PrimaryButton disable={loading} onClick={() => setIsModalVisible(false)} background="red" icon="cancel" type="button">
+						<PrimaryButton disable={loading} onClick={() => setVisible(false)} background="red" icon="cancel" type="button">
 							Huỷ
 						</PrimaryButton>
-						<PrimaryButton onClick={() => form.submit()} className="ml-2" background="blue" icon="save" type="button">
+						<PrimaryButton disable={loading} onClick={() => form.submit()} className="ml-2" background="blue" icon="save" type="button">
 							Lưu
 						</PrimaryButton>
 					</>
@@ -285,7 +289,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 									<Select disabled={loading || isEdit} className="primary-input primary-select" onChange={(event) => setCurrentType(event)}>
 										<Select.Option value={QUESTION_TYPES.MultipleChoice}>Trắc nghiệm</Select.Option>
 										<Select.Option value={QUESTION_TYPES.Write}>Tự luận</Select.Option>
-										<Select.Option value={QUESTION_TYPES.TrueOrFalse}>True or false</Select.Option>
+										<Select.Option value={QUESTION_TYPES.TrueOrFalse}>True or False</Select.Option>
 										<Select.Option value={QUESTION_TYPES.Mindmap}>Mindmap</Select.Option>
 										<Select.Option value={QUESTION_TYPES.Speak}>Speaking</Select.Option>
 										<Select.Option value={QUESTION_TYPES.FillInTheBlank}>Điền vào ô trống</Select.Option>
@@ -313,7 +317,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 							</div>
 
 							{showEditor && (
-								<Form.Item className="col-span-4 mb-0" label="Nội dung" name="Content">
+								<Form.Item className="col-span-4 relative mb-0" label="Nội dung" name="Content">
 									<PrimaryEditor
 										noFullscreen
 										isFillInBlank={currentType == QUESTION_TYPES.FillInTheBlank || currentType == QUESTION_TYPES.DragDrop}
@@ -326,8 +330,8 @@ const GroupForm: FC<IGroupForm> = (props) => {
 								</Form.Item>
 							)}
 							{!showEditor && (
-								<div className="h-[213px]">
-									<Skeleton active />
+								<div className="h-[350px] col-span-4">
+									<Skeleton active paragraph />
 								</div>
 							)}
 						</div>

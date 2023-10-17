@@ -12,8 +12,8 @@ import { getTimeStamp } from '~/common/utils/super-functions'
 
 const INIT_ANSWER = [
 	{ Content: 'True', Id: 0, IsTrue: false, Type: 1, Enable: true, isAdd: true, timestamp: getTimeStamp() },
-	{ Content: 'False', Id: 0, IsTrue: false, Type: 1, Enable: true, isAdd: true, timestamp: getTimeStamp() }
-	// { Content: 'Not given', Id: 0, IsTrue: false, Type: 1, Enable: true, isAdd: true, timestamp: getTimeStamp() }
+	{ Content: 'False', Id: 0, IsTrue: false, Type: 1, Enable: true, isAdd: true, timestamp: getTimeStamp() },
+	{ Content: 'Not given', Id: 0, IsTrue: false, Type: 1, Enable: true, isAdd: true, timestamp: getTimeStamp() }
 ]
 
 const InputTrueFalse: FC<IGroupForm> = (props) => {
@@ -89,6 +89,8 @@ const InputTrueFalse: FC<IGroupForm> = (props) => {
 		setVisible(true)
 	}
 
+	// console.log('--- answers: ', answers)
+
 	async function openCreate() {
 		setVisible(true)
 	}
@@ -139,6 +141,7 @@ const InputTrueFalse: FC<IGroupForm> = (props) => {
 				postCreateQuestion({ ...DATA_SUBMIT, Id: 0, timestamp: new Date().getTime() })
 			}
 		} else {
+			setLoading(false)
 			setTextError(checkSubmit)
 		}
 	}

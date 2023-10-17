@@ -1,6 +1,7 @@
 import Router from 'next/router'
 import React, { FC } from 'react'
 import { TbFileCertificate } from 'react-icons/tb'
+import { useExamContext } from '~/common/providers/Exam'
 import htmlParser from '~/common/components/HtmlParser'
 
 type TGroupContent = {
@@ -11,7 +12,9 @@ type TGroupContent = {
 }
 
 const GroupContent: FC<TGroupContent> = (props) => {
-	const { is, curGroup, questionsInSection, className } = props
+	const { is, curGroup, className } = props
+
+	const { questionsInSection } = useExamContext()
 
 	if (!curGroup?.Content) {
 		return <></>
@@ -75,7 +78,9 @@ const GroupContent: FC<TGroupContent> = (props) => {
 			{(is.drag || is.typing) && (
 				<div className={'typing-drag-23-content' + ` ${className}`}>
 					{!Router.asPath.includes('questions') && <RealQuestIndex />}
-					<div className="mb-[16px]">{htmlParser(curGroup?.Content)}</div>
+					<div key={`f-gc-${curGroup?.Id}`} id={`f-gc-${curGroup?.Id}`} className="mb-[16px]">
+						{htmlParser(curGroup?.Content)}
+					</div>
 				</div>
 			)}
 		</>

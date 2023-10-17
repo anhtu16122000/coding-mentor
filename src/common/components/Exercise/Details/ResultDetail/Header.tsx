@@ -1,12 +1,12 @@
 import React from 'react'
-import { MdSettings } from 'react-icons/md'
-import PrimaryButton from '~/common/components/Primary/Button'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import PrimaryTooltip from '~/common/components/PrimaryTooltip'
+import DrawerSettings from '../../Components/DrawerSettings'
 
 const ResultDetailHeader = (props) => {
-	const { overview, loading, setShowSetings, showSettings, skills, currentSkill } = props
+	const { overview, loading, skills, currentSkill } = props
+	const { showSkills, setShowSkills, showSections, setShowSections, showQuestions, setShowQuestions } = props
 
 	const globalState = useSelector((state: RootState) => state.takeAnExam)
 	const indexOfSkill = skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
@@ -36,7 +36,7 @@ const ResultDetailHeader = (props) => {
 			</div>
 
 			{!globalState?.submited && (
-				<div className="take-an-exam__right">
+				<div className="take-an-exam__right mr-[8px]">
 					<div className="take-an-exam__countdown">
 						{loading && <>-- : -- : --</>}
 						{!loading && (
@@ -48,9 +48,14 @@ const ResultDetailHeader = (props) => {
 				</div>
 			)}
 
-			<PrimaryButton onClick={() => setShowSetings(!showSettings)} className="mx-[16px]" type="button" background="yellow">
-				<MdSettings size={20} />
-			</PrimaryButton>
+			<DrawerSettings
+				showSkills={showSkills}
+				showSections={showSections}
+				showQuestions={showQuestions}
+				setShowSkills={setShowSkills}
+				setShowQuestions={setShowQuestions}
+				setShowSections={setShowSections}
+			/>
 		</div>
 	)
 }

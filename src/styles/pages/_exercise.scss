@@ -151,8 +151,9 @@
 	// @apply  mx-[8px];
 }
 
+// text-[#0074e4]
 .cc-choice-number {
-	@apply text-[#0074e4] flex-shrink-0 font-[600] inline-flex items-center mb-2;
+	@apply flex-shrink-0 font-[600] inline-flex items-center mb-2;
 }
 
 .cc-choice-point {
@@ -668,7 +669,7 @@
 }
 
 .cc-23-btn-question {
-	@apply w-[28px] h-[28px] rounded-[6px] cursor-pointer hover:opacity-80 all-center mr-[8px] border-[1px];
+	@apply w-[28px] h-[28px] rounded-[6px] cursor-pointer flex-shrink-0 hover:opacity-80 all-center mr-[8px] border-[1px];
 }
 
 .cc-23-btn-quests {

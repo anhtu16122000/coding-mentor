@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import ExamSectionItem from '../ExamSkillNext/exam-section-item'
 import { MdArrowBackIos, MdOutlineArrowForwardIos } from 'react-icons/md'
 import { FaHeadphonesAlt } from 'react-icons/fa'
+import { useExamContext } from '~/common/providers/Exam'
 
 function SkillLoading({ loading }) {
 	if (loading) {
@@ -18,9 +19,11 @@ function SkillLoading({ loading }) {
 }
 
 const ResultDetailController = (props) => {
-	const { showSkills, showSections, loading, skills, setCurAudio, currentSkill, setCurrentSkill, onRefreshSkill, sections } = props
+	const { showSkills, showSections, loading, skills, currentSkill, setCurrentSkill } = props
 
 	const { currentSection, setCurrentSection, getSections, setSections } = props
+
+	const { setCurAudio } = useExamContext()
 
 	const indexOfSkill = skills.findIndex((skill) => skill?.Id == currentSkill?.Id)
 

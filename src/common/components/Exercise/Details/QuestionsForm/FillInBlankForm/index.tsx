@@ -5,7 +5,7 @@ import PrimaryButton from '~/common/components/Primary/Button'
 import { log, wait } from '~/common/utils'
 import { Input, Skeleton } from 'antd'
 import { IoClose } from 'react-icons/io5'
-import { useExamContext } from '~/common/components/Auth/Provider/exam'
+import { useExamContext } from '~/common/providers/Exam'
 
 const CreateTyping = (props) => {
 	const { isEdit } = props

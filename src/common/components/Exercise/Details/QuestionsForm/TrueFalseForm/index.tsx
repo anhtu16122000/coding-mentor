@@ -84,7 +84,7 @@ const TrueFalseForm = () => {
 					<div className="h-[30px] flex items-center ">
 						<div className="w-[50px]">True</div>
 						<div className="w-[50px]">False</div>
-						{/* <div className="w-[80px]">Not given</div> */}
+						<div className="w-[80px]">Not given</div>
 					</div>
 				</div>
 

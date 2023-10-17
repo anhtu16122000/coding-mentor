@@ -3,13 +3,14 @@ import Router from 'next/router'
 import React from 'react'
 import ReactHTMLParser from 'react-html-parser'
 import { FaCheck } from 'react-icons/fa'
-import { TbFileCertificate, TbLoader } from 'react-icons/tb'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
+import { useExamContext } from '~/common/providers/Exam'
 import MarkingExam from '~/common/components/Mark/MarkingExam/MarkingExam'
 import PrimaryTag from '~/common/components/Primary/Tag'
 
 const Write = (props) => {
-	const { data, IndexInExam, isDoing, setCurrentQuestion, onRefreshNav, isResult, curGroup, onRefresh } = props
+	const { data, IndexInExam, isDoing, isResult, curGroup, onRefresh } = props
+	const { questionsInSection, setCurrentQuestion, setQuestionsInSection, setNotSetCurrentQuest } = useExamContext()
 
 	async function insertDetails(answer) {
 		let items = []
@@ -24,15 +25,23 @@ const Write = (props) => {
 			console.log('-------- PUT items: ', items)
 
 			try {
-				await doingTestApi.insertDetail({
+				const res = await doingTestApi.insertDetail({
 					DoingTestId: parseInt(Router?.query?.exam + ''),
 					IeltsQuestionId: data.Id,
 					Items: [...items]
 				})
-			} catch (error) {
-			} finally {
-				onRefreshNav()
-			}
+				if (res.status == 200) {
+					const indexInQuestions = questionsInSection.findIndex((qx) => qx?.IeltsQuestionId == data?.Id)
+
+					if (indexInQuestions > -1) {
+						setNotSetCurrentQuest(true)
+
+						let temp = [...questionsInSection]
+						temp[indexInQuestions].IsDone = true
+						setQuestionsInSection([...temp])
+					}
+				}
+			} catch (error) {}
 		}
 	}
 
@@ -50,23 +59,29 @@ const Write = (props) => {
 		return ''
 	}
 
+	function activeThis() {
+		setNotSetCurrentQuest(true)
+		if (!Router.asPath.includes('/questions')) {
+			setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionResultId: data?.Id })
+		}
+	}
+
 	return (
 		<div
-			onClick={() =>
-				!Router.asPath.includes('/questions') && setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionResultId: data?.Id })
-			}
+			onClick={activeThis}
 			key={'question-' + data.Id}
-			id={'question-' + data.Id}
+			id={'cauhoi-' + data.Id}
 			className={`cc-choice-warpper border-[1px] border-[#e6e6e6]`}
 		>
 			<div className="exam-quest-wrapper none-selection">
 				{!Router.asPath.includes('questions') && (
-					<div>
-						<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
-							Question {IndexInExam}
-						</div>
+					<div id={`quest-num-${data.Id}`} className="ex-quest-tf">
+						{IndexInExam}
 					</div>
 				)}
+
+				<div className="h-[16px]" />
+
 				{ReactHTMLParser(data?.Content)}
 			</div>
 
@@ -90,7 +105,7 @@ const Write = (props) => {
 					<div className="flex flex-col items-start mt-[16px]">
 						{!data?.Point && (
 							<PrimaryTag color="yellow" className="!px-[8px]">
-								<TbLoader size={18} className="mr-[4px] animate-spin custom-spin" /> Chưa chấm
+								Chưa chấm
 							</PrimaryTag>
 						)}
 

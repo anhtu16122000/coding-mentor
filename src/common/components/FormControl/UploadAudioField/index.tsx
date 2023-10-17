@@ -2,10 +2,17 @@ import { Form, Upload } from 'antd'
 import { useEffect, useState } from 'react'
 import PrimaryButton from '../../Primary/Button'
 
-export default function UploadAudioField(props: IUploadFileField & { loading?: boolean }) {
-	const { style, label, name, isRequired, className, disabled, rules, multiple, form, loading, max } = props
+export default function UploadAudioField(props: IUploadFileField & { loading?: boolean; defaultValue?: string }) {
+	const { style, label, name, defaultValue, isRequired, className, disabled, rules, multiple, form, loading, max } = props
 
 	const [audioPreview, setAudioPreview] = useState(null)
+
+	useEffect(() => {
+		if (!!defaultValue) {
+			setAudioPreview(defaultValue)
+			form.setFieldsValue({ [name]: defaultValue })
+		}
+	}, [defaultValue])
 
 	useEffect(() => {
 		if (!!form.getFieldValue(name)) {

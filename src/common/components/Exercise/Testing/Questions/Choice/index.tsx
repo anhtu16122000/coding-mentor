@@ -7,11 +7,16 @@ import { doingTestApi } from '~/api/IeltsExam/doing-test'
 import Router from 'next/router'
 import htmlParser from '~/common/components/HtmlParser'
 import { CgSelectO } from 'react-icons/cg'
+import { useExamContext } from '~/common/providers/Exam'
 
 const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']
 
 const Choice = (props) => {
-	const { data, index, indexInExam, onRefresh, showEdit, isDoing, setCurrentQuestion, onRefreshNav, isResult } = props
+	const { data, index, indexInExam, showEdit, isDoing, isResult } = props
+
+	const { questionsInSection, setCurrentQuestion, setQuestionsInSection, setNotSetCurrentQuest } = useExamContext()
+
+	function onRefresh() {}
 
 	const onChange = (event, type: 'single' | 'multiple') => {
 		if (!isDoing) {
@@ -205,35 +210,52 @@ const Choice = (props) => {
 			console.log('-------- PUT items: ', items)
 
 			try {
-				await doingTestApi.insertDetail({
+				const res = await doingTestApi.insertDetail({
 					DoingTestId: parseInt(Router?.query?.exam + ''),
 					IeltsQuestionId: data.Id,
 					Items: [...items]
 				})
-			} catch (error) {
-			} finally {
-				onRefreshNav()
-			}
+
+				if (res.status == 200) {
+					const indexInQuestions = questionsInSection.findIndex((qx) => qx?.IeltsQuestionId == data?.Id)
+
+					if (indexInQuestions > -1) {
+						setNotSetCurrentQuest(true)
+
+						let temp = [...questionsInSection]
+						temp[indexInQuestions].IsDone = true
+						setQuestionsInSection([...temp])
+					}
+				}
+			} catch (error) {}
+		}
+	}
+
+	function activeThis() {
+		setNotSetCurrentQuest(true)
+		if (!Router.asPath.includes('/questions')) {
+			setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionResultId: data?.Id })
 		}
 	}
 
 	return (
 		<div
-			onClick={() =>
-				!Router.asPath.includes('/questions') && setCurrentQuestion({ ...data, IeltsQuestionId: data?.Id, IeltsQuestionResultId: data?.Id })
-			}
-			key={'question-' + data.Id}
-			id={'question-' + data.Id}
+			onClick={activeThis}
+			key={'question-' + data?.Id}
+			id={'question-' + data?.Id}
 			className={`cc-choice-warpper shadow-sm border-[1px] border-[#fff]`}
 			style={{ marginTop: index == 0 ? 8 : 0 }}
 		>
 			<div className="exam-quest-wrapper none-selection">
 				<div id={`cauhoi-${data.Id}`} className="cc-choice-number">
-					{!Router.asPath.includes('questions') && <div className="mr-[8px]">Question {indexInExam}</div>}
+					{!Router.asPath.includes('questions') && (
+						<div id={`quest-num-${data.Id}`} className="ex-quest-tf">
+							{indexInExam}
+						</div>
+					)}
 
-					<div className="cc-choice-point !ml-0">
-						<TbFileCertificate size={12} className="mr-1" />
-						<div className="mt-[1px]">Point: {data?.Point || 0}</div>
+					<div className="bg-[#e9e9e9] h-[26px] px-[8px] rounded-full text-[14px] inline-flex items-center justify-center">
+						<div>Point: {data?.Point}</div>
 					</div>
 
 					{!!showEdit && (

@@ -206,6 +206,37 @@
 	}
 }
 
+.mobile-audio {
+	@apply block w750:hidden mr-[8px] mt-[-4px];
+}
+
+.input-fucking-activated {
+	border: 1px #0083ff solid;
+	&::placeholder {
+		color: #0083ff !important;
+		opacity: 1;
+	}
+	&::-ms-input-placeholder {
+		color: #0083ff !important;
+	}
+}
+
+.input-taking-activated {
+	border: 1px #0083ff solid;
+}
+
+// text-[#1b73e8]
+.ex-quest-tf {
+	@apply w-[28px] h-[28px] bg-[#e9e9e9] rounded-full shadow-sm mr-[4px] font-[600];
+	@apply inline-flex items-center justify-center;
+	// border: 1px #d9d9d9 solid;
+}
+
+.tf-active {
+	@apply bg-[#0A89FF] text-[#fff];
+	// border: 1px #0a89ff solid;
+}
+
 .ex-au-show {
 	max-width: 350px !important;
 	.rhap_container {
@@ -240,6 +271,10 @@
 
 .rhap_current-time {
 	margin-right: 4px !important;
+}
+
+.exam-detail-right {
+	@apply flex-1 p-[16px] scrollable max-w-[1200px] mx-auto hidden w750:block;
 }
 
 .take-an-exam {
@@ -687,7 +722,7 @@
 			width: 100% !important;
 			height: 100%;
 			.ant-checkbox-inner {
-				background: #efefef;
+				background: #f8f8f8;
 				border: none !important;
 				width: 100%;
 				height: 100%;
@@ -708,12 +743,12 @@
 }
 
 .ex-mind-checkbox {
-	@apply flex items-center mt-[0.5px];
+	@apply flex items-center;
 	.antd-mind-check-border {
 		@apply border-l-[1px] border-[#ffffff];
 	}
 	.antd-mind-check {
-		@apply h-[46px] bg-[#f2f2f2] flex all-center flex-shrink-0 w-[110px];
+		@apply h-[46px] bg-[#fff] flex all-center flex-shrink-0 w-[110px];
 	}
 }
 

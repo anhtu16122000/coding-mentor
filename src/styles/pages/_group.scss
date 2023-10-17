@@ -5,3 +5,21 @@
 .cc-list-group--title {
 	@apply mb-4 font-semibold;
 }
+
+.tae-right-desktop {
+	@apply flex-1 p-[16px] scrollable max-w-[1200px] mx-auto hidden w750:block;
+}
+
+.tae-right-mobile {
+	@apply flex-1 p-[16px] scrollable max-w-[1200px] mx-auto block w750:hidden;
+}
+
+.btn-view-passage {
+	@apply mb-[16px] bg-[#0A89FF] px-[8px] text-[#fff] rounded-[4px] font-[600] py-[4px];
+	@apply flex w750:hidden all-center;
+}
+
+.btn-view-quest {
+	@apply flex w750:hidden mb-[16px] bg-[#0A89FF] px-[8px] text-[#fff] rounded-[4px] font-[600] py-[4px];
+	@apply all-center;
+}

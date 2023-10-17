@@ -4,9 +4,12 @@ import { IoCloseSharp } from 'react-icons/io5'
 import AudioPlayer from 'react-h5-audio-player'
 import { FaMinus } from 'react-icons/fa'
 import { TbArrowsMaximize } from 'react-icons/tb'
+import { useExamContext } from '~/common/providers/Exam'
 
 const MainAudioPlayer = (props) => {
-	const { curAudio, setCurAudio, showAudioControl, setShowAudioControl, curSection, curSkill } = props
+	const { showAudioControl, setShowAudioControl, curSection, curSkill } = props
+
+	const { curAudio, setCurAudio } = useExamContext()
 
 	return (
 		<>

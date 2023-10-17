@@ -1,6 +1,6 @@
-import { Empty } from 'antd'
 import Router from 'next/router'
 import React, { FC } from 'react'
+import { useExamContext } from '~/common/providers/Exam'
 import htmlParser from '~/common/components/HtmlParser'
 
 type TGroupContent = {
@@ -11,7 +11,9 @@ type TGroupContent = {
 }
 
 const ResultGroupContent: FC<TGroupContent> = (props) => {
-	const { is, curGroup, questionsInSection, className } = props
+	const { is, curGroup, className } = props
+
+	const { questionsInSection } = useExamContext()
 
 	if (!curGroup?.Content) {
 		return <></>

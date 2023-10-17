@@ -3,11 +3,18 @@ import { RootState } from '~/store'
 import { useSelector, useDispatch } from 'react-redux'
 import { setTimeOut } from '~/store/take-an-exam'
 
-const CountdownTimer = ({ minutes }) => {
+const CountdownTimer = ({ minutes, onSubmit }) => {
 	const globalState = useSelector((state: RootState) => state.takeAnExam)
 	const dispatch = useDispatch()
 
 	const [timeLeft, setTimeLeft] = useState(minutes * 60)
+
+	useEffect(() => {
+		if (minutes == 0) {
+			dispatch(setTimeOut(true))
+			onSubmit()
+		}
+	}, [])
 
 	useEffect(() => {
 		if (!globalState.submited && timeLeft > 0) {

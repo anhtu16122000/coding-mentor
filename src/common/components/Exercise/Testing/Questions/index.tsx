@@ -7,6 +7,7 @@ import SpeakingQuestion from './Speak'
 import Router from 'next/router'
 import MindMap from './MindMap'
 import MindMapAnnotate from './MindMap/Annotate'
+import { useExamContext } from '~/common/providers/Exam'
 
 function getQuestIndex(questions, curQuest) {
 	if (Router.asPath.includes('questions')) {
@@ -33,7 +34,14 @@ function getResultQuestIndex(questions, curQuest) {
 }
 
 const TestingQuestions = (props) => {
-	const { data, isFinal, questions, onRefresh, showEdit, getDoingQuestionGroup, setCurrentQuestion, onRefreshNav, isResult } = props
+	const { data, isFinal, onRefresh, showEdit, getDoingQuestionGroup } = props
+	const { onRefreshNav, isResult, setCurGroup } = props
+
+	const { questionsInSection: questions, setCurrentQuestion } = useExamContext()
+
+	// console.log('-- SOS questions: ', questions)
+
+	// log.Yellow('---- questions', questions)
 
 	const theQuestions = !isResult ? data?.IeltsQuestions : data?.IeltsQuestionResults || []
 
@@ -56,12 +64,9 @@ const TestingQuestions = (props) => {
 							key={index}
 							data={quest}
 							index={index}
-							onRefresh={onRefresh}
 							indexInExam={thisItem?.Index || ''}
 							showEdit={showEdit}
 							isDoing={Router.asPath.includes('take-an-exam')}
-							setCurrentQuestion={setCurrentQuestion}
-							onRefreshNav={onRefreshNav}
 							isResult={isResult}
 						/>
 					)
@@ -77,8 +82,6 @@ const TestingQuestions = (props) => {
 							data={quest}
 							IndexInExam={thisItem?.Index}
 							isDoing={Router.asPath.includes('take-an-exam')}
-							setCurrentQuestion={setCurrentQuestion}
-							onRefreshNav={onRefreshNav}
 							isResult={isResult}
 							curGroup={data}
 							onRefresh={onRefresh}
@@ -93,6 +96,7 @@ const TestingQuestions = (props) => {
 						<div className="h-[30px] flex items-center">
 							<div className="w-[50px]">True</div>
 							<div className="w-[50px]">False</div>
+							<div className="w-[80px]">Not Given</div>
 						</div>
 					</div>
 
@@ -106,10 +110,9 @@ const TestingQuestions = (props) => {
 								data={quest}
 								indexInExam={thisItem?.Index || ''}
 								isDoing={Router.asPath.includes('take-an-exam')}
-								getDoingQuestionGroup={getDoingQuestionGroup}
 								setCurrentQuestion={setCurrentQuestion}
-								onRefreshNav={onRefreshNav}
 								isResult={isResult}
+								setCurGroup={setCurGroup}
 							/>
 						)
 					})}
@@ -137,6 +140,7 @@ const TestingQuestions = (props) => {
 							isResult={isResult}
 							curGroup={data}
 							onRefresh={onRefresh}
+							setCurGroup={setCurGroup}
 						/>
 					)
 				})}
@@ -146,11 +150,9 @@ const TestingQuestions = (props) => {
 					disabled={true}
 					isFinal={isFinal}
 					dataSource={data}
-					getDoingQuestionGroup={getDoingQuestionGroup}
 					setCurrentQuestion={setCurrentQuestion}
-					onRefreshNav={onRefreshNav}
 					isResult={isResult}
-					allQuestions={questions}
+					setCurGroup={setCurGroup}
 				/>
 			)}
 		</>
