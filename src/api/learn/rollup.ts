@@ -24,5 +24,9 @@ export const rollUpApi = {
 		return instance.get<IApiResultData<IRollUpStudent[]>>(`${url}`, {
 			params
 		})
+	},
+	getStudent()
+	{
+		return instance.get('/api/UserInformation/user-available/3');
 	}
 }

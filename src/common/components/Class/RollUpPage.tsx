@@ -11,6 +11,7 @@ import { RootState } from '~/store'
 import InputTextField from '../FormControl/InputTextField'
 import IconButton from '../Primary/IconButton'
 import PrimaryTable from '../Primary/Table'
+import _ from 'lodash'
 
 const InputNote = ({ value, onChange, index }) => {
 	const [note, setNote] = useState('')
@@ -40,7 +41,7 @@ export const RollUpPage = () => {
 	const router = useRouter()
 	const user = useSelector((state: RootState) => state.user.information)
 	const [loading, setLoading] = useState(false)
-	const initParameters = { classId: router.query.class, scheduleId: null, pageIndex: 1, pageSize: PAGE_SIZE }
+	const initParameters = { classId: router.query.class, scheduleId: null, studentIds: null, pageIndex: 1, pageSize: PAGE_SIZE }
 	const initParametersSchedule = { classId: router.query.class }
 	const [apiParameters, setApiParameters] = useState(initParameters)
 	const [apiParametersSchedule, setApiParametersSchedule] = useState(initParametersSchedule)
@@ -48,6 +49,7 @@ export const RollUpPage = () => {
 	const [dataTable, setDataTable] = useState([])
 	const [scheduleId, setScheduleId] = useState(null)
 	const [dataSchedule, setDataSchedule] = useState<{ title: string; value: string }[]>([])
+	const [studentIds, setStudentIds] = useState(null)
 
 	const getSchedule = async (params) => {
 		try {
@@ -71,7 +73,6 @@ export const RollUpPage = () => {
 		} finally {
 		}
 	}
-
 	const getRollUp = async (params) => {
 		try {
 			setLoading(true)
@@ -93,7 +94,24 @@ export const RollUpPage = () => {
 			setLoading(false)
 		}
 	}
-
+	const getStudent = async () => 
+	{
+		try {
+			setLoading(true)
+			const res = await rollUpApi.getStudent()
+			if (res.status === 200) {
+				let _studentIds = res.data.data.map(x=>x.UserInformationId)
+				setStudentIds(_studentIds);
+			}
+			if (res.status === 204) {
+				setDataTable([])
+			}
+		} catch (error) {
+			setLoading(true)
+		} finally {
+			setLoading(false)
+	}
+	}
 	const handleChangeStatus = (info, index) => {
 		let temp = [...dataTable]
 		temp[index] = { ...temp[index], Status: info }
@@ -133,7 +151,6 @@ export const RollUpPage = () => {
 		}
 		handleUpdateRollUp(dataSubmit)
 	}
-
 	useEffect(() => {
 		if (router?.query?.class) {
 			getSchedule(apiParametersSchedule)
@@ -141,6 +158,12 @@ export const RollUpPage = () => {
 	}, [router?.query?.class])
 
 	useEffect(() => {
+		if(user.RoleId == 3 || user.RoleId == 8)
+		{
+			getStudent()
+			apiParameters.studentIds = studentIds == null ? "0" : studentIds.join(",")
+			setApiParameters(apiParameters)
+		}
 		if (apiParameters) {
 			getRollUp(apiParameters)
 		}
