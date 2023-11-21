@@ -163,9 +163,8 @@ const CreateMindmap: FC<IGroupForm> = (props) => {
 			)}
 
 			{!!isEdit && (
-				<div onClick={openEdit} className="cc-update-group-button">
-					<FiEdit size={18} className="mr-2 mt-[-2px]" />
-					Cập nhật
+				<div onClick={openEdit} className="cc-update-group-button !w-[30px]">
+					<FiEdit size={18} className="mr-2 mt-[-2px] flex-shrink-0" />
 				</div>
 			)}
 

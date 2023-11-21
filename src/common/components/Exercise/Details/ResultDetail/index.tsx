@@ -468,8 +468,6 @@ function ResultDetail() {
 									{!!window && window?.innerWidth < 750 && (
 										<TestingQuestions
 											data={curGroup}
-											setCurrentQuestion={setCurrentQuestion}
-											getDoingQuestionGroup={getResultQuestionGroup}
 											isResult={true}
 											onRefresh={(e) => getResultQuestionGroup(e)}
 											onRefreshNav={() => {
@@ -497,8 +495,6 @@ function ResultDetail() {
 
 						<TestingQuestions
 							data={curGroup}
-							setCurrentQuestion={setCurrentQuestion}
-							getDoingQuestionGroup={getResultQuestionGroup}
 							isResult={true}
 							onRefresh={(e) => getResultQuestionGroup(e)}
 							onRefreshNav={() => {
