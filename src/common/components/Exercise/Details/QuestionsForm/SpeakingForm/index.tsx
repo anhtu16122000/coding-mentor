@@ -33,7 +33,7 @@ class GroupItem extends React.Component<PlanetProps, PlanetState> {
 						</div>
 
 						<div className="!inline-flex">
-							<QestDragMenu item={item} isQuest questionType={QUESTION_TYPES.Write} />
+							<QestDragMenu item={item} isQuest questionType={QUESTION_TYPES.Speak} />
 						</div>
 					</div>
 

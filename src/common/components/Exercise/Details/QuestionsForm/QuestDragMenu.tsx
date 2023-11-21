@@ -12,6 +12,7 @@ import FormWriting from './WritingForm/form-writing'
 import TrueFalseForm from './TrueFalseForm'
 import TrueFalseQuestion from './TrueFalseForm/Question'
 import InputTrueFalse from './TrueFalseForm/Form'
+import FormSpeaking from './SpeakingForm/form-speaking'
 
 const QestDragMenu = (props) => {
 	const { isQuest, questionType } = props
@@ -56,6 +57,10 @@ const QestDragMenu = (props) => {
 
 					{isQuest && questionType == QUESTION_TYPES.TrueOrFalse && (
 						<InputTrueFalse isEdit defaultData={props.item} onOpen={() => theRef?.current?.close()} />
+					)}
+
+					{isQuest && questionType == QUESTION_TYPES.Speak && (
+						<FormSpeaking isEdit defaultData={props.item} onOpen={() => theRef?.current?.close()} />
 					)}
 
 					<Popconfirm placement="left" title="Xoá câu hỏi?" okText="Xóa" cancelText="Hủy" onConfirm={deleteQuestion}>

@@ -196,7 +196,7 @@ const TrueFalseQuestion = (props) => {
 						)}
 					</div>
 
-					<div className="w-[80px] all-center">
+					<div className="w-[88px] all-center">
 						{checkChecked(2) && (
 							<>
 								{showen && (
@@ -244,7 +244,7 @@ const TrueFalseQuestion = (props) => {
 						/>
 					</div>
 
-					<div className="w-[80px] all-center">
+					<div className="w-[88px] all-center">
 						<Checkbox
 							disabled={disabledCheckbox}
 							id={`check-box-${data?.Id || ''}`}

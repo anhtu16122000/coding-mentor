@@ -34,14 +34,10 @@ function getResultQuestIndex(questions, curQuest) {
 }
 
 const TestingQuestions = (props) => {
-	const { data, isFinal, onRefresh, showEdit, getDoingQuestionGroup } = props
+	const { data, isFinal, onRefresh, showEdit } = props
 	const { onRefreshNav, isResult, setCurGroup } = props
 
 	const { questionsInSection: questions, setCurrentQuestion } = useExamContext()
-
-	// console.log('-- SOS questions: ', questions)
-
-	// log.Yellow('---- questions', questions)
 
 	const theQuestions = !isResult ? data?.IeltsQuestions : data?.IeltsQuestionResults || []
 
@@ -93,7 +89,7 @@ const TestingQuestions = (props) => {
 				<div className="mb-[16px] bg-[#ffffff] p-[8px] !rounded-[6px]">
 					<div className="w-full mb-[8px] hidden w500:flex">
 						<div className="flex-1"></div>
-						<div className="h-[30px] flex items-center">
+						<div className="h-[30px] flex items-center font-[600]">
 							<div className="w-[50px]">True</div>
 							<div className="w-[50px]">False</div>
 							<div className="w-[80px]">Not Given</div>
