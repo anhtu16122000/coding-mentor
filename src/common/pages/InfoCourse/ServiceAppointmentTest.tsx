@@ -424,6 +424,7 @@ export default function ServiceAppointmentTest(props) {
 		{
 			title: 'Trạng thái',
 			dataIndex: 'Status',
+			width: 100,
 			render: (status, data) => {
 				if (isAdmin() || isManager() || isTeacher() || isSaler() || isAcademic()) {
 					return <TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />

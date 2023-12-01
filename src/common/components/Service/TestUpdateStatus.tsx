@@ -49,6 +49,12 @@ const TestUpdateStatus = (props) => {
 		<>
 			<PrimaryTooltip id={rowData?.id + '-fi'} content="Cập nhật trạng thái" place="left">
 				<div onClick={showModal} className="cursor-pointer">
+					{rowData?.Status != 1 && rowData?.Status != 2 && !rowData.StatusName && (
+						<p className="tag yellow">
+							Cập nhật trạng thái <TiArrowSortedDown size={16} className="mt-[-3px]" />
+						</p>
+					)}
+
 					{rowData?.Status == 1 && (
 						<p className="tag red">
 							{rowData.StatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
@@ -61,7 +67,7 @@ const TestUpdateStatus = (props) => {
 						</p>
 					)}
 
-					{rowData?.Status != 1 && rowData?.Status != 2 && (
+					{rowData?.Status != 1 && rowData?.Status != 2 && !!rowData.StatusName && (
 						<p className="tag yellow">
 							{rowData.StatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
 						</p>
