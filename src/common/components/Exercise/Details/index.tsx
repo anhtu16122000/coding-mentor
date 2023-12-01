@@ -686,7 +686,7 @@ function ExamDetail() {
 
 									{!!window && window?.innerWidth < 750 && <GroupContent is={is} curGroup={curGroup} />}
 
-									{!!window && window?.innerWidth < 750 && <TestingQuestions setCurrentQuestion={setCurrentQuestion} data={curGroup} />}
+									{!!window && window?.innerWidth < 750 && <TestingQuestions data={curGroup} />}
 
 									{curAudio?.Audio && <div className="h-[200px]" />}
 									<div className="h-[100px]" />

@@ -3,7 +3,10 @@ import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import CreateMindmap from './Create'
 import HTMLParser from 'react-html-parser'
-import { Checkbox } from 'antd'
+import { Checkbox, Popconfirm } from 'antd'
+import { RiDeleteBin6Line } from 'react-icons/ri'
+import { useDispatch } from 'react-redux'
+import { setCurrentExerciseForm } from '~/store/globalState'
 
 const MindMapForm = () => {
 	const exercises = useSelector((state: RootState) => state.globalState.currentExerciseForm)
@@ -46,6 +49,28 @@ const MindMapForm = () => {
 		setAnswerFormated(shuffleArray(temp))
 	}
 
+	const answers = useSelector((state: RootState) => state.globalState.currentExerciseForm)
+
+	const dispatch = useDispatch()
+
+	async function deleteQuestion(item) {
+		let temp = []
+		answers.forEach((answer) => {
+			if (!!answer.Id) {
+				if (answer.Id !== item.Id) {
+					temp.push(answer)
+				} else {
+					temp.push({ ...answer, Enable: false })
+				}
+			} else {
+				if (answer.ficaID !== item.ficaID) {
+					temp.push(answer)
+				}
+			}
+		})
+		dispatch(setCurrentExerciseForm(temp))
+	}
+
 	return (
 		<div className="flex flex-col ">
 			<div className="flex flex-row">
@@ -53,7 +78,14 @@ const MindMapForm = () => {
 					<div className="h-[46px]" />
 					{formatData(exercises).map((exercise, exIndex) => {
 						return (
-							<div className={`border-t-[1px] px-[8px] border-[#ffffff] h-[46px] flex all-center bg-[#f2f2f2] min-w-[110px]`}>
+							<div className={`border-t-[1px] px-[8px] border-[#ffffff] h-[46px] flex items-center bg-[#f2f2f2] min-w-[110px]`}>
+								<CreateMindmap isEdit defaultData={exercise} />
+								<Popconfirm placement="left" title="Xoá câu hỏi?" okText="Xóa" cancelText="Hủy" onConfirm={() => deleteQuestion(exercise)}>
+									<div className="button-delete-choice !w-[30px] mr-[8px]">
+										<RiDeleteBin6Line size={18} className="mr-2 flex-shrink-0 mt-[-1px]" />
+									</div>
+								</Popconfirm>
+
 								<div>{HTMLParser(exercise?.Content)}</div>
 							</div>
 						)

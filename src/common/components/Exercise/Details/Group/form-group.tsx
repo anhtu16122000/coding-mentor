@@ -22,6 +22,8 @@ import { useExamContext } from '~/common/providers/Exam'
 import { setQuestions } from '~/store/createQuestion'
 import CreateDragAndDrop from '../QuestionsForm/DragAndDropForm'
 import { tagApi } from '~/api/configs/tag'
+import SortAnswer from '../QuestionsForm/SortAnswerForm/Question'
+import SortAnswerContainer from '../QuestionsForm/SortAnswerForm'
 
 const GroupForm: FC<IGroupForm> = (props) => {
 	const { isEdit, defaultData, isChangeInfo, onOpen, section, onRefresh, isQuestionsBank } = props
@@ -239,17 +241,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 		getRightHeight()
 	}, [visible])
 
-	async function getRightHeight() {
-		// await wait(1000)
-		// const leftElement = document.getElementById('the-left-form')
-		// console.log('--- the-left-form: ', leftElement)
-		// console.log('-- leftElement.offsetHeight: ', leftElement?.offsetHeight)
-		// if (leftElement?.offsetHeight > 0) {
-		// 	setRightHeight(leftElement.offsetHeight)
-		// }
-	}
-
-	// console.log('--------- rightHeight: ', rightHeight)
+	async function getRightHeight() {}
 
 	return (
 		<>
@@ -294,6 +286,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 										<Select.Option value={QUESTION_TYPES.Speak}>Speaking</Select.Option>
 										<Select.Option value={QUESTION_TYPES.FillInTheBlank}>Điền vào ô trống</Select.Option>
 										<Select.Option value={QUESTION_TYPES.DragDrop}>Chọn đáp án đúng</Select.Option>
+										<Select.Option value={QUESTION_TYPES.Sort}>Sắp xếp đáp án</Select.Option>
 									</Select>
 								</Form.Item>
 
@@ -338,15 +331,14 @@ const GroupForm: FC<IGroupForm> = (props) => {
 
 						<div className="cc-group-quest-list" style={{ height: rightHeight }}>
 							{textError && <div className="mb-2 text-danger">{textError}</div>}
-
 							{currentType == QUESTION_TYPES.MultipleChoice && <MultipleChoiceForm />}
 							{currentType == QUESTION_TYPES.Write && <CreateWriting />}
 							{currentType == QUESTION_TYPES.TrueOrFalse && <TrueFalseForm />}
 							{currentType == QUESTION_TYPES.Mindmap && <MindMapForm />}
 							{currentType == QUESTION_TYPES.Speak && <CreateSpeaking />}
-
 							{currentType == QUESTION_TYPES.FillInTheBlank && <CreateTyping isEdit={isEdit} />}
 							{currentType == QUESTION_TYPES.DragDrop && <CreateDragAndDrop isEdit={isEdit} />}
+							{currentType == QUESTION_TYPES.Sort && <SortAnswerContainer />}
 						</div>
 					</div>
 				</Form>

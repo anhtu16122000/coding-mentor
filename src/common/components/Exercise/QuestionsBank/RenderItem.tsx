@@ -9,7 +9,7 @@ import { QUESTION_TYPES } from '~/common/libs'
 import DragHeader from '../Details/Components/drag-header'
 import GroupContent from '../Details/Components/group-content'
 import TestingQuestions from '../Testing/Questions'
-import { TbListDetails } from 'react-icons/tb'
+import { TbListDetails, TbSitemap } from 'react-icons/tb'
 import { TiArrowSortedDown } from 'react-icons/ti'
 import { deleteQuestionsBank } from './util'
 import GroupForm from '../Details/Group/form-group'
@@ -25,6 +25,8 @@ const QuestionBankRenderItem = ({ item, index, questIs, dragAns, onRefresh }) =>
 			onRefresh()
 		})
 	}
+
+	console.log('--- item: ', item)
 
 	const popref = useRef(null)
 
@@ -46,6 +48,7 @@ const QuestionBankRenderItem = ({ item, index, questIs, dragAns, onRefresh }) =>
 							{item?.Type == QUESTION_TYPES.TrueOrFalse && <BiCheckboxSquare size={20} color="#fff" className="ml-[-2px] mr-[2px]" />}
 							{item?.Type == QUESTION_TYPES.Speak && <FaMicrophone size={16} color="#fff" className="ml-[-2px] mr-[2px]" />}
 							{item?.Type == QUESTION_TYPES.FillInTheBlank && <FaPen size={12} color="#fff" className="mr-[4px]" />}
+							{item?.Type == QUESTION_TYPES.Mindmap && <TbSitemap size={16} color="#fff" className="mr-[4px]" />}
 
 							<div className="text-[#fff] font-[600]">{item?.TypeName == 'Kéo thả' ? 'Chọn đáp án' : item?.TypeName}</div>
 						</div>

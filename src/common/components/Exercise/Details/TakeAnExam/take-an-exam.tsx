@@ -551,9 +551,6 @@ function TakeAnExamDetail() {
 											<TestingQuestions
 												key={`t-m-gr-${curGroup?.Id}`}
 												data={curGroup}
-												questions={questionsInSection}
-												// setCurrentQuestion={setCurrentQuestion}
-												getDoingQuestionGroup={getDoingQuestionGroup}
 												onRefreshNav={refreshNav}
 												setCurGroup={setCurGroup}
 											/>
@@ -570,15 +567,7 @@ function TakeAnExamDetail() {
 
 									<GroupContent key={`d-gc-${curGroup?.Id}`} is={is} curGroup={curGroup} questionsInSection={questionsInSection} />
 
-									<TestingQuestions
-										key={`t-d-gr-${curGroup?.Id}`}
-										data={curGroup}
-										questions={questionsInSection}
-										// setCurrentQuestion={setCurrentQuestion}
-										getDoingQuestionGroup={getDoingQuestionGroup}
-										onRefreshNav={refreshNav}
-										setCurGroup={setCurGroup}
-									/>
+									<TestingQuestions key={`t-d-gr-${curGroup?.Id}`} data={curGroup} onRefreshNav={refreshNav} setCurGroup={setCurGroup} />
 
 									{curAudio?.Audio && <div className="h-[200px]" />}
 								</div>
