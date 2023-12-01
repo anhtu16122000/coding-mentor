@@ -14,7 +14,7 @@ import ReactDOM from 'react-dom'
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { MdOutlineDragIndicator } from 'react-icons/md'
 
-import { DragDropContainer, DropTarget } from 'react-drag-drop-container'
+// import { DragDropContainer, DropTarget } from 'react-drag-drop-container'
 
 import { DragDropContext, Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import List from './List'

@@ -1,7 +1,7 @@
 import { Input, Select } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { rollUpApi } from '~/api/learn/rollup'
 import { scheduleApi } from '~/api/learn/schedule'
@@ -12,6 +12,9 @@ import InputTextField from '../FormControl/InputTextField'
 import IconButton from '../Primary/IconButton'
 import PrimaryTable from '../Primary/Table'
 import _ from 'lodash'
+import { isMapIterator } from 'util/types'
+import { getDate } from '~/common/utils/super-functions'
+import { date } from 'yup/lib/locale'
 
 const InputNote = ({ value, onChange, index }) => {
 	const [note, setNote] = useState('')
@@ -50,13 +53,20 @@ export const RollUpPage = () => {
 	const [scheduleId, setScheduleId] = useState(null)
 	const [dataSchedule, setDataSchedule] = useState<{ title: string; value: string }[]>([])
 	const [studentIds, setStudentIds] = useState(null)
+	const [defaultSchedule, setDefaultSchedule] = useState(null)
 
 	const getSchedule = async (params) => {
 		try {
 			const res = await scheduleApi.getAll(params)
 			if (res.status === 200) {
 				let temp = [{ title: 'Bỏ chọn', value: null }]
+				let scheduleCompleteds = []
+				let today = new Date()
 				res?.data?.data?.forEach((item, index) => {
+					const startDate: Date = new Date(moment(item?.StartTime).format('YYYY-MM-DD HH:mm'))
+					if (startDate < today) {
+						scheduleCompleteds.push(item?.Id)
+					}
 					temp.push({
 						title: `[Buổi ${index + 1}][${moment(item?.StartTime).format('MM/DD')}] ${moment(item?.StartTime).format('HH:mm')} - ${moment(
 							item?.EndTime
@@ -64,6 +74,10 @@ export const RollUpPage = () => {
 						value: item?.Id
 					})
 				})
+				let _defaultSchedule = scheduleCompleteds.length == 0 ? null : scheduleCompleteds[scheduleCompleteds.length - 1]
+				setDefaultSchedule(_defaultSchedule)
+				setApiParameters({ ...apiParameters, scheduleId: _defaultSchedule })
+				setScheduleId(_defaultSchedule)
 				setDataSchedule(temp)
 			}
 			if (res.status === 204) {
@@ -94,14 +108,13 @@ export const RollUpPage = () => {
 			setLoading(false)
 		}
 	}
-	const getStudent = async () => 
-	{
+	const getStudent = async () => {
 		try {
 			setLoading(true)
 			const res = await rollUpApi.getStudent()
 			if (res.status === 200) {
-				let _studentIds = res.data.data.map(x=>x.UserInformationId)
-				setStudentIds(_studentIds);
+				let _studentIds = res.data.data.map((x) => x.UserInformationId)
+				setStudentIds(_studentIds)
 			}
 			if (res.status === 204) {
 				setDataTable([])
@@ -110,7 +123,7 @@ export const RollUpPage = () => {
 			setLoading(true)
 		} finally {
 			setLoading(false)
-	}
+		}
 	}
 	const handleChangeStatus = (info, index) => {
 		let temp = [...dataTable]
@@ -158,10 +171,9 @@ export const RollUpPage = () => {
 	}, [router?.query?.class])
 
 	useEffect(() => {
-		if(user.RoleId == 3 || user.RoleId == 8)
-		{
+		if (user.RoleId == 3 || user.RoleId == 8) {
 			getStudent()
-			apiParameters.studentIds = studentIds == null ? "0" : studentIds.join(",")
+			apiParameters.studentIds = studentIds == null ? '0' : studentIds.join(',')
 			setApiParameters(apiParameters)
 		}
 		if (apiParameters) {
@@ -260,9 +272,11 @@ export const RollUpPage = () => {
 						<div className="flex items-center antd-custom-wrap">
 							Buổi học:
 							<Select
-								className="w-[220px] ml-tw-4"
+								value={defaultSchedule}
+								className="w-[250px] ml-tw-4"
 								onChange={(data) => {
 									setScheduleId(data)
+									setDefaultSchedule(data)
 									setApiParameters({ ...apiParameters, scheduleId: data })
 								}}
 							>
