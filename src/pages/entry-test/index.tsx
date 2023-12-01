@@ -8,7 +8,7 @@ const ServiceAppointmentTest = () => {
 	return (
 		<>
 			<Head>
-				<title>{appConfigs.appName} - Khách hẹn test</title>
+				<title>{appConfigs.appName} - Hẹn test</title>
 			</Head>
 			<ServiceAppointmentTestPage />
 		</>

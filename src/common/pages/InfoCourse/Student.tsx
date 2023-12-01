@@ -387,10 +387,9 @@ const Student: FC<IPersonnel> = (props) => {
 			dataIndex: 'LearningStatus',
 			render: (data, record) => (
 				<>
-					{data === 1 && <span className="tag yellow">{record.LearningStatusName}</span>}
-					{data === 2 && <span className="tag blue">{record.LearningStatusName}</span>}
-					{data === 3 && <span className="tag green">{record.LearningStatusName}</span>}
-					{data === 4 && <span className="tag red">{record.LearningStatusName}</span>}
+					{data === 5 && <span className="tag yellow">{record.LearningStatusName}</span>}
+					{data === 6 && <span className="tag blue">{record.LearningStatusName}</span>}
+					{data === 7 && <span className="tag red">{record.LearningStatusName}</span>}
 				</>
 			)
 		},

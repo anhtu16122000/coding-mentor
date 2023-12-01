@@ -95,7 +95,7 @@ export const SalerChildMenu = [
 				ItemType: 'single',
 				Key: '/entry-test',
 				Route: '/entry-test',
-				Text: 'Khách hẹn test',
+				Text: 'Hẹn test',
 				Icon: ''
 			},
 			{

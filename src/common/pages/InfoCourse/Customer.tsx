@@ -437,7 +437,7 @@ const CustomerAdvisory = () => {
 
 						<CustomerAdvisoryMail dataRow={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
 
-						{data.CustomerStatusId !== 2 && (
+						{/* {data.CustomerStatusId !== 2 && (
 							<CustomerAdviseForm
 								onRefresh={handleRefresh}
 								isStudent={true}
@@ -451,7 +451,20 @@ const CustomerAdvisory = () => {
 								listTodoApi={listTodoApi}
 								setTodoApi={setTodoApi}
 							/>
-						)}
+						)} */}
+							<CustomerAdviseForm
+								onRefresh={handleRefresh}
+								isStudent={true}
+								source={source}
+								learningNeed={learningNeed}
+								purpose={purpose}
+								sale={sale}
+								branch={convertBranchSelect}
+								customerStatus={customerStatus}
+								rowData={data}
+								listTodoApi={listTodoApi}
+								setTodoApi={setTodoApi}
+							/>
 					</div>
 				)
 			}

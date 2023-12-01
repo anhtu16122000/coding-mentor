@@ -134,7 +134,7 @@ export const TeacherChildMenu = [
 				ItemType: 'single',
 				Key: '/entry-test',
 				Route: '/entry-test',
-				Text: 'Khách hẹn test',
+				Text: 'Hẹn test',
 				Icon: ''
 			},
 			{

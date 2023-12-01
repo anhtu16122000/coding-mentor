@@ -26,7 +26,7 @@ const TestUpdateStatus = (props) => {
 	const onSubmit = async (data) => {
 		setIsLoading(true)
 		try {
-			const res = await testAppointmentApi.update({ ...rowData, Status: data.Status })
+			const res = await testAppointmentApi.update({ ...rowData, LearningStatus: data.LearningStatus })
 			if (res.status == 200) {
 				handleCancel()
 				setTodoApi(listTodoApi)
@@ -49,21 +49,27 @@ const TestUpdateStatus = (props) => {
 		<>
 			<PrimaryTooltip id={rowData?.id + '-fi'} content="Cập nhật trạng thái" place="left">
 				<div onClick={showModal} className="cursor-pointer">
-					{rowData?.Status == 1 && (
+					{rowData?.LearningStatus == 1 && (
 						<p className="tag red">
-							{rowData.StatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
+							{rowData.LearningStatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
 						</p>
 					)}
 
-					{rowData?.Status == 2 && (
+					{rowData?.LearningStatus == 2 && (
 						<p className="tag blue">
-							{rowData.StatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
+							{rowData.LearningStatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
 						</p>
 					)}
 
-					{rowData?.Status != 1 && rowData?.Status != 2 && (
+					{rowData?.LearningStatus == 3 && (
+						<p className="tag black">
+							{rowData.LearningStatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
+						</p>
+					)}
+
+					{rowData?.LearningStatus != 1 && rowData?.LearningStatus != 2 && rowData?.LearningStatus != 3 && (
 						<p className="tag yellow">
-							{rowData.StatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
+							{rowData.LearningStatusName} <TiArrowSortedDown size={16} className="mt-[-3px]" />
 						</p>
 					)}
 				</div>
@@ -83,11 +89,13 @@ const TestUpdateStatus = (props) => {
 			>
 				<Form form={form} layout="vertical" onFinish={onSubmit}>
 					<SelectField
-						name="Status"
+						name="LearningStatus"
 						label="Trạng thái"
 						optionList={[
-							{ value: 1, title: 'Chưa kiểm tra' },
-							{ value: 2, title: 'Đã kiểm tra' }
+							{ value: 1, title: 'Chờ kiểm tra' },
+							{ value: 2, title: 'Đã kiểm tra' },
+							{ value: 3, title: 'Không học' },
+							{ value: 4, title: 'Chờ xếp lớp' }
 						]}
 					/>
 				</Form>

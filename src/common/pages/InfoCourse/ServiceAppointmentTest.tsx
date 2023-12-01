@@ -40,14 +40,16 @@ const appointmenInitFilter = [
 		value: null
 	},
 	{
-		name: 'Status',
+		name: 'LearningStatus',
 		title: 'Trạng thái',
 		col: 'col-md-12 col-12',
 		type: 'select',
 		mode: 'multiple',
 		optionList: [
-			{ value: 1, title: 'Chưa kiểm tra' },
-			{ value: 2, title: 'Đã kiểm tra' }
+			{ value: 1, title: 'Chờ kiểm tra' },
+			{ value: 2, title: 'Đã kiểm tra' },
+			{ value: 3, title: 'Không học' },
+			{ value: 4, title: 'Chờ xếp lớp' }
 		],
 		value: null
 	}
@@ -423,19 +425,22 @@ export default function ServiceAppointmentTest(props) {
 		},
 		{
 			title: 'Trạng thái',
-			dataIndex: 'Status',
-			render: (status, data) => {
+			dataIndex: 'LearningStatus',
+			render: (learningStatus, data) => {
 				if (isAdmin() || isManager() || isTeacher() || isSaler() || isAcademic()) {
 					return <TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
 				}
-
-				if (status == 1) {
-					return <p className="tag red">{data.StatusName}</p>
+				
+				if (learningStatus == 1) {
+					return <p className="tag red">{data.LearningStatusName}</p>
 				}
-				if (status == 2) {
-					return <p className="tag blue">{data.StatusName}</p>
+				if (learningStatus == 2) {
+					return <p className="tag blue">{data.LearningStatusName}</p>
 				}
-				return <p className="tag yellow">{data.StatusName}</p>
+				if (learningStatus == 3) {
+					return <p className="tag black">{data.LearningStatusName}</p>
+				}
+				return <p className="tag yellow">{data.LearningStatusName}</p>
 			}
 		},
 		{
@@ -615,7 +620,7 @@ export default function ServiceAppointmentTest(props) {
 					}
 					Extra={
 						<>
-							{(isAdmin() || isManager()) && !student && (
+							{/* {(isAdmin() || isManager()) && !student && (
 								<StudentForm
 									listStudent={listStudent}
 									listTeacher={listTeacher}
@@ -623,7 +628,7 @@ export default function ServiceAppointmentTest(props) {
 									setTodoApi={setTodoApi}
 									listTodoApi={listTodoApi}
 								/>
-							)}
+							)} */}
 
 							{userInformation?.RoleId == '8' ? (
 								<>

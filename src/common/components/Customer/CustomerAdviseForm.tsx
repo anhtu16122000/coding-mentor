@@ -380,7 +380,7 @@ const CustomerAdviseForm = React.memo((props: any) => {
 									<div className="col-md-6 col-12">
 										<DatePickerField mode="single" name="DOB" label="Ngày sinh" />
 									</div>
-									<div>
+									<div className="col-md-6 col-12">
 										<SelectField
 											className="col-12"
 											label="Giới tính"
