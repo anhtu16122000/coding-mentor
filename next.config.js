@@ -22,7 +22,7 @@ const webpackConfig = {
 
 const withTM = require('next-transpile-modules')([
 	// '@fullcalendar/common',
-	'@babel/preset-react',
+	'babel-preset-react',
 	'@fullcalendar/daygrid',
 	'@fullcalendar/timegrid',
 	'@fullcalendar/interaction'

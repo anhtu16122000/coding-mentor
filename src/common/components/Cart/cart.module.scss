@@ -28,13 +28,13 @@
 			@apply w-[32px] h-[32px] border-[1px] border-[#dedede] flex items-center justify-center;
 		}
 		.cart-control-button-top {
-			border-bottom: none !important;
-			@apply rounded-t-[4px] cursor-pointer hover:bg-[#f9f9f9] active:bg-[#fff];
+			border-right: none !important;
+			@apply rounded-tl-[4px] rounded-bl-[4px] cursor-pointer hover:bg-[#f9f9f9] active:bg-[#fff];
 			@apply text-[#8f8f8f] hover:text-[#000] active:text-[#8f8f8f];
 		}
 		.cart-control-button-bottom {
-			border-top: none !important;
-			@apply rounded-b-[4px] cursor-pointer hover:bg-[#f9f9f9] active:bg-[#fff];
+			border-left: none !important;
+			@apply rounded-br-[4px] rounded-tr-[4px] cursor-pointer hover:bg-[#f9f9f9] active:bg-[#fff];
 			@apply text-[#8f8f8f] hover:text-[#000] active:text-[#8f8f8f];
 		}
 		.cart-payment-method {

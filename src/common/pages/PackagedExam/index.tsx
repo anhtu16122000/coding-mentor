@@ -252,18 +252,20 @@ function PackageExam() {
 														</div>
 													</div>
 
-													<div className="pe-i-d-price mb-[-8px]">{parseToMoney(item?.Price || 0)}VNĐ</div>
+													<div className="pe-i-d-price mb-[-8px]">{item?.Price ? `${parseToMoney(item?.Price || 0)} VNĐ` : 'Miễn phí'}</div>
 												</div>
 
 												<div className="pe-i-d-controller">
-													{is(userInfo).student && item?.Status != 2 && (
+													{is(userInfo).student && item?.Status != 2 && item?.Price ? (
 														<div onClick={() => _addToCart(item)} className="pe-i-d-cart">
 															<FaCartPlus size={14} />
 															<div className="pe-i-d-c-title">Mua ngay</div>
 														</div>
+													) : (
+														<></>
 													)}
 
-													{(is(userInfo).admin || is(userInfo).manager) && (
+													{is(userInfo).admin || is(userInfo).manager ? (
 														<div
 															className="pe-i-d-detail"
 															onClick={() => Router.push({ pathname: '/package-exam/detail', query: { package: item?.Id } })}
@@ -271,9 +273,11 @@ function PackageExam() {
 															<BiSolidDetail size={16} />
 															<div className="pe-i-d-c-title">Chi tiết</div>
 														</div>
+													) : (
+														<></>
 													)}
 
-													{is(userInfo).student && item?.Status == 2 && (
+													{is(userInfo).student && (item?.Status == 2 || !item?.Price) ? (
 														<div
 															className="pe-i-d-detail"
 															onClick={() => Router.push({ pathname: '/package-exam/detail', query: { package: item?.Id } })}
@@ -281,6 +285,8 @@ function PackageExam() {
 															<BiSolidDetail size={16} />
 															<div className="pe-i-d-c-title">Chi tiết</div>
 														</div>
+													) : (
+														<></>
 													)}
 
 													{is(userInfo).admin || (is(userInfo).manager && <DonatePackage onRefresh={onRefresh} item={item} />)}

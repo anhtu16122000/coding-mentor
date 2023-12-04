@@ -10,7 +10,7 @@ import styles from './cart.module.scss'
 import Head from 'next/head'
 import ReactHTMLParser from 'react-html-parser'
 import appConfigs from '~/appConfig'
-import { Card, Divider, Empty, Input, Modal, Skeleton } from 'antd'
+import { Card, Divider, Empty, Input, Modal, Popconfirm, Skeleton } from 'antd'
 import Avatar from '../Avatar'
 import { parseToMoney } from '~/common/utils/common'
 import { HiPlus } from 'react-icons/hi'
@@ -23,6 +23,7 @@ import { IoMdClose } from 'react-icons/io'
 import PrimaryTooltip from '../PrimaryTooltip'
 import PrimaryButton from '../Primary/Button'
 import PaymentSucess from './success'
+import { FaRegTrashAlt } from 'react-icons/fa'
 
 const CART_ROUTER = '/cart'
 
@@ -119,6 +120,18 @@ const MainCart = () => {
 		setLoadingUpdate({ Id: params?.Id, Status: true, Type: type })
 		try {
 			const response = await RestApi.put('Cart', params)
+			if (response.status == 200) {
+				getData()
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		}
+	}
+
+	async function deleteCart(params, type) {
+		setLoadingUpdate({ Id: params?.Id, Status: true, Type: 'delete' })
+		try {
+			const response = await RestApi.delete('Cart', params?.Id)
 			if (response.status == 200) {
 				getData()
 			}
@@ -295,33 +308,41 @@ const MainCart = () => {
 													</div>
 												</div>
 
-												<div className="ml-[16px] none-selection">
-													<div
-														onClick={() => updateCart({ Quantity: item.Quantity + 1, Id: item?.Id }, 'plus')}
-														className="cart-control-button cart-control-button-top"
-													>
-														{loadingUpdate.Status == true && loadingUpdate.Id == item?.Id && loadingUpdate.Type == 'plus' && (
-															<BaseLoading.Black />
-														)}
+												<div className="h-[110px] ml-[16px] flex flex-col items-end justify-between">
+													<Popconfirm title={`Xoá ${item?.ProductName} khỏi giỏ hàng?`} onConfirm={() => deleteCart(item, 'delete')}>
+														<div className="pr-[2px] pl-[8px] pb-[4px] cursor-pointer hover:opacity-70">
+															<FaRegTrashAlt size={18} color="#F44336" />
+														</div>
+													</Popconfirm>
 
-														{(loadingUpdate.Status == false || loadingUpdate.Id !== item?.Id || loadingUpdate.Type !== 'plus') && (
-															<HiPlus size={16} />
-														)}
-													</div>
+													<div className="none-selection flex items-center">
+														<div
+															onClick={() => updateCart({ Quantity: item.Quantity + 1, Id: item?.Id }, 'plus')}
+															className="cart-control-button cart-control-button-top"
+														>
+															{loadingUpdate.Status == true && loadingUpdate.Id == item?.Id && loadingUpdate.Type == 'plus' && (
+																<BaseLoading.Black />
+															)}
 
-													<div className="cart-control-button font-[600]">{item?.Quantity}</div>
+															{(loadingUpdate.Status == false || loadingUpdate.Id !== item?.Id || loadingUpdate.Type !== 'plus') && (
+																<HiPlus size={16} />
+															)}
+														</div>
 
-													<div
-														onClick={() => updateCart({ Quantity: item.Quantity - 1, Id: item?.Id }, 'remove')}
-														className="cart-control-button cart-control-button-bottom"
-													>
-														{loadingUpdate.Status == true && loadingUpdate.Id == item?.Id && loadingUpdate.Type == 'remove' && (
-															<BaseLoading.Black />
-														)}
+														<div className="cart-control-button font-[600]">{item?.Quantity}</div>
 
-														{(loadingUpdate.Status == false || loadingUpdate.Id !== item?.Id || loadingUpdate.Type != 'remove') && (
-															<MdRemove size={16} />
-														)}
+														<div
+															onClick={() => updateCart({ Quantity: item.Quantity - 1, Id: item?.Id }, 'remove')}
+															className="cart-control-button cart-control-button-bottom"
+														>
+															{loadingUpdate.Status == true && loadingUpdate.Id == item?.Id && loadingUpdate.Type == 'remove' && (
+																<BaseLoading.Black />
+															)}
+
+															{(loadingUpdate.Status == false || loadingUpdate.Id !== item?.Id || loadingUpdate.Type != 'remove') && (
+																<MdRemove size={16} />
+															)}
+														</div>
 													</div>
 												</div>
 											</div>
