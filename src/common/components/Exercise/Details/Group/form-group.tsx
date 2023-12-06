@@ -286,7 +286,7 @@ const GroupForm: FC<IGroupForm> = (props) => {
 										<Select.Option value={QUESTION_TYPES.Speak}>Speaking</Select.Option>
 										<Select.Option value={QUESTION_TYPES.FillInTheBlank}>Điền vào ô trống</Select.Option>
 										<Select.Option value={QUESTION_TYPES.DragDrop}>Chọn đáp án đúng</Select.Option>
-										<Select.Option value={QUESTION_TYPES.Sort}>Sắp xếp đáp án</Select.Option>
+										{/* <Select.Option value={QUESTION_TYPES.Sort}>Sắp xếp đáp án</Select.Option> */}
 									</Select>
 								</Form.Item>
 

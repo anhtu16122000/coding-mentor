@@ -1,5 +1,5 @@
 import { Checkbox, Radio, Space } from 'antd'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineFileDone } from 'react-icons/ai'
 import { TbFileCertificate } from 'react-icons/tb'
 import ChoiceInputForm from '../../../Details/QuestionsForm/MultipleChoiceForm/Form'
@@ -8,11 +8,14 @@ import Router from 'next/router'
 import htmlParser from '~/common/components/HtmlParser'
 import { CgSelectO } from 'react-icons/cg'
 import { useExamContext } from '~/common/providers/Exam'
+import { forEach } from 'lodash'
 
 const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']
 
 const Choice = (props) => {
 	const { data, index, indexInExam, showEdit, isDoing, isResult } = props
+
+	console.log('----- props: ', props)
 
 	const { questionsInSection, setCurrentQuestion, setQuestionsInSection, setNotSetCurrentQuest } = useExamContext()
 
@@ -22,6 +25,7 @@ const Choice = (props) => {
 		if (!isDoing) {
 			return
 		}
+
 		if (type == 'single') {
 			insertDetails({ Id: event.target?.value })
 		}
@@ -141,6 +145,21 @@ const Choice = (props) => {
 		return ''
 	}
 
+	function getCorrectAnswer() {
+		let cor = []
+
+		if (!!isResult) {
+			for (let i = 0; i < data.IeltsAnswerResults.length; i++) {
+				const element = data.IeltsAnswerResults[i]
+				if (element?.Correct) {
+					cor.push(alphabet[i])
+				}
+			}
+		}
+
+		return cor.length > 0 ? cor.join(', ') : ''
+	}
+
 	function getCorrect() {
 		let cor = []
 
@@ -156,6 +175,12 @@ const Choice = (props) => {
 		return cor.length > 0 ? cor.join(', ') : ''
 	}
 
+	const [doingTestDetails, setDoingTestDetails] = useState(null)
+
+	useEffect(() => {
+		setDoingTestDetails(data?.DoingTestDetails)
+	}, [data])
+
 	async function insertDetails(answer) {
 		if (!isDoing) {
 			return
@@ -164,10 +189,20 @@ const Choice = (props) => {
 		let items = []
 
 		if (getType() == 'single') {
-			if (!!data?.DoingTestDetails) {
-				items.push({ ...data?.DoingTestDetails[0], Enable: false })
+			if (!!doingTestDetails) {
+				doingTestDetails.forEach((element) => {
+					items.push({ ...element, Enable: false })
+				})
 			}
-			items.push({ Id: 0, IeltsAnswerId: answer?.Id, IeltsAnswerContent: answer?.Content, Type: 0, Index: 0, Enable: true })
+
+			items.push({
+				Id: 0,
+				IeltsAnswerId: answer?.Id,
+				IeltsAnswerContent: answer?.Content,
+				Type: 0,
+				Index: 0,
+				Enable: true
+			})
 		} else {
 			// ----------------------------------
 			if (!!data?.DoingTestDetails) {
@@ -207,7 +242,7 @@ const Choice = (props) => {
 		}
 
 		if (!!Router?.query?.exam) {
-			console.log('-------- PUT items: ', items)
+			console.log('-------- PUT ANSWER items: ', items)
 
 			try {
 				const res = await doingTestApi.insertDetail({
@@ -217,6 +252,12 @@ const Choice = (props) => {
 				})
 
 				if (res.status == 200) {
+					console.log(
+						'---- res.data.data?.IeltsQuestions[index]?.DoingTestDetails: ',
+						res.data.data?.IeltsQuestions[index]?.DoingTestDetails
+					)
+
+					setDoingTestDetails(res.data.data?.IeltsQuestions[index]?.DoingTestDetails)
 					const indexInQuestions = questionsInSection.findIndex((qx) => qx?.IeltsQuestionId == data?.Id)
 
 					if (indexInQuestions > -1) {
@@ -267,7 +308,7 @@ const Choice = (props) => {
 					{!!isResult && (
 						<div className="cc-choice-correct-number">
 							<AiOutlineFileDone size={12} className="mr-1" />
-							<div className="mt-[1px]">Câu đúng: {getCorrect()}</div>
+							<div className="mt-[1px]">Câu đúng: {getCorrectAnswer()}</div>
 						</div>
 					)}
 
@@ -279,7 +320,7 @@ const Choice = (props) => {
 					)}
 				</div>
 
-				<div>{htmlParser(!isResult ? data?.Content : '')}</div>
+				<div className="font-[600]">{htmlParser(data?.Content)}</div>
 			</div>
 
 			{getType() == 'single' && (
@@ -315,6 +356,7 @@ const Choice = (props) => {
 			{getType() !== 'single' && (
 				<div className="custom-check-group">
 					<Checkbox.Group
+						disabled={!!isResult}
 						className="none-selection"
 						options={getDataCheckbox(!isResult ? data.IeltsAnswers : data.IeltsAnswerResults).option}
 						defaultValue={getDataCheckbox(!isResult ? data.IeltsAnswers : data.IeltsAnswerResults, 1).checked}

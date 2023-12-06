@@ -37,10 +37,6 @@ function TakeAnExamDetail() {
 	const router = useRouter()
 	const dispatch = useDispatch()
 
-	// useEffect(() => {
-	// 	log.Yellow('--- dragSelected: ', dragSelected)
-	// }, [dragSelected])
-
 	const {
 		curAudio,
 		loading,
@@ -54,8 +50,6 @@ function TakeAnExamDetail() {
 		setCurrentQuestion
 	} = useExamContext()
 
-	// log.Yellow('---currentQuestion', currentQuestion)
-
 	const user = useSelector((state: RootState) => state.user.information)
 
 	const [testInfo, setTestInfo] = useState(null)
@@ -65,7 +59,6 @@ function TakeAnExamDetail() {
 	const [showSkills, setShowSkills] = useState<boolean>(true)
 	const [showSections, setShowSections] = useState<boolean>(true)
 
-	// const [currentQuestion, setCurrentQuestion] = useState(null)
 	const [showQuestions, setShowQuestions] = useState<boolean>(true)
 
 	const [blocked, setBlocked] = useState('')
@@ -177,8 +170,6 @@ function TakeAnExamDetail() {
 			setLoading(false)
 		}
 	}
-
-	// const [questionsInSection, setQuestionsInSection] = useState([])
 
 	async function getQuestions() {
 		getAllQuestions(currentSection, setCurGroup)
