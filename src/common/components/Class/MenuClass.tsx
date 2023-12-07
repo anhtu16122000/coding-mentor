@@ -38,7 +38,7 @@ const itemsAdmin = [
 	'Thông báo'
 ]
 
-const itemsStudent = ['Lịch học', 'Học phí', 'Các buổi học', 'Bài tập', 'Tài liệu','Điểm danh', 'Bảng điểm']
+const itemsStudent = ['Lịch học', 'Học phí', 'Các buổi học', 'Bài tập', 'Tài liệu', 'Điểm danh', 'Bảng điểm']
 
 const itemsTeacher = [
 	'Lịch học',
@@ -221,6 +221,10 @@ const MenuClass = () => {
 					defaultActiveKey="0"
 					tabPosition="left"
 					items={itemsTeacher.map((item, index) => {
+						if (infoClass?.PaymentType == 1 && item == 'Học phí') {
+							return null
+						}
+
 						return {
 							label: <div className="no-select">{getLabel(item, index)}</div>,
 							key: index.toString(),
@@ -236,6 +240,10 @@ const MenuClass = () => {
 					defaultActiveKey="0"
 					tabPosition="left"
 					items={itemsStudent.map((item, index) => {
+						if (infoClass?.PaymentType == 1 && item == 'Học phí') {
+							return null
+						}
+
 						return {
 							label: <div className="no-select">{getLabel(item, index)}</div>,
 							key: index.toString(),
@@ -251,6 +259,10 @@ const MenuClass = () => {
 					defaultActiveKey="0"
 					tabPosition="left"
 					items={itemsParent.map((item, index) => {
+						if (infoClass?.PaymentType == 1 && item == 'Học phí') {
+							return null
+						}
+
 						return {
 							label: <div className="no-select">{getLabel(item, index)}</div>,
 							key: index.toString(),
