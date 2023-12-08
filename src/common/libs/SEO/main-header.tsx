@@ -29,6 +29,8 @@ const MainHeader = () => {
 
 			<link rel="icon" href="/white-logo.png" />
 
+			<script defer data-domain="monalms.monamedia.net" src="https://web-analytics.mona.host/js/script.js"></script>
+
 			<script
 				type="text/javascript"
 				dangerouslySetInnerHTML={{
