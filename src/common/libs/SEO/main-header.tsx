@@ -29,6 +29,19 @@ const MainHeader = () => {
 
 			<link rel="icon" href="/white-logo.png" />
 
+			<script
+				type="text/javascript"
+				dangerouslySetInnerHTML={{
+					__html: `
+            (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "k274o07cd9");
+          `
+				}}
+			/>
+
 			<Script src="https://cdn.tiny.cloud/1/lmr9ug3bh4iwjsrap9hgwgxqcngllssiraqluwto4slerrwg/tinymce/6/tinymce.min.js" />
 		</Head>
 	)
