@@ -98,11 +98,11 @@ export const ListStudentInClass = () => {
 							return (
 								<div className="min-w-[120px]">
 									<div className="flex items-center">
-										<div className="font-[600] text-[#1b73e8]">{item?.UserCode}</div>
+										<div className="font-[600] text-[#1b73e8]">{item?.FullName}</div>
 									</div>
 									<div className="flex items-center">
 										<div className="font-[600] mr-[4px]">Mã:</div>
-										<div>{item?.FullName}</div>
+										<div>{item?.UserCode}</div>
 									</div>
 								</div>
 							)
