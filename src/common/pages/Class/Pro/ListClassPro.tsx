@@ -24,7 +24,7 @@ const initFilter = {
 	name: null,
 	status: null,
 	branchIds: null,
-	pageSize: 10,
+	pageSize: 20,
 	pageIndex: 1,
 	sort: 0,
 	sortType: false,
