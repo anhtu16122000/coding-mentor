@@ -11,7 +11,7 @@ import { formNoneRequired, formRequired } from '~/common/libs/others/form'
 import PrimaryEditor from '../Editor'
 
 const PaymentMethodForm = (props) => {
-	const { dataRow, setTodoApi, initTodoApi } = props
+	const { dataRow, setTodoApi, initTodoApi, onRefreshData = () => {} } = props
 	const [form] = Form.useForm()
 	const [openModal, setOpenModal] = useState(false)
 	const [statusShow, setStatusShow] = useState(false)
@@ -28,6 +28,7 @@ const PaymentMethodForm = (props) => {
 				ShowNoti('success', res.data.message)
 				setTodoApi(initTodoApi)
 				setOpenModal(false)
+				onRefreshData()
 			}
 		} catch (err) {
 			ShowNoti('error', err.message)

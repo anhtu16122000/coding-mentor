@@ -15,6 +15,7 @@ import IconButton from '../../Primary/IconButton'
 import PrimaryTable from '../../Primary/Table'
 import PrimaryTag from '../../Primary/Tag'
 import IncomeExpenseManagementModalCRUD from './ModalCRUD'
+import DeleteManagement from './DeleteManagement'
 
 export interface IIncomeExpenseManagementPageProps {}
 
@@ -165,6 +166,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 									query: { paymentID: item.Id, Name: item.TypeName }
 								})
 							}}
+							placementTooltip="left"
 							className=""
 							tooltip="In phiếu"
 						/>
@@ -177,6 +179,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 							dataRow={item}
 							onSubmit={onSubmit}
 						/>
+						<DeleteManagement defaultData={item} onRefresh={getDataPayment} />
 					</div>
 				)
 			}

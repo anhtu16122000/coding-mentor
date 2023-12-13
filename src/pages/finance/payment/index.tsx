@@ -20,6 +20,7 @@ import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import PrimaryButton from '~/common/components/Primary/Button'
+import DeletePayment from '~/common/components/Finance/Payment/DeletePayment'
 
 const initParamters = {
 	pageSize: PAGE_SIZE,
@@ -30,6 +31,8 @@ const initParamters = {
 	toDate: null,
 	type: 0
 }
+
+const typeAllowDeleteIds = [1, 4, 5]
 
 const PaymentManagementPage = () => {
 	const [loading, setLoading] = React.useState(true)
@@ -282,6 +285,7 @@ const PaymentManagementPage = () => {
 											<PaymentDetail data={item} />
 											<PayForm isEdit defaultData={item} onRefresh={getData} />
 											{item?.Debt < 0 && <RefundForm onRefresh={getData} item={item} />}
+											{typeAllowDeleteIds.includes(Number(item?.Type)) && <DeletePayment defaultData={item} onRefresh={getData} />}
 										</div>
 									)
 								}

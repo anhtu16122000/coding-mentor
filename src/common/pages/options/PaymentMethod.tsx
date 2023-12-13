@@ -64,7 +64,12 @@ const PaymentMethodPage = () => {
 			render: (data) => {
 				return (
 					<>
-						<PaymentMethodForm dataRow={data} setTodoApi={setTodoApi} initTodoApi={initTodoApi} />
+						<PaymentMethodForm
+							dataRow={data}
+							setTodoApi={setTodoApi}
+							initTodoApi={initTodoApi}
+							onRefreshData={() => getAllPaymentMethod(todoApi)}
+						/>
 					</>
 				)
 			}

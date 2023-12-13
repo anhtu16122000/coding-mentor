@@ -56,9 +56,10 @@ instance.interceptors.response.use(
 	},
 	async function (error: any) {
 		if (!!error?.response) {
+			console.log('error?.response', error?.response)
 			if (error?.response?.status == 401 && !isTimeout) {
 				isTimeout = true
-				// logOut()
+				logOut()
 			}
 
 			const apiUrl = `${error?.response?.status} - ${getUrl(error?.response?.config)}`

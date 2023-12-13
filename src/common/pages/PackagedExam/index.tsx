@@ -259,7 +259,7 @@ function PackageExam() {
 													{is(userInfo).student && item?.Status != 2 && item?.Price ? (
 														<div onClick={() => _addToCart(item)} className="pe-i-d-cart">
 															<FaCartPlus size={14} />
-															<div className="pe-i-d-c-title">Mua ngay</div>
+															<div className="pe-i-d-c-title">Thêm vào giỏ hàng</div>
 														</div>
 													) : (
 														<></>
