@@ -314,7 +314,8 @@ const PaymentManagementPage = () => {
 									<Select
 										placeholder="Loại thanh toán"
 										className="primay-input min-w-[210px] ml-[8px] !h-[36px]"
-										defaultValue={0}
+										value={statusSelected}
+										optionLabelProp="children"
 										onChange={(e) => handleSelecStatus(e)}
 									>
 										{billStatus.map((item, index) => {
