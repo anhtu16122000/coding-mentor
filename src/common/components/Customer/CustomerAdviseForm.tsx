@@ -1,11 +1,11 @@
 import { Divider, Form, Modal, Select } from 'antd'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { districtApi, wardApi } from '~/api/area/area'
 import * as yup from 'yup'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 import SelectField from '~/common/components/FormControl/SelectField'
-import { ShowNoti, log } from '~/common/utils'
+import { ShowNoti } from '~/common/utils'
 import { parseSelectArray, parseSelectArrayUser } from '~/common/utils/common'
 import { RootState } from '~/store'
 import { customerAdviseApi } from '~/api/user/customer'
@@ -148,9 +148,6 @@ const CustomerAdviseForm = React.memo((props: any) => {
 			} else {
 				DATA_SUBMIT = { ...data, SaleId: isSaler() ? Number(theInformation.UserInformationId) : data.SaleId }
 			}
-
-			console.log('--- DATA_SUBMIT: ', DATA_SUBMIT)
-
 			const res = await (rowData?.Id
 				? isStudent
 					? userInformationApi.addTestAppointment({
@@ -161,7 +158,10 @@ const CustomerAdviseForm = React.memo((props: any) => {
 								Type: data?.Type
 							}
 					  })
-					: customerAdviseApi.update(DATA_SUBMIT)
+					: customerAdviseApi.update({
+							...DATA_SUBMIT,
+							SourceId: data?.SourceId || 0
+					  })
 				: customerAdviseApi.add(DATA_SUBMIT))
 
 			if (res.status == 200) {

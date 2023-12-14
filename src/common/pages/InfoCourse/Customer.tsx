@@ -302,7 +302,7 @@ const CustomerAdvisory = () => {
 			getStatusCount()
 		}
 	}
-
+	console.log('source', source)
 	function handleUpdateStatus(item, params) {
 		const thisIndex = dataCustomer.findIndex((thisItem) => thisItem.Id == item?.Id)
 
@@ -341,6 +341,10 @@ const CustomerAdvisory = () => {
 				<div>
 					<p className="font-weight-primary">{a}</p>
 					<p className="font-[500]">Mã: {item?.Code}</p>
+					<p>
+						<div className="font-[500] inline-block">Nguồn:</div>{' '}
+						{item?.SourceId ? source?.find(({ value = 0 }) => value == item?.SourceId)?.title || 'Chưa có' : 'Chưa có'}
+					</p>
 				</div>
 			)
 		},
@@ -376,16 +380,16 @@ const CustomerAdvisory = () => {
 			}
 		},
 		{
-			width: 180,
-			title: 'Trung tâm',
-			dataIndex: 'BranchId',
-			render: (text, data) => <p className="font-semibold">{data.BranchName}</p>
-		},
-		{
 			width: 200,
 			title: 'Tư vấn viên',
 			dataIndex: 'SaleId',
 			render: (text, data) => <p className="font-semibold">{data.SaleName}</p>
+		},
+		{
+			width: 180,
+			title: 'Trung tâm',
+			dataIndex: 'BranchId',
+			render: (text, data) => <p className="font-semibold">{data.BranchName}</p>
 		},
 		{
 			title: 'Khởi tạo',
@@ -452,19 +456,19 @@ const CustomerAdvisory = () => {
 								setTodoApi={setTodoApi}
 							/>
 						)} */}
-							<CustomerAdviseForm
-								onRefresh={handleRefresh}
-								isStudent={true}
-								source={source}
-								learningNeed={learningNeed}
-								purpose={purpose}
-								sale={sale}
-								branch={convertBranchSelect}
-								customerStatus={customerStatus}
-								rowData={data}
-								listTodoApi={listTodoApi}
-								setTodoApi={setTodoApi}
-							/>
+						<CustomerAdviseForm
+							onRefresh={handleRefresh}
+							isStudent={true}
+							source={source}
+							learningNeed={learningNeed}
+							purpose={purpose}
+							sale={sale}
+							branch={convertBranchSelect}
+							customerStatus={customerStatus}
+							rowData={data}
+							listTodoApi={listTodoApi}
+							setTodoApi={setTodoApi}
+						/>
 					</div>
 				)
 			}
