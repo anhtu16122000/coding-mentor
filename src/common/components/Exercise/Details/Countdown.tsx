@@ -7,7 +7,7 @@ const CountdownTimer = ({ minutes, onSubmit }) => {
 	const globalState = useSelector((state: RootState) => state.takeAnExam)
 	const dispatch = useDispatch()
 
-	const [timeLeft, setTimeLeft] = useState(minutes * 60)
+	const [timeLeft, setTimeLeft] = useState((minutes + 1) * 60)
 
 	useEffect(() => {
 		if (minutes == 0) {
