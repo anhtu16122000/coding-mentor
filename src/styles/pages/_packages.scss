@@ -40,8 +40,9 @@
 }
 
 .pe-i-d-detail {
-	@apply flex-1 bg-[#327846] hover:bg-[#2b683c] active:bg-[#327846];
-	@apply text-[#fff] h-[32px] flex items-center justify-center rounded-[4px];
+	@apply bg-gradient-to-r from-[#21ac44] to-[#1a9d3b];
+	@apply hover:opacity-90;
+	@apply text-[#fff] flex-1 h-[32px] flex items-center justify-center rounded-[4px];
 }
 
 .pe-i-d-cart {

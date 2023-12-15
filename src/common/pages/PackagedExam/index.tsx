@@ -252,7 +252,11 @@ function PackageExam() {
 														</div>
 													</div>
 
-													<div className="pe-i-d-price mb-[-8px]">{item?.Price ? `${parseToMoney(item?.Price || 0)} VNĐ` : 'Miễn phí'}</div>
+													{!!item?.Price ? (
+														<div className="pe-i-d-price mb-[-8px]">{parseToMoney(item?.Price || 0)}VNĐ</div>
+													) : (
+														<div className="pe-i-d-price mb-[-8px] text-[#1a9d3b]">Miễn phí</div>
+													)}
 												</div>
 
 												<div className="pe-i-d-controller">
