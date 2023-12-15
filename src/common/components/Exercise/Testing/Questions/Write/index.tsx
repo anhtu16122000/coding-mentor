@@ -1,6 +1,6 @@
 import { Input } from 'antd'
 import Router from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import ReactHTMLParser from 'react-html-parser'
 import { FaCheck } from 'react-icons/fa'
 import { doingTestApi } from '~/api/IeltsExam/doing-test'
@@ -12,18 +12,20 @@ const Write = (props) => {
 	const { data, IndexInExam, isDoing, isResult, curGroup, onRefresh } = props
 	const { questionsInSection, setCurrentQuestion, setQuestionsInSection, setNotSetCurrentQuest } = useExamContext()
 
+	const [doingTestDetails, setDoingTestDetails] = useState<Array<any>>([...data?.DoingTestDetails])
+
 	async function insertDetails(answer) {
 		let items = []
 
-		if (!!data?.DoingTestDetails) {
-			items.push({ ...data?.DoingTestDetails[0], Enable: false })
+		if (!!doingTestDetails) {
+			doingTestDetails.forEach((element) => {
+				items.push({ ...element, Enable: false })
+			})
 		}
 
 		items.push({ Id: 0, IeltsAnswerId: 0, IeltsAnswerContent: answer?.Content, Type: 0, Index: 0, Enable: true })
 
 		if (!!Router?.query?.exam) {
-			console.log('-------- PUT items: ', items)
-
 			try {
 				const res = await doingTestApi.insertDetail({
 					DoingTestId: parseInt(Router?.query?.exam + ''),
@@ -31,6 +33,17 @@ const Write = (props) => {
 					Items: [...items]
 				})
 				if (res.status == 200) {
+					const ieltsQuestions = res?.data?.data?.IeltsQuestions
+
+					if (ieltsQuestions) {
+						const questIndex = ieltsQuestions.findIndex((inQuest) => inQuest?.Id == data?.Id)
+						if (questIndex > -1 && !!ieltsQuestions[questIndex]?.DoingTestDetails) {
+							setDoingTestDetails([...ieltsQuestions[questIndex]?.DoingTestDetails])
+						}
+					}
+
+					// ----------------------------------------------------------------
+
 					const indexInQuestions = questionsInSection.findIndex((qx) => qx?.IeltsQuestionId == data?.Id)
 
 					if (indexInQuestions > -1) {
@@ -47,8 +60,8 @@ const Write = (props) => {
 
 	function getAnswered() {
 		if (!!isDoing) {
-			if (!!data?.DoingTestDetails) {
-				return !!data?.DoingTestDetails[0]?.IeltsAnswerContent ? data?.DoingTestDetails[0]?.IeltsAnswerContent : ''
+			if (!!doingTestDetails) {
+				return !!doingTestDetails[0]?.IeltsAnswerContent ? doingTestDetails[0]?.IeltsAnswerContent : ''
 			}
 		}
 
