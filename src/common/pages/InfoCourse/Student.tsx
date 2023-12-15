@@ -344,7 +344,7 @@ const Student: FC<IPersonnel> = (props) => {
 	const columnsStudent = [
 		userInfoColumn,
 		{
-			width: 250,
+			// width: 250,
 			title: 'Liên hệ',
 			dataIndex: 'Mobile',
 			render: (a, item) => (
