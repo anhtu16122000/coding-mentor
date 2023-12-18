@@ -16,6 +16,7 @@ import { PrimaryTooltip } from '~/common/components'
 import PackageHistories from './Histories'
 import Avatar from '~/common/components/Avatar'
 import PrimaryButton from '~/common/components/Primary/Button'
+import Ratings from './Ratings'
 
 const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, onRefresh }) => {
 	const userInfo = useSelector((state: RootState) => state.user.information)
@@ -195,11 +196,14 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 								<div key={`ski-${iSkill}`} className="col-span-1 flex items-center bg-[#f2f2f2] hover:bg-[#e8e8e8] p-[8px] rounded-[6px]">
 									<div className="font-[600] flex-1">{itemSkill?.Name}</div>
 									<div className="flex items-center h-[26px]">
+										<Ratings SkillsId={itemSkill?.Id} />
+
 										<div
-											onClick={() => {
-												setCurSkill(itemSkill)
-												getPreview(itemSkill?.Id)
-											}}
+											// onClick={() => {
+											// 	setCurSkill(itemSkill)
+											// 	getPreview(itemSkill?.Id)
+											// }}
+											onClick={() => makeTest(itemSkill?.IeltsExamId, itemSkill)}
 											className="pe-i-d-cart !px-[8px] !h-[26px]"
 										>
 											<div className="pe-i-d-c-title !ml-0">
@@ -250,7 +254,7 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 				</div>
 			</Modal>
 
-			<Modal
+			{/* <Modal
 				title="Tổng quan"
 				width={400}
 				open={preview}
@@ -314,7 +318,7 @@ const PackageDetailItem = ({ thisId, item, onDelete, deleting, currentPackage, o
 						)}
 					</div>
 				</div>
-			</Modal>
+			</Modal> */}
 		</div>
 	)
 }
