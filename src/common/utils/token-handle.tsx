@@ -50,7 +50,7 @@ async function playWithToken(params, dispatch, callback?: Function) {
 
 	const pathname = Router.pathname
 
-	if (pathname == '/signin' || pathname == '/support-portal' || pathname == '/fogot-password/l02') {
+	if (pathname == '/signin' || pathname == '/hacked' || pathname == '/support-portal' || pathname == '/fogot-password/l02') {
 		Router.push('/')
 	}
 }

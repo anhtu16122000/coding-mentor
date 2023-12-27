@@ -334,26 +334,20 @@ const CustomerAdvisory = () => {
 			sorter: (befor, after, status) => {
 				console.log('---- status: ', status)
 			},
-			width: 220,
 			title: 'Thông tin',
 			dataIndex: 'FullName',
 			render: (a, item) => (
-				<div>
+				<div className="min-w-[120px]">
 					<p className="font-weight-primary">{a}</p>
 					<p className="font-[500]">Mã: {item?.Code}</p>
-					<p>
-						<div className="font-[500] inline-block">Nguồn:</div>{' '}
-						{item?.SourceId ? source?.find(({ value = 0 }) => value == item?.SourceId)?.title || 'Chưa có' : 'Chưa có'}
-					</p>
 				</div>
 			)
 		},
 		{
-			width: 250,
 			title: 'Liên hệ',
 			dataIndex: 'Mobile',
 			render: (a, item) => (
-				<div>
+				<div className="min-w-[120px]">
 					<p>
 						<div className="font-[500] inline-block">Điện thoại:</div> {a}
 					</p>
@@ -364,26 +358,36 @@ const CustomerAdvisory = () => {
 			)
 		},
 		{
-			width: 200,
 			title: 'Trạng thái',
 			dataIndex: 'CustomerStatusId',
 			render: (id, item) => {
 				return (
-					<CustomerStatus
-						onUpdate={(id, name) => {
-							const temp = { CustomerStatusId: id, CustomerStatusName: name }
-							handleUpdateStatus(item, temp)
-						}}
-						item={item}
-					/>
+					<div className="min-w-[120px]">
+						<CustomerStatus
+							onUpdate={(id, name) => {
+								const temp = { CustomerStatusId: id, CustomerStatusName: name }
+								handleUpdateStatus(item, temp)
+							}}
+							item={item}
+						/>
+					</div>
 				)
 			}
 		},
 		{
-			width: 200,
 			title: 'Tư vấn viên',
 			dataIndex: 'SaleId',
-			render: (text, data) => <p className="font-semibold">{data.SaleName}</p>
+			render: (text, data) => <p className="font-semibold min-w-[100px]">{data.SaleName}</p>
+		},
+		{
+			width: 200,
+			title: 'Nguồn',
+			dataIndex: 'SaleId',
+			render: (text, data) => (
+				<p className="min-w-[90px]">
+					{data?.SourceId ? source?.find(({ value = 0 }) => value == data?.SourceId)?.title || 'Chưa có' : 'Chưa có'}
+				</p>
+			)
 		},
 		{
 			width: 180,
