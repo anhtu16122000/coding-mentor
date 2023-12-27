@@ -4,19 +4,19 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getMenuByRole } from '~/common/libs/routers'
 import { findPathUrl } from '~/common/libs/routers/func'
+import { MANAGEMENT_ROLES, NORMAL_ROLES } from '~/constants/common'
 import { RootState } from '~/store'
 import Header from '../Header'
 import MyLink from '../MyLink'
 import SideBarOne from './SideBarOne'
+import SideBarTwo from './SideBarTwo'
 
 function Layout({ children, home }: { children: React.ReactNode; home?: boolean }) {
 	const [isOpen, setIsOpen] = useState(true)
 	const user = useSelector((state: RootState) => state.user.information)
 	const router = useRouter()
 	const { pathname } = router
-
 	const CURRENT_MENU = getMenuByRole(Number(user?.RoleId))
-	console.log('CURRENT_MENU', CURRENT_MENU)
 	const pathUrls = findPathUrl(pathname, CURRENT_MENU) || []
 
 	const [openMenuMobile, setOpenMenuMobile] = useState(false)
@@ -41,13 +41,24 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 	return (
 		<div className={`app`}>
 			<Header isOpenMenu={isOpenMenu} isOpen={isOpen} funcMenuMobile={funcMenuMobile} openMenuMobile={openMenuMobile} />
-			<SideBarOne
-				pathUrlKeys={pathUrls.map(({ key }) => key)}
-				menus={CURRENT_MENU}
-				isOpen={isOpen}
-				closeMenuMobile={closeMenuMobile}
-				openMenuMobile={openMenuMobile}
-			/>
+			{MANAGEMENT_ROLES.includes(Number(user?.RoleId)) && (
+				<SideBarOne
+					pathUrlKeys={pathUrls.map(({ key }) => key)}
+					menus={CURRENT_MENU}
+					isOpen={isOpen}
+					closeMenuMobile={closeMenuMobile}
+					openMenuMobile={openMenuMobile}
+				/>
+			)}
+			{NORMAL_ROLES.includes(Number(user?.RoleId)) && (
+				<SideBarTwo
+					pathUrlKeys={pathUrls.map(({ key }) => key)}
+					menus={CURRENT_MENU}
+					isOpen={isOpen}
+					closeMenuMobile={closeMenuMobile}
+					openMenuMobile={openMenuMobile}
+				/>
+			)}
 			<main className="app-main">
 				<div id="the-super-scroll" className={`app-content ${!isOpen && 'close-app'}`}>
 					<div className="container w-full container-fluid">

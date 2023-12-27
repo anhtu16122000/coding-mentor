@@ -1,4 +1,13 @@
-import { ROLE_ACADEMIC, ROLE_ACCOUNTANT, ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_TEACHER } from '~/constants/common'
+import {
+	ROLE_ACADEMIC,
+	ROLE_ACCOUNTANT,
+	ROLE_ADMIN,
+	ROLE_MANAGER,
+	ROLE_PARENT,
+	ROLE_SALER,
+	ROLE_STUDENT,
+	ROLE_TEACHER
+} from '~/constants/common'
 import { renderItemMenu } from './func'
 import { MenuItems } from './type'
 
@@ -17,7 +26,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
 				children: [
 					renderItemMenu({
-						key: '/news',
+						key: '/',
 						label: 'Tin tức',
 						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					}),
@@ -452,4 +461,101 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 	}
 ]
 // menu cho phụ huynh và học sinh
-export const NORMAL_MENU = []
+export const NORMAL_MENU: MenuItems[] = [
+	{
+		key: 'thongtinchung',
+		label: 'Thông tin chung',
+		type: 'group',
+		allow: [ROLE_STUDENT, ROLE_PARENT],
+		children: [
+			{
+				label: 'Tin tức',
+				key: '/',
+				icon: <img style={{ width: 'unset' }} src="/icons/menu/normal/tintuc.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			},
+			{
+				label: 'Thống kê',
+				key: '/dashboard',
+				icon: <img style={{ width: '24px', height: '24px' }} src="/icons/menu/normal/thongke.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			},
+			{
+				label: 'Phản hồi',
+				key: '/info-course/feedbacks',
+				icon: <img style={{ width: '24px', height: '24px' }} src="/icons/menu/normal/phanhoi.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			}
+		]
+	},
+	{
+		label: 'Học tập',
+		key: 'hoctap',
+		type: 'group',
+		allow: [ROLE_STUDENT, ROLE_PARENT],
+		children: [
+			{
+				label: 'Lịch học',
+				key: '/class/schedule',
+				icon: <img style={{ width: 'unset' }} src="/icons/menu/normal/lichhoc.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			},
+			{
+				label: 'Danh sách lớp học',
+				key: '/class',
+				icon: <img style={{ width: 'unset' }} src="/icons/menu/normal/danhsachlophoc.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			},
+			{
+				label: 'Luyện tập',
+				key: '/training-student',
+				icon: <img style={{ width: 'unset' }} src="/icons/menu/normal/luyentap.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			},
+			{
+				label: 'Thông tin hẹn test',
+				key: '/entry-test',
+				icon: <img style={{ width: 'unset' }} src="/icons/menu/normal/thongtinhentest.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			},
+			{
+				label: 'Thông tin cảnh báo',
+				key: '/info-course/student/warning',
+				icon: <img style={{ width: 'unset' }} src="/icons/menu/normal/thongtincanhbao.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			},
+			{
+				label: 'Thư viện online',
+				key: '/library-online/library',
+				icon: <img style={{ width: 'unset' }} src="/icons/menu/normal/thuvientructuyen.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			}
+		]
+	},
+	{
+		key: 'cuahang',
+		label: 'Cửa hàng',
+		type: 'group',
+		allow: [ROLE_STUDENT],
+		children: [
+			{
+				label: 'Bộ đề',
+				key: '/package-exam',
+				icon: <img style={{ width: 'unset' }} src="/icons/menu/normal/bode.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			},
+			{
+				label: 'Khóa học video',
+				key: '/course',
+				icon: <img style={{ width: '24px', height: '24px' }} src="/icons/menu/normal/khoahocvideo.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			},
+			{
+				label: 'Danh sách mã kích hoạt',
+				key: '/course/codes',
+				icon: <img style={{ width: '24px', height: '24px' }} src="/icons/menu/normal/danhsachmakichhoat.svg" />,
+				allow: [ROLE_STUDENT, ROLE_PARENT]
+			}
+		]
+	}
+]
