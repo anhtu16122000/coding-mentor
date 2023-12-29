@@ -302,7 +302,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 
 				<div className="menu-parent-body overflow-auto  max-h-[calc(100vh-120px)] h-full w500:max-h-[95vh]">
 					<ul className="list-menu">
-						{parentMenu.map((item, index) => {
+						{/* {parentMenu.map((item, index) => {
 							const isActive = mainActivated == item.Key
 
 							return (
@@ -322,7 +322,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 									</a>
 								</li>
 							)
-						})}
+						})} */}
 					</ul>
 				</div>
 
@@ -345,7 +345,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 					ref={menuChild}
 					style={{ top: isHover.status ? isHover.position : 'unset' }}
 				>
-					{childMenu?.map((menu, indexMenu) => (
+					{/* {childMenu?.map((menu, indexMenu) => (
 						<div key={indexMenu} className="menu-child-body-element">
 							<Menu
 								key={indexMenu}
@@ -400,7 +400,7 @@ const PrimaryMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, re
 								</Menu.ItemGroup>
 							</Menu>
 						</div>
-					))}
+					))} */}
 				</div>
 			</div>
 		</aside>

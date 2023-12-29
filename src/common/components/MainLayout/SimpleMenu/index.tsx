@@ -28,7 +28,7 @@ const SimpleMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, res
 
 	const [isHover, setIsHover] = useState({ changeHeight: null, status: false, position: null })
 	const [posMenu, setPosMenu] = useState(null)
-	const [openKeys, setOpenKeys] = useState([])
+	// const [openKeys, setOpenKeys] = useState([])
 	const [statusOpen, setStatusOpen] = useState<boolean>(false)
 	const [sameTab, setSameTab] = useState(false)
 
@@ -37,7 +37,6 @@ const SimpleMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, res
 
 	const [mainActivated, setMainActivated] = useState<string>(defaultTab)
 	const [subMenuActive, setSubMenuActive] = useState('')
-
 	useEffect(() => {
 		if (parentMenu.length > 0) {
 			getActiveTab()
@@ -125,51 +124,51 @@ const SimpleMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, res
 		})
 	}
 
-	const onOpenChange = (openKeys) => {
-		setOpenKeys(openKeys)
-		if (openKeys.length > 0) {
-			for (const value of openKeys) {
-				childMenu.forEach((menu, index) => {
-					menu.MenuItem.forEach((item, ind) => {
-						if (item.ItemType === 'sub-menu') {
-							if (item.Key === value) {
-								setSubMenuActive(value)
-								return false
-							}
-						}
-					})
-				})
-			}
-		} else {
-			setSubMenuActive('')
-		}
-	}
+	// const onOpenChange = (openKeys) => {
+	// 	setOpenKeys(openKeys)
+	// 	if (openKeys.length > 0) {
+	// 		for (const value of openKeys) {
+	// 			childMenu.forEach((menu, index) => {
+	// 				menu.MenuItem.forEach((item, ind) => {
+	// 					if (item.ItemType === 'sub-menu') {
+	// 						if (item.Key === value) {
+	// 							setSubMenuActive(value)
+	// 							return false
+	// 						}
+	// 					}
+	// 				})
+	// 			})
+	// 		}
+	// 	} else {
+	// 		setSubMenuActive('')
+	// 	}
+	// }
 
-	useEffect(() => {
-		setTimeout(() => {
-			// Get height Screen window
-			let heightScr = window.innerHeight
-			heightScr = heightScr / 2
+	// useEffect(() => {
+	// 	setTimeout(() => {
+	// 		// Get height Screen window
+	// 		let heightScr = window.innerHeight
+	// 		heightScr = heightScr / 2
 
-			// Get height menu when hover
-			let heightMenu = menuChild.current?.clientHeight
+	// 		// Get height menu when hover
+	// 		let heightMenu = menuChild.current?.clientHeight
 
-			if (!isOpen) {
-				if (openKeys.length > 0) {
-					if (heightMenu > heightScr) {
-						setIsHover({ ...isHover, changeHeight: true })
-					}
-				} else {
-					setIsHover({ ...isHover, changeHeight: false })
-				}
-			}
-		}, 200)
+	// 		if (!isOpen) {
+	// 			if (openKeys.length > 0) {
+	// 				if (heightMenu > heightScr) {
+	// 					setIsHover({ ...isHover, changeHeight: true })
+	// 				}
+	// 			} else {
+	// 				setIsHover({ ...isHover, changeHeight: false })
+	// 			}
+	// 		}
+	// 	}, 200)
 
-		let itemMenu = document.querySelector('.menu-child-body-element .ant-menu-submenu-inline.is-open')
-		if (itemMenu) {
-			itemMenu.closest('.ant-menu-inline').classList.add('scroll')
-		}
-	}, [openKeys])
+	// 	let itemMenu = document.querySelector('.menu-child-body-element .ant-menu-submenu-inline.is-open')
+	// 	if (itemMenu) {
+	// 		itemMenu.closest('.ant-menu-inline').classList.add('scroll')
+	// 	}
+	// }, [openKeys])
 
 	useEffect(() => {
 		window.innerWidth < 1000 ? resetMenuMobile() : FindSubMenuActive(), getActivated()
@@ -249,6 +248,34 @@ const SimpleMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, res
 	useEffect(() => {
 		if (!!userInformation?.RoleId) {
 			switch (parseInt(userInformation?.RoleId + '')) {
+				case 1:
+					setParentMenu(AdminMenu)
+					setChildMenu(AdminChildMenu)
+					break
+				case 2:
+					setParentMenu(TeacherMenu)
+					setChildMenu(TeacherChildMenu)
+					break
+				case 3:
+					setParentMenu(StudentMenu)
+					setChildMenu(StudentChildMenu)
+					break
+				case 4:
+					setParentMenu(ManagerMenu)
+					setChildMenu(ManagerChildMenu)
+					break
+				case 5:
+					setParentMenu(SalerMenu)
+					setChildMenu(SalerChildMenu)
+					break
+				case 6:
+					setParentMenu(AccountantMenu)
+					setChildMenu(AccountantChildMenu)
+					break
+				case 7:
+					setParentMenu(AcademicMenu)
+					setChildMenu(AcademicChildMenu)
+					break
 				case 8:
 					setParentMenu(ParentStudentMenu)
 					setChildMenu(ParentStudentChildMenu)
@@ -284,22 +311,63 @@ const SimpleMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, res
 					ref={menuChild}
 					style={{ top: isHover.status ? isHover.position : 'unset' }}
 				>
-					{childMenu?.map((menu, indexMenu) => (
-						<div key={indexMenu} className="menu-child-body-element">
-							<Menu key={indexMenu} openKeys={[subMenuActive]} mode="inline" theme="light">
-								{/* single */}
-
+					<Menu mode="inline" theme="light">
+						{childMenu?.map((menu, indexMenu) => (
+							<>
 								{menu.Type !== 'single' && (
 									<SubMenu
 										onTitleClick={() => {
 											menu.MenuKey != subMenuActive ? setSubMenuActive(menu.MenuKey) : setSubMenuActive('')
 										}}
 										className={`${menu.MenuKey == subMenuActive ? 'is-open' : ''}`}
-										key={menu.MenuKey}
-										title={menu.MenuTitle !== 'xx69x' ? menu.MenuTitle : ''}
+										key={menu.Parent}
+										title={menu?.MenuTitle || ''}
 									>
 										{menu.MenuItem?.map((item) => {
 											const isActive = item?.Route == pathname
+											const { SubMenuList = [] } = item
+											if (SubMenuList.length > 0) {
+												return (
+													<SubMenu
+														onTitleClick={() => {
+															item?.Key != subMenuActive ? setSubMenuActive(item?.Key) : setSubMenuActive('')
+														}}
+														className={`${item.Key == subMenuActive ? 'is-open' : ''}`}
+														key={item.Key}
+														title={item?.TitleSub || ''}
+													>
+														{SubMenuList.map((subMenu) => {
+															const isActive = subMenu?.Route == pathname
+															return (
+																<Menu.Item
+																	className={`${isActive ? '!text-[#1b73e8] bg-[#ecf2fd] ant-menu-item-selected' : 'none-selected'}`}
+																	key={subMenu.Route}
+																	icon={null}
+																>
+																	<Link href={subMenu.Route}>
+																		<a>
+																			<div
+																				style={{
+																					width: '100%',
+																					height: '100%',
+																					display: 'flex',
+																					paddingLeft: 10,
+																					alignItems: 'center'
+																				}}
+																			>
+																				{subMenu?.Icon}
+																				<div className="" style={{ fontWeight: 500 }}>
+																					{subMenu.Text}
+																				</div>
+																			</div>
+																		</a>
+																	</Link>
+																</Menu.Item>
+															)
+														})}
+													</SubMenu>
+												)
+											}
 											return (
 												<Menu.Item
 													key={item.Key}
@@ -347,9 +415,9 @@ const SimpleMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, res
 										})}
 									</>
 								)}
-							</Menu>
-						</div>
-					))}
+							</>
+						))}
+					</Menu>
 				</div>
 			</div>
 		</aside>

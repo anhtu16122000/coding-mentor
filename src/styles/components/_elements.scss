@@ -870,7 +870,7 @@ body {
 		}
 	}
 	.app-content {
-		width: calc(100% - 310px);
+		width: calc(100% - 240px);
 		margin-top: 65px;
 		padding: 20px 10px;
 		transition: 0.3s width;
@@ -901,7 +901,6 @@ body {
 		}
 
 		&.close-app {
-			width: calc(100% - 70px);
 		}
 
 		.app-content-box {
@@ -1513,7 +1512,6 @@ body {
 	}
 	.ant-card-head-wrapper {
 		@include max-media(800px) {
- 
 			.ant-card-extra {
 				.wrap-filter-parent {
 					margin-bottom: 5px;

@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import { setBreadcrumb } from '~/store/globalState'
 import Header from '../Header'
-import PrimaryMenu from './Menu'
 
 import { AdminMenu, AdminChildMenu } from '~/common/libs/routers/admin'
 import { StudentChildMenu, StudentMenu } from '~/common/libs/routers/student'
@@ -15,7 +14,6 @@ import { SalerChildMenu, SalerMenu } from '~/common/libs/routers/saler'
 import { AccountantChildMenu, AccountantMenu } from '~/common/libs/routers/accountant'
 import { AcademicChildMenu, AcademicMenu } from '~/common/libs/routers/academic'
 import { ParentStudentChildMenu, ParentStudentMenu } from '~/common/libs/routers/parent'
-import { log } from '~/common/utils'
 import SimpleMenu from './SimpleMenu'
 
 function Layout({ children, home }: { children: React.ReactNode; home?: boolean }) {
@@ -180,7 +178,7 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 		<div className={`app ${is.parent ? 'simple-menu-pro' : ''}`}>
 			<Header isOpenMenu={isOpenMenu} isOpen={isOpen} funcMenuMobile={funcMenuMobile} openMenuMobile={openMenuMobile} />
 
-			{!is.parent && (
+			{/* {!is.parent && (
 				<PrimaryMenu
 					resetMenuMobile={resetMenuMobile}
 					isOpenMenu={isOpenMenu}
@@ -188,17 +186,15 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 					openMenuMobile={openMenuMobile}
 					funcMenuMobile={funcMenuMobile}
 				/>
-			)}
+			)} */}
 
-			{is.parent && (
-				<SimpleMenu
-					resetMenuMobile={resetMenuMobile}
-					isOpenMenu={isOpenMenu}
-					isOpen={isOpen}
-					openMenuMobile={openMenuMobile}
-					funcMenuMobile={funcMenuMobile}
-				/>
-			)}
+			<SimpleMenu
+				resetMenuMobile={resetMenuMobile}
+				isOpenMenu={isOpenMenu}
+				isOpen={isOpen}
+				openMenuMobile={openMenuMobile}
+				funcMenuMobile={funcMenuMobile}
+			/>
 
 			<main className="app-main">
 				<div id="the-super-scroll" className={`app-content ${!isOpen && 'close-app'}`}>
