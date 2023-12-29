@@ -29,12 +29,22 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 					renderItemMenu({
 						key: '/elsa-speak',
 						label: 'Kiểm tra nói',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/options/general-notification',
 						label: 'Tạo thông báo',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER]
+					}),
+					renderItemMenu({
+						key: '/users/salary',
+						label: 'Bảng lương',
+						allow: [ROLE_TEACHER, ROLE_SALER]
+					}),
+					renderItemMenu({
+						key: '/users/teacher/teacher-off',
+						label: 'Đăng ký lịch nghỉ',
+						allow: [ROLE_TEACHER]
 					})
 				]
 			},
@@ -47,27 +57,27 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 					renderItemMenu({
 						key: '/leads',
 						label: 'Leads',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/entry-test',
 						label: 'Hẹn test',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/class/register',
 						label: 'Đăng ký học',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/info-course/registration',
 						label: 'Hẹn đăng ký',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/options/discount',
 						label: 'Mã khuyến mãi',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACADEMIC]
 					})
 				]
 			}
@@ -88,7 +98,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 					renderItemMenu({
 						key: '/class/create',
 						label: 'Tạo lớp học',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/class',
@@ -105,7 +115,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 					renderItemMenu({
 						key: '/class/class-timeline',
 						label: 'Timeline lớp học',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/class/schedule',
@@ -115,7 +125,12 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 					renderItemMenu({
 						key: '/class/zoom-rooms',
 						label: 'Danh sách phòng Zoom',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_ACADEMIC]
+					}),
+					renderItemMenu({
+						key: '/class/schedule',
+						label: 'Lịch dạy',
+						allow: [ROLE_TEACHER]
 					})
 				]
 			},
@@ -133,37 +148,37 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 					renderItemMenu({
 						key: '/info-course/student-in-class',
 						label: 'Học viên trong lớp',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/info-course/changed',
 						label: 'Chuyển lớp',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/info-course/reserved',
 						label: 'Bảo lưu',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/library-online/library',
 						label: 'Tài liệu',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/info-course/nearing-completion',
 						label: 'Danh sách học viên sắp học xong',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/practice',
 						label: 'Luyện tập',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/info-course/rollup',
 						label: 'Điểm danh mã QR',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_ACADEMIC]
 					})
 				]
 			},
@@ -171,12 +186,12 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 				label: 'Kết nối phụ huynh',
 				key: 'ketnoiphuhuynh',
 				icon: <img style={{ width: 'unset' }} src="/icons/menu/ketnoiphuhuynh.svg" />,
-				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
+				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACADEMIC],
 				children: [
 					renderItemMenu({
 						key: '/info-course/parents',
 						label: 'Danh sách phụ huynh',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/info-course/feedbacks',
@@ -194,7 +209,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 				label: 'Cấu hình học',
 				key: 'cauhinhhoc',
 				icon: <img style={{ width: 'unset' }} src="/icons/menu/cauhinhhoc.svg" />,
-				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
+				allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_ACADEMIC],
 				children: [
 					renderItemMenu({
 						key: '/options/specialize',
@@ -232,7 +247,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 				label: 'Đề thi',
 				key: 'dethi',
 				icon: <img style={{ width: 'unset' }} src="/icons/menu/dethi.svg" />,
-				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
+				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_ACADEMIC],
 				children: [
 					renderItemMenu({
 						key: '/package-exam',
@@ -255,7 +270,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 				label: 'Khóa học video ',
 				key: 'khoahocvideo',
 				icon: <img style={{ width: 'unset' }} src="/icons/menu/khoahocvideo.svg" />,
-				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
+				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_ACADEMIC],
 				children: [
 					renderItemMenu({
 						key: '/course/videos',
@@ -265,12 +280,12 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 					renderItemMenu({
 						key: '/course/codes',
 						label: 'Khoá học đã bán',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/course/donation-history',
 						label: 'Lịch sử tặng',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					})
 				]
 			}
@@ -280,28 +295,28 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 		key: 'quanly',
 		label: 'Quản lý',
 		type: 'group',
-		allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
+		allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
 		children: [
 			{
 				key: 'quanlynhanvien',
 				label: 'Quản lý nhân viên',
 				icon: <img style={{ width: 'unset' }} src="/icons/menu/person-outline.svg" />,
-				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
+				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
 				children: [
 					renderItemMenu({
 						key: '/users/personnel',
 						label: 'Danh sách nhân viên',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT]
 					}),
 					renderItemMenu({
 						key: '/users/teacher/teacher-off',
 						label: 'Duyệt lịch nghỉ',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/users/salary-config',
 						label: 'Cấu hình lương',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT]
 					}),
 					renderItemMenu({
 						key: '/users/salary',
@@ -324,7 +339,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 					renderItemMenu({
 						key: '/finance/income-expense-management',
 						label: 'Thu chi',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_ACCOUNTANT]
 					}),
 					renderItemMenu({
 						key: '/finance/verification',
@@ -344,13 +359,13 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 		key: 'cauhinh',
 		label: 'Cấu hình',
 		type: 'group',
-		allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
+		allow: [ROLE_ADMIN, ROLE_MANAGER, ROLE_ACADEMIC],
 		children: [
 			{
 				key: 'hethong',
 				label: 'Hệ thống',
 				icon: <img style={{ width: 'unset' }} src="/icons/menu/finance.svg" />,
-				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
+				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT],
 				children: [
 					renderItemMenu({
 						key: '/options/center',
@@ -380,7 +395,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 					renderItemMenu({
 						key: '/options/paymentPemission',
 						label: 'Cấp quyền thanh toán',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/options/faq',
@@ -390,7 +405,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 					renderItemMenu({
 						key: '/options/config-template',
 						label: 'Mẫu',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
+						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					})
 				]
 			},
