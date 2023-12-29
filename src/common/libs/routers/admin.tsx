@@ -4,6 +4,8 @@ import { FaMoneyBillAlt, FaUserGraduate, FaUserTie } from 'react-icons/fa'
 import { IoLibrarySharp, IoVideocam } from 'react-icons/io5'
 import { RiFileList2Fill } from 'react-icons/ri'
 import { TiHome } from 'react-icons/ti'
+import { renderItemMenu } from './func'
+import { MenuItems } from './type'
 
 export const AdminMenu = [
 	{

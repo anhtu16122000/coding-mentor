@@ -153,7 +153,7 @@
 		box-shadow: 10px 9px 15px #0000000d;
 		z-index: 9;
 
-		@apply w-[240px] bg-[#fff] fixed top-[65px] h-[calc(100vh-65px)];
+		@apply w-[247px] bg-[#fff] fixed top-[65px] h-[calc(100vh-65px)];
 
 		@include max-media(1000px) {
 			@apply h-[100vh] absolute top-0;
@@ -321,10 +321,6 @@
 			.ant-menu-submenu-title {
 				border-radius: 6px;
 				padding: 8px !important;
-
-				.ant-menu-submenu-arrow {
-					color: $primary-color !important;
-				}
 				&:active {
 					background-color: #e5e5e5 !important;
 				}
@@ -357,10 +353,6 @@
 				transition: 0.3s;
 				@apply text-[16px] text-[#717171] w-[16px];
 			}
-
-			.ant-menu-item-group-title {
-				@apply w-full text-[16px] uppercase font-bold pl-[14px] text-[#000000];
-			}
 		}
 
 		li.ant-menu-submenu {
@@ -371,74 +363,74 @@
 			}
 		}
 
-		li.ant-menu-item {
-			transition: 0.3s;
-			padding: 0px !important;
+		// li.ant-menu-item {
+		// 	transition: 0.3s;
+		// 	padding: 0px !important;
 
-			@apply flex items-center text-[#504f56] rounded-[6px] ml-0 font-[500];
+		// 	@apply flex items-center text-[#504f56] rounded-[6px] ml-0 font-[500];
 
-			a {
-				text-decoration: none;
-				@apply font-[400] text-[14px] text-[#333333];
+		// 	a {
+		// 		text-decoration: none;
+		// 		@apply font-[400] text-[14px] text-[#333333];
 
-				&:hover {
-					text-decoration: none;
-					color: $primary-color;
-				}
-			}
+		// 		&:hover {
+		// 			text-decoration: none;
+		// 			color: $primary-color;
+		// 		}
+		// 	}
 
-			svg {
-				font-size: 17px;
-				color: #333333;
-				transition: 0.3s;
-			}
+		// 	svg {
+		// 		font-size: 17px;
+		// 		color: #333333;
+		// 		transition: 0.3s;
+		// 	}
 
-			&.ant-menu-item-active {
-				background: #f0f0f0;
-			}
-			&:active {
-				background-color: #e5e5e5 !important;
-			}
+		// 	&.ant-menu-item-active {
+		// 		background: #f0f0f0;
+		// 	}
+		// 	&:active {
+		// 		background-color: #e5e5e5 !important;
+		// 	}
 
-			&.ant-menu-item-selected {
-				color: $primary-color;
-				background: #1b73e817;
+		// 	&.ant-menu-item-selected {
+		// 		color: $primary-color;
+		// 		background: #1b73e817;
 
-				&:after {
-					border-right: 0px solid $primary-color;
-					display: none;
-					transition: 0s;
-				}
-				span {
-					color: $primary-color;
-				}
-				svg {
-					color: $primary-color !important;
-					transition: 0.3s;
-				}
-				a {
-					color: $primary-color !important;
-				}
-			}
+		// 		&:after {
+		// 			border-right: 0px solid $primary-color;
+		// 			display: none;
+		// 			transition: 0s;
+		// 		}
+		// 		span {
+		// 			color: $primary-color;
+		// 		}
+		// 		svg {
+		// 			color: $primary-color !important;
+		// 			transition: 0.3s;
+		// 		}
+		// 		a {
+		// 			color: $primary-color !important;
+		// 		}
+		// 	}
 
-			&:hover {
-				color: $primary-color;
-				transition: 0.3s;
-				span {
-					color: $primary-color;
-					transition: 0.3s;
-				}
-				svg {
-					color: $primary-color;
-					transition: 0.3s;
-				}
-			}
+		// 	&:hover {
+		// 		color: $primary-color;
+		// 		transition: 0.3s;
+		// 		span {
+		// 			color: $primary-color;
+		// 			transition: 0.3s;
+		// 		}
+		// 		svg {
+		// 			color: $primary-color;
+		// 			transition: 0.3s;
+		// 		}
+		// 	}
 
-			span {
-				transition: 0.3s;
-				vertical-align: middle;
-			}
-		}
+		// 	span {
+		// 		transition: 0.3s;
+		// 		vertical-align: middle;
+		// 	}
+		// }
 	}
 }
 
