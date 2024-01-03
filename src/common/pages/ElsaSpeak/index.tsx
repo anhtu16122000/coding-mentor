@@ -11,6 +11,8 @@ import { elsaSpeakApi } from '~/api/elseSpeak'
 import TextArea from 'antd/lib/input/TextArea'
 import ColoredSentence from '~/common/components/ElsaSpeak/ColoredSentence '
 import dynamic from 'next/dynamic'
+import { Volume2 } from 'react-feather'
+import TextToSpeech from './TextToSpeech/TextToSpeech'
 
 const AudioRecoderApp: any = dynamic(() => import('./AudioRecoder/AudioRecoderApp'), {
 	ssr: false
@@ -41,7 +43,7 @@ const ElsaSpeak = () => {
 		function getRecordPermission() {
 			navigator.mediaDevices
 				.getUserMedia({ audio: true })
-				.then((stream) => {})
+				.then((stream) => { })
 				.catch(function (error) {
 					console.log('Không thể lấy được quyền ghi âm: ' + error)
 				})
@@ -105,7 +107,7 @@ const ElsaSpeak = () => {
 		<div>
 			<Card>
 				<div className="row">
-					<div className="col-4">
+					<div className="col-3">
 						<div className="wrap-table">
 							<div className="flex justify-center flex-col items-center">
 								{/* <button className="mx-auto" onClick={handleRecord}>
@@ -152,7 +154,18 @@ const ElsaSpeak = () => {
 							)}
 						</div>
 					</div>
-					<div className="col-8">
+					<div className="col-2">
+						<div className="wrap-table">
+							<div className="flex justify-center flex-col items-center right-0">
+									<TextToSpeech
+										text={sentence}
+									>
+									</TextToSpeech>
+								{/* <div className="mt-3">Nghe thử</div> */}
+							</div>
+						</div>
+					</div>
+					<div className="col-7">
 						<TextArea value={sentence} onChange={(e) => setSentence(e.target.value)} rows={5} className="h-44 max-h-44" />
 					</div>
 				</div>
