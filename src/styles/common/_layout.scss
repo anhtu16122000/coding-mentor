@@ -38,7 +38,7 @@
 	}
 
 	&.close-app {
-		width: calc(100% - 80px);
+		width: calc(100% - 0px);
 	}
 }
 
@@ -54,13 +54,8 @@
 		justify-content: center;
 	}
 
-	// .ant-pagination-prev,.ant-pagination-next {
-	// 	margin-top: 5px!important;
-	// }
-
 	li {
 		border-radius: 4px !important;
-		// border-color: $primary-color;
 		margin-top: 1px;
 		&.ant-pagination-item-active {
 			margin-top: 1px;
