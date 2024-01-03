@@ -18,7 +18,7 @@ interface IPaymentForm {
 	onOpen?: Function
 }
 
-const url = 'Bill'
+const url = 'Bill/v2'
 
 const PaymentForm: FC<IPaymentForm> = ({ isEdit, onRefresh, item }) => {
 	const [form] = Form.useForm()

@@ -137,7 +137,7 @@ const CreateExamSection: FC<ICreateExam & { skill?: any }> = (props) => {
 
 			<Modal
 				centered
-				title={isEdit ? 'Cập phần năng' : 'Thêm phần mới'}
+				title={isEdit ? 'Cập nhật phần' : 'Thêm phần mới'}
 				width={700}
 				open={visible}
 				onCancel={() => !loading && setVisible(false)}

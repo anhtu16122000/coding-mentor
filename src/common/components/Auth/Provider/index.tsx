@@ -32,7 +32,8 @@ function AuthProvider({ children }: IAuthLayout) {
 			router.pathname.search('fogot-password') < 1 &&
 			router.pathname.search('reset-password') < 1 &&
 			router.pathname.search('register') < 1 &&
-			router.pathname.search('verify') < 1
+			router.pathname.search('verify') < 1 &&
+			router.pathname.search('hacked') < 1
 		) {
 			return false
 		} else {
@@ -105,7 +106,10 @@ function AuthProvider({ children }: IAuthLayout) {
 					}
 				}
 			} else {
-				logOut()
+				if (!allowNoneLogin()) {
+					logOut()
+				}
+				dispatch(setAuthLoading(false))
 			}
 		} catch (error) {}
 	}

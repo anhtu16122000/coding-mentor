@@ -1,0 +1,41 @@
+.hover-opacity {
+	&:hover {
+		opacity: 0.9;
+	}
+	&:active {
+		opacity: 1;
+	}
+}
+
+.hover-scale-out {
+	transition: transform 0.05s ease-in-out;
+	&:hover {
+		transform: scale(1.03);
+	}
+	&:active {
+		transform: scale(1);
+	}
+}
+
+.hover-scale-in {
+	transition: transform 0.05s ease-in-out;
+	&:hover {
+		transform: scale(0.97);
+	}
+	&:active {
+		transform: scale(1);
+	}
+}
+
+.hacked-table {
+	@apply w-[90%] shadow-sm max-w-[700px] mx-[24px] border-[1px] border-[#d2d2d2];
+	:global {
+		.ant-table-thead {
+			.ant-table-cell {
+				background: #dedede !important;
+				color: #000000 !important ;
+				font-weight: 600 !important;
+			}
+		}
+	}
+}

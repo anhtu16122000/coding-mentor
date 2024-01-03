@@ -12,7 +12,7 @@ const Write = (props) => {
 	const { data, IndexInExam, isDoing, isResult, curGroup, onRefresh } = props
 	const { questionsInSection, setCurrentQuestion, setQuestionsInSection, setNotSetCurrentQuest } = useExamContext()
 
-	const [doingTestDetails, setDoingTestDetails] = useState<Array<any>>([...data?.DoingTestDetails])
+	const [doingTestDetails, setDoingTestDetails] = useState<Array<any>>(!data?.DoingTestDetails ? [] : [...data?.DoingTestDetails])
 
 	async function insertDetails(answer) {
 		let items = []
