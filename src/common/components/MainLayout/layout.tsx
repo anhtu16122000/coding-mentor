@@ -10,6 +10,15 @@ import Header from '../Header'
 import MyLink from '../MyLink'
 import SideBarOne from './SideBarOne'
 import SideBarTwo from './SideBarTwo'
+import { AdminMenu, AdminChildMenu } from '~/common/libs/routers/admin'
+import { StudentChildMenu, StudentMenu } from '~/common/libs/routers/student'
+import { TeacherChildMenu, TeacherMenu } from '~/common/libs/routers/teacher'
+import { ManagerChildMenu, ManagerMenu } from '~/common/libs/routers/manager'
+import { SalerChildMenu, SalerMenu } from '~/common/libs/routers/saler'
+import { AccountantChildMenu, AccountantMenu } from '~/common/libs/routers/accountant'
+import { AcademicChildMenu, AcademicMenu } from '~/common/libs/routers/academic'
+import { ParentStudentChildMenu, ParentStudentMenu } from '~/common/libs/routers/parent'
+import SimpleMenu from './SimpleMenu'
 
 function Layout({ children, home }: { children: React.ReactNode; home?: boolean }) {
 	const [isOpen, setIsOpen] = useState(true)

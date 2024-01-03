@@ -6,6 +6,7 @@ import { packageSkillApi } from '~/api/packed/packages-skill'
 import { ShowNostis } from '~/common/utils'
 import findRankl from '~/common/components/json/findRankl.json'
 import Lottie from 'react-lottie-player'
+
 interface Rank {
 	Id: number
 	StudentId: number
@@ -171,25 +172,24 @@ function Ratings({ SkillsId }) {
 							</Col>
 						</Col>
 						{!!ranks[3] ? (
-							<Col span={24} className="flex items-center bg-tw-disable pt-[4px] pb-[4px] rounded-md">
-								<Col span={4}>
-									<div className="flex items-center justify-center bg-tw-blue rounded-md text-tw-white font-bold w-[48px] pt-[8px] pb-[8px]">
-										4
-									</div>
+							ranks.slice(3).map((_item) => (
+								<Col span={24} className="flex items-center bg-tw-disable pt-[4px] pb-[4px] rounded-md">
+									<Col span={4}>
+										<div className="flex items-center justify-center bg-tw-blue rounded-md text-tw-white font-bold w-[48px] pt-[8px] pb-[8px]">
+											{_item.Rank}
+										</div>
+									</Col>
+									<Col span={12}>
+										<div className="font-bold flex items-center">
+											<img className="h-[40px] w-[40px] rounded-[50%] mr-[4px]" src={_item.StudentThumbnail} />
+											{_item.StudentName}
+										</div>
+									</Col>
+									<Col span={6}>
+										<div>{_item.MyPoint}</div>
+									</Col>
 								</Col>
-								<Col span={12}>
-									<div className="font-bold flex items-center">
-										<img
-											className="h-[40px] w-[40px] rounded-[50%] mr-[4px]"
-											src="https://play-lh.googleusercontent.com/2NJb9nukCV958oxsXuPQwF3hGcTTp21k9fIojW3Z5HfW42TsXXcdBDo_IVtanZDF0BmC"
-										/>
-										Nguyễn Thị Thanh Thảo
-									</div>
-								</Col>
-								<Col span={6}>
-									<div>2</div>
-								</Col>
-							</Col>
+							))
 						) : (
 							<Col span={24} className="flex items-center bg-tw-disable pt-[4px] pb-[4px] rounded-md">
 								<Col span={4}>
