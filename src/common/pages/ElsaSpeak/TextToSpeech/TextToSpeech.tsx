@@ -8,9 +8,9 @@ const TextToSpeech: React.FC<{ text: string }> = ({ text }) => {
 
 
     useEffect(() => {
-        getaudioSrc(text)
+        getAudioSrc(text)
     }, [text])
-    const getaudioSrc = async (_text)=>
+    const getAudioSrc = async (_text)=>
     {
         try {
             if (_text) {
