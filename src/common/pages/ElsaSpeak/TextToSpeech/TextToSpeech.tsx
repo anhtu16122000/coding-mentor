@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { textToSpeech } from '~/api/textToSpeech';
 import ShowNostis from '~/common/utils/show-noti';
 
-const TextToSpeech: React.FC<{ text: string }> = ({ text }) => {
+type ITextToSpeechProps =
+{
+    text: string
+}
+const TextToSpeech = (props: ITextToSpeechProps) => {
+    const {text} = props
     const audioRef = useRef<HTMLAudioElement>(null);
     const [audioSrc, setAudioSrc] = useState('');
 

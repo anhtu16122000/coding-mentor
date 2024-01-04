@@ -159,9 +159,7 @@ const ElsaSpeak = () => {
 							<div className="flex justify-center flex-col items-center right-0">
 									<TextToSpeech
 										text={sentence}
-									>
-									</TextToSpeech>
-								{/* <div className="mt-3">Nghe thử</div> */}
+									/>
 							</div>
 						</div>
 					</div>
