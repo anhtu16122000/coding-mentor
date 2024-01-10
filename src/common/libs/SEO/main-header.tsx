@@ -4,30 +4,45 @@ import React from 'react'
 import appConfigs from '~/appConfig'
 
 const viewport = 'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover'
-const siteTitle = 'Quản lý giáo dục hiệu quả với phần mềm chuyên nghiệp từ Mona LMS'
-const description =
-	'Tối ưu hoá hoạt động quản lý giáo dục với phần mềm chuyên nghiệp từ Mona Software. Hỗ trợ quàn lý tất cả các thông tin về học viên, giáo viên, lớp học... giúp cho việc quản lý trở nên dễ dàng và hiệu quả hơn.'
+
+const siteTitle = 'Bạn lo giảng dạy, MONA lo quản trị'
+
+const description = 'Dù bạn ở mảng nào của giáo dục, chúng tôi đều có sản phẩm phù hợp'
 
 const MainHeader = () => {
 	return (
 		<Head>
-			<title>{appConfigs.appName} - Phần mềm quản lý giáo dục chuyên nghiệp</title>
+			<title>{appConfigs.appName} - Phần mềm quản lý trung tâm giáo dục</title>
 
 			<meta property="og:locale" content="vi_VN" />
+			<link rel="icon" href="/white-logo.png" />
 			<meta content={viewport} name="viewport" />
+
 			<meta name="description" content={description} />
 
 			<meta name="robots" content="noindex" />
+			<meta property="og:image" content="/og-image.png" />
 
 			<meta name="og:title" content={siteTitle} />
-			<meta property="og:site_name" content="Hệ thống quản lý giáo dục chuyên nghiệp" />
+			<meta property="og:site_name" content="Bạn lo giảng dạy, MONA lo quản trị" />
 			<meta property="og:description" content={description} />
 
 			<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 			<meta http-equiv="Pragma" content="no-cache" />
 			<meta http-equiv="Expires" content="0" />
 
-			<link rel="icon" href="/white-logo.png" />
+			<meta name="twitter:card" content="summary_large_image" />
+			<meta name="twitter:title" content="Mona Edutech - Hiểu quản trị hơn chính bạn" />
+			<meta name="twitter:image:alt" content="mona-lms" />
+			<meta name="twitter:image" content="/og-image.png" />
+			<meta name="twitter:description" content={description} />
+			<meta name="twitter:url" content="https://mona.software/edutech" />
+			<meta name="twitter:site" content="mona.media" />
+			<meta name="twitter:domain" content="mona.media" />
+			<meta name="twitter:label1" content="Written by" />
+			<meta name="twitter:data1" content="Nguyễn Phúc Bảo Châu" />
+
+			<meta name="keywords" content="hệ thống đào tạo, lms, hệ thống quản lý đào tạo" />
 
 			<script defer data-domain="monalms.monamedia.net" src="https://web-analytics.mona.host/js/script.js"></script>
 
