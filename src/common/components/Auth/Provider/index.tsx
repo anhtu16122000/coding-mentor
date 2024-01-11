@@ -33,7 +33,8 @@ function AuthProvider({ children }: IAuthLayout) {
 			router.pathname.search('reset-password') < 1 &&
 			router.pathname.search('register') < 1 &&
 			router.pathname.search('verify') < 1 &&
-			router.pathname.search('hacked') < 1
+			router.pathname.search('hacked') < 1 &&
+			router.pathname.search('anti-download-video') < 1
 		) {
 			return false
 		} else {

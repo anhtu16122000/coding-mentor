@@ -1,0 +1,23 @@
+.vcMainIframe {
+	max-width: 800px;
+	transition-duration: 300ms;
+
+	overflow: hidden;
+	width: 100%;
+	position: relative !important;
+	padding-top: 29.8%;
+	margin-top: 16px;
+	height: 450px;
+
+	iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		border: 1px solid #ededed;
+		border-radius: 8px;
+	}
+}
