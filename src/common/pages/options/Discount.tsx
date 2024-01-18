@@ -224,6 +224,8 @@ const Discount = () => {
 					break
 				case '4':
 					break
+				case '5':
+					break
 				default:
 					Router.push('/')
 			}
@@ -235,16 +237,18 @@ const Discount = () => {
 			switch (userInformation?.RoleId) {
 				case '1':
 					return true
-					break
+
 				case '6':
 					return true
-					break
+
+				case '5':
+					return true
+
 				case '4':
 					return true
-					break
+
 				default:
 					return false
-					break
 			}
 		}
 	}

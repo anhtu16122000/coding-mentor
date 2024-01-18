@@ -337,7 +337,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 			{
 				key: 'quanlytaichinh',
 				label: 'Quản lý tài chính',
-				icon: <img style={{ width: 'unset' }} src="/icons/menu/settings.svg" />,
+				icon: <img style={{ width: 'unset' }} src="/icons/menu/finance.svg" />,
 				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC],
 				children: [
 					renderItemMenu({
@@ -373,7 +373,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 			{
 				key: 'hethong',
 				label: 'Hệ thống',
-				icon: <img style={{ width: 'unset' }} src="/icons/menu/finance.svg" />,
+				icon: <img style={{ width: 'unset' }} src="/icons/menu/settings.svg" />,
 				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT],
 				children: [
 					renderItemMenu({
