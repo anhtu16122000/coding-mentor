@@ -478,7 +478,7 @@ export default function ServiceAppointmentTest(props) {
 							/>
 						)}
 
-						{(isAdmin() || isManager()) && data.Status == 1 && <CancelTest onUpdateData={onUpdateData} dataRow={data} />}
+						{(isAdmin() || isManager()) && data.LearningStatus == 1 && <CancelTest onUpdateData={onUpdateData} dataRow={data} />}
 
 						{(isAdmin() || isManager() || isTeacher() || isAcademic()) && data.Type == 1 && (
 							<ScoreModal rowData={data} listTodoApi={listTodoApi} setTodoApi={setTodoApi} />
@@ -494,7 +494,7 @@ export default function ServiceAppointmentTest(props) {
 							/>
 						)}
 
-						{isStudent() && data.Status == 1 && data?.Type == 2 && (
+						{isStudent() && data.LearningStatus == 1 && data?.Type == 2 && (
 							<PrimaryTooltip place="left" id={`hw-take-${data?.Id}`} content="Làm bài">
 								<div
 									onClick={() => getDraft(data?.IeltsExamId, data?.Id)}
