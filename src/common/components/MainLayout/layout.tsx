@@ -1,5 +1,5 @@
 import { Breadcrumb } from 'antd'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getMenuByRole } from '~/common/libs/routers'
@@ -70,19 +70,22 @@ function Layout({ children, home }: { children: React.ReactNode; home?: boolean 
 			)}
 			<main className="app-main">
 				<div id="the-super-scroll" className={`app-content ${!isOpen && 'close-app'}`}>
-					<div className="container w-full container-fluid">
-						<div className="breadcrumb">
-							<Breadcrumb>
-								{pathUrls?.map(({ key, label, type }) => {
-									return (
-										<Breadcrumb.Item>
-											<MyLink href={key} disable={type !== 'link'} DisplayComponent={label} />
-										</Breadcrumb.Item>
-									)
-								})}
-							</Breadcrumb>
+					{Router.asPath != '/' && (
+						<div className="container w-full container-fluid">
+							<div className="breadcrumb">
+								<Breadcrumb>
+									{pathUrls?.map(({ key, label, type }) => {
+										return (
+											<Breadcrumb.Item>
+												<MyLink href={key} disable={type !== 'link'} DisplayComponent={label} />
+											</Breadcrumb.Item>
+										)
+									})}
+								</Breadcrumb>
+							</div>
 						</div>
-					</div>
+					)}
+
 					<div className="container-fluid">{children}</div>
 				</div>
 			</main>
