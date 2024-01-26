@@ -17,6 +17,7 @@ import CreateNews from './Create'
 import { encode } from '~/common/utils/common'
 import Router from 'next/router'
 import moment from 'moment'
+import ShowMore from './components/ShowMore'
 
 const ButtonPost: FC<TNewType> = (props) => {
 	const { onClick, title, icon, loading, activated } = props
@@ -61,12 +62,15 @@ const ItemContent = (props) => {
 		visible,
 		setVisible,
 		currentComment,
-		setCurrentComment
+		setCurrentComment,
+		isModal
 	} = props
 
 	const menuRef = useRef(null)
 
 	const user = useSelector((state: RootState) => state.user.information)
+
+	const [showAll, setShowAll] = useState<boolean>(true)
 
 	function deleteThisComment() {
 		refreshComment()
@@ -108,20 +112,24 @@ const ItemContent = (props) => {
 	const [showButton, setShowButton] = useState<boolean>(false)
 
 	useEffect(() => {
-		const thisElement = document.getElementById('news-item-content-' + item?.Id)
+		const idContent = !visible ? 'news-item-content-' : 'news-item-content-x-'
+
+		const thisElement = document.getElementById(idContent + item?.Id)
 		const desiredLineCount = 2
 
-		// Tính toán chiều cao mong muốn dựa trên số dòng
-		const lineHeight = parseInt(window.getComputedStyle(thisElement).lineHeight)
-		const maxHeight = lineHeight * desiredLineCount
+		if (thisElement) {
+			// Tính toán chiều cao mong muốn dựa trên số dòng
+			const lineHeight = parseInt(window.getComputedStyle(thisElement).lineHeight)
+			const maxHeight = lineHeight * desiredLineCount
 
-		// Kiểm tra chiều cao thực tế
-		if (thisElement.scrollHeight > maxHeight) {
-			!showButton && setShowButton(true)
-		} else {
-			showButton && setShowButton(false)
+			// Kiểm tra chiều cao thực tế
+			if (thisElement.scrollHeight > maxHeight) {
+				!showButton && setShowButton(true)
+			} else {
+				showButton && setShowButton(false)
+			}
 		}
-	}, [item?.Id])
+	}, [item?.Id, visible])
 
 	function inpuKeyUp(event) {
 		if (event.keyCode == 13 && !!currentComment && !loadingComment) _comment()
@@ -218,19 +226,15 @@ const ItemContent = (props) => {
 			</div>
 
 			<div className="cc-news-item-body">
-				<div>
-					<span id={'news-item-content-' + item?.Id} className="cc-news-item-content in-4-line">
-						{Content}
-					</span>
-
-					{!visible && showButton && (
-						<div onClick={() => setVisible(true)} className="text-[#1E88E5] mt-[8px] cursor-pointer">
-							Xem thêm...
-						</div>
-					)}
-
-					<span className="cc-news-item-content full-content">{Content}</span>
-				</div>
+				<ShowMore
+					Content={Content}
+					isModal={isModal}
+					item={item}
+					setShowAll={setShowAll}
+					setVisible={setVisible}
+					showAll={showAll}
+					showButton={showButton}
+				/>
 
 				{!!details?.FileList && (
 					<div className="cc-news-item-files">

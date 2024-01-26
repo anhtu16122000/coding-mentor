@@ -150,6 +150,7 @@ const NewsItem: FC<{ item: TNews; index: number; onRefresh: Function }> = (props
 					visible={visible}
 					currentComment={currentComment}
 					setCurrentComment={setCurrentComment}
+					isModal
 				/>
 			</Modal>
 		</>
