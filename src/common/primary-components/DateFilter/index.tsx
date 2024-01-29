@@ -95,6 +95,15 @@ const DateFilter: FC<TProps> = (props) => {
 			return
 		}
 
+		if (!params?.start) {
+			onSubmit({
+				start: null,
+				end: null,
+				timestamp: new Date().getTime()
+			})
+			return
+		}
+
 		if (!useISOString) {
 			onSubmit({ ...params, timestamp: new Date().getTime() })
 		} else {
