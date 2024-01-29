@@ -15,7 +15,7 @@ interface IDeleteManagement {
 const DeleteManagement: FC<IDeleteManagement> = ({ onRefresh, defaultData }) => {
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(false)
-	console.log('defaultData', defaultData)
+
 	async function handleDelete() {
 		setLoading(true)
 		try {

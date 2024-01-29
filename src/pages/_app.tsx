@@ -26,6 +26,10 @@ import 'react-vertical-timeline-component/style.min.css'
 import 'react-h5-audio-player/lib/styles.css'
 import 'react-image-crop/src/ReactCrop.scss'
 
+// react-date-range
+import 'react-date-range/dist/styles.css'
+import 'react-date-range/dist/theme/default.css'
+
 import 'react-tooltip/dist/react-tooltip.css'
 
 import ToastifyContainer from '~/common/providers/Toastify'

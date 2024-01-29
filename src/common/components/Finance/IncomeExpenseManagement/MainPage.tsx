@@ -16,6 +16,8 @@ import PrimaryTag from '../../Primary/Tag'
 import IncomeExpenseManagementModalCRUD from './ModalCRUD'
 import DeleteManagement from './DeleteManagement'
 import DateFilter from '~/common/primary-components/DateFilter'
+import { Select } from 'antd'
+import TagByChao from '~/common/primary-components/Tag'
 
 export interface IIncomeExpenseManagementPageProps {}
 
@@ -98,13 +100,15 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 			render: (text, item) => {
 				return (
 					<>
-						<p className="table-row-main-text">{text}</p>
-						<p className="table-row-sub-text">
-							Người tạo: <span>{item.CreatedBy}</span>
-						</p>
-						<p className="table-row-sub-text">
-							Thời gian: <span> {moment(item.CreatedOn).format('DD/MM/YYY HH:mm')}</span>
-						</p>
+						<div className="text-[#000] font-[600] in-1-line">{text}</div>
+
+						<div className="mt-[4px]">
+							Người tạo: <div className="text-[#1b73e8] font-[500] inline">{item?.CreatedBy}</div>
+						</div>
+
+						<div>
+							Thời gian: <div className="text-[#1b73e8] font-[500] inline">{moment(item.CreatedOn).format('HH:mm DD/MM/YYYY')}</div>
+						</div>
 					</>
 				)
 			}
@@ -116,8 +120,10 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 			render: (text, item) => {
 				return (
 					<>
-						<p className="table-row-main-text">{text}</p>
-						<p className="table-row-sub-text">Mã HV: {item.UserCode}</p>
+						<p className="text-[#000] font-[600] in-1-line">{text}</p>
+						<div>
+							Mã HV: <div className="text-[#1b73e8] font-[500] inline">{item?.UserCode}</div>
+						</div>
 					</>
 				)
 			}
@@ -129,12 +135,17 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 			render: (text, item) => {
 				return (
 					<>
-						<p className={`table-row-main-text ${item.Type == 1 ? 'text-tw-green' : 'text-tw-red'} !font-[600]`}>
+						<div className={`font-[600] ${item?.Type == 1 ? 'text-tw-green' : 'text-tw-red'}`}>
+							{item?.Type == 1 ? '+' : '-'}
 							{_format.numberToPrice(text)} VND
-						</p>
-						<p className="table-row-sub-text">
-							Phương thức: <span className="table-row-main-text">{item.PaymentMethodName}</span>
-						</p>
+						</div>
+
+						<div>
+							Phương thức:{' '}
+							<div className={`${item?.PaymentMethodName ? 'text-[#1b73e8]' : 'text-[red]'} font-[500] inline`}>
+								{item?.PaymentMethodName || 'Không rõ'}
+							</div>
+						</div>
 					</>
 				)
 			}
@@ -144,7 +155,15 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 			width: 100,
 			dataIndex: 'TypeName',
 			render: (text, item) => {
-				return <PrimaryTag children={<span>{text}</span>} color={item.Type == 1 ? 'green' : 'red'} />
+				if (item.Type == 1) {
+					return <TagByChao background="green">{text}</TagByChao>
+				}
+
+				if (item.Type == 2) {
+					return <TagByChao background="red">{text}</TagByChao>
+				}
+
+				return <TagByChao>{text}</TagByChao>
 			}
 		},
 		{

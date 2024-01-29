@@ -93,14 +93,10 @@ export default function IncomeExpenseManagementModalCRUD(props: IIncomeExpenseMa
 	return (
 		<>
 			{(isAdmin() || isAccountant()) && mode == 'add' && (
-				<PrimaryButton background="green" type="button" children={<span>Thêm phiếu</span>} icon="add" onClick={() => onOpen()} />
+				<PrimaryButton background="green" type="button" children={<span>Thêm</span>} icon="add" onClick={() => onOpen()} />
 			)}
 
 			{mode == 'edit' && <IconButton type="button" icon={'edit'} color="green" onClick={() => onOpen()} className="Sửa phiếu" tooltip="" />}
-
-			{/* {(isAdmin() || isAccountant()) && mode == 'delete' && (
-				<IconButton type="button" icon={'remove'} color="red" onClick={() => onOpen()} className="" tooltip="Xóa phiếu" />
-			)} */}
 
 			<Modal
 				footer={null}
