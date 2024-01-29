@@ -1,4 +1,3 @@
-import { Input } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -16,12 +15,27 @@ import PrimaryTable from '../../Primary/Table'
 import PrimaryTag from '../../Primary/Tag'
 import IncomeExpenseManagementModalCRUD from './ModalCRUD'
 import DeleteManagement from './DeleteManagement'
+import DateFilter from '~/common/primary-components/DateFilter'
 
 export interface IIncomeExpenseManagementPageProps {}
 
-const initialParams = { pageIndex: 1, pageSize: PAGE_SIZE, Type: null, search: '' }
+const initialParams = {
+	pageIndex: 1,
+	pageSize: PAGE_SIZE,
+	Type: null,
+	search: '',
+	fromDate: null,
+	toDate: null
+}
 
-const initialParamsStudent = { pageIndex: 1, pageSize: PAGE_SIZE, FullName: '', RoleIds: 3 }
+const initialParamsStudent = {
+	pageIndex: 1,
+	pageSize: PAGE_SIZE,
+	FullName: '',
+	RoleIds: 3,
+	fromDate: null,
+	toDate: null
+}
 
 const initialFilter = [
 	{
@@ -38,6 +52,8 @@ const initialFilter = [
 ]
 
 export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagementPageProps) {
+	const router = useRouter()
+
 	const [dataSource, setDataSource] = useState<IPaymentSession[]>()
 	const [dataStatistical, setDataStatistical] = useState({ income: 0, expense: 0, revenue: 0 })
 	const [totalPage, setTotalPage] = useState(0)
@@ -47,7 +63,6 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 	const [isLoading, setIsLoading] = useState(false)
 	const [filterList, setFilterList] = useState([])
 	const [todoApi, setTodoApi] = useState(initialParams)
-	const router = useRouter()
 
 	const getDataPayment = async () => {
 		setIsLoading(true)
@@ -326,19 +341,26 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 				total={totalPage}
 				onChangePage={(event: number) => setTodoApi({ ...todoApi, pageIndex: event })}
 				loading={isLoading}
-				Extra={
-					<IncomeExpenseManagementModalCRUD
-						mode="add"
-						handleSearchForOptionList={handleSearchForOptionList}
-						handleLoadOnScrollForOptionList={handleLoadOnScrollForOptionList}
-						onSubmit={onSubmit}
-						optionStudent={optionStudent}
-						dataOption={optionList}
-					/>
-				}
 				TitleCard={
-					<div className="flex items-center justify-between w-full">
-						<FilterBaseVer2 handleFilter={handleFilter} dataFilter={filterList} handleReset={() => setTodoApi({ ...initialParams })} />
+					<div className="flex items-start gap-[16px] w-full">
+						<div className="flex flex-1 gap-[8px]">
+							<DateFilter
+								useISOString
+								showYesterday={false}
+								onSubmit={(e) => setTodoApi({ ...todoApi, fromDate: e?.start, toDate: e?.end })}
+							/>
+
+							<FilterBaseVer2 handleFilter={handleFilter} dataFilter={filterList} handleReset={() => setTodoApi({ ...initialParams })} />
+						</div>
+
+						<IncomeExpenseManagementModalCRUD
+							mode="add"
+							handleSearchForOptionList={handleSearchForOptionList}
+							handleLoadOnScrollForOptionList={handleLoadOnScrollForOptionList}
+							onSubmit={onSubmit}
+							optionStudent={optionStudent}
+							dataOption={optionList}
+						/>
 					</div>
 				}
 			>
