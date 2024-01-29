@@ -1,0 +1,31 @@
+// Cấm chỉnh sửa dưới mọi hình thức
+
+.tag {
+	@apply font-[600] h-[28px] rounded-[6px] inline-flex items-center justify-center px-[8px];
+}
+
+.blue-tag {
+	@apply tag bg-gradient-to-r from-[#2586ed] to-[#1d6fc7] text-[#fff];
+}
+
+.red-tag {
+	@apply tag bg-gradient-to-r from-[#E53935] to-[#d22e2b] text-[#fff];
+}
+
+.green-tag {
+	@apply tag bg-gradient-to-r from-[#4CAF50] to-[#388E3C] text-[#fff];
+}
+
+.yellow-tag {
+	@apply tag bg-gradient-to-r from-[#FFBA0A] to-[#e7ab11] text-[#000];
+}
+
+.black-tag {
+	@apply tag bg-gradient-to-r from-[#000000] to-[#000000] text-[#fff];
+}
+
+.white-tag {
+	@apply tag bg-gradient-to-r from-[#fff] to-[#fff] text-[#000];
+}
+
+// Cấm chỉnh sửa dưới mọi hình thức
