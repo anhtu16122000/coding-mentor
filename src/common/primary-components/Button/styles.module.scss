@@ -1,0 +1,82 @@
+// Cấm chỉnh sửa dưới mọi hình thức
+
+.chaos-btn-23 {
+	@apply bg-[#e5e5e5]; // transparent 0.1
+	@apply h-[36px] min-w-[36px] px-[8px];
+	@apply inline-flex items-center justify-center gap-[4px];
+	@apply rounded-[6px] font-[600] text-[15px] text-[#000];
+
+	:global {
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+		.chaos-spinner {
+			width: 16px;
+			height: 16px;
+			border: 5px solid red;
+			border-top: 5px solid transparent;
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+		}
+	}
+}
+
+.btn-create {
+	@apply bg-[#4caf50] text-[#fff];
+}
+
+.btn-save {
+	@apply bg-[#0989ff] text-[#fff];
+}
+
+.btn-edit {
+	@apply bg-[#0e9de0] text-[#fff];
+}
+
+.btn-delete {
+	@apply bg-[#ff595e] text-[#fff];
+}
+
+.btn-import {
+	@apply bg-[#0989ff] text-[#fff];
+}
+
+.btn-export {
+	@apply bg-[#f77f35] text-[#fff];
+}
+
+.hover-opacity {
+	&:hover {
+		opacity: 0.9;
+	}
+	&:active {
+		opacity: 1;
+	}
+}
+
+.hover-scale-out {
+	transition: transform 0.05s ease-in-out;
+	&:hover {
+		transform: scale(1.03);
+	}
+	&:active {
+		transform: scale(1);
+	}
+}
+
+.hover-scale-in {
+	transition: transform 0.05s ease-in-out;
+	&:hover {
+		transform: scale(0.97);
+	}
+	&:active {
+		transform: scale(1);
+	}
+}
+
+// Cấm chỉnh sửa dưới mọi hình thức

@@ -1,3 +1,5 @@
+// Cấm chỉnh sửa dưới mọi hình thức
+
 import React, { FC, useState } from 'react'
 import styles from './styles.module.scss'
 import { Modal } from 'antd'
@@ -66,6 +68,7 @@ type TProps = {
 	onSubmit: Function
 }
 
+// Cấm chỉnh sửa dưới mọi hình thức
 const DateFilter: FC<TProps> = (props) => {
 	const { onSubmit, useISOString, showYesterday = true, showToday = true, showPast7Days = true, showSelected = true } = props
 
@@ -149,6 +152,7 @@ const DateFilter: FC<TProps> = (props) => {
 				break
 
 			case 'range':
+				setCurTab(4)
 				setVisible(false)
 				handleSubmit({
 					start: getMidnightDate(dateRange[0]?.startDate),
@@ -166,6 +170,7 @@ const DateFilter: FC<TProps> = (props) => {
 		}
 	}
 
+	// Cấm chỉnh sửa dưới mọi hình thức
 	return (
 		<>
 			<div>
@@ -192,13 +197,7 @@ const DateFilter: FC<TProps> = (props) => {
 						</div>
 					)}
 
-					<div
-						onClick={() => {
-							setCurTab(4)
-							setVisible(true)
-						}}
-						className={`item ${curTab == 4 ? 'active' : ''}`}
-					>
+					<div onClick={() => setVisible(true)} className={`item ${curTab == 4 ? 'active' : ''}`}>
 						<div>Tuỳ chỉnh</div>
 					</div>
 				</div>
@@ -243,3 +242,5 @@ const DateFilter: FC<TProps> = (props) => {
 }
 
 export default DateFilter
+
+// Cấm chỉnh sửa dưới mọi hình thức

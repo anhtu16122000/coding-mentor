@@ -1,3 +1,5 @@
+// Cấm chỉnh sửa dưới mọi hình thức
+
 .container {
 	@apply flex text-[12px] items-center rounded-[8px] p-[4px] bg-[#edf1f8] h-[36px];
 
@@ -25,3 +27,5 @@
 .btn-create {
 	@apply bg-[#4caf50] text-[#fff];
 }
+
+// Cấm chỉnh sửa dưới mọi hình thức
