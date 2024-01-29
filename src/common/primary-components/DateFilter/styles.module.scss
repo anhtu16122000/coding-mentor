@@ -1,0 +1,27 @@
+.container {
+	@apply flex text-[12px] items-center rounded-[8px] p-[4px] bg-[#edf1f8] h-[36px];
+
+	:global {
+		.item {
+			@apply px-[8px] rounded-[6px] h-full flex items-center justify-center cursor-pointer;
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			-o-user-select: none;
+			text-decoration: none;
+
+			div {
+				@apply font-[600];
+			}
+
+			&.active {
+				@apply bg-[#1b73e8] text-[#fff];
+			}
+		}
+	}
+}
+
+.btn-create {
+	@apply bg-[#4caf50] text-[#fff];
+}
