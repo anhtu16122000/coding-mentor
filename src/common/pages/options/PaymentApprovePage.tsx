@@ -15,6 +15,7 @@ import PrimaryTable from '~/common/components/Primary/Table'
 import { ButtonRefund } from '~/common/components/TableButton'
 import TabComp from '~/common/custom/TabComp'
 import { TabCompData } from '~/common/custom/TabComp/type'
+import TagByChao from '~/common/primary-components/Tag'
 import { ShowNostis, ShowNoti } from '~/common/utils'
 import { parseToMoney } from '~/common/utils/common'
 import { _format } from '~/common/utils/format'
@@ -123,17 +124,17 @@ const PaymentVerification = () => {
 			render: (text, item) => <div className="font-semibold text-[#1b73e8]">{text}</div>
 		},
 		{
-			title: 'Thêm lúc',
-			dataIndex: 'CreatedOn',
-			render: (date) => moment(date).format('DD/MM/YYYY HH:mm')
-		},
-		{
 			title: 'Số tiền',
 			dataIndex: 'Money',
 			width: 150,
 			render: (money) => {
-				return <p>{_format.numberToPrice(money)}</p>
+				return <div className="font-[600]">{_format.numberToPrice(money)}</div>
 			}
+		},
+		{
+			title: 'Thời gian',
+			dataIndex: 'CreatedOn',
+			render: (date) => moment(date).format('HH:mm DD/MM/YYYY')
 		},
 		{
 			title: 'Ghi chú ',
@@ -145,11 +146,11 @@ const PaymentVerification = () => {
 			render: (data) => {
 				switch (data?.Status) {
 					case 1:
-						return <p className="font-semibold text-tw-yellow">{data.StatusName}</p>
+						return <TagByChao background="yellow">{data.StatusName}</TagByChao>
 					case 2:
-						return <p className="font-semibold text-tw-green">{data.StatusName}</p>
+						return <TagByChao background="green">{data.StatusName}</TagByChao>
 					default:
-						return <p className="font-semibold text-tw-red">{data.StatusName}</p>
+						return <TagByChao background="red">{data.StatusName}</TagByChao>
 				}
 			}
 		},

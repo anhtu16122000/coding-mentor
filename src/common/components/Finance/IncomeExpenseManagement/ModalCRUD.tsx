@@ -188,7 +188,7 @@ export default function IncomeExpenseManagementModalCRUD(props: IIncomeExpenseMa
 								type="submit"
 								children={<span>{mode == 'add' ? 'Thêm' : mode == 'edit' ? 'Lưu' : 'Xác nhận'}</span>}
 								icon={mode == 'add' ? 'add' : mode == 'edit' ? 'save' : 'remove'}
-								loading={isLoading}
+								loading={isLoading?.status}
 							/>
 						</div>
 					</div>

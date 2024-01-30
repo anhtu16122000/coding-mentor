@@ -13,7 +13,7 @@ import { SiMicrosoftexcel } from 'react-icons/si'
 import { TbDownload, TbShoppingCartPlus, TbUpload } from 'react-icons/tb'
 
 const PrimaryButton: FC<IPrimaryButton> = (props) => {
-	const { background, children, icon, type, onClick, className, disable, loading, iconClassName } = props
+	const { background, children, icon, type, onClick, className, disable, loading, iconClassName, mobileIconOnly } = props
 
 	function getBG() {
 		if (!!disable || !!loading) {
@@ -83,7 +83,7 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 		}
 	}
 
-	const iconClass = iconClassName ? iconClassName : !!children ? 'mr-2' : ''
+	const iconClass = iconClassName || ''
 
 	function getIcon() {
 		if (icon == 'sort') {
@@ -193,11 +193,11 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 				}
 				!disable && _onClick()
 			}}
-			className={`font-medium none-selection rounded-lg h-[36px] px-[10px] inline-flex items-center justify-center !flex-shrink-0 ${getBG()} ${getColor()} ${className}`}
+			className={`font-medium none-selection gap-[8px] rounded-lg h-[36px] px-[10px] inline-flex items-center justify-center !flex-shrink-0 ${getBG()} ${getColor()} ${className}`}
 		>
-			{!!loading && <Spin className="loading-base mr-3 !ml-0 !mt-[1px]" />}
+			{!!loading && <Spin className="loading-base !ml-0 !mt-[1px]" />}
 			{!!icon && !loading && getIcon()}
-			{children}
+			{mobileIconOnly ? <div className="hidden w600:inline">{children}</div> : children}
 		</button>
 	)
 }

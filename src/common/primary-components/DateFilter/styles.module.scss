@@ -1,11 +1,11 @@
 // Cấm chỉnh sửa dưới mọi hình thức
 
 .container {
-	@apply flex text-[12px] items-center rounded-[8px] p-[4px] bg-[#edf1f8] h-[36px];
+	@apply flex text-[11px] w600:text-[12px] items-center rounded-[8px] p-[4px] bg-[#edf1f8] h-[36px];
 
 	:global {
 		.item {
-			@apply px-[8px] rounded-[6px] h-full flex items-center justify-center cursor-pointer;
+			@apply px-[6px] w600:px-[8px] rounded-[6px] h-full flex items-center justify-center cursor-pointer;
 			-moz-user-select: none;
 			-webkit-user-select: none;
 			-ms-user-select: none;

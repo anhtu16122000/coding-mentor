@@ -69,8 +69,8 @@ export const AccountantChildMenu = [
 			},
 			{
 				TypeItem: 'single',
-				Key: '/finance/income-expense-management',
-				Route: '/finance/income-expense-management',
+				Key: '/finance/cash-flow',
+				Route: '/finance/cash-flow',
 				Icon: '',
 				Text: 'Quản lý thu chi'
 			},

@@ -1,56 +1,43 @@
-import { DatePicker, Form, Popover, Select } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
-import { ShowNostis, ShowNoti } from '~/common/utils'
-import { formNoneRequired } from '~/common/libs/others/form'
-import { Filter } from 'react-feather'
+import { ShowNostis } from '~/common/utils'
+import { Select } from 'antd'
+import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import { branchApi } from '~/api/manage/branch'
-import { useDispatch } from 'react-redux'
-import { setFilterBranchs } from '~/store/filterReducer'
-import FooterFilters from '~/common/components/Footer/Filters'
-import { PrimaryTooltip } from '~/common/components'
 import { userInformationApi } from '~/api/user/user'
-import moment from 'moment'
 
-const { RangePicker } = DatePicker
+type TProps = {
+	filters: any
+	statusSelected?: any
+	billStatus: Array<any>
 
-const dateFormat = 'YYYY/MM/DD'
+	setFilter: Function
+	handleSelecStatus: Function
+}
 
-const Filters: FC<{ filters: any; onSubmit: Function; onReset: Function }> = (props) => {
-	const { filters, onSubmit, onReset } = props
+const PaymentFilter: FC<TProps> = (props) => {
+	const { filters, setFilter, statusSelected, handleSelecStatus, billStatus } = props
 
-	const [form] = Form.useForm()
+	const user = useSelector((state: RootState) => state.user.information)
+	const router = useRouter()
 
-	const dispatch = useDispatch()
-
-	const [visible, setVisible] = useState(false)
-	const branches = useSelector((state: RootState) => state.filter.Branchs)
-	const [listFilter, setListFilter] = useState([
-		{
-			name: 'date-range',
-			title: 'Từ - đến',
-			col: 'grid-cols-1',
-			type: 'date-range'
-		}
-	])
-
+	// --
+	const [branches, setBranches] = useState([])
 	const [students, setStudents] = useState([])
 
 	useEffect(() => {
-		if (visible) {
-			getBranchs()
-			getStudents()
-		}
-	}, [visible])
+		getBranchs()
+		getStudents()
+	}, [])
 
 	const getBranchs = async () => {
 		try {
 			const response = await branchApi.getAll({ pageIndex: 1, pageSize: 99999 })
 			if (response.status == 200) {
-				dispatch(setFilterBranchs(response.data.data))
+				setBranches(response.data.data)
 			} else {
-				dispatch(setFilterBranchs([]))
+				setBranches([])
 			}
 		} catch (error) {
 			ShowNostis.error(error?.message)
@@ -70,149 +57,93 @@ const Filters: FC<{ filters: any; onSubmit: Function; onReset: Function }> = (pr
 		}
 	}
 
-	function toggle() {
-		setVisible(!visible)
-	}
-
-	function convertToString(arr) {
-		if (!arr) return ''
-		return arr.join(',')
-	}
-
-	function onFinish(params) {
-		const DATA_SUBMIT = {
-			...filters,
-			...params,
-			sort: 1,
-			tags: convertToString(checkedKeys),
-			fromDate: params?.['date-range'] ? new Date(params?.['date-range'][0]).toISOString() : null,
-			toDate: params?.['date-range'] ? new Date(params?.['date-range'][1]).toISOString() : null
-		}
-
-		!!onSubmit && onSubmit(DATA_SUBMIT)
-
-		toggle()
-	}
-
-	function submitForm() {
-		form.submit()
-	}
-
-	function resetForm() {
-		form.resetFields()
-		if (!!onReset) onReset()
-		setCheckedKeys([])
-		toggle()
-	}
-
-	const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([])
-
-	const getValueFilter = (value, typeFilter, nameFilter) => {
-		switch (typeFilter) {
-			case 'date-range':
-				if (value.length > 1) {
-					let fromDate = moment(value[0].toDate()).format('YYYY/MM/DD')
-					let toDate = moment(value[1].toDate()).format('YYYY/MM/DD')
-					let valueFromDate = {
-						name: 'fromDate',
-						value: fromDate
-					}
-					let valueToDate = {
-						name: 'toDate',
-						value: toDate
-					}
-					// @ts-ignore
-					listFilter.push(valueFromDate, valueToDate)
-					setListFilter([...listFilter])
-				} else {
-					ShowNoti('error', 'Chưa chọn đầy đủ ngày')
-				}
-				break
-		}
-	}
-
-	const content = (
-		<div className="w-[300px] p-[8px]">
-			<Form
-				form={form}
-				className="grid grid-cols-2 gap-x-4"
-				layout="vertical"
-				initialValues={{ remember: true }}
-				onFinish={onFinish}
-				autoComplete="on"
-			>
-				<Form.Item className="col-span-2" name="branchIds" label="Trung tâm" rules={formNoneRequired}>
-					<Select placeholder="Chọn trung tâm" allowClear>
-						{branches.map((item) => {
-							return (
-								<Select.Option key={item.Id} value={item.Id}>
-									{item?.Name}
-								</Select.Option>
-							)
-						})}
-					</Select>
-				</Form.Item>
-
-				<Form.Item className="col-span-2" name="studentIds" label="Học viên" rules={formNoneRequired}>
-					<Select placeholder="Chọn học viên" allowClear>
-						{students.map((item) => {
-							return (
-								<Select.Option key={item.UserInformationId} value={item.UserInformationId}>
-									[{item?.UserCode}] - {item?.FullName}
-								</Select.Option>
-							)
-						})}
-					</Select>
-				</Form.Item>
-
-				<Form.Item className="col-span-2" name="status" label="Trạng thái" rules={formNoneRequired}>
-					<Select placeholder="Chọn trạng thái" allowClear>
-						<Select.Option key="1" value={1}>
-							Chưa thanh toán hết
-						</Select.Option>
-
-						<Select.Option key="2" value={2}>
-							Đã thanh toán hết
-						</Select.Option>
-					</Select>
-				</Form.Item>
-
-				<Form.Item className="col-span-2" name={'date-range'} label="Ngày">
-					<RangePicker
-						placeholder={['Bắt đầu', 'Kết thúc']}
-						className="primary-input"
-						format={dateFormat}
-						onChange={(value) => getValueFilter(value, 'date-range', 'date-range')}
-					/>
-				</Form.Item>
-			</Form>
-
-			<FooterFilters onSubmit={submitForm} onReset={resetForm} />
-		</div>
-	)
-
 	return (
-		<>
-			<Popover
-				placement="bottomLeft"
-				content={content}
-				trigger="click"
-				open={visible}
-				onOpenChange={toggle}
-				showArrow={true}
-				overlayClassName="show-arrow"
-			>
-				<PrimaryTooltip id={`filters-api`} place="right" content="Bộ lọc">
-					<div
-						onClick={toggle}
-						className="w-[36px] h-[36px] cursor-pointer bg-[#edf1f8] all-center rounded-[6px] hover:bg-[#dee2ea] active:bg-[#edf1f8]"
-					>
-						<Filter size={16} />
-					</div>
-				</PrimaryTooltip>
-			</Popover>
-		</>
+		<div className="grid grid-cols-2 w900:grid-cols-4 gap-[12px] w400:gap-[16px] w-full">
+			<div className="col-span-2 w600:col-span-1 flex flex-col">
+				<div className="mb-[4px] mt-[-3px] font-[600]">Loại thanh toán</div>
+				<Select
+					className="primay-input w-full !h-[36px]"
+					placeholder="Loại thanh toán"
+					value={statusSelected}
+					optionLabelProp="children"
+					onChange={(e) => handleSelecStatus(e)}
+				>
+					{billStatus.map((item, index) => {
+						return (
+							<Select.Option key={item?.id} value={item?.id}>
+								{item?.title}
+							</Select.Option>
+						)
+					})}
+				</Select>
+			</div>
+
+			<div className="col-span-2 w600:col-span-1 flex flex-col">
+				<div className="mb-[4px] mt-[-3px] font-[600]">Học viên</div>
+				<Select
+					value={filters.studentIds}
+					showSearch
+					placeholder="Chọn học viên"
+					className="primay-input !h-[36px] w-full"
+					optionFilterProp="children"
+					onChange={(e) => setFilter({ ...filters, studentIds: e })}
+				>
+					<Select.Option key={null} value={null}>
+						Tất cả
+					</Select.Option>
+					{students.map((item) => {
+						return (
+							<Select.Option key={item.UserInformationId} value={item.UserInformationId}>
+								[{item?.UserCode}] - {item?.FullName}
+							</Select.Option>
+						)
+					})}
+				</Select>
+			</div>
+
+			<div className="col-span-1 flex flex-col">
+				<div className="mb-[4px] mt-[-3px] font-[600]">Trung tâm</div>
+				<Select
+					value={filters.branchIds}
+					placeholder="Trung tâm"
+					className="primay-input !h-[36px] w-full"
+					optionLabelProp="children"
+					onChange={(e) => setFilter({ ...filters, branchIds: e })}
+				>
+					<Select.Option key={null} value={null}>
+						Tất cả
+					</Select.Option>
+					{branches.map((item) => {
+						return (
+							<Select.Option key={item.Id} value={item.Id}>
+								{item?.Name}
+							</Select.Option>
+						)
+					})}
+				</Select>
+			</div>
+
+			<div className="col-span-1 flex flex-col">
+				<div className="mb-[4px] mt-[-3px] font-[600]">Trạng thái</div>
+				<Select
+					value={filters.status}
+					placeholder="Chọn trạng thái"
+					className="primay-input !h-[36px] w-full"
+					onChange={(e) => setFilter({ ...filters, status: e })}
+				>
+					<Select.Option key={null} value={null}>
+						Tất cả
+					</Select.Option>
+					<Select.Option key="1" value={1}>
+						Chưa thanh toán hết
+					</Select.Option>
+					<Select.Option key="2" value={2}>
+						Đã thanh toán hết
+					</Select.Option>
+				</Select>
+			</div>
+		</div>
 	)
 }
 
-export default Filters
+export default PaymentFilter

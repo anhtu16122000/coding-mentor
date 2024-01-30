@@ -18,6 +18,10 @@ import DeleteManagement from './DeleteManagement'
 import DateFilter from '~/common/primary-components/DateFilter'
 import { Select } from 'antd'
 import TagByChao from '~/common/primary-components/Tag'
+import { TiWarning } from 'react-icons/ti'
+import { IconBcRevenue, IconBcWallet } from '~/common/primary-components/Icon'
+import SuperFilter from '~/common/primary-components/SuperFilter'
+import CashFlowFilter from './Filter'
 
 export interface IIncomeExpenseManagementPageProps {}
 
@@ -36,7 +40,8 @@ const initialParamsStudent = {
 	FullName: '',
 	RoleIds: 3,
 	fromDate: null,
-	toDate: null
+	toDate: null,
+	Type: null
 }
 
 const initialFilter = [
@@ -196,8 +201,8 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 							color="blue"
 							onClick={() => {
 								router.push({
-									pathname: '/finance/income-expense-management/print-payment-session',
-									query: { paymentID: item.Id, Name: item.TypeName }
+									pathname: '/finance/cash-flow/print',
+									query: { payment: item.Id }
 								})
 							}}
 							placementTooltip="left"
@@ -318,42 +323,61 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 		}
 	}
 
-	const renderStatistical = () => {
-		return (
-			<div className="statistical-contain">
-				<div className="item total-revenue">
-					<div className="text">
-						<p className="name">Tổng thu</p>
-						<p className="number">{_format.numberToPrice(dataStatistical.income)}₫</p>
-					</div>
-					<div className="icon">
-						<GiReceiveMoney />
-					</div>
-				</div>
-				<div className="item total-income">
-					<div className="text">
-						<p className="name">Tổng chi</p>
-						<p className="number">{_format.numberToPrice(dataStatistical.expense)}₫</p>
-					</div>
-					<div className="icon">
-						<GiPayMoney />
-					</div>
-				</div>
-				<div className="item total-expense">
-					<div className="text">
-						<p className="name">Lợi nhuận</p>
-						<p className="number">{_format.numberToPrice(dataStatistical.revenue)}₫</p>
-					</div>
-					<div className="icon">
-						<GiTakeMyMoney />
-					</div>
-				</div>
-			</div>
-		)
-	}
+	const [filterVisible, setFilterVisible] = useState<boolean>(false)
 
 	return (
 		<>
+			<div className="grid grid-cols-1 w650:grid-cols-3 gap-[8px] mb-[8px]">
+				<div className="col-span-1 bg-[#fff] flex border-[1px] border-[#eaedf3] rounded-[8px] gap-[8px] p-[8px]">
+					<div className="w-[40px] h-[40px] w700:w-[50px] w700:h-[50px] rounded-[8px] flex items-center justify-center bg-[#E3F2FD]">
+						<div className="scale-75 w700:scale-100">
+							<IconBcWallet size={26} color="#1E88E5" />
+						</div>
+					</div>
+
+					<div className="flex-1">
+						<div className="font-[600] text-[12px] w700:text-[14px] text-[#000]">Tổng thu</div>
+						<div className="font-bold text-[16px] w700:text-[20px] text-[#1E88E5] mt-[-2px]">
+							{_format.numberToPrice(dataStatistical.income || 0)}₫
+						</div>
+					</div>
+				</div>
+
+				<div className="col-span-1 bg-[#fff] flex border-[1px] border-[#eaedf3] rounded-[8px] gap-[8px] p-[8px]">
+					<div className="w-[40px] h-[40px] w700:w-[50px] w700:h-[50px] rounded-[8px] flex items-center justify-center bg-[#E0F2F1]">
+						<div className="scale-75 w700:scale-100">
+							<IconBcRevenue color="#009688" size={32} />
+						</div>
+					</div>
+
+					<div className="flex-1">
+						<div className="font-[600] text-[12px] w700:text-[14px] text-[#000]">Lợi nhuận</div>
+						<div className="font-bold text-[16px] w700:text-[20px] text-[#009688] mt-[-2px]">
+							{_format.numberToPrice(dataStatistical.revenue || 0)}₫
+						</div>
+					</div>
+				</div>
+
+				<div className="col-span-1 bg-[#fff] flex border-[1px] border-[#eaedf3] rounded-[8px] gap-[8px] p-[8px]">
+					<div className="w-[40px] h-[40px] w700:w-[50px] w700:h-[50px] rounded-[8px] flex items-center justify-center bg-[#FBE9E7]">
+						<div className="scale-75 w700:scale-100">
+							<TiWarning color="#E53935" size={32} />
+						</div>
+					</div>
+
+					<div className="flex-1">
+						<div className="font-[600] text-[12px] w700:text-[14px] text-[#000]">Tổng chi</div>
+						<div className="font-bold text-[16px] w700:text-[20px] text-[#E53935] mt-[-2px]">
+							{_format.numberToPrice(dataStatistical.expense || 0)}₫
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<SuperFilter visible={filterVisible} style={{ marginBottom: 8 }}>
+				<CashFlowFilter key="filter-v3" filters={todoApi} setFilter={setTodoApi} />
+			</SuperFilter>
+
 			<PrimaryTable
 				columns={columns}
 				data={dataSource}
@@ -368,8 +392,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 								showYesterday={false}
 								onSubmit={(e) => setTodoApi({ ...todoApi, fromDate: e?.start, toDate: e?.end })}
 							/>
-
-							<FilterBaseVer2 handleFilter={handleFilter} dataFilter={filterList} handleReset={() => setTodoApi({ ...initialParams })} />
+							<SuperFilter isButton visible={filterVisible} onClickButton={() => setFilterVisible(!filterVisible)} />{' '}
 						</div>
 
 						<IncomeExpenseManagementModalCRUD
@@ -382,9 +405,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 						/>
 					</div>
 				}
-			>
-				{dataSource && renderStatistical()}
-			</PrimaryTable>
+			/>
 		</>
 	)
 }

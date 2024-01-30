@@ -202,7 +202,8 @@ const DateFilter: FC<TProps> = (props) => {
 
 					{showPast7Days && (
 						<div onClick={() => handleChange('thisWeek')} className={`item ${curTab == 3 ? 'active' : ''}`}>
-							<div>7 ngày qua</div>
+							<div className="block w400:hidden">7 ngày</div>
+							<div className="hidden w400:block">7 ngày qua</div>
 						</div>
 					)}
 

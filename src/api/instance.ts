@@ -1,7 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import appConfigs from '~/appConfig'
-import { ShowNostis } from '~/common/utils'
-import { wait } from '~/common/utils/super-functions'
 import { logOut } from '~/common/utils/token-handle'
 
 console.log(`%cSWIMMING API:`, 'color: #00BCD4; font-weight: bold', appConfigs.hostURL)
@@ -33,7 +31,7 @@ instance.interceptors.request.use(
 			config.startCall = new Date().getTime()
 		}
 
-		console.log(`%c ${config?.method.toUpperCase()} - ${getUrl(config)}:`, 'color: #0086b3; font-weight: bold', config)
+		// console.log(`%c ${config?.method.toUpperCase()} - ${getUrl(config)}:`, 'color: #0086b3; font-weight: bold', config)
 		return config
 	},
 	(error: any) => {

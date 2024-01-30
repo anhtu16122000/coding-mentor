@@ -21,8 +21,7 @@ export const findPathUrl = (
 		if (!menu) continue
 		const { children, key, label, text, type, childrenExtend } = menu
 		const currentLabel = typeof label === 'string' ? label : text
-		console.log('key', key)
-		console.log('pathname', pathname)
+
 		if (pathname === key) {
 			return [...prevResult, { key, type, label: currentLabel, children }]
 		}

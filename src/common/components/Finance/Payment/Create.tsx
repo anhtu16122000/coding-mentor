@@ -34,16 +34,9 @@ const PaymentForm: FC<IPaymentForm> = ({ isEdit, onRefresh, item }) => {
 		setVisible(!visible)
 	}
 
-	function openEdit() {
-		setVisible(!visible)
-	}
-
 	useEffect(() => {
 		if (visible) {
-			// getPaymentMethods()
-
 			getBranchs()
-
 			getAllStudent()
 		}
 	}, [visible])
@@ -139,8 +132,8 @@ const PaymentForm: FC<IPaymentForm> = ({ isEdit, onRefresh, item }) => {
 
 	return (
 		<>
-			<PrimaryButton onClick={toggle} background="green" icon="add" type="button">
-				Thêm mới
+			<PrimaryButton mobileIconOnly onClick={toggle} background="green" icon="add" type="button">
+				Thêm
 			</PrimaryButton>
 
 			<Modal

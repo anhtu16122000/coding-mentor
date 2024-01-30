@@ -4,7 +4,7 @@ import { MainLayout } from '~/common/index'
 import PayForm from '~/common/components/Finance/Payment/pay'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
-import { ShowNostis } from '~/common/utils'
+import { ShowNostis, _format } from '~/common/utils'
 import { decode, is, parseToMoney } from '~/common/utils/common'
 import BillDetails from '../../../common/components/Finance/BillDetails'
 import moment from 'moment'
@@ -21,6 +21,15 @@ import { useSelector } from 'react-redux'
 import { RootState } from '~/store'
 import PrimaryButton from '~/common/components/Primary/Button'
 import DeletePayment from '~/common/components/Finance/Payment/DeletePayment'
+import DateFilter from '~/common/primary-components/DateFilter'
+import SuperFilter from '~/common/primary-components/SuperFilter'
+import { branchApi } from '~/api/manage/branch'
+import { userInformationApi } from '~/api/user/user'
+import PaymentFilter from './Filters'
+import { GiPayMoney, GiReceiveMoney, GiTakeMyMoney } from 'react-icons/gi'
+import { TiWarning } from 'react-icons/ti'
+import { IconBcRevenue, IconBcWallet } from '~/common/primary-components/Icon'
+import TagByChao from '~/common/primary-components/Tag'
 
 const initParamters = {
 	pageSize: PAGE_SIZE,
@@ -29,7 +38,9 @@ const initParamters = {
 	search: '',
 	fromDate: null,
 	toDate: null,
-	type: 0
+	type: 0,
+	studentIds: null,
+	status: null
 }
 
 const typeAllowDeleteIds = [1, 4, 5]
@@ -38,7 +49,7 @@ const PaymentManagementPage = () => {
 	const [loading, setLoading] = React.useState(true)
 	const [totalPage, setTotalPage] = React.useState(1)
 	const [data, setData] = React.useState([])
-	const [sumPrice, setSumPrice] = React.useState({})
+	const [sumPrice, setSumPrice] = React.useState(null)
 	const [filters, setFilter] = React.useState(initParamters)
 	const [billStatus, setBillStatus] = useState<TabCompData[]>([])
 	const [statusSelected, setStatusSelected] = useState<number>(0)
@@ -129,7 +140,7 @@ const PaymentManagementPage = () => {
 					return (
 						<>
 							<div className="font-[600] mb-[4px]">Mã: {item?.Code}</div>
-							<span className="tag blue !ml-[-1px]">{item?.TypeName}</span>
+							<TagByChao background="blue">{item?.TypeName}</TagByChao>
 						</>
 					)
 				}
@@ -138,7 +149,7 @@ const PaymentManagementPage = () => {
 					return (
 						<>
 							<div className="font-[600] mb-[4px]">Mã: {item?.Code}</div>
-							<span className="tag green !ml-[-1px]">{item?.TypeName}</span>
+							<TagByChao background="green">{item?.TypeName}</TagByChao>
 						</>
 					)
 				}
@@ -147,7 +158,7 @@ const PaymentManagementPage = () => {
 					return (
 						<>
 							<div className="font-[600] mb-[4px]">Mã: {item?.Code}</div>
-							<span className="tag yellow !ml-[-1px]">{item?.TypeName}</span>
+							<TagByChao background="yellow">{item?.TypeName}</TagByChao>
 						</>
 					)
 				}
@@ -155,7 +166,7 @@ const PaymentManagementPage = () => {
 				return (
 					<>
 						<div className="font-[600] mb-[4px]">Mã: {item?.Code}</div>
-						<span className="tag gray !ml-[-1px]">{item?.TypeName}</span>
+						<TagByChao background="dark">{item?.TypeName}</TagByChao>
 					</>
 				)
 			}
@@ -245,6 +256,27 @@ const PaymentManagementPage = () => {
 		}
 	]
 
+	const theRealColumns =
+		is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic
+			? [
+					...columns,
+					{
+						title: '',
+						dataIndex: 'Type',
+						fixed: 'right',
+						width: 60,
+						render: (value, item) => (
+							<div className="flex item-center">
+								<PaymentDetail data={item} />
+								<PayForm isEdit defaultData={item} onRefresh={getData} />
+								{item?.Debt < 0 && <RefundForm onRefresh={getData} item={item} />}
+								{typeAllowDeleteIds.includes(Number(item?.Type)) && <DeletePayment defaultData={item} onRefresh={getData} />}
+							</div>
+						)
+					}
+			  ]
+			: columns
+
 	const handleSelecStatus = (status: number) => {
 		if (statusSelected !== status) {
 			setStatusSelected(status)
@@ -259,11 +291,106 @@ const PaymentManagementPage = () => {
 		scrollContainer.scrollLeft += evt.deltaY
 	})
 
+	// --
+	const [branches, setBranches] = useState([])
+	const [students, setStudents] = useState([])
+
+	const [filterVisible, setFilterVisible] = useState<boolean>(false)
+
+	useEffect(() => {
+		getBranchs()
+		getStudents()
+	}, [])
+
+	const getBranchs = async () => {
+		try {
+			const response = await branchApi.getAll({ pageIndex: 1, pageSize: 99999 })
+			if (response.status == 200) {
+				setBranches(response.data.data)
+			} else {
+				setBranches([])
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		}
+	}
+
+	const getStudents = async () => {
+		try {
+			const response = await userInformationApi.getByRole(3)
+			if (response.status == 200) {
+				setStudents(response.data.data)
+			} else {
+				setStudents([])
+			}
+		} catch (error) {
+			ShowNostis.error(error?.message)
+		}
+	}
+
 	return (
 		<>
 			<Head>
 				<title>{appConfigs.appName} | Quản lý thanh toán</title>
 			</Head>
+
+			<div className="grid grid-cols-1 w650:grid-cols-3 gap-[8px] mb-[8px]">
+				<div className="col-span-1 bg-[#fff] flex border-[1px] border-[#eaedf3] rounded-[8px] gap-[8px] p-[8px]">
+					<div className="w-[40px] h-[40px] w700:w-[50px] w700:h-[50px] rounded-[8px] flex items-center justify-center bg-[#E0F2F1]">
+						<div className="scale-75 w700:scale-100">
+							<IconBcRevenue color="#009688" size={32} />
+						</div>
+					</div>
+
+					<div className="flex-1">
+						<div className="font-[600] text-[12px] w700:text-[14px] text-[#000]">Tổng tiền</div>
+						<div className="font-bold text-[16px] w700:text-[20px] text-[#009688] mt-[-2px]">
+							{_format.numberToPrice(sumPrice?.sumtotalPrice || 0)}₫
+						</div>
+					</div>
+				</div>
+
+				<div className="col-span-1 bg-[#fff] flex border-[1px] border-[#eaedf3] rounded-[8px] gap-[8px] p-[8px]">
+					<div className="w-[40px] h-[40px] w700:w-[50px] w700:h-[50px] rounded-[8px] flex items-center justify-center bg-[#E3F2FD]">
+						<div className="scale-75 w700:scale-100">
+							<IconBcWallet size={26} color="#1E88E5" />
+						</div>
+					</div>
+
+					<div className="flex-1">
+						<div className="font-[600] text-[12px] w700:text-[14px] text-[#000]">Đã thanh toán</div>
+						<div className="font-bold text-[16px] w700:text-[20px] text-[#1E88E5] mt-[-2px]">
+							{_format.numberToPrice(sumPrice?.sumPaid || 0)}₫
+						</div>
+					</div>
+				</div>
+
+				<div className="col-span-1 bg-[#fff] flex border-[1px] border-[#eaedf3] rounded-[8px] gap-[8px] p-[8px]">
+					<div className="w-[40px] h-[40px] w700:w-[50px] w700:h-[50px] rounded-[8px] flex items-center justify-center bg-[#FBE9E7]">
+						<div className="scale-75 w700:scale-100">
+							<TiWarning color="#E53935" size={32} />
+						</div>
+					</div>
+
+					<div className="flex-1">
+						<div className="font-[600] text-[12px] w700:text-[14px] text-[#000]">Tổng nợ</div>
+						<div className="font-bold text-[16px] w700:text-[20px] text-[#E53935] mt-[-2px]">
+							{_format.numberToPrice(sumPrice?.sumDebt || 0)}₫
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<SuperFilter visible={filterVisible} style={{ marginBottom: 8 }}>
+				<PaymentFilter
+					key="filter-v3"
+					billStatus={billStatus}
+					statusSelected={statusSelected}
+					filters={filters}
+					setFilter={setFilter}
+					handleSelecStatus={handleSelecStatus}
+				/>
+			</SuperFilter>
 
 			<ExpandTable
 				currentPage={filters.pageIndex}
@@ -271,31 +398,10 @@ const PaymentManagementPage = () => {
 				getPagination={(page: number) => setFilter({ ...filters, pageIndex: page })}
 				loading={{ type: 'GET_ALL', status: loading }}
 				dataSource={data}
-				columns={
-					is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic
-						? [
-								...columns,
-								{
-									title: '',
-									dataIndex: 'Type',
-									fixed: 'right',
-									width: 60,
-									render: (value, item) => (
-										<div className="flex item-center">
-											<PaymentDetail data={item} />
-											<PayForm isEdit defaultData={item} onRefresh={getData} />
-											{item?.Debt < 0 && <RefundForm onRefresh={getData} item={item} />}
-											{typeAllowDeleteIds.includes(Number(item?.Type)) && <DeletePayment defaultData={item} onRefresh={getData} />}
-										</div>
-									)
-								}
-						  ]
-						: columns
-				}
-				sumPrice={is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic ? sumPrice : null}
+				columns={theRealColumns}
 				TitleCard={
-					<div className="w-full flex items-center justify-between">
-						<div className="flex items-center">
+					<div className="w-full flex items-start justify-between">
+						<div className="flex items-start gap-[8px]">
 							{!!router?.asPath.includes('bill=') && is(user).student && <>Thông tin thanh toán</>}
 
 							{!!router?.asPath.includes('bill=') &&
@@ -308,24 +414,16 @@ const PaymentManagementPage = () => {
 							{!router?.asPath.includes('bill=') && (
 								<>
 									{(is(user).admin || is(user).teacher || is(user).manager || is(user).accountant || is(user).academic) && (
-										<Filters filters={filters} onReset={() => setFilter(initParamters)} onSubmit={(e) => setFilter({ ...e })} />
-									)}
+										<>
+											<DateFilter
+												useISOString
+												showYesterday={false}
+												onSubmit={(e) => setFilter({ ...filters, fromDate: e?.start, toDate: e?.end })}
+											/>
 
-									<Select
-										placeholder="Loại thanh toán"
-										className="primay-input min-w-[210px] ml-[8px] !h-[36px]"
-										value={statusSelected}
-										optionLabelProp="children"
-										onChange={(e) => handleSelecStatus(e)}
-									>
-										{billStatus.map((item, index) => {
-											return (
-												<Select.Option key={item?.id} value={item?.id}>
-													{item?.title}
-												</Select.Option>
-											)
-										})}
-									</Select>
+											<SuperFilter isButton visible={filterVisible} onClickButton={() => setFilterVisible(!filterVisible)} />
+										</>
+									)}
 								</>
 							)}
 						</div>

@@ -346,7 +346,7 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_SALER, ROLE_ACCOUNTANT, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
-						key: '/finance/income-expense-management',
+						key: '/finance/cash-flow',
 						label: 'Thu chi',
 						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_ACCOUNTANT]
 					}),

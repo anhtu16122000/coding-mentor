@@ -1,7 +1,7 @@
 // Cấm chỉnh sửa dưới mọi hình thức
 
 .tag {
-	@apply font-[600] h-[28px] rounded-[6px] inline-flex items-center justify-center px-[8px];
+	@apply font-[500] h-[26px] rounded-[6px] inline-flex items-center justify-center px-[8px];
 }
 
 .blue-tag {
@@ -26,6 +26,10 @@
 
 .white-tag {
 	@apply tag bg-gradient-to-r from-[#fff] to-[#fff] text-[#000];
+}
+
+.dark-tag {
+	@apply tag bg-gradient-to-r from-[#c9c9c9] to-[#b0b0b0] text-[#000];
 }
 
 // Cấm chỉnh sửa dưới mọi hình thức

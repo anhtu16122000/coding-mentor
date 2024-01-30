@@ -6,10 +6,10 @@ import styles from './styles.module.scss'
 type TProps = {
 	key?: string | number
 	children?: React.ReactNode | string
-	background?: 'red' | 'green' | 'blue' | 'yellow' | 'black' | 'white'
+	background?: 'red' | 'green' | 'blue' | 'yellow' | 'black' | 'white' | 'dark'
 }
 
-function getBackground(color: 'red' | 'green' | 'blue' | 'yellow' | 'black' | 'white') {
+function getBackground(color: 'red' | 'green' | 'blue' | 'yellow' | 'black' | 'white' | 'dark') {
 	switch (color) {
 		case 'red':
 			return styles['red-tag']
@@ -28,6 +28,9 @@ function getBackground(color: 'red' | 'green' | 'blue' | 'yellow' | 'black' | 'w
 
 		case 'white':
 			return styles['white-tag']
+
+		case 'dark':
+			return styles['dark-tag']
 
 		default:
 			return styles['blue-tag']

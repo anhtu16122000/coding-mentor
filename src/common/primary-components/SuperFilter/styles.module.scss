@@ -1,0 +1,44 @@
+// Cấm chỉnh sửa dưới mọi hình thức
+
+.container {
+	@apply px-[12px] py-[12px] bg-[#fff] rounded-[8px] duration-300 relative;
+
+	:global {
+		.ant-select-single.ant-select-show-arrow .ant-select-selection-item,
+		.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
+			padding-right: 0px;
+		}
+
+		.ant-select-show-search.ant-select:not(.ant-select-customize-input) .ant-select-selector input {
+			@apply h-full;
+		}
+
+		.item {
+			@apply px-[8px] rounded-[6px] h-full flex items-center justify-center cursor-pointer;
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			-o-user-select: none;
+			text-decoration: none;
+
+			div {
+				@apply font-[600];
+			}
+
+			&.active {
+				@apply bg-[#1b73e8] text-[#fff];
+			}
+		}
+	}
+}
+
+.close {
+	@apply w-[20px] h-[20px] hover:scale-110 cursor-pointer text-[#de2842] flex items-center justify-center absolute top-[4px] right-[4px];
+}
+
+.btn-filter {
+	@apply w-[36px] h-[36px] cursor-pointer flex items-center justify-center rounded-[8px] bg-[#edf1f8] hover:bg-[#dee2ea] active:bg-[#edf1f8];
+}
+
+// Cấm chỉnh sửa dưới mọi hình thức

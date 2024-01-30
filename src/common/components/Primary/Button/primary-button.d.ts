@@ -36,5 +36,6 @@ type IPrimaryButton = {
 	className?: string
 	iconClassName?: string
 	disable?: boolean
-	loading?: booleans
+	loading?: boolean
+	mobileIconOnly?: boolean
 }
