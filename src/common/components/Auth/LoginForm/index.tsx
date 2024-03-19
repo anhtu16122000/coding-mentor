@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Input, Spin, Form, Modal, Divider } from 'antd'
-import { ImEnter } from 'react-icons/im'
-import { userApi } from '~/services/auth'
+import { Divider, Form, Input, Modal, Spin } from 'antd'
+import { useEffect, useState } from 'react'
 import Lottie from 'react-lottie-player'
+import { userApi } from '~/services/auth'
 
-import loadingJson from '~/common/components/json/121421-login.json'
 import { FiLogIn } from 'react-icons/fi'
 import appConfigs from '~/appConfig'
+import loadingJson from '~/common/components/json/121421-login.json'
 
 type ILoginForm = {
 	csrfToken?: string
@@ -87,10 +86,10 @@ function LoginForm(props: ILoginForm) {
 					Đăng nhập {props.loading && <Spin className="loading-white" />}
 				</button>
 
-				<button onClick={() => setVisible(true)} className="btn-login mt-4 !bg-[#ee8503]" type="button">
+				{/* <button onClick={() => setVisible(true)} className="btn-login mt-4 !bg-[#ee8503]" type="button">
 					<ImEnter className="mr-[8px]" />
 					Dùng thử
-				</button>
+				</button> */}
 
 				{!!props?.alloweRegisters && (
 					<div className="mt-4 register">

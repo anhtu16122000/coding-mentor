@@ -36,7 +36,7 @@ const PaymentPage = () => {
 		{
 			title: 'Họ tên',
 			dataIndex: 'FullName',
-			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+			render: (text) => <p className="font-semibold text-[#D21320]">{text}</p>
 		},
 		{
 			title: 'Ngày cấp',
@@ -46,7 +46,7 @@ const PaymentPage = () => {
 		{
 			title: 'Người cấp',
 			dataIndex: 'CreatedBy',
-			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+			render: (text) => <p className="font-semibold text-[#D21320]">{text}</p>
 		},
 		{
 			title: 'Chức năng',

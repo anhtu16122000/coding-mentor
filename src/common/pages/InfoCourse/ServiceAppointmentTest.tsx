@@ -430,7 +430,7 @@ export default function ServiceAppointmentTest(props) {
 				if (isAdmin() || isManager() || isTeacher() || isSaler() || isAcademic()) {
 					return <TestUpdateStatus rowData={data} setTodoApi={setTodoApi} listTodoApi={listTodoApi} />
 				}
-				
+
 				if (learningStatus == 1) {
 					return <p className="tag red">{data.LearningStatusName}</p>
 				}
@@ -498,7 +498,7 @@ export default function ServiceAppointmentTest(props) {
 							<PrimaryTooltip place="left" id={`hw-take-${data?.Id}`} content="Làm bài">
 								<div
 									onClick={() => getDraft(data?.IeltsExamId, data?.Id)}
-									className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+									className="w-[28px] text-[#D21320] h-[30px] all-center hover:opacity-70 cursor-pointer"
 								>
 									<TbWritingSign size={22} />
 								</div>
@@ -545,7 +545,7 @@ export default function ServiceAppointmentTest(props) {
 							<PrimaryTooltip place="left" id={`hw-take-${data?.Id}`} content="Làm bài">
 								<div
 									onClick={() => getDraft(data?.IeltsExamId, data?.Id)}
-									className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+									className="w-[28px] text-[#D21320] h-[30px] all-center hover:opacity-70 cursor-pointer"
 								>
 									<TbWritingSign size={22} />
 								</div>

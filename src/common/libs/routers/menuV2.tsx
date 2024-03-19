@@ -38,7 +38,8 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 					renderItemMenu({
 						key: '/elsa-speak',
 						label: 'Kiểm tra nói',
-						allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_ACADEMIC]
+						allow: []
+						// allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_ACADEMIC]
 					}),
 					renderItemMenu({
 						key: '/options/general-notification',
@@ -256,7 +257,8 @@ export const MANAGEMENT_MENU: MenuItems[] = [
 				label: 'Đề thi',
 				key: 'dethi',
 				icon: <img style={{ width: 'unset' }} src="/icons/menu/dethi.svg" />,
-				allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_ACADEMIC],
+				// allow: [ROLE_ADMIN, ROLE_TEACHER, ROLE_MANAGER, ROLE_ACADEMIC],
+				allow: [],
 				children: [
 					renderItemMenu({
 						key: '/package-exam',
@@ -542,7 +544,8 @@ export const NORMAL_MENU: MenuItems[] = [
 				label: 'Bộ đề',
 				key: '/package-exam',
 				icon: <img style={{ width: 'unset' }} src="/icons/menu/normal/bode.svg" />,
-				allow: [ROLE_STUDENT, ROLE_PARENT]
+				// allow: [ROLE_STUDENT, ROLE_PARENT],
+				allow: []
 			},
 			{
 				label: 'Khóa học video',

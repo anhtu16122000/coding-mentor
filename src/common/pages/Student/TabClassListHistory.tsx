@@ -60,7 +60,7 @@ export const TabClassListHistory: React.FC<ITabClassListHistory> = ({ StudentDet
 			return 'rgb(16, 204, 82)'
 		}
 
-		return '#1b73e8'
+		return '#D21320'
 	}
 
 	return (
@@ -71,8 +71,8 @@ export const TabClassListHistory: React.FC<ITabClassListHistory> = ({ StudentDet
 						<VerticalTimelineElement
 							key={index + 'ficax'}
 							className="vertical-timeline-element--work"
-							contentStyle={{ background: '#1b73e8', color: '#fff', borderRadius: 6 }}
-							contentArrowStyle={{ borderRight: `7px solid #1b73e8` }}
+							contentStyle={{ background: '#D21320', color: '#fff', borderRadius: 6 }}
+							contentArrowStyle={{ borderRight: `7px solid #D21320` }}
 							date={moment(item?.CreatedOn).format('HH:mm DD/MM/YYYY')}
 							iconStyle={{ background: getIconColor(item?.Content), color: '#fff' }}
 							icon={getIcon(item?.Content)}

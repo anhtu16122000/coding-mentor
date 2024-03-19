@@ -1,17 +1,14 @@
-import { Modal, Form, Input, Select } from 'antd'
-import React, { FC, useEffect, useState } from 'react'
+import { Form, Input, Modal, Select } from 'antd'
+import { FC, useEffect, useState } from 'react'
+import { FaEdit, FaPlus } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
+import { ieltsExamApi } from '~/api/IeltsExam'
+import { packageSkillApi } from '~/api/packed/packages-skill'
+import ModalFooter from '~/common/components/ModalFooter'
 import { formRequired } from '~/common/libs/others/form'
 import { ShowNoti } from '~/common/utils'
-import { useSelector } from 'react-redux'
-import { RootState } from '~/store'
-import ButtonAdd from '~/common/components/DirtyButton/Button-Add'
-import ModalFooter from '~/common/components/ModalFooter'
-import { FaCartPlus, FaEdit, FaPlus } from 'react-icons/fa'
 import { is } from '~/common/utils/common'
-import { packageSectionApi } from '~/api/packed/packages-section'
-import { packageSkillApi } from '~/api/packed/packages-skill'
-import { ieltsExamApi } from '~/api/IeltsExam'
-import { HiOutlinePlus } from 'react-icons/hi'
+import { RootState } from '~/store'
 
 const FormPackageSkill: FC<ICreateExam & { packageSectionId: any }> = (props) => {
 	const { onRefresh, isEdit, defaultData, onOpen, packageId, packageSectionId } = props
@@ -114,7 +111,7 @@ const FormPackageSkill: FC<ICreateExam & { packageSectionId: any }> = (props) =>
 
 			{(is(user).admin || is(user).manager) && !!isEdit && (
 				<div onClick={openEdit} className="pe-menu-item mt-[8px]">
-					<FaEdit size={16} color="#1b73e8" />
+					<FaEdit size={16} color="#D21320" />
 					<div className="ml-[8px]">Chỉnh sửa</div>
 				</div>
 			)}

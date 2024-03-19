@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { dashboardApi } from '~/api/manage/dashboard'
 import { Card, Col, Row } from 'antd'
+import { useEffect, useState } from 'react'
 import { RiArrowDownSLine } from 'react-icons/ri'
+import { dashboardApi } from '~/api/manage/dashboard'
 
 const onePercent = 4.21
 
@@ -30,8 +30,8 @@ function ItemFica({ params }) {
 			<Card bordered={false} className={`h-full`} style={{ backgroundColor: getColor() }}>
 				<Row gutter={8}>
 					<Col className="gutter-row" span={12}>
-						<h2 className="text-[#1b73e8] font-[700] text-[20px] in-2-line">{item.Name}</h2>
-						<h3 className={`text-[#1b73e8] font-medium text-lg leading-7 py-2 pb-1 ${getClass()}`}>
+						<h2 className="text-[#D21320] font-[700] text-[20px] in-2-line">{item.Name}</h2>
+						<h3 className={`text-[#D21320] font-medium text-lg leading-7 py-2 pb-1 ${getClass()}`}>
 							Hoàn thành: {item?.Completed} / {item?.Lesson}
 						</h3>
 					</Col>
@@ -49,7 +49,7 @@ function ItemFica({ params }) {
 								/>
 							</svg>
 							<div className="w-[80px] h-[80px] absolute top-0 right-[4px] inline-flex items-center justify-center">
-								<span className="text-[18px] text-[#1b73e8] font-[600] mt-[2px]">{parseInt(item?.Percent + '')}%</span>
+								<span className="text-[18px] text-[#D21320] font-[600] mt-[2px]">{parseInt(item?.Percent + '')}%</span>
 							</div>
 						</div>
 					</Col>

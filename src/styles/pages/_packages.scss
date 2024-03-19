@@ -1,6 +1,6 @@
 .pe-i-default {
 	@apply bg-[#fff] rounded-[8px] mb-[16px] border-[1px];
-	@apply border-[#d5d5d5] hover:border-[#1b73e8] ml-[8px] relative;
+	@apply border-[#d5d5d5] hover:border-[#D21320] ml-[8px] relative;
 	@apply h-full flex flex-col;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .pe-i-d-cart {
-	@apply flex-1 bg-[#1b73e8] cursor-pointer hover:bg-[#1666d1] active:bg-[#1b73e8];
+	@apply flex-1 bg-[#D21320] cursor-pointer hover:bg-[#1666d1] active:bg-[#D21320];
 	@apply text-[#fff] h-[30px] flex items-center justify-center rounded-[4px];
 }
 
@@ -107,6 +107,6 @@
 
 .pe-d-default {
 	@apply bg-[#fff] rounded-[8px] mb-[16px] border-[1px];
-	@apply border-[#d5d5d5] hover:border-[#1b73e8] ml-[8px] relative;
+	@apply border-[#d5d5d5] hover:border-[#D21320] ml-[8px] relative;
 	@apply h-full flex flex-col;
 }

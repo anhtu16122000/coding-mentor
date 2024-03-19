@@ -125,7 +125,7 @@ const RenderItem = (props) => {
 		{
 			title: 'Tên học viên',
 			dataIndex: 'StudentName',
-			render: (value, item, index) => <div className="font-[600] text-[#1b73e8] min-w-[100px] max-w-[250px]">{value}</div>
+			render: (value, item, index) => <div className="font-[600] text-[#D21320] min-w-[100px] max-w-[250px]">{value}</div>
 		},
 		{
 			title: 'Thời gian làm',
@@ -180,7 +180,7 @@ const RenderItem = (props) => {
 						<PrimaryTooltip place="left" id={`hw-res-${item?.Id}`} content="Xem kết quả">
 							<div
 								onClick={() => window.open(`/exam-result/?test=${item?.Id}`, '_blank')}
-								className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+								className="w-[28px] text-[#D21320] h-[30px] all-center hover:opacity-70 cursor-pointer"
 							>
 								<FiEye size={22} />
 							</div>
@@ -212,7 +212,7 @@ const RenderItem = (props) => {
 										<div className="font-[600] text-center">{detail?.Skill}</div>
 										<div
 											onClick={() => getDraft(detail?.ExamId, item?.Id)}
-											className="bg-[#1b73e8] mt-[8px] hover:opacity-80 cursor-pointer text-[#fff] py-[4px] rounded-[4px] flex items-center justify-center"
+											className="bg-[#D21320] mt-[8px] hover:opacity-80 cursor-pointer text-[#fff] py-[4px] rounded-[4px] flex items-center justify-center"
 										>
 											Làm bài
 										</div>
@@ -261,7 +261,7 @@ const RenderItem = (props) => {
 			<Modal
 				title={
 					<div>
-						Lịch sử làm bài: <div className="inline text-[#1b73e8]">{histories?.Name}</div>
+						Lịch sử làm bài: <div className="inline text-[#D21320]">{histories?.Name}</div>
 					</div>
 				}
 				width={1200}

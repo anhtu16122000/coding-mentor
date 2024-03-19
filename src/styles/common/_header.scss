@@ -101,7 +101,7 @@
 				@apply leading-[0] cursor-pointer w-[40px] h-[40px] flex justify-center items-center rounded-[7px] bg-tw-white transition-all duration-[0.3s];
 				i,
 				svg {
-					@apply text-tw-blue text-[20px] transition-all duration-[0.3s];
+					@apply text-tw-red text-[20px] transition-all duration-[0.3s];
 				}
 			}
 		}

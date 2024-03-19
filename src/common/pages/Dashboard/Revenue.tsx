@@ -86,7 +86,7 @@ const RevenueChart = () => {
 			return (
 				<div className="bg-[#fff] p-[16px] rounded-[4px] shadow-md border-[#dadada] border-[1px]">
 					<div className="text-[16px] font-[600]">Tháng {payload[0]?.payload?.name}</div>
-					<p className="text-[14px] font-[500] text-[#1b73e8]">Doanh thu hiện tại: {parseToMoney(payload[0]?.payload?.current)}</p>
+					<p className="text-[14px] font-[500] text-[#D21320]">Doanh thu hiện tại: {parseToMoney(payload[0]?.payload?.current)}</p>
 					{visible && (
 						<p className="text-[14px] font-[500] text-[#f51d92]">Doanh thu năm trước: {parseToMoney(payload[0]?.payload?.prev)}</p>
 					)}
@@ -129,7 +129,7 @@ const RevenueChart = () => {
 							{!visible ? (
 								<div
 									onClick={() => setVisible(!visible)}
-									className="bg-[#1b73e8] hover:bg-[#1566cf] active:bg-[#1b73e8] cursor-pointer h-[36px] w-[36px] flex items-center justify-center rounded-[6px] ml-[8px] text-[#fff]"
+									className="bg-[#D21320] hover:bg-[#1566cf] active:bg-[#D21320] cursor-pointer h-[36px] w-[36px] flex items-center justify-center rounded-[6px] ml-[8px] text-[#fff]"
 								>
 									<MdCompareArrows size={20} />
 								</div>
@@ -165,7 +165,7 @@ const RevenueChart = () => {
 
 						<Tooltip content={<CustomTooltip />} />
 
-						<Line type="monotone" dataKey="current" stroke="#1b73e8" strokeWidth={1.5}>
+						<Line type="monotone" dataKey="current" stroke="#D21320" strokeWidth={1.5}>
 							<LabelList content={<CustomizedLabel />} />
 						</Line>
 

@@ -108,11 +108,11 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 						<div className="text-[#000] font-[600] in-1-line">{text}</div>
 
 						<div className="mt-[4px]">
-							Người tạo: <div className="text-[#1b73e8] font-[500] inline">{item?.CreatedBy}</div>
+							Người tạo: <div className="text-[#D21320] font-[500] inline">{item?.CreatedBy}</div>
 						</div>
 
 						<div>
-							Thời gian: <div className="text-[#1b73e8] font-[500] inline">{moment(item.CreatedOn).format('HH:mm DD/MM/YYYY')}</div>
+							Thời gian: <div className="text-[#D21320] font-[500] inline">{moment(item.CreatedOn).format('HH:mm DD/MM/YYYY')}</div>
 						</div>
 					</>
 				)
@@ -127,7 +127,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 					<>
 						<p className="text-[#000] font-[600] in-1-line">{text}</p>
 						<div>
-							Mã HV: <div className="text-[#1b73e8] font-[500] inline">{item?.UserCode}</div>
+							Mã HV: <div className="text-[#D21320] font-[500] inline">{item?.UserCode}</div>
 						</div>
 					</>
 				)
@@ -147,7 +147,7 @@ export default function IncomeExpenseManagementPage(props: IIncomeExpenseManagem
 
 						<div>
 							Phương thức:{' '}
-							<div className={`${item?.PaymentMethodName ? 'text-[#1b73e8]' : 'text-[red]'} font-[500] inline`}>
+							<div className={`${item?.PaymentMethodName ? 'text-[#D21320]' : 'text-[red]'} font-[500] inline`}>
 								{item?.PaymentMethodName || 'Không rõ'}
 							</div>
 						</div>

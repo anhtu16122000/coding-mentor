@@ -1,17 +1,17 @@
-import React, { useRef, useState } from 'react'
 import { Modal, Popconfirm, Popover } from 'antd'
-import { ShowNoti, wait } from '~/common/utils'
-import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
+import { useRef, useState } from 'react'
 import { FaHeadphonesAlt, FaInfoCircle } from 'react-icons/fa'
-import ExamSkillInfo from './exam-skill.info'
-import { IoCloseSharp } from 'react-icons/io5'
-import PrimaryTooltip from '~/common/components/PrimaryTooltip'
-import CreateExamSkill from './exam-skill-form'
 import { FiMoreVertical } from 'react-icons/fi'
+import { IoCloseSharp } from 'react-icons/io5'
 import { TiArrowSortedDown } from 'react-icons/ti'
-import { userIs } from '~/common/utils/common'
 import { useSelector } from 'react-redux'
+import { ieltsSkillApi } from '~/api/IeltsExam/ieltsSkill'
+import PrimaryTooltip from '~/common/components/PrimaryTooltip'
+import { ShowNoti, wait } from '~/common/utils'
+import { userIs } from '~/common/utils/common'
 import { RootState } from '~/store'
+import CreateExamSkill from './exam-skill-form'
+import ExamSkillInfo from './exam-skill.info'
 
 function ExamSkillItem(props) {
 	const { data, index, allSkills, onRefresh, onUp, onDown, showSort, currentSkill, setCurrentSkill, onPlayAudio, hideController } = props
@@ -79,7 +79,7 @@ function ExamSkillItem(props) {
 	const user = useSelector((state: RootState) => state.user.information)
 
 	const noneActiveClass = 'text-[#000] bg-[#e9e9e9] hover:bg-[#dad9d9]'
-	const activeClass = 'text-[#fff] bg-[#1b73e8] hover:bg-[#1867cf]'
+	const activeClass = 'text-[#fff] bg-[#D21320] hover:bg-[#1867cf]'
 
 	const classApply = activated ? activeClass : noneActiveClass
 

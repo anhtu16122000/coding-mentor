@@ -1,17 +1,17 @@
 import { Divider, Popconfirm } from 'antd'
-import React, { useState } from 'react'
-import { ShowNoti } from '~/common/utils'
-import PrimaryButton from '../Primary/Button'
-import CreateExam from './exam-form'
-import { RiArrowLeftSLine } from 'react-icons/ri'
+import { useState } from 'react'
+import CountUp from 'react-countup'
 import { FaRegCalendarAlt, FaUserEdit, FaUserPlus } from 'react-icons/fa'
 import { MdDateRange, MdOutlineKeyboardArrowDown } from 'react-icons/md'
-import { parseDateTime } from '~/common/utils/main-function'
-import CountUp from 'react-countup'
-import { ieltsExamApi } from '~/api/IeltsExam'
+import { RiArrowLeftSLine } from 'react-icons/ri'
 import { useSelector } from 'react-redux'
-import { RootState } from '~/store'
+import { ieltsExamApi } from '~/api/IeltsExam'
+import { ShowNoti } from '~/common/utils'
 import { is } from '~/common/utils/common'
+import { parseDateTime } from '~/common/utils/main-function'
+import { RootState } from '~/store'
+import PrimaryButton from '../Primary/Button'
+import CreateExam from './exam-form'
 
 const ExamInfo = (params) => {
 	const { data, onRefresh, onClose } = params
@@ -71,7 +71,7 @@ const ExamInfo = (params) => {
 
 			<Divider className="ant-divider-16" />
 
-			<div className="text-[#1b73e8]">
+			<div className="text-[#D21320]">
 				<strong>Mô tả</strong>
 			</div>
 
@@ -79,7 +79,7 @@ const ExamInfo = (params) => {
 
 			<Divider className="ant-divider-16" />
 
-			<div onClick={() => setShowAll(!showALL)} className="flex items-center cursor-pointer  no-select hover:text-[#1b73e8]">
+			<div onClick={() => setShowAll(!showALL)} className="flex items-center cursor-pointer  no-select hover:text-[#D21320]">
 				<div>{showALL ? 'Ẩn bớt' : 'Hiện thêm'}</div>
 				<MdOutlineKeyboardArrowDown size={20} className={`ml-[4px] rotate-${showALL ? '180' : 0} duration-200`} />
 			</div>

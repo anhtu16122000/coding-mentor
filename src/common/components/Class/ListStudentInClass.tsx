@@ -98,7 +98,7 @@ export const ListStudentInClass = () => {
 							return (
 								<div className="min-w-[120px]">
 									<div className="flex items-center">
-										<div className="font-[600] text-[#1b73e8]">{item?.FullName}</div>
+										<div className="font-[600] text-[#D21320]">{item?.FullName}</div>
 									</div>
 									<div className="flex items-center">
 										<div className="font-[600] mr-[4px]">Mã:</div>
@@ -159,7 +159,7 @@ export const ListStudentInClass = () => {
 										<Tooltip placement="left" title="Cấp chứng chỉ">
 											<div
 												onClick={() => createCertificate(item?.StudentId)}
-												className="flex all-center !text-[#1b73e8] cursor-pointer pt-[2px] pl-[12px]"
+												className="flex all-center !text-[#D21320] cursor-pointer pt-[2px] pl-[12px]"
 											>
 												<GrCertificate size={18} />
 											</div>
@@ -182,7 +182,7 @@ export const ListStudentInClass = () => {
 						title: 'Tên học viên',
 						width: 200,
 						dataIndex: 'FullName',
-						render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+						render: (text) => <p className="font-semibold text-[#D21320]">{text}</p>
 					},
 					{
 						title: 'Số điện thoại',

@@ -1,7 +1,7 @@
-import { Card, Form, Modal, Rate, Select, Spin, Timeline, Tooltip } from 'antd'
+import { Card, Form, Modal, Rate, Spin, Timeline } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FcClock } from 'react-icons/fc'
 import { useSelector } from 'react-redux'
 import { scheduleApi } from '~/api/learn/schedule'
@@ -134,7 +134,7 @@ export const RateTeacher = () => {
 									<div className="flex items-start justify-between">
 										<div>
 											<div className="mb-2">
-												<span className="font-semibold text-[#1b73e8]">{item?.TeacherName}</span> <span> - {item?.TeacherCode}</span>
+												<span className="font-semibold text-[#D21320]">{item?.TeacherName}</span> <span> - {item?.TeacherCode}</span>
 											</div>
 											<div>
 												<Rate

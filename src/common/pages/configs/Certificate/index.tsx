@@ -136,7 +136,7 @@ const CertificateItem = ({ Id, name, background, backside, content, deleteCertif
 
 	return (
 		<>
-			<div className="border-[1px] relative border-[#c7c7c7] hover:border-[#1b73e8] rounded-[8px]">
+			<div className="border-[1px] relative border-[#c7c7c7] hover:border-[#D21320] rounded-[8px]">
 				<img
 					className="rounded-[7px]"
 					onClick={() => router.push({ pathname: '/configs/certificates/detail', query: { slug: Id, key: nanoid() } })}
@@ -179,7 +179,7 @@ const CertificateItem = ({ Id, name, background, backside, content, deleteCertif
 										router.push({ pathname: '/configs/certificates/detail', query: { slug: Id } })
 									}}
 								>
-									<FiEdit size="18" color="#1b73e8" />
+									<FiEdit size="18" color="#D21320" />
 									<div className="ml-[8px]">Cập nhật</div>
 								</div>
 							</div>

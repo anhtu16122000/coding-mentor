@@ -1,6 +1,5 @@
 import { List } from 'antd'
 import moment from 'moment'
-import React from 'react'
 
 const ListNotificate = (props) => {
 	const { data, onClick } = props
@@ -17,7 +16,7 @@ const ListNotificate = (props) => {
 						<List.Item.Meta
 							title={
 								<div className="flex items-center justify-between">
-									<p className="font-bold text-tw-blue line-clamp-1">{item.Title}</p>
+									<p className="font-bold text-tw-red line-clamp-1">{item.Title}</p>
 									<p className="font-bold">{moment(item.CreatedOn).format('DD/MM/YYYY')}</p>
 								</div>
 							}

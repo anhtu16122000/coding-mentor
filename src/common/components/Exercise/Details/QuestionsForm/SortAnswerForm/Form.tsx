@@ -1,18 +1,16 @@
-import { Modal, Form, Input, Checkbox } from 'antd'
-import React, { FC, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import PrimaryButton from '~/common/components/Primary/Button'
-import { setCurrentExerciseForm } from '~/store/globalState'
+import { Form, Modal } from 'antd'
+import { FC, useEffect, useState } from 'react'
 import { FiEdit } from 'react-icons/fi'
-import { RootState } from '~/store'
-import { formRequired } from '~/common/libs/others/form'
 import { NumericFormat } from 'react-number-format'
+import { useDispatch, useSelector } from 'react-redux'
 import PrimaryEditor from '~/common/components/Editor'
+import PrimaryButton from '~/common/components/Primary/Button'
+import { formRequired } from '~/common/libs/others/form'
+import { RootState } from '~/store'
+import { setCurrentExerciseForm } from '~/store/globalState'
 import { removeChoiceAnswer } from '../utils'
 
-import ReactDOM from 'react-dom'
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { MdOutlineDragIndicator } from 'react-icons/md'
 
 // import { DragDropContainer, DropTarget } from 'react-drag-drop-container'
 
@@ -409,7 +407,7 @@ const SortAnswerForm: FC<IGroupForm> = (props) => {
 											<Draggable draggableId={item.uuid} index={index} key={item.id} direction="horizontal">
 												{(provided, snapshot) => (
 													<div className="" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-														<div className="flex w-full flex-shrink-0 cursor-move bg-[#1b73e8] px-[8px] py-[2px] rounded-[6px]">
+														<div className="flex w-full flex-shrink-0 cursor-move bg-[#D21320] px-[8px] py-[2px] rounded-[6px]">
 															<div className="font-[600] text-[16px] text-[#fff]">{item.title}</div>
 														</div>
 													</div>
@@ -430,7 +428,7 @@ const SortAnswerForm: FC<IGroupForm> = (props) => {
 															{...provided.dragHandleProps}
 														>
 															{console.log('-- xxx provided: ', provided)}
-															<div className="flex w-full cursor-move bg-[#1b73e8] px-[8px] py-[2px] rounded-[6px]">
+															<div className="flex w-full cursor-move bg-[#D21320] px-[8px] py-[2px] rounded-[6px]">
 																<div className="font-[600] text-[16px] text-[#fff]">{item.title}</div>
 															</div>
 														</div>

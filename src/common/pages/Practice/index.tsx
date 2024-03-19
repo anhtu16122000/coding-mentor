@@ -103,7 +103,7 @@ const Practice = () => {
 		{
 			title: 'Tên bài',
 			dataIndex: 'Name',
-			render: (value, item, index) => <div className="font-[600] text-[#1b73e8] min-w-[100px] max-w-[250px]">{value}</div>
+			render: (value, item, index) => <div className="font-[600] text-[#D21320] min-w-[100px] max-w-[250px]">{value}</div>
 		},
 		{
 			title: 'Tuổi',
@@ -152,7 +152,7 @@ const Practice = () => {
 						<PrimaryTooltip place="left" id={`hw-res-${item?.Id}`} content="Xem chi tiết">
 							<div
 								onClick={() => router.push(`/practice/detail/?practice=${item?.Id}`)}
-								className="w-[28px] ml-[8px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+								className="w-[28px] ml-[8px] text-[#D21320] h-[30px] all-center hover:opacity-70 cursor-pointer"
 							>
 								<FiEye size={20} />
 							</div>

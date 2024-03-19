@@ -186,7 +186,7 @@ export const SalaryPage = () => {
 			}),
 			title: 'Nhân viên',
 			dataIndex: 'FullName',
-			render: (text) => <p className="font-semibold text-[#1b73e8] min-w-[120px]">{text}</p>
+			render: (text) => <p className="font-semibold text-[#D21320] min-w-[120px]">{text}</p>
 		},
 		{
 			title: 'Năm',

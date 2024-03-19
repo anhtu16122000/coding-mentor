@@ -100,7 +100,7 @@ const ModalReserve = (props) => {
 										<div>{parseToMoney(item?.MoneyUsed)}</div>
 									</div>
 
-									<div className="flex font-[600] items-center text-[#1b73e8] text-[14px]">
+									<div className="flex font-[600] items-center text-[#D21320] text-[14px]">
 										<div className="mr-[4px]">Số tiền còn lại:</div>
 										<div>{parseToMoney(item?.MoneyRemaining)}</div>
 									</div>

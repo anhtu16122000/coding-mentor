@@ -1,14 +1,14 @@
 import { Card, List, Popover } from 'antd'
 import Modal from 'antd/lib/modal/Modal'
 import moment from 'moment'
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import ReactHtmlParser from 'react-html-parser'
 import { VscBell } from 'react-icons/vsc'
 import { useDispatch, useSelector } from 'react-redux'
 import { notificationApi } from '~/api/manage/notification'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import { getAll } from '~/store/notificateReducer'
-import ReactHtmlParser from 'react-html-parser'
 
 const Notification = () => {
 	const notification = useSelector((state: RootState) => state.notificate.dataNotificate)
@@ -90,7 +90,7 @@ const Notification = () => {
 			<Card
 				title="Thông báo"
 				extra={
-					<div onClick={() => handleSeenNotification(notification)} className="select-none cursor-pointer hover:text-tw-blue font-bold">
+					<div onClick={() => handleSeenNotification(notification)} className="select-none cursor-pointer hover:text-tw-red font-bold">
 						<p>Xem tất cả</p>
 					</div>
 				}
@@ -105,7 +105,7 @@ const Notification = () => {
 								className="bg-[#f3f3f3] hover:bg-[#e8e8e8] rounded-xl mb-tw-2 last:m-tw-0 px-tw-3 py-tw-2.5 cursor-pointer"
 							>
 								<div className="flex justify-between items-center">
-									<p className={`${item.IsSeen ? '' : 'font-bold'} text-tw-blue line-clamp-1`}>{item.Title}</p>
+									<p className={`${item.IsSeen ? '' : 'font-bold'} text-tw-red line-clamp-1`}>{item.Title}</p>
 									<p className={`${item.IsSeen ? '' : 'font-bold'}`}>{moment(item.CreatedOn).format('DD/MM/YYYY')}</p>
 								</div>
 								<div>
@@ -148,7 +148,7 @@ const Notification = () => {
 									<List.Item.Meta />
 									<div onClick={() => {}} className=" w-full bg-tw-gray rounded-xl mb-tw-2 last:m-tw-0 px-tw-3 py-tw-2.5">
 										<div className="flex justify-between items-center">
-											<p className="font-bold text-tw-blue">{item.Title}</p>
+											<p className="font-bold text-tw-red">{item.Title}</p>
 											<p>{moment(item.CreatedOn).format('DD/MM/YYYY')}</p>
 										</div>
 										<div>
@@ -161,7 +161,7 @@ const Notification = () => {
 					) : (
 						<div className=" w-full bg-tw-gray rounded-xl mb-tw-2 last:m-tw-0 px-tw-3 py-tw-2.5">
 							<div className="flex justify-between items-center">
-								<p className="font-bold text-tw-blue">{contentToShow[0]?.Title}</p>
+								<p className="font-bold text-tw-red">{contentToShow[0]?.Title}</p>
 								<p>{moment(contentToShow[0]?.CreatedOn).format('DD/MM/YYYY')}</p>
 							</div>
 							<div>

@@ -1,17 +1,12 @@
-import { Checkbox, Form, Input, Spin, Tooltip } from 'antd'
-import { useState } from 'react'
-import { registerApi } from '~/api/user/user'
-import { parseJwt, ShowNoti } from '~/common/utils'
-import Router, { useRouter } from 'next/router'
-import { userApi } from '~/services/auth'
-import { useDispatch } from 'react-redux'
-import { setUser } from '~/store/userReducer'
-import { setAuthData, setAuthLoading } from '~/store/authReducer'
-import InputTextField from '~/common/components/FormControl/InputTextField'
+import { Form, Input, Spin } from 'antd'
 import Link from 'next/link'
-import { ROOTS_VERIFY } from '~/Router/path'
-import { LockOutlined, MailOutlined, PhoneOutlined, SendOutlined, SmileOutlined, UserOutlined } from '@ant-design/icons'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 import Lottie from 'react-lottie-player'
+import { useDispatch } from 'react-redux'
+import { ROOTS_VERIFY } from '~/Router/path'
+import { registerApi } from '~/api/user/user'
+import { ShowNoti } from '~/common/utils'
 import maill from '../../../../../public/jsons/animation_lmokumbq.json'
 
 function RegisterForm(props) {
@@ -140,7 +135,7 @@ function RegisterForm(props) {
 					<div className="wrap-password mt-3 w-full flex items-center justify-center">
 						Bạn đã có tài khoản?
 						<Link href="/signin">
-							<span className="font-semibold text-tw-blue pl-1 cursor-pointer">ĐĂNG NHẬP</span>
+							<span className="font-semibold text-tw-red pl-1 cursor-pointer">ĐĂNG NHẬP</span>
 						</Link>
 					</div>
 				</div>

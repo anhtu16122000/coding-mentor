@@ -1,7 +1,7 @@
 import { Popconfirm, Skeleton } from 'antd'
 import TextArea from 'antd/lib/input/TextArea'
 import moment from 'moment'
-import React, { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { AnswerQuestionInVideoCourseApi } from '~/api/course/video-course/answer-question-in-video-course'
 import { QuestionInVideoCourseApi } from '~/api/course/video-course/question-in-video-course'
@@ -131,7 +131,7 @@ export default function QuestionInCourseItem(props: IQuestionInCourseItemProps) 
 
 			<div className="flex justify-start items-center mb-2">
 				<button
-					className="text-tw-blue font-semibold cursor-pointer opacity-70 hover:opacity-100 mr-2"
+					className="text-tw-red font-semibold cursor-pointer opacity-70 hover:opacity-100 mr-2"
 					onClick={() => setIsAddAnswer(!isAddAnswer)}
 				>
 					Trả lời

@@ -1,6 +1,6 @@
-import { Button, Card, Input, Space } from 'antd'
+import { Card, Input, Space } from 'antd'
 import moment from 'moment'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { studentRollUpQrCodeApi } from '~/api/learn/studentRollUpQrCode'
 import { ShowNoti } from '~/common/utils'
 import PrimaryButton from '../Primary/Button'
@@ -44,7 +44,7 @@ export const RollUpQRStudentPage = () => {
 			title: 'Học viên',
 			width: 180,
 			dataIndex: 'FullName',
-			render: (text) => <p className="text-semibold text-[#1b73e8]">{text}</p>
+			render: (text) => <p className="text-semibold text-[#D21320]">{text}</p>
 		},
 		{
 			title: 'Mã',

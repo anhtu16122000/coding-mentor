@@ -121,7 +121,7 @@ const EntryHistories = (props) => {
 					return (
 						<div
 							key={`res-${index}-${result?.Id}`}
-							className="flex border-[1px] p-[8px] rounded-[6px] border-[#f1f1f1] hover:border-[#1b73e8] flex-col items-start col-span-1"
+							className="flex border-[1px] p-[8px] rounded-[6px] border-[#f1f1f1] hover:border-[#D21320] flex-col items-start col-span-1"
 						>
 							<div className="flex items-center">
 								<div>Học viên:</div>

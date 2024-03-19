@@ -80,7 +80,7 @@ const ModalCreateTrainingRouteForm = (props) => {
 					<PrimaryTooltip place="left" id={`hw-take-${defaultData?.Id}`} content="Cập nhật">
 						<div
 							onClick={openEdit}
-							className="h-[30px] px-[16px] all-center cursor-pointer shadow-sm duration-150 hover:opacity-80 rounded-full bg-[#fff] text-[#1b73e8] font-[600]"
+							className="h-[30px] px-[16px] all-center cursor-pointer shadow-sm duration-150 hover:opacity-80 rounded-full bg-[#fff] text-[#D21320] font-[600]"
 						>
 							<FaEdit size={16} className="w550:ml-[-2px]" />
 							<div className="hidden w550:block ml-[4px]">Cập nhật</div>

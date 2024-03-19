@@ -12,11 +12,11 @@ export const StylePaymentMethodsItems = styled.div`
 	width: 100px;
 `
 export const StylePaymentMethodsAvatar = styled.img<{ isChecked: boolean }>`
-	border: ${(props) => (props.isChecked ? '1px solid #1B73E8' : '')};
+	border: ${(props) => (props.isChecked ? '1px solid #D21320' : '')};
 	border-radius: 10px;
 	transition: all 0.2s ease;
 	transform: ${(props) => (props.isChecked ? 'translateY(-2)' : 'scale(1)')};
-	box-shadow: ${(props) => (props.isChecked ? '0 3px 10px 0 #1B73E8' : '')};
+	box-shadow: ${(props) => (props.isChecked ? '0 3px 10px 0 #D21320' : '')};
 	cursor: pointer;
 	height: 100px;
 `

@@ -1,4 +1,4 @@
-import { Spin, Tooltip } from 'antd'
+import { Spin } from 'antd'
 import { FC } from 'react'
 import { PlusCircle } from 'react-feather'
 import { AiFillPrinter, AiOutlineCheckCircle, AiOutlineEye, AiOutlineFileSearch } from 'react-icons/ai'
@@ -35,7 +35,7 @@ const PrimaryButton: FC<IPrimaryButton> = (props) => {
 				return 'bg-[#000] hover:bg-[#191919] focus:bg-[#313131]'
 			}
 			if (background == 'primary') {
-				return 'bg-[#1b73e8] hover:bg-[#1369da] focus:bg-[#1b73e8]'
+				return 'bg-[#D21320] hover:bg-[#e51b29] focus:bg-[#D21320]'
 			}
 			if (background == 'purple') {
 				return 'bg-[#8E24AA] hover:bg-[#7B1FA2] focus:bg-[#8E24AA]'

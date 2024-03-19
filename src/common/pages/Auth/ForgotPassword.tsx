@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { ShowNoti } from '~/common/utils'
-import { accountApi } from '~/api/user/user'
 import { Form, Input, Spin } from 'antd'
+import { useState } from 'react'
+import { accountApi } from '~/api/user/user'
+import { ShowNoti } from '~/common/utils'
 
 function ForgotPassword() {
 	const [form] = Form.useForm()
@@ -34,7 +34,7 @@ function ForgotPassword() {
 		<>
 			<div className="w-full scrollable login-forms">
 				<Form form={form} onFinish={_submit} className="w-100 login-form center-column ">
-					<img className="logo-register" src="/white-logo.png" alt="" />
+					<img className="logo-login" src="/images/logo-2.jpg" alt="" />
 
 					<h6 className="mt-5 mb-3 login-title">Lấy lại mật khẩu</h6>
 

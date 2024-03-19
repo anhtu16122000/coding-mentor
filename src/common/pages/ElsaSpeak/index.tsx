@@ -1,17 +1,13 @@
-import { Card, Form, Select } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { FaMicrophone, FaMicrophoneSlash } from 'react-icons/fa'
-import { useDispatch } from 'react-redux'
+import { Card, Form } from 'antd'
+import TextArea from 'antd/lib/input/TextArea'
+import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { parseSelectArray } from '~/common/utils/common'
-import { RootState } from '~/store'
+import { elsaSpeakApi } from '~/api/elseSpeak'
+import ColoredSentence from '~/common/components/ElsaSpeak/ColoredSentence '
 import PrimaryButton from '~/common/components/Primary/Button'
 import { ShowNoti } from '~/common/utils'
-import { elsaSpeakApi } from '~/api/elseSpeak'
-import TextArea from 'antd/lib/input/TextArea'
-import ColoredSentence from '~/common/components/ElsaSpeak/ColoredSentence '
-import dynamic from 'next/dynamic'
-import { Volume2 } from 'react-feather'
+import { RootState } from '~/store'
 import TextToSpeech from './TextToSpeech/TextToSpeech'
 
 const AudioRecoderApp: any = dynamic(() => import('./AudioRecoder/AudioRecoderApp'), {
@@ -43,7 +39,7 @@ const ElsaSpeak = () => {
 		function getRecordPermission() {
 			navigator.mediaDevices
 				.getUserMedia({ audio: true })
-				.then((stream) => { })
+				.then((stream) => {})
 				.catch(function (error) {
 					console.log('Không thể lấy được quyền ghi âm: ' + error)
 				})
@@ -157,9 +153,7 @@ const ElsaSpeak = () => {
 					<div className="col-2">
 						<div className="wrap-table">
 							<div className="flex justify-center flex-col items-center right-0">
-									<TextToSpeech
-										text={sentence}
-									/>
+								<TextToSpeech text={sentence} />
 							</div>
 						</div>
 					</div>
@@ -173,7 +167,7 @@ const ElsaSpeak = () => {
 					<div className="col-3">
 						<div className="wrap-table">
 							<div className="shadow-lg xl:p-6 p-4  sm:w-auto w-full bg-white sm:absolute relative z-20 sm:mt-0  xl:mt-80 sm:mt-56 xl:-ml-0 sm:-ml-12">
-								<p className="text-2xl font-semibold text-tw-blue">{data !== null ? data.cefr_score : '-'}</p>
+								<p className="text-2xl font-semibold text-tw-red">{data !== null ? data.cefr_score : '-'}</p>
 								<p className=" leading-4 xl:mt-4 mt-2 text-gray-400">Trình độ hiện tại</p>
 							</div>
 						</div>
@@ -181,7 +175,7 @@ const ElsaSpeak = () => {
 					<div className="col-3">
 						<div className="wrap-table">
 							<div className="shadow-lg xl:p-6 p-4  sm:w-auto w-full bg-white sm:absolute relative z-20 sm:mt-0  xl:mt-80 sm:mt-56 xl:-ml-0 sm:-ml-12">
-								<p className="text-2xl font-semibold text-tw-blue">{data !== null ? data.decision : '-'}</p>
+								<p className="text-2xl font-semibold text-tw-red">{data !== null ? data.decision : '-'}</p>
 								<p className=" leading-4 xl:mt-4 mt-2 text-gray-400">Độ thành thạo</p>
 							</div>
 						</div>
@@ -190,7 +184,7 @@ const ElsaSpeak = () => {
 					<div className="col-3">
 						<div className="wrap-table">
 							<div className="shadow-lg xl:p-6 p-4  sm:w-auto w-full bg-white sm:absolute relative z-20 sm:mt-0  xl:mt-80 sm:mt-56 xl:-ml-0 sm:-ml-12">
-								<p className="text-2xl font-semibold text-tw-blue">{data !== null ? data.fluency_score : '-'}</p>
+								<p className="text-2xl font-semibold text-tw-red">{data !== null ? data.fluency_score : '-'}</p>
 								<p className=" leading-4 xl:mt-4 mt-2 text-gray-400">Độ diễn cảm</p>
 							</div>
 						</div>
@@ -198,7 +192,7 @@ const ElsaSpeak = () => {
 					<div className="col-3">
 						<div className="wrap-table">
 							<div className="shadow-lg xl:p-6 p-4  sm:w-auto w-full bg-white sm:absolute relative z-20 sm:mt-0  xl:mt-80 sm:mt-56 xl:-ml-0 sm:-ml-12">
-								<p className="text-2xl font-semibold text-tw-blue">{data !== null ? data.pronunciation_score : '-'}</p>
+								<p className="text-2xl font-semibold text-tw-red">{data !== null ? data.pronunciation_score : '-'}</p>
 								<p className=" leading-4 xl:mt-4 mt-2 text-gray-400">Độ tự nhiên</p>
 							</div>
 						</div>
@@ -208,7 +202,7 @@ const ElsaSpeak = () => {
 					<div className="col-2">
 						<div className="wrap-table">
 							<div className="shadow-lg xl:p-6 p-4  sm:w-auto w-full bg-white sm:absolute relative z-20 sm:mt-0  xl:mt-80 sm:mt-56 xl:-ml-0 sm:-ml-12">
-								<p className="text-2xl font-semibold text-tw-blue">{data !== null ? data.cefr_score : '-'}</p>
+								<p className="text-2xl font-semibold text-tw-red">{data !== null ? data.cefr_score : '-'}</p>
 								<p className=" leading-4 xl:mt-4 mt-2 text-gray-400">Điểm phát âm</p>
 							</div>
 						</div>
@@ -216,7 +210,7 @@ const ElsaSpeak = () => {
 					<div className="col-2">
 						<div className="wrap-table">
 							<div className="shadow-lg xl:p-6 p-4  sm:w-auto w-full bg-white sm:absolute relative z-20 sm:mt-0  xl:mt-80 sm:mt-56 xl:-ml-0 sm:-ml-12">
-								<p className="text-2xl font-semibold text-tw-blue">{data !== null ? data.ielts_score : '-'}</p>
+								<p className="text-2xl font-semibold text-tw-red">{data !== null ? data.ielts_score : '-'}</p>
 								<p className=" leading-4 xl:mt-4 mt-2 text-gray-400">Điểm IELTS</p>
 							</div>
 						</div>
@@ -224,7 +218,7 @@ const ElsaSpeak = () => {
 					<div className="col-2">
 						<div className="wrap-table">
 							<div className="shadow-lg xl:p-6 p-4  sm:w-auto w-full bg-white sm:absolute relative z-20 sm:mt-0  xl:mt-80 sm:mt-56 xl:-ml-0 sm:-ml-12">
-								<p className="text-2xl font-semibold text-tw-blue">{data !== null ? data.toefl_score : '-'}</p>
+								<p className="text-2xl font-semibold text-tw-red">{data !== null ? data.toefl_score : '-'}</p>
 								<p className=" leading-4 xl:mt-4 mt-2 text-gray-400">Điểm TOEFL</p>
 							</div>
 						</div>
@@ -232,7 +226,7 @@ const ElsaSpeak = () => {
 					<div className="col-2">
 						<div className="wrap-table">
 							<div className="shadow-lg xl:p-6 p-4  sm:w-auto w-full bg-white sm:absolute relative z-20 sm:mt-0  xl:mt-80 sm:mt-56 xl:-ml-0 sm:-ml-12">
-								<p className="text-2xl font-semibold text-tw-blue">{data !== null ? data.toeic_score : '-'}</p>
+								<p className="text-2xl font-semibold text-tw-red">{data !== null ? data.toeic_score : '-'}</p>
 								<p className=" leading-4 xl:mt-4 mt-2 text-gray-400">Điểm TOEIC</p>
 							</div>
 						</div>
@@ -240,7 +234,7 @@ const ElsaSpeak = () => {
 					<div className="col-2">
 						<div className="wrap-table">
 							<div className="shadow-lg xl:p-6 p-4  sm:w-auto w-full bg-white sm:absolute relative z-20 sm:mt-0  xl:mt-80 sm:mt-56 xl:-ml-0 sm:-ml-12">
-								<p className="text-2xl font-semibold text-tw-blue">{data !== null ? data.pte_score : '-'}</p>
+								<p className="text-2xl font-semibold text-tw-red">{data !== null ? data.pte_score : '-'}</p>
 								<p className=" leading-4 xl:mt-4 mt-2 text-gray-400">Điểm PTE</p>
 							</div>
 						</div>
@@ -248,7 +242,7 @@ const ElsaSpeak = () => {
 					<div className="col-2">
 						<div className="wrap-table">
 							<div className="shadow-lg xl:p-6 p-4  sm:w-auto w-full bg-white sm:absolute relative z-20 sm:mt-0  xl:mt-80 sm:mt-56 xl:-ml-0 sm:-ml-12">
-								<p className="text-2xl font-semibold text-tw-blue">{data !== null ? data.eps_score : '-'}</p>
+								<p className="text-2xl font-semibold text-tw-red">{data !== null ? data.eps_score : '-'}</p>
 								<p className=" leading-4 xl:mt-4 mt-2 text-gray-400">Điểm EPS</p>
 							</div>
 						</div>

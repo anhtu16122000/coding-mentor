@@ -51,7 +51,7 @@ export const SalaryTutoringConfigPage = () => {
 		{
 			title: 'Họ tên',
 			dataIndex: 'TeacherName',
-			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+			render: (text) => <p className="font-semibold text-[#D21320]">{text}</p>
 		},
 		{
 			title: 'Mức lương',

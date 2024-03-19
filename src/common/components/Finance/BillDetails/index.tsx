@@ -143,7 +143,7 @@ const BillDetails = ({ bill }) => {
 			dataIndex: 'ClassName',
 			width: 80,
 			render: (value, item, index) => {
-				return <div className="min-w-[80px] text-[#1b73e8] font-[600]">{value}</div>
+				return <div className="min-w-[80px] text-[#D21320] font-[600]">{value}</div>
 			}
 		},
 		{

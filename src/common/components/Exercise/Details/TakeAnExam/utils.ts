@@ -315,7 +315,7 @@ export async function formatInput(
 				temp[i].addEventListener('focus', (event) => {
 					focusValue = event.target.value
 
-					event.target.style.border = '1px solid #1b73e8'
+					event.target.style.border = '1px solid #D21320'
 					setCurrentQuestion({ ...currentQuestion, IeltsQuestionId: realId, InputId: temp[i]?.id })
 				})
 

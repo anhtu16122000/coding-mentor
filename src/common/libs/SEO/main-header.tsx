@@ -1,50 +1,40 @@
 import Head from 'next/head'
 import Script from 'next/script'
-import React from 'react'
 import appConfigs from '~/appConfig'
 
 const viewport = 'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover'
 
-const siteTitle = 'Bạn lo giảng dạy, MONA lo quản trị'
+const siteTitle = 'Coding Mentor - Nền tảng học lập trình dành cho mọi người'
 
 const description = 'Dù bạn ở mảng nào của giáo dục, chúng tôi đều có sản phẩm phù hợp'
 
 const MainHeader = () => {
 	return (
 		<Head>
-			<title>{appConfigs.appName} - Phần mềm quản lý trung tâm giáo dục</title>
+			<title>{appConfigs.appName} - Nền tảng học lập trình dành cho mọi người</title>
 
 			<meta property="og:locale" content="vi_VN" />
-			<link rel="icon" href="/white-logo.png" />
 			<meta content={viewport} name="viewport" />
-
 			<meta name="description" content={description} />
 
 			<meta name="robots" content="noindex" />
-			<meta property="og:image" content="/og-image.png" />
+			<meta property="og:image" content="/favicon_io/apple-touch-icon.png" />
 
 			<meta name="og:title" content={siteTitle} />
-			<meta property="og:site_name" content="Bạn lo giảng dạy, MONA lo quản trị" />
+			<meta property="og:site_name" content="Coding Mentor - Nền tảng học lập trình dành cho mọi người" />
 			<meta property="og:description" content={description} />
+			<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png" />
+			<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png" />
+			<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png" />
+			<link rel="manifest" href="/favicon_io/site.webmanifest" />
 
 			<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 			<meta http-equiv="Pragma" content="no-cache" />
 			<meta http-equiv="Expires" content="0" />
 
-			<meta name="twitter:card" content="summary_large_image" />
-			<meta name="twitter:title" content="Mona Edutech - Hiểu quản trị hơn chính bạn" />
-			<meta name="twitter:image:alt" content="mona-lms" />
-			<meta name="twitter:image" content="/og-image.png" />
-			<meta name="twitter:description" content={description} />
-			<meta name="twitter:url" content="https://mona.software/edutech" />
-			<meta name="twitter:site" content="mona.media" />
-			<meta name="twitter:domain" content="mona.media" />
-			<meta name="twitter:label1" content="Written by" />
-			<meta name="twitter:data1" content="Nguyễn Phúc Bảo Châu" />
+			<meta name="keywords" content="học lập trình, lập trình viên, học coding" />
 
-			<meta name="keywords" content="hệ thống đào tạo, lms, hệ thống quản lý đào tạo" />
-
-			<script defer data-domain="monalms.monamedia.net" src="https://web-analytics.mona.host/js/script.js"></script>
+			{/* <script defer data-domain="monalms.monamedia.net" src="https://web-analytics.mona.host/js/script.js"></script> */}
 
 			<script
 				type="text/javascript"

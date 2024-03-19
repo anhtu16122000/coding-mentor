@@ -1,21 +1,21 @@
 import { Divider, Popconfirm, Popover } from 'antd'
 import moment from 'moment'
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { BiCheckboxSquare, BiTrash } from 'react-icons/bi'
 import { FaMicrophone, FaPen } from 'react-icons/fa'
 import { HiPencilAlt, HiSelector } from 'react-icons/hi'
 import { MdOutlineRadioButtonChecked } from 'react-icons/md'
+import { TbSitemap } from 'react-icons/tb'
+import { TiArrowSortedDown } from 'react-icons/ti'
+import { useSelector } from 'react-redux'
 import { QUESTION_TYPES } from '~/common/libs'
+import { is } from '~/common/utils/common'
+import { RootState } from '~/store'
 import DragHeader from '../Details/Components/drag-header'
 import GroupContent from '../Details/Components/group-content'
-import TestingQuestions from '../Testing/Questions'
-import { TbListDetails, TbSitemap } from 'react-icons/tb'
-import { TiArrowSortedDown } from 'react-icons/ti'
-import { deleteQuestionsBank } from './util'
 import GroupForm from '../Details/Group/form-group'
-import { RootState } from '~/store'
-import { useSelector } from 'react-redux'
-import { is } from '~/common/utils/common'
+import TestingQuestions from '../Testing/Questions'
+import { deleteQuestionsBank } from './util'
 
 const QuestionBankRenderItem = ({ item, index, questIs, dragAns, onRefresh }) => {
 	const userInfo = useSelector((state: RootState) => state.user.information)
@@ -31,10 +31,10 @@ const QuestionBankRenderItem = ({ item, index, questIs, dragAns, onRefresh }) =>
 	const popref = useRef(null)
 
 	return (
-		<div className="ml-[8px] mb-[16px] pb-[8px] bg-[#fff] rounded-[8px] shadow-sm border-[rgba(0,0,0,0)] hover:border-[#1b73e8] border-[1px] border-solid">
+		<div className="ml-[8px] mb-[16px] pb-[8px] bg-[#fff] rounded-[8px] shadow-sm border-[rgba(0,0,0,0)] hover:border-[#D21320] border-[1px] border-solid">
 			<div className="flex items-start">
 				<div className="flex-1">
-					<div className="font-[600] text-[#1b73e8] mt-[16px] mx-[16px] text-[16px]">Tên nhóm: {item?.Name}</div>
+					<div className="font-[600] text-[#D21320] mt-[16px] mx-[16px] text-[16px]">Tên nhóm: {item?.Name}</div>
 
 					<div className="flex items-center p-[16px] pt-[8px] pb-0">
 						<div className="bg-[#d94da6] px-[8px] py-[2px] rounded-full flex items-center flex-shrink-0">
@@ -107,7 +107,7 @@ const QuestionBankRenderItem = ({ item, index, questIs, dragAns, onRefresh }) =>
 							placement="bottomLeft"
 							trigger="click"
 						>
-							<div className="bg-[#1b73e8] cursor-pointer px-[8px] py-[2px] flex items-center rounded-full ml-[8px]">
+							<div className="bg-[#D21320] cursor-pointer px-[8px] py-[2px] flex items-center rounded-full ml-[8px]">
 								<TiArrowSortedDown size={18} color="#fff" />
 								<div className="text-[#fff] hidden w400:flex ml-[4px] font-[600] items-center">
 									<div>Hành động</div>

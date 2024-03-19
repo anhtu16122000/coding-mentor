@@ -1,13 +1,13 @@
 // Cấm chỉnh sửa dưới mọi hình thức
 
-import React, { FC, useState } from 'react'
-import styles from './styles.module.scss'
 import { Modal } from 'antd'
-import { DateRange } from 'react-date-range'
 import { vi } from 'date-fns/locale'
-import ChaoButton from '../Button'
-import { IoClose } from 'react-icons/io5'
 import moment from 'moment'
+import { FC, useState } from 'react'
+import { DateRange } from 'react-date-range'
+import { IoClose } from 'react-icons/io5'
+import ChaoButton from '../Button'
+import styles from './styles.module.scss'
 
 function getCurrentAndPast7Days() {
 	// Lấy ngày hiện tại
@@ -212,7 +212,7 @@ const DateFilter: FC<TProps> = (props) => {
 					</div>
 				</div>
 
-				{curTab !== 0 && showSelected && <div className="text-[12px] mt-[4px] text-[#1b73e8]">Đang xem: {getDateString()}</div>}
+				{curTab !== 0 && showSelected && <div className="text-[12px] mt-[4px] text-[#D21320]">Đang xem: {getDateString()}</div>}
 			</div>
 
 			<Modal
@@ -221,7 +221,7 @@ const DateFilter: FC<TProps> = (props) => {
 				title={
 					<>
 						<div>Chọn khoảng thời gian</div>
-						<div className="text-[12px] opacity-70 text-[#1b73e8]">Đã chọn: {getDateString()}</div>
+						<div className="text-[12px] opacity-70 text-[#D21320]">Đã chọn: {getDateString()}</div>
 					</>
 				}
 				closable={false}

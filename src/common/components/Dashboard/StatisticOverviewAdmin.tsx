@@ -1,5 +1,4 @@
 import { Card, Col, Row, Tooltip } from 'antd'
-import React from 'react'
 import { BsCalendarXFill, BsFillBookmarksFill } from 'react-icons/bs'
 import { FiUsers } from 'react-icons/fi'
 import { GiFamilyHouse, GiVikingLonghouse } from 'react-icons/gi'
@@ -9,27 +8,27 @@ const StatisticOverviewAdmin = (props) => {
 	const { statisticAll } = props
 	const styleCard = [
 		{
-			background: '#1b73e8c4',
+			background: '#D21320c4',
 			Icon: <FiUsers className="ml-auto text-white text-4xl" />
 		},
 		{
-			background: '#1b73e8c4',
+			background: '#D21320c4',
 			Icon: <MdList className="ml-auto text-white text-4xl" />
 		},
 		{
-			background: '#1b73e8c4',
+			background: '#D21320c4',
 			Icon: <BsFillBookmarksFill className="ml-auto text-white text-4xl" />
 		},
 		{
-			background: '#1b73e8c4',
+			background: '#D21320c4',
 			Icon: <GiFamilyHouse className="ml-auto text-white text-4xl" />
 		},
 		{
-			background: '#1b73e8c4',
+			background: '#D21320c4',
 			Icon: <GiVikingLonghouse className="ml-auto text-white text-4xl" />
 		},
 		{
-			background: '#1b73e8c4',
+			background: '#D21320c4',
 			Icon: <BsCalendarXFill className="ml-auto text-white text-4xl" />
 		}
 	]

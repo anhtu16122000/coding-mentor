@@ -32,7 +32,7 @@
 		margin-left: 4px;
 	}
 	&:hover {
-		color: #1b73e8;
+		color: #d21320;
 		.btn-exam-icon {
 			@apply duration-200;
 			margin-left: 8px;
@@ -42,7 +42,7 @@
 }
 
 .btn-exam-info {
-	color: #1b73e8;
+	color: #d21320;
 	cursor: pointer;
 	.btn-exam-info-icon {
 		font-size: 24px;
@@ -56,7 +56,7 @@
 }
 
 .cc-exam-info-item-icon {
-	@apply w-[30px] h-[30px] items-center justify-center flex rounded-full mr-[8px] bg-[#1b74e820] text-[#1b73e8];
+	@apply w-[30px] h-[30px] items-center justify-center flex rounded-full mr-[8px] bg-[#1b74e820] text-[#D21320];
 }
 
 .cc-xem-info-quest-container {
@@ -68,7 +68,7 @@
 }
 
 .cc-exam-item-code {
-	@apply px-[6px] py-[2px] text-[14px] font-[600] rounded-[4px] bg-[#1b74e820] text-[#1b73e8];
+	@apply px-[6px] py-[2px] text-[14px] font-[600] rounded-[4px] bg-[#1b74e820] text-[#D21320];
 }
 
 .cc-exam-item-info {
@@ -143,11 +143,11 @@
 }
 
 .cc-exercise-drag-menu {
-	@apply w-[24px] h-[24px] bg-[#1b73e8] inline-flex items-center justify-center rounded-full;
+	@apply w-[24px] h-[24px] bg-[#D21320] inline-flex items-center justify-center rounded-full;
 }
 
 .cc-choice-warpper {
-	@apply bg-[#fff] hover:border-[#1b73e8] p-3 rounded-[6px] mb-[8px];
+	@apply bg-[#fff] hover:border-[#D21320] p-3 rounded-[6px] mb-[8px];
 	// @apply  mx-[8px];
 }
 

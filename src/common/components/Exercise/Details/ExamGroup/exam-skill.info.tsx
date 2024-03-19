@@ -1,9 +1,9 @@
 import { Divider } from 'antd'
-import React, { useState } from 'react'
+import { useState } from 'react'
+import CountUp from 'react-countup'
 import { FaRegCalendarAlt, FaUserEdit, FaUserPlus } from 'react-icons/fa'
 import { MdDateRange, MdOutlineKeyboardArrowDown } from 'react-icons/md'
 import { parseDateTime } from '~/common/utils/main-function'
-import CountUp from 'react-countup'
 
 const ExamSkillInfo = (params) => {
 	const { data } = params
@@ -17,12 +17,12 @@ const ExamSkillInfo = (params) => {
 			<Divider className="ant-divider-16" />
 
 			<div className="grid grid-cols-2 w400:grid-cols-2 gap-3">
-				<div className="cc-xem-info-quest-container !text-[#1b73e8]">
+				<div className="cc-xem-info-quest-container !text-[#D21320]">
 					<div className="font-[500]">Tổng số câu</div>
 					<CountUp end={data?.QuestionsAmount} className="font-[600] text-[20px]" />
 				</div>
 
-				<div className="cc-xem-info-quest-container !text-[#1b73e8]">
+				<div className="cc-xem-info-quest-container !text-[#D21320]">
 					<div className="font-[500]">Thời gian</div>
 					<CountUp end={data?.Time} className="font-[600] text-[20px]" suffix=" phút" />
 				</div>
@@ -51,7 +51,7 @@ const ExamSkillInfo = (params) => {
 				<>
 					<Divider className="ant-divider-16" />
 					<div className="flex flex-col items-center">
-						<div className="text-[#1b73e8]">
+						<div className="text-[#D21320]">
 							<strong>Âm thanh</strong>
 						</div>
 
@@ -69,7 +69,7 @@ const ExamSkillInfo = (params) => {
 
 			<Divider className="ant-divider-16" />
 
-			<div onClick={() => setShowAll(!showALL)} className="all-center cursor-pointer text-center no-select hover:text-[#1b73e8]">
+			<div onClick={() => setShowAll(!showALL)} className="all-center cursor-pointer text-center no-select hover:text-[#D21320]">
 				<div>{showALL ? 'Ẩn bớt' : 'Hiện thêm'}</div>
 				<MdOutlineKeyboardArrowDown size={20} className={`ml-[4px] rotate-${showALL ? '180' : 0} duration-200`} />
 			</div>

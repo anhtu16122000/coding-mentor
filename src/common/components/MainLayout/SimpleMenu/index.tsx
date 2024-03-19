@@ -337,7 +337,7 @@ const SimpleMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, res
 															const isActive = subMenu?.Route == pathname
 															return (
 																<Menu.Item
-																	className={`${isActive ? '!text-[#1b73e8] bg-[#ecf2fd] ant-menu-item-selected' : 'none-selected'}`}
+																	className={`${isActive ? '!text-[#D21320] bg-[#ecf2fd] ant-menu-item-selected' : 'none-selected'}`}
 																	key={subMenu.Route}
 																	icon={null}
 																>
@@ -369,7 +369,7 @@ const SimpleMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, res
 												<Menu.Item
 													key={item.Key}
 													icon={null}
-													className={`${isActive ? '!text-[#1b73e8] bg-[#ecf2fd] ant-menu-item-selected' : ''}`}
+													className={`${isActive ? '!text-[#D21320] bg-[#ecf2fd] ant-menu-item-selected' : ''}`}
 												>
 													<Link href={item.Route}>
 														<a>
@@ -395,7 +395,7 @@ const SimpleMenu: FC<IMainMenu> = ({ isOpen, openMenuMobile, funcMenuMobile, res
 												<Menu.Item
 													key={menu.MenuKey}
 													icon={null}
-													className={`${isActive ? '!text-[#1b73e8] bg-[#ecf2fd] ant-menu-item-selected' : 'none-selected'}`}
+													className={`${isActive ? '!text-[#D21320] bg-[#ecf2fd] ant-menu-item-selected' : 'none-selected'}`}
 												>
 													<Link href={item.Route}>
 														<a>

@@ -1,14 +1,14 @@
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { Switch } from 'antd'
+import moment from 'moment'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { classApi } from '~/api/learn/class'
 import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
+import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import PrimaryTable from '../Primary/Table'
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
-import { classApi } from '~/api/learn/class'
-import moment from 'moment'
-import { ShowNoti } from '~/common/utils'
 
 export const RollUpTeacherPage = () => {
 	const user = useSelector((state: RootState) => state.user.information)
@@ -89,7 +89,7 @@ export const RollUpTeacherPage = () => {
 		{
 			title: 'Giáo viên',
 			dataIndex: 'TeacherName',
-			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+			render: (text) => <p className="font-semibold text-[#D21320]">{text}</p>
 		},
 		{
 			title: 'Ngày',

@@ -49,7 +49,7 @@ const SuperFilter: FC<TProps> = (props) => {
 					}}
 					className={styles['btn-filter']}
 				>
-					{visible ? <FaFilterCircleXmark size={18} color="#de2842" /> : <FaFilter size={16} color="#1b73e8" />}
+					{visible ? <FaFilterCircleXmark size={18} color="#de2842" /> : <FaFilter size={16} color="#D21320" />}
 				</div>
 			</Tooltip>
 		)

@@ -88,7 +88,7 @@ export const ListCertificates = () => {
 						title: 'Tên học viên',
 						width: 200,
 						dataIndex: 'FullName',
-						render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+						render: (text) => <p className="font-semibold text-[#D21320]">{text}</p>
 					},
 					{
 						title: 'Số điện thoại',
@@ -141,7 +141,7 @@ export const ListCertificates = () => {
 						title: 'Tên học viên',
 						width: 200,
 						dataIndex: 'FullName',
-						render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+						render: (text) => <p className="font-semibold text-[#D21320]">{text}</p>
 					},
 					{
 						title: 'Số điện thoại',

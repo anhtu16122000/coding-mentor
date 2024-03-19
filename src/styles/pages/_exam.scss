@@ -14,10 +14,10 @@
 		color: white;
 	}
 	&.start {
-		background: #1b73e8;
+		background: #d21320;
 	}
 	&.pause {
-		background: #1b73e8;
+		background: #d21320;
 	}
 	&.save {
 		background: #004aad;
@@ -151,10 +151,10 @@
 		display: none !important;
 	}
 	.rhap_progress-indicator {
-		background: #1b73e8 !important;
+		background: #d21320 !important;
 	}
 	.rhap_progress-filled {
-		background: #1b73e8 !important;
+		background: #d21320 !important;
 	}
 	.rhap_controls-section {
 		margin-top: 0px !important;
@@ -172,7 +172,7 @@
 
 .rhap_play-status--paused {
 	.rhap_play-pause-button {
-		color: #1b73e8 !important;
+		color: #d21320 !important;
 	}
 }
 
@@ -225,7 +225,7 @@
 	border: 1px #0083ff solid;
 }
 
-// text-[#1b73e8]
+// text-[#D21320]
 .ex-quest-tf {
 	@apply w-[28px] h-[28px] bg-[#e9e9e9] rounded-full shadow-sm mr-[4px] font-[600];
 	@apply inline-flex items-center justify-center;
@@ -316,11 +316,11 @@
 }
 
 .ex-23-btn-change-skill {
-	@apply cc-23-skill text-[#fff] bg-[#1b73e8] hover:bg-[#1867cf] flex items-center;
+	@apply cc-23-skill text-[#fff] bg-[#D21320] hover:bg-[#1867cf] flex items-center;
 }
 
 .tae-skill-name {
-	@apply font-[600] text-[16px] text-[#1b73e8];
+	@apply font-[600] text-[16px] text-[#D21320];
 }
 
 .ant-select:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-item {
@@ -641,7 +641,7 @@
 }
 
 .active-num {
-	background-color: #1b73e8 !important;
+	background-color: #d21320 !important;
 	color: #fff;
 }
 .none-active-num {

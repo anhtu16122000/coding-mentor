@@ -22,7 +22,7 @@ export const NotificationInClassPage = () => {
 			title: 'Thông báo qua email',
 			dataIndex: 'Title',
 			width: 200,
-			render: (text) => <p className="font-semibold text-[#1b73e8]">{text}</p>
+			render: (text) => <p className="font-semibold text-[#D21320]">{text}</p>
 		},
 		{
 			title: 'Nội dung',

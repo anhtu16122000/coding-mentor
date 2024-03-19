@@ -1,12 +1,12 @@
 import { Form, Modal } from 'antd'
-import React, { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Eye } from 'react-feather'
 import { RiQuestionLine } from 'react-icons/ri'
+import Lottie from 'react-lottie-player'
 import { formRequired } from '~/common/libs/others/form'
 import InputText from '../../FormControl/InputTextField'
 import PrimaryButton from '../../Primary/Button'
 import IconButton from '../../Primary/IconButton'
-import Lottie from 'react-lottie-player'
 
 import deleteJson from '~/common/components/json/15120-delete.json'
 
@@ -189,7 +189,7 @@ export default function ModalZoomConfig(props: Props) {
 
 								<div className="grid-cols-1">
 									<div
-										className="font-bold text-tw-blue hover:text-[#1267b7] cursor-pointer w-fit flex gap-1 justify-center items-center mb-2"
+										className="font-bold text-tw-red hover:text-[#1267b7] cursor-pointer w-fit flex gap-1 justify-center items-center mb-2"
 										onClick={() => setShowTutorial(!showTutorial)}
 									>
 										<p>

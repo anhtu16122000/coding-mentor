@@ -121,7 +121,7 @@ const PaymentVerification = () => {
 		{
 			title: 'Người yêu cầu',
 			dataIndex: 'FullName',
-			render: (text, item) => <div className="font-semibold text-[#1b73e8]">{text}</div>
+			render: (text, item) => <div className="font-semibold text-[#D21320]">{text}</div>
 		},
 		{
 			title: 'Số tiền',

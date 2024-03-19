@@ -98,7 +98,7 @@ const ModalDetail = (props) => {
 
 					<div
 						className="p-[0px] px-[6px] rounded-full text-[#fff]"
-						style={{ background: data?.Status == 3 ? '#e31616' : data?.Status == 2 ? '#1b73e8' : '#24913c' }}
+						style={{ background: data?.Status == 3 ? '#e31616' : data?.Status == 2 ? '#D21320' : '#24913c' }}
 					>
 						{data?.StatusName}
 					</div>

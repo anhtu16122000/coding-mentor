@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import React from 'react'
 import { IoPaperPlaneOutline } from 'react-icons/io5'
 import { MdArrowForwardIos } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
@@ -35,7 +34,7 @@ const TAEFooter = ({ visible, onToggle, questions, curQuest, onClickQuest, testI
 					{/* {router?.asPath.includes('take-an-exam') && testInfo?.Type != 1 && ( */}
 					<div
 						onClick={() => dispatch(openSubmitModal())}
-						className="h-[34px] cursor-pointer no-select px-[8px] rounded-[6px] all-center text-[#fff] bg-[#1b73e8] hover:bg-[#1867cf]"
+						className="h-[34px] cursor-pointer no-select px-[8px] rounded-[6px] all-center text-[#fff] bg-[#D21320] hover:bg-[#1867cf]"
 					>
 						<IoPaperPlaneOutline color="#fff" size={20} />
 						<div className="ml-[4px]">Nộp bài</div>

@@ -1,35 +1,34 @@
 import { Tabs } from 'antd'
-import React from 'react'
 import { AiOutlineCalendar, AiOutlineQrcode } from 'react-icons/ai'
 import { BsCalendar2Week } from 'react-icons/bs'
 import { CgTranscript } from 'react-icons/cg'
 import { FiUserCheck } from 'react-icons/fi'
+import { GrCertificate } from 'react-icons/gr'
 import { IoNotificationsOutline } from 'react-icons/io5'
 import { RiContactsBook2Line, RiFileList2Line, RiFileList3Line, RiQuillPenLine } from 'react-icons/ri'
 import { VscFeedback, VscFolderLibrary } from 'react-icons/vsc'
 import { useSelector } from 'react-redux'
+import { TabMonthlyTuition } from '~/common/pages/Student/TabMonthlyTuition'
 import { RootState } from '~/store'
 import CalendarClassEdit from './CalendarClassEdit'
 import DocumentsPageInClass from './DocumentsPage'
+import HomeWork from './HomeWork'
 import { LessonFeedbackPage } from './LessonFeedbackPage'
+import { ListCertificates } from './ListCertificates'
 import { ListStudentInClass } from './ListStudentInClass'
 import { NotificationInClassPage } from './NotificationInClassPage'
 import { RollUpPage } from './RollUpPage'
 import { RollUpStudent } from './RollUpStudent'
 import { RollUpTeacherPage } from './RollUpTeacherPage'
 import { ScheduleList } from './ScheduleList'
-import HomeWork from './HomeWork'
 import TransScriptFlexColumnPage from './TransScriptFlexColumnPage'
-import { TabMonthlyTuition } from '~/common/pages/Student/TabMonthlyTuition'
-import { GrCertificate } from 'react-icons/gr'
-import { ListCertificates } from './ListCertificates'
 
 const itemsAdmin = [
 	'Lịch học',
 	'Học viên',
 	'Học phí',
 	'Các buổi học',
-	'Bài tập',
+	// 'Bài tập',
 	'Tài liệu',
 	'Điểm danh',
 	'Bảng điểm',
@@ -38,14 +37,14 @@ const itemsAdmin = [
 	'Thông báo'
 ]
 
-const itemsStudent = ['Lịch học', 'Học phí', 'Các buổi học', 'Bài tập', 'Tài liệu', 'Điểm danh', 'Bảng điểm']
+const itemsStudent = ['Lịch học', 'Học phí', 'Các buổi học', 'Tài liệu', 'Điểm danh', 'Bảng điểm']
 
 const itemsTeacher = [
 	'Lịch học',
 	'Học viên',
 	'Học phí',
 	'Các buổi học',
-	'Bài tập',
+	// 'Bài tập',
 	'Tài liệu',
 	'Điểm danh',
 	'Bảng điểm',

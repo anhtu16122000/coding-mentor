@@ -116,7 +116,7 @@ const TrainingRouteForm = () => {
 		{
 			title: 'Tên bài',
 			dataIndex: 'Name',
-			render: (value, item, index) => <div className="font-[600] text-[#1b73e8] min-w-[100px] max-w-[250px]">{value}</div>
+			render: (value, item, index) => <div className="font-[600] text-[#D21320] min-w-[100px] max-w-[250px]">{value}</div>
 		},
 		{
 			title: 'Người tạo',
@@ -262,7 +262,7 @@ const TrainingRouteForm = () => {
 		{
 			title: 'Tên học viên',
 			dataIndex: 'StudentName',
-			render: (value, item, index) => <div className="font-[600] text-[#1b73e8] min-w-[100px] max-w-[250px]">{value}</div>
+			render: (value, item, index) => <div className="font-[600] text-[#D21320] min-w-[100px] max-w-[250px]">{value}</div>
 		},
 		{
 			title: 'Thời gian làm',
@@ -317,7 +317,7 @@ const TrainingRouteForm = () => {
 						<PrimaryTooltip place="left" id={`hw-res-${item?.Id}`} content="Xem kết quả">
 							<div
 								onClick={() => window.open(`/exam-result/?test=${item?.Id}`, '_blank')}
-								className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+								className="w-[28px] text-[#D21320] h-[30px] all-center hover:opacity-70 cursor-pointer"
 							>
 								<FiEye size={22} />
 							</div>
@@ -417,13 +417,13 @@ const TrainingRouteForm = () => {
 								key={dataIndex + 'ficax'}
 								className="vertical-timeline-element--work"
 								contentStyle={{
-									background: '#1b73e8e0',
+									background: '#D21320e0',
 									color: '#fff',
 									borderRadius: 6,
 									width: 'fit-content'
 								}}
-								contentArrowStyle={{ borderRight: `7px solid #1b73e8` }}
-								iconStyle={{ background: item?.Completed ? '#4CAF50' : '#1b73e8', color: '#fff' }}
+								contentArrowStyle={{ borderRight: `7px solid #D21320` }}
+								iconStyle={{ background: item?.Completed ? '#4CAF50' : '#D21320', color: '#fff' }}
 								icon={
 									!item?.Completed ? (
 										<div className="all-center w-full h-full">
@@ -450,7 +450,7 @@ const TrainingRouteForm = () => {
 													opacity: dataIndex > 0 ? '1' : '0.5'
 												}}
 											>
-												<TiArrowSortedUp color="#1b73e8e0" size={18} />
+												<TiArrowSortedUp color="#D21320e0" size={18} />
 											</div>
 
 											<div
@@ -460,7 +460,7 @@ const TrainingRouteForm = () => {
 													opacity: dataIndex < data.length - 1 ? '1' : '0.5'
 												}}
 											>
-												<TiArrowSortedDown color="#1b73e8e0" size={18} />
+												<TiArrowSortedDown color="#D21320e0" size={18} />
 											</div>
 										</div>
 									)}
@@ -498,7 +498,7 @@ const TrainingRouteForm = () => {
 															key={`itx-${dataIndex}-${detailIndex}`}
 															className="flex flex-col p-[8px] cursor-pointer shadow-sm duration-150 rounded-[6px] bg-[#fff] text-[#000] font-[600]"
 														>
-															<div className="text-[14px] text-[#1b73e8]">{detail?.Skill}</div>
+															<div className="text-[14px] text-[#D21320]">{detail?.Skill}</div>
 
 															<div className="font-[600] text-[14px] flex items-center" style={{ color: '#000' }}>
 																<div className="font-[600] mr-[4px]">Đề: </div>
@@ -587,7 +587,7 @@ const TrainingRouteForm = () => {
 			<Modal
 				title={
 					<div>
-						Lịch sử làm bài: <div className="inline text-[#1b73e8]">{histories?.Name}</div>
+						Lịch sử làm bài: <div className="inline text-[#D21320]">{histories?.Name}</div>
 					</div>
 				}
 				width={1200}

@@ -25,7 +25,7 @@ const ResultHeader = (props) => {
 					<div className="all-center inline-flex cc-choice-point !ml-0">{overview?.QuestionsAmount} câu</div>
 					<div className="cc-choice-correct-number">{overview?.Point} điểm</div>
 
-					{overview?.Status == 1 && <div className="cc-choice-correct-number !ml-0 !text-[#1b73e8]">{overview?.StatusName}</div>}
+					{overview?.Status == 1 && <div className="cc-choice-correct-number !ml-0 !text-[#D21320]">{overview?.StatusName}</div>}
 					{overview?.Status == 2 && <div className="cc-choice-correct-number !ml-0">{overview?.StatusName}</div>}
 				</div>
 			</div>

@@ -70,7 +70,7 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 			title: 'Lớp',
 			dataIndex: 'ClassName',
 			render: (value, item, index) => {
-				return <div className="min-w-[100px] text-[#1b73e8] font-[600]">{value}</div>
+				return <div className="min-w-[100px] text-[#D21320] font-[600]">{value}</div>
 			}
 		},
 		{
@@ -139,7 +139,7 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 								}
 								className="p-[2px] cursor-pointer"
 							>
-								<RiBillLine size={22} className="text-[#1b73e8]" />
+								<RiBillLine size={22} className="text-[#D21320]" />
 							</div>
 						</PrimaryTooltip>
 					</>
@@ -227,7 +227,7 @@ export const TabMonthlyTuition = ({ StudentDetail }) => {
 								}
 								className="p-[2px] cursor-pointer"
 							>
-								<RiBillLine size={22} className="text-[#1b73e8]" />
+								<RiBillLine size={22} className="text-[#D21320]" />
 							</div>
 						</PrimaryTooltip>
 					</>

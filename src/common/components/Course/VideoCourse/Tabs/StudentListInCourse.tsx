@@ -1,5 +1,6 @@
 import { Rate } from 'antd'
-import React, { useState, useEffect } from 'react'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
 import { GiRoundStar } from 'react-icons/gi'
 import { useSelector } from 'react-redux'
 import { StudentListInCourseApi } from '~/api/course/video-course/student-list-in-video-course'
@@ -10,7 +11,6 @@ import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 import { ShowNoti } from '~/common/utils'
 import { RootState } from '~/store'
 import ModalLearningDetail from '../ModalLearningDetail'
-import moment from 'moment'
 
 type Props = {
 	videoCourseID: number
@@ -101,7 +101,7 @@ export default function StudentListInCourse(props: Props) {
 			title: 'Học viên',
 			dataIndex: 'FullName',
 			align: 'left',
-			render: (text, data) => <div className="font-[600] text-[#1b73e8]">{text}</div>
+			render: (text, data) => <div className="font-[600] text-[#D21320]">{text}</div>
 		},
 		{
 			title: 'Email',

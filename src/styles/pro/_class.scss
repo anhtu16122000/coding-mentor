@@ -16,10 +16,10 @@
 			transition: all 0.3s linear;
 			&:hover {
 				background: rgba(27, 115, 232, 0.0901960784);
-				color: #1b73e8;
+				color: #d21320;
 			}
 			&.active {
-				background: #1b73e8;
+				background: #d21320;
 				color: #fff;
 			}
 		}
@@ -90,7 +90,7 @@
 	}
 
 	&.blue {
-		@apply text-[#1b73e8];
+		@apply text-[#D21320];
 	}
 
 	&.green {
@@ -102,7 +102,7 @@
 	}
 
 	&.back-blue {
-		@apply bg-[#1b73e8] hover:bg-[#1966cd] text-[#fff];
+		@apply bg-[#D21320] hover:bg-[#1966cd] text-[#fff];
 	}
 
 	&.back-green {
@@ -122,12 +122,12 @@
 }
 
 .class-price {
-	@apply font-[500] text-[#1b73e8] text-[14px];
+	@apply font-[500] text-[#D21320] text-[14px];
 }
 
 .btn-class-info {
 	@apply w-[30px] h-[30px] bg-[#fff] rounded-[6px] shadow-sm cursor-pointer absolute top-[8px] right-[8px];
-	@apply flex items-center justify-center text-[#1b73e8];
+	@apply flex items-center justify-center text-[#D21320];
 	border: 1px solid rgba(0, 0, 0, 0.1);
 }
 

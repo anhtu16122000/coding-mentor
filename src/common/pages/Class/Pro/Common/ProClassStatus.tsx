@@ -15,7 +15,7 @@ const ProClassStatusContent = ({ onUpdateStatus }) => {
 			<div onClick={(e) => onUpdateStatus(e, { Status: 1, StatusName: 'Sắp diễn ra' })} className={defaultClass + 'text-[#24913c]'}>
 				<div>Sắp diễn ra</div>
 			</div>
-			<div onClick={(e) => onUpdateStatus(e, { Status: 2, StatusName: 'Đang diễn ra' })} className={defaultClass + 'text-[#1b73e8]'}>
+			<div onClick={(e) => onUpdateStatus(e, { Status: 2, StatusName: 'Đang diễn ra' })} className={defaultClass + 'text-[#D21320]'}>
 				<div>Đang diễn ra</div>
 			</div>
 			<div onClick={(e) => onUpdateStatus(e, { Status: 3, StatusName: 'Đã kết thúc' })} className={defaultClass + 'text-[#e31616]'}>

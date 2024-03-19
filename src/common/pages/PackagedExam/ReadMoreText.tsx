@@ -39,7 +39,7 @@ function ReadMoreText({ text, title }) {
 			</div>
 
 			{lineCount > 1 && (
-				<div className="font-[400] text-[14px] text-[#1b73e8] cursor-pointer" onClick={handleReadMoreClick}>
+				<div className="font-[400] text-[14px] text-[#D21320] cursor-pointer" onClick={handleReadMoreClick}>
 					Xem thêm
 				</div>
 			)}

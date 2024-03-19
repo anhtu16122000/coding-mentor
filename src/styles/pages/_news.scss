@@ -118,7 +118,7 @@
 			@apply text-[12px];
 		}
 		&.is-admin {
-			@apply text-[#ffffff] bg-[#1b73e8];
+			@apply text-[#ffffff] bg-[#D21320];
 		}
 	}
 
@@ -180,7 +180,7 @@
 }
 
 .btn-submit-post {
-	@apply w-full bg-[#1b73e8] hover:bg-[#1d69cb] cursor-pointer text-[#fff] all-center h-[38px] rounded-[6px];
+	@apply w-full bg-[#D21320] hover:bg-[#1d69cb] cursor-pointer text-[#fff] all-center h-[38px] rounded-[6px];
 }
 
 .news-cmt-info {

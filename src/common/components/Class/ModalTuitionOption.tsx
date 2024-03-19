@@ -1,13 +1,12 @@
 import { Modal } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AiOutlinePlusCircle } from 'react-icons/ai'
-import PrimaryButton from '../Primary/Button'
+import { IoClose } from 'react-icons/io5'
+import { MdAdd } from 'react-icons/md'
 import { billApi } from '~/api/business/bill'
 import { parseToMoney } from '~/common/utils/common'
-import { MdAdd } from 'react-icons/md'
+import PrimaryButton from '../Primary/Button'
 import PrimaryTooltip from '../PrimaryTooltip'
-import { IoClose } from 'react-icons/io5'
-import { FaInfoCircle } from 'react-icons/fa'
 
 const ModalTuitionOption = (props) => {
 	const { onSubmit, curTuition, totalPrice, discount } = props
@@ -101,7 +100,7 @@ const ModalTuitionOption = (props) => {
 										<div>{parseToMoney(item?.Months)}</div>
 									</div>
 
-									<div className="flex font-[600] items-center text-[#1b73e8] text-[14px]">
+									<div className="flex font-[600] items-center text-[#D21320] text-[14px]">
 										<div className="mr-[4px]">Số tiền giảm:</div>
 										<div>
 											{parseToMoney(item?.Discount)}

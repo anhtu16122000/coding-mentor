@@ -107,7 +107,7 @@ const HomeWork = () => {
 		{
 			title: 'Tên bài',
 			dataIndex: 'Name',
-			render: (value, item, index) => <div className="font-[600] text-[#1b73e8] min-w-[100px] max-w-[250px]">{value}</div>
+			render: (value, item, index) => <div className="font-[600] text-[#D21320] min-w-[100px] max-w-[250px]">{value}</div>
 		},
 		{
 			title: 'Bắt đầu',
@@ -189,7 +189,7 @@ const HomeWork = () => {
 							<PrimaryTooltip place="left" id={`hw-take-${item?.Id}`} content="Làm bài">
 								<div
 									onClick={() => getDraft(item?.IeltsExamId, item?.Id)}
-									className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+									className="w-[28px] text-[#D21320] h-[30px] all-center hover:opacity-70 cursor-pointer"
 								>
 									<TbWritingSign size={22} />
 								</div>
@@ -223,7 +223,7 @@ const HomeWork = () => {
 		{
 			title: 'Tên học viên',
 			dataIndex: 'StudentName',
-			render: (value, item, index) => <div className="font-[600] text-[#1b73e8] min-w-[100px] max-w-[250px]">{value}</div>
+			render: (value, item, index) => <div className="font-[600] text-[#D21320] min-w-[100px] max-w-[250px]">{value}</div>
 		},
 		{
 			title: 'Thời gian làm',
@@ -278,7 +278,7 @@ const HomeWork = () => {
 						<PrimaryTooltip place="left" id={`hw-res-${item?.Id}`} content="Xem kết quả">
 							<div
 								onClick={() => window.open(`/exam-result/?test=${item?.Id}`, '_blank')}
-								className="w-[28px] text-[#1b73e8] h-[30px] all-center hover:opacity-70 cursor-pointer"
+								className="w-[28px] text-[#D21320] h-[30px] all-center hover:opacity-70 cursor-pointer"
 							>
 								<FiEye size={22} />
 							</div>
@@ -374,7 +374,7 @@ const HomeWork = () => {
 			<Modal
 				title={
 					<div>
-						Học viên làm bài: <div className="inline text-[#1b73e8]">{histories?.Name}</div>
+						Học viên làm bài: <div className="inline text-[#D21320]">{histories?.Name}</div>
 					</div>
 				}
 				width={1200}

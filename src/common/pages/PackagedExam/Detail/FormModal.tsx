@@ -93,7 +93,7 @@ const FormPackageSection: FC<ICreateExam> = (props) => {
 
 			{(is(user).admin || is(user).manager) && !!isEdit && (
 				<div onClick={openEdit} className="pe-menu-item mt-[8px]">
-					<FaEdit size={16} color="#1b73e8" />
+					<FaEdit size={16} color="#D21320" />
 					<div className="ml-[8px]">Chỉnh sửa</div>
 				</div>
 			)}

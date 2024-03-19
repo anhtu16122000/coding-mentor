@@ -15,7 +15,7 @@ export const StylePaymentStatusItem = styled.div<{ checked?: boolean }>`
 	justify-content: center;
 	border-radius: 6px;
 	height: 35px;
-	background-color: ${(props) => (props.checked ? '#1B73E8' : '#dadada')};
+	background-color: ${(props) => (props.checked ? '#D21320' : '#dadada')};
 	color: ${(props) => (props.checked ? '#fff' : '#000')};
 	padding: 5px 10px;
 	margin-right: 5px;
@@ -24,7 +24,7 @@ export const StylePaymentStatusItem = styled.div<{ checked?: boolean }>`
 	transition: all 0.2s ease;
 	&:hover {
 		transform: translateY(-2);
-		box-shadow: 0 3px 10px 0 #1b73e8;
-		background-color: #1b73e8;
+		box-shadow: 0 3px 10px 0 #d21320;
+		background-color: #d21320;
 	}
 `

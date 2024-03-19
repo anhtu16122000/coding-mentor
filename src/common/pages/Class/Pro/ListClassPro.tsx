@@ -348,8 +348,8 @@ const ListClassPro = () => {
 								className="border-[1px] h-[32px] w-[32px] flex items-center justify-center cursor-pointer rounded-l-[4px]"
 								onClick={() => handleChangeStyleSaved(0)}
 								style={{
-									backgroundColor: currentStyle == 0 ? '#1b73e8' : '#fff',
-									borderColor: currentStyle == 0 ? '#1b73e8' : '#bdbdbd'
+									backgroundColor: currentStyle == 0 ? '#D21320' : '#fff',
+									borderColor: currentStyle == 0 ? '#D21320' : '#bdbdbd'
 								}}
 							>
 								<IoGrid className="cursor-pointer" size={20} color={currentStyle == 0 ? '#fff' : '#000'} />
@@ -358,8 +358,8 @@ const ListClassPro = () => {
 								className="border-[1px] border-l-[0px] border-[#bdbdbd] h-[32px] w-[32px] flex items-center justify-center cursor-pointer rounded-r-[4px]"
 								onClick={() => handleChangeStyleSaved(1)}
 								style={{
-									backgroundColor: currentStyle == 1 ? '#1b73e8' : '#fff',
-									borderColor: currentStyle == 1 ? '#1b73e8' : '#bdbdbd'
+									backgroundColor: currentStyle == 1 ? '#D21320' : '#fff',
+									borderColor: currentStyle == 1 ? '#D21320' : '#bdbdbd'
 								}}
 							>
 								<ImList className="cursor-pointer" size={16} color={currentStyle == 1 ? '#fff' : '#000'} />

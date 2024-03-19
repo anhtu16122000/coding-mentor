@@ -1,5 +1,4 @@
 import { Card, Col, Row, Tooltip } from 'antd'
-import React from 'react'
 import { BiBookBookmark } from 'react-icons/bi'
 import { BsBookFill, BsBookHalf, BsFillPatchQuestionFill } from 'react-icons/bs'
 import { GiVikingLonghouse } from 'react-icons/gi'
@@ -13,23 +12,23 @@ const StatisticOverviewStudent = (props) => {
 
 	const styleCard = [
 		{
-			background: '#1b73e8c4',
+			background: '#D21320c4',
  			Icon: <GiVikingLonghouse className="ml-auto text-white text-4xl" />
 		},
 		{
-			background: '#1b73e8c4',
+			background: '#D21320c4',
 			Icon: <BsBookHalf className="ml-auto text-white text-4xl" />
 		},
 		{
-			background: '#1b73e8c4',
+			background: '#D21320c4',
 			Icon: <BiBookBookmark className="ml-auto text-white text-4xl" />
 		},
 		{
-			background: '#1b73e8c4',
+			background: '#D21320c4',
 			Icon: <BsBookFill className="ml-auto text-white text-4xl" />
 		},
 		{
-			background: '#1b73e8c4',
+			background: '#D21320c4',
 			Icon: <BsFillPatchQuestionFill className="ml-auto text-white text-4xl" />
 		}
 	]

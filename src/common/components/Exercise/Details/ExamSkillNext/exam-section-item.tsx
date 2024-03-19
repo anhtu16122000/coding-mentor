@@ -1,15 +1,15 @@
-import React, { useRef } from 'react'
 import { Popconfirm, Popover } from 'antd'
-import { ShowNoti } from '~/common/utils'
+import { useRef } from 'react'
 import { FaHeadphonesAlt } from 'react-icons/fa'
-import { IoCloseSharp } from 'react-icons/io5'
-import PrimaryTooltip from '~/common/components/PrimaryTooltip'
 import { FiMoreVertical } from 'react-icons/fi'
-import { ieltsSectionApi } from '~/api/IeltsExam/ieltsSection'
-import CreateExamSection from '../ExamSkillSection/exam-section-form'
+import { IoCloseSharp } from 'react-icons/io5'
 import { useSelector } from 'react-redux'
-import { RootState } from '~/store'
+import { ieltsSectionApi } from '~/api/IeltsExam/ieltsSection'
+import PrimaryTooltip from '~/common/components/PrimaryTooltip'
+import { ShowNoti } from '~/common/utils'
 import { is } from '~/common/utils/common'
+import { RootState } from '~/store'
+import CreateExamSection from '../ExamSkillSection/exam-section-form'
 
 function ExamSectionItem(props) {
 	const { data, index, onRefresh, currentSection, setCurrentSection, createGroupComponent, onPlayAudio, hideController } = props
@@ -55,7 +55,7 @@ function ExamSectionItem(props) {
 	const activated = currentSection?.Id == data.Id
 
 	const noneActiveClass = 'text-[#000] bg-[#e9e9e9] hover:bg-[#dad9d9]'
-	const activeClass = 'text-[#fff] bg-[#1b73e8] hover:bg-[#1867cf]'
+	const activeClass = 'text-[#fff] bg-[#D21320] hover:bg-[#1867cf]'
 
 	const classApply = activated ? activeClass : noneActiveClass
 
