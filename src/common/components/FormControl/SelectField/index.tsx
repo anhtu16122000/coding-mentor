@@ -1,5 +1,4 @@
 import { Form, Select } from 'antd'
-import React from 'react'
 
 const SelectField = (props: IFormSelectField) => {
 	const {
@@ -13,6 +12,7 @@ const SelectField = (props: IFormSelectField) => {
 		disabled,
 		name,
 		rules,
+		allowClear = true,
 		mode,
 		isLoading,
 		maxTagCount
@@ -30,7 +30,7 @@ const SelectField = (props: IFormSelectField) => {
 				mode={mode}
 				className={`primary-input ${className}`}
 				showSearch
-				allowClear
+				allowClear={allowClear}
 				maxTagCount={maxTagCount}
 				loading={isLoading}
 				style={style}

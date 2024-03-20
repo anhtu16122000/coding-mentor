@@ -48,6 +48,7 @@ type IFormInputNumber = {
 type IFormSelectField = {
 	style?: object
 	name: string
+	allowClear?: boolean
 	label: string | element
 	isRequired?: boolean
 	className?: string

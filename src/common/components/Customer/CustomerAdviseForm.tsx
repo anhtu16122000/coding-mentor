@@ -1,25 +1,25 @@
 import { Divider, Form, Modal, Select } from 'antd'
+import moment from 'moment'
+import Router, { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { districtApi, wardApi } from '~/api/area/area'
 import * as yup from 'yup'
+import { ieltsExamApi } from '~/api/IeltsExam'
+import RestApi from '~/api/RestApi'
+import { districtApi, wardApi } from '~/api/area/area'
+import { customerAdviseApi } from '~/api/user/customer'
+import { userInformationApi } from '~/api/user/user'
 import InputTextField from '~/common/components/FormControl/InputTextField'
 import SelectField from '~/common/components/FormControl/SelectField'
+import { formNoneRequired, formRequired } from '~/common/libs/others/form'
 import { ShowNoti } from '~/common/utils'
 import { parseSelectArray, parseSelectArrayUser } from '~/common/utils/common'
 import { RootState } from '~/store'
-import { customerAdviseApi } from '~/api/user/customer'
-import CustomerModalConfirm from './CustomerModalConfirm'
-import { formNoneRequired, formRequired } from '~/common/libs/others/form'
-import { userInformationApi } from '~/api/user/user'
 import DatePickerField from '../FormControl/DatePickerField'
 import UploadImageField from '../FormControl/UploadImageField'
 import PrimaryButton from '../Primary/Button'
 import IconButton from '../Primary/IconButton'
-import RestApi from '~/api/RestApi'
-import Router, { useRouter } from 'next/router'
-import moment from 'moment'
-import { ieltsExamApi } from '~/api/IeltsExam'
+import CustomerModalConfirm from './CustomerModalConfirm'
 
 const CustomerAdviseForm = React.memo((props: any) => {
 	const { source, learningNeed, purpose, branch, refPopover, onRefresh, isEntry } = props
@@ -491,13 +491,11 @@ const CustomerAdviseForm = React.memo((props: any) => {
 									<div className="col-md-6 col-12">
 										<SelectField
 											name="Type"
+											allowClear={false}
 											label="Địa điểm làm bài"
 											onChangeSelect={(e) => setTestType(e)}
 											placeholder="Chọn địa điểm làm bài"
-											optionList={[
-												{ title: 'Tại trung tâm', value: 1 },
-												{ title: 'Làm bài trực tuyến', value: 2 }
-											]}
+											optionList={[{ title: 'Tại trung tâm', value: 1 }]}
 										/>
 									</div>
 
