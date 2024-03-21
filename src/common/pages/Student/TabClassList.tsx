@@ -1,11 +1,8 @@
 import { Collapse, Empty } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { rollUpApi } from '~/api/learn/rollup'
 import { studentInClassApi } from '~/api/user/student-in-class'
-import PrimaryTable from '~/common/components/Primary/Table'
 import ExpandTable from '~/common/components/Primary/Table/ExpandTable'
-import { PAGE_SIZE } from '~/common/libs/others/constant-constructer'
 
 const { Panel } = Collapse
 
@@ -24,9 +21,10 @@ export const TabClassList: React.FC<ITabClassList> = ({ StudentDetail }) => {
 	const [dataTable, setDataTable] = useState([])
 
 	const getRollUp = async (params) => {
+		const { classId, studentIds } = params
 		try {
 			setLoadingRollUp(true)
-			const res = await rollUpApi.getRollUpStudent(params)
+			const res = await studentInClassApi.attendanceByStudent(params)
 			if (res.status === 200) {
 				const temp = res.data.data?.map((item) => {
 					return { ...item, ScheduleModel: JSON.parse(item?.ScheduleModel) }
@@ -46,10 +44,8 @@ export const TabClassList: React.FC<ITabClassList> = ({ StudentDetail }) => {
 
 	const onChange = (value) => {
 		getRollUp({
-			classId: Number(value),
-			studentIds: StudentDetail.UserInformationId,
-			pageIndex: 1,
-			pageSize: 99999
+			'request.classId': Number(value),
+			'request.studentId': Number(StudentDetail.UserInformationId)
 		})
 	}
 

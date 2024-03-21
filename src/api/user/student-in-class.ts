@@ -49,6 +49,12 @@ export const studentInClassApi = {
 	},
 	delCer(ID) {
 		return instance.delete(`${url}/certificate/${ID}`)
+	},
+	// attendance-by-student
+	attendanceByStudent(params: { 'request.classId'?: number; 'request.studentId'?: number }) {
+		return instance.get(`${url}/attendance-by-student`, {
+			params
+		})
 	}
 }
 
