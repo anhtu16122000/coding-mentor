@@ -76,7 +76,7 @@ export const TabClassList: React.FC<ITabClassList> = ({ StudentDetail }) => {
 			title: 'Ngày',
 			width: 150,
 			dataIndex: 'Time',
-			render: (text, item) => <>{moment(item?.ScheduleModel?.StartTime).format('DD/MM/YYYY')}</>
+			render: (text, item) => <>{moment(item?.StartTime).format('DD/MM/YYYY')}</>
 		},
 		{
 			title: 'Ca',
@@ -84,7 +84,7 @@ export const TabClassList: React.FC<ITabClassList> = ({ StudentDetail }) => {
 			dataIndex: 'Times',
 			render: (text, item) => (
 				<>
-					{moment(item?.ScheduleModel?.StartTime).format('HH:mm')} - {moment(item?.ScheduleModel?.EndTime).format('HH:mm')}
+					{moment(item?.StartTime).format('HH:mm')} - {moment(item?.EndTime).format('HH:mm')}
 				</>
 			)
 		},
