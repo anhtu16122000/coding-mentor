@@ -26,10 +26,7 @@ export const TabClassList: React.FC<ITabClassList> = ({ StudentDetail }) => {
 			setLoadingRollUp(true)
 			const res = await studentInClassApi.attendanceByStudent(params)
 			if (res.status === 200) {
-				const temp = res.data.data?.map((item) => {
-					return { ...item, ScheduleModel: JSON.parse(item?.ScheduleModel) }
-				})
-				setDataTable(temp)
+				setDataTable(res?.data?.data || [])
 				setTotalRow(res.data.totalRow)
 			}
 			if (res.status === 204) {
@@ -90,11 +87,6 @@ export const TabClassList: React.FC<ITabClassList> = ({ StudentDetail }) => {
 					{moment(item?.ScheduleModel?.StartTime).format('HH:mm')} - {moment(item?.ScheduleModel?.EndTime).format('HH:mm')}
 				</>
 			)
-		},
-		{
-			title: 'Học lực',
-			width: 150,
-			dataIndex: 'LearningStatusName'
 		},
 		{
 			title: 'Điểm danh',
